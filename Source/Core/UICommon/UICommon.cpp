@@ -43,7 +43,7 @@
 #include "UICommon/X11Utils.h"
 #endif
 
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(IPHONEOS)
 #include <IOKit/pwr_mgt/IOPMLib.h>
 #endif
 
@@ -391,7 +391,7 @@ void InhibitScreenSaver(bool inhibit)
                           (inhibit ? (ES_DISPLAY_REQUIRED | ES_SYSTEM_REQUIRED) : 0));
 #endif
 
-#ifdef __APPLE__
+#if defined(__APPLE__) && !defined(IPHONEOS)
   static IOPMAssertionID s_power_assertion = kIOPMNullAssertionID;
   if (inhibit)
   {
