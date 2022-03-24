@@ -13,8 +13,6 @@ add_library(discio
   DiscScrubber.h
   DiscUtils.cpp
   DiscUtils.h
-  DriveBlob.cpp
-  DriveBlob.h
   Enums.cpp
   Enums.h
   FileBlob.cpp
@@ -63,6 +61,13 @@ add_library(discio
   WiiSaveBanner.cpp
   WiiSaveBanner.h
 )
+
+if (NOT IOS)
+  target_sources(dolphin-emu PRIVATE_HEADER
+    DriveBlob.cpp
+    DriveBlob.h
+  )
+endif()
 
 target_link_libraries(discio
 PUBLIC
