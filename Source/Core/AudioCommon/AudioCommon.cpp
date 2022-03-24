@@ -33,7 +33,7 @@ constexpr int AUDIO_VOLUME_MAX = 100;
 
 static std::unique_ptr<SoundStream> CreateSoundStreamForBackend(std::string_view backend)
 {
-  if (backend == BACKEND_CUBEB)
+  if (backend == BACKEND_CUBEB && CubebStream::IsValid())
     return std::make_unique<CubebStream>();
   else if (backend == BACKEND_OPENAL && OpenALStream::IsValid())
     return std::make_unique<OpenALStream>();
