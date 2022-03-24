@@ -831,7 +831,7 @@ else()
   set(ICONV_LIBRARIES iconv)
 endif()
 
-if(NOT ANDROID)
+if(NOT ANDROID AND NOT IOS)
   find_package(HIDAPI)
   if(NOT HIDAPI_FOUND)
     check_vendoring_approved(hidapi)
