@@ -259,7 +259,7 @@ if(WIN32)
     GL/GLInterface/WGL.cpp
     GL/GLInterface/WGL.h
   )
-elseif(APPLE)
+elseif(APPLE AND NOT IOS)
   target_sources(common PRIVATE
     GL/GLInterface/AGL.h
     GL/GLInterface/AGL.mm
