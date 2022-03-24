@@ -143,6 +143,8 @@ endif()
 
 if(ANDROID)
   target_sources(inputcommon PRIVATE GCAdapter_Android.cpp)
+elseif(IOS)
+  target_sources(inputcommon PRIVATE GCAdapter_iOS.cpp)
 else()
   target_sources(inputcommon PRIVATE
     GCAdapter.cpp
