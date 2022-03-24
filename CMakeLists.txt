@@ -32,7 +32,7 @@ if(NOT WIN32 AND NOT APPLE AND NOT HAIKU)
   option(ENABLE_EGL "Enables EGL OpenGL Interface" ON)
 endif()
 
-if(NOT ANDROID)
+if(NOT ANDROID AND NOT IOS)
   option(ENABLE_CLI_TOOL "Enable dolphin-tool, a CLI-based utility for functions such as managing disc images" ON)
 endif()
 
