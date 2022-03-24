@@ -603,7 +603,7 @@ add_subdirectory(Externals/glslang)
 if(ENABLE_VULKAN)
   add_definitions(-DHAS_VULKAN)
 
-  if(APPLE)
+  if(APPLE AND NOT IOS)
     add_subdirectory(Externals/MoltenVK)
   endif()
 endif()
