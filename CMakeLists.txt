@@ -428,6 +428,24 @@ if(ANDROID)
   SET(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 endif()
 
+if(IOS)
+  message(STATUS "Building for iOS")
+  add_definitions(-DIPHONEOS)
+
+  set(USE_UPNP 0)
+  set(ENABLE_NOGUI 0)
+  set(ENABLE_QT 0)
+  set(ENABLE_AUTOUPDATE 0)
+  set(ENABLE_CUBEB 0)
+  set(USE_DISCORD_PRESENCE 0)
+
+  # We are cross compiling, search only the toolchain for libraries and includes
+  SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+  SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+  SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+  SET(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+endif()
+
 if(ENABLE_HEADLESS)
   message(STATUS "Enabling Headless! Disabling GUI.")
   set(ENABLE_QT 0)
