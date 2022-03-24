@@ -745,7 +745,7 @@ if(ENABLE_CUBEB)
   add_definitions(-DHAVE_CUBEB)
 endif()
 
-if(NOT ANDROID)
+if(NOT ANDROID AND NOT IOS)
   add_definitions(-D__LIBUSB__)
   if(NOT APPLE)
     find_package(LibUSB)
