@@ -20,7 +20,7 @@
 #ifdef HAVE_X11
 #define CIFACE_USE_XLIB
 #endif
-#if defined(__APPLE__)
+#if defined(__APPLE__) && !defined(IPHONEOS)
 #define CIFACE_USE_OSX
 #endif
 #if defined(HAVE_LIBEVDEV) && defined(HAVE_LIBUDEV)
