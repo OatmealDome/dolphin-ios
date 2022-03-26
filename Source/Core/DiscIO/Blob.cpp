@@ -212,8 +212,10 @@ u32 SectorReader::ReadChunk(u8* buffer, u64 chunk_num)
 
 std::unique_ptr<BlobReader> CreateBlobReader(const std::string& filename)
 {
+#ifndef IPHONEOS
   if (Common::IsCDROMDevice(filename))
     return DriveReader::Create(filename);
+#endif
 
   File::IOFile file(filename, "rb");
   u32 magic;
