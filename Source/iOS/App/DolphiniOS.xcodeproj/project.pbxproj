@@ -169,7 +169,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		B9DC3E0D27EFBD2F0084DAA4 /* Debug */ = {
+		B9DC3E0D27EFBD2F0084DAA4 /* Debug (Non-Jailbroken) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -227,9 +227,9 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
-			name = Debug;
+			name = "Debug (Non-Jailbroken)";
 		};
-		B9DC3E0E27EFBD2F0084DAA4 /* Release */ = {
+		B9DC3E0E27EFBD2F0084DAA4 /* Release (Non-Jailbroken) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -281,9 +281,9 @@
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = "Release (Non-Jailbroken)";
 		};
-		B9DC3E1027EFBD2F0084DAA4 /* Debug */ = {
+		B9DC3E1027EFBD2F0084DAA4 /* Debug (Non-Jailbroken) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -309,9 +309,9 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Debug;
+			name = "Debug (Non-Jailbroken)";
 		};
-		B9DC3E1127EFBD2F0084DAA4 /* Release */ = {
+		B9DC3E1127EFBD2F0084DAA4 /* Release (Non-Jailbroken) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -337,7 +337,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Release;
+			name = "Release (Non-Jailbroken)";
 		};
 /* End XCBuildConfiguration section */
 
@@ -345,20 +345,20 @@
 		B9DC3DF127EFBD2C0084DAA4 /* Build configuration list for PBXProject "DolphiniOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B9DC3E0D27EFBD2F0084DAA4 /* Debug */,
-				B9DC3E0E27EFBD2F0084DAA4 /* Release */,
+				B9DC3E0D27EFBD2F0084DAA4 /* Debug (Non-Jailbroken) */,
+				B9DC3E0E27EFBD2F0084DAA4 /* Release (Non-Jailbroken) */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release (Non-Jailbroken)";
 		};
 		B9DC3E0F27EFBD2F0084DAA4 /* Build configuration list for PBXNativeTarget "DolphiniOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B9DC3E1027EFBD2F0084DAA4 /* Debug */,
-				B9DC3E1127EFBD2F0084DAA4 /* Release */,
+				B9DC3E1027EFBD2F0084DAA4 /* Debug (Non-Jailbroken) */,
+				B9DC3E1127EFBD2F0084DAA4 /* Release (Non-Jailbroken) */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "Release (Non-Jailbroken)";
 		};
 /* End XCConfigurationList section */
 	};
