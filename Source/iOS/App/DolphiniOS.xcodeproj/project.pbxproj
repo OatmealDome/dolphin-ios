@@ -16,6 +16,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
+		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
+		B96F72D027F0FC020024BA7D /* Release (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
+		B96F72D127F0FC1A0024BA7D /* Release (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Jailbroken).xcconfig"; sourceTree = "<group>"; };
+		B96F72D227F0FC420024BA7D /* Release (Beta, Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Beta, Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
+		B96F72D327F0FC520024BA7D /* Release (Beta, Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Beta, Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B9DC3DF627EFBD2C0084DAA4 /* DolphiniOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DolphiniOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9DC3DF927EFBD2C0084DAA4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B9DC3DFA27EFBD2C0084DAA4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -39,9 +45,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B96F72CC27F0E6A00024BA7D /* Project */ = {
+			isa = PBXGroup;
+			children = (
+				B96F72CD27F0E8A70024BA7D /* Config */,
+			);
+			path = Project;
+			sourceTree = "<group>";
+		};
+		B96F72CD27F0E8A70024BA7D /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */,
+				B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */,
+				B96F72D027F0FC020024BA7D /* Release (Non-Jailbroken).xcconfig */,
+				B96F72D227F0FC420024BA7D /* Release (Beta, Non-Jailbroken).xcconfig */,
+				B96F72D127F0FC1A0024BA7D /* Release (Jailbroken).xcconfig */,
+				B96F72D327F0FC520024BA7D /* Release (Beta, Jailbroken).xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		B9DC3DED27EFBD2C0084DAA4 = {
 			isa = PBXGroup;
 			children = (
+				B96F72CC27F0E6A00024BA7D /* Project */,
 				B9DC3DF827EFBD2C0084DAA4 /* DolphiniOS */,
 				B9DC3DF727EFBD2C0084DAA4 /* Products */,
 			);
@@ -232,6 +260,7 @@
 		};
 		B96F72C527F0E43D0024BA7D /* Debug (Jailbroken) */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -315,6 +344,7 @@
 		};
 		B96F72C727F0E4470024BA7D /* Release (Jailbroken) */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B96F72D127F0FC1A0024BA7D /* Release (Jailbroken).xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -398,6 +428,7 @@
 		};
 		B96F72C927F0E4A60024BA7D /* Release (Beta, Non-Jailbroken) */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B96F72D227F0FC420024BA7D /* Release (Beta, Non-Jailbroken).xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -481,6 +512,7 @@
 		};
 		B96F72CB27F0E4AE0024BA7D /* Release (Beta, Jailbroken) */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B96F72D327F0FC520024BA7D /* Release (Beta, Jailbroken).xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -625,6 +657,7 @@
 		};
 		B9DC3E1027EFBD2F0084DAA4 /* Debug (Non-Jailbroken) */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -653,6 +686,7 @@
 		};
 		B9DC3E1127EFBD2F0084DAA4 /* Release (Non-Jailbroken) */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B96F72D027F0FC020024BA7D /* Release (Non-Jailbroken).xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
