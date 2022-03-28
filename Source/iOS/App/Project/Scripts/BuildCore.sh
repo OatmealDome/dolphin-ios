@@ -5,7 +5,7 @@ set -e
 PATH="$PATH:/opt/homebrew/bin:/usr/local/bin"
 
 REPO_ROOT_DIR="$PROJECT_DIR/../../.."
-CMAKE_BUILD_DIR="$REPO_ROOT_DIR/build-$PLATFORM_NAME"
+CMAKE_BUILD_DIR="$REPO_ROOT_DIR/build-$PLATFORM_NAME-$DOL_CORE_BUILD_TARGET"
 
 case $PLATFORM_NAME in
     iphoneos)

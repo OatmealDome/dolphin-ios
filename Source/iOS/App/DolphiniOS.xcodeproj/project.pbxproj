@@ -38,7 +38,7 @@
 		B9476B1F27F1B1F2009C0A4B /* Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Beta.xcconfig; sourceTree = "<group>"; };
 		B9476B2027F22416009C0A4B /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		B9476B2227F235A0009C0A4B /* BuildCore.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildCore.sh; sourceTree = "<group>"; };
-		B9476B2427F23FFE009C0A4B /* libdolphin.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libdolphin.dylib; path = "../../../build-$(PLATFORM_NAME)/Source/iOS/Library/libdolphin.dylib"; sourceTree = SOURCE_ROOT; };
+		B9476B2427F23FFE009C0A4B /* libdolphin.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libdolphin.dylib; path = "../../../build-$(PLATFORM_NAME)-$(DOL_CORE_BUILD_TARGET)/Source/iOS/Library/libdolphin.dylib"; sourceTree = SOURCE_ROOT; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72D027F0FC020024BA7D /* Release (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
