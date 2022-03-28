@@ -5,7 +5,7 @@
 // Change this line to modify the organization identifier.
 //
 
-DOL_PBID_ORGANIZATION_IDENTIFIER = me.oatmealdome
+DOL_PBID_ORGANIZATION_IDENTIFIER = use.your.own.organization.identifier
 
 //
 // You probably shouldn't touch anything below. (Unless you know what you're doing.)
