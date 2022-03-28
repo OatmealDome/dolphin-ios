@@ -1,0 +1,8 @@
+// Copyright 2022 DolphiniOS Project
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+// It's impossible to append to a property when combining multiple xcconfigs together.
+// Therefore, this file combines properties set in other files to make a correct
+// GCC_PREPROCESSOR_DEFINITIONS for the current configuration.
+
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited)
