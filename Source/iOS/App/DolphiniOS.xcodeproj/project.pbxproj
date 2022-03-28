@@ -22,6 +22,7 @@
 		B9476B1E27F1B17F009C0A4B /* NonJailbroken.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = NonJailbroken.xcconfig; sourceTree = "<group>"; };
 		B9476B1F27F1B1F2009C0A4B /* Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Beta.xcconfig; sourceTree = "<group>"; };
 		B9476B2027F22416009C0A4B /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		B9476B2227F235A0009C0A4B /* BuildCore.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildCore.sh; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72D027F0FC020024BA7D /* Release (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -52,10 +53,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B9476B2127F2357B009C0A4B /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				B9476B2227F235A0009C0A4B /* BuildCore.sh */,
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
 		B96F72CC27F0E6A00024BA7D /* Project */ = {
 			isa = PBXGroup;
 			children = (
 				B96F72CD27F0E8A70024BA7D /* Config */,
+				B9476B2127F2357B009C0A4B /* Scripts */,
 			);
 			path = Project;
 			sourceTree = "<group>";
@@ -128,6 +138,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B9DC3E0F27EFBD2F0084DAA4 /* Build configuration list for PBXNativeTarget "DolphiniOS" */;
 			buildPhases = (
+				B9476B2327F23920009C0A4B /* Build Dolphin Core */,
 				B9DC3DF227EFBD2C0084DAA4 /* Sources */,
 				B9DC3DF327EFBD2C0084DAA4 /* Frameworks */,
 				B9DC3DF427EFBD2C0084DAA4 /* Resources */,
@@ -185,6 +196,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B9476B2327F23920009C0A4B /* Build Dolphin Core */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Dolphin Core";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PROJECT_DIR/Project/Scripts/BuildCore.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B9DC3DF227EFBD2C0084DAA4 /* Sources */ = {
