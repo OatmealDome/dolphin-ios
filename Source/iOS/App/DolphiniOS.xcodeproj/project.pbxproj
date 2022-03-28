@@ -16,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PreprocessorCombine.xcconfig; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -60,6 +61,7 @@
 			children = (
 				B96F72DB27F167E90024BA7D /* Presets */,
 				B96F72DD27F199040024BA7D /* BundleIdentifier.xcconfig */,
+				B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */,
 				B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */,
 			);
 			path = Config;
@@ -252,10 +254,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -591,10 +589,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
