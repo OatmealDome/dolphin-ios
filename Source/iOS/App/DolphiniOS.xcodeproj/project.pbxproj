@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B900A7A127F255EF000361DD /* libdolphin.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
 		B9DC3DFB27EFBD2C0084DAA4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B9DC3DFA27EFBD2C0084DAA4 /* AppDelegate.m */; };
 		B9DC3E0127EFBD2D0084DAA4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9DC3E0027EFBD2D0084DAA4 /* ViewController.m */; };
 		B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */; };
@@ -14,6 +16,19 @@
 		B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0727EFBD2F0084DAA4 /* LaunchScreen.storyboard */; };
 		B9DC3E0C27EFBD2F0084DAA4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B9DC3E0B27EFBD2F0084DAA4 /* main.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B900A7A027F255E0000361DD /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B900A7A127F255EF000361DD /* libdolphin.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		B900A7A227F25718000361DD /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
@@ -23,6 +38,7 @@
 		B9476B1F27F1B1F2009C0A4B /* Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Beta.xcconfig; sourceTree = "<group>"; };
 		B9476B2027F22416009C0A4B /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		B9476B2227F235A0009C0A4B /* BuildCore.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildCore.sh; sourceTree = "<group>"; };
+		B9476B2427F23FFE009C0A4B /* libdolphin.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libdolphin.dylib; path = "../../../build-$(PLATFORM_NAME)/Source/iOS/Library/libdolphin.dylib"; sourceTree = SOURCE_ROOT; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72D027F0FC020024BA7D /* Release (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -47,12 +63,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B900A7A327F260EF000361DD /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				B9476B2427F23FFE009C0A4B /* libdolphin.dylib */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
 		B9476B2127F2357B009C0A4B /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				B96F72CC27F0E6A00024BA7D /* Project */,
+				B900A7A327F260EF000361DD /* Libraries */,
 				B9DC3DF827EFBD2C0084DAA4 /* DolphiniOS */,
 				B9DC3DF727EFBD2C0084DAA4 /* Products */,
 			);
@@ -142,6 +168,7 @@
 				B9DC3DF227EFBD2C0084DAA4 /* Sources */,
 				B9DC3DF327EFBD2C0084DAA4 /* Frameworks */,
 				B9DC3DF427EFBD2C0084DAA4 /* Resources */,
+				B900A7A027F255E0000361DD /* CopyFiles */,
 			);
 			buildRules = (
 			);
