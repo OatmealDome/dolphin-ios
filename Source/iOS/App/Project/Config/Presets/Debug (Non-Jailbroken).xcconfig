@@ -4,4 +4,5 @@
 #include "Project/Config/BundleIdentifier.xcconfig"
 #include "Project/Config/Debug.xcconfig"
 #include "Project/Config/NonJailbroken.xcconfig"
+#include "Project/Config/Common.xcconfig"
 #include "Project/Config/PreprocessorCombine.xcconfig"
