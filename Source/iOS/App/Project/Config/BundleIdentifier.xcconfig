@@ -1,0 +1,24 @@
+// Copyright 2022 DolphiniOS Project
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+//
+// Change this line to modify the organization identifier.
+//
+
+DOL_PBID_ORGANIZATION_IDENTIFIER = me.oatmealdome
+
+//
+// You probably shouldn't touch anything below. (Unless you know what you're doing.)
+//
+
+DOL_PBID_APP_NAME[sdk=iphoneos*] = DolphiniOS
+DOL_PBID_APP_NAME[sdk=iphonesimulator*] = DolphiniOS
+
+PRODUCT_BUNDLE_IDENTIFIER[config=Debug \(Non-Jailbroken\)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-njb-debug
+PRODUCT_BUNDLE_IDENTIFIER[config=Debug \(Jailbroken\)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-debug
+PRODUCT_BUNDLE_IDENTIFIER[config=Release \(Non-Jailbroken\)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-njb
+PRODUCT_BUNDLE_IDENTIFIER[config=Release \(Beta, Non-Jailbroken\)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-njb-patreon-beta
+PRODUCT_BUNDLE_IDENTIFIER[config=Release \(Jailbroken\)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)
+PRODUCT_BUNDLE_IDENTIFIER[config=Release \(Beta, Jailbroken\)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-patreon-beta
+
+// PRODUCT_BUNDLE_IDENTIFIER[config=xyz] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)
