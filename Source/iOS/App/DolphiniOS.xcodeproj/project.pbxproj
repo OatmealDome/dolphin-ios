@@ -19,6 +19,7 @@
 		B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PreprocessorCombine.xcconfig; sourceTree = "<group>"; };
 		B9476B1E27F1B17F009C0A4B /* NonJailbroken.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = NonJailbroken.xcconfig; sourceTree = "<group>"; };
+		B9476B1F27F1B1F2009C0A4B /* Beta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Beta.xcconfig; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72D027F0FC020024BA7D /* Release (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -61,6 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				B96F72DB27F167E90024BA7D /* Presets */,
+				B9476B1F27F1B1F2009C0A4B /* Beta.xcconfig */,
 				B96F72DD27F199040024BA7D /* BundleIdentifier.xcconfig */,
 				B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */,
 				B9476B1E27F1B17F009C0A4B /* NonJailbroken.xcconfig */,
