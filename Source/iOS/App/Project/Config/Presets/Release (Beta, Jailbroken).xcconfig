@@ -3,4 +3,5 @@
 
 #include "Project/Config/BundleIdentifier.xcconfig"
 #include "Project/Config/Beta.xcconfig"
+#include "Project/Config/Release.xcconfig"
 #include "Project/Config/PreprocessorCombine.xcconfig"

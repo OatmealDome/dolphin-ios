@@ -2,4 +2,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "Project/Config/BundleIdentifier.xcconfig"
+#include "Project/Config/Release.xcconfig"
 #include "Project/Config/PreprocessorCombine.xcconfig"
