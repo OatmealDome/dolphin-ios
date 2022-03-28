@@ -56,6 +56,14 @@
 		B96F72CD27F0E8A70024BA7D /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				B96F72DB27F167E90024BA7D /* Presets */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		B96F72DB27F167E90024BA7D /* Presets */ = {
+			isa = PBXGroup;
+			children = (
 				B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */,
 				B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */,
 				B96F72D027F0FC020024BA7D /* Release (Non-Jailbroken).xcconfig */,
@@ -63,7 +71,7 @@
 				B96F72D127F0FC1A0024BA7D /* Release (Jailbroken).xcconfig */,
 				B96F72D327F0FC520024BA7D /* Release (Beta, Jailbroken).xcconfig */,
 			);
-			path = Config;
+			path = Presets;
 			sourceTree = "<group>";
 		};
 		B9DC3DED27EFBD2C0084DAA4 = {
