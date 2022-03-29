@@ -257,6 +257,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		B9476B2327F23920009C0A4B /* Build Dolphin Core */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
