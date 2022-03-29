@@ -33,6 +33,7 @@
 		B900A7A227F25718000361DD /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		B900A7A527F26F60000361DD /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		B900A7A627F26F61000361DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B900A7B127F28806000361DD /* FoundationStringUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FoundationStringUtil.h; sourceTree = "<group>"; };
 		B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PreprocessorCombine.xcconfig; sourceTree = "<group>"; };
 		B9476B1E27F1B17F009C0A4B /* NonJailbroken.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = NonJailbroken.xcconfig; sourceTree = "<group>"; };
@@ -80,6 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				B900A7A627F26F61000361DD /* AppDelegate.swift */,
+				B900A7B127F28806000361DD /* FoundationStringUtil.h */,
 			);
 			path = Common;
 			sourceTree = "<group>";
