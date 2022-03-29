@@ -109,13 +109,6 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		B900A7B427F2D3C0000361DD /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		B9476B2127F2357B009C0A4B /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,7 +162,6 @@
 				B900A7A427F26F17000361DD /* Common */,
 				B9DC3DF827EFBD2C0084DAA4 /* DolphiniOS */,
 				B9DC3DF727EFBD2C0084DAA4 /* Products */,
-				B900A7B427F2D3C0000361DD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
