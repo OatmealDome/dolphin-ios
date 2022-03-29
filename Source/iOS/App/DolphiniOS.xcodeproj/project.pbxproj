@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B900A7A127F255EF000361DD /* libdolphin.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7A627F26F61000361DD /* AppDelegate.swift */; };
+		B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7AF27F2866D000361DD /* UserFolderUtil.swift */; };
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
 		B9DC3E0127EFBD2D0084DAA4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9DC3E0027EFBD2D0084DAA4 /* ViewController.m */; };
 		B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */; };
@@ -33,6 +34,7 @@
 		B900A7A227F25718000361DD /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		B900A7A527F26F60000361DD /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		B900A7A627F26F61000361DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B900A7AF27F2866D000361DD /* UserFolderUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFolderUtil.swift; sourceTree = "<group>"; };
 		B900A7B127F28806000361DD /* FoundationStringUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FoundationStringUtil.h; sourceTree = "<group>"; };
 		B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PreprocessorCombine.xcconfig; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 			children = (
 				B900A7A627F26F61000361DD /* AppDelegate.swift */,
 				B900A7B127F28806000361DD /* FoundationStringUtil.h */,
+				B900A7AF27F2866D000361DD /* UserFolderUtil.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */,
+				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
 				B9DC3E0127EFBD2D0084DAA4 /* ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
