@@ -38,6 +38,7 @@ static Common::DynamicLibrary s_vulkan_module;
 static bool OpenVulkanLibrary()
 {
 #ifdef __APPLE__
+#ifndef IPHONEOS
   // Check if a path to a specific Vulkan library has been specified.
   char* libvulkan_env = getenv("LIBVULKAN_PATH");
   if (libvulkan_env && s_vulkan_module.Open(libvulkan_env))
@@ -45,6 +46,9 @@ static bool OpenVulkanLibrary()
 
   // Use the libMoltenVK.dylib from the application bundle.
   std::string filename = File::GetBundleDirectory() + "/Contents/Frameworks/libMoltenVK.dylib";
+#else
+  std::string filename = File::GetBundleDirectory() + "/Frameworks/libMoltenVK.dylib";
+#endif
   return s_vulkan_module.Open(filename.c_str());
 #else
   std::string filename = Common::DynamicLibrary::GetVersionedFilename("vulkan", 1);
