@@ -206,6 +206,10 @@ void FreeMemoryPages(void* ptr, size_t size)
     if (munmap(ptr, size) != 0)
       PanicAlertFmt("FreeMemoryPages failed!\nmunmap: {}", LastStrerrorString());
 #endif
+
+#ifdef IPHONEOS
+    g_jit_memory_tracker.UnregisterJITRegion(ptr);
+#endif
   }
 }
 
