@@ -17,6 +17,12 @@
 #include <unistd.h>
 #endif
 
+#ifdef IPHONEOS
+#include <regex>
+#include <sys/utsname.h>
+#include <unistd.h>
+#endif
+
 #include <fmt/format.h>
 
 #include "Common/CommonTypes.h"
@@ -82,6 +88,52 @@ void CPUInfo::Detect()
   bSHA1 = true;
   bSHA2 = true;
   bCRC32 = true;
+
+#ifdef IPHONEOS
+  //
+  // Check for CRC32 intrinsics support via the device's model. (Apple doesn't provide a better way
+  // to do this.) A10 processors and above should support this.
+  //
+  // These include:
+  //
+  // iPhone9,1 and above
+  // iPad7,1 and above
+  // iPod9,1 and above
+  // AppleTV6,2 and above
+  //
+
+  utsname system_info;
+  uname(&system_info);
+  
+  const std::string model = std::string(system_info.machine);
+  std::regex number_regex("[0-9]+");
+  std::smatch match;
+
+  if (std::regex_search(model.begin(), model.end(), match, number_regex))
+  {
+    int model_number = std::stoi(match[0]);
+    int minimum_model = 99; // impossible value, in case a new type of device comes along
+
+    if (model.find("iPhone") != std::string::npos)
+    {
+      minimum_model = 9;
+    }
+    else if (model.find("iPad") != std::string::npos)
+    {
+      minimum_model = 7;
+    }
+    else if (model.find("iPod") != std::string::npos)
+    {
+      minimum_model = 9;
+    }
+    else if (model.find("AppleTV") != std::string::npos)
+    {
+      minimum_model = 6;
+    }
+
+    bCRC32 = model_number >= minimum_model;
+  }
+#endif
 #elif defined(_WIN32)
   num_cores = std::thread::hardware_concurrency();
 
