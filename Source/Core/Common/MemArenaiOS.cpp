@@ -1,0 +1,73 @@
+// Copyright 2008 Dolphin Emulator Project
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+#include "Common/MemArena.h"
+
+#include "Common/Logging/Log.h"
+
+namespace Common
+{
+MemArena::MemArena() = default;
+MemArena::~MemArena() = default;
+
+void MemArena::GrabSHMSegment(size_t size)
+{
+  kern_return_t retval = vm_allocate(mach_task_self(), &m_shm_address, size, VM_FLAGS_ANYWHERE);
+  if (retval != KERN_SUCCESS)
+  {
+    ERROR_LOG_FMT(MEMMAP, "Failed to allocate low memory space: {0:#x}", retval);
+  }
+
+  m_shm_size = size;
+}
+
+void MemArena::ReleaseSHMSegment()
+{
+  vm_deallocate(mach_task_self(), m_shm_address, m_shm_size);
+  m_shm_address = 0;
+  m_shm_size = 0;
+}
+
+void* MemArena::CreateView(s64 offset, size_t size)
+{
+  vm_address_t target = 0;
+  uint64_t mask = 0;
+  vm_address_t source = m_shm_address + offset;
+  vm_prot_t cur_protection = 0;
+  vm_prot_t max_protection = 0;
+
+  kern_return_t retval =
+      vm_remap(mach_task_self(), &target, size, mask, true, mach_task_self(), source, false,
+               &cur_protection, &max_protection, VM_INHERIT_DEFAULT);
+  if (retval != KERN_SUCCESS)
+  {
+    ERROR_LOG_FMT(MEMMAP, "vm_remap failed {0:#x}", retval);
+    return nullptr;
+  }
+
+  return reinterpret_cast<void*>(target);
+}
+
+void MemArena::ReleaseView(void* view, size_t size)
+{
+  vm_deallocate(mach_task_self(), reinterpret_cast<vm_address_t>(view), size);
+}
+
+u8* MemArena::ReserveMemoryRegion(size_t memory_size)
+{
+  return nullptr;
+}
+
+void MemArena::ReleaseMemoryRegion()
+{
+}
+
+void* MemArena::MapInMemoryRegion(s64 offset, size_t size, void* base)
+{
+  return nullptr;
+}
+
+void MemArena::UnmapFromMemoryRegion(void* view, size_t size)
+{
+}
+}  // namespace Common

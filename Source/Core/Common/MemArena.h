@@ -6,6 +6,10 @@
 #include <cstddef>
 #include <vector>
 
+#ifdef IPHONEOS
+#include <mach/mach.h>
+#endif
+
 #include "Common/CommonTypes.h"
 #include "Common/DynamicLibrary.h"
 
@@ -115,6 +119,9 @@ private:
 #else
 #ifdef ANDROID
   int fd;
+#elif defined(IPHONEOS)
+  vm_address_t m_shm_address;
+  vm_size_t m_shm_size;
 #else
   int m_shm_fd;
   void* m_reserved_region;
