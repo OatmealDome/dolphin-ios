@@ -8,6 +8,7 @@ class AppDelegate : UIResponder, UIApplicationDelegate {
   var window: UIWindow?
   
   let services: [UIApplicationDelegate] = [
+    DefaultsInitService(),
     DolphinCoreService()
   ]
   

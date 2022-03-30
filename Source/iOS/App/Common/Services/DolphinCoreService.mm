@@ -12,10 +12,7 @@
 @implementation DolphinCoreService
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id>*)launchOptions {
-  NSString* userFolder = [UserFolderUtil getUserFolder];
-  [[NSFileManager defaultManager] createDirectoryAtPath:userFolder withIntermediateDirectories:true attributes:nil error:nil];
-  
-  UICommon::SetUserDirectory(FoundationToCppString(userFolder));
+  UICommon::SetUserDirectory(FoundationToCppString([UserFolderUtil getUserFolder]));
   UICommon::Init();
   
   return YES;
