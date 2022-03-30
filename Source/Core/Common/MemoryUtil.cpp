@@ -29,10 +29,18 @@
 #endif
 #endif
 
+#ifdef IPHONEOS
+#include "Common/JITMemoryTracker.h"
+#endif
+
 namespace Common
 {
 // This is purposely not a full wrapper for virtualalloc/mmap, but it
 // provides exactly the primitive operations that Dolphin needs.
+
+#ifdef IPHONEOS
+static JITMemoryTracker g_jit_memory_tracker;
+#endif
 
 void* AllocateExecutableMemory(size_t size)
 {
@@ -40,23 +48,35 @@ void* AllocateExecutableMemory(size_t size)
   void* ptr = VirtualAlloc(nullptr, size, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 #else
   int map_flags = MAP_ANON | MAP_PRIVATE;
-#if defined(__APPLE__)
+#if defined(__APPLE__) && !defined(IPHONEOS)
   // This check is in place to prepare for x86_64 MAP_JIT support. While MAP_JIT did exist
   // prior to 10.14, it had restrictions on the number of JIT allocations that were removed
   // in 10.14.
   if (__builtin_available(macOS 10.14, *))
     map_flags |= MAP_JIT;
 #endif
-  void* ptr = mmap(nullptr, size, PROT_READ | PROT_WRITE | PROT_EXEC, map_flags, -1, 0);
+
+  int map_prot = PROT_READ | PROT_EXEC;
+#ifndef IPHONEOS
+  // The default protection is r-x on non-iOS platforms.
+  map_prot |= PROT_WRITE;
+#endif
+
+  void* ptr = mmap(nullptr, size, map_prot, map_flags, -1, 0);
   if (ptr == MAP_FAILED)
     ptr = nullptr;
 #endif
 
   if (ptr == nullptr)
-    PanicAlertFmt("Failed to allocate executable memory");
+    PanicAlertFmt("Failed to allocate executable memory: {}", LastStrerrorString());
+
+#ifdef IPHONEOS
+  g_jit_memory_tracker.RegisterJITRegion(ptr, size);
+#endif
 
   return ptr;
 }
+#ifndef IPHONEOS
 // This function is used to provide a counter for the JITPageWrite*Execute*
 // functions to enable nesting. The static variable is wrapped in a a function
 // to allow those functions to be called inside of the constructor of a static
@@ -98,7 +118,7 @@ static int& JITPageWriteNestCounter()
 // Allows a thread to write to executable memory, but not execute the data.
 void JITPageWriteEnableExecuteDisable()
 {
-#if defined(_M_ARM_64) && defined(__APPLE__)
+#if defined(_M_ARM_64) && defined(__APPLE__) && !defined(IPHONEOS)
   if (JITPageWriteNestCounter() == 0)
   {
     if (__builtin_available(macOS 11.0, *))
@@ -120,7 +140,7 @@ void JITPageWriteDisableExecuteEnable()
   if (JITPageWriteNestCounter() < 0)
     PanicAlertFmt("JITPageWriteNestCounter() underflowed");
 
-#if defined(_M_ARM_64) && defined(__APPLE__)
+#if defined(_M_ARM_64) && defined(__APPLE__) && !defined(IPHONEOS)
   if (JITPageWriteNestCounter() == 0)
   {
     if (__builtin_available(macOS 11.0, *))
@@ -130,6 +150,17 @@ void JITPageWriteDisableExecuteEnable()
   }
 #endif
 }
+#else
+void JITPageWriteEnableExecuteDisable(void* ptr)
+{
+  g_jit_memory_tracker.JITRegionWriteEnableExecuteDisable(ptr);
+}
+
+void JITPageWriteDisableExecuteEnable(void* ptr)
+{
+  g_jit_memory_tracker.JITRegionWriteDisableExecuteEnable(ptr);
+}
+#endif
 
 void* AllocateMemoryPages(size_t size)
 {
@@ -208,7 +239,7 @@ void WriteProtectMemory(void* ptr, size_t size, bool allowExecute)
   DWORD oldValue;
   if (!VirtualProtect(ptr, size, allowExecute ? PAGE_EXECUTE_READ : PAGE_READONLY, &oldValue))
     PanicAlertFmt("WriteProtectMemory failed!\nVirtualProtect: {}", GetLastErrorString());
-#elif !(defined(_M_ARM_64) && defined(__APPLE__))
+#elif !(defined(_M_ARM_64) && defined(__APPLE__) && !defined(IPHONEOS))
   // MacOS 11.2 on ARM does not allow for changing the access permissions of pages
   // that were marked executable, instead it uses the protections offered by MAP_JIT
   // for write protection.
@@ -223,7 +254,7 @@ void UnWriteProtectMemory(void* ptr, size_t size, bool allowExecute)
   DWORD oldValue;
   if (!VirtualProtect(ptr, size, allowExecute ? PAGE_EXECUTE_READWRITE : PAGE_READWRITE, &oldValue))
     PanicAlertFmt("UnWriteProtectMemory failed!\nVirtualProtect: {}", GetLastErrorString());
-#elif !(defined(_M_ARM_64) && defined(__APPLE__))
+#elif !(defined(_M_ARM_64) && defined(__APPLE__) && !defined(IPHONEOS))
   // MacOS 11.2 on ARM does not allow for changing the access permissions of pages
   // that were marked executable, instead it uses the protections offered by MAP_JIT
   // for write protection.
