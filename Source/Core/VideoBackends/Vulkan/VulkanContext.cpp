@@ -212,7 +212,8 @@ bool VulkanContext::SelectInstanceExtensions(std::vector<const char*>* extension
   }
 #endif
 #if defined(VK_USE_PLATFORM_METAL_EXT)
-  if (wstype == WindowSystemType::MacOS && !AddExtension(VK_EXT_METAL_SURFACE_EXTENSION_NAME, true))
+  if ((wstype == WindowSystemType::MacOS || wstype == WindowSystemType::iOS) &&
+      !AddExtension(VK_EXT_METAL_SURFACE_EXTENSION_NAME, true))
   {
     return false;
   }
