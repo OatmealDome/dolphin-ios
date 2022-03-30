@@ -6,6 +6,8 @@
 #include <cstddef>
 #include <string>
 
+#include "Common/CommonTypes.h"
+
 namespace Common
 {
 void* AllocateExecutableMemory(size_t size);
@@ -23,7 +25,7 @@ void JITPageWriteDisableExecuteEnable();
 // write to executable memory but not execute it.
 struct ScopedJITPageWriteAndNoExecute
 {
-  ScopedJITPageWriteAndNoExecute() { JITPageWriteEnableExecuteDisable(); }
+  ScopedJITPageWriteAndNoExecute(u8*) { JITPageWriteEnableExecuteDisable(); }
   ~ScopedJITPageWriteAndNoExecute() { JITPageWriteDisableExecuteEnable(); }
 };
 void* AllocateMemoryPages(size_t size);

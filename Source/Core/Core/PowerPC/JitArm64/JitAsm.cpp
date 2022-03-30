@@ -25,7 +25,7 @@ using namespace Arm64Gen;
 
 void JitArm64::GenerateAsm()
 {
-  const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes;
+  const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes(GetRegionPtr());
 
   // This value is all of the callee saved registers that we are required to save.
   // According to the AACPS64 we need to save R19 ~ R30 and Q8 ~ Q15.
