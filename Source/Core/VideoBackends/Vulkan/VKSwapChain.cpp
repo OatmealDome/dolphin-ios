@@ -107,7 +107,7 @@ VkSurfaceKHR SwapChain::CreateVulkanSurface(VkInstance instance, const WindowSys
 #endif
 
 #if defined(VK_USE_PLATFORM_METAL_EXT)
-  if (wsi.type == WindowSystemType::MacOS)
+  if (wsi.type == WindowSystemType::MacOS || wsi.type == WindowSystemType::iOS)
   {
     VkMetalSurfaceCreateInfoEXT surface_create_info = {
         VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT, nullptr, 0,
