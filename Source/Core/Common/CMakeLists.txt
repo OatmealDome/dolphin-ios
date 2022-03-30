@@ -192,6 +192,8 @@ elseif(WIN32)
 elseif(IOS)
   target_sources(common PRIVATE
     Logging/ConsoleListenerNix.cpp
+    JITMemoryTracker.h
+    JITMemoryTracker.cpp
     MemArenaiOS.cpp
   )
 else()
