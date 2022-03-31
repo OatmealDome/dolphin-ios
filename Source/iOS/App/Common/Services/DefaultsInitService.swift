@@ -11,6 +11,15 @@ class DefaultsInitService : UIResponder, UIApplicationDelegate {
     
     let softwareFolder: String = UserFolderUtil.getSoftwareFolder()
     try! FileManager.default.createDirectory(atPath: softwareFolder, withIntermediateDirectories: true, attributes: nil)
+    
+    // Set NSURLIsExcludedFromBackupKey on the folder and all its subcontents
+    
+    var softwareResourceValues = URLResourceValues()
+    softwareResourceValues.isExcludedFromBackup = true
+    
+    var softwareFolderUrl: URL = URL(fileURLWithPath: softwareFolder)
+    try! softwareFolderUrl.setResourceValues(softwareResourceValues)
+    
     return true
   }
 }
