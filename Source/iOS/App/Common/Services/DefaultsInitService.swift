@@ -9,6 +9,8 @@ class DefaultsInitService : UIResponder, UIApplicationDelegate {
     let userFolder: String = UserFolderUtil.getUserFolder()
     try! FileManager.default.createDirectory(atPath: userFolder, withIntermediateDirectories: true, attributes: nil)
     
+    let softwareFolder: String = UserFolderUtil.getSoftwareFolder()
+    try! FileManager.default.createDirectory(atPath: softwareFolder, withIntermediateDirectories: true, attributes: nil)
     return true
   }
 }
