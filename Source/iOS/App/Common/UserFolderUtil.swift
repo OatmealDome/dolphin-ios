@@ -11,4 +11,8 @@ import Foundation
     return "/private/var/mobile/Documents/DolphiniOS"
 #endif
   }
+  
+  @objc static func getSoftwareFolder() -> String {
+    return getUserFolder().stringByAppendingPathComponent("Software")
+  }
 }
