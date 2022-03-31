@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "UICollectionViewLeftAlignedLayout",
+        "repositoryURL": "https://github.com/OatmealDome/UICollectionViewLeftAlignedLayout",
+        "state": {
+          "branch": null,
+          "revision": "8cba0fc9fe5e9e7392ed0bd8c121ebd9973ff673",
+          "version": "1.0.4"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

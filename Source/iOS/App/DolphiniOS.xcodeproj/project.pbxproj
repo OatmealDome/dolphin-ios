@@ -16,6 +16,7 @@
 		B900A7B827F2E167000361DD /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7B727F2E167000361DD /* MetalView.swift */; };
 		B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7B927F4CB80000361DD /* DefaultsInitService.swift */; };
 		B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7BC27F4CDD3000361DD /* SwiftStringUtil.swift */; };
+		B900A7D227F5228B000361DD /* UICollectionViewLeftAlignedLayout in Frameworks */ = {isa = PBXBuildFile; productRef = B900A7D127F5228B000361DD /* UICollectionViewLeftAlignedLayout */; };
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
 		B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */; };
 		B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */; };
@@ -76,6 +77,7 @@
 			files = (
 				B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */,
 				B900A7B527F2D3C0000361DD /* MoltenVK.xcframework in Frameworks */,
+				B900A7D227F5228B000361DD /* UICollectionViewLeftAlignedLayout in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +234,9 @@
 			dependencies = (
 			);
 			name = DolphiniOS;
+			packageProductDependencies = (
+				B900A7D127F5228B000361DD /* UICollectionViewLeftAlignedLayout */,
+			);
 			productName = DolphiniOS;
 			productReference = B9DC3DF627EFBD2C0084DAA4 /* DolphiniOS.app */;
 			productType = "com.apple.product-type.application";
@@ -260,6 +265,9 @@
 				Base,
 			);
 			mainGroup = B9DC3DED27EFBD2C0084DAA4;
+			packageReferences = (
+				B900A7D027F5228B000361DD /* XCRemoteSwiftPackageReference "UICollectionViewLeftAlignedLayout" */,
+			);
 			productRefGroup = B9DC3DF727EFBD2C0084DAA4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -888,6 +896,25 @@
 			defaultConfigurationName = "Release (Non-Jailbroken)";
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B900A7D027F5228B000361DD /* XCRemoteSwiftPackageReference "UICollectionViewLeftAlignedLayout" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/OatmealDome/UICollectionViewLeftAlignedLayout";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B900A7D127F5228B000361DD /* UICollectionViewLeftAlignedLayout */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B900A7D027F5228B000361DD /* XCRemoteSwiftPackageReference "UICollectionViewLeftAlignedLayout" */;
+			productName = UICollectionViewLeftAlignedLayout;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B9DC3DEE27EFBD2C0084DAA4 /* Project object */;
 }
