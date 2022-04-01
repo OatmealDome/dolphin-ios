@@ -7,7 +7,7 @@
 
 #import "FoundationStringUtil.h"
 
-#import <UICommon/UICommon.h>
+#import "UICommon/UICommon.h"
 
 @implementation DolphinCoreService
 
