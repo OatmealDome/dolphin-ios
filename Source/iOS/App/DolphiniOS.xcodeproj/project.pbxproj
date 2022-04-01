@@ -98,9 +98,9 @@
 			children = (
 				B900A7BB27F4CD16000361DD /* FoundationUtil */,
 				B900A7A827F27EB9000361DD /* Services */,
+				B933EDBB27F6A5C7004D7DD7 /* Swift */,
 				B900A7BF27F4D2E4000361DD /* UI */,
 				B900A7A627F26F61000361DD /* AppDelegate.swift */,
-				B900A7B227F2CF8A000361DD /* BridgingHeader.h */,
 				B900A7AF27F2866D000361DD /* UserFolderUtil.swift */,
 			);
 			path = Common;
@@ -139,6 +139,14 @@
 				B900A7B727F2E167000361DD /* MetalView.swift */,
 			);
 			path = Util;
+			sourceTree = "<group>";
+		};
+		B933EDBB27F6A5C7004D7DD7 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				B900A7B227F2CF8A000361DD /* BridgingHeader.h */,
+			);
+			path = Swift;
 			sourceTree = "<group>";
 		};
 		B9476B2127F2357B009C0A4B /* Scripts */ = {
