@@ -49,6 +49,7 @@
 		B900A7B727F2E167000361DD /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		B900A7B927F4CB80000361DD /* DefaultsInitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsInitService.swift; sourceTree = "<group>"; };
 		B900A7BC27F4CDD3000361DD /* SwiftStringUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftStringUtil.swift; sourceTree = "<group>"; };
+		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PreprocessorCombine.xcconfig; sourceTree = "<group>"; };
 		B9476B1E27F1B17F009C0A4B /* NonJailbroken.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = NonJailbroken.xcconfig; sourceTree = "<group>"; };
@@ -145,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				B900A7B227F2CF8A000361DD /* BridgingHeader.h */,
+				B933EDBC27F6A61B004D7DD7 /* Swift.h */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
