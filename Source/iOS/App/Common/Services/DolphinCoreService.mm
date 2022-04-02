@@ -8,6 +8,8 @@
 #import "FoundationStringUtil.h"
 
 #import "UICommon/UICommon.h"
+#import "Core/Config/UISettings.h"
+
 
 @implementation DolphinCoreService
 
@@ -15,6 +17,8 @@
   UICommon::SetUserDirectory(FoundationToCppString([UserFolderUtil getUserFolder]));
   UICommon::CreateDirectories();
   UICommon::Init();
+  
+  Config::SetBase(Config::MAIN_USE_GAME_COVERS, true);
   
   return YES;
 }
