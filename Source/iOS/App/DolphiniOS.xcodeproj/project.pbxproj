@@ -18,6 +18,7 @@
 		B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7BC27F4CDD3000361DD /* SwiftStringUtil.swift */; };
 		B900A7D227F5228B000361DD /* UICollectionViewLeftAlignedLayout in Frameworks */ = {isa = PBXBuildFile; productRef = B900A7D127F5228B000361DD /* UICollectionViewLeftAlignedLayout */; };
 		B900A7D527F61F3A000361DD /* GameFileCacheManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B900A7D427F61F3A000361DD /* GameFileCacheManager.mm */; };
+		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
@@ -55,6 +56,7 @@
 		B900A7D327F61F3A000361DD /* GameFileCacheManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFileCacheManager.h; sourceTree = "<group>"; };
 		B900A7D427F61F3A000361DD /* GameFileCacheManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameFileCacheManager.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
+		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
 		B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameFilePtrWrapper.mm; sourceTree = "<group>"; };
 		B933EDC227F8E215004D7DD7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				B900A7B927F4CB80000361DD /* DefaultsInitService.swift */,
 				B900A7AC27F27F36000361DD /* DolphinCoreService.h */,
 				B900A7AD27F27F36000361DD /* DolphinCoreService.mm */,
+				B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 			files = (
 				B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */,
 				B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */,
+				B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */,
 				B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */,
 				B900A7D527F61F3A000361DD /* GameFileCacheManager.mm in Sources */,
 				B900A7B827F2E167000361DD /* MetalView.swift in Sources */,

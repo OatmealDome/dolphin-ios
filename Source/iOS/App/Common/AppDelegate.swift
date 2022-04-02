@@ -9,7 +9,8 @@ class AppDelegate : UIResponder, UIApplicationDelegate {
   
   let services: [UIApplicationDelegate] = [
     DefaultsInitService(),
-    DolphinCoreService()
+    DolphinCoreService(),
+    GameFileCacheService()
   ]
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
