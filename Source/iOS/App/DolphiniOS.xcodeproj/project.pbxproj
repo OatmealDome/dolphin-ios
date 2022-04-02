@@ -16,6 +16,9 @@
 		B900A7B827F2E167000361DD /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7B727F2E167000361DD /* MetalView.swift */; };
 		B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7B927F4CB80000361DD /* DefaultsInitService.swift */; };
 		B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7BC27F4CDD3000361DD /* SwiftStringUtil.swift */; };
+		B900A7C727F4D4F4000361DD /* SoftwareList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B900A7C627F4D4F4000361DD /* SoftwareList.storyboard */; };
+		B900A7CA27F4DA97000361DD /* SoftwareListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B900A7C927F4DA97000361DD /* SoftwareListViewController.mm */; };
+		B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7CE27F4DB9A000361DD /* SoftwareListCell.swift */; };
 		B900A7D227F5228B000361DD /* UICollectionViewLeftAlignedLayout in Frameworks */ = {isa = PBXBuildFile; productRef = B900A7D127F5228B000361DD /* UICollectionViewLeftAlignedLayout */; };
 		B900A7D527F61F3A000361DD /* GameFileCacheManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B900A7D427F61F3A000361DD /* GameFileCacheManager.mm */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
@@ -53,6 +56,10 @@
 		B900A7B727F2E167000361DD /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		B900A7B927F4CB80000361DD /* DefaultsInitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsInitService.swift; sourceTree = "<group>"; };
 		B900A7BC27F4CDD3000361DD /* SwiftStringUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftStringUtil.swift; sourceTree = "<group>"; };
+		B900A7C627F4D4F4000361DD /* SoftwareList.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SoftwareList.storyboard; sourceTree = "<group>"; };
+		B900A7C827F4DA97000361DD /* SoftwareListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SoftwareListViewController.h; sourceTree = "<group>"; };
+		B900A7C927F4DA97000361DD /* SoftwareListViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SoftwareListViewController.mm; sourceTree = "<group>"; };
+		B900A7CE27F4DB9A000361DD /* SoftwareListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareListCell.swift; sourceTree = "<group>"; };
 		B900A7D327F61F3A000361DD /* GameFileCacheManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFileCacheManager.h; sourceTree = "<group>"; };
 		B900A7D427F61F3A000361DD /* GameFileCacheManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameFileCacheManager.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
@@ -162,6 +169,25 @@
 				B900A7D427F61F3A000361DD /* GameFileCacheManager.mm */,
 				B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */,
 				B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */,
+				B900A7CE27F4DB9A000361DD /* SoftwareListCell.swift */,
+				B900A7C827F4DA97000361DD /* SoftwareListViewController.h */,
+				B900A7C927F4DA97000361DD /* SoftwareListViewController.mm */,
+			);
+			path = SoftwareList;
+			sourceTree = "<group>";
+		};
+		B900A7C427F4D4DE000361DD /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				B900A7C527F4D4E2000361DD /* SoftwareList */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		B900A7C527F4D4E2000361DD /* SoftwareList */ = {
+			isa = PBXGroup;
+			children = (
+				B900A7C627F4D4F4000361DD /* SoftwareList.storyboard */,
 			);
 			path = SoftwareList;
 			sourceTree = "<group>";
@@ -242,6 +268,7 @@
 		B9DC3DF827EFBD2C0084DAA4 /* DolphiniOS */ = {
 			isa = PBXGroup;
 			children = (
+				B900A7C427F4D4DE000361DD /* UI */,
 				B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */,
 				B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */,
 				B9DC3E0727EFBD2F0084DAA4 /* LaunchScreen.storyboard */,
@@ -317,6 +344,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */,
+				B900A7C727F4D4F4000361DD /* SoftwareList.storyboard in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
 				B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */,
 				B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */,
@@ -353,9 +381,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */,
 				B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */,
 				B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */,
+				B900A7CA27F4DA97000361DD /* SoftwareListViewController.mm in Sources */,
 				B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */,
 				B900A7D527F61F3A000361DD /* GameFileCacheManager.mm in Sources */,
 				B900A7B827F2E167000361DD /* MetalView.swift in Sources */,
