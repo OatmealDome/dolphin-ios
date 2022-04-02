@@ -13,6 +13,7 @@
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id>*)launchOptions {
   UICommon::SetUserDirectory(FoundationToCppString([UserFolderUtil getUserFolder]));
+  UICommon::CreateDirectories();
   UICommon::Init();
   
   return YES;
