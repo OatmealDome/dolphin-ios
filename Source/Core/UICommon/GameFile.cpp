@@ -291,7 +291,11 @@ void GameFile::DownloadDefaultCover()
   }
 
   Common::HttpRequest request;
+#ifdef IPHONEOS
+  constexpr char cover_url[] = "http://art.gametdb.com/wii/cover/{}/{}.png";
+#else
   constexpr char cover_url[] = "https://art.gametdb.com/wii/cover/{}/{}.png";
+#endif
   const auto response = request.Get(fmt::format(cover_url, region_code, m_gametdb_id));
 
   if (!response)
