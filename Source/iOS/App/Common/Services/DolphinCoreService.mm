@@ -81,6 +81,8 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
   UICommon::CreateDirectories();
   UICommon::Init();
   
+  Common::RegisterMsgAlertHandler(MsgAlert);
+  
   Config::SetBase(Config::MAIN_USE_GAME_COVERS, true);
   
   return YES;
