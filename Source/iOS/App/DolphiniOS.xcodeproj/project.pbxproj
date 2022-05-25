@@ -13,7 +13,6 @@
 		B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7AF27F2866D000361DD /* UserFolderUtil.swift */; };
 		B900A7B527F2D3C0000361DD /* MoltenVK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900A7B327F2D3AF000361DD /* MoltenVK.xcframework */; };
 		B900A7B627F2D3C4000361DD /* MoltenVK.xcframework in CopyFiles */ = {isa = PBXBuildFile; fileRef = B900A7B327F2D3AF000361DD /* MoltenVK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B900A7B827F2E167000361DD /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7B727F2E167000361DD /* MetalView.swift */; };
 		B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7B927F4CB80000361DD /* DefaultsInitService.swift */; };
 		B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7BC27F4CDD3000361DD /* SwiftStringUtil.swift */; };
 		B900A7C727F4D4F4000361DD /* SoftwareList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B900A7C627F4D4F4000361DD /* SoftwareList.storyboard */; };
@@ -58,7 +57,6 @@
 		B900A7B127F28806000361DD /* FoundationStringUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FoundationStringUtil.h; sourceTree = "<group>"; };
 		B900A7B227F2CF8A000361DD /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		B900A7B327F2D3AF000361DD /* MoltenVK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MoltenVK.xcframework; path = "../../../Externals/MoltenVK-iOS/MoltenVK.xcframework"; sourceTree = SOURCE_ROOT; };
-		B900A7B727F2E167000361DD /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		B900A7B927F4CB80000361DD /* DefaultsInitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsInitService.swift; sourceTree = "<group>"; };
 		B900A7BC27F4CDD3000361DD /* SwiftStringUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftStringUtil.swift; sourceTree = "<group>"; };
 		B900A7C627F4D4F4000361DD /* SoftwareList.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SoftwareList.storyboard; sourceTree = "<group>"; };
@@ -175,7 +173,6 @@
 		B900A7C027F4D37C000361DD /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				B900A7B727F2E167000361DD /* MetalView.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -457,7 +454,6 @@
 				B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */,
 				B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */,
 				B900A7D527F61F3A000361DD /* GameFileCacheManager.mm in Sources */,
-				B900A7B827F2E167000361DD /* MetalView.swift in Sources */,
 				B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */,
 				B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */,
 				B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */,
