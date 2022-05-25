@@ -21,6 +21,7 @@
 #include "Common/Swap.h"
 #include "Core/FifoPlayer/FifoPlayer.h"
 
+#include "DolphinQt/QtUtils/NonDefaultQPushButton.h"
 #include "DolphinQt/Settings.h"
 
 #include "VideoCommon/BPMemory.h"
@@ -82,9 +83,9 @@ void FIFOAnalyzer::CreateWidgets()
 
   m_search_box = new QGroupBox(tr("Search Current Object"));
   m_search_edit = new QLineEdit;
-  m_search_new = new QPushButton(tr("Search"));
-  m_search_next = new QPushButton(tr("Next Match"));
-  m_search_previous = new QPushButton(tr("Previous Match"));
+  m_search_new = new NonDefaultQPushButton(tr("Search"));
+  m_search_next = new NonDefaultQPushButton(tr("Next Match"));
+  m_search_previous = new NonDefaultQPushButton(tr("Previous Match"));
   m_search_label = new QLabel;
 
   m_search_next->setEnabled(false);
@@ -676,10 +677,9 @@ public:
       }
       process_component(vtx_desc.low.Position, vtx_attr.g0.PosFormat,
                         vtx_attr.g0.PosElements == CoordComponentCount::XY ? 2 : 3);
-      // TODO: Is this calculation correct?
       const u32 normal_component_count =
           vtx_desc.low.Normal == VertexComponentFormat::Direct ? 3 : 1;
-      const u32 normal_elements = vtx_attr.g0.NormalElements == NormalComponentCount::NBT ? 3 : 1;
+      const u32 normal_elements = vtx_attr.g0.NormalElements == NormalComponentCount::NTB ? 3 : 1;
       process_component(vtx_desc.low.Normal, vtx_attr.g0.NormalFormat,
                         normal_component_count * normal_elements,
                         vtx_attr.g0.NormalIndex3 ? normal_elements : 1);

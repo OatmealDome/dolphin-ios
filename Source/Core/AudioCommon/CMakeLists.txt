@@ -89,3 +89,8 @@ PUBLIC
 PRIVATE
   SoundTouch
   FreeSurround)
+
+if(MSVC)
+  # Add precompiled header
+  target_link_libraries(audiocommon PRIVATE use_pch)
+endif()

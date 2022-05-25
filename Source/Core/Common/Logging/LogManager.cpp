@@ -62,24 +62,6 @@ private:
   bool m_enable;
 };
 
-void GenericLog(LogLevel level, LogType type, const char* file, int line, const char* fmt, ...)
-{
-  auto* instance = LogManager::GetInstance();
-  if (instance == nullptr)
-    return;
-
-  if (!instance->IsEnabled(type, level))
-    return;
-
-  va_list args;
-  va_start(args, fmt);
-  char message[MAX_MSGLEN];
-  CharArrayFromFormatV(message, MAX_MSGLEN, fmt, args);
-  va_end(args);
-
-  instance->Log(level, type, file, line, message);
-}
-
 void GenericLogFmtImpl(LogLevel level, LogType type, const char* file, int line,
                        fmt::string_view format, const fmt::format_args& args)
 {
@@ -137,6 +119,7 @@ LogManager::LogManager()
   m_log[LogType::GDB_STUB] = {"GDB_STUB", "GDB Stub"};
   m_log[LogType::GPFIFO] = {"GP", "GatherPipe FIFO"};
   m_log[LogType::HOST_GPU] = {"Host GPU", "Host GPU"};
+  m_log[LogType::HSP] = {"HSP", "High-Speed Port (HSP)"};
   m_log[LogType::IOS] = {"IOS", "IOS"};
   m_log[LogType::IOS_DI] = {"IOS_DI", "IOS - Drive Interface"};
   m_log[LogType::IOS_ES] = {"IOS_ES", "IOS - ETicket Services"};

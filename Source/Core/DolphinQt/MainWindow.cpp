@@ -325,9 +325,9 @@ void MainWindow::InitControllers()
   if (!g_controller_interface.HasDefaultDevice())
   {
     // Note that the CI default device could be still temporarily removed at any time
-    WARN_LOG(CONTROLLERINTERFACE,
-             "No default device has been added in time. EmulatedController(s) defaulting adds"
-             " input mappings made for a specific default device depending on the platform");
+    WARN_LOG_FMT(CONTROLLERINTERFACE,
+                 "No default device has been added in time. EmulatedController(s) defaulting adds"
+                 " input mappings made for a specific default device depending on the platform");
   }
   GCAdapter::Init();
   Pad::Initialize();
@@ -825,7 +825,7 @@ void MainWindow::TogglePause()
 void MainWindow::OnStopComplete()
 {
   m_stop_requested = false;
-  HideRenderWidget(true, m_exit_requested);
+  HideRenderWidget(!m_exit_requested, m_exit_requested);
 #ifdef USE_DISCORD_PRESENCE
   if (!m_netplay_dialog->isVisible())
     Discord::UpdateDiscordPresence();
@@ -834,7 +834,7 @@ void MainWindow::OnStopComplete()
   SetFullScreenResolution(false);
 
   if (m_exit_requested || Settings::Instance().IsBatchModeEnabled())
-    QGuiApplication::instance()->quit();
+    QGuiApplication::exit(0);
 
   // If the current emulation prevented the booting of another, do that now
   if (m_pending_boot != nullptr)

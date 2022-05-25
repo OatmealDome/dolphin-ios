@@ -321,7 +321,9 @@ PixelShaderUid GetPixelShaderUid()
   BlendingState state = {};
   state.Generate(bpmem);
 
-  if (state.usedualsrc && state.dstalpha && g_ActiveConfig.backend_info.bSupportsFramebufferFetch &&
+  if (((state.usedualsrc && state.dstalpha) ||
+       DriverDetails::HasBug(DriverDetails::BUG_BROKEN_DISCARD_WITH_EARLY_Z)) &&
+      g_ActiveConfig.backend_info.bSupportsFramebufferFetch &&
       !g_ActiveConfig.backend_info.bSupportsDualSourceBlend)
   {
     uid_data->blend_enable = state.blendenable;
@@ -944,14 +946,18 @@ ShaderCode GeneratePixelShaderCode(APIType api_type, const ShaderHostConfig& hos
       (!DriverDetails::HasBug(DriverDetails::BUG_BROKEN_DUAL_SOURCE_BLENDING) ||
        uid_data->useDstAlpha);
   const bool use_shader_blend =
-      !use_dual_source && uid_data->useDstAlpha && host_config.backend_shader_framebuffer_fetch;
+      !use_dual_source &&
+      (uid_data->useDstAlpha ||
+       DriverDetails::HasBug(DriverDetails::BUG_BROKEN_DISCARD_WITH_EARLY_Z)) &&
+      host_config.backend_shader_framebuffer_fetch;
   const bool use_shader_logic_op = !host_config.backend_logic_op && uid_data->logic_op_enable &&
                                    host_config.backend_shader_framebuffer_fetch;
+  const bool use_framebuffer_fetch =
+      use_shader_blend || use_shader_logic_op ||
+      DriverDetails::HasBug(DriverDetails::BUG_BROKEN_DISCARD_WITH_EARLY_Z);
 
   if (api_type == APIType::OpenGL || api_type == APIType::Vulkan)
   {
-    bool use_framebuffer_fetch = use_shader_blend || use_shader_logic_op;
-
 #ifdef __APPLE__
     // Framebuffer fetch is only supported by Metal, so ensure that we're running Vulkan (MoltenVK)
     // if we want to use it.
@@ -959,18 +965,16 @@ ShaderCode GeneratePixelShaderCode(APIType api_type, const ShaderHostConfig& hos
     {
       if (use_dual_source)
       {
-        out.Write("FRAGMENT_OUTPUT_LOCATION_INDEXED(0, 0) out vec4 ocol0;\n"
-                  "FRAGMENT_OUTPUT_LOCATION_INDEXED(0, 1) out vec4 ocol1;\n");
-      }
-      else if (use_shader_blend)
-      {
-        // Metal doesn't support a single unified variable for both input and output, so we declare
-        // the output separately. The input will be defined later below.
-        out.Write("FRAGMENT_OUTPUT_LOCATION(0) out vec4 real_ocol0;\n");
+        out.Write("FRAGMENT_OUTPUT_LOCATION_INDEXED(0, 0) out vec4 {};\n"
+                  "FRAGMENT_OUTPUT_LOCATION_INDEXED(0, 1) out vec4 ocol1;\n",
+                  use_framebuffer_fetch ? "real_ocol0" : "ocol0");
       }
       else
       {
-        out.Write("FRAGMENT_OUTPUT_LOCATION(0) out vec4 ocol0;\n");
+        // Metal doesn't support a single unified variable for both input and output,
+        // so when using framebuffer fetch, we declare the input separately below.
+        out.Write("FRAGMENT_OUTPUT_LOCATION(0) out vec4 {};\n",
+                  use_framebuffer_fetch ? "real_ocol0" : "ocol0");
       }
 
       if (use_framebuffer_fetch)
@@ -989,7 +993,7 @@ ShaderCode GeneratePixelShaderCode(APIType api_type, const ShaderHostConfig& hos
                 has_broken_decoration ? "FRAGMENT_OUTPUT_LOCATION(0)" :
                                         "FRAGMENT_OUTPUT_LOCATION_INDEXED(0, 0)",
                 use_framebuffer_fetch ? "FRAGMENT_INOUT" : "out",
-                use_shader_blend ? "real_ocol0" : "ocol0");
+                use_framebuffer_fetch ? "real_ocol0" : "ocol0");
 
       if (use_dual_source)
       {
@@ -1048,23 +1052,23 @@ ShaderCode GeneratePixelShaderCode(APIType api_type, const ShaderHostConfig& hos
       // Store off a copy of the initial framebuffer value.
       //
       // If FB_FETCH_VALUE isn't defined (i.e. no special keyword for fetching from the
-      // framebuffer), we read from real_ocol0 or ocol0, depending if shader blending is enabled.
+      // framebuffer), we read from real_ocol0.
       out.Write("#ifdef FB_FETCH_VALUE\n"
                 "\tfloat4 initial_ocol0 = FB_FETCH_VALUE;\n"
                 "#else\n"
-                "\tfloat4 initial_ocol0 = {};\n"
-                "#endif\n",
-                use_shader_blend ? "real_ocol0" : "ocol0");
+                "\tfloat4 initial_ocol0 = real_ocol0;\n"
+                "#endif\n");
+
+      // QComm's Adreno driver doesn't seem to like using the framebuffer_fetch value as an
+      // intermediate value with multiple reads & modifications, so we pull out the "real" output
+      // value above and use a temporary for calculations, then set the output value once at the
+      // end of the shader.
+      out.Write("\tfloat4 ocol0;\n");
     }
 
     if (use_shader_blend)
     {
-      // QComm's Adreno driver doesn't seem to like using the framebuffer_fetch value as an
-      // intermediate value with multiple reads & modifications, so we pull out the "real" output
-      // value above and use a temporary for calculations, then set the output value once at the
-      // end of the shader if we are using shader blending.
-      out.Write("\tfloat4 ocol0;\n"
-                "\tfloat4 ocol1;\n");
+      out.Write("\tfloat4 ocol1;\n");
     }
   }
   else  // D3D
@@ -1135,7 +1139,7 @@ ShaderCode GeneratePixelShaderCode(APIType api_type, const ShaderHostConfig& hos
 
   if (per_pixel_lighting)
   {
-    out.Write("\tfloat3 _norm0 = normalize(Normal.xyz);\n\n"
+    out.Write("\tfloat3 _normal = normalize(Normal.xyz);\n\n"
               "\tfloat3 pos = WorldPos;\n");
 
     out.Write("\tint4 lacc;\n"
@@ -1335,6 +1339,8 @@ ShaderCode GeneratePixelShaderCode(APIType api_type, const ShaderHostConfig& hos
 
   if (use_shader_blend)
     WriteBlend(out, uid_data);
+  else if (use_framebuffer_fetch)
+    out.Write("\treal_ocol0 = ocol0;\n");
 
   if (uid_data->bounding_box)
     out.Write("\tUpdateBoundingBox(rawpos.xy);\n");
@@ -1870,9 +1876,23 @@ static void WriteAlphaTest(ShaderCode& out, const pixel_shader_uid_data* uid_dat
   // ZCOMPLOC HACK:
   if (!uid_data->alpha_test_use_zcomploc_hack)
   {
-    out.Write("\t\tdiscard;\n");
-    if (api_type == APIType::D3D)
+#ifdef __APPLE__
+    if (uid_data->forced_early_z &&
+        DriverDetails::HasBug(DriverDetails::BUG_BROKEN_DISCARD_WITH_EARLY_Z))
+    {
+      // Instead of using discard, fetch the framebuffer's color value and use it as the output
+      // for this fragment.
+      out.Write("\t\t{} = float4(initial_ocol0.xyz, 1.0);\n",
+                use_dual_source ? "real_ocol0" : "ocol0");
       out.Write("\t\treturn;\n");
+    }
+    else
+#endif
+    {
+      out.Write("\t\tdiscard;\n");
+      if (api_type == APIType::D3D)
+        out.Write("\t\treturn;\n");
+    }
   }
 
   out.Write("\t}}\n");
@@ -2019,8 +2039,8 @@ static void WriteBlend(ShaderCode& out, const pixel_shader_uid_data* uid_data)
         "float3(1,1,1);",                      // ONE
         "initial_ocol0.rgb;",                  // DSTCLR
         "float3(1,1,1) - initial_ocol0.rgb;",  // INVDSTCLR
-        "ocol1.aaa;",                          // SRCALPHA
-        "float3(1,1,1) - ocol1.aaa;",          // INVSRCALPHA
+        "src_color.aaa;",                      // SRCALPHA
+        "float3(1,1,1) - src_color.aaa;",      // INVSRCALPHA
         "initial_ocol0.aaa;",                  // DSTALPHA
         "float3(1,1,1) - initial_ocol0.aaa;",  // INVDSTALPHA
     };
@@ -2029,8 +2049,8 @@ static void WriteBlend(ShaderCode& out, const pixel_shader_uid_data* uid_data)
         "1.0;",                    // ONE
         "initial_ocol0.a;",        // DSTCLR
         "1.0 - initial_ocol0.a;",  // INVDSTCLR
-        "ocol1.a;",                // SRCALPHA
-        "1.0 - ocol1.a;",          // INVSRCALPHA
+        "src_color.a;",            // SRCALPHA
+        "1.0 - src_color.a;",      // INVSRCALPHA
         "initial_ocol0.a;",        // DSTALPHA
         "1.0 - initial_ocol0.a;",  // INVDSTALPHA
     };
@@ -2039,8 +2059,8 @@ static void WriteBlend(ShaderCode& out, const pixel_shader_uid_data* uid_data)
         "float3(1,1,1);",                      // ONE
         "ocol0.rgb;",                          // SRCCLR
         "float3(1,1,1) - ocol0.rgb;",          // INVSRCCLR
-        "ocol1.aaa;",                          // SRCALHA
-        "float3(1,1,1) - ocol1.aaa;",          // INVSRCALPHA
+        "src_color.aaa;",                      // SRCALHA
+        "float3(1,1,1) - src_color.aaa;",      // INVSRCALPHA
         "initial_ocol0.aaa;",                  // DSTALPHA
         "float3(1,1,1) - initial_ocol0.aaa;",  // INVDSTALPHA
     };
@@ -2049,12 +2069,14 @@ static void WriteBlend(ShaderCode& out, const pixel_shader_uid_data* uid_data)
         "1.0;",                    // ONE
         "ocol0.a;",                // SRCCLR
         "1.0 - ocol0.a;",          // INVSRCCLR
-        "ocol1.a;",                // SRCALPHA
-        "1.0 - ocol1.a;",          // INVSRCALPHA
+        "src_color.a;",            // SRCALPHA
+        "1.0 - src_color.a;",      // INVSRCALPHA
         "initial_ocol0.a;",        // DSTALPHA
         "1.0 - initial_ocol0.a;",  // INVDSTALPHA
     };
-    out.Write("\tfloat4 blend_src;\n");
+    out.Write("\tfloat4 src_color = {};\n"
+              "\tfloat4 blend_src;",
+              uid_data->useDstAlpha ? "ocol1" : "ocol0");
     out.Write("\tblend_src.rgb = {}\n", blend_src_factor[uid_data->blend_src_factor]);
     out.Write("\tblend_src.a = {}\n", blend_src_factor_alpha[uid_data->blend_src_factor_alpha]);
     out.Write("\tfloat4 blend_dst;\n");

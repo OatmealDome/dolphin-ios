@@ -218,6 +218,14 @@ add_library(core
   HW/GCPadEmu.h
   HW/GPFifo.cpp
   HW/GPFifo.h
+  HW/HSP/HSP.cpp
+  HW/HSP/HSP.h
+  HW/HSP/HSP_Device.cpp
+  HW/HSP/HSP_Device.h
+  HW/HSP/HSP_DeviceARAMExpansion.cpp
+  HW/HSP/HSP_DeviceARAMExpansion.h
+  HW/HSP/HSP_DeviceNull.cpp
+  HW/HSP/HSP_DeviceNull.h
   HW/HW.cpp
   HW/HW.h
   HW/Memmap.cpp
@@ -706,4 +714,9 @@ if(UNIX)
     MemoryWatcher.cpp
     MemoryWatcher.h
   )
+endif()
+
+if(MSVC)
+  # Add precompiled header
+  target_link_libraries(core PRIVATE use_pch)
 endif()

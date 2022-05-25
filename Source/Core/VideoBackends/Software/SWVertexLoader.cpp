@@ -25,12 +25,20 @@
 #include "VideoCommon/Statistics.h"
 #include "VideoCommon/VertexLoaderBase.h"
 #include "VideoCommon/VertexLoaderManager.h"
+#include "VideoCommon/VertexShaderManager.h"
 #include "VideoCommon/VideoConfig.h"
 #include "VideoCommon/XFMemory.h"
 
 SWVertexLoader::SWVertexLoader() = default;
 
 SWVertexLoader::~SWVertexLoader() = default;
+
+DataReader SWVertexLoader::PrepareForAdditionalData(OpcodeDecoder::Primitive primitive, u32 count,
+                                                    u32 stride, bool cullall)
+{
+  // The software renderer needs cullall to be false for zfreeze to work
+  return VertexManagerBase::PrepareForAdditionalData(primitive, count, stride, false);
+}
 
 void SWVertexLoader::DrawCurrentBatch(u32 base_index, u32 num_indices, u32 base_vertex)
 {
@@ -82,11 +90,8 @@ void SWVertexLoader::DrawCurrentBatch(u32 base_index, u32 num_indices, u32 base_
     OutputVertexData* outVertex = m_setup_unit.GetVertex();
     TransformUnit::TransformPosition(&m_vertex, outVertex);
     outVertex->normal = {};
-    if (VertexLoaderManager::g_current_components & VB_HAS_NRM0)
-    {
-      TransformUnit::TransformNormal(
-          &m_vertex, (VertexLoaderManager::g_current_components & VB_HAS_NRM2) != 0, outVertex);
-    }
+    if (VertexLoaderManager::g_current_components & VB_HAS_NORMAL)
+      TransformUnit::TransformNormal(&m_vertex, outVertex);
     TransformUnit::TransformColor(&m_vertex, outVertex);
     TransformUnit::TransformTexCoord(&m_vertex, outVertex);
 
@@ -101,20 +106,6 @@ void SWVertexLoader::DrawCurrentBatch(u32 base_index, u32 num_indices, u32 base_
 
 void SWVertexLoader::SetFormat()
 {
-  // matrix index from xf regs or cp memory?
-  if (xfmem.MatrixIndexA.PosNormalMtxIdx != g_main_cp_state.matrix_index_a.PosNormalMtxIdx ||
-      xfmem.MatrixIndexA.Tex0MtxIdx != g_main_cp_state.matrix_index_a.Tex0MtxIdx ||
-      xfmem.MatrixIndexA.Tex1MtxIdx != g_main_cp_state.matrix_index_a.Tex1MtxIdx ||
-      xfmem.MatrixIndexA.Tex2MtxIdx != g_main_cp_state.matrix_index_a.Tex2MtxIdx ||
-      xfmem.MatrixIndexA.Tex3MtxIdx != g_main_cp_state.matrix_index_a.Tex3MtxIdx ||
-      xfmem.MatrixIndexB.Tex4MtxIdx != g_main_cp_state.matrix_index_b.Tex4MtxIdx ||
-      xfmem.MatrixIndexB.Tex5MtxIdx != g_main_cp_state.matrix_index_b.Tex5MtxIdx ||
-      xfmem.MatrixIndexB.Tex6MtxIdx != g_main_cp_state.matrix_index_b.Tex6MtxIdx ||
-      xfmem.MatrixIndexB.Tex7MtxIdx != g_main_cp_state.matrix_index_b.Tex7MtxIdx)
-  {
-    ERROR_LOG_FMT(VIDEO, "Matrix indices don't match");
-  }
-
   m_vertex.posMtx = xfmem.MatrixIndexA.PosNormalMtxIdx;
   m_vertex.texMtx[0] = xfmem.MatrixIndexA.Tex0MtxIdx;
   m_vertex.texMtx[1] = xfmem.MatrixIndexA.Tex1MtxIdx;
@@ -222,6 +213,18 @@ void SWVertexLoader::ParseVertex(const PortableVertexDeclaration& vdec, int inde
   for (std::size_t i = 0; i < m_vertex.normal.size(); i++)
   {
     ReadVertexAttribute<float>(&m_vertex.normal[i][0], src, vdec.normals[i], 0, 3, false);
+  }
+  if (!vdec.normals[1].enable)
+  {
+    m_vertex.normal[1][0] = VertexShaderManager::constants.cached_tangent[0];
+    m_vertex.normal[1][1] = VertexShaderManager::constants.cached_tangent[1];
+    m_vertex.normal[1][2] = VertexShaderManager::constants.cached_tangent[2];
+  }
+  if (!vdec.normals[2].enable)
+  {
+    m_vertex.normal[2][0] = VertexShaderManager::constants.cached_binormal[0];
+    m_vertex.normal[2][1] = VertexShaderManager::constants.cached_binormal[1];
+    m_vertex.normal[2][2] = VertexShaderManager::constants.cached_binormal[2];
   }
 
   ParseColorAttributes(&m_vertex, src, vdec);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project>
   <ItemGroup>
     <ClInclude Include="AudioCommon\AudioCommon.h" />
     <ClInclude Include="AudioCommon\AudioStretcher.h" />
@@ -279,6 +279,10 @@
     <ClInclude Include="Core\HW\GCPad.h" />
     <ClInclude Include="Core\HW\GCPadEmu.h" />
     <ClInclude Include="Core\HW\GPFifo.h" />
+    <ClInclude Include="Core\HW\HSP\HSP.h" />
+    <ClInclude Include="Core\HW\HSP\HSP_Device.h" />
+    <ClInclude Include="Core\HW\HSP\HSP_DeviceARAMExpansion.h" />
+    <ClInclude Include="Core\HW\HSP\HSP_DeviceNull.h" />
     <ClInclude Include="Core\HW\HW.h" />
     <ClInclude Include="Core\HW\Memmap.h" />
     <ClInclude Include="Core\HW\MemoryInterface.h" />
@@ -483,6 +487,7 @@
     <ClInclude Include="InputCommon\ControllerInterface\evdev\evdev.h" />
     <ClInclude Include="InputCommon\ControllerInterface\ForceFeedback\ForceFeedbackDevice.h" />
     <ClInclude Include="InputCommon\ControllerInterface\MappingCommon.h" />
+    <ClInclude Include="InputCommon\ControllerInterface\WGInput\WGInput.h" />
     <ClInclude Include="InputCommon\ControllerInterface\Wiimote\WiimoteController.h" />
     <ClInclude Include="InputCommon\ControllerInterface\Win32\Win32.h" />
     <ClInclude Include="InputCommon\ControllerInterface\XInput\XInput.h" />
@@ -872,6 +877,10 @@
     <ClCompile Include="Core\HW\GCPad.cpp" />
     <ClCompile Include="Core\HW\GCPadEmu.cpp" />
     <ClCompile Include="Core\HW\GPFifo.cpp" />
+    <ClCompile Include="Core\HW\HSP\HSP.cpp" />
+    <ClCompile Include="Core\HW\HSP\HSP_Device.cpp" />
+    <ClCompile Include="Core\HW\HSP\HSP_DeviceARAMExpansion.cpp" />
+    <ClCompile Include="Core\HW\HSP\HSP_DeviceNull.cpp" />
     <ClCompile Include="Core\HW\HW.cpp" />
     <ClCompile Include="Core\HW\Memmap.cpp" />
     <ClCompile Include="Core\HW\MemoryInterface.cpp" />
@@ -1071,6 +1080,7 @@
     <ClCompile Include="InputCommon\ControllerInterface\DualShockUDPClient\DualShockUDPClient.cpp" />
     <ClCompile Include="InputCommon\ControllerInterface\ForceFeedback\ForceFeedbackDevice.cpp" />
     <ClCompile Include="InputCommon\ControllerInterface\MappingCommon.cpp" />
+    <ClCompile Include="InputCommon\ControllerInterface\WGInput\WGInput.cpp" />
     <ClCompile Include="InputCommon\ControllerInterface\Wiimote\WiimoteController.cpp" />
     <ClCompile Include="InputCommon\ControllerInterface\Win32\Win32.cpp" />
     <ClCompile Include="InputCommon\ControllerInterface\XInput\XInput.cpp" />
@@ -1193,6 +1203,7 @@
     <ClCompile Include="VideoCommon\FPSCounter.cpp" />
     <ClCompile Include="VideoCommon\FramebufferManager.cpp" />
     <ClCompile Include="VideoCommon\FramebufferShaderGen.cpp" />
+    <ClCompile Include="VideoCommon\FrameDump.cpp" />
     <ClCompile Include="VideoCommon\FreeLookCamera.cpp" />
     <ClCompile Include="VideoCommon\GeometryShaderGen.cpp" />
     <ClCompile Include="VideoCommon\GeometryShaderManager.cpp" />

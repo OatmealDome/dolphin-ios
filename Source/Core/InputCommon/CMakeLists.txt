@@ -94,6 +94,8 @@ if(WIN32)
     ControllerInterface/DInput/XInputFilter.h
     ControllerInterface/Win32/Win32.cpp
     ControllerInterface/Win32/Win32.h
+    ControllerInterface/WGInput/WGInput.cpp
+    ControllerInterface/WGInput/WGInput.h
     ControllerInterface/XInput/XInput.cpp
     ControllerInterface/XInput/XInput.h
     ControllerInterface/ForceFeedback/ForceFeedbackDevice.cpp
@@ -204,4 +206,9 @@ if(ENABLE_SDL)
   else()
     message(STATUS "SDL NOT found, disabling SDL input")
   endif()
+endif()
+
+if(MSVC)
+  # Add precompiled header
+  target_link_libraries(inputcommon PRIVATE use_pch)
 endif()

@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31
-    ndkVersion "23.0.7599858"
+    compileSdkVersion 32
+    ndkVersion "23.1.7779620"
 
     compileOptions {
         // Flag to enable support for the new language APIs
@@ -26,7 +26,7 @@ android {
         // TODO If this is ever modified, change application_id in strings.xml
         applicationId "org.dolphinemu.dolphinemu"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
 
         versionCode(getBuildVersionCode())
 
@@ -73,6 +73,7 @@ android {
             version "3.18.1"
         }
     }
+    namespace 'org.dolphinemu.dolphinemu'
 
     defaultConfig {
         externalNativeBuild {
@@ -99,7 +100,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.4.1'
     implementation 'androidx.fragment:fragment:1.4.1'
     implementation 'androidx.slidingpanelayout:slidingpanelayout:1.2.0'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.6.0'
 
     // Android TV UI libraries.
     implementation 'androidx.leanback:leanback:1.0.0'
