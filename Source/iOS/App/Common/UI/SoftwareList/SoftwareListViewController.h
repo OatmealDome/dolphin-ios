@@ -3,12 +3,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class EmulationBootParameter;
 @class GameFilePtrWrapper;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SoftwareListViewController : UICollectionViewController<UICollectionViewDelegateFlowLayout> {
   NSArray<GameFilePtrWrapper*>* _gameFiles;
+  EmulationBootParameter* _bootParameter;
 }
 
 @end

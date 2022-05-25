@@ -85,10 +85,21 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="Games" id="S5F-CY-S3A"/>
+                    <connections>
+                        <segue destination="TaY-Qy-7UM" kind="presentation" identifier="emulation" id="Jyi-q2-HSg"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E2z-QY-NM7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="710" y="147"/>
+        </scene>
+        <!--emulationViewController-->
+        <scene sceneID="ewQ-iN-4BB">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Emulation" referencedIdentifier="emulationViewController" id="TaY-Qy-7UM" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a5U-HV-bzh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1414" y="147"/>
         </scene>
     </scenes>
     <resources>

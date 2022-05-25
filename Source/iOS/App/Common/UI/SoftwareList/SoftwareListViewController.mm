@@ -3,6 +3,8 @@
 
 #import "SoftwareListViewController.h"
 
+#import "EmulationBootParameter.h"
+#import "EmulationViewController.h"
 #import "FoundationStringUtil.h"
 #import "GameFileCacheManager.h"
 #import "GameFilePtrWrapper.h"
@@ -65,6 +67,16 @@
   return cell;
 }
 
+- (void)collectionView:(UICollectionView*)collectionView didSelectItemAtIndexPath:(NSIndexPath*)indexPath {
+  GameFilePtrWrapper* gameFileWrapper = [self->_gameFiles objectAtIndex:indexPath.item];
+  
+  _bootParameter = [[EmulationBootParameter alloc] init];
+  _bootParameter.bootType = EmulationBootTypeFile;
+  _bootParameter.path = CppToFoundationString(gameFileWrapper.gameFile->GetFilePath());
+  
+  [self performSegueWithIdentifier:@"emulation" sender:nil];
+}
+
 #pragma mark <UICollectionViewDelegateFlowLayout>
 
 - (CGSize)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath*)indexPath {
@@ -74,6 +86,17 @@
   
   CGFloat totalSpacing = ((cellsPerRow - 1) * cellSpacing);
   return CGSizeMake((collectionView.bounds.size.width - totalSpacing) / cellsPerRow, cellHeight);
+}
+
+#pragma mark Segue
+
+- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
+{
+  if ([segue.identifier isEqualToString:@"emulation"])
+  {
+    EmulationViewController* viewController = (EmulationViewController*)segue.destinationViewController;
+    viewController.bootParameter = _bootParameter;
+  }
 }
 
 @end
