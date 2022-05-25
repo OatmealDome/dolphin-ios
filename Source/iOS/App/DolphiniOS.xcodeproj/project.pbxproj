@@ -28,6 +28,7 @@
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
+		B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = B9D93896283ECE1100B290FC /* DOLUIKitSwitch.m */; };
 		B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */; };
 		B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */; };
 		B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0727EFBD2F0084DAA4 /* LaunchScreen.storyboard */; };
@@ -90,6 +91,9 @@
 		B9D9388D283DE3C800B290FC /* EmulationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationViewController.h; sourceTree = "<group>"; };
 		B9D9388E283DE3C800B290FC /* EmulationViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationViewController.mm; sourceTree = "<group>"; };
 		B9D93891283DE63800B290FC /* Emulation.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Emulation.storyboard; sourceTree = "<group>"; };
+		B9D93894283ECD9500B290FC /* DOLSwitch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOLSwitch.h; sourceTree = "<group>"; };
+		B9D93895283ECE1100B290FC /* DOLUIKitSwitch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOLUIKitSwitch.h; sourceTree = "<group>"; };
+		B9D93896283ECE1100B290FC /* DOLUIKitSwitch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DOLUIKitSwitch.m; sourceTree = "<group>"; };
 		B9DC3DF627EFBD2C0084DAA4 /* DolphiniOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DolphiniOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9DC3E0327EFBD2D0084DAA4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -157,6 +161,7 @@
 		B900A7BF27F4D2E4000361DD /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				B9D93893283ECD6F00B290FC /* Controls */,
 				B933EDC527F8E8D6004D7DD7 /* Emulation */,
 				B900A7C327F4D44D000361DD /* SoftwareList */,
 				B900A7C027F4D37C000361DD /* Util */,
@@ -189,6 +194,7 @@
 		B900A7C427F4D4DE000361DD /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				B9D9389B283ECF0B00B290FC /* Controls */,
 				B9D93890283DE62700B290FC /* Emulation */,
 				B900A7C527F4D4E2000361DD /* SoftwareList */,
 			);
@@ -275,6 +281,23 @@
 				B9D93891283DE63800B290FC /* Emulation.storyboard */,
 			);
 			path = Emulation;
+			sourceTree = "<group>";
+		};
+		B9D93893283ECD6F00B290FC /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				B9D93894283ECD9500B290FC /* DOLSwitch.h */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
+		B9D9389B283ECF0B00B290FC /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				B9D93895283ECE1100B290FC /* DOLUIKitSwitch.h */,
+				B9D93896283ECE1100B290FC /* DOLUIKitSwitch.m */,
+			);
+			path = Controls;
 			sourceTree = "<group>";
 		};
 		B9DC3DED27EFBD2C0084DAA4 = {
@@ -417,6 +440,7 @@
 				B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */,
 				B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */,
 				B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */,
+				B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */,
 				B900A7CA27F4DA97000361DD /* SoftwareListViewController.mm in Sources */,
 				B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */,
 				B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */,
