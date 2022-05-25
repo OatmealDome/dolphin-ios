@@ -29,16 +29,13 @@
   
   std::unique_ptr<BootParameters> boot = [self.bootParameter generateDolphinBootParameter];
   
-  if (BootManager::BootCore(std::move(boot), wsi))
-  {
+  if (BootManager::BootCore(std::move(boot), wsi)) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      while (Core::GetState() == Core::State::Starting)
-      {
+      while (Core::GetState() == Core::State::Starting) {
         [NSThread sleepForTimeInterval:0.025];
       }
       
-      while (Core::IsRunning())
-      {
+      while (Core::IsRunning()) {
         Core::HostDispatchJobs();
       }
     });
