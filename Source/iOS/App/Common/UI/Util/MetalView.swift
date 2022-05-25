@@ -3,6 +3,7 @@
 
 import UIKit
 
+@available(iOS 13.0, *)
 @objc class MetalView: UIView {
   override class var layerClass: Swift.AnyClass {
     return CAMetalLayer.self
