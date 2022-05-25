@@ -17,18 +17,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jUv-WO-T8S" customClass="MetalView" customModule="DolphiniOS" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jUv-WO-T8S" customClass="MTKView">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="jUv-WO-T8S" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="RPU-jG-cAK"/>
-                            <constraint firstAttribute="bottom" secondItem="jUv-WO-T8S" secondAttribute="bottom" id="TIo-9x-704"/>
-                            <constraint firstAttribute="trailing" secondItem="jUv-WO-T8S" secondAttribute="trailing" id="cXY-Ct-bGQ"/>
-                            <constraint firstItem="jUv-WO-T8S" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="hye-ra-oQt"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="jUv-WO-T8S" secondAttribute="trailing" id="21u-m5-3Pf"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="jUv-WO-T8S" secondAttribute="leading" id="RmJ-bG-Qc7"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="jUv-WO-T8S" secondAttribute="bottom" id="TK6-ZL-CFi"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="top" secondItem="jUv-WO-T8S" secondAttribute="top" id="U4Z-cR-9dT"/>
                         </constraints>
                     </view>
                     <connections>

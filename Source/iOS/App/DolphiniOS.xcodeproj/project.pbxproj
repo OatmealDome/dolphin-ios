@@ -29,6 +29,7 @@
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
 		B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = B9D93896283ECE1100B290FC /* DOLUIKitSwitch.m */; };
+		B9D9389E283EF7AD00B290FC /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D9389D283EF7AD00B290FC /* MetalKit.framework */; };
 		B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */; };
 		B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */; };
 		B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0727EFBD2F0084DAA4 /* LaunchScreen.storyboard */; };
@@ -94,6 +95,7 @@
 		B9D93894283ECD9500B290FC /* DOLSwitch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOLSwitch.h; sourceTree = "<group>"; };
 		B9D93895283ECE1100B290FC /* DOLUIKitSwitch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOLUIKitSwitch.h; sourceTree = "<group>"; };
 		B9D93896283ECE1100B290FC /* DOLUIKitSwitch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DOLUIKitSwitch.m; sourceTree = "<group>"; };
+		B9D9389D283EF7AD00B290FC /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		B9DC3DF627EFBD2C0084DAA4 /* DolphiniOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DolphiniOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9DC3E0327EFBD2D0084DAA4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9D9389E283EF7AD00B290FC /* MetalKit.framework in Frameworks */,
 				B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */,
 				B900A7B527F2D3C0000361DD /* MoltenVK.xcframework in Frameworks */,
 				B900A7D227F5228B000361DD /* UICollectionViewLeftAlignedLayout in Frameworks */,
@@ -300,6 +303,14 @@
 			path = Controls;
 			sourceTree = "<group>";
 		};
+		B9D9389C283EF7AD00B290FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B9D9389D283EF7AD00B290FC /* MetalKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B9DC3DED27EFBD2C0084DAA4 = {
 			isa = PBXGroup;
 			children = (
@@ -308,6 +319,7 @@
 				B900A7A427F26F17000361DD /* Common */,
 				B9DC3DF827EFBD2C0084DAA4 /* DolphiniOS */,
 				B9DC3DF727EFBD2C0084DAA4 /* Products */,
+				B9D9389C283EF7AD00B290FC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};

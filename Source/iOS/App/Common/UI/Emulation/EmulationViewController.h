@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #import <UIKit/UIKit.h>
+#import <MetalKit/MetalKit.h>
 
 #import "Swift.h"
 
@@ -11,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EmulationViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet MetalView* metalView;
+@property (weak, nonatomic) IBOutlet MTKView* metalView;
 
 @property (nonatomic) EmulationBootParameter* bootParameter;
 
