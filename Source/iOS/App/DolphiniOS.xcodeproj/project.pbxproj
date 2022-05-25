@@ -25,6 +25,7 @@
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
+		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */; };
 		B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */; };
 		B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0727EFBD2F0084DAA4 /* LaunchScreen.storyboard */; };
@@ -81,6 +82,9 @@
 		B96F72D227F0FC420024BA7D /* Release (Beta, Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Beta, Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72D327F0FC520024BA7D /* Release (Beta, Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Beta, Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72DD27F199040024BA7D /* BundleIdentifier.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BundleIdentifier.xcconfig; sourceTree = "<group>"; };
+		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
+		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
+		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
 		B9DC3DF627EFBD2C0084DAA4 /* DolphiniOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DolphiniOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9DC3E0327EFBD2D0084DAA4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -148,6 +152,7 @@
 		B900A7BF27F4D2E4000361DD /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				B933EDC527F8E8D6004D7DD7 /* Emulation */,
 				B900A7C327F4D44D000361DD /* SoftwareList */,
 				B900A7C027F4D37C000361DD /* Util */,
 			);
@@ -199,6 +204,16 @@
 				B933EDBC27F6A61B004D7DD7 /* Swift.h */,
 			);
 			path = Swift;
+			sourceTree = "<group>";
+		};
+		B933EDC527F8E8D6004D7DD7 /* Emulation */ = {
+			isa = PBXGroup;
+			children = (
+				B9D93889283DD83E00B290FC /* EmulationBootType.h */,
+				B9D9388A283DD86100B290FC /* EmulationBootParameter.h */,
+				B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */,
+			);
+			path = Emulation;
 			sourceTree = "<group>";
 		};
 		B9476B2127F2357B009C0A4B /* Scripts */ = {
@@ -391,6 +406,7 @@
 				B900A7B827F2E167000361DD /* MetalView.swift in Sources */,
 				B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */,
 				B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */,
+				B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
