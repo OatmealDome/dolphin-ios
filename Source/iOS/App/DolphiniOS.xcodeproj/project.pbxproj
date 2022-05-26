@@ -29,6 +29,7 @@
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
 		B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = B9D93896283ECE1100B290FC /* DOLUIKitSwitch.m */; };
 		B9D9389E283EF7AD00B290FC /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D9389D283EF7AD00B290FC /* MetalKit.framework */; };
+		B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D938A0283F239F00B290FC /* TCButtonType.swift */; };
 		B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */; };
 		B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */; };
 		B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0727EFBD2F0084DAA4 /* LaunchScreen.storyboard */; };
@@ -94,6 +95,7 @@
 		B9D93895283ECE1100B290FC /* DOLUIKitSwitch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOLUIKitSwitch.h; sourceTree = "<group>"; };
 		B9D93896283ECE1100B290FC /* DOLUIKitSwitch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DOLUIKitSwitch.m; sourceTree = "<group>"; };
 		B9D9389D283EF7AD00B290FC /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		B9D938A0283F239F00B290FC /* TCButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCButtonType.swift; sourceTree = "<group>"; };
 		B9DC3DF627EFBD2C0084DAA4 /* DolphiniOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DolphiniOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9DC3E0327EFBD2D0084DAA4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 		B933EDC527F8E8D6004D7DD7 /* Emulation */ = {
 			isa = PBXGroup;
 			children = (
+				B9D9389F283F239200B290FC /* TouchController */,
 				B9D93889283DD83E00B290FC /* EmulationBootType.h */,
 				B9D9388A283DD86100B290FC /* EmulationBootParameter.h */,
 				B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */,
@@ -306,6 +309,14 @@
 				B9D9389D283EF7AD00B290FC /* MetalKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B9D9389F283F239200B290FC /* TouchController */ = {
+			isa = PBXGroup;
+			children = (
+				B9D938A0283F239F00B290FC /* TCButtonType.swift */,
+			);
+			path = TouchController;
 			sourceTree = "<group>";
 		};
 		B9DC3DED27EFBD2C0084DAA4 = {
@@ -457,6 +468,7 @@
 				B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */,
 				B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */,
 				B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */,
+				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
