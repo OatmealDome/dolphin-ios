@@ -23,6 +23,9 @@
 #if defined(__APPLE__) && !defined(IPHONEOS)
 #define CIFACE_USE_OSX
 #endif
+#ifdef IPHONEOS
+#define CIFACE_USE_IOS
+#endif
 #if defined(HAVE_LIBEVDEV) && defined(HAVE_LIBUDEV)
 #define CIFACE_USE_EVDEV
 #endif

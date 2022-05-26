@@ -19,6 +19,9 @@
 #include "InputCommon/ControllerInterface/OSX/OSX.h"
 #include "InputCommon/ControllerInterface/Quartz/Quartz.h"
 #endif
+#ifdef CIFACE_USE_IOS
+#include "InputCommon/ControllerInterface/iOS/iOS.h"
+#endif
 #ifdef CIFACE_USE_SDL
 #include "InputCommon/ControllerInterface/SDL/SDL.h"
 #endif
@@ -62,6 +65,9 @@ void ControllerInterface::Initialize(const WindowSystemInfo& wsi)
 #endif
 #ifdef CIFACE_USE_OSX
 // nothing needed for OSX and Quartz
+#endif
+#ifdef CIFACE_USE_IOS
+  ciface::iOS::Init();
 #endif
 #ifdef CIFACE_USE_SDL
   ciface::SDL::Init();
@@ -181,6 +187,9 @@ void ControllerInterface::RefreshDevices(RefreshReason reason)
     ciface::Quartz::PopulateDevices(m_wsi.render_window);
   }
 #endif
+#ifdef CIFACE_USE_IOS
+  ciface::iOS::PopulateDevices();
+#endif
 #ifdef CIFACE_USE_SDL
   ciface::SDL::PopulateDevices();
 #endif
@@ -241,6 +250,9 @@ void ControllerInterface::Shutdown()
 #ifdef CIFACE_USE_OSX
   ciface::OSX::DeInit();
   ciface::Quartz::DeInit();
+#endif
+#ifdef CIFACE_USE_IOS
+  ciface::iOS::DeInit();
 #endif
 #ifdef CIFACE_USE_SDL
   ciface::SDL::DeInit();

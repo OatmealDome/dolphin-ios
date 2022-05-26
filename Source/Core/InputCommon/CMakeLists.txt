@@ -122,6 +122,11 @@ elseif(APPLE AND NOT IOS)
     ${FORCEFEEDBACK_LIBRARY}
     ${IOK_LIBRARY}
   )
+elseif(IOS)
+  target_sources(inputcommon PRIVATE
+    ControllerInterface/iOS/iOS.h
+    ControllerInterface/iOS/iOS.mm
+  )
 elseif(X11_FOUND)
   target_sources(inputcommon PRIVATE
     ControllerInterface/Xlib/XInput2.cpp
