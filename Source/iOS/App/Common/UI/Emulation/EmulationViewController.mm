@@ -10,17 +10,25 @@
 #import "Core/Core.h"
 
 #import "EmulationBootParameter.h"
+#import "HostNotifications.h"
 
 @interface EmulationViewController ()
 
 - (void)runEmulation;
+- (void)receiveDispatchJobNotification;
 
 @end
 
-@implementation EmulationViewController
+@implementation EmulationViewController {
+  NSCondition* _hostJobCondition;
+}
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+  
+  _hostJobCondition = [[NSCondition alloc] init];
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveDispatchJobNotification) name:DOLHostDidReceiveDispatchJobNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -51,8 +59,19 @@
   }
   
   while (Core::IsRunning()) {
+    [_hostJobCondition lock];
+    [_hostJobCondition wait];
+    
     Core::HostDispatchJobs();
+    
+    [_hostJobCondition unlock];
   }
+}
+
+- (void)receiveDispatchJobNotification {
+  [_hostJobCondition lock];
+  [_hostJobCondition signal];
+  [_hostJobCondition unlock];
 }
 
 @end
