@@ -4,8 +4,13 @@
 #import "DolphinCoreService.h"
 
 #import "Core/Config/UISettings.h"
+#import "Core/HW/GCPad.h"
+#import "Core/HW/Wiimote.h"
 
 #import "Common/MsgHandler.h"
+
+#import "InputCommon/ControllerInterface/ControllerInterface.h"
+#import "InputCommon/InputConfig.h"
 
 #import "UICommon/UICommon.h"
 
@@ -85,6 +90,20 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
   
   Config::SetBase(Config::MAIN_USE_GAME_COVERS, true);
   
+  WindowSystemInfo wsi;
+  wsi.type = WindowSystemType::iOS;
+  
+  g_controller_interface.Initialize(wsi);
+  
+  Pad::Initialize();
+  Wiimote::Initialize(Wiimote::InitializeMode::DO_NOT_WAIT_FOR_WIIMOTES);
+  
+  Wiimote::LoadConfig();
+  Wiimote::GetConfig()->SaveConfig();
+
+  Pad::LoadConfig();
+  Pad::GetConfig()->SaveConfig();
+
   return YES;
 }
 
