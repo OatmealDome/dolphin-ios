@@ -4,7 +4,11 @@
 #include <string>
 #include <vector>
 
+#include <Foundation/Foundation.h>
+
 #include "Core/Host.h"
+
+#include "HostNotifications.h"
 
 std::vector<std::string> Host_GetPreferredLocales()
 {
@@ -19,8 +23,12 @@ void Host_RefreshDSPDebuggerWindow()
 {
 }
 
-void Host_Message(HostMessageID)
+void Host_Message(HostMessageID message)
 {
+  if (message == HostMessageID::WMUserJobDispatch)
+  {
+    [[NSNotificationCenter defaultCenter] postNotificationName:DOLHostDidReceiveDispatchJobNotification object:nil];
+  }
 }
 
 void Host_UpdateTitle(const std::string&)
