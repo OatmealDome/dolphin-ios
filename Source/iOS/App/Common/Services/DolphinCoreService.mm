@@ -39,8 +39,10 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:foundationCaption message:foundationText preferredStyle:UIAlertControllerStyleAlert];
     
     void (^finish)() = ^void() {
+      [condition lock];
       [condition signal];
       [window setHidden:true];
+      [condition unlock];
     };
 
     if (question) {
