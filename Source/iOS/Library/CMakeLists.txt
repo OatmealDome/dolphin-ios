@@ -1,5 +1,5 @@
 add_library(dolphin SHARED
-  Host.cpp
+  Host.mm
 )
 
 set_target_properties(dolphin PROPERTIES
