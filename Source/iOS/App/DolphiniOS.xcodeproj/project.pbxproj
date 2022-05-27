@@ -223,7 +223,6 @@
 		B933EDC527F8E8D6004D7DD7 /* Emulation */ = {
 			isa = PBXGroup;
 			children = (
-				B9D9389F283F239200B290FC /* TouchController */,
 				B9D93889283DD83E00B290FC /* EmulationBootType.h */,
 				B9D9388A283DD86100B290FC /* EmulationBootParameter.h */,
 				B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */,
@@ -281,6 +280,7 @@
 		B9D93890283DE62700B290FC /* Emulation */ = {
 			isa = PBXGroup;
 			children = (
+				B9D9389F283F239200B290FC /* TouchController */,
 				B9D93891283DE63800B290FC /* Emulation.storyboard */,
 			);
 			path = Emulation;
