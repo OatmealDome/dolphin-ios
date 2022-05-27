@@ -124,6 +124,7 @@ elseif(APPLE AND NOT IOS)
   )
 elseif(IOS)
   target_sources(inputcommon PRIVATE
+    ControllerInterface/iOS/ButtonType.h
     ControllerInterface/iOS/iOS.h
     ControllerInterface/iOS/iOS.mm
   )
