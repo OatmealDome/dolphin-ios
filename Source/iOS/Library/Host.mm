@@ -54,17 +54,17 @@ bool Host_UIBlocksControllerState()
 
 bool Host_RendererHasFocus()
 {
-  return false;
+  return true;
 }
 
 bool Host_RendererHasFullFocus()
 {
-  return false;
+  return true;
 }
 
 bool Host_RendererIsFullscreen()
 {
-  return false;
+  return true;
 }
 
 void Host_YieldToUI()
