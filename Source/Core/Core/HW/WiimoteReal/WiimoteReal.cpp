@@ -839,7 +839,7 @@ void Initialize(::Wiimote::InitializeMode init_mode)
 {
   if (!s_real_wiimotes_initialized)
   {
-    s_wiimote_scanner.StartThread();
+    // s_wiimote_scanner.StartThread();
   }
 
   if (Config::Get(Config::MAIN_WIIMOTE_CONTINUOUS_SCANNING))
