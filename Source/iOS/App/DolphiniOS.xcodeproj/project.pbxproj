@@ -23,6 +23,8 @@
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
+		B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */; };
+		B9447B0D2841939300BC9110 /* ImageAsset.json.in in Resources */ = {isa = PBXBuildFile; fileRef = B9447B0C2841939300BC9110 /* ImageAsset.json.in */; };
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
@@ -71,6 +73,9 @@
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
 		B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameFilePtrWrapper.mm; sourceTree = "<group>"; };
 		B933EDC227F8E215004D7DD7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DolphinAssets.xcassets; sourceTree = "<group>"; };
+		B9447B0A2841931E00BC9110 /* CopyAssets.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CopyAssets.sh; sourceTree = "<group>"; };
+		B9447B0C2841939300BC9110 /* ImageAsset.json.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = ImageAsset.json.in; sourceTree = "<group>"; };
 		B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PreprocessorCombine.xcconfig; sourceTree = "<group>"; };
 		B9476B1E27F1B17F009C0A4B /* NonJailbroken.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = NonJailbroken.xcconfig; sourceTree = "<group>"; };
@@ -136,6 +141,7 @@
 				B900A7BF27F4D2E4000361DD /* UI */,
 				B900A7A627F26F61000361DD /* AppDelegate.swift */,
 				B933EDC227F8E215004D7DD7 /* Assets.xcassets */,
+				B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */,
 				B900A7AF27F2866D000361DD /* UserFolderUtil.swift */,
 			);
 			path = Common;
@@ -232,10 +238,19 @@
 			path = Emulation;
 			sourceTree = "<group>";
 		};
+		B9447B0B2841937100BC9110 /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				B9447B0C2841939300BC9110 /* ImageAsset.json.in */,
+			);
+			path = Templates;
+			sourceTree = "<group>";
+		};
 		B9476B2127F2357B009C0A4B /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
 				B9476B2227F235A0009C0A4B /* BuildCore.sh */,
+				B9447B0A2841931E00BC9110 /* CopyAssets.sh */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -244,6 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				B96F72CD27F0E8A70024BA7D /* Config */,
+				B9447B0B2841937100BC9110 /* Templates */,
 				B9476B2127F2357B009C0A4B /* Scripts */,
 			);
 			path = Project;
@@ -361,6 +377,7 @@
 				B9476B2327F23920009C0A4B /* Build Dolphin Core */,
 				B9DC3DF227EFBD2C0084DAA4 /* Sources */,
 				B9DC3DF327EFBD2C0084DAA4 /* Frameworks */,
+				B9447B0E2841941D00BC9110 /* Copy Dolphin Assets */,
 				B9DC3DF427EFBD2C0084DAA4 /* Resources */,
 				B900A7A027F255E0000361DD /* CopyFiles */,
 			);
@@ -419,8 +436,10 @@
 			files = (
 				B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */,
 				B900A7C727F4D4F4000361DD /* SoftwareList.storyboard in Resources */,
+				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
 				B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */,
+				B9447B0D2841939300BC9110 /* ImageAsset.json.in in Resources */,
 				B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */,
 				B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */,
 			);
@@ -429,6 +448,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		B9447B0E2841941D00BC9110 /* Copy Dolphin Assets */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Dolphin Assets";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(PROJECT_DIR)/Common/DolphinAssets.xcassets/**",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PROJECT_DIR/Project/Scripts/CopyAssets.sh\"\n";
+		};
 		B9476B2327F23920009C0A4B /* Build Dolphin Core */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
