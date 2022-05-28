@@ -3,14 +3,18 @@
 
 #include "InputCommon/ControllerInterface/iOS/iOS.h"
 
+#include "InputCommon/ControllerInterface/iOS/StateManager.h"
+
 namespace ciface::iOS
 {
 void Init()
 {
+  StateManager::GetInstance()->Init();
 }
 
 void DeInit()
 {
+  StateManager::GetInstance()->DeInit();
 }
 
 void PopulateDevices()
