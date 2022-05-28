@@ -127,6 +127,8 @@ elseif(IOS)
     ControllerInterface/iOS/ButtonType.h
     ControllerInterface/iOS/iOS.h
     ControllerInterface/iOS/iOS.mm
+    ControllerInterface/iOS/StateManager.h
+    ControllerInterface/iOS/StateManager.cpp
   )
 elseif(X11_FOUND)
   target_sources(inputcommon PRIVATE
