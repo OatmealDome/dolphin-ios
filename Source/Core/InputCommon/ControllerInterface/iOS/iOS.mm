@@ -4,6 +4,7 @@
 #include "InputCommon/ControllerInterface/iOS/iOS.h"
 
 #include "InputCommon/ControllerInterface/iOS/StateManager.h"
+#include "InputCommon/ControllerInterface/iOS/Touchscreen.h"
 
 namespace ciface::iOS
 {
@@ -19,5 +20,8 @@ void DeInit()
 
 void PopulateDevices()
 {
+  for (int i = 0; i < 8; ++i)
+    g_controller_interface.AddDevice(std::make_shared<ciface::iOS::Touchscreen>(
+        i, i >= 4));
 }
 }  // namespace ciface::iOS
