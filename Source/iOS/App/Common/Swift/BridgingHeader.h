@@ -3,3 +3,7 @@
 
 #import "DolphinCoreService.h"
 #import "GameFileCacheManager.h"
+
+#if TARGET_OS_IOS
+#import "TCManagerInterface.h"
+#endif

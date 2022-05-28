@@ -23,6 +23,10 @@
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
+		B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447AFC28418D7600BC9110 /* TCButton.swift */; };
+		B9447AFF28418EA100BC9110 /* TCDirectionalPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */; };
+		B9447B0128418F2600BC9110 /* TCJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447B0028418F2600BC9110 /* TCJoystick.swift */; };
+		B9447B072841906000BC9110 /* TCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447B062841906000BC9110 /* TCView.swift */; };
 		B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */; };
 		B9447B0D2841939300BC9110 /* ImageAsset.json.in in Resources */ = {isa = PBXBuildFile; fileRef = B9447B0C2841939300BC9110 /* ImageAsset.json.in */; };
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
@@ -74,6 +78,10 @@
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
 		B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameFilePtrWrapper.mm; sourceTree = "<group>"; };
 		B933EDC227F8E215004D7DD7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B9447AFC28418D7600BC9110 /* TCButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCButton.swift; sourceTree = "<group>"; };
+		B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDirectionalPad.swift; sourceTree = "<group>"; };
+		B9447B0028418F2600BC9110 /* TCJoystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCJoystick.swift; sourceTree = "<group>"; };
+		B9447B062841906000BC9110 /* TCView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCView.swift; sourceTree = "<group>"; };
 		B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DolphinAssets.xcassets; sourceTree = "<group>"; };
 		B9447B0A2841931E00BC9110 /* CopyAssets.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CopyAssets.sh; sourceTree = "<group>"; };
 		B9447B0C2841939300BC9110 /* ImageAsset.json.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = ImageAsset.json.in; sourceTree = "<group>"; };
@@ -333,9 +341,13 @@
 		B9D9389F283F239200B290FC /* TouchController */ = {
 			isa = PBXGroup;
 			children = (
+				B9447AFC28418D7600BC9110 /* TCButton.swift */,
 				B9D938A0283F239F00B290FC /* TCButtonType.swift */,
+				B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */,
+				B9447B0028418F2600BC9110 /* TCJoystick.swift */,
 				B9D938A528418AFD00B290FC /* TCManagerInterface.h */,
 				B9D938A628418AFD00B290FC /* TCManagerInterface.mm */,
+				B9447B062841906000BC9110 /* TCView.swift */,
 			);
 			path = TouchController;
 			sourceTree = "<group>";
@@ -501,6 +513,7 @@
 			files = (
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */,
+				B9447AFF28418EA100BC9110 /* TCDirectionalPad.swift in Sources */,
 				B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */,
 				B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */,
 				B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */,
@@ -508,9 +521,12 @@
 				B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */,
 				B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */,
 				B900A7D527F61F3A000361DD /* GameFileCacheManager.mm in Sources */,
+				B9447B0128418F2600BC9110 /* TCJoystick.swift in Sources */,
 				B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */,
+				B9447B072841906000BC9110 /* TCView.swift in Sources */,
 				B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */,
 				B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */,
+				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
 				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
 				B9D938A728418AFE00B290FC /* TCManagerInterface.mm in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
