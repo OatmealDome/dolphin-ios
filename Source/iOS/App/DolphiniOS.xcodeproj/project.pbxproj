@@ -30,7 +30,6 @@
 		B9447B052841901200BC9110 /* TCGameCubePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447B032841901200BC9110 /* TCGameCubePad.swift */; };
 		B9447B072841906000BC9110 /* TCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447B062841906000BC9110 /* TCView.swift */; };
 		B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */; };
-		B9447B0D2841939300BC9110 /* ImageAsset.json.in in Resources */ = {isa = PBXBuildFile; fileRef = B9447B0C2841939300BC9110 /* ImageAsset.json.in */; };
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
@@ -463,7 +462,6 @@
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
 				B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */,
-				B9447B0D2841939300BC9110 /* ImageAsset.json.in in Resources */,
 				B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */,
 				B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */,
 			);
