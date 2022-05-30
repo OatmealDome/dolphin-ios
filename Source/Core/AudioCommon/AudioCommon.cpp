@@ -7,6 +7,7 @@
 #include <fmt/format.h>
 
 #include "AudioCommon/AlsaSoundStream.h"
+#include "AudioCommon/CoreAudioSoundStream.h"
 #include "AudioCommon/CubebStream.h"
 #include "AudioCommon/Mixer.h"
 #include "AudioCommon/NullSoundStream.h"
@@ -47,6 +48,8 @@ static std::unique_ptr<SoundStream> CreateSoundStreamForBackend(std::string_view
     return std::make_unique<OpenSLESStream>();
   else if (backend == BACKEND_WASAPI && WASAPIStream::IsValid())
     return std::make_unique<WASAPIStream>();
+  else if (backend == BACKEND_COREAUDIO && CoreAudioSound::IsValid())
+    return std::make_unique<CoreAudioSound>();
   return {};
 }
 
@@ -103,6 +106,8 @@ std::string GetDefaultSoundBackend()
 #elif defined __linux__
   if (AlsaSound::IsValid())
     backend = BACKEND_ALSA;
+#elif defined(IPHONEOS)
+  backend = BACKEND_COREAUDIO;
 #elif defined(__APPLE__) || defined(_WIN32)
   backend = BACKEND_CUBEB;
 #endif
@@ -130,6 +135,8 @@ std::vector<std::string> GetSoundBackends()
     backends.emplace_back(BACKEND_OPENSLES);
   if (WASAPIStream::IsValid())
     backends.emplace_back(BACKEND_WASAPI);
+  if (CoreAudioSound::IsValid())
+    backends.emplace_back(BACKEND_COREAUDIO);
 
   return backends;
 }
