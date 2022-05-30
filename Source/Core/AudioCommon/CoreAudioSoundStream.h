@@ -17,7 +17,7 @@ public:
   bool SetRunning(bool running) override;
   void SetVolume(int volume) override;
 
-  static bool isValid() { return true; }
+  static bool IsValid() { return true; }
 
 private:
   AudioUnit audio_unit;
