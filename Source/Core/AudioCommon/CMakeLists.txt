@@ -87,6 +87,8 @@ if(IOS)
     CoreAudioSoundStream.cpp
     CoreAudioSoundStream.h
   )
+
+  target_link_libraries(audiocommon PRIVATE ${AUDIOTOOLBOX_LIBRARY})
 endif()
 
 target_link_libraries(audiocommon
