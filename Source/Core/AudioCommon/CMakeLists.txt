@@ -82,6 +82,13 @@ if(WIN32)
   )
 endif()
 
+if(IOS)
+  target_sources(audiocommon PRIVATE
+    CoreAudioSoundStream.cpp
+    CoreAudioSoundStream.h
+  )
+endif()
+
 target_link_libraries(audiocommon
 PUBLIC
   common
