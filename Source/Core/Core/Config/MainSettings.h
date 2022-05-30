@@ -20,6 +20,7 @@
 #define BACKEND_PULSEAUDIO "Pulse"
 #define BACKEND_OPENSLES "OpenSLES"
 #define BACKEND_WASAPI _trans("WASAPI (Exclusive Mode)")
+#define BACKEND_COREAUDIO "CoreAudio"
 
 namespace PowerPC
 {
