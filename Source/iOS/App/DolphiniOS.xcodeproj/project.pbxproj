@@ -84,6 +84,7 @@
 		B933EDC227F8E215004D7DD7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B938835C287EC12500910606 /* SettingsRoot.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingsRoot.storyboard; sourceTree = "<group>"; };
 		B93986FA287F45A3008E8E47 /* SettingsRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRootViewController.swift; sourceTree = "<group>"; };
+		B93986FC287F7C2F008E8E47 /* CoreVersion.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = CoreVersion.xcconfig; sourceTree = "<group>"; };
 		B9447AFC28418D7600BC9110 /* TCButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCButton.swift; sourceTree = "<group>"; };
 		B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDirectionalPad.swift; sourceTree = "<group>"; };
 		B9447B0028418F2600BC9110 /* TCJoystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCJoystick.swift; sourceTree = "<group>"; };
@@ -319,6 +320,7 @@
 				B9476B1F27F1B1F2009C0A4B /* Beta.xcconfig */,
 				B96F72DD27F199040024BA7D /* BundleIdentifier.xcconfig */,
 				B900A7A227F25718000361DD /* Common.xcconfig */,
+				B93986FC287F7C2F008E8E47 /* CoreVersion.xcconfig */,
 				B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */,
 				B9476B1E27F1B17F009C0A4B /* NonJailbroken.xcconfig */,
 				B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */,
