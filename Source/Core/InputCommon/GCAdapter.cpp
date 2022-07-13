@@ -3,12 +3,15 @@
 
 #include "InputCommon/GCAdapter.h"
 
-#ifndef ANDROID
-#define GCADAPTER_USE_LIBUSB_IMPLEMENTATION true
-#define GCADAPTER_USE_ANDROID_IMPLEMENTATION false
-#else
+#ifdef ANDROID
 #define GCADAPTER_USE_LIBUSB_IMPLEMENTATION false
 #define GCADAPTER_USE_ANDROID_IMPLEMENTATION true
+#elif defined(IPHONEOS)
+#define GCADAPTER_USE_LIBUSB_IMPLEMENTATION false
+#define GCADAPTER_USE_ANDROID_IMPLEMENTATION false
+#else
+#define GCADAPTER_USE_LIBUSB_IMPLEMENTATION true
+#define GCADAPTER_USE_ANDROID_IMPLEMENTATION false
 #endif
 
 #include <algorithm>
@@ -202,6 +205,8 @@ static void Read()
     jbyte* const java_data = env->GetByteArrayElements(*java_controller_payload, nullptr);
     std::copy(java_data, java_data + CONTROLER_INPUT_PAYLOAD_EXPECTED_SIZE,
               s_controller_payload_swap.begin());
+#else
+    const int payload_size = 0;
 #endif
     {
       std::lock_guard<std::mutex> lk(s_read_mutex);
