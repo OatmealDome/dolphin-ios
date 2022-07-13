@@ -55,7 +55,17 @@ void MemArena::ReleaseView(void* view, size_t size)
 
 u8* MemArena::ReserveMemoryRegion(size_t memory_size)
 {
-  return nullptr;
+  vm_address_t addr = 0;
+  kern_return_t retval = vm_allocate(mach_task_self(), &addr, memory_size, VM_FLAGS_ANYWHERE);
+  if (retval != KERN_SUCCESS)
+  {
+    ERROR_LOG_FMT(MEMMAP, "vm_allocate failed: {0:#x}", retval);
+    return nullptr;
+  }
+
+  vm_deallocate(mach_task_self(), addr, memory_size);
+
+  return reinterpret_cast<u8*>(addr);
 }
 
 void MemArena::ReleaseMemoryRegion()
@@ -64,10 +74,26 @@ void MemArena::ReleaseMemoryRegion()
 
 void* MemArena::MapInMemoryRegion(s64 offset, size_t size, void* base)
 {
-  return nullptr;
+  vm_address_t target = reinterpret_cast<vm_address_t>(base);
+  uint64_t mask = 0;
+  vm_address_t source = m_shm_address + offset;
+  vm_prot_t cur_protection = 0;
+  vm_prot_t max_protection = 0;
+
+  kern_return_t retval =
+      vm_remap(mach_task_self(), &target, size, mask, false, mach_task_self(), source, false,
+               &cur_protection, &max_protection, VM_INHERIT_DEFAULT);
+  if (retval != KERN_SUCCESS)
+  {
+    ERROR_LOG_FMT(MEMMAP, "vm_remap failed: {0:#x}", retval);
+    return nullptr;
+  }
+
+  return reinterpret_cast<void*>(target);
 }
 
 void MemArena::UnmapFromMemoryRegion(void* view, size_t size)
 {
+  vm_deallocate(mach_task_self(), reinterpret_cast<vm_address_t>(view), size);
 }
 }  // namespace Common
