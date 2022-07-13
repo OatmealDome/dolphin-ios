@@ -8,5 +8,7 @@
 	<true/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>DOLCoreVersion</key>
+	<string>$(DOL_CORE_VERSION)</string>
 </dict>
 </plist>
