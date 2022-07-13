@@ -891,7 +891,7 @@ std::string GetSysDirectory()
 {
   std::string sysDir;
 
-#if defined(_WIN32) || defined(LINUX_LOCAL_DEV)
+#if defined(_WIN32) || defined(LINUX_LOCAL_DEV) || defined(IPHONEOS)
 #define SYSDATA_DIR "Sys"
 #elif defined __APPLE__
 #define SYSDATA_DIR "Contents/Resources/Sys"
