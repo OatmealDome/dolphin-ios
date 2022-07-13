@@ -25,6 +25,7 @@
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
 		B938835D287EC12500910606 /* SettingsRoot.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B938835C287EC12500910606 /* SettingsRoot.storyboard */; };
 		B93986FB287F45A3008E8E47 /* SettingsRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93986FA287F45A3008E8E47 /* SettingsRootViewController.swift */; };
+		B93986FF287F8F18008E8E47 /* ConfigSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B93986FE287F8F18008E8E47 /* ConfigSettings.storyboard */; };
 		B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447AFC28418D7600BC9110 /* TCButton.swift */; };
 		B9447AFF28418EA100BC9110 /* TCDirectionalPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */; };
 		B9447B0128418F2600BC9110 /* TCJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447B0028418F2600BC9110 /* TCJoystick.swift */; };
@@ -85,6 +86,7 @@
 		B938835C287EC12500910606 /* SettingsRoot.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingsRoot.storyboard; sourceTree = "<group>"; };
 		B93986FA287F45A3008E8E47 /* SettingsRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRootViewController.swift; sourceTree = "<group>"; };
 		B93986FC287F7C2F008E8E47 /* CoreVersion.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = CoreVersion.xcconfig; sourceTree = "<group>"; };
+		B93986FE287F8F18008E8E47 /* ConfigSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ConfigSettings.storyboard; sourceTree = "<group>"; };
 		B9447AFC28418D7600BC9110 /* TCButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCButton.swift; sourceTree = "<group>"; };
 		B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDirectionalPad.swift; sourceTree = "<group>"; };
 		B9447B0028418F2600BC9110 /* TCJoystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCJoystick.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 		B938835B287EBA5500910606 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				B93986FD287F8F0F008E8E47 /* Config */,
 				B938835C287EC12500910606 /* SettingsRoot.storyboard */,
 			);
 			path = Settings;
@@ -275,6 +278,14 @@
 				B93986FA287F45A3008E8E47 /* SettingsRootViewController.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		B93986FD287F8F0F008E8E47 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				B93986FE287F8F18008E8E47 /* ConfigSettings.storyboard */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		B9447B0B2841937100BC9110 /* Templates */ = {
@@ -493,6 +504,7 @@
 			files = (
 				B938835D287EC12500910606 /* SettingsRoot.storyboard in Resources */,
 				B950CA942846A13100F45219 /* Sys in Resources */,
+				B93986FF287F8F18008E8E47 /* ConfigSettings.storyboard in Resources */,
 				B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */,
 				B900A7C727F4D4F4000361DD /* SoftwareList.storyboard in Resources */,
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
