@@ -31,6 +31,7 @@
 		B9447B072841906000BC9110 /* TCView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447B062841906000BC9110 /* TCView.swift */; };
 		B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */; };
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
+		B950CA942846A13100F45219 /* Sys in Resources */ = {isa = PBXBuildFile; fileRef = B950CA932846A13100F45219 /* Sys */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -95,6 +96,7 @@
 		B9476B2027F22416009C0A4B /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		B9476B2227F235A0009C0A4B /* BuildCore.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildCore.sh; sourceTree = "<group>"; };
 		B9476B2427F23FFE009C0A4B /* libdolphin.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libdolphin.dylib; path = "../../../build-$(PLATFORM_NAME)-$(DOL_CORE_BUILD_TARGET)/Source/iOS/Library/libdolphin.dylib"; sourceTree = SOURCE_ROOT; };
+		B950CA932846A13100F45219 /* Sys */ = {isa = PBXFileReference; lastKnownFileType = text; name = Sys; path = ../../../Data/Sys; sourceTree = SOURCE_ROOT; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72D027F0FC020024BA7D /* Release (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -269,9 +271,18 @@
 			path = Scripts;
 			sourceTree = "<group>";
 		};
+		B950CA922846A10400F45219 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				B950CA932846A13100F45219 /* Sys */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		B96F72CC27F0E6A00024BA7D /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				B950CA922846A10400F45219 /* Assets */,
 				B96F72CD27F0E8A70024BA7D /* Config */,
 				B9447B0B2841937100BC9110 /* Templates */,
 				B9476B2127F2357B009C0A4B /* Scripts */,
@@ -456,6 +467,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B950CA942846A13100F45219 /* Sys in Resources */,
 				B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */,
 				B900A7C727F4D4F4000361DD /* SoftwareList.storyboard in Resources */,
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
