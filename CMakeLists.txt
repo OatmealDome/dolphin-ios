@@ -13,13 +13,6 @@ endif()
 
 # Minimum OS X version.
 # This is inserted into the Info.plist as well.
-
-# MacOS prior to 10.14 did not support aligned alloc which is used to implement
-# std::unique_ptr in the arm64 C++ standard library. x86_64 builds can override
-# this to 10.13.0 using -DCMAKE_OSX_DEPLOYMENT_TARGET="10.13.0" without issue.
-# This is done in the universal binary building script to build a binary that
-# runs on 10.13 on x86_64 computers, while still containing an arm64 slice.
-
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14.0" CACHE STRING "")
 
 set(CMAKE_USER_MAKE_RULES_OVERRIDE "CMake/FlagsOverride.cmake")
@@ -57,6 +50,7 @@ if(NOT ANDROID AND NOT IOS)
 endif()
 
 option(USE_SHARED_ENET "Use shared libenet if found rather than Dolphin's soon-to-compatibly-diverge version" OFF)
+option(USE_SHARED_LIBPNG "Use shared libpng if found" ON)
 option(USE_UPNP "Enables UPnP port mapping support" ON)
 option(ENABLE_NOGUI "Enable NoGUI frontend" ON)
 option(ENABLE_QT "Enable Qt (Default)" ON)
@@ -71,6 +65,7 @@ option(ENABLE_VULKAN "Enables vulkan video backend" ON)
 option(USE_DISCORD_PRESENCE "Enables Discord Rich Presence, show the current game on Discord" ON)
 option(USE_MGBA "Enables GBA controllers emulation using libmgba" ON)
 option(ENABLE_AUTOUPDATE "Enables support for automatic updates" ON)
+option(STEAM "Creates a build for Steam" OFF)
 option(ENABLE_CUBEB "Enables Cubeb sound backend" ON)
 
 # Maintainers: if you consider blanket disabling this for your users, please
@@ -90,8 +85,8 @@ option(OPROFILING "Enable profiling" OFF)
 # TODO: Add DSPSpy
 option(DSPTOOL "Build dsptool" OFF)
 
-# Enable SDL for default on operating systems that aren't Android, Linux or Windows.
-if(NOT ANDROID AND NOT CMAKE_SYSTEM_NAME STREQUAL "Linux" AND NOT MSVC)
+# Enable SDL for default on operating systems that aren't Android or Linux.
+if(NOT ANDROID AND NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
   option(ENABLE_SDL "Enables SDL as a generic controller backend" ON)
 else()
   option(ENABLE_SDL "Enables SDL as a generic controller backend" OFF)
@@ -102,6 +97,7 @@ if(APPLE)
   option(SKIP_POSTPROCESS_BUNDLE "Skip postprocessing bundle for redistributability" OFF)
   # Enable adhoc code signing by default (otherwise makefile builds on ARM will not work)
   option(MACOS_CODE_SIGNING "Enable codesigning" ON)
+  option(USE_BUNDLED_MOLTENVK "Build MoltenVK from Externals with Dolphin-specific patches" ON)
   set(MACOS_CODE_SIGNING_IDENTITY "-" CACHE STRING "The identity used for codesigning.")
   set(MACOS_CODE_SIGNING_IDENTITY_UPDATER "-" CACHE STRING "The identity used for codesigning, for the updater.")
 endif()
@@ -415,6 +411,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
   find_library(IOB_LIBRARY IOBluetooth)
   find_library(IOK_LIBRARY IOKit)
   find_library(OPENGL_LIBRARY OpenGL)
+
+  # We don't want to use shared libpng.
+  set(USE_SHARED_LIBPNG OFF)
 endif()
 
 if(ENABLE_LTO)
@@ -430,8 +429,10 @@ if(ENABLE_LTO)
   endif()
 endif()
 
-if(UNIX AND LINUX_LOCAL_DEV)
-  add_definitions(-DLINUX_LOCAL_DEV)
+if(UNIX)
+  if(LINUX_LOCAL_DEV OR (CMAKE_SYSTEM_NAME STREQUAL "Linux" AND STEAM))
+    add_definitions(-DLINUX_LOCAL_DEV)
+  endif()
 endif()
 
 # BSDs put packages in /usr/local instead of /usr, so we need to
@@ -634,6 +635,23 @@ if(UNIX)
   add_definitions(-DUSE_MEMORYWATCHER=1)
 endif()
 
+if(ENABLE_SDL)
+  find_package(SDL2)
+
+  if(SDL2_FOUND)
+    message(STATUS "Using system SDL2")
+  else()
+    message(STATUS "Using static SDL2 from Externals")
+    set(SDL_SHARED OFF)
+    set(SDL_SHARED_ENABLED_BY_DEFAULT OFF)
+    set(SDL_STATIC ON)
+    set(SDL_STATIC_ENABLED_BY_DEFAULT ON)
+    add_subdirectory(Externals/SDL/SDL)
+    set(SDL2_FOUND TRUE)
+  endif()
+  add_definitions(-DHAVE_SDL2=1)
+endif()
+
 if(ENABLE_ANALYTICS)
   message(STATUS "Enabling analytics collection (subject to end-user opt-in)")
   add_definitions(-DUSE_ANALYTICS=1)
@@ -682,11 +700,12 @@ else()
 endif()
 add_subdirectory(Externals/imgui)
 add_subdirectory(Externals/glslang)
+add_subdirectory(Externals/spirv_cross)
 
 if(ENABLE_VULKAN)
   add_definitions(-DHAS_VULKAN)
 
-  if(APPLE AND NOT IOS)
+  if(APPLE AND NOT IOS AND USE_BUNDLED_MOLTENVK)
     add_subdirectory(Externals/MoltenVK)
   endif()
 endif()
@@ -783,7 +802,7 @@ else()
   add_subdirectory(Externals/zlib)
 endif()
 
-pkg_check_modules(MINIZIP minizip>=2.0.0)
+pkg_check_modules(MINIZIP minizip-ng>=3.0.0)
 if(MINIZIP_FOUND)
   message(STATUS "Using shared minizip")
   include_directories(${MINIZIP_INCLUDE_DIRS})
@@ -806,7 +825,7 @@ else()
   set(LZO lzo2)
 endif()
 
-if(NOT APPLE)
+if(USE_SHARED_LIBPNG)
   check_lib(PNG libpng png png.h QUIET)
 endif()
 if (PNG_FOUND)
@@ -963,6 +982,10 @@ else()
   message(STATUS "libsystemd not found, disabling traversal server watchdog support")
 endif()
 
+if(STEAM)
+  add_definitions(-DSTEAM)
+endif()
+
 if (WIN32)
   include_directories(Externals/WIL/include)
   include_directories(Externals/OpenAL/include)
@@ -971,6 +994,8 @@ endif()
 include_directories(Externals/picojson)
 
 add_subdirectory(Externals/rangeset)
+
+add_subdirectory(Externals/FatFs)
 
 ########################################
 # Pre-build events: Define configuration variables and write SCM info header

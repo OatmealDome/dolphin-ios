@@ -157,34 +157,44 @@ const AbstractPipeline* ShaderCache::GetUberPipelineForUid(const GXUberPipelineU
 
 void ShaderCache::WaitForAsyncCompiler()
 {
-  while (m_async_shader_compiler->HasPendingWork() || m_async_shader_compiler->HasCompletedWork())
+  bool running = true;
+
+  constexpr auto update_ui_progress = [](size_t completed, size_t total) {
+    g_renderer->BeginUIFrame();
+
+    const float center_x = ImGui::GetIO().DisplaySize.x * 0.5f;
+    const float center_y = ImGui::GetIO().DisplaySize.y * 0.5f;
+    const float scale = ImGui::GetIO().DisplayFramebufferScale.x;
+
+    ImGui::SetNextWindowSize(ImVec2(400.0f * scale, 50.0f * scale), ImGuiCond_Always);
+    ImGui::SetNextWindowPos(ImVec2(center_x, center_y), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+    if (ImGui::Begin(Common::GetStringT("Compiling Shaders").c_str(), nullptr,
+                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs |
+                         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings |
+                         ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoNav |
+                         ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing))
+    {
+      ImGui::Text("Compiling shaders: %zu/%zu", completed, total);
+      ImGui::ProgressBar(static_cast<float>(completed) /
+                             static_cast<float>(std::max(total, static_cast<size_t>(1))),
+                         ImVec2(-1.0f, 0.0f), "");
+    }
+    ImGui::End();
+
+    g_renderer->EndUIFrame();
+  };
+
+  while (running &&
+         (m_async_shader_compiler->HasPendingWork() || m_async_shader_compiler->HasCompletedWork()))
   {
-    m_async_shader_compiler->WaitUntilCompletion([](size_t completed, size_t total) {
-      g_renderer->BeginUIFrame();
+    running = m_async_shader_compiler->WaitUntilCompletion(update_ui_progress);
 
-      const float center_x = ImGui::GetIO().DisplaySize.x * 0.5f;
-      const float center_y = ImGui::GetIO().DisplaySize.y * 0.5f;
-      const float scale = ImGui::GetIO().DisplayFramebufferScale.x;
-
-      ImGui::SetNextWindowSize(ImVec2(400.0f * scale, 50.0f * scale), ImGuiCond_Always);
-      ImGui::SetNextWindowPos(ImVec2(center_x, center_y), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-      if (ImGui::Begin(Common::GetStringT("Compiling Shaders").c_str(), nullptr,
-                       ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs |
-                           ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings |
-                           ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoNav |
-                           ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing))
-      {
-        ImGui::Text("Compiling shaders: %zu/%zu", completed, total);
-        ImGui::ProgressBar(static_cast<float>(completed) /
-                               static_cast<float>(std::max(total, static_cast<size_t>(1))),
-                           ImVec2(-1.0f, 0.0f), "");
-      }
-      ImGui::End();
-
-      g_renderer->EndUIFrame();
-    });
     m_async_shader_compiler->RetrieveWorkItems();
   }
+
+  // Just render nothing to clear the screen
+  g_renderer->BeginUIFrame();
+  g_renderer->EndUIFrame();
 }
 
 template <typename SerializedUidType, typename UidType>
@@ -430,7 +440,8 @@ ShaderCache::CompileVertexUberShader(const UberShader::VertexShaderUid& uid) con
 {
   const ShaderCode source_code =
       UberShader::GenVertexShader(m_api_type, m_host_config, uid.GetUidData());
-  return g_renderer->CreateShaderFromSource(ShaderStage::Vertex, source_code.GetBuffer());
+  return g_renderer->CreateShaderFromSource(ShaderStage::Vertex, source_code.GetBuffer(),
+                                            fmt::to_string(*uid.GetUidData()));
 }
 
 std::unique_ptr<AbstractShader> ShaderCache::CompilePixelShader(const PixelShaderUid& uid) const
@@ -445,7 +456,8 @@ ShaderCache::CompilePixelUberShader(const UberShader::PixelShaderUid& uid) const
 {
   const ShaderCode source_code =
       UberShader::GenPixelShader(m_api_type, m_host_config, uid.GetUidData());
-  return g_renderer->CreateShaderFromSource(ShaderStage::Pixel, source_code.GetBuffer());
+  return g_renderer->CreateShaderFromSource(ShaderStage::Pixel, source_code.GetBuffer(),
+                                            fmt::to_string(*uid.GetUidData()));
 }
 
 const AbstractShader* ShaderCache::InsertVertexShader(const VertexShaderUid& uid,
@@ -1339,15 +1351,17 @@ const AbstractPipeline* ShaderCache::GetTextureReinterpretPipeline(TextureFormat
   return iiter.first->second.get();
 }
 
-const AbstractShader* ShaderCache::GetTextureDecodingShader(TextureFormat format,
-                                                            TLUTFormat palette_format)
+const AbstractShader*
+ShaderCache::GetTextureDecodingShader(TextureFormat format,
+                                      std::optional<TLUTFormat> palette_format)
 {
-  const auto key = std::make_pair(static_cast<u32>(format), static_cast<u32>(palette_format));
-  auto iter = m_texture_decoding_shaders.find(key);
+  const auto key = std::make_pair(static_cast<u32>(format),
+                                  static_cast<u32>(palette_format.value_or(TLUTFormat::IA8)));
+  const auto iter = m_texture_decoding_shaders.find(key);
   if (iter != m_texture_decoding_shaders.end())
     return iter->second.get();
 
-  std::string shader_source =
+  const std::string shader_source =
       TextureConversionShaderTiled::GenerateDecodingShader(format, palette_format, APIType::OpenGL);
   if (shader_source.empty())
   {
@@ -1355,16 +1369,20 @@ const AbstractShader* ShaderCache::GetTextureDecodingShader(TextureFormat format
     return nullptr;
   }
 
-  std::unique_ptr<AbstractShader> shader = g_renderer->CreateShaderFromSource(
-      ShaderStage::Compute, shader_source,
-      fmt::format("Texture decoding compute shader: {}, {}", format, palette_format));
+  const std::string name =
+      palette_format.has_value() ?
+          fmt::format("Texture decoding compute shader: {}, {}", format, *palette_format) :
+          fmt::format("Texture decoding compute shader: {}", format);
+
+  std::unique_ptr<AbstractShader> shader =
+      g_renderer->CreateShaderFromSource(ShaderStage::Compute, shader_source, name);
   if (!shader)
   {
     m_texture_decoding_shaders.emplace(key, nullptr);
     return nullptr;
   }
 
-  auto iiter = m_texture_decoding_shaders.emplace(key, std::move(shader));
+  const auto iiter = m_texture_decoding_shaders.emplace(key, std::move(shader));
   return iiter.first->second.get();
 }
 }  // namespace VideoCommon

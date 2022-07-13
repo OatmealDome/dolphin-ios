@@ -87,10 +87,13 @@ const Info<ExpansionInterface::EXIDeviceType>& GetInfoForEXIDevice(ExpansionInte
 extern const Info<std::string> MAIN_BBA_MAC;
 extern const Info<std::string> MAIN_BBA_XLINK_IP;
 extern const Info<bool> MAIN_BBA_XLINK_CHAT_OSD;
+extern const Info<std::string> MAIN_BBA_BUILTIN_DNS;
+extern const Info<std::string> MAIN_BBA_BUILTIN_IP;
 const Info<SerialInterface::SIDevices>& GetInfoForSIDevice(int channel);
 const Info<bool>& GetInfoForAdapterRumble(int channel);
 const Info<bool>& GetInfoForSimulateKonga(int channel);
 extern const Info<bool> MAIN_WII_SD_CARD;
+extern const Info<bool> MAIN_WII_SD_CARD_ENABLE_FOLDER_SYNC;
 extern const Info<bool> MAIN_WII_KEYBOARD;
 extern const Info<bool> MAIN_WIIMOTE_CONTINUOUS_SCANNING;
 extern const Info<bool> MAIN_WIIMOTE_ENABLE_SPEAKER;
@@ -177,7 +180,8 @@ extern const Info<std::string> MAIN_DUMP_PATH;
 extern const Info<std::string> MAIN_LOAD_PATH;
 extern const Info<std::string> MAIN_RESOURCEPACK_PATH;
 extern const Info<std::string> MAIN_FS_PATH;
-extern const Info<std::string> MAIN_SD_PATH;
+extern const Info<std::string> MAIN_WII_SD_CARD_IMAGE_PATH;
+extern const Info<std::string> MAIN_WII_SD_CARD_SYNC_FOLDER_PATH;
 extern const Info<std::string> MAIN_WFS_PATH;
 extern const Info<bool> MAIN_SHOW_LAG;
 extern const Info<bool> MAIN_SHOW_FRAME_COUNT;
@@ -332,4 +336,15 @@ extern const Info<std::string> MAIN_USB_PASSTHROUGH_DEVICES;
 std::set<std::pair<u16, u16>> GetUSBDeviceWhitelist();
 void SetUSBDeviceWhitelist(const std::set<std::pair<u16, u16>>& devices);
 
+// GameCube path utility functions
+
+// Replaces NTSC-K with some other region, and doesn't replace non-NTSC-K regions
+DiscIO::Region ToGameCubeRegion(DiscIO::Region region);
+// The region argument must be valid for GameCube (i.e. must not be NTSC-K)
+const char* GetDirectoryForRegion(DiscIO::Region region);
+std::string GetBootROMPath(const std::string& region_directory);
+std::string GetMemcardPath(ExpansionInterface::Slot slot, DiscIO::Region region,
+                           u16 size_mb = 0x80);
+std::string GetMemcardPath(std::string configured_filename, ExpansionInterface::Slot slot,
+                           DiscIO::Region region, u16 size_mb = 0x80);
 }  // namespace Config

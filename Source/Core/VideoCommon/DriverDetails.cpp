@@ -128,8 +128,6 @@ constexpr BugInfo m_known_bugs[] = {
      -1.0, -1.0, true},
     {API_VULKAN, OS_ALL, VENDOR_ARM, DRIVER_ARM, Family::UNKNOWN, BUG_BROKEN_VECTOR_BITWISE_AND,
      -1.0, -1.0, true},
-    {API_OPENGL, OS_WINDOWS, VENDOR_ATI, DRIVER_ATI, Family::UNKNOWN, BUG_BROKEN_SSBO_FIELD_ATOMICS,
-     -1.0, -1.0, true},
     {API_VULKAN, OS_OSX, VENDOR_ATI, DRIVER_PORTABILITY, Family::UNKNOWN,
      BUG_BROKEN_SUBGROUP_INVOCATION_ID, -1.0, -1.0, true},
     {API_OPENGL, OS_ANDROID, VENDOR_ALL, DRIVER_ALL, Family::UNKNOWN,
@@ -142,6 +140,8 @@ constexpr BugInfo m_known_bugs[] = {
      -1.0, -1.0, true},
     {API_VULKAN, OS_OSX, VENDOR_APPLE, DRIVER_PORTABILITY, Family::UNKNOWN,
      BUG_BROKEN_DISCARD_WITH_EARLY_Z, -1.0, -1.0, true},
+    {API_VULKAN, OS_OSX, VENDOR_INTEL, DRIVER_PORTABILITY, Family::UNKNOWN,
+     BUG_BROKEN_DYNAMIC_SAMPLER_INDEXING, -1.0, -1.0, true},
 };
 
 static std::map<Bug, BugInfo> m_bugs;

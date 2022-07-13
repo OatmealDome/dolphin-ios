@@ -360,6 +360,8 @@ void MainWindow::ShutdownControllers()
 {
   m_hotkey_scheduler->Stop();
 
+  Settings::Instance().UnregisterDevicesChangedCallback();
+
   Pad::Shutdown();
   Pad::ShutdownGBA();
   Keyboard::Shutdown();
@@ -455,6 +457,7 @@ void MainWindow::CreateComponents()
   };
 
   connect(m_watch_widget, &WatchWidget::RequestMemoryBreakpoint, request_memory_breakpoint);
+  connect(m_watch_widget, &WatchWidget::ShowMemory, m_memory_widget, &MemoryWidget::SetAddress);
   connect(m_register_widget, &RegisterWidget::RequestMemoryBreakpoint, request_memory_breakpoint);
   connect(m_register_widget, &RegisterWidget::RequestWatch, request_watch);
   connect(m_register_widget, &RegisterWidget::RequestViewInMemory, request_view_in_memory);
@@ -480,10 +483,13 @@ void MainWindow::CreateComponents()
           &CodeWidget::Update);
   connect(m_breakpoint_widget, &BreakpointWidget::BreakpointsChanged, m_memory_widget,
           &MemoryWidget::Update);
-  connect(m_breakpoint_widget, &BreakpointWidget::SelectedBreakpoint, [this](u32 address) {
+  connect(m_breakpoint_widget, &BreakpointWidget::ShowCode, [this](u32 address) {
     if (Core::GetState() == Core::State::Paused)
       m_code_widget->SetAddress(address, CodeViewWidget::SetAddressUpdate::WithDetailedUpdate);
   });
+  connect(m_breakpoint_widget, &BreakpointWidget::ShowMemory, m_memory_widget,
+          &MemoryWidget::SetAddress);
+  connect(m_cheats_manager, &CheatsManager::ShowMemory, m_memory_widget, &MemoryWidget::SetAddress);
 }
 
 void MainWindow::ConnectMenuBar()
@@ -666,6 +672,7 @@ void MainWindow::ConnectGameList()
           &MainWindow::ShowRiivolutionBootWidget);
 
   connect(m_game_list, &GameList::OpenGeneralSettings, this, &MainWindow::ShowGeneralWindow);
+  connect(m_game_list, &GameList::OpenGraphicsSettings, this, &MainWindow::ShowGraphicsWindow);
 }
 
 void MainWindow::ConnectRenderWidget()

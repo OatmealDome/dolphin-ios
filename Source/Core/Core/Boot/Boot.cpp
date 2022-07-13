@@ -311,8 +311,8 @@ std::unique_ptr<BootParameters> BootParameters::GenerateFromFile(std::vector<std
 
 BootParameters::IPL::IPL(DiscIO::Region region_) : region(region_)
 {
-  const std::string directory = SConfig::GetInstance().GetDirectoryForRegion(region);
-  path = SConfig::GetInstance().GetBootROMPath(directory);
+  const std::string directory = Config::GetDirectoryForRegion(region);
+  path = Config::GetBootROMPath(directory);
 }
 
 BootParameters::IPL::IPL(DiscIO::Region region_, Disc&& disc_) : IPL(region_)
@@ -434,7 +434,7 @@ bool CBoot::Load_BS2(const std::string& boot_rom_filename)
   if (known_ipl && pal_ipl != (boot_region == DiscIO::Region::PAL))
   {
     PanicAlertFmtT("{0} IPL found in {1} directory. The disc might not be recognized",
-                   pal_ipl ? "PAL" : "NTSC", SConfig::GetDirectoryForRegion(boot_region));
+                   pal_ipl ? "PAL" : "NTSC", Config::GetDirectoryForRegion(boot_region));
   }
 
   // Run the descrambler over the encrypted section containing BS1/BS2
@@ -538,14 +538,12 @@ bool CBoot::BootUp(std::unique_ptr<BootParameters> boot)
       SetDefaultDisc();
 
       SetupMSR();
+      SetupHID(config.bWii);
       SetupBAT(config.bWii);
       CopyDefaultExceptionHandlers();
 
       if (config.bWii)
       {
-        PowerPC::ppcState.spr[SPR_HID0] = 0x0011c464;
-        PowerPC::ppcState.spr[SPR_HID4] = 0x82000000;
-
         // Set a value for the SP. It doesn't matter where this points to,
         // as long as it is a valid location. This value is taken from a homebrew binary.
         PowerPC::ppcState.gpr[1] = 0x8004d4bc;

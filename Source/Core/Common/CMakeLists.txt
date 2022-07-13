@@ -44,6 +44,8 @@ add_library(common
   EnumFormatter.h
   EnumMap.h
   Event.h
+  FatFsUtil.cpp
+  FatFsUtil.h
   FileSearch.cpp
   FileSearch.h
   FileUtil.cpp
@@ -140,10 +142,11 @@ PUBLIC
   enet
   fmt::fmt
   ${MBEDTLS_LIBRARIES}
-  minizip
+  minizip-ng
 
 PRIVATE
   ${CURL_LIBRARIES}
+  FatFs
   ${ICONV_LIBRARIES}
   png
   ${VTUNE_LIBRARIES}

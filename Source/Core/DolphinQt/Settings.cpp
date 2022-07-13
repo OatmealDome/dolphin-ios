@@ -29,6 +29,7 @@
 #include "Common/FileUtil.h"
 #include "Common/StringUtil.h"
 
+#include "Core/Config/GraphicsSettings.h"
 #include "Core/Config/MainSettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
@@ -69,7 +70,7 @@ Settings::Settings()
     }
   });
 
-  g_controller_interface.RegisterDevicesChangedCallback([this] {
+  m_hotplug_callback_handle = g_controller_interface.RegisterDevicesChangedCallback([this] {
     if (Host::GetInstance()->IsHostThread())
     {
       emit DevicesChanged();
@@ -89,6 +90,11 @@ Settings::Settings()
 }
 
 Settings::~Settings() = default;
+
+void Settings::UnregisterDevicesChangedCallback()
+{
+  g_controller_interface.UnregisterDevicesChangedCallback(m_hotplug_callback_handle);
+}
 
 Settings& Settings::Instance()
 {
@@ -119,8 +125,7 @@ QString Settings::GetCurrentUserStyle() const
   return QFileInfo(GetQSettings().value(QStringLiteral("userstyle/path")).toString()).fileName();
 }
 
-// Calling this before the main window has been created breaks the style of some widgets on
-// Windows 10/Qt 5.15.0. But only if we set a stylesheet that isn't an empty string.
+// Calling this before the main window has been created breaks the style of some widgets.
 void Settings::SetCurrentUserStyle(const QString& stylesheet_name)
 {
   QString stylesheet_contents;
@@ -345,6 +350,22 @@ void Settings::SetKeepWindowOnTop(bool top)
 bool Settings::IsKeepWindowOnTopEnabled() const
 {
   return Config::Get(Config::MAIN_KEEP_WINDOW_ON_TOP);
+}
+
+bool Settings::GetGraphicModsEnabled() const
+{
+  return Config::Get(Config::GFX_MODS_ENABLE);
+}
+
+void Settings::SetGraphicModsEnabled(bool enabled)
+{
+  if (GetGraphicModsEnabled() == enabled)
+  {
+    return;
+  }
+
+  Config::SetBaseOrCurrent(Config::GFX_MODS_ENABLE, enabled);
+  emit EnableGfxModsChanged(enabled);
 }
 
 int Settings::GetVolume() const

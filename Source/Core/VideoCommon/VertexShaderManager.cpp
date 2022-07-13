@@ -38,6 +38,7 @@ static bool bProjectionChanged;
 static bool bViewportChanged;
 static bool bTexMtxInfoChanged;
 static bool bLightingConfigChanged;
+static bool bProjectionGraphicsModChange;
 static BitSet32 nMaterialsChanged;
 static std::array<int, 2> nTransformMatricesChanged;      // min,max
 static std::array<int, 2> nNormalMatricesChanged;         // min,max
@@ -63,6 +64,7 @@ void VertexShaderManager::Init()
   bViewportChanged = false;
   bTexMtxInfoChanged = false;
   bLightingConfigChanged = false;
+  bProjectionGraphicsModChange = false;
 
   std::memset(static_cast<void*>(&xfmem), 0, sizeof(xfmem));
   constants = {};
@@ -85,7 +87,7 @@ void VertexShaderManager::Dirty()
 
 // Syncs the shader constant buffers with xfmem
 // TODO: A cleaner way to control the matrices without making a mess in the parameters field
-void VertexShaderManager::SetConstants()
+void VertexShaderManager::SetConstants(const std::vector<std::string>& textures)
 {
   if (constants.missing_color_hex != g_ActiveConfig.iMissingColorValue)
   {
@@ -302,9 +304,30 @@ void VertexShaderManager::SetConstants()
     g_stats.AddScissorRect();
   }
 
-  if (bProjectionChanged || g_freelook_camera.GetController()->IsDirty())
+  std::vector<GraphicsModAction*> projection_actions;
+  if (g_ActiveConfig.bGraphicMods)
+  {
+    for (const auto action :
+         g_renderer->GetGraphicsModManager().GetProjectionActions(xfmem.projection.type))
+    {
+      projection_actions.push_back(action);
+    }
+
+    for (const auto& texture : textures)
+    {
+      for (const auto action : g_renderer->GetGraphicsModManager().GetProjectionTextureActions(
+               xfmem.projection.type, texture))
+      {
+        projection_actions.push_back(action);
+      }
+    }
+  }
+
+  if (bProjectionChanged || g_freelook_camera.GetController()->IsDirty() ||
+      !projection_actions.empty() || bProjectionGraphicsModChange)
   {
     bProjectionChanged = false;
+    bProjectionGraphicsModChange = !projection_actions.empty();
 
     const auto& rawProjection = xfmem.projection.rawProjection;
 
@@ -383,6 +406,11 @@ void VertexShaderManager::SetConstants()
 
     if (g_freelook_camera.IsActive() && xfmem.projection.type == ProjectionType::Perspective)
       corrected_matrix *= g_freelook_camera.GetView();
+
+    for (auto action : projection_actions)
+    {
+      action->OnProjection(&corrected_matrix);
+    }
 
     memcpy(constants.projection.data(), corrected_matrix.data.data(), 4 * sizeof(float4));
 
@@ -635,7 +663,7 @@ void VertexShaderManager::DoState(PointerWrap& p)
 
   p.Do(constants);
 
-  if (p.GetMode() == PointerWrap::MODE_READ)
+  if (p.IsReadMode())
   {
     Dirty();
   }
