@@ -144,6 +144,7 @@
 		B96F72DD27F199040024BA7D /* BundleIdentifier.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BundleIdentifier.xcconfig; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
+		B99137822880ABDA00588446 /* DevelopmentTeam.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DevelopmentTeam.xcconfig; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -428,6 +429,7 @@
 				B900A7A227F25718000361DD /* Common.xcconfig */,
 				B93986FC287F7C2F008E8E47 /* CoreVersion.xcconfig */,
 				B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */,
+				B99137822880ABDA00588446 /* DevelopmentTeam.xcconfig */,
 				B9476B1E27F1B17F009C0A4B /* NonJailbroken.xcconfig */,
 				B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */,
 				B9476B2027F22416009C0A4B /* Release.xcconfig */,
@@ -783,7 +785,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 46669ZA7J4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -871,7 +872,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 46669ZA7J4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -958,7 +958,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 46669ZA7J4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -1045,7 +1044,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 46669ZA7J4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -1189,7 +1187,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 46669ZA7J4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -1221,7 +1218,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 46669ZA7J4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
