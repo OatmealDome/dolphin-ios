@@ -33,6 +33,27 @@
   } else {
     self.speedLimitLabel.text = [NSString stringWithFormat:@"%d%%", speedLimit];
   }
+  
+  NSString* region;
+  switch (Config::Get(Config::MAIN_FALLBACK_REGION)) {
+    case DiscIO::Region::NTSC_J:
+      region = @"NTSC-J";
+      break;
+    case DiscIO::Region::NTSC_U:
+      region = @"NTSC-U";
+      break;
+    case DiscIO::Region::PAL:
+      region = @"PAL";
+      break;
+    case DiscIO::Region::NTSC_K:
+      region = @"NTSC-K";
+      break;
+    default:
+      region = @"Error";
+      break;
+  }
+  
+  self.regionLabel.text = region;
 }
 
 - (void)dualCoreChanged {
@@ -49,6 +70,19 @@
 
 - (void)changeDiscsChanged {
   Config::SetBase(Config::MAIN_AUTO_DISC_CHANGE, self.changeDiscsSwitch.on);
+}
+
+- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+  if (indexPath.section == 1 && indexPath.row == 1) {
+    NSString* message = @"Dolphin will use this for titles whose region cannot be determined automatically.";
+    
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Help" message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    
+    [self presentViewController:alert animated:true completion:nil];
+  }
+  
+  [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 @end
