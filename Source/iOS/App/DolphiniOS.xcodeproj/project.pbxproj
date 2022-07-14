@@ -33,6 +33,8 @@
 		B9398716287FE28F008E8E47 /* FallbackRegionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B9398715287FE28F008E8E47 /* FallbackRegionCell.m */; };
 		B939871A287FF135008E8E47 /* ConfigInterfaceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9398719287FF135008E8E47 /* ConfigInterfaceViewController.mm */; };
 		B9398724287FFBEC008E8E47 /* ConfigSoundViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9398723287FFBEC008E8E47 /* ConfigSoundViewController.mm */; };
+		B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9398726288009D0008E8E47 /* AudioBackendViewController.mm */; };
+		B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B939872928800BA2008E8E47 /* AudioBackendCell.m */; };
 		B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447AFC28418D7600BC9110 /* TCButton.swift */; };
 		B9447AFF28418EA100BC9110 /* TCDirectionalPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */; };
 		B9447B0128418F2600BC9110 /* TCJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447B0028418F2600BC9110 /* TCJoystick.swift */; };
@@ -108,6 +110,10 @@
 		B9398719287FF135008E8E47 /* ConfigInterfaceViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConfigInterfaceViewController.mm; sourceTree = "<group>"; };
 		B9398722287FFBEC008E8E47 /* ConfigSoundViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigSoundViewController.h; sourceTree = "<group>"; };
 		B9398723287FFBEC008E8E47 /* ConfigSoundViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConfigSoundViewController.mm; sourceTree = "<group>"; };
+		B9398725288009D0008E8E47 /* AudioBackendViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioBackendViewController.h; sourceTree = "<group>"; };
+		B9398726288009D0008E8E47 /* AudioBackendViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioBackendViewController.mm; sourceTree = "<group>"; };
+		B939872828800BA2008E8E47 /* AudioBackendCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioBackendCell.h; sourceTree = "<group>"; };
+		B939872928800BA2008E8E47 /* AudioBackendCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioBackendCell.m; sourceTree = "<group>"; };
 		B9447AFC28418D7600BC9110 /* TCButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCButton.swift; sourceTree = "<group>"; };
 		B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDirectionalPad.swift; sourceTree = "<group>"; };
 		B9447B0028418F2600BC9110 /* TCJoystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCJoystick.swift; sourceTree = "<group>"; };
@@ -349,6 +355,10 @@
 		B9398721287FFBD3008E8E47 /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				B939872828800BA2008E8E47 /* AudioBackendCell.h */,
+				B939872928800BA2008E8E47 /* AudioBackendCell.m */,
+				B9398725288009D0008E8E47 /* AudioBackendViewController.h */,
+				B9398726288009D0008E8E47 /* AudioBackendViewController.mm */,
 				B9398722287FFBEC008E8E47 /* ConfigSoundViewController.h */,
 				B9398723287FFBEC008E8E47 /* ConfigSoundViewController.mm */,
 			);
@@ -633,6 +643,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
+				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
 				B9398716287FE28F008E8E47 /* FallbackRegionCell.m in Sources */,
 				B939871A287FF135008E8E47 /* ConfigInterfaceViewController.mm in Sources */,
 				B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */,
@@ -660,6 +671,7 @@
 				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
 				B9D938A728418AFE00B290FC /* TCManagerInterface.mm in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
+				B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
