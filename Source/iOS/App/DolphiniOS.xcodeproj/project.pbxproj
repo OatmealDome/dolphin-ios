@@ -35,6 +35,7 @@
 		B9398724287FFBEC008E8E47 /* ConfigSoundViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9398723287FFBEC008E8E47 /* ConfigSoundViewController.mm */; };
 		B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9398726288009D0008E8E47 /* AudioBackendViewController.mm */; };
 		B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B939872928800BA2008E8E47 /* AudioBackendCell.m */; };
+		B939872E2880896D008E8E47 /* ConfigGameCubeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B939872D2880896D008E8E47 /* ConfigGameCubeViewController.mm */; };
 		B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447AFC28418D7600BC9110 /* TCButton.swift */; };
 		B9447AFF28418EA100BC9110 /* TCDirectionalPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */; };
 		B9447B0128418F2600BC9110 /* TCJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447B0028418F2600BC9110 /* TCJoystick.swift */; };
@@ -114,6 +115,8 @@
 		B9398726288009D0008E8E47 /* AudioBackendViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioBackendViewController.mm; sourceTree = "<group>"; };
 		B939872828800BA2008E8E47 /* AudioBackendCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioBackendCell.h; sourceTree = "<group>"; };
 		B939872928800BA2008E8E47 /* AudioBackendCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioBackendCell.m; sourceTree = "<group>"; };
+		B939872C2880896D008E8E47 /* ConfigGameCubeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigGameCubeViewController.h; sourceTree = "<group>"; };
+		B939872D2880896D008E8E47 /* ConfigGameCubeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConfigGameCubeViewController.mm; sourceTree = "<group>"; };
 		B9447AFC28418D7600BC9110 /* TCButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCButton.swift; sourceTree = "<group>"; };
 		B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDirectionalPad.swift; sourceTree = "<group>"; };
 		B9447B0028418F2600BC9110 /* TCJoystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCJoystick.swift; sourceTree = "<group>"; };
@@ -319,6 +322,7 @@
 		B9398700287F98E7008E8E47 /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				B939872B28808958008E8E47 /* GameCube */,
 				B9398720287FFBA2008E8E47 /* General */,
 				B9398717287FF121008E8E47 /* Interface */,
 				B9398721287FFBD3008E8E47 /* Sound */,
@@ -363,6 +367,15 @@
 				B9398723287FFBEC008E8E47 /* ConfigSoundViewController.mm */,
 			);
 			path = Sound;
+			sourceTree = "<group>";
+		};
+		B939872B28808958008E8E47 /* GameCube */ = {
+			isa = PBXGroup;
+			children = (
+				B939872C2880896D008E8E47 /* ConfigGameCubeViewController.h */,
+				B939872D2880896D008E8E47 /* ConfigGameCubeViewController.mm */,
+			);
+			path = GameCube;
 			sourceTree = "<group>";
 		};
 		B9447B0B2841937100BC9110 /* Templates */ = {
@@ -653,6 +666,7 @@
 				B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */,
 				B9398707287F998C008E8E47 /* ConfigGeneralViewController.mm in Sources */,
 				B93986FB287F45A3008E8E47 /* SettingsRootViewController.swift in Sources */,
+				B939872E2880896D008E8E47 /* ConfigGameCubeViewController.mm in Sources */,
 				B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */,
 				B900A7CA27F4DA97000361DD /* SoftwareListViewController.mm in Sources */,
 				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
