@@ -4,6 +4,8 @@
 #import "DolphinCoreService.h"
 
 #import "Core/Config/UISettings.h"
+#import "Core/Config/MainSettings.h"
+#import "Core/Config/GraphicsSettings.h"
 #import "Core/HW/GCPad.h"
 #import "Core/HW/Wiimote.h"
 
@@ -91,6 +93,11 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
   Common::RegisterMsgAlertHandler(MsgAlert);
   
   Config::SetBase(Config::MAIN_USE_GAME_COVERS, true);
+  
+  // TODO: Defaults for debugging
+  Config::SetBase(Config::MAIN_FASTMEM, false);
+  Config::SetBase(Config::GFX_SHOW_FPS, true);
+  Config::SetBase(Config::MAIN_CPU_THREAD, true);
   
   WindowSystemInfo wsi;
   wsi.type = WindowSystemType::iOS;
