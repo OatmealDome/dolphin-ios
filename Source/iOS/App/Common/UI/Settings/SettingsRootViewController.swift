@@ -24,7 +24,7 @@ class SettingsRootViewController : UITableViewController {
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
     
-    if (indexPath.section == 0 && indexPath.row == 2) {
+    if (indexPath.section == 0 && indexPath.row == 3) {
       UIApplication.shared.open(URL(string: "https://oatmealdome.me/dolphinios/")!)
     }
   }
