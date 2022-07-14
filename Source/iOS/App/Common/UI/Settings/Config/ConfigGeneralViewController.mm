@@ -11,8 +11,8 @@
 
 @implementation ConfigGeneralViewController
 
-- (void)viewDidLoad {
-  [super viewDidLoad];
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
   
   [self.dualCoreSwitch setOn:Config::Get(Config::MAIN_CPU_THREAD)];
   [self.dualCoreSwitch addValueChangedTarget:self action:@selector(dualCoreChanged)];
