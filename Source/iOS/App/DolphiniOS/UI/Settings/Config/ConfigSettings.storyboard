@@ -315,16 +315,26 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speed Limit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Npl-cg-zxe">
-                                                    <rect key="frame" x="16" y="11" width="294.5" height="21.5"/>
+                                                    <rect key="frame" x="16" y="11" width="135.5" height="21.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yFY-lJ-VTt">
+                                                    <rect key="frame" x="151.5" y="11" width="159" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Npl-cg-zxe" firstAttribute="top" secondItem="2dH-RB-tew" secondAttribute="topMargin" id="Ccy-Bw-7sI"/>
                                                 <constraint firstItem="Npl-cg-zxe" firstAttribute="leading" secondItem="2dH-RB-tew" secondAttribute="leadingMargin" id="EAC-2i-6aR"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="Npl-cg-zxe" secondAttribute="trailing" id="joq-pH-BvS"/>
+                                                <constraint firstItem="yFY-lJ-VTt" firstAttribute="leading" secondItem="Npl-cg-zxe" secondAttribute="trailing" id="OnV-Dr-EaL"/>
+                                                <constraint firstItem="yFY-lJ-VTt" firstAttribute="top" secondItem="2dH-RB-tew" secondAttribute="topMargin" id="fJi-1B-t8W"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="yFY-lJ-VTt" secondAttribute="bottom" id="fzV-hj-WCh"/>
+                                                <constraint firstAttribute="centerX" secondItem="Npl-cg-zxe" secondAttribute="trailing" constant="8" id="joq-pH-BvS"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="yFY-lJ-VTt" secondAttribute="trailing" id="p1P-Dy-gNh"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="Npl-cg-zxe" secondAttribute="bottom" id="rfM-QG-JcZ"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -347,6 +357,7 @@
                         <outlet property="cheatsSwitch" destination="dhI-OE-YNN" id="ISH-UQ-wHz"/>
                         <outlet property="dualCoreSwitch" destination="vet-Xu-j5s" id="khd-D9-mHL"/>
                         <outlet property="mismatchedRegionSwitch" destination="7Qq-58-BXb" id="Ps2-qU-lhO"/>
+                        <outlet property="speedLimitLabel" destination="yFY-lJ-VTt" id="Pb9-0s-LGh"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ozr-Wi-EvJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

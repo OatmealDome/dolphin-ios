@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet DOLSwitch* cheatsSwitch;
 @property (weak, nonatomic) IBOutlet DOLSwitch* mismatchedRegionSwitch;
 @property (weak, nonatomic) IBOutlet DOLSwitch* changeDiscsSwitch;
+@property (weak, nonatomic) IBOutlet UILabel* speedLimitLabel;
 
 @end
 

@@ -25,6 +25,14 @@
   
   [self.changeDiscsSwitch setOn:Config::Get(Config::MAIN_AUTO_DISC_CHANGE)];
   [self.changeDiscsSwitch addValueChangedTarget:self action:@selector(changeDiscsChanged)];
+  
+  int speedLimit = Config::Get(Config::MAIN_EMULATION_SPEED) * 100;
+  
+  if (speedLimit == 0) {
+    self.speedLimitLabel.text = @"Unlimited";
+  } else {
+    self.speedLimitLabel.text = [NSString stringWithFormat:@"%d%%", speedLimit];
+  }
 }
 
 - (void)dualCoreChanged {
