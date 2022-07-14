@@ -27,6 +27,8 @@
 		B93986FB287F45A3008E8E47 /* SettingsRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93986FA287F45A3008E8E47 /* SettingsRootViewController.swift */; };
 		B93986FF287F8F18008E8E47 /* ConfigSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B93986FE287F8F18008E8E47 /* ConfigSettings.storyboard */; };
 		B9398707287F998C008E8E47 /* ConfigGeneralViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9398706287F998C008E8E47 /* ConfigGeneralViewController.mm */; };
+		B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9398709287FBB08008E8E47 /* SpeedLimitViewController.mm */; };
+		B9398710287FBB80008E8E47 /* SpeedLimitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B939870F287FBB80008E8E47 /* SpeedLimitCell.m */; };
 		B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447AFC28418D7600BC9110 /* TCButton.swift */; };
 		B9447AFF28418EA100BC9110 /* TCDirectionalPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */; };
 		B9447B0128418F2600BC9110 /* TCJoystick.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9447B0028418F2600BC9110 /* TCJoystick.swift */; };
@@ -90,6 +92,10 @@
 		B93986FE287F8F18008E8E47 /* ConfigSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ConfigSettings.storyboard; sourceTree = "<group>"; };
 		B9398705287F998C008E8E47 /* ConfigGeneralViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigGeneralViewController.h; sourceTree = "<group>"; };
 		B9398706287F998C008E8E47 /* ConfigGeneralViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConfigGeneralViewController.mm; sourceTree = "<group>"; };
+		B9398708287FBB08008E8E47 /* SpeedLimitViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpeedLimitViewController.h; sourceTree = "<group>"; };
+		B9398709287FBB08008E8E47 /* SpeedLimitViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SpeedLimitViewController.mm; sourceTree = "<group>"; };
+		B939870E287FBB80008E8E47 /* SpeedLimitCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpeedLimitCell.h; sourceTree = "<group>"; };
+		B939870F287FBB80008E8E47 /* SpeedLimitCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpeedLimitCell.m; sourceTree = "<group>"; };
 		B9447AFC28418D7600BC9110 /* TCButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCButton.swift; sourceTree = "<group>"; };
 		B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDirectionalPad.swift; sourceTree = "<group>"; };
 		B9447B0028418F2600BC9110 /* TCJoystick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCJoystick.swift; sourceTree = "<group>"; };
@@ -297,6 +303,10 @@
 			children = (
 				B9398705287F998C008E8E47 /* ConfigGeneralViewController.h */,
 				B9398706287F998C008E8E47 /* ConfigGeneralViewController.mm */,
+				B939870E287FBB80008E8E47 /* SpeedLimitCell.h */,
+				B939870F287FBB80008E8E47 /* SpeedLimitCell.m */,
+				B9398708287FBB08008E8E47 /* SpeedLimitViewController.h */,
+				B9398709287FBB08008E8E47 /* SpeedLimitViewController.mm */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -581,12 +591,14 @@
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */,
 				B9447AFF28418EA100BC9110 /* TCDirectionalPad.swift in Sources */,
+				B9398710287FBB80008E8E47 /* SpeedLimitCell.m in Sources */,
 				B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */,
 				B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */,
 				B9398707287F998C008E8E47 /* ConfigGeneralViewController.mm in Sources */,
 				B93986FB287F45A3008E8E47 /* SettingsRootViewController.swift in Sources */,
 				B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */,
 				B900A7CA27F4DA97000361DD /* SoftwareListViewController.mm in Sources */,
+				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
 				B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */,
 				B9447B052841901200BC9110 /* TCGameCubePad.swift in Sources */,
 				B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */,
