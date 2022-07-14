@@ -45,6 +45,7 @@
 		B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */; };
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
 		B950CA942846A13100F45219 /* Sys in Resources */ = {isa = PBXBuildFile; fileRef = B950CA932846A13100F45219 /* Sys */; };
+		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -141,6 +142,8 @@
 		B96F72D227F0FC420024BA7D /* Release (Beta, Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Beta, Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72D327F0FC520024BA7D /* Release (Beta, Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Beta, Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72DD27F199040024BA7D /* BundleIdentifier.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BundleIdentifier.xcconfig; sourceTree = "<group>"; };
+		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
+		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -374,6 +377,8 @@
 			children = (
 				B939872C2880896D008E8E47 /* ConfigGameCubeViewController.h */,
 				B939872D2880896D008E8E47 /* ConfigGameCubeViewController.mm */,
+				B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */,
+				B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */,
 			);
 			path = GameCube;
 			sourceTree = "<group>";
@@ -657,6 +662,7 @@
 			files = (
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
+				B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */,
 				B9398716287FE28F008E8E47 /* FallbackRegionCell.m in Sources */,
 				B939871A287FF135008E8E47 /* ConfigInterfaceViewController.mm in Sources */,
 				B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */,
