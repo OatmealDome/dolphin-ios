@@ -36,19 +36,19 @@
 }
 
 - (void)dualCoreChanged {
-  Config::SetCurrent(Config::MAIN_CPU_THREAD, [self.dualCoreSwitch isOn]);
+  Config::SetBaseOrCurrent(Config::MAIN_CPU_THREAD, [self.dualCoreSwitch isOn]);
 }
 
 - (void)cheatsChanged {
-  Config::SetCurrent(Config::MAIN_ENABLE_CHEATS, [self.cheatsSwitch isOn]);
+  Config::SetBaseOrCurrent(Config::MAIN_ENABLE_CHEATS, [self.cheatsSwitch isOn]);
 }
 
 - (void)mismatchedRegionChanged {
-  Config::SetCurrent(Config::MAIN_OVERRIDE_REGION_SETTINGS, [self.mismatchedRegionSwitch isOn]);
+  Config::SetBaseOrCurrent(Config::MAIN_OVERRIDE_REGION_SETTINGS, [self.mismatchedRegionSwitch isOn]);
 }
 
 - (void)changeDiscsChanged {
-  Config::SetCurrent(Config::MAIN_AUTO_DISC_CHANGE, [self.changeDiscsSwitch isOn]);
+  Config::SetBase(Config::MAIN_AUTO_DISC_CHANGE, [self.changeDiscsSwitch isOn]);
 }
 
 @end
