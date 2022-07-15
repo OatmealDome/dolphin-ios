@@ -5,7 +5,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AspectRatioViewController : UITableViewController
+@interface WiiAspectRatioViewController : UITableViewController
 
 @end
 

@@ -1,15 +1,15 @@
 // Copyright 2022 DolphiniOS Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#import "AspectRatioViewController.h"
+#import "WiiAspectRatioViewController.h"
 
 #import "Core/Config/SYSCONFSettings.h"
 
-@interface AspectRatioViewController ()
+@interface WiiAspectRatioViewController ()
 
 @end
 
-@implementation AspectRatioViewController {
+@implementation WiiAspectRatioViewController {
   NSInteger _lastSelected;
 }
 
