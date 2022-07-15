@@ -2242,6 +2242,9 @@
                                                 <constraint firstAttribute="trailingMargin" secondItem="uhW-cT-kmX" secondAttribute="trailing" id="vdV-yK-Clj"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="Ppi-mC-8aw" kind="show" id="9qO-kh-Wc3"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="n0w-go-lrs">
                                         <rect key="frame" x="16" y="93" width="343" height="43.5"/>
@@ -2493,7 +2496,7 @@ If unsure, leave this unchecked.</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" style="inline" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BE-Ko-fhA">
-                                                    <rect key="frame" x="16" y="11" width="311" height="336"/>
+                                                    <rect key="frame" x="16" y="11" width="320" height="342"/>
                                                     <date key="date" timeIntervalSinceReferenceDate="-31604399.218200684">
                                                         <!--2000-01-01 05:00:00 +0000-->
                                                     </date>
@@ -2544,6 +2547,53 @@ If unsure, leave this unchecked.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="avF-nM-hae" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1425" y="6743"/>
+        </scene>
+        <!--CPU Emulation Engine-->
+        <scene sceneID="EBa-uN-mji">
+            <objects>
+                <tableViewController id="Ppi-mC-8aw" customClass="CpuEngineViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="Wd0-3l-1wr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="EngineCell" id="Unl-xk-V29" customClass="CpuEngineCell">
+                                <rect key="frame" x="16" y="49.5" width="343" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Unl-xk-V29" id="IU7-XC-kGJ">
+                                    <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Engine" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="4XR-fB-Uaf">
+                                            <rect key="frame" x="16" y="11" width="311" height="21.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="4XR-fB-Uaf" secondAttribute="trailing" id="399-rL-uwD"/>
+                                        <constraint firstItem="4XR-fB-Uaf" firstAttribute="top" secondItem="IU7-XC-kGJ" secondAttribute="topMargin" id="8u7-rt-THS"/>
+                                        <constraint firstItem="4XR-fB-Uaf" firstAttribute="leading" secondItem="IU7-XC-kGJ" secondAttribute="leadingMargin" id="ZoD-hv-2K3"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="4XR-fB-Uaf" secondAttribute="bottom" id="ime-OU-JD8"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="engineCell" destination="4XR-fB-Uaf" id="A7R-TI-Dyf"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="Ppi-mC-8aw" id="Ql3-Jd-oGP"/>
+                            <outlet property="delegate" destination="Ppi-mC-8aw" id="Umo-eQ-kIf"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="CPU Emulation Engine" largeTitleDisplayMode="never" id="Wtu-wr-8xr"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nXt-FF-wsW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2356" y="6743"/>
         </scene>
     </scenes>
     <resources>

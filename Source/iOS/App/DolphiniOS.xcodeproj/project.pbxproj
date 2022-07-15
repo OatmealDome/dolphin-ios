@@ -52,6 +52,8 @@
 		B991378B288149F100588446 /* WiiSoundViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991378A288149F100588446 /* WiiSoundViewController.mm */; };
 		B991378E28814BCD00588446 /* WiiSensorBarViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991378D28814BCD00588446 /* WiiSensorBarViewController.mm */; };
 		B9913792288153D000588446 /* ConfigAdvancedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913791288153D000588446 /* ConfigAdvancedViewController.mm */; };
+		B99137952881D62C00588446 /* CpuEngineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B99137942881D62C00588446 /* CpuEngineCell.m */; };
+		B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B99137972881D68600588446 /* CpuEngineViewController.mm */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -163,6 +165,10 @@
 		B991378D28814BCD00588446 /* WiiSensorBarViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WiiSensorBarViewController.mm; sourceTree = "<group>"; };
 		B9913790288153D000588446 /* ConfigAdvancedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigAdvancedViewController.h; sourceTree = "<group>"; };
 		B9913791288153D000588446 /* ConfigAdvancedViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ConfigAdvancedViewController.mm; sourceTree = "<group>"; };
+		B99137932881D62C00588446 /* CpuEngineCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuEngineCell.h; sourceTree = "<group>"; };
+		B99137942881D62C00588446 /* CpuEngineCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CpuEngineCell.m; sourceTree = "<group>"; };
+		B99137962881D68600588446 /* CpuEngineViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuEngineViewController.h; sourceTree = "<group>"; };
+		B99137972881D68600588446 /* CpuEngineViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CpuEngineViewController.mm; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -484,6 +490,10 @@
 			children = (
 				B9913790288153D000588446 /* ConfigAdvancedViewController.h */,
 				B9913791288153D000588446 /* ConfigAdvancedViewController.mm */,
+				B99137932881D62C00588446 /* CpuEngineCell.h */,
+				B99137942881D62C00588446 /* CpuEngineCell.m */,
+				B99137962881D68600588446 /* CpuEngineViewController.h */,
+				B99137972881D68600588446 /* CpuEngineViewController.mm */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -733,8 +743,10 @@
 				B9447B072841906000BC9110 /* TCView.swift in Sources */,
 				B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */,
 				B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */,
+				B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */,
 				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
 				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
+				B99137952881D62C00588446 /* CpuEngineCell.m in Sources */,
 				B9D938A728418AFE00B290FC /* TCManagerInterface.mm in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
 				B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */,
