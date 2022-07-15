@@ -234,16 +234,8 @@
 				B933EDC527F8E8D6004D7DD7 /* Emulation */,
 				B93986F9287F4592008E8E47 /* Settings */,
 				B900A7C327F4D44D000361DD /* SoftwareList */,
-				B900A7C027F4D37C000361DD /* Util */,
 			);
 			path = UI;
-			sourceTree = "<group>";
-		};
-		B900A7C027F4D37C000361DD /* Util */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Util;
 			sourceTree = "<group>";
 		};
 		B900A7C327F4D44D000361DD /* SoftwareList */ = {
