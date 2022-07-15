@@ -50,6 +50,7 @@
 		B9913785288146D700588446 /* AspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* AspectRatioViewController.mm */; };
 		B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B99137872881486200588446 /* WiiSystemLanguageViewController.mm */; };
 		B991378B288149F100588446 /* WiiSoundViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991378A288149F100588446 /* WiiSoundViewController.mm */; };
+		B991378E28814BCD00588446 /* WiiSensorBarViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991378D28814BCD00588446 /* WiiSensorBarViewController.mm */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -157,6 +158,8 @@
 		B99137872881486200588446 /* WiiSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WiiSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B9913789288149F100588446 /* WiiSoundViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WiiSoundViewController.h; sourceTree = "<group>"; };
 		B991378A288149F100588446 /* WiiSoundViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WiiSoundViewController.mm; sourceTree = "<group>"; };
+		B991378C28814BCD00588446 /* WiiSensorBarViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WiiSensorBarViewController.h; sourceTree = "<group>"; };
+		B991378D28814BCD00588446 /* WiiSensorBarViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WiiSensorBarViewController.mm; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -462,6 +465,8 @@
 				B9913784288146D700588446 /* AspectRatioViewController.mm */,
 				B991377F288096A300588446 /* ConfigWiiViewController.h */,
 				B9913780288096A300588446 /* ConfigWiiViewController.mm */,
+				B991378C28814BCD00588446 /* WiiSensorBarViewController.h */,
+				B991378D28814BCD00588446 /* WiiSensorBarViewController.mm */,
 				B9913789288149F100588446 /* WiiSoundViewController.h */,
 				B991378A288149F100588446 /* WiiSoundViewController.mm */,
 				B99137862881486200588446 /* WiiSystemLanguageViewController.h */,
@@ -704,6 +709,7 @@
 				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
 				B9398713287FDF23008E8E47 /* FallbackRegionViewController.mm in Sources */,
 				B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */,
+				B991378E28814BCD00588446 /* WiiSensorBarViewController.mm in Sources */,
 				B9447B052841901200BC9110 /* TCGameCubePad.swift in Sources */,
 				B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */,
 				B900A7D527F61F3A000361DD /* GameFileCacheManager.mm in Sources */,

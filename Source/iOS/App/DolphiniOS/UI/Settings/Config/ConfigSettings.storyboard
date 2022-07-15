@@ -1599,6 +1599,9 @@
                                                 <constraint firstItem="lVg-Mq-csQ" firstAttribute="leading" secondItem="wdp-PF-pQj" secondAttribute="leadingMargin" id="wCr-iD-DP7"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="ap4-Wa-pfZ" kind="show" id="b1H-DR-OG9"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="98" id="AUw-W1-p0n">
                                         <rect key="frame" x="16" y="666.5" width="343" height="98"/>
@@ -2125,6 +2128,75 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3eV-vA-VXC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2356" y="5235"/>
+        </scene>
+        <!--Sensor Bar Position-->
+        <scene sceneID="sVs-h2-AKt">
+            <objects>
+                <tableViewController id="ap4-Wa-pfZ" customClass="WiiSensorBarViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="ByS-GT-piJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <sections>
+                            <tableViewSection id="kAj-y6-Zm9">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Lr1-p1-5Zh">
+                                        <rect key="frame" x="16" y="18" width="343" height="43"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Lr1-p1-5Zh" id="KPG-Jg-Qzd">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bottom" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="cnE-pL-axQ">
+                                                    <rect key="frame" x="16" y="11" width="311" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="cnE-pL-axQ" secondAttribute="bottom" id="7OM-PK-YCm"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="cnE-pL-axQ" secondAttribute="trailing" id="mgv-d7-lIz"/>
+                                                <constraint firstItem="cnE-pL-axQ" firstAttribute="leading" secondItem="KPG-Jg-Qzd" secondAttribute="leadingMargin" id="oFy-1z-REw"/>
+                                                <constraint firstItem="cnE-pL-axQ" firstAttribute="top" secondItem="KPG-Jg-Qzd" secondAttribute="topMargin" id="w1r-U7-VJc"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="ah8-cY-zG5">
+                                        <rect key="frame" x="16" y="61" width="343" height="43"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ah8-cY-zG5" id="H4Y-4f-15l">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="aBB-xD-HlP">
+                                                    <rect key="frame" x="16" y="11" width="311" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="aBB-xD-HlP" firstAttribute="top" secondItem="H4Y-4f-15l" secondAttribute="topMargin" id="Nka-ny-pZL"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="aBB-xD-HlP" secondAttribute="trailing" id="Pf0-MC-GaP"/>
+                                                <constraint firstItem="aBB-xD-HlP" firstAttribute="leading" secondItem="H4Y-4f-15l" secondAttribute="leadingMargin" id="cdf-Px-z3h"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="aBB-xD-HlP" secondAttribute="bottom" id="lsd-mp-Otz"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="ap4-Wa-pfZ" id="gvz-Sg-IWS"/>
+                            <outlet property="delegate" destination="ap4-Wa-pfZ" id="0q4-sw-aJm"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Sensor Bar Position" largeTitleDisplayMode="never" id="c4f-2N-YmD"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HN8-bX-BHO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2356" y="5988"/>
         </scene>
     </scenes>
     <resources>
