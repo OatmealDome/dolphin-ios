@@ -48,6 +48,7 @@
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* AspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* AspectRatioViewController.mm */; };
+		B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B99137872881486200588446 /* WiiSystemLanguageViewController.mm */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -151,6 +152,8 @@
 		B99137822880ABDA00588446 /* DevelopmentTeam.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DevelopmentTeam.xcconfig; sourceTree = "<group>"; };
 		B9913783288146D700588446 /* AspectRatioViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AspectRatioViewController.h; sourceTree = "<group>"; };
 		B9913784288146D700588446 /* AspectRatioViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AspectRatioViewController.mm; sourceTree = "<group>"; };
+		B99137862881486200588446 /* WiiSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WiiSystemLanguageViewController.h; sourceTree = "<group>"; };
+		B99137872881486200588446 /* WiiSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WiiSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -456,6 +459,8 @@
 				B9913784288146D700588446 /* AspectRatioViewController.mm */,
 				B991377F288096A300588446 /* ConfigWiiViewController.h */,
 				B9913780288096A300588446 /* ConfigWiiViewController.mm */,
+				B99137862881486200588446 /* WiiSystemLanguageViewController.h */,
+				B99137872881486200588446 /* WiiSystemLanguageViewController.mm */,
 			);
 			path = Wii;
 			sourceTree = "<group>";
@@ -673,6 +678,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9913785288146D700588446 /* AspectRatioViewController.mm in Sources */,
+				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
 				B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */,
