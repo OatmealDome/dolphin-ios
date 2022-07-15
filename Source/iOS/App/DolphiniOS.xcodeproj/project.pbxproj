@@ -169,6 +169,7 @@
 		B99137942881D62C00588446 /* CpuEngineCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CpuEngineCell.m; sourceTree = "<group>"; };
 		B99137962881D68600588446 /* CpuEngineViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuEngineViewController.h; sourceTree = "<group>"; };
 		B99137972881D68600588446 /* CpuEngineViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CpuEngineViewController.mm; sourceTree = "<group>"; };
+		B991379A2881DC2200588446 /* UpdateStoryboardStrings.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UpdateStoryboardStrings.sh; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -415,6 +416,7 @@
 			children = (
 				B9476B2227F235A0009C0A4B /* BuildCore.sh */,
 				B9447B0A2841931E00BC9110 /* CopyAssets.sh */,
+				B991379A2881DC2200588446 /* UpdateStoryboardStrings.sh */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -591,6 +593,7 @@
 				B9DC3DF227EFBD2C0084DAA4 /* Sources */,
 				B9DC3DF327EFBD2C0084DAA4 /* Frameworks */,
 				B9447B0E2841941D00BC9110 /* Copy Dolphin Assets */,
+				B991379B2881DCAC00588446 /* Update Storyboard Strings */,
 				B9DC3DF427EFBD2C0084DAA4 /* Resources */,
 				B900A7A027F255E0000361DD /* CopyFiles */,
 			);
@@ -702,6 +705,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"$PROJECT_DIR/Project/Scripts/BuildCore.sh\"\n";
+		};
+		B991379B2881DCAC00588446 /* Update Storyboard Strings */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Update Storyboard Strings";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PROJECT_DIR/Project/Scripts/UpdateStoryboardStrings.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

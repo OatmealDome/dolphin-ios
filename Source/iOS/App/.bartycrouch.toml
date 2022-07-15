@@ -1,0 +1,8 @@
+[update]
+tasks = ["interfaces"]
+
+[update.interfaces]
+path = ["DolphiniOS"]
+defaultToBase = true
+ignoreEmptyStrings = false
+unstripped = false
