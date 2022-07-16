@@ -1,3 +1,41 @@
+# DolphiniOS
+
+DolphiniOS is a port of the Dolphin Emulator to iOS and iPadOS. For installation instructions and downloads, check [our website](https://dolphinios.oatmealdome.me).
+
+This is the repository for the new DolphiniOS codebase.
+
+## Building
+
+You will need the following:
+
+* A Mac capable of running macOS Big Sur 11.3 or later
+* Xcode 13 or later
+* Homebrew (or your favourite package manager)
+
+First, install the necessary tools using Homebrew:
+
+```
+brew install cmake ninja bartycrouch
+```
+
+If you are using a different package manager, refer to its documentation.
+
+Finally, use the following command to install `polib` using the Xcode-provided `python3`:
+
+```
+/path/to/Xcode.app/Contents/Developer/usr/bin/python3 -m pip install polib
+```
+
+Once all of the prerequisites are installed, you can open the Xcode project at `Source/iOS/App/DolphiniOS.xcodeproj`.
+
+You must change the organization identifier and team ID before you can build!
+
+To change the organization identifier, go to `Project` -> `Config` -> `BundleIdentifier.xcconfig`, and change `use.your.own.organization.identifier` to something unique.
+
+To change the team ID, go to `Project` -> `Config` -> `DevelopmentTeam.xcconfig`, and replace `your-team-id` with your developer account's team ID.
+
+Once this is complete, you are now able to build and run DolphiniOS.
+
 # Dolphin - A GameCube and Wii Emulator
 
 [Homepage](https://dolphin-emu.org/) | [Project Site](https://github.com/dolphin-emu/dolphin) | [Buildbot](https://dolphin.ci) | [Forums](https://forums.dolphin-emu.org/) | [Wiki](https://wiki.dolphin-emu.org/) | [Issue Tracker](https://bugs.dolphin-emu.org/projects/emulator/issues) | [Coding Style](https://github.com/dolphin-emu/dolphin/blob/master/Contributing.md) | [Transifex Page](https://www.transifex.com/projects/p/dolphin-emu/)
