@@ -180,6 +180,7 @@
 		B99137AD28827AD200588446 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SettingsRoot.storyboard; sourceTree = "<group>"; };
 		B99137B028827B0400588446 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SettingsRoot.strings; sourceTree = "<group>"; };
 		B99137B228827B8700588446 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/SettingsRoot.strings; sourceTree = "<group>"; };
+		B99137B328827BF300588446 /* TransferCoreStringsToStoryboard.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = TransferCoreStringsToStoryboard.py; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -427,6 +428,7 @@
 			children = (
 				B9476B2227F235A0009C0A4B /* BuildCore.sh */,
 				B9447B0A2841931E00BC9110 /* CopyAssets.sh */,
+				B99137B328827BF300588446 /* TransferCoreStringsToStoryboard.py */,
 				B991379A2881DC2200588446 /* UpdateStoryboardStrings.sh */,
 				B99137A228825AA600588446 /* UpdateCoreStrings.py */,
 			);
@@ -615,6 +617,7 @@
 				B9447B0E2841941D00BC9110 /* Copy Dolphin Assets */,
 				B991379B2881DCAC00588446 /* Update Storyboard Strings */,
 				B99137A428825CFA00588446 /* Update Core Strings */,
+				B99137B428829F1400588446 /* Transfer Core Strings to Storyboard Strings */,
 				B9DC3DF427EFBD2C0084DAA4 /* Resources */,
 				B900A7A027F255E0000361DD /* CopyFiles */,
 			);
@@ -766,6 +769,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "python3 \"$PROJECT_DIR/Project/Scripts/UpdateCoreStrings.py\" \"$PROJECT_DIR/../../../Languages/po/\" \"$PROJECT_DIR/Common/UI/\"\n";
+		};
+		B99137B428829F1400588446 /* Transfer Core Strings to Storyboard Strings */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Transfer Core Strings to Storyboard Strings";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$PROJECT_DIR/Project/Scripts/TransferCoreStringsToStoryboard.py\" \"$PROJECT_DIR/DolphiniOS\" \"$PROJECT_DIR/Common/UI\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
