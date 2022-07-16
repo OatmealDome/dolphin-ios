@@ -614,7 +614,7 @@
 				B9DC3DF327EFBD2C0084DAA4 /* Frameworks */,
 				B9447B0E2841941D00BC9110 /* Copy Dolphin Assets */,
 				B991379B2881DCAC00588446 /* Update Storyboard Strings */,
-				B99137A428825CFA00588446 /* Update Strings Files */,
+				B99137A428825CFA00588446 /* Update Core Strings */,
 				B9DC3DF427EFBD2C0084DAA4 /* Resources */,
 				B900A7A027F255E0000361DD /* CopyFiles */,
 			);
@@ -747,7 +747,7 @@
 			shellPath = /bin/sh;
 			shellScript = "\"$PROJECT_DIR/Project/Scripts/UpdateStoryboardStrings.sh\"\n";
 		};
-		B99137A428825CFA00588446 /* Update Strings Files */ = {
+		B99137A428825CFA00588446 /* Update Core Strings */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -757,7 +757,7 @@
 			inputPaths = (
 				"$(PROJECT_DIR)/../../../Languages/po/en.po",
 			);
-			name = "Update Strings Files";
+			name = "Update Core Strings";
 			outputFileListPaths = (
 			);
 			outputPaths = (
