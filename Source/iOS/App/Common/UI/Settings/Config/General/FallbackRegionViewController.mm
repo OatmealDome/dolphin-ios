@@ -6,6 +6,7 @@
 #import "Core/Config/MainSettings.h"
 
 #import "FallbackRegionCell.h"
+#import "LocalizationUtil.h"
 
 @interface FallbackRegionViewController ()
 
@@ -67,7 +68,7 @@
       break;
   }
   
-  cell.regionLabel.text = region;
+  cell.regionLabel.text = DOLCoreLocalizedString(region);
   
   if (_lastSelected == indexPath.row) {
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
