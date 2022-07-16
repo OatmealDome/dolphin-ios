@@ -1,9 +1,6 @@
 /* Class = "UILabel"; text = "Aspect Ratio"; ObjectID = "0Jc-TQ-Kjr"; */
 "0Jc-TQ-Kjr.text" = "Aspect Ratio";
 
-/* Class = "UILabel"; text = "Skip Main Menu"; ObjectID = "0lg-Ob-vTD"; */
-"0lg-Ob-vTD.text" = "Skip Main Menu";
-
 /* Class = "UILabel"; text = "Stereo"; ObjectID = "2Fb-zZ-YXT"; */
 "2Fb-zZ-YXT.text" = "Stereo";
 
@@ -73,9 +70,6 @@
 /* Class = "UILabel"; text = "Allow Mismatched Region Settings"; ObjectID = "DwD-Dg-nXC"; */
 "DwD-Dg-nXC.text" = "Allow Mismatched Region Settings";
 
-/* Class = "UILabel"; text = "Language"; ObjectID = "EvY-XC-c0J"; */
-"EvY-XC-c0J.text" = "Language";
-
 /* Class = "UITableViewSection"; headerTitle = "Misc Settings"; ObjectID = "EwP-gb-3vf"; */
 "EwP-gb-3vf.headerTitle" = "Misc Settings";
 
@@ -108,9 +102,6 @@
 
 /* Class = "UILabel"; text = "Surround"; ObjectID = "JQY-2h-eIz"; */
 "JQY-2h-eIz.text" = "Surround";
-
-/* Class = "UITableViewSection"; headerTitle = "IPL Settings"; ObjectID = "Jhc-xa-gYX"; */
-"Jhc-xa-gYX.headerTitle" = "IPL Settings";
 
 /* Class = "UILabel"; text = "Simplified Chinese"; ObjectID = "JtS-Bq-xqJ"; */
 "JtS-Bq-xqJ.text" = "Simplified Chinese";
@@ -238,9 +229,6 @@
 /* Class = "UINavigationItem"; title = "General"; ObjectID = "dB5-UY-CbC"; */
 "dB5-UY-CbC.title" = "General";
 
-/* Class = "UINavigationItem"; title = "GameCube"; ObjectID = "dS3-1e-7xv"; */
-"dS3-1e-7xv.title" = "GameCube";
-
 /* Class = "UILabel"; text = "Dutch"; ObjectID = "dS3-mz-mwz"; */
 "dS3-mz-mwz.text" = "Dutch";
 
@@ -285,9 +273,6 @@
 
 /* Class = "UILabel"; text = "Sensor Bar Position"; ObjectID = "lVg-Mq-csQ"; */
 "lVg-Mq-csQ.text" = "Sensor Bar Position";
-
-/* Class = "UILabel"; text = "System Language"; ObjectID = "lbV-hX-1To"; */
-"lbV-hX-1To.text" = "System Language";
 
 /* Class = "UILabel"; text = "Italian"; ObjectID = "m9o-pl-QWA"; */
 "m9o-pl-QWA.text" = "Italian";

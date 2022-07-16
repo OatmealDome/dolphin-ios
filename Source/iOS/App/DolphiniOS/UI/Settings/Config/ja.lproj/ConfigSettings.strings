@@ -1,9 +1,6 @@
 /* Class = "UILabel"; text = "Aspect Ratio"; ObjectID = "0Jc-TQ-Kjr"; */
 "0Jc-TQ-Kjr.text" = "アスペクト比";
 
-/* Class = "UILabel"; text = "Skip Main Menu"; ObjectID = "0lg-Ob-vTD"; */
-"0lg-Ob-vTD.text" = "メインメニューをスキップ";
-
 /* Class = "UILabel"; text = "Stereo"; ObjectID = "2Fb-zZ-YXT"; */
 "2Fb-zZ-YXT.text" = "ステレオ";
 
@@ -73,9 +70,6 @@
 /* Class = "UILabel"; text = "Allow Mismatched Region Settings"; ObjectID = "DwD-Dg-nXC"; */
 "DwD-Dg-nXC.text" = "コンソール上の言語設定の不一致を許可";
 
-/* Class = "UILabel"; text = "Language"; ObjectID = "EvY-XC-c0J"; */
-"EvY-XC-c0J.text" = "UIの言語";
-
 /* Class = "UITableViewSection"; headerTitle = "Misc Settings"; ObjectID = "EwP-gb-3vf"; */
 "EwP-gb-3vf.headerTitle" = "その他の設定";
 
@@ -108,9 +102,6 @@
 
 /* Class = "UILabel"; text = "Surround"; ObjectID = "JQY-2h-eIz"; */
 "JQY-2h-eIz.text" = "サラウンド";
-
-/* Class = "UITableViewSection"; headerTitle = "IPL Settings"; ObjectID = "Jhc-xa-gYX"; */
-"Jhc-xa-gYX.headerTitle" = "IPL設定";
 
 /* Class = "UILabel"; text = "Simplified Chinese"; ObjectID = "JtS-Bq-xqJ"; */
 "JtS-Bq-xqJ.text" = "簡体字中国語";
@@ -238,9 +229,6 @@
 /* Class = "UINavigationItem"; title = "General"; ObjectID = "dB5-UY-CbC"; */
 "dB5-UY-CbC.title" = "一般";
 
-/* Class = "UINavigationItem"; title = "GameCube"; ObjectID = "dS3-1e-7xv"; */
-"dS3-1e-7xv.title" = "ゲームキューブ";
-
 /* Class = "UILabel"; text = "Dutch"; ObjectID = "dS3-mz-mwz"; */
 "dS3-mz-mwz.text" = "オランダ語";
 
@@ -285,9 +273,6 @@
 
 /* Class = "UILabel"; text = "Sensor Bar Position"; ObjectID = "lVg-Mq-csQ"; */
 "lVg-Mq-csQ.text" = "センサーバーの位置";
-
-/* Class = "UILabel"; text = "System Language"; ObjectID = "lbV-hX-1To"; */
-"lbV-hX-1To.text" = "システムの言語";
 
 /* Class = "UILabel"; text = "Italian"; ObjectID = "m9o-pl-QWA"; */
 "m9o-pl-QWA.text" = "イタリア語";
