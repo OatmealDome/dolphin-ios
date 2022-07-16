@@ -1,0 +1,377 @@
+/* Class = "UILabel"; text = "Aspect Ratio"; ObjectID = "0Jc-TQ-Kjr"; */
+"0Jc-TQ-Kjr.text" = "アスペクト比";
+
+/* Class = "UILabel"; text = "Skip Main Menu"; ObjectID = "0lg-Ob-vTD"; */
+"0lg-Ob-vTD.text" = "メインメニューをスキップ";
+
+/* Class = "UILabel"; text = "Stereo"; ObjectID = "2Fb-zZ-YXT"; */
+"2Fb-zZ-YXT.text" = "ステレオ";
+
+/* Class = "UILabel"; text = "General"; ObjectID = "3Q1-X2-XXf"; */
+"3Q1-X2-XXf.text" = "一般";
+
+/* Class = "UINavigationItem"; title = "Aspect Ratio"; ObjectID = "3rl-o2-iN6"; */
+"3rl-o2-iN6.title" = "アスペクト比";
+
+/* Class = "UILabel"; text = "Enable MMU"; ObjectID = "44a-xv-dfS"; */
+"44a-xv-dfS.text" = "Enable MMU";
+
+/* Class = "UILabel"; text = "Enable Custom RTC"; ObjectID = "46G-Mb-1hy"; */
+"46G-Mb-1hy.text" = "Custom RTC を使用する";
+
+/* Class = "UITableViewSection"; headerTitle = "Backend Settings"; ObjectID = "4Ns-oO-aRP"; */
+"4Ns-oO-aRP.headerTitle" = "出力設定";
+
+/* Class = "UILabel"; text = "Engine"; ObjectID = "4XR-fB-Uaf"; */
+"4XR-fB-Uaf.text" = "Engine";
+
+/* Class = "UILabel"; text = "Show On-Screen Display Messages"; ObjectID = "4Zi-op-1sU"; */
+"4Zi-op-1sU.text" = "オンスクリーンメッセージを表示";
+
+/* Class = "UITableViewSection"; headerTitle = "Volume"; ObjectID = "5M3-5y-j9I"; */
+"5M3-5y-j9I.headerTitle" = "音量";
+
+/* Class = "UILabel"; text = "Allow Writes to SD Card"; ObjectID = "5Zv-GN-hRM"; */
+"5Zv-GN-hRM.text" = "SDカードへの書込を許可";
+
+/* Class = "UILabel"; text = "GameCube"; ObjectID = "6pf-kR-RoD"; */
+"6pf-kR-RoD.text" = "ゲームキューブ";
+
+/* Class = "UILabel"; text = "German"; ObjectID = "7Vg-RB-5CW"; */
+"7Vg-RB-5CW.text" = "ドイツ語";
+
+/* Class = "UINavigationItem"; title = "Config"; ObjectID = "7vA-H4-xrb"; */
+"7vA-H4-xrb.title" = "設定";
+
+/* Class = "UILabel"; text = "Backend"; ObjectID = "7wP-CJ-8PV"; */
+"7wP-CJ-8PV.text" = "ビデオAPI";
+
+/* Class = "UILabel"; text = "System Language"; ObjectID = "9DI-ol-SST"; */
+"9DI-ol-SST.text" = "システムの言語";
+
+/* Class = "UILabel"; text = "0%"; ObjectID = "9OE-FI-vjm"; */
+"9OE-FI-vjm.text" = "0%";
+
+/* Class = "UILabel"; text = "Change Discs Automatically"; ObjectID = "9he-wS-2Fz"; */
+"9he-wS-2Fz.text" = "ディスク交換を自動化";
+
+/* Class = "UILabel"; text = "Position"; ObjectID = "BEG-O8-spe"; */
+"BEG-O8-spe.text" = "Position";
+
+/* Class = "UILabel"; text = "CPU Emulation Engine"; ObjectID = "Bfp-7u-0qj"; */
+"Bfp-7u-0qj.text" = "CPUエミュレーション方式";
+
+/* Class = "UILabel"; text = "Sound"; ObjectID = "BlU-2o-JGE"; */
+"BlU-2o-JGE.text" = "サウンドの設定";
+
+/* Class = "UILabel"; text = "16:9"; ObjectID = "Clx-le-Vbc"; */
+"Clx-le-Vbc.text" = "16:9";
+
+/* Class = "UITableViewSection"; headerTitle = "CPU Options"; ObjectID = "Dhq-BP-rXb"; */
+"Dhq-BP-rXb.headerTitle" = "CPU設定";
+
+/* Class = "UILabel"; text = "Allow Mismatched Region Settings"; ObjectID = "DwD-Dg-nXC"; */
+"DwD-Dg-nXC.text" = "コンソール上の言語設定の不一致を許可";
+
+/* Class = "UILabel"; text = "Language"; ObjectID = "EvY-XC-c0J"; */
+"EvY-XC-c0J.text" = "UIの言語";
+
+/* Class = "UITableViewSection"; headerTitle = "Misc Settings"; ObjectID = "EwP-gb-3vf"; */
+"EwP-gb-3vf.headerTitle" = "その他の設定";
+
+/* Class = "UILabel"; text = "Confirm on Stop"; ObjectID = "F2g-Nt-t4o"; */
+"F2g-Nt-t4o.text" = "動作停止時に確認";
+
+/* Class = "UINavigationItem"; title = "Wii"; ObjectID = "FGt-ju-fqW"; */
+"FGt-ju-fqW.title" = "Wii";
+
+/* Class = "UITableViewController"; title = "Config"; ObjectID = "GC7-TA-DT1"; */
+"GC7-TA-DT1.title" = "設定";
+
+/* Class = "UILabel"; text = "0 MB"; ObjectID = "GkB-HW-gOg"; */
+"GkB-HW-gOg.text" = "0 MB";
+
+/* Class = "UINavigationItem"; title = "Speed Limit"; ObjectID = "GuG-3q-oSx"; */
+"GuG-3q-oSx.title" = "速度制限";
+
+/* Class = "UILabel"; text = "IR Sensitivity"; ObjectID = "HKr-LO-ZJY"; */
+"HKr-LO-ZJY.text" = "Wiiリモコンの感度";
+
+/* Class = "UITableViewSection"; headerTitle = "SD Card Settings"; ObjectID = "HbC-2c-92H"; */
+"HbC-2c-92H.headerTitle" = "SD Card Settings";
+
+/* Class = "UILabel"; text = "German"; ObjectID = "HmT-kY-6wi"; */
+"HmT-kY-6wi.text" = "ドイツ語";
+
+/* Class = "UINavigationItem"; title = "Interface"; ObjectID = "I9K-6N-Wgv"; */
+"I9K-6N-Wgv.title" = "表示";
+
+/* Class = "UILabel"; text = "Surround"; ObjectID = "JQY-2h-eIz"; */
+"JQY-2h-eIz.text" = "サラウンド";
+
+/* Class = "UITableViewSection"; headerTitle = "IPL Settings"; ObjectID = "Jhc-xa-gYX"; */
+"Jhc-xa-gYX.headerTitle" = "IPL設定";
+
+/* Class = "UILabel"; text = "Simplified Chinese"; ObjectID = "JtS-Bq-xqJ"; */
+"JtS-Bq-xqJ.text" = "簡体字中国語";
+
+/* Class = "UILabel"; text = "Spanish"; ObjectID = "Kq3-zO-Wz6"; */
+"Kq3-zO-Wz6.text" = "スペイン語";
+
+/* Class = "UILabel"; text = "Buffer Size"; ObjectID = "LaS-K8-o67"; */
+"LaS-K8-o67.text" = "バッファサイズ";
+
+/* Class = "UITableViewSection"; headerTitle = "User Interface"; ObjectID = "Lbj-Vb-zkU"; */
+"Lbj-Vb-zkU.headerTitle" = "Dolphinの表示に関する設定";
+
+/* Class = "UILabel"; text = "English"; ObjectID = "NYf-8z-6kl"; */
+"NYf-8z-6kl.text" = "英語";
+
+/* Class = "UILabel"; text = "Speed Limit"; ObjectID = "Npl-cg-zxe"; */
+"Npl-cg-zxe.text" = "速度制限";
+
+/* Class = "UILabel"; text = "Use Built-In Database of Game Names"; ObjectID = "O40-Mu-3K1"; */
+"O40-Mu-3K1.text" = "ゲーム名の表記に内蔵リストを使用";
+
+/* Class = "UILabel"; text = "Spanish"; ObjectID = "OA0-L0-Lsr"; */
+"OA0-L0-Lsr.text" = "スペイン語";
+
+/* Class = "UILabel"; text = "Traditional Chinese"; ObjectID = "OOb-ot-bsG"; */
+"OOb-ot-bsG.text" = "繁体字中国語";
+
+/* Class = "UILabel"; text = "Enable Audio Stretching"; ObjectID = "PIN-oZ-jnV"; */
+"PIN-oZ-jnV.text" = "タイムストレッチを有効にする (Audio Stretching)";
+
+/* Class = "UITableViewSection"; footerTitle = "Adjusts the amount of RAM in the emulated console.\n\nWARNING: Enabling this will completely break many games. Only a small number of games can benefit from this."; ObjectID = "Q01-LG-j5M"; */
+"Q01-LG-j5M.footerTitle" = "Adjusts the amount of RAM in the emulated console.\n\nWARNING: Enabling this will completely break many games. Only a small number of games can benefit from this.";
+
+/* Class = "UITableViewSection"; headerTitle = "Memory Override"; ObjectID = "Q01-LG-j5M"; */
+"Q01-LG-j5M.headerTitle" = "Memory Override";
+
+/* Class = "UILabel"; text = "Ratio"; ObjectID = "QAt-qC-pEy"; */
+"QAt-qC-pEy.text" = "Ratio";
+
+/* Class = "UINavigationItem"; title = "Audio Backend"; ObjectID = "QBS-Hf-JnR"; */
+"QBS-Hf-JnR.title" = "出力API (Audio Backend)";
+
+/* Class = "UILabel"; text = "French"; ObjectID = "Qb1-Ol-BpB"; */
+"Qb1-Ol-BpB.text" = "フランス語";
+
+/* Class = "UITableViewSection"; headerTitle = "Basic Settings"; ObjectID = "RLw-ih-Lsp"; */
+"RLw-ih-Lsp.headerTitle" = "基本設定";
+
+/* Class = "UILabel"; text = "Audio"; ObjectID = "ROj-l7-xYo"; */
+"ROj-l7-xYo.text" = "サウンド";
+
+/* Class = "UILabel"; text = "Backend"; ObjectID = "S7p-3z-UpT"; */
+"S7p-3z-UpT.text" = "ビデオAPI";
+
+/* Class = "UILabel"; text = "MEM1"; ObjectID = "Sza-kd-jso"; */
+"Sza-kd-jso.text" = "MEM1";
+
+/* Class = "UINavigationItem"; title = "Advanced"; ObjectID = "VTV-1S-N5h"; */
+"VTV-1S-N5h.title" = "高度な設定";
+
+/* Class = "UILabel"; text = "0 MB"; ObjectID = "VlD-xp-cK3"; */
+"VlD-xp-cK3.text" = "0 MB";
+
+/* Class = "UILabel"; text = "0%"; ObjectID = "WAz-n9-zdh"; */
+"WAz-n9-zdh.text" = "0%";
+
+/* Class = "UINavigationItem"; title = "System Language"; ObjectID = "WJO-4V-SZ6"; */
+"WJO-4V-SZ6.title" = "システムの言語";
+
+/* Class = "UINavigationItem"; title = "CPU Emulation Engine"; ObjectID = "Wtu-wr-8xr"; */
+"Wtu-wr-8xr.title" = "CPUエミュレーション方式";
+
+/* Class = "UILabel"; text = "Mono"; ObjectID = "Wtw-Ba-5d3"; */
+"Wtw-Ba-5d3.text" = "モノラル";
+
+/* Class = "UILabel"; text = "Korean"; ObjectID = "XWP-zt-ySg"; */
+"XWP-zt-ySg.text" = "韓国語";
+
+/* Class = "UILabel"; text = "Enable Emulated CPU Clock Override"; ObjectID = "XkE-mc-OlD"; */
+"XkE-mc-OlD.text" = "CPU Clock Override を有効化";
+
+/* Class = "UILabel"; text = "Mode"; ObjectID = "ZbB-qU-VDU"; */
+"ZbB-qU-VDU.text" = "Mode";
+
+/* Class = "UILabel"; text = "Insert SD Card"; ObjectID = "Zkh-q9-ifj"; */
+"Zkh-q9-ifj.text" = "SDカードの挿入をエミュレート";
+
+/* Class = "UILabel"; text = "Use PAL60 Mode (EuRGB60)"; ObjectID = "Zp1-mH-cmU"; */
+"Zp1-mH-cmU.text" = "PAL60 (EuRGB60) モードを使用";
+
+/* Class = "UILabel"; text = "Top"; ObjectID = "aBB-xD-HlP"; */
+"aBB-xD-HlP.text" = "上";
+
+/* Class = "UITableViewSection"; headerTitle = "IPL Settings"; ObjectID = "at6-At-g74"; */
+"at6-At-g74.headerTitle" = "IPL設定";
+
+/* Class = "UINavigationItem"; title = "Fallback Region"; ObjectID = "bMi-pD-kB9"; */
+"bMi-pD-kB9.title" = "Fallback Region";
+
+/* Class = "UINavigationItem"; title = "Sound"; ObjectID = "buI-Do-OuI"; */
+"buI-Do-OuI.title" = "サウンドの設定";
+
+/* Class = "UINavigationItem"; title = "Sensor Bar Position"; ObjectID = "c4f-2N-YmD"; */
+"c4f-2N-YmD.title" = "センサーバーの位置";
+
+/* Class = "UILabel"; text = "English"; ObjectID = "cGI-iJ-CiJ"; */
+"cGI-iJ-CiJ.text" = "英語";
+
+/* Class = "UILabel"; text = "Enable Rumble"; ObjectID = "cMG-Bj-rfF"; */
+"cMG-Bj-rfF.text" = "振動を有効にする";
+
+/* Class = "UILabel"; text = "0 ms"; ObjectID = "cmb-N5-yBD"; */
+"cmb-N5-yBD.text" = "0 ms";
+
+/* Class = "UILabel"; text = "Bottom"; ObjectID = "cnE-pL-axQ"; */
+"cnE-pL-axQ.text" = "下";
+
+/* Class = "UILabel"; text = "Advanced"; ObjectID = "cne-eH-Kb9"; */
+"cne-eH-Kb9.text" = "高度な設定";
+
+/* Class = "UILabel"; text = "Region"; ObjectID = "d8e-ou-2Fp"; */
+"d8e-ou-2Fp.text" = "地域";
+
+/* Class = "UINavigationItem"; title = "General"; ObjectID = "dB5-UY-CbC"; */
+"dB5-UY-CbC.title" = "一般";
+
+/* Class = "UINavigationItem"; title = "GameCube"; ObjectID = "dS3-1e-7xv"; */
+"dS3-1e-7xv.title" = "ゲームキューブ";
+
+/* Class = "UILabel"; text = "Dutch"; ObjectID = "dS3-mz-mwz"; */
+"dS3-mz-mwz.text" = "オランダ語";
+
+/* Class = "UILabel"; text = "Wii"; ObjectID = "dpa-m4-rjN"; */
+"dpa-m4-rjN.text" = "Wii";
+
+/* Class = "UILabel"; text = "Italian"; ObjectID = "e8K-DS-sAI"; */
+"e8K-DS-sAI.text" = "イタリア語";
+
+/* Class = "UILabel"; text = "Japanese"; ObjectID = "eGQ-bT-nYY"; */
+"eGQ-bT-nYY.text" = "日本語";
+
+/* Class = "UITableViewSection"; footerTitle = "Adjusts the emulated CPU's clock rate.\n\nHigher values may make variable-framerate games run at a higher framerate, at the expense of performance. Lower values may activate a game's internal frameskip, potentially improving performance.\n\nWARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default clock."; ObjectID = "fDr-Gl-zZI"; */
+"fDr-Gl-zZI.footerTitle" = "Adjusts the emulated CPU's clock rate.\n\nHigher values may make variable-framerate games run at a higher framerate, at the expense of performance. Lower values may activate a game's internal frameskip, potentially improving performance.\n\nWARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default clock.";
+
+/* Class = "UITableViewSection"; headerTitle = "Clock Override"; ObjectID = "fDr-Gl-zZI"; */
+"fDr-Gl-zZI.headerTitle" = "Clock Override";
+
+/* Class = "UILabel"; text = "Dutch"; ObjectID = "fTA-hM-qWa"; */
+"fTA-hM-qWa.text" = "オランダ語";
+
+/* Class = "UILabel"; text = "French"; ObjectID = "ga7-mT-af0"; */
+"ga7-mT-af0.text" = "フランス語";
+
+/* Class = "UILabel"; text = "Enable Cheats"; ObjectID = "gmP-nZ-ptN"; */
+"gmP-nZ-ptN.text" = "チートコードを有効化";
+
+/* Class = "UILabel"; text = "Convert Folder to File Now"; ObjectID = "hJv-Z3-sDT"; */
+"hJv-Z3-sDT.text" = "Convert Folder to File Now";
+
+/* Class = "UILabel"; text = "Use Panic Handlers"; ObjectID = "ipP-Fv-k8r"; */
+"ipP-Fv-k8r.text" = "パニックハンドラを使用";
+
+/* Class = "UILabel"; text = "Language"; ObjectID = "k7E-dg-UcG"; */
+"k7E-dg-UcG.text" = "UIの言語";
+
+/* Class = "UILabel"; text = "Download Game Covers from GameTDB.com"; ObjectID = "kzL-o9-q6A"; */
+"kzL-o9-q6A.text" = "Download Game Covers from GameTDB.com";
+
+/* Class = "UILabel"; text = "Automatically Sync with Folder"; ObjectID = "lLr-en-yJx"; */
+"lLr-en-yJx.text" = "Automatically Sync with Folder";
+
+/* Class = "UILabel"; text = "Sensor Bar Position"; ObjectID = "lVg-Mq-csQ"; */
+"lVg-Mq-csQ.text" = "センサーバーの位置";
+
+/* Class = "UILabel"; text = "System Language"; ObjectID = "lbV-hX-1To"; */
+"lbV-hX-1To.text" = "システムの言語";
+
+/* Class = "UILabel"; text = "Italian"; ObjectID = "m9o-pl-QWA"; */
+"m9o-pl-QWA.text" = "イタリア語";
+
+/* Class = "UILabel"; text = "Speaker Volume"; ObjectID = "mOy-fU-QWw"; */
+"mOy-fU-QWw.text" = "リモコンスピーカー音量";
+
+/* Class = "UILabel"; text = "Convert File to Folder Now"; ObjectID = "nCM-18-d00"; */
+"nCM-18-d00.text" = "Convert File to Folder Now";
+
+/* Class = "UITableViewSection"; headerTitle = "Audio Stretching Settings"; ObjectID = "owp-az-Oz8"; */
+"owp-az-Oz8.headerTitle" = "タイムストレッチの設定";
+
+/* Class = "UINavigationItem"; title = "Audio"; ObjectID = "oxt-T9-VEG"; */
+"oxt-T9-VEG.title" = "サウンド";
+
+/* Class = "UILabel"; text = "MEM2"; ObjectID = "pRO-hG-kn8"; */
+"pRO-hG-kn8.text" = "MEM2";
+
+/* Class = "UITableViewSection"; headerTitle = "Render Window"; ObjectID = "pTr-tD-qWn"; */
+"pTr-tD-qWn.headerTitle" = "ゲームウィンドウの設定";
+
+/* Class = "UILabel"; text = "Enable Dual Core (speedup)"; ObjectID = "pW2-Nr-TyB"; */
+"pW2-Nr-TyB.text" = "デュアルコア動作を行う (速度向上)";
+
+/* Class = "UILabel"; text = "Connect USB Keyboard"; ObjectID = "qzS-Ua-Q83"; */
+"qzS-Ua-Q83.text" = "USBキーボードの接続をエミュレート";
+
+/* Class = "UILabel"; text = "Region"; ObjectID = "rlE-XT-vfw"; */
+"rlE-XT-vfw.text" = "地域";
+
+/* Class = "UILabel"; text = "Audio Backend"; ObjectID = "roE-vP-a3S"; */
+"roE-vP-a3S.text" = "出力API (Audio Backend)";
+
+/* Class = "UILabel"; text = "Fallback Region"; ObjectID = "sCB-dz-YQe"; */
+"sCB-dz-YQe.text" = "Fallback Region";
+
+/* Class = "UINavigationItem"; title = "GameCube"; ObjectID = "sM7-RR-8uE"; */
+"sM7-RR-8uE.title" = "ゲームキューブ";
+
+/* Class = "UILabel"; text = "100% (486 MHz)"; ObjectID = "t3d-Dq-zsd"; */
+"t3d-Dq-zsd.text" = "100% (486 MHz)";
+
+/* Class = "UILabel"; text = "Interface"; ObjectID = "tbG-OU-QE8"; */
+"tbG-OU-QE8.text" = "表示";
+
+/* Class = "UILabel"; text = "Skip Main Menu"; ObjectID = "tdk-PU-XMm"; */
+"tdk-PU-XMm.text" = "メインメニューをスキップ";
+
+/* Class = "UILabel"; text = "Engine"; ObjectID = "uhW-cT-kmX"; */
+"uhW-cT-kmX.text" = "Engine";
+
+/* Class = "UILabel"; text = "4:3"; ObjectID = "vr5-sd-t4l"; */
+"vr5-sd-t4l.text" = "4:3";
+
+/* Class = "UITableViewSection"; footerTitle = "Dolphin will use this for titles whose region cannot be determined automatically."; ObjectID = "w9f-Gt-sOg"; */
+"w9f-Gt-sOg.footerTitle" = "Dolphin will use this for titles whose region cannot be determined automatically.";
+
+/* Class = "UITableViewSection"; headerTitle = "Fallback Region"; ObjectID = "w9f-Gt-sOg"; */
+"w9f-Gt-sOg.headerTitle" = "Fallback Region";
+
+/* Class = "UITableViewSection"; footerTitle = "This setting allows you to set a custom real time clock (RTC) separate from your current system time.\n\nIf unsure, leave this unchecked."; ObjectID = "wxJ-yD-fCS"; */
+"wxJ-yD-fCS.footerTitle" = "This setting allows you to set a custom real time clock (RTC) separate from your current system time.\n\nIf unsure, leave this unchecked.";
+
+/* Class = "UITableViewSection"; headerTitle = "Custom RTC Options"; ObjectID = "wxJ-yD-fCS"; */
+"wxJ-yD-fCS.headerTitle" = "リアルタイムクロック設定";
+
+/* Class = "UILabel"; text = "Enable Screen Saver"; ObjectID = "xZc-n0-nMx"; */
+"xZc-n0-nMx.text" = "スクリーンセーバーを有効化";
+
+/* Class = "UILabel"; text = "Enable Emulated Memory SIze Override"; ObjectID = "y8z-i5-E2j"; */
+"y8z-i5-E2j.text" = "Enable Emulated Memory SIze Override";
+
+/* Class = "UILabel"; text = "0%"; ObjectID = "yFY-lJ-VTt"; */
+"yFY-lJ-VTt.text" = "0%";
+
+/* Class = "UILabel"; text = "Language"; ObjectID = "yK8-Sw-KHg"; */
+"yK8-Sw-KHg.text" = "UIの言語";
+
+/* Class = "UILabel"; text = "System Language"; ObjectID = "yXt-b0-DVU"; */
+"yXt-b0-DVU.text" = "システムの言語";
+
+/* Class = "UINavigationItem"; title = "System Language"; ObjectID = "ybk-7b-Htb"; */
+"ybk-7b-Htb.title" = "システムの言語";
+
+/* Class = "UITableViewSection"; headerTitle = "Wii Remote Settings"; ObjectID = "zwp-Y9-R4u"; */
+"zwp-Y9-R4u.headerTitle" = "Wiiリモコンの設定";
