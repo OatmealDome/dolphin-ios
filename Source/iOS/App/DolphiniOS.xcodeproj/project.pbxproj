@@ -174,6 +174,7 @@
 		B991379F2881F23A00588446 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Core.strings; sourceTree = "<group>"; };
 		B99137A228825AA600588446 /* UpdateCoreStrings.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = UpdateCoreStrings.py; sourceTree = "<group>"; };
 		B99137A6288279AC00588446 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		B99137A8288279F000588446 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -834,6 +835,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				B9DC3E0827EFBD2F0084DAA4 /* Base */,
+				B99137A8288279F000588446 /* en */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
