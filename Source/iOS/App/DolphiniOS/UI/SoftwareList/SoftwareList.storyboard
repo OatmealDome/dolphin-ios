@@ -9,11 +9,11 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Games-->
+        <!--Software-->
         <scene sceneID="h5R-o7-WfS">
             <objects>
                 <navigationController storyboardIdentifier="softwareListRoot" id="vug-Ec-8zC" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Games" image="gamecontroller.fill" catalog="system" id="Ttt-Zj-H9c"/>
+                    <tabBarItem key="tabBarItem" title="Software" image="gamecontroller.fill" catalog="system" id="Ttt-Zj-H9c"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="qTc-1j-eyt">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
@@ -27,7 +27,7 @@
             </objects>
             <point key="canvasLocation" x="-208" y="147"/>
         </scene>
-        <!--Games-->
+        <!--Software-->
         <scene sceneID="J5Y-gO-CN4">
             <objects>
                 <collectionViewController id="Rbr-ly-5Pp" customClass="SoftwareListViewController" sceneMemberID="viewController">
@@ -84,7 +84,7 @@
                             <outlet property="delegate" destination="Rbr-ly-5Pp" id="BF1-OC-9yD"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Games" id="S5F-CY-S3A"/>
+                    <navigationItem key="navigationItem" title="Software" id="S5F-CY-S3A"/>
                     <connections>
                         <segue destination="TaY-Qy-7UM" kind="presentation" identifier="emulation" id="Jyi-q2-HSg"/>
                     </connections>
