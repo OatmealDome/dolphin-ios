@@ -5,6 +5,8 @@
 
 #import "Core/Config/MainSettings.h"
 
+#import "LocalizationUtil.h"
+
 @interface ConfigGeneralViewController ()
 
 @end
@@ -29,7 +31,7 @@
   int speedLimit = Config::Get(Config::MAIN_EMULATION_SPEED) * 100;
   
   if (speedLimit == 0) {
-    self.speedLimitLabel.text = @"Unlimited";
+    self.speedLimitLabel.text = DOLCoreLocalizedString(@"Unlimited");
   } else {
     self.speedLimitLabel.text = [NSString stringWithFormat:@"%d%%", speedLimit];
   }
@@ -53,7 +55,7 @@
       break;
   }
   
-  self.regionLabel.text = region;
+  self.regionLabel.text = DOLCoreLocalizedString(region);
 }
 
 - (void)dualCoreChanged {
