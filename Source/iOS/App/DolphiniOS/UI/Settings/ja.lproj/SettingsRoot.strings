@@ -1,26 +1,26 @@
 /* Class = "UILabel"; text = "Version"; ObjectID = "AYM-5G-niu"; */
-"AYM-5G-niu.text" = "Version";
+"AYM-5G-niu.text" = "バージョン";
 
 /* Class = "UILabel"; text = "Dolphin Core"; ObjectID = "AcY-gP-Kls"; */
 "AcY-gP-Kls.text" = "Dolphin Core";
 
 /* Class = "UINavigationItem"; title = "Settings"; ObjectID = "Aqs-lU-ZQb"; */
-"Aqs-lU-ZQb.title" = "Settings";
+"Aqs-lU-ZQb.title" = "設定";
 
 /* Class = "UILabel"; text = "Help"; ObjectID = "Fve-gS-Kpm"; */
-"Fve-gS-Kpm.text" = "Help";
+"Fve-gS-Kpm.text" = "ヘルプ";
 
 /* Class = "UILabel"; text = "About"; ObjectID = "LOJ-rQ-Cvy"; */
-"LOJ-rQ-Cvy.text" = "About";
+"LOJ-rQ-Cvy.text" = "Dolphinについて";
 
 /* Class = "UILabel"; text = "5.0"; ObjectID = "UmV-ON-sVs"; */
 "UmV-ON-sVs.text" = "5.0";
 
 /* Class = "UILabel"; text = "Config"; ObjectID = "WUF-CY-WHt"; */
-"WUF-CY-WHt.text" = "Config";
+"WUF-CY-WHt.text" = "設定";
 
 /* Class = "UILabel"; text = "1.0.0"; ObjectID = "XyO-IH-bTB"; */
 "XyO-IH-bTB.text" = "1.0.0";
 
 /* Class = "UITabBarItem"; title = "Settings"; ObjectID = "xtB-7c-6An"; */
-"xtB-7c-6An.title" = "Settings";
+"xtB-7c-6An.title" = "設定";
