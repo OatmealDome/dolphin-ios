@@ -15,6 +15,14 @@
 
 @implementation ConfigAdvancedViewController
 
+- (void)viewDidLoad {
+  // We use the compact style in the storyboard to maintain compatibilty with iOS 13.
+  // If iOS 14 APIs are available, we can make the UI look fancier with the inline style.
+  if (@available(iOS 14, *)) {
+    self.rtcPicker.preferredDatePickerStyle = UIDatePickerStyleInline;
+  }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
   
