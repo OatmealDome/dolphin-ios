@@ -15,7 +15,6 @@
 		B900A7B627F2D3C4000361DD /* MoltenVK.xcframework in CopyFiles */ = {isa = PBXBuildFile; fileRef = B900A7B327F2D3AF000361DD /* MoltenVK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7B927F4CB80000361DD /* DefaultsInitService.swift */; };
 		B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7BC27F4CDD3000361DD /* SwiftStringUtil.swift */; };
-		B900A7C727F4D4F4000361DD /* SoftwareList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B900A7C627F4D4F4000361DD /* SoftwareList.storyboard */; };
 		B900A7CA27F4DA97000361DD /* SoftwareListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B900A7C927F4DA97000361DD /* SoftwareListViewController.mm */; };
 		B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7CE27F4DB9A000361DD /* SoftwareListCell.swift */; };
 		B900A7D227F5228B000361DD /* UICollectionViewLeftAlignedLayout in Frameworks */ = {isa = PBXBuildFile; productRef = B900A7D127F5228B000361DD /* UICollectionViewLeftAlignedLayout */; };
@@ -55,6 +54,7 @@
 		B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B99137972881D68600588446 /* CpuEngineViewController.mm */; };
 		B991379E2881F23A00588446 /* Core.strings in Resources */ = {isa = PBXBuildFile; fileRef = B99137A02881F23A00588446 /* Core.strings */; };
 		B99137AC28827AD200588446 /* SettingsRoot.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B99137AE28827AD200588446 /* SettingsRoot.storyboard */; };
+		B99137B52882A58000588446 /* SoftwareList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B99137B72882A58000588446 /* SoftwareList.storyboard */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -92,7 +92,6 @@
 		B900A7B327F2D3AF000361DD /* MoltenVK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MoltenVK.xcframework; path = "../../../Externals/MoltenVK-iOS/MoltenVK.xcframework"; sourceTree = SOURCE_ROOT; };
 		B900A7B927F4CB80000361DD /* DefaultsInitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsInitService.swift; sourceTree = "<group>"; };
 		B900A7BC27F4CDD3000361DD /* SwiftStringUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftStringUtil.swift; sourceTree = "<group>"; };
-		B900A7C627F4D4F4000361DD /* SoftwareList.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SoftwareList.storyboard; sourceTree = "<group>"; };
 		B900A7C827F4DA97000361DD /* SoftwareListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SoftwareListViewController.h; sourceTree = "<group>"; };
 		B900A7C927F4DA97000361DD /* SoftwareListViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SoftwareListViewController.mm; sourceTree = "<group>"; };
 		B900A7CE27F4DB9A000361DD /* SoftwareListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareListCell.swift; sourceTree = "<group>"; };
@@ -181,6 +180,9 @@
 		B99137B028827B0400588446 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SettingsRoot.strings; sourceTree = "<group>"; };
 		B99137B228827B8700588446 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/SettingsRoot.strings; sourceTree = "<group>"; };
 		B99137B328827BF300588446 /* TransferCoreStringsToStoryboard.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = TransferCoreStringsToStoryboard.py; sourceTree = "<group>"; };
+		B99137B62882A58000588446 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SoftwareList.storyboard; sourceTree = "<group>"; };
+		B99137B92882A58800588446 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SoftwareList.strings; sourceTree = "<group>"; };
+		B99137BB2882A5BC00588446 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/SoftwareList.strings; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -300,7 +302,7 @@
 		B900A7C527F4D4E2000361DD /* SoftwareList */ = {
 			isa = PBXGroup;
 			children = (
-				B900A7C627F4D4F4000361DD /* SoftwareList.storyboard */,
+				B99137B72882A58000588446 /* SoftwareList.storyboard */,
 			);
 			path = SoftwareList;
 			sourceTree = "<group>";
@@ -680,7 +682,7 @@
 				B950CA942846A13100F45219 /* Sys in Resources */,
 				B93986FF287F8F18008E8E47 /* ConfigSettings.storyboard in Resources */,
 				B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */,
-				B900A7C727F4D4F4000361DD /* SoftwareList.storyboard in Resources */,
+				B99137B52882A58000588446 /* SoftwareList.storyboard in Resources */,
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
@@ -858,6 +860,16 @@
 				B99137B228827B8700588446 /* ja */,
 			);
 			name = SettingsRoot.storyboard;
+			sourceTree = "<group>";
+		};
+		B99137B72882A58000588446 /* SoftwareList.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B99137B62882A58000588446 /* Base */,
+				B99137B92882A58800588446 /* en */,
+				B99137BB2882A5BC00588446 /* ja */,
+			);
+			name = SoftwareList.storyboard;
 			sourceTree = "<group>";
 		};
 		B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */ = {
