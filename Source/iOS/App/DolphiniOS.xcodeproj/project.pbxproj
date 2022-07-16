@@ -54,6 +54,7 @@
 		B9913792288153D000588446 /* ConfigAdvancedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913791288153D000588446 /* ConfigAdvancedViewController.mm */; };
 		B99137952881D62C00588446 /* CpuEngineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B99137942881D62C00588446 /* CpuEngineCell.m */; };
 		B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B99137972881D68600588446 /* CpuEngineViewController.mm */; };
+		B991379E2881F23A00588446 /* Core.strings in Resources */ = {isa = PBXBuildFile; fileRef = B99137A02881F23A00588446 /* Core.strings */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -170,6 +171,8 @@
 		B99137962881D68600588446 /* CpuEngineViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CpuEngineViewController.h; sourceTree = "<group>"; };
 		B99137972881D68600588446 /* CpuEngineViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CpuEngineViewController.mm; sourceTree = "<group>"; };
 		B991379A2881DC2200588446 /* UpdateStoryboardStrings.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = UpdateStoryboardStrings.sh; sourceTree = "<group>"; };
+		B991379F2881F23A00588446 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Core.strings; sourceTree = "<group>"; };
+		B99137A228825AA600588446 /* UpdateCoreStrings.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = UpdateCoreStrings.py; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -256,6 +259,7 @@
 				B933EDC527F8E8D6004D7DD7 /* Emulation */,
 				B93986F9287F4592008E8E47 /* Settings */,
 				B900A7C327F4D44D000361DD /* SoftwareList */,
+				B99137A02881F23A00588446 /* Core.strings */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -417,6 +421,7 @@
 				B9476B2227F235A0009C0A4B /* BuildCore.sh */,
 				B9447B0A2841931E00BC9110 /* CopyAssets.sh */,
 				B991379A2881DC2200588446 /* UpdateStoryboardStrings.sh */,
+				B99137A228825AA600588446 /* UpdateCoreStrings.py */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
@@ -435,6 +440,7 @@
 				B950CA922846A10400F45219 /* Assets */,
 				B96F72CD27F0E8A70024BA7D /* Config */,
 				B9447B0B2841937100BC9110 /* Templates */,
+				B99137A128825A8400588446 /* Tools */,
 				B9476B2127F2357B009C0A4B /* Scripts */,
 			);
 			path = Project;
@@ -498,6 +504,13 @@
 				B99137972881D68600588446 /* CpuEngineViewController.mm */,
 			);
 			path = Advanced;
+			sourceTree = "<group>";
+		};
+		B99137A128825A8400588446 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Tools;
 			sourceTree = "<group>";
 		};
 		B9D93890283DE62700B290FC /* Emulation */ = {
@@ -594,6 +607,7 @@
 				B9DC3DF327EFBD2C0084DAA4 /* Frameworks */,
 				B9447B0E2841941D00BC9110 /* Copy Dolphin Assets */,
 				B991379B2881DCAC00588446 /* Update Storyboard Strings */,
+				B99137A428825CFA00588446 /* Update Strings Files */,
 				B9DC3DF427EFBD2C0084DAA4 /* Resources */,
 				B900A7A027F255E0000361DD /* CopyFiles */,
 			);
@@ -651,6 +665,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B938835D287EC12500910606 /* SettingsRoot.storyboard in Resources */,
+				B991379E2881F23A00588446 /* Core.strings in Resources */,
 				B950CA942846A13100F45219 /* Sys in Resources */,
 				B93986FF287F8F18008E8E47 /* ConfigSettings.storyboard in Resources */,
 				B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */,
@@ -724,6 +739,26 @@
 			shellPath = /bin/sh;
 			shellScript = "\"$PROJECT_DIR/Project/Scripts/UpdateStoryboardStrings.sh\"\n";
 		};
+		B99137A428825CFA00588446 /* Update Strings Files */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(PROJECT_DIR)/../../../Languages/po/en.po",
+			);
+			name = "Update Strings Files";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/UpdateCoreStrings_dummy.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$PROJECT_DIR/Project/Scripts/UpdateCoreStrings.py\" \"$PROJECT_DIR/../../../Languages/po/\" \"$PROJECT_DIR/Common/UI/\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -777,6 +812,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		B99137A02881F23A00588446 /* Core.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B991379F2881F23A00588446 /* en */,
+			);
+			name = Core.strings;
+			sourceTree = "<group>";
+		};
 		B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
