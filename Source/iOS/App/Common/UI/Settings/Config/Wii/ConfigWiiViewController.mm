@@ -6,6 +6,8 @@
 #import "Core/Config/MainSettings.h"
 #import "Core/Config/SYSCONFSettings.h"
 
+#import "LocalizationUtil.h"
+
 @interface ConfigWiiViewController ()
 
 @end
@@ -31,7 +33,7 @@
     aspectRatio = @"4:3";
   }
   
-  self.aspectRatioLabel.text = aspectRatio;
+  self.aspectRatioLabel.text = DOLCoreLocalizedString(aspectRatio);
   
   NSString* language;
   switch (Config::Get(Config::SYSCONF_LANGUAGE)) {
@@ -70,7 +72,7 @@
       break;
   }
   
-  self.languageLabel.text = language;
+  self.languageLabel.text = DOLCoreLocalizedString(language);
   
   NSString* audioMode;
   switch (Config::Get(Config::SYSCONF_SOUND_MODE)) {
@@ -88,7 +90,7 @@
       break;
   }
   
-  self.audioLabel.text = audioMode;
+  self.audioLabel.text = DOLCoreLocalizedString(audioMode);
   
   self.sdInsertedSwitch.on = Config::Get(Config::MAIN_WII_SD_CARD);
   [self.sdInsertedSwitch addValueChangedTarget:self action:@selector(sdInsertedChanged)];
@@ -106,7 +108,7 @@
     position = @"Top";
   }
   
-  self.sensorBarLabel.text = position;
+  self.sensorBarLabel.text = DOLCoreLocalizedString(position);
   
   self.irSlider.value = Config::Get(Config::SYSCONF_SENSOR_BAR_SENSITIVITY);
   
