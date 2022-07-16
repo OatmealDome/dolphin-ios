@@ -5,6 +5,7 @@
 
 #import "Core/Config/MainSettings.h"
 
+#import "LocalizationUtil.h"
 #import "SpeedLimitCell.h"
 
 @interface SpeedLimitViewController ()
@@ -36,12 +37,15 @@
   SpeedLimitCell* cell = [tableView dequeueReusableCellWithIdentifier:@"SpeedLimitCell" forIndexPath:indexPath];
   
   if (indexPath.row == 0) {
-    cell.limitLabel.text = @"Unlimited";
+    cell.limitLabel.text = DOLCoreLocalizedString(@"Unlimited");
   } else {
     NSInteger percent = indexPath.row * 10;
     
     if (percent == 100) {
-      cell.limitLabel.text = [NSString stringWithFormat:@"%ld%% (Normal Speed)", indexPath.row * 10];
+      NSString* localizedFormatString = DOLCoreLocalizedStringWithArgs(@"%1% (Normal Speed)", @"d");
+      localizedFormatString = [localizedFormatString stringByReplacingOccurrencesOfString:@"% " withString:@"%% "];
+      
+      cell.limitLabel.text = [NSString stringWithFormat:localizedFormatString, percent];
     } else {
       cell.limitLabel.text = [NSString stringWithFormat:@"%ld%%", percent];
     }
