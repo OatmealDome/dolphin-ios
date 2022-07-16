@@ -72,17 +72,4 @@
   Config::SetBase(Config::MAIN_AUTO_DISC_CHANGE, self.changeDiscsSwitch.on);
 }
 
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-  if (indexPath.section == 1 && indexPath.row == 1) {
-    NSString* message = @"Dolphin will use this for titles whose region cannot be determined automatically.";
-    
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Help" message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-    
-    [self presentViewController:alert animated:true completion:nil];
-  }
-  
-  [tableView deselectRowAtIndexPath:indexPath animated:true];
-}
-
 @end
