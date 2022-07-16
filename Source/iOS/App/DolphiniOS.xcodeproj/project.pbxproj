@@ -23,7 +23,6 @@
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
-		B938835D287EC12500910606 /* SettingsRoot.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B938835C287EC12500910606 /* SettingsRoot.storyboard */; };
 		B93986FB287F45A3008E8E47 /* SettingsRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93986FA287F45A3008E8E47 /* SettingsRootViewController.swift */; };
 		B93986FF287F8F18008E8E47 /* ConfigSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B93986FE287F8F18008E8E47 /* ConfigSettings.storyboard */; };
 		B9398707287F998C008E8E47 /* ConfigGeneralViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9398706287F998C008E8E47 /* ConfigGeneralViewController.mm */; };
@@ -55,6 +54,7 @@
 		B99137952881D62C00588446 /* CpuEngineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B99137942881D62C00588446 /* CpuEngineCell.m */; };
 		B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B99137972881D68600588446 /* CpuEngineViewController.mm */; };
 		B991379E2881F23A00588446 /* Core.strings in Resources */ = {isa = PBXBuildFile; fileRef = B99137A02881F23A00588446 /* Core.strings */; };
+		B99137AC28827AD200588446 /* SettingsRoot.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B99137AE28827AD200588446 /* SettingsRoot.storyboard */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -103,7 +103,6 @@
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
 		B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameFilePtrWrapper.mm; sourceTree = "<group>"; };
 		B933EDC227F8E215004D7DD7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		B938835C287EC12500910606 /* SettingsRoot.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingsRoot.storyboard; sourceTree = "<group>"; };
 		B93986FA287F45A3008E8E47 /* SettingsRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRootViewController.swift; sourceTree = "<group>"; };
 		B93986FC287F7C2F008E8E47 /* CoreVersion.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = CoreVersion.xcconfig; sourceTree = "<group>"; };
 		B93986FE287F8F18008E8E47 /* ConfigSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ConfigSettings.storyboard; sourceTree = "<group>"; };
@@ -178,6 +177,9 @@
 		B99137A928827A1400588446 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
 		B99137AA28827A1500588446 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		B99137AB28827A1700588446 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Core.strings; sourceTree = "<group>"; };
+		B99137AD28827AD200588446 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SettingsRoot.storyboard; sourceTree = "<group>"; };
+		B99137B028827B0400588446 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SettingsRoot.strings; sourceTree = "<group>"; };
+		B99137B228827B8700588446 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/SettingsRoot.strings; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -327,7 +329,7 @@
 			isa = PBXGroup;
 			children = (
 				B93986FD287F8F0F008E8E47 /* Config */,
-				B938835C287EC12500910606 /* SettingsRoot.storyboard */,
+				B99137AE28827AD200588446 /* SettingsRoot.storyboard */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -670,7 +672,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B938835D287EC12500910606 /* SettingsRoot.storyboard in Resources */,
+				B99137AC28827AD200588446 /* SettingsRoot.storyboard in Resources */,
 				B991379E2881F23A00588446 /* Core.strings in Resources */,
 				B950CA942846A13100F45219 /* Sys in Resources */,
 				B93986FF287F8F18008E8E47 /* ConfigSettings.storyboard in Resources */,
@@ -825,6 +827,16 @@
 				B99137AB28827A1700588446 /* ja */,
 			);
 			name = Core.strings;
+			sourceTree = "<group>";
+		};
+		B99137AE28827AD200588446 /* SettingsRoot.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B99137AD28827AD200588446 /* Base */,
+				B99137B028827B0400588446 /* en */,
+				B99137B228827B8700588446 /* ja */,
+			);
+			name = SettingsRoot.storyboard;
 			sourceTree = "<group>";
 		};
 		B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */ = {
