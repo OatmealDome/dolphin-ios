@@ -8,6 +8,8 @@
 
 #import "Core/Config/MainSettings.h"
 
+#import "LocalizationUtil.h"
+
 @interface ConfigGameCubeViewController ()
 
 @end
@@ -57,7 +59,7 @@
       break;
   }
   
-  self.languageLabel.text = language;
+  self.languageLabel.text = DOLCoreLocalizedString(language);
 }
 
 - (void)mainMenuChanged {
