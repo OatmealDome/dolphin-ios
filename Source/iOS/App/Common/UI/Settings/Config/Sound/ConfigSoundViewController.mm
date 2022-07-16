@@ -3,9 +3,10 @@
 
 #import "ConfigSoundViewController.h"
 
-#import "FoundationStringUtil.h"
-
 #import "Core/Config/MainSettings.h"
+
+#import "FoundationStringUtil.h"
+#import "LocalizationUtil.h"
 
 @interface ConfigSoundViewController ()
 
@@ -50,7 +51,7 @@
   int bufferSize = (int)self.bufferSizeSlider.value;
   
   Config::SetBaseOrCurrent(Config::MAIN_AUDIO_STRETCH_LATENCY, bufferSize);
-  self.bufferSizeLabel.text = [NSString stringWithFormat:@"%d ms", bufferSize];
+  self.bufferSizeLabel.text = [NSString stringWithFormat:DOLCoreLocalizedStringWithArgs(@"%1 ms", @"d"), bufferSize];
 }
 
 @end
