@@ -55,6 +55,7 @@
 		B99137AC28827AD200588446 /* SettingsRoot.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B99137AE28827AD200588446 /* SettingsRoot.storyboard */; };
 		B99137B52882A58000588446 /* SoftwareList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B99137B72882A58000588446 /* SoftwareList.storyboard */; };
 		B99137BF288327AC00588446 /* ConfigSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B99137C1288327AC00588446 /* ConfigSettings.storyboard */; };
+		B99137C928832A0800588446 /* LocalizationUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B99137C828832A0800588446 /* LocalizationUtil.m */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -185,6 +186,8 @@
 		B99137C0288327AC00588446 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ConfigSettings.storyboard; sourceTree = "<group>"; };
 		B99137C3288327B200588446 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ConfigSettings.strings; sourceTree = "<group>"; };
 		B99137C5288327BB00588446 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/ConfigSettings.strings; sourceTree = "<group>"; };
+		B99137C728832A0800588446 /* LocalizationUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalizationUtil.h; sourceTree = "<group>"; };
+		B99137C828832A0800588446 /* LocalizationUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalizationUtil.m; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -530,6 +533,8 @@
 			isa = PBXGroup;
 			children = (
 				B99137A02881F23A00588446 /* Core.strings */,
+				B99137C728832A0800588446 /* LocalizationUtil.h */,
+				B99137C828832A0800588446 /* LocalizationUtil.m */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -841,6 +846,7 @@
 				B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */,
 				B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */,
 				B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */,
+				B99137C928832A0800588446 /* LocalizationUtil.m in Sources */,
 				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
 				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
 				B99137952881D62C00588446 /* CpuEngineCell.m in Sources */,
