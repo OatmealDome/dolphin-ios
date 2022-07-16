@@ -269,9 +269,9 @@
 			children = (
 				B9D93893283ECD6F00B290FC /* Controls */,
 				B933EDC527F8E8D6004D7DD7 /* Emulation */,
+				B99137C62883290000588446 /* Localization */,
 				B93986F9287F4592008E8E47 /* Settings */,
 				B900A7C327F4D44D000361DD /* SoftwareList */,
-				B99137A02881F23A00588446 /* Core.strings */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -526,6 +526,14 @@
 			path = Tools;
 			sourceTree = "<group>";
 		};
+		B99137C62883290000588446 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				B99137A02881F23A00588446 /* Core.strings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 		B9D93890283DE62700B290FC /* Emulation */ = {
 			isa = PBXGroup;
 			children = (
@@ -772,7 +780,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "python3 \"$PROJECT_DIR/Project/Scripts/UpdateCoreStrings.py\" \"$PROJECT_DIR/../../../Languages/po/\" \"$PROJECT_DIR/Common/UI/\"\n";
+			shellScript = "python3 \"$PROJECT_DIR/Project/Scripts/UpdateCoreStrings.py\" \"$PROJECT_DIR/../../../Languages/po/\" \"$PROJECT_DIR/Common/UI/Localization\"\n";
 		};
 		B99137B428829F1400588446 /* Transfer Core Strings to Storyboard Strings */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -790,7 +798,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "python3 \"$PROJECT_DIR/Project/Scripts/TransferCoreStringsToStoryboard.py\" \"$PROJECT_DIR/DolphiniOS\" \"$PROJECT_DIR/Common/UI\"\n";
+			shellScript = "python3 \"$PROJECT_DIR/Project/Scripts/TransferCoreStringsToStoryboard.py\" \"$PROJECT_DIR/DolphiniOS\" \"$PROJECT_DIR/Common/UI/Localization/\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
