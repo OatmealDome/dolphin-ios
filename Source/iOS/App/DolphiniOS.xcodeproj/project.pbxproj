@@ -69,6 +69,7 @@
 		B9DC5FA828849478004BD94A /* GraphicsSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC5FA728849478004BD94A /* GraphicsSettings.storyboard */; };
 		B9DC5FAB28849535004BD94A /* GraphicsRootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */; };
 		B9DC5FAF28849640004BD94A /* GraphicsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FAE28849640004BD94A /* GraphicsTabViewController.m */; };
+		B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -216,6 +217,8 @@
 		B9DC5FAE28849640004BD94A /* GraphicsTabViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphicsTabViewController.m; sourceTree = "<group>"; };
 		B9DC5FB42884A563004BD94A /* GraphicsBoolCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsBoolCell.h; sourceTree = "<group>"; };
 		B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsBoolCell.mm; sourceTree = "<group>"; };
+		B9DC5FB72884CB7C004BD94A /* GraphicsChoiceCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsChoiceCell.h; sourceTree = "<group>"; };
+		B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsChoiceCell.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -638,6 +641,8 @@
 			children = (
 				B9DC5FB42884A563004BD94A /* GraphicsBoolCell.h */,
 				B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */,
+				B9DC5FB72884CB7C004BD94A /* GraphicsChoiceCell.h */,
+				B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */,
 				B9DC5FA928849535004BD94A /* GraphicsRootViewController.h */,
 				B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */,
 				B9DC5FAD28849640004BD94A /* GraphicsTabViewController.h */,
