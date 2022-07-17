@@ -853,6 +853,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */,
+				B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */,
 				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
