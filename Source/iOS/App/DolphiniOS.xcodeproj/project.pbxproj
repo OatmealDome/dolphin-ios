@@ -68,6 +68,7 @@
 		B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0727EFBD2F0084DAA4 /* LaunchScreen.storyboard */; };
 		B9DC5FA828849478004BD94A /* GraphicsSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC5FA728849478004BD94A /* GraphicsSettings.storyboard */; };
 		B9DC5FAB28849535004BD94A /* GraphicsRootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */; };
+		B9DC5FAF28849640004BD94A /* GraphicsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FAE28849640004BD94A /* GraphicsTabViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -211,6 +212,8 @@
 		B9DC5FA728849478004BD94A /* GraphicsSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = GraphicsSettings.storyboard; sourceTree = "<group>"; };
 		B9DC5FA928849535004BD94A /* GraphicsRootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsRootViewController.h; sourceTree = "<group>"; };
 		B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsRootViewController.mm; sourceTree = "<group>"; };
+		B9DC5FAD28849640004BD94A /* GraphicsTabViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsTabViewController.h; sourceTree = "<group>"; };
+		B9DC5FAE28849640004BD94A /* GraphicsTabViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphicsTabViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -633,6 +636,8 @@
 			children = (
 				B9DC5FA928849535004BD94A /* GraphicsRootViewController.h */,
 				B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */,
+				B9DC5FAD28849640004BD94A /* GraphicsTabViewController.h */,
+				B9DC5FAE28849640004BD94A /* GraphicsTabViewController.m */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";
@@ -867,6 +872,7 @@
 				B9DC5FAB28849535004BD94A /* GraphicsRootViewController.mm in Sources */,
 				B9447B0128418F2600BC9110 /* TCJoystick.swift in Sources */,
 				B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */,
+				B9DC5FAF28849640004BD94A /* GraphicsTabViewController.m in Sources */,
 				B9398724287FFBEC008E8E47 /* ConfigSoundViewController.mm in Sources */,
 				B9447B072841906000BC9110 /* TCView.swift in Sources */,
 				B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */,
