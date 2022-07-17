@@ -214,6 +214,8 @@
 		B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsRootViewController.mm; sourceTree = "<group>"; };
 		B9DC5FAD28849640004BD94A /* GraphicsTabViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsTabViewController.h; sourceTree = "<group>"; };
 		B9DC5FAE28849640004BD94A /* GraphicsTabViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphicsTabViewController.m; sourceTree = "<group>"; };
+		B9DC5FB42884A563004BD94A /* GraphicsBoolCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsBoolCell.h; sourceTree = "<group>"; };
+		B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsBoolCell.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -634,6 +636,8 @@
 		B9DC5FA52884945C004BD94A /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				B9DC5FB42884A563004BD94A /* GraphicsBoolCell.h */,
+				B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */,
 				B9DC5FA928849535004BD94A /* GraphicsRootViewController.h */,
 				B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */,
 				B9DC5FAD28849640004BD94A /* GraphicsTabViewController.h */,
@@ -882,6 +886,7 @@
 				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
 				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
 				B99137952881D62C00588446 /* CpuEngineCell.m in Sources */,
+				B9DC5FB62884A563004BD94A /* GraphicsBoolCell.mm in Sources */,
 				B9D938A728418AFE00B290FC /* TCManagerInterface.mm in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
 				B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */,
