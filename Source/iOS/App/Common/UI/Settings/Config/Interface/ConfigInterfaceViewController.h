@@ -9,11 +9,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ConfigInterfaceViewController : UITableViewController
 
-@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* namesSwitch;
-@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* coversSwitch;
-@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* panicHandlersSwitch;
-@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* stopSwitch;
-@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* osdMessagesSwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* namesSwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* coversSwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* panicHandlersSwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* stopSwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* osdMessagesSwitch;
 
 @end
 

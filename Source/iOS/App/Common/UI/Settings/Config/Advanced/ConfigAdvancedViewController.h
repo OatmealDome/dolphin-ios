@@ -10,16 +10,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ConfigAdvancedViewController : UITableViewController
 
 @property (weak, nonatomic) IBOutlet UILabel* engineLabel;
-@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* mmuSwitch;
-@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* cpuClockSwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* mmuSwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* cpuClockSwitch;
 @property (weak, nonatomic) IBOutlet UISlider* cpuClockSlider;
 @property (weak, nonatomic) IBOutlet UILabel* cpuClockLabel;
-@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* memorySwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* memorySwitch;
 @property (weak, nonatomic) IBOutlet UISlider* memOneSlider;
 @property (weak, nonatomic) IBOutlet UILabel* memOneLabel;
 @property (weak, nonatomic) IBOutlet UISlider* memTwoSlider;
 @property (weak, nonatomic) IBOutlet UILabel* memTwoLabel;
-@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* rtcSwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* rtcSwitch;
 @property (weak, nonatomic) IBOutlet UIDatePicker* rtcPicker;
 
 @end

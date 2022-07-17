@@ -9,7 +9,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ConfigGameCubeViewController : UITableViewController
 
-@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* mainMenuSwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* mainMenuSwitch;
 @property (weak, nonatomic) IBOutlet UILabel* languageLabel;
 
 @end
