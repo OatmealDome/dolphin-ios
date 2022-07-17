@@ -9,6 +9,8 @@
 #import "Core/HW/SystemTimers.h"
 #import "Core/PowerPC/PowerPC.h"
 
+#import "LocalizationUtil.h"
+
 @interface ConfigAdvancedViewController ()
 
 @end
@@ -45,7 +47,7 @@
       break;
   }
   
-  self.engineLabel.text = cpuCore;
+  self.engineLabel.text = DOLCoreLocalizedString(cpuCore);
   
   self.mmuSwitch.on = Config::Get(Config::MAIN_MMU);
   [self.mmuSwitch addValueChangedTarget:self action:@selector(mmuChanged)];
@@ -132,6 +134,7 @@
 }
 
 - (void)setMemOneLabel {
+  // TODO: "MB" isn't applicable to all language, but there isn't a good Core string to use here...
   self.memOneLabel.text = [NSString stringWithFormat:@"%d MB", Config::Get(Config::MAIN_MEM1_SIZE) / 0x100000];
 }
 
@@ -142,6 +145,7 @@
 }
 
 - (void)setMemTwoLabel {
+  // TODO: See comment on MEM1 above.
   self.memTwoLabel.text = [NSString stringWithFormat:@"%d MB", Config::Get(Config::MAIN_MEM2_SIZE) / 0x100000];
 }
 
