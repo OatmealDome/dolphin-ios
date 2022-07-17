@@ -24,3 +24,6 @@
 
 /* Class = "UITabBarItem"; title = "Settings"; ObjectID = "xtB-7c-6An"; */
 "xtB-7c-6An.title" = "Settings";
+
+/* Class = "UILabel"; text = "Graphics"; ObjectID = "bgK-44-TnF"; */
+"bgK-44-TnF.text" = "Graphics";

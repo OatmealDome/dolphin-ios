@@ -66,6 +66,8 @@
 		B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */; };
 		B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */; };
 		B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC3E0727EFBD2F0084DAA4 /* LaunchScreen.storyboard */; };
+		B9DC5FA828849478004BD94A /* GraphicsSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC5FA728849478004BD94A /* GraphicsSettings.storyboard */; };
+		B9DC5FAB28849535004BD94A /* GraphicsRootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -206,6 +208,9 @@
 		B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B9DC3E0827EFBD2F0084DAA4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B9DC3E0A27EFBD2F0084DAA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B9DC5FA728849478004BD94A /* GraphicsSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = GraphicsSettings.storyboard; sourceTree = "<group>"; };
+		B9DC5FA928849535004BD94A /* GraphicsRootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsRootViewController.h; sourceTree = "<group>"; };
+		B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsRootViewController.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -337,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				B93986FD287F8F0F008E8E47 /* Config */,
+				B9DC5FA628849467004BD94A /* Graphics */,
 				B99137AE28827AD200588446 /* SettingsRoot.storyboard */,
 			);
 			path = Settings;
@@ -346,6 +352,7 @@
 			isa = PBXGroup;
 			children = (
 				B9398700287F98E7008E8E47 /* Config */,
+				B9DC5FA52884945C004BD94A /* Graphics */,
 				B93986FA287F45A3008E8E47 /* SettingsRootViewController.swift */,
 			);
 			path = Settings;
@@ -621,6 +628,23 @@
 			path = DolphiniOS;
 			sourceTree = "<group>";
 		};
+		B9DC5FA52884945C004BD94A /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				B9DC5FA928849535004BD94A /* GraphicsRootViewController.h */,
+				B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */,
+			);
+			path = Graphics;
+			sourceTree = "<group>";
+		};
+		B9DC5FA628849467004BD94A /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				B9DC5FA728849478004BD94A /* GraphicsSettings.storyboard */,
+			);
+			path = Graphics;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -697,6 +721,7 @@
 				B950CA942846A13100F45219 /* Sys in Resources */,
 				B99137BF288327AC00588446 /* ConfigSettings.storyboard in Resources */,
 				B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */,
+				B9DC5FA828849478004BD94A /* GraphicsSettings.storyboard in Resources */,
 				B99137B52882A58000588446 /* SoftwareList.storyboard in Resources */,
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
@@ -839,6 +864,7 @@
 				B9447B052841901200BC9110 /* TCGameCubePad.swift in Sources */,
 				B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */,
 				B900A7D527F61F3A000361DD /* GameFileCacheManager.mm in Sources */,
+				B9DC5FAB28849535004BD94A /* GraphicsRootViewController.mm in Sources */,
 				B9447B0128418F2600BC9110 /* TCJoystick.swift in Sources */,
 				B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */,
 				B9398724287FFBEC008E8E47 /* ConfigSoundViewController.mm in Sources */,
