@@ -7,6 +7,7 @@
 #import "Core/PowerPC/PowerPC.h"
 
 #import "CpuEngineCell.h"
+#import "LocalizationUtil.h"
 
 @interface CpuEngineViewController ()
 
@@ -63,7 +64,7 @@
       break;
   }
   
-  cell.engineCell.text = cpuCore;
+  cell.engineCell.text = DOLCoreLocalizedString(cpuCore);
   
   if (indexPath.row == _lastSelected) {
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
