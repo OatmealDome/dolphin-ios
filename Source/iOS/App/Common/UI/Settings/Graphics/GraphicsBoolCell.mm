@@ -10,11 +10,11 @@
   bool _shouldReverse;
 }
 
-- (void)updateWithConfig:(const Config::Info<bool>&) setting {
-  [self updateWithConfig:setting shouldReverse:false];
+- (void)registerSetting:(const Config::Info<bool>&) setting {
+  [self registerSetting:setting shouldReverse:false];
 }
 
-- (void)updateWithConfig:(const Config::Info<bool>&) setting shouldReverse:(bool)reverse {
+- (void)registerSetting:(const Config::Info<bool>&) setting shouldReverse:(bool)reverse {
   _setting = &setting;
   _shouldReverse = reverse;
   

@@ -17,8 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel* boolLabel;
 @property (weak, nonatomic) IBOutlet DOLSwitch* boolSwitch;
 
-- (void)updateWithConfig:(const Config::Info<bool>&) setting;
-- (void)updateWithConfig:(const Config::Info<bool>&) setting shouldReverse:(bool)reverse;
+- (void)registerSetting:(const Config::Info<bool>&) setting;
+- (void)registerSetting:(const Config::Info<bool>&) setting shouldReverse:(bool)reverse;
 
 @end
 
