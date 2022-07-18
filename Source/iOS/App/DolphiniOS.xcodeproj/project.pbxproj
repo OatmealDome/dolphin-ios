@@ -21,6 +21,7 @@
 		B900A7D527F61F3A000361DD /* GameFileCacheManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B900A7D427F61F3A000361DD /* GameFileCacheManager.mm */; };
 		B904ACBE28851C5C008B6BE9 /* GraphicsBackendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904ACBD28851C5C008B6BE9 /* GraphicsBackendCell.m */; };
 		B904ACC128851C6F008B6BE9 /* GraphicsBackendViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACC028851C6F008B6BE9 /* GraphicsBackendViewController.mm */; };
+		B904ACC4288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACC3288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -110,6 +111,8 @@
 		B904ACBD28851C5C008B6BE9 /* GraphicsBackendCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphicsBackendCell.m; sourceTree = "<group>"; };
 		B904ACBF28851C6F008B6BE9 /* GraphicsBackendViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsBackendViewController.h; sourceTree = "<group>"; };
 		B904ACC028851C6F008B6BE9 /* GraphicsBackendViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsBackendViewController.mm; sourceTree = "<group>"; };
+		B904ACC2288524D9008B6BE9 /* GraphicsAspectRatioViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsAspectRatioViewController.h; sourceTree = "<group>"; };
+		B904ACC3288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsAspectRatioViewController.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -673,6 +676,8 @@
 		B9DC5FB028849798004BD94A /* General */ = {
 			isa = PBXGroup;
 			children = (
+				B904ACC2288524D9008B6BE9 /* GraphicsAspectRatioViewController.h */,
+				B904ACC3288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm */,
 				B904ACBC28851C5C008B6BE9 /* GraphicsBackendCell.h */,
 				B904ACBD28851C5C008B6BE9 /* GraphicsBackendCell.m */,
 				B904ACBF28851C6F008B6BE9 /* GraphicsBackendViewController.h */,
@@ -919,6 +924,7 @@
 				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
 				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
 				B99137952881D62C00588446 /* CpuEngineCell.m in Sources */,
+				B904ACC4288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm in Sources */,
 				B9DC5FB62884A563004BD94A /* GraphicsBoolCell.mm in Sources */,
 				B9D938A728418AFE00B290FC /* TCManagerInterface.mm in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
