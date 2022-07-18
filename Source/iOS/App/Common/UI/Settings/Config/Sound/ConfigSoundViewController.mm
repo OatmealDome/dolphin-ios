@@ -22,7 +22,7 @@
   int volume = Config::Get(Config::MAIN_AUDIO_VOLUME);
   self.volumeSlider.value = volume;
   
-  [self volumeChanged:self];
+  [self updateVolumeLabel];
   
   bool stretchingEnabled = Config::Get(Config::MAIN_AUDIO_STRETCH);
   self.stretchingSwitch.on = stretchingEnabled;
@@ -30,13 +30,17 @@
   
   self.bufferSizeSlider.value = Config::Get(Config::MAIN_AUDIO_STRETCH_LATENCY);
   
-  [self bufferSizeChanged:self];
+  [self updateBufferSizeLabel];
 }
 
 - (IBAction)volumeChanged:(id)sender {
-  int volume = (int)self.volumeSlider.value;
+  Config::SetBaseOrCurrent(Config::MAIN_AUDIO_VOLUME, (int)self.volumeSlider.value);
   
-  Config::SetBaseOrCurrent(Config::MAIN_AUDIO_VOLUME, volume);
+  [self updateVolumeLabel];
+}
+
+- (void)updateVolumeLabel {
+  int volume = Config::Get(Config::MAIN_AUDIO_VOLUME);
   self.volumeLabel.text = [NSString stringWithFormat:@"%d%%", volume];
 }
 
@@ -48,9 +52,13 @@
 }
 
 - (IBAction)bufferSizeChanged:(id)sender {
-  int bufferSize = (int)self.bufferSizeSlider.value;
+  Config::SetBaseOrCurrent(Config::MAIN_AUDIO_STRETCH_LATENCY, (int)self.bufferSizeSlider.value);
   
-  Config::SetBaseOrCurrent(Config::MAIN_AUDIO_STRETCH_LATENCY, bufferSize);
+  [self updateBufferSizeLabel];
+}
+
+- (void)updateBufferSizeLabel {
+  int bufferSize = Config::Get(Config::MAIN_AUDIO_STRETCH_LATENCY);
   self.bufferSizeLabel.text = [NSString stringWithFormat:DOLCoreLocalizedStringWithArgs(@"%1 ms", @"d"), bufferSize];
 }
 
