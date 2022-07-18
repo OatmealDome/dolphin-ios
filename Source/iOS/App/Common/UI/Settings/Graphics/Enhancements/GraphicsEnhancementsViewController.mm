@@ -31,8 +31,13 @@
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
   
-  NSString* resolution = [NSString stringWithFormat:@"%dx", Config::Get(Config::GFX_EFB_SCALE)];
-  self.resolutionCell.choiceSettingLabel.text = resolution;
+  const int efb_scale = Config::Get(Config::GFX_EFB_SCALE);
+  if (efb_scale > 0) {
+    NSString* resolution = [NSString stringWithFormat:@"%dx", efb_scale];
+    self.resolutionCell.choiceSettingLabel.text = resolution;
+  } else {
+    self.resolutionCell.choiceSettingLabel.text = DOLCoreLocalizedString(@"Auto");
+  }
   
   NSString* filtering;
   switch (Config::Get(Config::GFX_ENHANCE_MAX_ANISOTROPY)) {
