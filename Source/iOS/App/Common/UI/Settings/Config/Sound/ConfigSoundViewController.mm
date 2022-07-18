@@ -28,6 +28,7 @@
   [self updateVolumeLabel];
   
   self.bufferSizeSlider.value = Config::Get(Config::MAIN_AUDIO_STRETCH_LATENCY);
+  self.bufferSizeSlider.enabled = stretchingEnabled;
   
   [self updateBufferSizeLabel];
 }
