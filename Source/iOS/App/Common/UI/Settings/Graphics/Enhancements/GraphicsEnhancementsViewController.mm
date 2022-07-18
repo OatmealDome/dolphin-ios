@@ -14,6 +14,8 @@
 @implementation GraphicsEnhancementsViewController
 
 - (void)viewDidLoad {
+  [super viewDidLoad];
+  
   [self.resolutionCell registerSetting:Config::GFX_EFB_SCALE];
   [self.filteringCell registerSetting:Config::GFX_ENHANCE_MAX_ANISOTROPY];
   [self.scaledEfbCell registerSetting:Config::GFX_HACK_COPY_EFB_SCALED];
@@ -27,6 +29,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  
   NSString* resolution = [NSString stringWithFormat:@"%dx", Config::Get(Config::GFX_EFB_SCALE)];
   self.resolutionCell.choiceSettingLabel.text = resolution;
   
