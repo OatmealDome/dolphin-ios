@@ -18,37 +18,6 @@
 @implementation ConfigAdvancedViewController
 
 - (void)viewDidLoad {
-  // We use the compact style in the storyboard to maintain compatibilty with iOS 13.
-  // If iOS 14 APIs are available, we can make the UI look fancier with the inline style.
-  if (@available(iOS 14, *)) {
-    self.rtcPicker.preferredDatePickerStyle = UIDatePickerStyleInline;
-  }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
-  
-  NSString* cpuCore;
-  switch (Config::Get(Config::MAIN_CPU_CORE)) {
-    case PowerPC::CPUCore::Interpreter:
-      cpuCore = @"Interpreter (slowest)";
-      break;
-    case PowerPC::CPUCore::CachedInterpreter:
-      cpuCore = @"Cached Interpreter (slower)";
-      break;
-    case PowerPC::CPUCore::JIT64:
-      cpuCore = @"JIT Recompiler for x86-64 (recommended)";
-      break;
-    case PowerPC::CPUCore::JITARM64:
-      cpuCore = @"JIT Recompiler for ARM64 (recommended)";
-      break;
-    default:
-      cpuCore = @"Error";
-      break;
-  }
-  
-  self.engineLabel.text = DOLCoreLocalizedString(cpuCore);
-  
   self.mmuSwitch.on = Config::Get(Config::MAIN_MMU);
   [self.mmuSwitch addValueChangedTarget:self action:@selector(mmuChanged)];
   
@@ -79,6 +48,37 @@
   self.rtcPicker.date = [NSDate dateWithTimeIntervalSince1970:Config::Get(Config::MAIN_CUSTOM_RTC_VALUE)];
   self.rtcPicker.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
   self.rtcPicker.enabled = self.rtcSwitch.on;
+  
+  // We use the compact style in the storyboard to maintain compatibilty with iOS 13.
+  // If iOS 14 APIs are available, we can make the UI look fancier with the inline style.
+  if (@available(iOS 14, *)) {
+    self.rtcPicker.preferredDatePickerStyle = UIDatePickerStyleInline;
+  }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  
+  NSString* cpuCore;
+  switch (Config::Get(Config::MAIN_CPU_CORE)) {
+    case PowerPC::CPUCore::Interpreter:
+      cpuCore = @"Interpreter (slowest)";
+      break;
+    case PowerPC::CPUCore::CachedInterpreter:
+      cpuCore = @"Cached Interpreter (slower)";
+      break;
+    case PowerPC::CPUCore::JIT64:
+      cpuCore = @"JIT Recompiler for x86-64 (recommended)";
+      break;
+    case PowerPC::CPUCore::JITARM64:
+      cpuCore = @"JIT Recompiler for ARM64 (recommended)";
+      break;
+    default:
+      cpuCore = @"Error";
+      break;
+  }
+  
+  self.engineLabel.text = DOLCoreLocalizedString(cpuCore);
 }
 
 - (void)mmuChanged {
