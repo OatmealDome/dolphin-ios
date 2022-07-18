@@ -30,6 +30,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  
   std::string currentBackend = Config::Get(Config::MAIN_GFX_BACKEND);
   
   NSString* localizableBackend = nil;
