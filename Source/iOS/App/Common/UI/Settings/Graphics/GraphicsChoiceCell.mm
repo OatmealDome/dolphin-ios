@@ -10,6 +10,11 @@
 }
 
 - (void)registerSetting:(const Config::Info<int>&) setting {
+  if (_setting != nullptr) {
+    [NSException raise:@"DOLCellAlreadyRegisteredException" format:@"GraphicsChoiceCell already registered"];
+    return;
+  }
+  
   _setting = &setting;
   
   UIFont* font;
