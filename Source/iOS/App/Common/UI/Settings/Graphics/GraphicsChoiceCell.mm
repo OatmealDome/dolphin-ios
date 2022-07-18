@@ -9,7 +9,7 @@
   const Config::Info<int>* _setting;
 }
 
-- (void)updateWithConfig:(const Config::Info<int>&) setting {
+- (void)registerSetting:(const Config::Info<int>&) setting {
   _setting = &setting;
   
   UIFont* font;

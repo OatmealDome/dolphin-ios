@@ -15,7 +15,7 @@ class Info;
 @property (weak, nonatomic) IBOutlet UILabel* choiceNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel* choiceSettingLabel;
 
-- (void)updateWithConfig:(const Config::Info<int>&) setting;
+- (void)registerSetting:(const Config::Info<int>&) setting;
 
 @end
 
