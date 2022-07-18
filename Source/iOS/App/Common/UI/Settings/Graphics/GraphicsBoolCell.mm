@@ -15,6 +15,11 @@
 }
 
 - (void)registerSetting:(const Config::Info<bool>&) setting shouldReverse:(bool)reverse {
+  if (_setting != nullptr) {
+    [NSException raise:@"DOLCellAlreadyRegisteredException" format:@"GraphicsBoolCell already registered"];
+    return;
+  }
+  
   _setting = &setting;
   _shouldReverse = reverse;
   
