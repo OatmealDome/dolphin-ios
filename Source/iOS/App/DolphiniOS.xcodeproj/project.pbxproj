@@ -27,6 +27,7 @@
 		B904ACCF288555E8008B6BE9 /* InternalResolutionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACCE288555E8008B6BE9 /* InternalResolutionViewController.mm */; };
 		B904ACD22885561E008B6BE9 /* InternalResolutionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904ACD12885561E008B6BE9 /* InternalResolutionCell.m */; };
 		B904ACD52885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACD42885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm */; };
+		B904ACD92885E7DE008B6BE9 /* GraphicsHacksViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACD82885E7DE008B6BE9 /* GraphicsHacksViewController.mm */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -128,6 +129,8 @@
 		B904ACD12885561E008B6BE9 /* InternalResolutionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InternalResolutionCell.m; sourceTree = "<group>"; };
 		B904ACD32885D2C4008B6BE9 /* AnisotropicFilteringViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnisotropicFilteringViewController.h; sourceTree = "<group>"; };
 		B904ACD42885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AnisotropicFilteringViewController.mm; sourceTree = "<group>"; };
+		B904ACD72885E7DE008B6BE9 /* GraphicsHacksViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsHacksViewController.h; sourceTree = "<group>"; };
+		B904ACD82885E7DE008B6BE9 /* GraphicsHacksViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsHacksViewController.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -366,6 +369,15 @@
 				B904ACCE288555E8008B6BE9 /* InternalResolutionViewController.mm */,
 			);
 			path = Enhancements;
+			sourceTree = "<group>";
+		};
+		B904ACD62885E7B5008B6BE9 /* Hacks */ = {
+			isa = PBXGroup;
+			children = (
+				B904ACD72885E7DE008B6BE9 /* GraphicsHacksViewController.h */,
+				B904ACD82885E7DE008B6BE9 /* GraphicsHacksViewController.mm */,
+			);
+			path = Hacks;
 			sourceTree = "<group>";
 		};
 		B933EDBB27F6A5C7004D7DD7 /* Swift */ = {
@@ -684,6 +696,7 @@
 			children = (
 				B904ACC828854768008B6BE9 /* Enhancements */,
 				B9DC5FB028849798004BD94A /* General */,
+				B904ACD62885E7B5008B6BE9 /* Hacks */,
 				B9DC5FB42884A563004BD94A /* GraphicsBoolCell.h */,
 				B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */,
 				B9DC5FB72884CB7C004BD94A /* GraphicsChoiceCell.h */,
@@ -935,6 +948,7 @@
 				B904ACBE28851C5C008B6BE9 /* GraphicsBackendCell.m in Sources */,
 				B939872E2880896D008E8E47 /* ConfigGameCubeViewController.mm in Sources */,
 				B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */,
+				B904ACD92885E7DE008B6BE9 /* GraphicsHacksViewController.mm in Sources */,
 				B900A7CA27F4DA97000361DD /* SoftwareListViewController.mm in Sources */,
 				B9DC5FB3288497B0004BD94A /* GraphicsGeneralViewController.mm in Sources */,
 				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
