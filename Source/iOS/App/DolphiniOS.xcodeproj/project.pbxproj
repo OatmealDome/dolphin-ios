@@ -69,6 +69,7 @@
 		B9DC5FA828849478004BD94A /* GraphicsSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9DC5FA728849478004BD94A /* GraphicsSettings.storyboard */; };
 		B9DC5FAB28849535004BD94A /* GraphicsRootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */; };
 		B9DC5FAF28849640004BD94A /* GraphicsTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FAE28849640004BD94A /* GraphicsTabViewController.m */; };
+		B9DC5FB3288497B0004BD94A /* GraphicsGeneralViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB2288497B0004BD94A /* GraphicsGeneralViewController.mm */; };
 		B9DC5FB62884A563004BD94A /* GraphicsBoolCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */; };
 		B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */; };
 /* End PBXBuildFile section */
@@ -216,6 +217,8 @@
 		B9DC5FAA28849535004BD94A /* GraphicsRootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsRootViewController.mm; sourceTree = "<group>"; };
 		B9DC5FAD28849640004BD94A /* GraphicsTabViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsTabViewController.h; sourceTree = "<group>"; };
 		B9DC5FAE28849640004BD94A /* GraphicsTabViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphicsTabViewController.m; sourceTree = "<group>"; };
+		B9DC5FB1288497B0004BD94A /* GraphicsGeneralViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsGeneralViewController.h; sourceTree = "<group>"; };
+		B9DC5FB2288497B0004BD94A /* GraphicsGeneralViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsGeneralViewController.mm; sourceTree = "<group>"; };
 		B9DC5FB42884A563004BD94A /* GraphicsBoolCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsBoolCell.h; sourceTree = "<group>"; };
 		B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsBoolCell.mm; sourceTree = "<group>"; };
 		B9DC5FB72884CB7C004BD94A /* GraphicsChoiceCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsChoiceCell.h; sourceTree = "<group>"; };
@@ -640,6 +643,7 @@
 		B9DC5FA52884945C004BD94A /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				B9DC5FB028849798004BD94A /* General */,
 				B9DC5FB42884A563004BD94A /* GraphicsBoolCell.h */,
 				B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */,
 				B9DC5FB72884CB7C004BD94A /* GraphicsChoiceCell.h */,
@@ -658,6 +662,15 @@
 				B9DC5FA728849478004BD94A /* GraphicsSettings.storyboard */,
 			);
 			path = Graphics;
+			sourceTree = "<group>";
+		};
+		B9DC5FB028849798004BD94A /* General */ = {
+			isa = PBXGroup;
+			children = (
+				B9DC5FB1288497B0004BD94A /* GraphicsGeneralViewController.h */,
+				B9DC5FB2288497B0004BD94A /* GraphicsGeneralViewController.mm */,
+			);
+			path = General;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -873,6 +886,7 @@
 				B939872E2880896D008E8E47 /* ConfigGameCubeViewController.mm in Sources */,
 				B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */,
 				B900A7CA27F4DA97000361DD /* SoftwareListViewController.mm in Sources */,
+				B9DC5FB3288497B0004BD94A /* GraphicsGeneralViewController.mm in Sources */,
 				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
 				B9398713287FDF23008E8E47 /* FallbackRegionViewController.mm in Sources */,
 				B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */,
