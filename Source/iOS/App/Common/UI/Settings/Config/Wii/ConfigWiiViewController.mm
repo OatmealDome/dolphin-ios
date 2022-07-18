@@ -14,8 +14,8 @@
 
 @implementation ConfigWiiViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
+- (void)viewDidLoad {
+  [super viewDidLoad];
   
   self.palSwitch.on = Config::Get(Config::SYSCONF_PAL60);
   [self.palSwitch addValueChangedTarget:self action:@selector(palChanged)];
@@ -25,6 +25,26 @@
   
   self.usbKeyboardSwitch.on = Config::Get(Config::MAIN_WII_KEYBOARD);
   [self.usbKeyboardSwitch addValueChangedTarget:self action:@selector(usbKeyboardChanged)];
+  
+  self.sdInsertedSwitch.on = Config::Get(Config::MAIN_WII_SD_CARD);
+  [self.sdInsertedSwitch addValueChangedTarget:self action:@selector(sdInsertedChanged)];
+  
+  self.sdWritesSwitch.on = Config::Get(Config::MAIN_ALLOW_SD_WRITES);
+  [self.sdWritesSwitch addValueChangedTarget:self action:@selector(sdWritesChanged)];
+  
+  self.sdSyncSwitch.on = Config::Get(Config::MAIN_WII_SD_CARD_ENABLE_FOLDER_SYNC);
+  [self.sdSyncSwitch addValueChangedTarget:self action:@selector(sdSyncChanged)];
+  
+  self.irSlider.value = Config::Get(Config::SYSCONF_SENSOR_BAR_SENSITIVITY);
+  
+  self.speakerVolumeSlider.value = Config::Get(Config::SYSCONF_SPEAKER_VOLUME);
+  
+  self.rumbleSwitch.on = Config::Get(Config::SYSCONF_WIIMOTE_MOTOR);
+  [self.rumbleSwitch addValueChangedTarget:self action:@selector(rumbleChanged)];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
   
   NSString* aspectRatio;
   if (Config::Get(Config::SYSCONF_WIDESCREEN)) {
@@ -92,15 +112,6 @@
   
   self.audioLabel.text = DOLCoreLocalizedString(audioMode);
   
-  self.sdInsertedSwitch.on = Config::Get(Config::MAIN_WII_SD_CARD);
-  [self.sdInsertedSwitch addValueChangedTarget:self action:@selector(sdInsertedChanged)];
-  
-  self.sdWritesSwitch.on = Config::Get(Config::MAIN_ALLOW_SD_WRITES);
-  [self.sdWritesSwitch addValueChangedTarget:self action:@selector(sdWritesChanged)];
-  
-  self.sdSyncSwitch.on = Config::Get(Config::MAIN_WII_SD_CARD_ENABLE_FOLDER_SYNC);
-  [self.sdSyncSwitch addValueChangedTarget:self action:@selector(sdSyncChanged)];
-  
   NSString* position;
   if (Config::Get(Config::SYSCONF_SENSOR_BAR_POSITION) == 0) {
     position = @"Bottom";
@@ -109,13 +120,6 @@
   }
   
   self.sensorBarLabel.text = DOLCoreLocalizedString(position);
-  
-  self.irSlider.value = Config::Get(Config::SYSCONF_SENSOR_BAR_SENSITIVITY);
-  
-  self.speakerVolumeSlider.value = Config::Get(Config::SYSCONF_SPEAKER_VOLUME);
-  
-  self.rumbleSwitch.on = Config::Get(Config::SYSCONF_WIIMOTE_MOTOR);
-  [self.rumbleSwitch addValueChangedTarget:self action:@selector(rumbleChanged)];
 }
 
 - (void)palChanged {
