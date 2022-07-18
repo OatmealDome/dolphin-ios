@@ -14,23 +14,28 @@
 
 @implementation ConfigSoundViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
+- (void)viewDidLoad {
+  [super viewDidLoad];
   
-  self.backendLabel.text = CppToFoundationString(Config::Get(Config::MAIN_AUDIO_BACKEND));
+  bool stretchingEnabled = Config::Get(Config::MAIN_AUDIO_STRETCH);
+  
+  self.stretchingSwitch.on = stretchingEnabled;
+  [self.stretchingSwitch addValueChangedTarget:self action:@selector(stretchingChanged)];
   
   int volume = Config::Get(Config::MAIN_AUDIO_VOLUME);
   self.volumeSlider.value = volume;
   
   [self updateVolumeLabel];
   
-  bool stretchingEnabled = Config::Get(Config::MAIN_AUDIO_STRETCH);
-  self.stretchingSwitch.on = stretchingEnabled;
-  [self.stretchingSwitch addValueChangedTarget:self action:@selector(stretchingChanged)];
-  
   self.bufferSizeSlider.value = Config::Get(Config::MAIN_AUDIO_STRETCH_LATENCY);
   
   [self updateBufferSizeLabel];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  
+  self.backendLabel.text = CppToFoundationString(Config::Get(Config::MAIN_AUDIO_BACKEND));
 }
 
 - (IBAction)volumeChanged:(id)sender {
