@@ -54,7 +54,12 @@
   bool stretchingEnabled = self.stretchingSwitch.on;
   
   Config::SetBaseOrCurrent(Config::MAIN_AUDIO_STRETCH, stretchingEnabled);
+  
   self.bufferSizeSlider.enabled = stretchingEnabled;
+  
+  // There is a bug on iOS 14+ where a UISlider won't update its appearance when enabled is toggled.
+  [self.bufferSizeSlider setNeedsLayout];
+  [self.bufferSizeSlider layoutIfNeeded];
 }
 
 - (IBAction)bufferSizeChanged:(id)sender {
