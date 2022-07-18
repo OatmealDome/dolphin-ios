@@ -12,8 +12,8 @@
 
 @implementation ConfigInterfaceViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
+- (void)viewDidLoad {
+  [super viewDidLoad];
   
   self.namesSwitch.on = Config::Get(Config::MAIN_USE_BUILT_IN_TITLE_DATABASE);
   [self.namesSwitch addValueChangedTarget:self action:@selector(namesChanged)];
