@@ -18,6 +18,8 @@
 @implementation ConfigAdvancedViewController
 
 - (void)viewDidLoad {
+  [super viewDidLoad];
+  
   self.mmuSwitch.on = Config::Get(Config::MAIN_MMU);
   [self.mmuSwitch addValueChangedTarget:self action:@selector(mmuChanged)];
   
