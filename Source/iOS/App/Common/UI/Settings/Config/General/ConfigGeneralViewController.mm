@@ -13,8 +13,8 @@
 
 @implementation ConfigGeneralViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
+- (void)viewDidLoad {
+  [super viewDidLoad];
   
   self.dualCoreSwitch.on = Config::Get(Config::MAIN_CPU_THREAD);
   [self.dualCoreSwitch addValueChangedTarget:self action:@selector(dualCoreChanged)];
@@ -27,6 +27,10 @@
   
   self.changeDiscsSwitch.on = Config::Get(Config::MAIN_AUTO_DISC_CHANGE);
   [self.changeDiscsSwitch addValueChangedTarget:self action:@selector(changeDiscsChanged)];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
   
   int speedLimit = Config::Get(Config::MAIN_EMULATION_SPEED) * 100;
   
