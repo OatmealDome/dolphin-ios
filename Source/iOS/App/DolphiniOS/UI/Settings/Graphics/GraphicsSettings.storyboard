@@ -754,6 +754,7 @@
                                         <connections>
                                             <outlet property="choiceNameLabel" destination="h3N-SC-79Q" id="Fo7-hS-DtR"/>
                                             <outlet property="choiceSettingLabel" destination="Ek7-iH-Byj" id="tMa-c2-h00"/>
+                                            <segue destination="UAn-Tm-f0P" kind="show" id="lYm-Mn-RtE"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="detailDisclosureButton" indentationWidth="10" id="R49-1I-GZB" customClass="GraphicsChoiceCell">
@@ -1065,6 +1066,53 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dGU-86-fAP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1425" y="2236"/>
+        </scene>
+        <!--Internal Resolution-->
+        <scene sceneID="EFR-Vn-Tdu">
+            <objects>
+                <tableViewController id="UAn-Tm-f0P" customClass="InternalResolutionViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="ucm-cM-ozl">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ResolutionCell" id="mRN-pw-YZ3" customClass="InternalResolutionCell">
+                                <rect key="frame" x="16" y="49.5" width="343" height="43"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mRN-pw-YZ3" id="1KX-xE-4WB">
+                                    <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Resolution" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="hcO-lQ-hLk">
+                                            <rect key="frame" x="16" y="11" width="311" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="hcO-lQ-hLk" firstAttribute="leading" secondItem="1KX-xE-4WB" secondAttribute="leadingMargin" id="2wf-tJ-iON"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="hcO-lQ-hLk" secondAttribute="bottom" id="81j-GZ-L8h"/>
+                                        <constraint firstItem="hcO-lQ-hLk" firstAttribute="top" secondItem="1KX-xE-4WB" secondAttribute="topMargin" id="L9t-aR-tng"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="hcO-lQ-hLk" secondAttribute="trailing" id="t0S-K8-wyH"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="resolutionLabel" destination="hcO-lQ-hLk" id="yll-p6-O1V"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="UAn-Tm-f0P" id="AWC-FJ-UBk"/>
+                            <outlet property="delegate" destination="UAn-Tm-f0P" id="m7A-fs-hdh"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Internal Resolution" largeTitleDisplayMode="never" id="QIU-Sb-PQP"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="p8e-bm-BQP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2366" y="2236"/>
         </scene>
     </scenes>
 </document>
