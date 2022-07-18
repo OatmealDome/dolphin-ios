@@ -22,6 +22,7 @@
 		B904ACBE28851C5C008B6BE9 /* GraphicsBackendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904ACBD28851C5C008B6BE9 /* GraphicsBackendCell.m */; };
 		B904ACC128851C6F008B6BE9 /* GraphicsBackendViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACC028851C6F008B6BE9 /* GraphicsBackendViewController.mm */; };
 		B904ACC4288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACC3288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm */; };
+		B904ACC728852708008B6BE9 /* GraphicsShaderModeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACC628852708008B6BE9 /* GraphicsShaderModeViewController.mm */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -113,6 +114,8 @@
 		B904ACC028851C6F008B6BE9 /* GraphicsBackendViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsBackendViewController.mm; sourceTree = "<group>"; };
 		B904ACC2288524D9008B6BE9 /* GraphicsAspectRatioViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsAspectRatioViewController.h; sourceTree = "<group>"; };
 		B904ACC3288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsAspectRatioViewController.mm; sourceTree = "<group>"; };
+		B904ACC528852708008B6BE9 /* GraphicsShaderModeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsShaderModeViewController.h; sourceTree = "<group>"; };
+		B904ACC628852708008B6BE9 /* GraphicsShaderModeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsShaderModeViewController.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -684,6 +687,8 @@
 				B904ACC028851C6F008B6BE9 /* GraphicsBackendViewController.mm */,
 				B9DC5FB1288497B0004BD94A /* GraphicsGeneralViewController.h */,
 				B9DC5FB2288497B0004BD94A /* GraphicsGeneralViewController.mm */,
+				B904ACC528852708008B6BE9 /* GraphicsShaderModeViewController.h */,
+				B904ACC628852708008B6BE9 /* GraphicsShaderModeViewController.mm */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -905,6 +910,7 @@
 				B9DC5FB3288497B0004BD94A /* GraphicsGeneralViewController.mm in Sources */,
 				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
 				B9398713287FDF23008E8E47 /* FallbackRegionViewController.mm in Sources */,
+				B904ACC728852708008B6BE9 /* GraphicsShaderModeViewController.mm in Sources */,
 				B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */,
 				B991378E28814BCD00588446 /* WiiSensorBarViewController.mm in Sources */,
 				B9447B052841901200BC9110 /* TCGameCubePad.swift in Sources */,
