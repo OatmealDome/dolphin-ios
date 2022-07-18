@@ -26,6 +26,7 @@
 		B904ACCB28854782008B6BE9 /* GraphicsEnhancementsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACCA28854782008B6BE9 /* GraphicsEnhancementsViewController.mm */; };
 		B904ACCF288555E8008B6BE9 /* InternalResolutionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACCE288555E8008B6BE9 /* InternalResolutionViewController.mm */; };
 		B904ACD22885561E008B6BE9 /* InternalResolutionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904ACD12885561E008B6BE9 /* InternalResolutionCell.m */; };
+		B904ACD52885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACD42885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -125,6 +126,8 @@
 		B904ACCE288555E8008B6BE9 /* InternalResolutionViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = InternalResolutionViewController.mm; sourceTree = "<group>"; };
 		B904ACD02885561E008B6BE9 /* InternalResolutionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InternalResolutionCell.h; sourceTree = "<group>"; };
 		B904ACD12885561E008B6BE9 /* InternalResolutionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InternalResolutionCell.m; sourceTree = "<group>"; };
+		B904ACD32885D2C4008B6BE9 /* AnisotropicFilteringViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnisotropicFilteringViewController.h; sourceTree = "<group>"; };
+		B904ACD42885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AnisotropicFilteringViewController.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -353,12 +356,14 @@
 		B904ACC828854768008B6BE9 /* Enhancements */ = {
 			isa = PBXGroup;
 			children = (
+				B904ACD32885D2C4008B6BE9 /* AnisotropicFilteringViewController.h */,
+				B904ACD42885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm */,
+				B904ACC928854782008B6BE9 /* GraphicsEnhancementsViewController.h */,
+				B904ACCA28854782008B6BE9 /* GraphicsEnhancementsViewController.mm */,
 				B904ACD02885561E008B6BE9 /* InternalResolutionCell.h */,
 				B904ACD12885561E008B6BE9 /* InternalResolutionCell.m */,
 				B904ACCD288555E8008B6BE9 /* InternalResolutionViewController.h */,
 				B904ACCE288555E8008B6BE9 /* InternalResolutionViewController.mm */,
-				B904ACC928854782008B6BE9 /* GraphicsEnhancementsViewController.h */,
-				B904ACCA28854782008B6BE9 /* GraphicsEnhancementsViewController.mm */,
 			);
 			path = Enhancements;
 			sourceTree = "<group>";
@@ -945,6 +950,7 @@
 				B9447B0128418F2600BC9110 /* TCJoystick.swift in Sources */,
 				B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */,
 				B9DC5FAF28849640004BD94A /* GraphicsTabViewController.m in Sources */,
+				B904ACD52885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm in Sources */,
 				B904ACC128851C6F008B6BE9 /* GraphicsBackendViewController.mm in Sources */,
 				B904ACCF288555E8008B6BE9 /* InternalResolutionViewController.mm in Sources */,
 				B9398724287FFBEC008E8E47 /* ConfigSoundViewController.mm in Sources */,
