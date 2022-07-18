@@ -16,11 +16,15 @@
 
 @implementation ConfigGameCubeViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
+- (void)viewDidLoad {
+  [super viewDidLoad];
   
   self.mainMenuSwitch.on = Config::Get(Config::MAIN_SKIP_IPL);
   [self.mainMenuSwitch addValueChangedTarget:self action:@selector(mainMenuChanged)];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
   
   bool haveMenu = false;
   for (const std::string dir : {USA_DIR, JAP_DIR, EUR_DIR}) {
