@@ -3,18 +3,10 @@
 
 #import "DOLUIKitSwitch.h"
 
-@implementation DOLUIKitSwitch {
-  BOOL _registeredValueChangedTarget;
-}
+@implementation DOLUIKitSwitch
 
 - (void)addValueChangedTarget:(nullable id)target action:(SEL)action {
-  if (_registeredValueChangedTarget) {
-    return;
-  }
-  
   [self addTarget:target action:action forControlEvents:UIControlEventValueChanged];
-  
-  _registeredValueChangedTarget = true;
 }
 
 @end
