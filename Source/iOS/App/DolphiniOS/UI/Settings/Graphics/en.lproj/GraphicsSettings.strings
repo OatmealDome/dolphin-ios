@@ -1,0 +1,263 @@
+/* Class = "UILabel"; text = "Specialized (Default)"; ObjectID = "175-Zc-acl"; */
+"175-Zc-acl.text" = "Specialized (Default)";
+
+/* Class = "UILabel"; text = "Hybrid Ubershaders"; ObjectID = "1ah-WU-oPm"; */
+"1ah-WU-oPm.text" = "Hybrid Ubershaders";
+
+/* Class = "UINavigationItem"; title = "Enhancements"; ObjectID = "2MC-w7-N8M"; */
+"2MC-w7-N8M.title" = "Enhancements";
+
+/* Class = "UILabel"; text = "Log Render Time to File"; ObjectID = "37p-hM-Ift"; */
+"37p-hM-Ift.text" = "Log Render Time to File";
+
+/* Class = "UITableViewController"; title = "Graphics"; ObjectID = "3ou-aq-3cy"; */
+"3ou-aq-3cy.title" = "Graphics";
+
+/* Class = "UILabel"; text = "Widescreen Hack"; ObjectID = "3uR-he-9oQ"; */
+"3uR-he-9oQ.text" = "Widescreen Hack";
+
+/* Class = "UITableViewSection"; headerTitle = "Debugging"; ObjectID = "4Z6-T6-OQZ"; */
+"4Z6-T6-OQZ.headerTitle" = "Debugging";
+
+/* Class = "UILabel"; text = "Accuracy"; ObjectID = "4ka-N8-VJa"; */
+"4ka-N8-VJa.text" = "Accuracy";
+
+/* Class = "UINavigationItem"; title = "Backend"; ObjectID = "5t3-Iy-oU4"; */
+"5t3-Iy-oU4.title" = "Backend";
+
+/* Class = "UILabel"; text = "Enable Graphics Mods"; ObjectID = "5xw-6d-ViV"; */
+"5xw-6d-ViV.text" = "Enable Graphics Mods";
+
+/* Class = "UILabel"; text = "Stretch to Window"; ObjectID = "62w-is-knA"; */
+"62w-is-knA.text" = "Stretch to Window";
+
+/* Class = "UILabel"; text = "Show Statistics"; ObjectID = "8HC-kf-ec3"; */
+"8HC-kf-ec3.text" = "Show Statistics";
+
+/* Class = "UILabel"; text = "Skip Presenting Duplicate Frames"; ObjectID = "8zt-QK-sIm"; */
+"8zt-QK-sIm.text" = "Skip Presenting Duplicate Frames";
+
+/* Class = "UITableViewSection"; headerTitle = "Experimental"; ObjectID = "AkE-Pg-Gcm"; */
+"AkE-Pg-Gcm.headerTitle" = "Experimental";
+
+/* Class = "UILabel"; text = "Force 4:3"; ObjectID = "Ap2-15-1wO"; */
+"Ap2-15-1wO.text" = "Force 4:3";
+
+/* Class = "UILabel"; text = "1x"; ObjectID = "Bgx-Al-0ab"; */
+"Bgx-Al-0ab.text" = "1x";
+
+/* Class = "UINavigationItem"; title = "Advanced"; ObjectID = "Cki-dS-34J"; */
+"Cki-dS-34J.title" = "Advanced";
+
+/* Class = "UITableViewSection"; headerTitle = "Embedded Frame Buffer (EFB)"; ObjectID = "D4U-8E-AUb"; */
+"D4U-8E-AUb.headerTitle" = "Embedded Frame Buffer (EFB)";
+
+/* Class = "UILabel"; text = "General"; ObjectID = "Drd-Xo-R0y"; */
+"Drd-Xo-R0y.text" = "General";
+
+/* Class = "UITableViewSection"; headerTitle = "Texture Cache"; ObjectID = "EWU-iq-iov"; */
+"EWU-iq-iov.headerTitle" = "Texture Cache";
+
+/* Class = "UILabel"; text = "1x"; ObjectID = "Ek7-iH-Byj"; */
+"Ek7-iH-Byj.text" = "1x";
+
+/* Class = "UILabel"; text = "Force 24-Bit Color"; ObjectID = "GOv-Af-lVT"; */
+"GOv-Af-lVT.text" = "Force 24-Bit Color";
+
+/* Class = "UILabel"; text = "Enable API Validation Layers"; ObjectID = "Gox-HX-QPR"; */
+"Gox-HX-QPR.text" = "Enable API Validation Layers";
+
+/* Class = "UILabel"; text = "Load Custom Textures"; ObjectID = "HjZ-jk-3AV"; */
+"HjZ-jk-3AV.text" = "Load Custom Textures";
+
+/* Class = "UINavigationItem"; title = "Mode"; ObjectID = "Hs4-Zz-Akc"; */
+"Hs4-Zz-Akc.title" = "Mode";
+
+/* Class = "UILabel"; text = "Compile Shaders Before Starting"; ObjectID = "I9I-Kb-dHX"; */
+"I9I-Kb-dHX.text" = "Compile Shaders Before Starting";
+
+/* Class = "UILabel"; text = "Disable Copy Filter"; ObjectID = "IAv-Sg-WC9"; */
+"IAv-Sg-WC9.text" = "Disable Copy Filter";
+
+/* Class = "UILabel"; text = "Crop"; ObjectID = "IPn-me-zdc"; */
+"IPn-me-zdc.text" = "Crop";
+
+/* Class = "UILabel"; text = "Fast Depth Calculation"; ObjectID = "JR2-8x-N5Q"; */
+"JR2-8x-N5Q.text" = "Fast Depth Calculation";
+
+/* Class = "UILabel"; text = "Skip Drawing"; ObjectID = "KKg-DO-e4A"; */
+"KKg-DO-e4A.text" = "Skip Drawing";
+
+/* Class = "UINavigationItem"; title = "Anisotropic Filtering"; ObjectID = "Lbv-ea-nxa"; */
+"Lbv-ea-nxa.title" = "Anisotropic Filtering";
+
+/* Class = "UILabel"; text = "Backend"; ObjectID = "MER-bC-y11"; */
+"MER-bC-y11.text" = "Backend";
+
+/* Class = "UILabel"; text = "Mode"; ObjectID = "N7K-iV-uV4"; */
+"N7K-iV-uV4.text" = "Mode";
+
+/* Class = "UILabel"; text = "Auto"; ObjectID = "NNC-VS-CIv"; */
+"NNC-VS-CIv.text" = "Auto";
+
+/* Class = "UITableViewSection"; headerTitle = "Utility"; ObjectID = "NYe-Cu-GAn"; */
+"NYe-Cu-GAn.headerTitle" = "Utility";
+
+/* Class = "UILabel"; text = "GPU Texture Decoding"; ObjectID = "NhS-TO-UAT"; */
+"NhS-TO-UAT.text" = "GPU Texture Decoding";
+
+/* Class = "UILabel"; text = "V-Sync"; ObjectID = "ObU-c2-Zq9"; */
+"ObU-c2-Zq9.text" = "V-Sync";
+
+/* Class = "UINavigationItem"; title = "Internal Resolution"; ObjectID = "QIU-Sb-PQP"; */
+"QIU-Sb-PQP.title" = "Internal Resolution";
+
+/* Class = "UILabel"; text = "Defer EFB Copies to RAM"; ObjectID = "Sxf-YO-1Uy"; */
+"Sxf-YO-1Uy.text" = "Defer EFB Copies to RAM";
+
+/* Class = "UILabel"; text = "Backend"; ObjectID = "UlC-mb-fXU"; */
+"UlC-mb-fXU.text" = "Backend";
+
+/* Class = "UITableViewSection"; headerTitle = "Misc"; ObjectID = "VK6-g2-KCD"; */
+"VK6-g2-KCD.headerTitle" = "Misc";
+
+/* Class = "UINavigationItem"; title = "General"; ObjectID = "VoE-VE-9iq"; */
+"VoE-VE-9iq.title" = "General";
+
+/* Class = "UILabel"; text = "Anisotropic Filtering"; ObjectID = "WGd-4C-CHI"; */
+"WGd-4C-CHI.text" = "Anisotropic Filtering";
+
+/* Class = "UILabel"; text = "4x"; ObjectID = "WQo-G8-DJS"; */
+"WQo-G8-DJS.text" = "4x";
+
+/* Class = "UITableViewSection"; headerTitle = "Basic"; ObjectID = "Xcx-Mj-LD4"; */
+"Xcx-Mj-LD4.headerTitle" = "Basic";
+
+/* Class = "UILabel"; text = "1x"; ObjectID = "Y2x-IN-jfQ"; */
+"Y2x-IN-jfQ.text" = "1x";
+
+/* Class = "UILabel"; text = "Disable EFB VRAM Copies"; ObjectID = "YsL-hE-fLj"; */
+"YsL-hE-fLj.text" = "Disable EFB VRAM Copies";
+
+/* Class = "UILabel"; text = "Force Texture Filtering"; ObjectID = "b7H-No-W1u"; */
+"b7H-No-W1u.text" = "Force Texture Filtering";
+
+/* Class = "UILabel"; text = "Prefetch Custom Textures"; ObjectID = "c56-Cq-b6x"; */
+"c56-Cq-b6x.text" = "Prefetch Custom Textures";
+
+/* Class = "UITableViewSection"; headerTitle = "Shader Compilation"; ObjectID = "chL-Ax-236"; */
+"chL-Ax-236.headerTitle" = "Shader Compilation";
+
+/* Class = "UILabel"; text = "Disable Bounding Box"; ObjectID = "cjU-ZN-1K2"; */
+"cjU-ZN-1K2.text" = "Disable Bounding Box";
+
+/* Class = "UILabel"; text = "Skip EFB Access from CPU"; ObjectID = "cxc-YQ-Nff"; */
+"cxc-YQ-Nff.text" = "Skip EFB Access from CPU";
+
+/* Class = "UITableViewSection"; headerTitle = "Other"; ObjectID = "d2R-Y7-pN6"; */
+"d2R-Y7-pN6.headerTitle" = "Other";
+
+/* Class = "UILabel"; text = "Show FPS"; ObjectID = "dIM-ex-MYi"; */
+"dIM-ex-MYi.text" = "Show FPS";
+
+/* Class = "UILabel"; text = "Ignore Format Changes"; ObjectID = "dM0-J0-hd7"; */
+"dM0-J0-hd7.text" = "Ignore Format Changes";
+
+/* Class = "UINavigationItem"; title = "Graphics"; ObjectID = "eMP-IH-kss"; */
+"eMP-IH-kss.title" = "Graphics";
+
+/* Class = "UILabel"; text = "Store XFB Copies to Texture Only"; ObjectID = "eXY-WV-bBn"; */
+"eXY-WV-bBn.text" = "Store XFB Copies to Texture Only";
+
+/* Class = "UILabel"; text = "Scaled EFB Copy"; ObjectID = "f1k-1J-gmX"; */
+"f1k-1J-gmX.text" = "Scaled EFB Copy";
+
+/* Class = "UILabel"; text = "Disable Fog"; ObjectID = "ftR-u6-tGZ"; */
+"ftR-u6-tGZ.text" = "Disable Fog";
+
+/* Class = "UILabel"; text = "16x"; ObjectID = "g26-bM-bcr"; */
+"g26-bM-bcr.text" = "16x";
+
+/* Class = "UILabel"; text = "Backend Multithreading"; ObjectID = "gP6-K5-P4M"; */
+"gP6-K5-P4M.text" = "Backend Multithreading";
+
+/* Class = "UILabel"; text = "Internal Resolution"; ObjectID = "h3N-SC-79Q"; */
+"h3N-SC-79Q.text" = "Internal Resolution";
+
+/* Class = "UILabel"; text = "Auto"; ObjectID = "hGO-sw-f9e"; */
+"hGO-sw-f9e.text" = "Auto";
+
+/* Class = "UILabel"; text = "Advanced"; ObjectID = "hPT-zB-DoZ"; */
+"hPT-zB-DoZ.text" = "Advanced";
+
+/* Class = "UILabel"; text = "Resolution"; ObjectID = "hcO-lQ-hLk"; */
+"hcO-lQ-hLk.text" = "Resolution";
+
+/* Class = "UILabel"; text = "Save Texture Cache to State"; ObjectID = "hhI-3P-VRo"; */
+"hhI-3P-VRo.text" = "Save Texture Cache to State";
+
+/* Class = "UITableViewSection"; headerTitle = "Enhancements"; ObjectID = "iNu-sf-Tdd"; */
+"iNu-sf-Tdd.headerTitle" = "Enhancements";
+
+/* Class = "UITableViewSection"; headerTitle = "External Frame Buffer (XFB)"; ObjectID = "kFd-4L-5lk"; */
+"kFd-4L-5lk.headerTitle" = "External Frame Buffer (XFB)";
+
+/* Class = "UINavigationItem"; title = "Aspect Ratio"; ObjectID = "l4u-GK-Pma"; */
+"l4u-GK-Pma.title" = "Aspect Ratio";
+
+/* Class = "UILabel"; text = "8x"; ObjectID = "njX-sh-ZHU"; */
+"njX-sh-ZHU.text" = "8x";
+
+/* Class = "UILabel"; text = "Vertex Rounding"; ObjectID = "oGF-Ui-ZvM"; */
+"oGF-Ui-ZvM.text" = "Vertex Rounding";
+
+/* Class = "UITableViewSection"; headerTitle = "Other"; ObjectID = "oKG-Mm-O4r"; */
+"oKG-Mm-O4r.headerTitle" = "Other";
+
+/* Class = "UILabel"; text = "Hacks"; ObjectID = "pJD-6T-p0a"; */
+"pJD-6T-p0a.text" = "Hacks";
+
+/* Class = "UILabel"; text = "Defer EFB Cache Invalidation"; ObjectID = "pYd-WP-Oa2"; */
+"pYd-WP-Oa2.text" = "Defer EFB Cache Invalidation";
+
+/* Class = "UILabel"; text = "Force 16:9"; ObjectID = "phe-ec-lNZ"; */
+"phe-ec-lNZ.text" = "Force 16:9";
+
+/* Class = "UILabel"; text = "Exclusive Ubershaders"; ObjectID = "q9O-ry-LJt"; */
+"q9O-ry-LJt.text" = "Exclusive Ubershaders";
+
+/* Class = "UILabel"; text = "Enable Progressive Scan"; ObjectID = "qbT-3n-0kG"; */
+"qbT-3n-0kG.text" = "Enable Progressive Scan";
+
+/* Class = "UILabel"; text = "Store EFB Copies to Texture Only"; ObjectID = "r5P-EE-Rhj"; */
+"r5P-EE-Rhj.text" = "Store EFB Copies to Texture Only";
+
+/* Class = "UILabel"; text = "Immediately Present XFB"; ObjectID = "syg-FA-sG4"; */
+"syg-FA-sG4.text" = "Immediately Present XFB";
+
+/* Class = "UINavigationItem"; title = "Hacks"; ObjectID = "ttO-2S-2Tq"; */
+"ttO-2S-2Tq.title" = "Hacks";
+
+/* Class = "UILabel"; text = "Manual Texture Sampling"; ObjectID = "ulu-2y-LaL"; */
+"ulu-2y-LaL.text" = "Manual Texture Sampling";
+
+/* Class = "UILabel"; text = "2x"; ObjectID = "une-Zp-EzM"; */
+"une-Zp-EzM.text" = "2x";
+
+/* Class = "UILabel"; text = "Aspect Ratio"; ObjectID = "vdK-23-Asj"; */
+"vdK-23-Asj.text" = "Aspect Ratio";
+
+/* Class = "UILabel"; text = "Arbitrary Mipmap Detection"; ObjectID = "wOe-Py-KNv"; */
+"wOe-Py-KNv.text" = "Arbitrary Mipmap Detection";
+
+/* Class = "UILabel"; text = "Backend"; ObjectID = "wXA-h3-1aI"; */
+"wXA-h3-1aI.text" = "Backend";
+
+/* Class = "UILabel"; text = "Enhancements"; ObjectID = "xVy-g6-vIt"; */
+"xVy-g6-vIt.text" = "Enhancements";
+
+/* Class = "UILabel"; text = "Per-Pixel Lighting"; ObjectID = "yuu-xG-FeT"; */
+"yuu-xG-FeT.text" = "Per-Pixel Lighting";
+
+/* Class = "UILabel"; text = "Type"; ObjectID = "zwr-G9-cCf"; */
+"zwr-G9-cCf.text" = "Type";
