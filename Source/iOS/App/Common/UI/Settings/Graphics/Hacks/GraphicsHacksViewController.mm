@@ -12,6 +12,8 @@
 @implementation GraphicsHacksViewController
 
 - (void)viewDidLoad {
+  [super viewDidLoad];
+  
   [self.skipEfbCell registerSetting:Config::GFX_HACK_EFB_ACCESS_ENABLE shouldReverse:true];
   [self.efbToTextureCell registerSetting:Config::GFX_HACK_SKIP_EFB_COPY_TO_RAM];
   [self.formatChangesCell registerSetting:Config::GFX_HACK_EFB_EMULATE_FORMAT_CHANGES shouldReverse:true];
