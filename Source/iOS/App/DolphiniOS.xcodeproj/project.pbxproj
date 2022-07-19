@@ -33,6 +33,7 @@
 		B904ACE828866E2D008B6BE9 /* ControllersSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B904ACE728866E2D008B6BE9 /* ControllersSettings.storyboard */; };
 		B904ACEB28866FF4008B6BE9 /* ControllersRootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACEA28866FF4008B6BE9 /* ControllersRootViewController.mm */; };
 		B904ACEE2886701C008B6BE9 /* ControllerPortCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904ACED2886701C008B6BE9 /* ControllerPortCell.m */; };
+		B904ACF128868E4B008B6BE9 /* ControllersSettingsUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACF028868E4B008B6BE9 /* ControllersSettingsUtil.mm */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -145,6 +146,8 @@
 		B904ACEA28866FF4008B6BE9 /* ControllersRootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersRootViewController.mm; sourceTree = "<group>"; };
 		B904ACEC2886701C008B6BE9 /* ControllerPortCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllerPortCell.h; sourceTree = "<group>"; };
 		B904ACED2886701C008B6BE9 /* ControllerPortCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ControllerPortCell.m; sourceTree = "<group>"; };
+		B904ACEF28868E4B008B6BE9 /* ControllersSettingsUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersSettingsUtil.h; sourceTree = "<group>"; };
+		B904ACF028868E4B008B6BE9 /* ControllersSettingsUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersSettingsUtil.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -417,6 +420,8 @@
 				B904ACED2886701C008B6BE9 /* ControllerPortCell.m */,
 				B904ACE928866FF4008B6BE9 /* ControllersRootViewController.h */,
 				B904ACEA28866FF4008B6BE9 /* ControllersRootViewController.mm */,
+				B904ACEF28868E4B008B6BE9 /* ControllersSettingsUtil.h */,
+				B904ACF028868E4B008B6BE9 /* ControllersSettingsUtil.mm */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1023,6 +1028,7 @@
 				B99137C928832A0800588446 /* LocalizationUtil.m in Sources */,
 				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
 				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
+				B904ACF128868E4B008B6BE9 /* ControllersSettingsUtil.mm in Sources */,
 				B99137952881D62C00588446 /* CpuEngineCell.m in Sources */,
 				B904ACC4288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm in Sources */,
 				B9DC5FB62884A563004BD94A /* GraphicsBoolCell.mm in Sources */,

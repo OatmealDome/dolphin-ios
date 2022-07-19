@@ -5,9 +5,9 @@
 
 #import "Core/Config/MainSettings.h"
 #import "Core/Config/WiimoteSettings.h"
-#import "Core/HW/SI/SI_Device.h"
 #import "Core/HW/Wiimote.h"
 
+#import "ControllersSettingsUtil.h"
 #import "LocalizationUtil.h"
 
 @interface ControllersRootViewController ()
@@ -29,43 +29,9 @@
     
     const SerialInterface::SIDevices siDevice = Config::Get(Config::GetInfoForSIDevice(i));
     
-    NSString* gamecubeType;
-    switch (siDevice) {
-      case SerialInterface::SIDEVICE_NONE:
-        gamecubeType = @"None";
-        break;
-      case SerialInterface::SIDEVICE_GC_CONTROLLER:
-        gamecubeType = @"Standard Controller";
-        break;
-      case SerialInterface::SIDEVICE_WIIU_ADAPTER:
-        gamecubeType = @"GameCube Adapter for Wii U";
-        break;
-      case SerialInterface::SIDEVICE_GC_STEERING:
-        gamecubeType = @"Steering Wheel";
-        break;
-      case SerialInterface::SIDEVICE_DANCEMAT:
-        gamecubeType = @"Dance Mat";
-        break;
-      case SerialInterface::SIDEVICE_GC_TARUKONGA:
-        gamecubeType = @"DK Bongos";;
-        break;
-      case SerialInterface::SIDEVICE_GC_GBA_EMULATED:
-        gamecubeType = @"GBA (Integrated)";
-        break;
-      case SerialInterface::SIDEVICE_GC_GBA:
-        gamecubeType = @"GBA (TCP)";
-        break;
-      case SerialInterface::SIDEVICE_GC_KEYBOARD:
-        gamecubeType = @"Keyboard";
-        break;
-      default:
-        gamecubeType = @"Error";
-        break;
-    }
-    
     ControllerPortCell* gamecubeCell = self.gamecubeCells[i];
     gamecubeCell.portLabel.text = [NSString stringWithFormat:gamecubeString, i + 1];
-    gamecubeCell.typeLabel.text = DOLCoreLocalizedString(gamecubeType);
+    gamecubeCell.typeLabel.text = [ControllersSettingsUtil getLocalizedStringForSIDevice:siDevice];
     
     //
     // Wii
