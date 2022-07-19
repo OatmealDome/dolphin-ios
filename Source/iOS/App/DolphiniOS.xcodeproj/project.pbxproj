@@ -28,6 +28,7 @@
 		B904ACD22885561E008B6BE9 /* InternalResolutionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904ACD12885561E008B6BE9 /* InternalResolutionCell.m */; };
 		B904ACD52885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACD42885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm */; };
 		B904ACD92885E7DE008B6BE9 /* GraphicsHacksViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACD82885E7DE008B6BE9 /* GraphicsHacksViewController.mm */; };
+		B904ACDD28862941008B6BE9 /* GraphicsAdvancedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACDC28862941008B6BE9 /* GraphicsAdvancedViewController.mm */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -131,6 +132,8 @@
 		B904ACD42885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AnisotropicFilteringViewController.mm; sourceTree = "<group>"; };
 		B904ACD72885E7DE008B6BE9 /* GraphicsHacksViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsHacksViewController.h; sourceTree = "<group>"; };
 		B904ACD82885E7DE008B6BE9 /* GraphicsHacksViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsHacksViewController.mm; sourceTree = "<group>"; };
+		B904ACDB28862941008B6BE9 /* GraphicsAdvancedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsAdvancedViewController.h; sourceTree = "<group>"; };
+		B904ACDC28862941008B6BE9 /* GraphicsAdvancedViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsAdvancedViewController.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -378,6 +381,15 @@
 				B904ACD82885E7DE008B6BE9 /* GraphicsHacksViewController.mm */,
 			);
 			path = Hacks;
+			sourceTree = "<group>";
+		};
+		B904ACDA2886292D008B6BE9 /* Advanced */ = {
+			isa = PBXGroup;
+			children = (
+				B904ACDB28862941008B6BE9 /* GraphicsAdvancedViewController.h */,
+				B904ACDC28862941008B6BE9 /* GraphicsAdvancedViewController.mm */,
+			);
+			path = Advanced;
 			sourceTree = "<group>";
 		};
 		B933EDBB27F6A5C7004D7DD7 /* Swift */ = {
@@ -694,6 +706,7 @@
 		B9DC5FA52884945C004BD94A /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				B904ACDA2886292D008B6BE9 /* Advanced */,
 				B904ACC828854768008B6BE9 /* Enhancements */,
 				B9DC5FB028849798004BD94A /* General */,
 				B904ACD62885E7B5008B6BE9 /* Hacks */,
@@ -952,6 +965,7 @@
 				B900A7CA27F4DA97000361DD /* SoftwareListViewController.mm in Sources */,
 				B9DC5FB3288497B0004BD94A /* GraphicsGeneralViewController.mm in Sources */,
 				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
+				B904ACDD28862941008B6BE9 /* GraphicsAdvancedViewController.mm in Sources */,
 				B9398713287FDF23008E8E47 /* FallbackRegionViewController.mm in Sources */,
 				B904ACC728852708008B6BE9 /* GraphicsShaderModeViewController.mm in Sources */,
 				B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */,
