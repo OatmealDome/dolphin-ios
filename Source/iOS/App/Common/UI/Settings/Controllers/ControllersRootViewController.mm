@@ -9,12 +9,16 @@
 
 #import "ControllersSettingsUtil.h"
 #import "LocalizationUtil.h"
+#import "MappingRootViewController.h"
 
 @interface ControllersRootViewController ()
 
 @end
 
-@implementation ControllersRootViewController
+@implementation ControllersRootViewController {
+  DOLMappingType _targetType;
+  int _targetPort;
+}
 
 - (void)viewDidLoad {
   [super viewDidLoad];
@@ -37,25 +41,11 @@
     // Wii
     //
     
-    NSString* wiiType;
-    switch (Config::Get(Config::GetInfoForWiimoteSource(i))) {
-      case WiimoteSource::None:
-        wiiType = @"None";
-        break;
-      case WiimoteSource::Emulated:
-        wiiType = @"Emulated Wii Remote";
-        break;
-      case WiimoteSource::Real:
-        wiiType = @"Real Wii Remote";
-        break;
-      default:
-        wiiType = @"Error";
-        break;
-    }
+    WiimoteSource wiiSource = Config::Get(Config::GetInfoForWiimoteSource(i));
     
     ControllerPortCell* wiiCell = self.wiiCells[i];
     wiiCell.portLabel.text = [NSString stringWithFormat:wiiString, i + 1];
-    wiiCell.typeLabel.text = DOLCoreLocalizedString(wiiType);
+    wiiCell.typeLabel.text = [ControllersSettingsUtil getLocalizedStringForWiimoteSource:wiiSource];
   }
 }
 

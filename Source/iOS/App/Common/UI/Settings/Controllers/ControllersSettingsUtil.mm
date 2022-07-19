@@ -4,6 +4,7 @@
 #import "ControllersSettingsUtil.h"
 
 #import "Core/HW/SI/SI_Device.h"
+#import "Core/HW/Wiimote.h"
 
 #import "LocalizationUtil.h"
 
@@ -38,6 +39,26 @@
       break;
     case SerialInterface::SIDEVICE_GC_KEYBOARD:
       localizable = @"Keyboard";
+      break;
+    default:
+      localizable = @"Error";
+      break;
+  }
+  
+  return DOLCoreLocalizedString(localizable);
+}
+
++ (NSString*)getLocalizedStringForWiimoteSource:(WiimoteSource)source {
+  NSString* localizable;
+  switch (source) {
+    case WiimoteSource::None:
+      localizable = @"None";
+      break;
+    case WiimoteSource::Emulated:
+      localizable = @"Emulated Wii Remote";
+      break;
+    case WiimoteSource::Real:
+      localizable = @"Real Wii Remote";
       break;
     default:
       localizable = @"Error";
