@@ -27,3 +27,6 @@
 
 /* Class = "UILabel"; text = "Graphics"; ObjectID = "bgK-44-TnF"; */
 "bgK-44-TnF.text" = "Graphics";
+
+/* Class = "UILabel"; text = "Controllers"; ObjectID = "kW4-Qw-tfg"; */
+"kW4-Qw-tfg.text" = "Controllers";

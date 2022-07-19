@@ -30,6 +30,9 @@
 		B904ACD92885E7DE008B6BE9 /* GraphicsHacksViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACD82885E7DE008B6BE9 /* GraphicsHacksViewController.mm */; };
 		B904ACDD28862941008B6BE9 /* GraphicsAdvancedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACDC28862941008B6BE9 /* GraphicsAdvancedViewController.mm */; };
 		B904ACDE28863119008B6BE9 /* GraphicsSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B904ACE028863119008B6BE9 /* GraphicsSettings.storyboard */; };
+		B904ACE828866E2D008B6BE9 /* ControllersSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B904ACE728866E2D008B6BE9 /* ControllersSettings.storyboard */; };
+		B904ACEB28866FF4008B6BE9 /* ControllersRootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACEA28866FF4008B6BE9 /* ControllersRootViewController.mm */; };
+		B904ACEE2886701C008B6BE9 /* ControllerPortCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904ACED2886701C008B6BE9 /* ControllerPortCell.m */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -137,6 +140,11 @@
 		B904ACDF28863119008B6BE9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/GraphicsSettings.storyboard; sourceTree = "<group>"; };
 		B904ACE228863123008B6BE9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/GraphicsSettings.strings; sourceTree = "<group>"; };
 		B904ACE42886312D008B6BE9 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/GraphicsSettings.strings; sourceTree = "<group>"; };
+		B904ACE728866E2D008B6BE9 /* ControllersSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ControllersSettings.storyboard; sourceTree = "<group>"; };
+		B904ACE928866FF4008B6BE9 /* ControllersRootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersRootViewController.h; sourceTree = "<group>"; };
+		B904ACEA28866FF4008B6BE9 /* ControllersRootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersRootViewController.mm; sourceTree = "<group>"; };
+		B904ACEC2886701C008B6BE9 /* ControllerPortCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllerPortCell.h; sourceTree = "<group>"; };
+		B904ACED2886701C008B6BE9 /* ControllerPortCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ControllerPortCell.m; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -394,6 +402,25 @@
 			path = Advanced;
 			sourceTree = "<group>";
 		};
+		B904ACE5288666D3008B6BE9 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				B904ACE728866E2D008B6BE9 /* ControllersSettings.storyboard */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		B904ACE628866E12008B6BE9 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				B904ACEC2886701C008B6BE9 /* ControllerPortCell.h */,
+				B904ACED2886701C008B6BE9 /* ControllerPortCell.m */,
+				B904ACE928866FF4008B6BE9 /* ControllersRootViewController.h */,
+				B904ACEA28866FF4008B6BE9 /* ControllersRootViewController.mm */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		B933EDBB27F6A5C7004D7DD7 /* Swift */ = {
 			isa = PBXGroup;
 			children = (
@@ -419,6 +446,7 @@
 			isa = PBXGroup;
 			children = (
 				B93986FD287F8F0F008E8E47 /* Config */,
+				B904ACE5288666D3008B6BE9 /* Controllers */,
 				B9DC5FA628849467004BD94A /* Graphics */,
 				B99137AE28827AD200588446 /* SettingsRoot.storyboard */,
 			);
@@ -429,6 +457,7 @@
 			isa = PBXGroup;
 			children = (
 				B9398700287F98E7008E8E47 /* Config */,
+				B904ACE628866E12008B6BE9 /* Controllers */,
 				B9DC5FA52884945C004BD94A /* Graphics */,
 				B93986FA287F45A3008E8E47 /* SettingsRootViewController.swift */,
 			);
@@ -831,6 +860,7 @@
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
 				B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */,
+				B904ACE828866E2D008B6BE9 /* ControllersSettings.storyboard in Resources */,
 				B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */,
 				B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */,
 			);
@@ -959,6 +989,7 @@
 				B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */,
 				B9398707287F998C008E8E47 /* ConfigGeneralViewController.mm in Sources */,
 				B93986FB287F45A3008E8E47 /* SettingsRootViewController.swift in Sources */,
+				B904ACEE2886701C008B6BE9 /* ControllerPortCell.m in Sources */,
 				B9913792288153D000588446 /* ConfigAdvancedViewController.mm in Sources */,
 				B904ACBE28851C5C008B6BE9 /* GraphicsBackendCell.m in Sources */,
 				B939872E2880896D008E8E47 /* ConfigGameCubeViewController.mm in Sources */,
@@ -974,6 +1005,7 @@
 				B991378E28814BCD00588446 /* WiiSensorBarViewController.mm in Sources */,
 				B904ACD22885561E008B6BE9 /* InternalResolutionCell.m in Sources */,
 				B9447B052841901200BC9110 /* TCGameCubePad.swift in Sources */,
+				B904ACEB28866FF4008B6BE9 /* ControllersRootViewController.mm in Sources */,
 				B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */,
 				B900A7D527F61F3A000361DD /* GameFileCacheManager.mm in Sources */,
 				B9DC5FAB28849535004BD94A /* GraphicsRootViewController.mm in Sources */,
