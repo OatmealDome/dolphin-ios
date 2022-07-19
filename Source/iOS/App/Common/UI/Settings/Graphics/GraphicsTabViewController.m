@@ -30,6 +30,10 @@
   message = [message stringByReplacingOccurrencesOfString:@"<br/>" withString:@"\n"];
   message = [message stringByReplacingOccurrencesOfString:@"<br />" withString:@"\n"];
   
+  // Wish there was an easy way to unescape these HTML entities.
+  message = [message stringByReplacingOccurrencesOfString:@"&lt;" withString:@"<"];
+  message = [message stringByReplacingOccurrencesOfString:@"&gt;" withString:@">"];
+  
   // TODO: Is there a way to make <dolphin_emphasis> parts of the string bold in the UIAlertController without private API usage?
   message = [message stringByReplacingOccurrencesOfString:@"<dolphin_emphasis>" withString:@""];
   message = [message stringByReplacingOccurrencesOfString:@"</dolphin_emphasis>" withString:@""];
