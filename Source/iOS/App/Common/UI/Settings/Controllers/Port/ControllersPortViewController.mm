@@ -30,6 +30,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  
   NSString* typeString;
   
   if (self.portType == DOLControllerPortTypePad) {
