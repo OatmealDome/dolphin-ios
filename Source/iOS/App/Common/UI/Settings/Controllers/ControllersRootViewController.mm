@@ -33,7 +33,7 @@
     
     const SerialInterface::SIDevices siDevice = Config::Get(Config::GetInfoForSIDevice(i));
     
-    ControllerPortCell* gamecubeCell = self.gamecubeCells[i];
+    ControllersRootPortCell* gamecubeCell = self.gamecubeCells[i];
     gamecubeCell.portLabel.text = [NSString stringWithFormat:gamecubeString, i + 1];
     gamecubeCell.typeLabel.text = [ControllersSettingsUtil getLocalizedStringForSIDevice:siDevice];
     
@@ -43,7 +43,7 @@
     
     WiimoteSource wiiSource = Config::Get(Config::GetInfoForWiimoteSource(i));
     
-    ControllerPortCell* wiiCell = self.wiiCells[i];
+    ControllersRootPortCell* wiiCell = self.wiiCells[i];
     wiiCell.portLabel.text = [NSString stringWithFormat:wiiString, i + 1];
     wiiCell.typeLabel.text = [ControllersSettingsUtil getLocalizedStringForWiimoteSource:wiiSource];
   }

@@ -32,7 +32,7 @@
 		B904ACDE28863119008B6BE9 /* GraphicsSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B904ACE028863119008B6BE9 /* GraphicsSettings.storyboard */; };
 		B904ACE828866E2D008B6BE9 /* ControllersSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B904ACE728866E2D008B6BE9 /* ControllersSettings.storyboard */; };
 		B904ACEB28866FF4008B6BE9 /* ControllersRootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACEA28866FF4008B6BE9 /* ControllersRootViewController.mm */; };
-		B904ACEE2886701C008B6BE9 /* ControllerPortCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904ACED2886701C008B6BE9 /* ControllerPortCell.m */; };
+		B904ACEE2886701C008B6BE9 /* ControllersRootPortCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904ACED2886701C008B6BE9 /* ControllersRootPortCell.m */; };
 		B904ACF128868E4B008B6BE9 /* ControllersSettingsUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACF028868E4B008B6BE9 /* ControllersSettingsUtil.mm */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
@@ -144,8 +144,8 @@
 		B904ACE728866E2D008B6BE9 /* ControllersSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ControllersSettings.storyboard; sourceTree = "<group>"; };
 		B904ACE928866FF4008B6BE9 /* ControllersRootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersRootViewController.h; sourceTree = "<group>"; };
 		B904ACEA28866FF4008B6BE9 /* ControllersRootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersRootViewController.mm; sourceTree = "<group>"; };
-		B904ACEC2886701C008B6BE9 /* ControllerPortCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllerPortCell.h; sourceTree = "<group>"; };
-		B904ACED2886701C008B6BE9 /* ControllerPortCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ControllerPortCell.m; sourceTree = "<group>"; };
+		B904ACEC2886701C008B6BE9 /* ControllersRootPortCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersRootPortCell.h; sourceTree = "<group>"; };
+		B904ACED2886701C008B6BE9 /* ControllersRootPortCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ControllersRootPortCell.m; sourceTree = "<group>"; };
 		B904ACEF28868E4B008B6BE9 /* ControllersSettingsUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersSettingsUtil.h; sourceTree = "<group>"; };
 		B904ACF028868E4B008B6BE9 /* ControllersSettingsUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersSettingsUtil.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
@@ -416,8 +416,8 @@
 		B904ACE628866E12008B6BE9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				B904ACEC2886701C008B6BE9 /* ControllerPortCell.h */,
-				B904ACED2886701C008B6BE9 /* ControllerPortCell.m */,
+				B904ACEC2886701C008B6BE9 /* ControllersRootPortCell.h */,
+				B904ACED2886701C008B6BE9 /* ControllersRootPortCell.m */,
 				B904ACE928866FF4008B6BE9 /* ControllersRootViewController.h */,
 				B904ACEA28866FF4008B6BE9 /* ControllersRootViewController.mm */,
 				B904ACEF28868E4B008B6BE9 /* ControllersSettingsUtil.h */,
@@ -994,7 +994,7 @@
 				B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */,
 				B9398707287F998C008E8E47 /* ConfigGeneralViewController.mm in Sources */,
 				B93986FB287F45A3008E8E47 /* SettingsRootViewController.swift in Sources */,
-				B904ACEE2886701C008B6BE9 /* ControllerPortCell.m in Sources */,
+				B904ACEE2886701C008B6BE9 /* ControllersRootPortCell.m in Sources */,
 				B9913792288153D000588446 /* ConfigAdvancedViewController.mm in Sources */,
 				B904ACBE28851C5C008B6BE9 /* GraphicsBackendCell.m in Sources */,
 				B939872E2880896D008E8E47 /* ConfigGameCubeViewController.mm in Sources */,

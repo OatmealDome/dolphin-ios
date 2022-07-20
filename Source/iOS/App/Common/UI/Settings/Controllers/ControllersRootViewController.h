@@ -3,14 +3,14 @@
 
 #import <UIKit/UIKit.h>
 
-#import "ControllerPortCell.h"
+#import "ControllersRootPortCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ControllersRootViewController : UITableViewController
 
-@property (strong, nonatomic) IBOutletCollection(ControllerPortCell) NSArray<ControllerPortCell*>* gamecubeCells;
-@property (strong, nonatomic) IBOutletCollection(ControllerPortCell) NSArray<ControllerPortCell*>* wiiCells;
+@property (strong, nonatomic) IBOutletCollection(ControllersRootPortCell) NSArray* gamecubeCells;
+@property (strong, nonatomic) IBOutletCollection(ControllersRootPortCell) NSArray* wiiCells;
 
 @end
 

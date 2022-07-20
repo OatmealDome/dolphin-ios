@@ -5,7 +5,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ControllerPortCell : UITableViewCell
+@interface ControllersRootPortCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel* portLabel;
 @property (weak, nonatomic) IBOutlet UILabel* typeLabel;
