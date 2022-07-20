@@ -23,6 +23,7 @@
 #import "InputCommon/ControllerEmu/ControllerEmu.h"
 #import "InputCommon/InputConfig.h"
 
+#import "MappingDeviceViewController.h"
 #import "FoundationStringUtil.h"
 #import "LocalizationUtil.h"
 #import "MappingRootDeviceCell.h"
@@ -254,6 +255,14 @@ struct Section {
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
   [tableView deselectRowAtIndexPath:indexPath animated:true];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
+  if ([segue.identifier isEqualToString:@"toDevice"]) {
+    MappingDeviceViewController* deviceController = segue.destinationViewController;
+    
+    deviceController.emulatedController = _controller;
+  }
 }
 
 @end

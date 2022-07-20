@@ -42,6 +42,8 @@
 		B904AD0C28886AE6008B6BE9 /* MappingRootDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD0B28886AE6008B6BE9 /* MappingRootDeviceCell.m */; };
 		B904AD0F28886AF8008B6BE9 /* MappingRootGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD0E28886AF8008B6BE9 /* MappingRootGroupCell.m */; };
 		B904AD1228886B0D008B6BE9 /* MappingRootExtensionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD1128886B0D008B6BE9 /* MappingRootExtensionCell.m */; };
+		B904AD1A2888AB5E008B6BE9 /* MappingDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD192888AB5E008B6BE9 /* MappingDeviceCell.m */; };
+		B904AD1D2888AB6B008B6BE9 /* MappingDeviceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD1C2888AB6B008B6BE9 /* MappingDeviceViewController.mm */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -172,6 +174,10 @@
 		B904AD0E28886AF8008B6BE9 /* MappingRootGroupCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingRootGroupCell.m; sourceTree = "<group>"; };
 		B904AD1028886B0D008B6BE9 /* MappingRootExtensionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingRootExtensionCell.h; sourceTree = "<group>"; };
 		B904AD1128886B0D008B6BE9 /* MappingRootExtensionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingRootExtensionCell.m; sourceTree = "<group>"; };
+		B904AD182888AB5E008B6BE9 /* MappingDeviceCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingDeviceCell.h; sourceTree = "<group>"; };
+		B904AD192888AB5E008B6BE9 /* MappingDeviceCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingDeviceCell.m; sourceTree = "<group>"; };
+		B904AD1B2888AB6B008B6BE9 /* MappingDeviceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingDeviceViewController.h; sourceTree = "<group>"; };
+		B904AD1C2888AB6B008B6BE9 /* MappingDeviceViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingDeviceViewController.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -462,6 +468,7 @@
 		B904ACF52886AC2F008B6BE9 /* Mapping */ = {
 			isa = PBXGroup;
 			children = (
+				B904AD172888AB3B008B6BE9 /* Device */,
 				B904AD0A28886AE6008B6BE9 /* MappingRootDeviceCell.h */,
 				B904AD0B28886AE6008B6BE9 /* MappingRootDeviceCell.m */,
 				B904AD1028886B0D008B6BE9 /* MappingRootExtensionCell.h */,
@@ -486,6 +493,17 @@
 				B904AD022887CF13008B6BE9 /* DOLControllerPortType.h */,
 			);
 			path = Port;
+			sourceTree = "<group>";
+		};
+		B904AD172888AB3B008B6BE9 /* Device */ = {
+			isa = PBXGroup;
+			children = (
+				B904AD182888AB5E008B6BE9 /* MappingDeviceCell.h */,
+				B904AD192888AB5E008B6BE9 /* MappingDeviceCell.m */,
+				B904AD1B2888AB6B008B6BE9 /* MappingDeviceViewController.h */,
+				B904AD1C2888AB6B008B6BE9 /* MappingDeviceViewController.mm */,
+			);
+			path = Device;
 			sourceTree = "<group>";
 		};
 		B933EDBB27F6A5C7004D7DD7 /* Swift */ = {
@@ -1092,7 +1110,9 @@
 				B904ACCF288555E8008B6BE9 /* InternalResolutionViewController.mm in Sources */,
 				B9398724287FFBEC008E8E47 /* ConfigSoundViewController.mm in Sources */,
 				B9447B072841906000BC9110 /* TCView.swift in Sources */,
+				B904AD1D2888AB6B008B6BE9 /* MappingDeviceViewController.mm in Sources */,
 				B904AD0C28886AE6008B6BE9 /* MappingRootDeviceCell.m in Sources */,
+				B904AD1A2888AB5E008B6BE9 /* MappingDeviceCell.m in Sources */,
 				B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */,
 				B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */,
 				B904AD1228886B0D008B6BE9 /* MappingRootExtensionCell.m in Sources */,
