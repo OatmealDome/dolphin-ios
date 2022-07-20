@@ -7,6 +7,7 @@
 #import "Core/Config/WiimoteSettings.h"
 
 #import "ControllersSettingsUtil.h"
+#import "ControllersTypeViewController.h"
 #import "LocalizationUtil.h"
 
 @interface ControllersPortViewController ()
@@ -56,6 +57,15 @@
   } else {
     self.configureLabel.textColor = [UIColor systemGrayColor];
     self.configureCell.selectionStyle = UITableViewCellSelectionStyleNone;
+  }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
+  if ([segue.identifier isEqualToString:@"toType"]) {
+    ControllersTypeViewController* typeController = segue.destinationViewController;
+    
+    typeController.portType = self.portType;
+    typeController.portNumber = self.portNumber;
   }
 }
 

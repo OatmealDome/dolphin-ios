@@ -35,6 +35,8 @@
 		B904ACEE2886701C008B6BE9 /* ControllersRootPortCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904ACED2886701C008B6BE9 /* ControllersRootPortCell.m */; };
 		B904ACF128868E4B008B6BE9 /* ControllersSettingsUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACF028868E4B008B6BE9 /* ControllersSettingsUtil.mm */; };
 		B904AD012887B9D1008B6BE9 /* ControllersPortViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD002887B9D1008B6BE9 /* ControllersPortViewController.mm */; };
+		B904AD082887DAEE008B6BE9 /* ControllersTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD052887D99B008B6BE9 /* ControllersTypeCell.m */; };
+		B904AD092887DAF1008B6BE9 /* ControllersTypeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD072887DA0E008B6BE9 /* ControllersTypeViewController.mm */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -152,6 +154,10 @@
 		B904ACFF2887B9D1008B6BE9 /* ControllersPortViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersPortViewController.h; sourceTree = "<group>"; };
 		B904AD002887B9D1008B6BE9 /* ControllersPortViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersPortViewController.mm; sourceTree = "<group>"; };
 		B904AD022887CF13008B6BE9 /* DOLControllerPortType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOLControllerPortType.h; sourceTree = "<group>"; };
+		B904AD042887D99B008B6BE9 /* ControllersTypeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersTypeCell.h; sourceTree = "<group>"; };
+		B904AD052887D99B008B6BE9 /* ControllersTypeCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ControllersTypeCell.m; sourceTree = "<group>"; };
+		B904AD062887DA0E008B6BE9 /* ControllersTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersTypeViewController.h; sourceTree = "<group>"; };
+		B904AD072887DA0E008B6BE9 /* ControllersTypeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersTypeViewController.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -436,6 +442,10 @@
 			children = (
 				B904ACFF2887B9D1008B6BE9 /* ControllersPortViewController.h */,
 				B904AD002887B9D1008B6BE9 /* ControllersPortViewController.mm */,
+				B904AD042887D99B008B6BE9 /* ControllersTypeCell.h */,
+				B904AD052887D99B008B6BE9 /* ControllersTypeCell.m */,
+				B904AD062887DA0E008B6BE9 /* ControllersTypeViewController.h */,
+				B904AD072887DA0E008B6BE9 /* ControllersTypeViewController.mm */,
 				B904AD022887CF13008B6BE9 /* DOLControllerPortType.h */,
 			);
 			path = Port;
@@ -991,12 +1001,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B904AD092887DAF1008B6BE9 /* ControllersTypeViewController.mm in Sources */,
 				B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */,
 				B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */,
 				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
 				B904ACCB28854782008B6BE9 /* GraphicsEnhancementsViewController.mm in Sources */,
+				B904AD082887DAEE008B6BE9 /* ControllersTypeCell.m in Sources */,
 				B991378B288149F100588446 /* WiiSoundViewController.mm in Sources */,
 				B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */,
 				B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */,
