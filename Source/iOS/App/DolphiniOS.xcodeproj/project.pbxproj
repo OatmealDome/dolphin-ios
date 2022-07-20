@@ -34,9 +34,14 @@
 		B904ACEB28866FF4008B6BE9 /* ControllersRootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACEA28866FF4008B6BE9 /* ControllersRootViewController.mm */; };
 		B904ACEE2886701C008B6BE9 /* ControllersRootPortCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904ACED2886701C008B6BE9 /* ControllersRootPortCell.m */; };
 		B904ACF128868E4B008B6BE9 /* ControllersSettingsUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACF028868E4B008B6BE9 /* ControllersSettingsUtil.mm */; };
+		B904ACF42886AB06008B6BE9 /* ButtonMapping.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B904ACF32886AB05008B6BE9 /* ButtonMapping.storyboard */; };
+		B904ACF82886AC58008B6BE9 /* MappingRootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904ACF72886AC58008B6BE9 /* MappingRootViewController.mm */; };
 		B904AD012887B9D1008B6BE9 /* ControllersPortViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD002887B9D1008B6BE9 /* ControllersPortViewController.mm */; };
 		B904AD082887DAEE008B6BE9 /* ControllersTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD052887D99B008B6BE9 /* ControllersTypeCell.m */; };
 		B904AD092887DAF1008B6BE9 /* ControllersTypeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD072887DA0E008B6BE9 /* ControllersTypeViewController.mm */; };
+		B904AD0C28886AE6008B6BE9 /* MappingRootDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD0B28886AE6008B6BE9 /* MappingRootDeviceCell.m */; };
+		B904AD0F28886AF8008B6BE9 /* MappingRootGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD0E28886AF8008B6BE9 /* MappingRootGroupCell.m */; };
+		B904AD1228886B0D008B6BE9 /* MappingRootExtensionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD1128886B0D008B6BE9 /* MappingRootExtensionCell.m */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -151,6 +156,9 @@
 		B904ACED2886701C008B6BE9 /* ControllersRootPortCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ControllersRootPortCell.m; sourceTree = "<group>"; };
 		B904ACEF28868E4B008B6BE9 /* ControllersSettingsUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersSettingsUtil.h; sourceTree = "<group>"; };
 		B904ACF028868E4B008B6BE9 /* ControllersSettingsUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersSettingsUtil.mm; sourceTree = "<group>"; };
+		B904ACF32886AB05008B6BE9 /* ButtonMapping.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ButtonMapping.storyboard; sourceTree = "<group>"; };
+		B904ACF62886AC58008B6BE9 /* MappingRootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingRootViewController.h; sourceTree = "<group>"; };
+		B904ACF72886AC58008B6BE9 /* MappingRootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingRootViewController.mm; sourceTree = "<group>"; };
 		B904ACFF2887B9D1008B6BE9 /* ControllersPortViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersPortViewController.h; sourceTree = "<group>"; };
 		B904AD002887B9D1008B6BE9 /* ControllersPortViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersPortViewController.mm; sourceTree = "<group>"; };
 		B904AD022887CF13008B6BE9 /* DOLControllerPortType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOLControllerPortType.h; sourceTree = "<group>"; };
@@ -158,6 +166,12 @@
 		B904AD052887D99B008B6BE9 /* ControllersTypeCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ControllersTypeCell.m; sourceTree = "<group>"; };
 		B904AD062887DA0E008B6BE9 /* ControllersTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersTypeViewController.h; sourceTree = "<group>"; };
 		B904AD072887DA0E008B6BE9 /* ControllersTypeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersTypeViewController.mm; sourceTree = "<group>"; };
+		B904AD0A28886AE6008B6BE9 /* MappingRootDeviceCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingRootDeviceCell.h; sourceTree = "<group>"; };
+		B904AD0B28886AE6008B6BE9 /* MappingRootDeviceCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingRootDeviceCell.m; sourceTree = "<group>"; };
+		B904AD0D28886AF8008B6BE9 /* MappingRootGroupCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingRootGroupCell.h; sourceTree = "<group>"; };
+		B904AD0E28886AF8008B6BE9 /* MappingRootGroupCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingRootGroupCell.m; sourceTree = "<group>"; };
+		B904AD1028886B0D008B6BE9 /* MappingRootExtensionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingRootExtensionCell.h; sourceTree = "<group>"; };
+		B904AD1128886B0D008B6BE9 /* MappingRootExtensionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingRootExtensionCell.m; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -437,6 +451,29 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		B904ACF22886AAED008B6BE9 /* Mapping */ = {
+			isa = PBXGroup;
+			children = (
+				B904ACF32886AB05008B6BE9 /* ButtonMapping.storyboard */,
+			);
+			path = Mapping;
+			sourceTree = "<group>";
+		};
+		B904ACF52886AC2F008B6BE9 /* Mapping */ = {
+			isa = PBXGroup;
+			children = (
+				B904AD0A28886AE6008B6BE9 /* MappingRootDeviceCell.h */,
+				B904AD0B28886AE6008B6BE9 /* MappingRootDeviceCell.m */,
+				B904AD1028886B0D008B6BE9 /* MappingRootExtensionCell.h */,
+				B904AD1128886B0D008B6BE9 /* MappingRootExtensionCell.m */,
+				B904AD0D28886AF8008B6BE9 /* MappingRootGroupCell.h */,
+				B904AD0E28886AF8008B6BE9 /* MappingRootGroupCell.m */,
+				B904ACF62886AC58008B6BE9 /* MappingRootViewController.h */,
+				B904ACF72886AC58008B6BE9 /* MappingRootViewController.mm */,
+			);
+			path = Mapping;
+			sourceTree = "<group>";
+		};
 		B904AD032887D65A008B6BE9 /* Port */ = {
 			isa = PBXGroup;
 			children = (
@@ -478,6 +515,7 @@
 				B93986FD287F8F0F008E8E47 /* Config */,
 				B904ACE5288666D3008B6BE9 /* Controllers */,
 				B9DC5FA628849467004BD94A /* Graphics */,
+				B904ACF22886AAED008B6BE9 /* Mapping */,
 				B99137AE28827AD200588446 /* SettingsRoot.storyboard */,
 			);
 			path = Settings;
@@ -489,6 +527,7 @@
 				B9398700287F98E7008E8E47 /* Config */,
 				B904ACE628866E12008B6BE9 /* Controllers */,
 				B9DC5FA52884945C004BD94A /* Graphics */,
+				B904ACF52886AC2F008B6BE9 /* Mapping */,
 				B93986FA287F45A3008E8E47 /* SettingsRootViewController.swift */,
 			);
 			path = Settings;
@@ -881,6 +920,7 @@
 			files = (
 				B99137AC28827AD200588446 /* SettingsRoot.storyboard in Resources */,
 				B991379E2881F23A00588446 /* Core.strings in Resources */,
+				B904ACF42886AB06008B6BE9 /* ButtonMapping.storyboard in Resources */,
 				B950CA942846A13100F45219 /* Sys in Resources */,
 				B99137BF288327AC00588446 /* ConfigSettings.storyboard in Resources */,
 				B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */,
@@ -1003,6 +1043,7 @@
 			files = (
 				B904AD092887DAF1008B6BE9 /* ControllersTypeViewController.mm in Sources */,
 				B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */,
+				B904ACF82886AC58008B6BE9 /* MappingRootViewController.mm in Sources */,
 				B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */,
 				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
@@ -1023,6 +1064,7 @@
 				B93986FB287F45A3008E8E47 /* SettingsRootViewController.swift in Sources */,
 				B904ACEE2886701C008B6BE9 /* ControllersRootPortCell.m in Sources */,
 				B9913792288153D000588446 /* ConfigAdvancedViewController.mm in Sources */,
+				B904AD0F28886AF8008B6BE9 /* MappingRootGroupCell.m in Sources */,
 				B904ACBE28851C5C008B6BE9 /* GraphicsBackendCell.m in Sources */,
 				B939872E2880896D008E8E47 /* ConfigGameCubeViewController.mm in Sources */,
 				B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */,
@@ -1050,8 +1092,10 @@
 				B904ACCF288555E8008B6BE9 /* InternalResolutionViewController.mm in Sources */,
 				B9398724287FFBEC008E8E47 /* ConfigSoundViewController.mm in Sources */,
 				B9447B072841906000BC9110 /* TCView.swift in Sources */,
+				B904AD0C28886AE6008B6BE9 /* MappingRootDeviceCell.m in Sources */,
 				B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */,
 				B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */,
+				B904AD1228886B0D008B6BE9 /* MappingRootExtensionCell.m in Sources */,
 				B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */,
 				B99137C928832A0800588446 /* LocalizationUtil.m in Sources */,
 				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
