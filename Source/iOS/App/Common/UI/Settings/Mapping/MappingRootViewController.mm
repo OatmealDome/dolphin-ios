@@ -238,7 +238,14 @@ struct Section {
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
   if (indexPath.section == 0) {
     MappingRootDeviceCell* deviceCell = [tableView dequeueReusableCellWithIdentifier:@"DeviceCell" forIndexPath:indexPath];
-    deviceCell.deviceLabel.text = CppToFoundationString(_controller->GetDefaultDevice().ToString());
+    
+    const auto deviceString = _controller->GetDefaultDevice().ToString();
+    if (!deviceString.empty()) {
+      deviceCell.deviceLabel.text = CppToFoundationString(deviceString);
+    } else {
+      // Show at least *something* to make it clear that no device is selected.
+      deviceCell.deviceLabel.text = @"—";
+    }
     
     return deviceCell;
   }
