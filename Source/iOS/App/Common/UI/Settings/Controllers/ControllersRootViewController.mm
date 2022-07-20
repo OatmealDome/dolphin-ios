@@ -28,27 +28,30 @@
   NSString* wiiString = DOLCoreLocalizedStringWithArgs(@"Wii Remote %1", @"d");
   
   for (int i = 0; i < 4; i++) {
-    //
-    // GameCube
-    //
+    ControllersRootPortCell* gamecubeCell = self.gamecubeCells[i];
+    gamecubeCell.portLabel.text = [NSString stringWithFormat:gamecubeString, i + 1];
     
+    ControllersRootPortCell* wiiCell = self.wiiCells[i];
+    wiiCell.portLabel.text = [NSString stringWithFormat:wiiString, i + 1];
+  }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  
+  for (int i = 0; i < 4; i++) {
     const SerialInterface::SIDevices siDevice = Config::Get(Config::GetInfoForSIDevice(i));
     
     ControllersRootPortCell* gamecubeCell = self.gamecubeCells[i];
-    gamecubeCell.portLabel.text = [NSString stringWithFormat:gamecubeString, i + 1];
     gamecubeCell.typeLabel.text = [ControllersSettingsUtil getLocalizedStringForSIDevice:siDevice];
-    
-    //
-    // Wii
-    //
     
     WiimoteSource wiiSource = Config::Get(Config::GetInfoForWiimoteSource(i));
     
     ControllersRootPortCell* wiiCell = self.wiiCells[i];
-    wiiCell.portLabel.text = [NSString stringWithFormat:wiiString, i + 1];
     wiiCell.typeLabel.text = [ControllersSettingsUtil getLocalizedStringForWiimoteSource:wiiSource];
   }
 }
+
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
   _targetType = indexPath.section == 0 ? DOLControllerPortTypePad : DOLControllerPortTypeWiimote;
