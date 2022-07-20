@@ -18,6 +18,8 @@
 }
 
 - (void)viewDidLoad {
+  [super viewDidLoad];
+  
   NSString* titleFormat;
   if (self.portType == DOLControllerPortTypePad) {
     // The string DolphinQt uses, "GameCube Controller at Port %1", is a bit too unwieldy for a UINavigationItem title.
