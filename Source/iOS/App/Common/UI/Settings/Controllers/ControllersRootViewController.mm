@@ -7,16 +7,17 @@
 #import "Core/Config/WiimoteSettings.h"
 #import "Core/HW/Wiimote.h"
 
+#import "ControllersPortViewController.h"
 #import "ControllersSettingsUtil.h"
+#import "DOLControllerPortType.h"
 #import "LocalizationUtil.h"
-#import "MappingRootViewController.h"
 
 @interface ControllersRootViewController ()
 
 @end
 
 @implementation ControllersRootViewController {
-  DOLMappingType _targetType;
+  DOLControllerPortType _targetType;
   int _targetPort;
 }
 
@@ -46,6 +47,22 @@
     ControllersRootPortCell* wiiCell = self.wiiCells[i];
     wiiCell.portLabel.text = [NSString stringWithFormat:wiiString, i + 1];
     wiiCell.typeLabel.text = [ControllersSettingsUtil getLocalizedStringForWiimoteSource:wiiSource];
+  }
+}
+
+- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+  _targetType = indexPath.section == 0 ? DOLControllerPortTypePad : DOLControllerPortTypeWiimote;
+  _targetPort = (int)indexPath.row;
+  
+  [self performSegueWithIdentifier:@"toPort" sender:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
+  if ([segue.identifier isEqualToString:@"toPort"]) {
+    ControllersPortViewController* portController = segue.destinationViewController;
+    
+    portController.portType = _targetType;
+    portController.portNumber = _targetPort;
   }
 }
 
