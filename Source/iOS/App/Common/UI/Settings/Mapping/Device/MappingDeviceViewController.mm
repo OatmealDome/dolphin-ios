@@ -102,6 +102,7 @@ struct Device {
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
   if (_lastSelected != indexPath.row) {
     self.emulatedController->SetDefaultDevice(_devices[indexPath.row]);
+    self.emulatedController->UpdateReferences(g_controller_interface);
     
     MappingDeviceCell* cell = [tableView cellForRowAtIndexPath:indexPath];
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
