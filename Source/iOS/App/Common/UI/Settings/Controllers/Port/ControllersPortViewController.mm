@@ -9,6 +9,7 @@
 #import "ControllersSettingsUtil.h"
 #import "ControllersTypeViewController.h"
 #import "LocalizationUtil.h"
+#import "MappingRootViewController.h"
 
 @interface ControllersPortViewController ()
 
@@ -60,12 +61,25 @@
   }
 }
 
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString*)identifier sender:(id)sender {
+  if ([identifier isEqualToString:@"toMapping"]) {
+    return _configureEnabled;
+  }
+  
+  return true;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
   if ([segue.identifier isEqualToString:@"toType"]) {
     ControllersTypeViewController* typeController = segue.destinationViewController;
     
     typeController.portType = self.portType;
     typeController.portNumber = self.portNumber;
+  } else if ([segue.identifier isEqualToString:@"toMapping"]) {
+    MappingRootViewController* mappingController = segue.destinationViewController;
+    
+    mappingController.mappingType = self.portType == DOLControllerPortTypePad ? DOLMappingTypePad : DOLMappingTypeWiimote;
+    mappingController.mappingPort = self.portNumber;
   }
 }
 

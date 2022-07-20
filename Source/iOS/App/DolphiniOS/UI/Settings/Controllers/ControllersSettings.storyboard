@@ -396,6 +396,9 @@
                                                 <constraint firstItem="yJZ-zO-pu1" firstAttribute="leading" secondItem="6cZ-iv-tXh" secondAttribute="leadingMargin" id="yEx-XE-Ktb"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="wLu-SO-QHV" kind="show" identifier="toMapping" id="r0N-GJ-4tY"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -463,6 +466,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jiB-IT-9jc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3231" y="-91"/>
+        </scene>
+        <!--ButtonMapping-->
+        <scene sceneID="3M8-aU-FYP">
+            <objects>
+                <viewControllerPlaceholder storyboardName="ButtonMapping" id="wLu-SO-QHV" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="aMz-N0-g01"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="92n-ku-FDg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3230" y="369"/>
         </scene>
     </scenes>
 </document>
