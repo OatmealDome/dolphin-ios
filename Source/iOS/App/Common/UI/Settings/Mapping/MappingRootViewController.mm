@@ -285,6 +285,8 @@ struct Section {
   } else if ([segue.identifier isEqualToString:@"toGroupEdit"]) {
     MappingGroupEditViewController* editController = segue.destinationViewController;
     
+    editController.controller = _controller;
+    
     NSIndexPath* indexPath = self.tableView.indexPathForSelectedRow;
     editController.controlGroup = _sections[indexPath.section - 1].groups[indexPath.row].controlGroup;
   }

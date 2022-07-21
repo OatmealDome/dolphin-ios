@@ -6,6 +6,7 @@
 #import "MappingGroupEditEnableCellDelegate.h"
 
 namespace ControllerEmu {
+class EmulatedController;
 class ControlGroup;
 }
 
@@ -13,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MappingGroupEditViewController : UITableViewController <MappingGroupEditEnableCellDelegate>
 
+@property (nonatomic) ControllerEmu::EmulatedController* controller;
 @property (nonatomic) ControllerEmu::ControlGroup* controlGroup;
 
 @end
