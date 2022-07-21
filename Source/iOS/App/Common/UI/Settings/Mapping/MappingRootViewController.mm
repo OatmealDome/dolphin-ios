@@ -23,9 +23,9 @@
 #import "InputCommon/ControllerEmu/ControllerEmu.h"
 #import "InputCommon/InputConfig.h"
 
-#import "MappingDeviceViewController.h"
 #import "FoundationStringUtil.h"
 #import "LocalizationUtil.h"
+#import "MappingDeviceViewController.h"
 #import "MappingRootDeviceCell.h"
 #import "MappingRootExtensionCell.h"
 #import "MappingRootGroupCell.h"
