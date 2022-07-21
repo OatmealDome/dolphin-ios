@@ -44,6 +44,7 @@
 		B904AD1228886B0D008B6BE9 /* MappingRootExtensionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD1128886B0D008B6BE9 /* MappingRootExtensionCell.m */; };
 		B904AD1A2888AB5E008B6BE9 /* MappingDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD192888AB5E008B6BE9 /* MappingDeviceCell.m */; };
 		B904AD1D2888AB6B008B6BE9 /* MappingDeviceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD1C2888AB6B008B6BE9 /* MappingDeviceViewController.mm */; };
+		B904AD272888D346008B6BE9 /* MappingUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD262888D346008B6BE9 /* MappingUtil.mm */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -178,6 +179,8 @@
 		B904AD192888AB5E008B6BE9 /* MappingDeviceCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingDeviceCell.m; sourceTree = "<group>"; };
 		B904AD1B2888AB6B008B6BE9 /* MappingDeviceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingDeviceViewController.h; sourceTree = "<group>"; };
 		B904AD1C2888AB6B008B6BE9 /* MappingDeviceViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingDeviceViewController.mm; sourceTree = "<group>"; };
+		B904AD252888D346008B6BE9 /* MappingUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingUtil.h; sourceTree = "<group>"; };
+		B904AD262888D346008B6BE9 /* MappingUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingUtil.mm; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -477,6 +480,8 @@
 				B904AD0E28886AF8008B6BE9 /* MappingRootGroupCell.m */,
 				B904ACF62886AC58008B6BE9 /* MappingRootViewController.h */,
 				B904ACF72886AC58008B6BE9 /* MappingRootViewController.mm */,
+				B904AD252888D346008B6BE9 /* MappingUtil.h */,
+				B904AD262888D346008B6BE9 /* MappingUtil.mm */,
 			);
 			path = Mapping;
 			sourceTree = "<group>";
@@ -1092,6 +1097,7 @@
 				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
 				B904ACDD28862941008B6BE9 /* GraphicsAdvancedViewController.mm in Sources */,
 				B904AD012887B9D1008B6BE9 /* ControllersPortViewController.mm in Sources */,
+				B904AD272888D346008B6BE9 /* MappingUtil.mm in Sources */,
 				B9398713287FDF23008E8E47 /* FallbackRegionViewController.mm in Sources */,
 				B904ACC728852708008B6BE9 /* GraphicsShaderModeViewController.mm in Sources */,
 				B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */,
