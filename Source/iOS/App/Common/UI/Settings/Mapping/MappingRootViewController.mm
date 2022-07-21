@@ -27,6 +27,7 @@
 #import "LocalizationUtil.h"
 #import "MappingDeviceViewController.h"
 #import "MappingExtensionViewController.h"
+#import "MappingGroupEditViewController.h"
 #import "MappingRootDeviceCell.h"
 #import "MappingRootExtensionCell.h"
 #import "MappingRootGroupCell.h"
@@ -270,10 +271,6 @@ struct Section {
   return groupCell;
 }
 
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-  [tableView deselectRowAtIndexPath:indexPath animated:true];
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
   if ([segue.identifier isEqualToString:@"toDevice"]) {
     MappingDeviceViewController* deviceController = segue.destinationViewController;
@@ -285,6 +282,11 @@ struct Section {
     MappingExtensionViewController* extensionController = segue.destinationViewController;
     
     extensionController.attachments = static_cast<ControllerEmu::Attachments*>(extensionGroup);
+  } else if ([segue.identifier isEqualToString:@"toGroupEdit"]) {
+    MappingGroupEditViewController* editController = segue.destinationViewController;
+    
+    NSIndexPath* indexPath = self.tableView.indexPathForSelectedRow;
+    editController.controlGroup = _sections[indexPath.section - 1].groups[indexPath.row].controlGroup;
   }
 }
 

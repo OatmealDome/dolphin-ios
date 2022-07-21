@@ -47,6 +47,11 @@
 		B904AD272888D346008B6BE9 /* MappingUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD262888D346008B6BE9 /* MappingUtil.mm */; };
 		B904AD2B2888D72F008B6BE9 /* MappingExtensionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD2A2888D72F008B6BE9 /* MappingExtensionViewController.mm */; };
 		B904AD2E2888D75F008B6BE9 /* MappingExtensionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD2D2888D75F008B6BE9 /* MappingExtensionCell.m */; };
+		B904AD322888FF17008B6BE9 /* MappingGroupEditViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD312888FF17008B6BE9 /* MappingGroupEditViewController.mm */; };
+		B904AD3528890477008B6BE9 /* MappingGroupEditEnabledCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3428890477008B6BE9 /* MappingGroupEditEnabledCell.m */; };
+		B904AD3828890489008B6BE9 /* MappingGroupEditControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3728890489008B6BE9 /* MappingGroupEditControlCell.m */; };
+		B904AD3B288904AC008B6BE9 /* MappingGroupEditBoolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3A288904AC008B6BE9 /* MappingGroupEditBoolCell.m */; };
+		B904AD3E288904D9008B6BE9 /* MappingGroupEditDoubleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3D288904D9008B6BE9 /* MappingGroupEditDoubleCell.m */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -187,6 +192,17 @@
 		B904AD2A2888D72F008B6BE9 /* MappingExtensionViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingExtensionViewController.mm; sourceTree = "<group>"; };
 		B904AD2C2888D75F008B6BE9 /* MappingExtensionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingExtensionCell.h; sourceTree = "<group>"; };
 		B904AD2D2888D75F008B6BE9 /* MappingExtensionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingExtensionCell.m; sourceTree = "<group>"; };
+		B904AD302888FF17008B6BE9 /* MappingGroupEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditViewController.h; sourceTree = "<group>"; };
+		B904AD312888FF17008B6BE9 /* MappingGroupEditViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingGroupEditViewController.mm; sourceTree = "<group>"; };
+		B904AD3328890477008B6BE9 /* MappingGroupEditEnabledCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditEnabledCell.h; sourceTree = "<group>"; };
+		B904AD3428890477008B6BE9 /* MappingGroupEditEnabledCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingGroupEditEnabledCell.m; sourceTree = "<group>"; };
+		B904AD3628890489008B6BE9 /* MappingGroupEditControlCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditControlCell.h; sourceTree = "<group>"; };
+		B904AD3728890489008B6BE9 /* MappingGroupEditControlCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingGroupEditControlCell.m; sourceTree = "<group>"; };
+		B904AD39288904AC008B6BE9 /* MappingGroupEditBoolCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditBoolCell.h; sourceTree = "<group>"; };
+		B904AD3A288904AC008B6BE9 /* MappingGroupEditBoolCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingGroupEditBoolCell.m; sourceTree = "<group>"; };
+		B904AD3C288904D9008B6BE9 /* MappingGroupEditDoubleCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditDoubleCell.h; sourceTree = "<group>"; };
+		B904AD3D288904D9008B6BE9 /* MappingGroupEditDoubleCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingGroupEditDoubleCell.m; sourceTree = "<group>"; };
+		B904AD3F2889CC86008B6BE9 /* MappingGroupEditEnableCellDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditEnableCellDelegate.h; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -479,6 +495,7 @@
 			children = (
 				B904AD172888AB3B008B6BE9 /* Device */,
 				B904AD282888D719008B6BE9 /* Extension */,
+				B904AD2F2888FEDE008B6BE9 /* GroupEdit */,
 				B904AD0A28886AE6008B6BE9 /* MappingRootDeviceCell.h */,
 				B904AD0B28886AE6008B6BE9 /* MappingRootDeviceCell.m */,
 				B904AD1028886B0D008B6BE9 /* MappingRootExtensionCell.h */,
@@ -527,6 +544,24 @@
 				B904AD2A2888D72F008B6BE9 /* MappingExtensionViewController.mm */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		B904AD2F2888FEDE008B6BE9 /* GroupEdit */ = {
+			isa = PBXGroup;
+			children = (
+				B904AD39288904AC008B6BE9 /* MappingGroupEditBoolCell.h */,
+				B904AD3A288904AC008B6BE9 /* MappingGroupEditBoolCell.m */,
+				B904AD3628890489008B6BE9 /* MappingGroupEditControlCell.h */,
+				B904AD3728890489008B6BE9 /* MappingGroupEditControlCell.m */,
+				B904AD3C288904D9008B6BE9 /* MappingGroupEditDoubleCell.h */,
+				B904AD3D288904D9008B6BE9 /* MappingGroupEditDoubleCell.m */,
+				B904AD3328890477008B6BE9 /* MappingGroupEditEnabledCell.h */,
+				B904AD3428890477008B6BE9 /* MappingGroupEditEnabledCell.m */,
+				B904AD3F2889CC86008B6BE9 /* MappingGroupEditEnableCellDelegate.h */,
+				B904AD302888FF17008B6BE9 /* MappingGroupEditViewController.h */,
+				B904AD312888FF17008B6BE9 /* MappingGroupEditViewController.mm */,
+			);
+			path = GroupEdit;
 			sourceTree = "<group>";
 		};
 		B933EDBB27F6A5C7004D7DD7 /* Swift */ = {
@@ -1092,6 +1127,7 @@
 				B904ACCB28854782008B6BE9 /* GraphicsEnhancementsViewController.mm in Sources */,
 				B904AD082887DAEE008B6BE9 /* ControllersTypeCell.m in Sources */,
 				B991378B288149F100588446 /* WiiSoundViewController.mm in Sources */,
+				B904AD322888FF17008B6BE9 /* MappingGroupEditViewController.mm in Sources */,
 				B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */,
 				B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */,
 				B9398716287FE28F008E8E47 /* FallbackRegionCell.m in Sources */,
@@ -1102,8 +1138,10 @@
 				B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */,
 				B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */,
 				B9398707287F998C008E8E47 /* ConfigGeneralViewController.mm in Sources */,
+				B904AD3E288904D9008B6BE9 /* MappingGroupEditDoubleCell.m in Sources */,
 				B93986FB287F45A3008E8E47 /* SettingsRootViewController.swift in Sources */,
 				B904ACEE2886701C008B6BE9 /* ControllersRootPortCell.m in Sources */,
+				B904AD3528890477008B6BE9 /* MappingGroupEditEnabledCell.m in Sources */,
 				B9913792288153D000588446 /* ConfigAdvancedViewController.mm in Sources */,
 				B904AD0F28886AF8008B6BE9 /* MappingRootGroupCell.m in Sources */,
 				B904ACBE28851C5C008B6BE9 /* GraphicsBackendCell.m in Sources */,
@@ -1114,6 +1152,7 @@
 				B9DC5FB3288497B0004BD94A /* GraphicsGeneralViewController.mm in Sources */,
 				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
 				B904ACDD28862941008B6BE9 /* GraphicsAdvancedViewController.mm in Sources */,
+				B904AD3B288904AC008B6BE9 /* MappingGroupEditBoolCell.m in Sources */,
 				B904AD012887B9D1008B6BE9 /* ControllersPortViewController.mm in Sources */,
 				B904AD272888D346008B6BE9 /* MappingUtil.mm in Sources */,
 				B9398713287FDF23008E8E47 /* FallbackRegionViewController.mm in Sources */,
@@ -1124,6 +1163,7 @@
 				B904ACD22885561E008B6BE9 /* InternalResolutionCell.m in Sources */,
 				B9447B052841901200BC9110 /* TCGameCubePad.swift in Sources */,
 				B904ACEB28866FF4008B6BE9 /* ControllersRootViewController.mm in Sources */,
+				B904AD3828890489008B6BE9 /* MappingGroupEditControlCell.m in Sources */,
 				B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */,
 				B900A7D527F61F3A000361DD /* GameFileCacheManager.mm in Sources */,
 				B9DC5FAB28849535004BD94A /* GraphicsRootViewController.mm in Sources */,
