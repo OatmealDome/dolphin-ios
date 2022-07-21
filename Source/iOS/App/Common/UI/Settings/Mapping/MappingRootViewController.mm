@@ -29,6 +29,7 @@
 #import "MappingRootDeviceCell.h"
 #import "MappingRootExtensionCell.h"
 #import "MappingRootGroupCell.h"
+#import "MappingUtil.h"
 
 struct Group {
   std::string name;
@@ -252,10 +253,18 @@ struct Section {
   
   NSInteger actualSection = indexPath.section - 1;
   
-  NSString* groupLocalizable = CppToFoundationString(_sections[actualSection].groups[indexPath.row].name);
+  const auto& group = _sections[actualSection].groups[indexPath.row];
+  
+  auto attachments = dynamic_cast<ControllerEmu::Attachments*>(group.controlGroup);
+  if (attachments) {
+    MappingRootExtensionCell* extensionCell = [tableView dequeueReusableCellWithIdentifier:@"ExtensionSelectCell" forIndexPath:indexPath];
+    extensionCell.extensionLabel.text = [MappingUtil getLocalizedStringForWiimoteExtension:static_cast<WiimoteEmu::ExtensionNumber>(attachments->GetSelectedAttachment())];
+    
+    return extensionCell;
+  }
   
   MappingRootGroupCell* groupCell = [tableView dequeueReusableCellWithIdentifier:@"GroupCell" forIndexPath:indexPath];
-  groupCell.nameCell.text = DOLCoreLocalizedString(groupLocalizable);
+  groupCell.nameCell.text = DOLCoreLocalizedString(CppToFoundationString(group.name));
   
   return groupCell;
 }
