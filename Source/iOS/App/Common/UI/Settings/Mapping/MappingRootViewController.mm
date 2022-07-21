@@ -26,6 +26,7 @@
 #import "FoundationStringUtil.h"
 #import "LocalizationUtil.h"
 #import "MappingDeviceViewController.h"
+#import "MappingExtensionViewController.h"
 #import "MappingRootDeviceCell.h"
 #import "MappingRootExtensionCell.h"
 #import "MappingRootGroupCell.h"
@@ -278,6 +279,12 @@ struct Section {
     MappingDeviceViewController* deviceController = segue.destinationViewController;
     
     deviceController.emulatedController = _controller;
+  } else if ([segue.identifier isEqualToString:@"toExtension"]) {
+    ControllerEmu::ControlGroup* extensionGroup = Wiimote::GetWiimoteGroup(self.mappingPort, WiimoteEmu::WiimoteGroup::Attachments);
+    
+    MappingExtensionViewController* extensionController = segue.destinationViewController;
+    
+    extensionController.attachments = static_cast<ControllerEmu::Attachments*>(extensionGroup);
   }
 }
 

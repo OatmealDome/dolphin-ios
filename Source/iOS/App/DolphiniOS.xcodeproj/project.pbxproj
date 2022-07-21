@@ -45,6 +45,8 @@
 		B904AD1A2888AB5E008B6BE9 /* MappingDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD192888AB5E008B6BE9 /* MappingDeviceCell.m */; };
 		B904AD1D2888AB6B008B6BE9 /* MappingDeviceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD1C2888AB6B008B6BE9 /* MappingDeviceViewController.mm */; };
 		B904AD272888D346008B6BE9 /* MappingUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD262888D346008B6BE9 /* MappingUtil.mm */; };
+		B904AD2B2888D72F008B6BE9 /* MappingExtensionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B904AD2A2888D72F008B6BE9 /* MappingExtensionViewController.mm */; };
+		B904AD2E2888D75F008B6BE9 /* MappingExtensionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD2D2888D75F008B6BE9 /* MappingExtensionCell.m */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -181,6 +183,10 @@
 		B904AD1C2888AB6B008B6BE9 /* MappingDeviceViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingDeviceViewController.mm; sourceTree = "<group>"; };
 		B904AD252888D346008B6BE9 /* MappingUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingUtil.h; sourceTree = "<group>"; };
 		B904AD262888D346008B6BE9 /* MappingUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingUtil.mm; sourceTree = "<group>"; };
+		B904AD292888D72F008B6BE9 /* MappingExtensionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingExtensionViewController.h; sourceTree = "<group>"; };
+		B904AD2A2888D72F008B6BE9 /* MappingExtensionViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingExtensionViewController.mm; sourceTree = "<group>"; };
+		B904AD2C2888D75F008B6BE9 /* MappingExtensionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingExtensionCell.h; sourceTree = "<group>"; };
+		B904AD2D2888D75F008B6BE9 /* MappingExtensionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingExtensionCell.m; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -472,6 +478,7 @@
 			isa = PBXGroup;
 			children = (
 				B904AD172888AB3B008B6BE9 /* Device */,
+				B904AD282888D719008B6BE9 /* Extension */,
 				B904AD0A28886AE6008B6BE9 /* MappingRootDeviceCell.h */,
 				B904AD0B28886AE6008B6BE9 /* MappingRootDeviceCell.m */,
 				B904AD1028886B0D008B6BE9 /* MappingRootExtensionCell.h */,
@@ -509,6 +516,17 @@
 				B904AD1C2888AB6B008B6BE9 /* MappingDeviceViewController.mm */,
 			);
 			path = Device;
+			sourceTree = "<group>";
+		};
+		B904AD282888D719008B6BE9 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				B904AD2C2888D75F008B6BE9 /* MappingExtensionCell.h */,
+				B904AD2D2888D75F008B6BE9 /* MappingExtensionCell.m */,
+				B904AD292888D72F008B6BE9 /* MappingExtensionViewController.h */,
+				B904AD2A2888D72F008B6BE9 /* MappingExtensionViewController.mm */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		B933EDBB27F6A5C7004D7DD7 /* Swift */ = {
@@ -1101,6 +1119,7 @@
 				B9398713287FDF23008E8E47 /* FallbackRegionViewController.mm in Sources */,
 				B904ACC728852708008B6BE9 /* GraphicsShaderModeViewController.mm in Sources */,
 				B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */,
+				B904AD2E2888D75F008B6BE9 /* MappingExtensionCell.m in Sources */,
 				B991378E28814BCD00588446 /* WiiSensorBarViewController.mm in Sources */,
 				B904ACD22885561E008B6BE9 /* InternalResolutionCell.m in Sources */,
 				B9447B052841901200BC9110 /* TCGameCubePad.swift in Sources */,
@@ -1124,6 +1143,7 @@
 				B904AD1228886B0D008B6BE9 /* MappingRootExtensionCell.m in Sources */,
 				B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */,
 				B99137C928832A0800588446 /* LocalizationUtil.m in Sources */,
+				B904AD2B2888D72F008B6BE9 /* MappingExtensionViewController.mm in Sources */,
 				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
 				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
 				B904ACF128868E4B008B6BE9 /* ControllersSettingsUtil.mm in Sources */,

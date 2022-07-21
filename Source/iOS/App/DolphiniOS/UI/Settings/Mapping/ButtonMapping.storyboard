@@ -82,6 +82,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="extensionLabel" destination="z6g-tm-gnc" id="glv-Gg-Qn7"/>
+                                    <segue destination="LsV-Yn-tgW" kind="show" identifier="toExtension" id="fFx-lz-izN"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="GroupCell" id="qj1-Uy-DYz" customClass="MappingRootGroupCell">
@@ -169,6 +170,53 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IBT-UO-Imz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2300" y="-91"/>
+        </scene>
+        <!--Extension-->
+        <scene sceneID="z0n-g6-Xag">
+            <objects>
+                <tableViewController id="LsV-Yn-tgW" customClass="MappingExtensionViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Cc7-ZA-b9L">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ExtensionCell" id="L1I-Zj-7ch" customClass="MappingExtensionCell">
+                                <rect key="frame" x="16" y="49.5" width="343" height="43"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="L1I-Zj-7ch" id="r3m-F9-s9H">
+                                    <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Extension" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ql2-UH-PeX">
+                                            <rect key="frame" x="16" y="11" width="311" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="ql2-UH-PeX" secondAttribute="trailing" id="CGP-Vz-Cjq"/>
+                                        <constraint firstItem="ql2-UH-PeX" firstAttribute="top" secondItem="r3m-F9-s9H" secondAttribute="topMargin" id="LdS-Je-iNI"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="ql2-UH-PeX" secondAttribute="bottom" id="Ppg-jh-pzd"/>
+                                        <constraint firstItem="ql2-UH-PeX" firstAttribute="leading" secondItem="r3m-F9-s9H" secondAttribute="leadingMargin" id="g03-9P-1Kt"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="extensionLabel" destination="ql2-UH-PeX" id="PdX-Xv-iru"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="LsV-Yn-tgW" id="fRY-LR-g00"/>
+                            <outlet property="delegate" destination="LsV-Yn-tgW" id="jgN-Fq-ilW"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Extension" largeTitleDisplayMode="never" id="xbM-OP-tKZ"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vOZ-B8-RzT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2300" y="680"/>
         </scene>
     </scenes>
 </document>
