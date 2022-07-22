@@ -281,6 +281,7 @@ struct Section {
     
     MappingExtensionViewController* extensionController = segue.destinationViewController;
     
+    extensionController.delegate = self;
     extensionController.attachments = static_cast<ControllerEmu::Attachments*>(extensionGroup);
   } else if ([segue.identifier isEqualToString:@"toGroupEdit"]) {
     MappingGroupEditViewController* editController = segue.destinationViewController;
@@ -294,6 +295,10 @@ struct Section {
 }
 
 - (void)controlGroupDidChange:(MappingGroupEditViewController*)viewController {
+  _config->SaveConfig();
+}
+
+- (void)extensionDidChange:(MappingExtensionViewController*)viewController {
   _config->SaveConfig();
 }
 

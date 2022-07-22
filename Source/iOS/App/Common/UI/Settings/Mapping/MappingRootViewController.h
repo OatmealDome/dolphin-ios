@@ -3,6 +3,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "MappingExtensionViewControllerDelegate.h"
 #import "MappingGroupEditViewControllerDelegate.h"
 
 typedef NS_ENUM(NSUInteger, DOLMappingType) {
@@ -12,7 +13,7 @@ typedef NS_ENUM(NSUInteger, DOLMappingType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MappingRootViewController : UITableViewController <MappingGroupEditViewControllerDelegate>
+@interface MappingRootViewController : UITableViewController <MappingExtensionViewControllerDelegate, MappingGroupEditViewControllerDelegate>
 
 @property (nonatomic) DOLMappingType mappingType;
 @property (nonatomic) int mappingPort;
