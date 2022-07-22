@@ -100,6 +100,12 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
   cell.expressionLabel.text = foundationExpression;
 }
 
+- (void)updateDoubleCell:(MappingGroupEditDoubleCell*)cell withSetting:(ControllerEmu::NumericSetting<double>*)setting {
+  NSString* textString = [NSString stringWithFormat:@"%f", setting->GetValue()];
+  
+  cell.textField.text = textString;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
@@ -167,9 +173,10 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
           MappingGroupEditDoubleCell* doubleCell = [tableView dequeueReusableCellWithIdentifier:@"DoubleCell" forIndexPath:indexPath];
           
           doubleCell.nameLabel.text = DOLCoreLocalizedString(CToFoundationString(doubleSetting->GetUIName()));
-          doubleCell.textField.text = [NSString localizedStringWithFormat:@"%f", doubleSetting->GetValue()];
           
           [self updateDoubleCellBasedOnEnabled:doubleCell];
+          
+          [self updateDoubleCell:doubleCell withSetting:doubleSetting];
           
           return doubleCell;
         }
