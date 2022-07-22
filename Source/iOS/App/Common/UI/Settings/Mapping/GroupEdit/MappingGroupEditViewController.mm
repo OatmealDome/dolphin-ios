@@ -85,6 +85,17 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
   cell.enabledSwitch.enabled = enabled;
 }
 
+- (void)updateControlCell:(MappingGroupEditControlCell*)cell withExpression:(std::string)expression {
+  NSString* foundationExpression;
+  if (!expression.empty()) {
+    foundationExpression = CppToFoundationString(expression);
+  } else {
+    foundationExpression = @"—";
+  }
+  
+  cell.expressionLabel.text = foundationExpression;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
@@ -134,15 +145,11 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
         name = DOLCoreLocalizedString(name);
       }
       
-      std::string expression = control->control_ref->GetExpression();
-      if (expression.empty()) {
-        expression = "—";
-      }
-      
       controlCell.nameLabel.text = name;
-      controlCell.expressionLabel.text = CppToFoundationString(expression);
       
       [self updateControlCellBasedOnEnabled:controlCell];
+      
+      [self updateControlCell:controlCell withExpression:control->control_ref->GetExpression()];
       
       return controlCell;
     }
