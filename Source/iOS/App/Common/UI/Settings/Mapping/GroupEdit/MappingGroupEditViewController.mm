@@ -145,6 +145,19 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
   [self updateDoubleCell:cell withSetting:doubleSetting];
 }
 
+- (void)switchDidChange:(MappingGroupEditBoolCell*)cell {
+  NSIndexPath* indexPath = [self.tableView indexPathForCell:cell];
+  
+  // TODO: Handling of non-simple values?
+  
+  auto& setting = self.controlGroup->numeric_settings[indexPath.row];
+  auto boolSetting = static_cast<ControllerEmu::NumericSetting<bool>*>(setting.get());
+  
+  boolSetting->SetValue(cell.enabledSwitch.on);
+  
+  [self.delegate controlGroupDidChange:self];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
@@ -228,6 +241,7 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
           
           MappingGroupEditBoolCell* boolCell = [tableView dequeueReusableCellWithIdentifier:@"BoolCell" forIndexPath:indexPath];
           
+          boolCell.delegate = self;
           boolCell.nameLabel.text = DOLCoreLocalizedString(CToFoundationString(boolSetting->GetUIName()));
           boolCell.enabledSwitch.on = boolSetting->GetValue();
           
