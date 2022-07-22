@@ -15,6 +15,7 @@
 #import "MappingGroupEditControlCell.h"
 #import "MappingGroupEditDoubleCell.h"
 #import "MappingGroupEditEnabledCell.h"
+#import "MappingGroupEditViewControllerDelegate.h"
 #import "MappingUtil.h"
 
 typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
@@ -210,6 +211,8 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
         
         controlRef->SetExpression(expression);
         self.controller->UpdateSingleControlReference(g_controller_interface, controlRef.get());
+        
+        [self.delegate controlGroupDidChange:self];
         
         [self updateControlCell:controlCell withExpression:expression];
       }

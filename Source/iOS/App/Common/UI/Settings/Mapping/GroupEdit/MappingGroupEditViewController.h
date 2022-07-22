@@ -10,9 +10,13 @@ class EmulatedController;
 class ControlGroup;
 }
 
+@protocol MappingGroupEditViewControllerDelegate;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MappingGroupEditViewController : UITableViewController <MappingGroupEditEnabledCellDelegate>
+
+@property (weak, nonatomic, nullable) id<MappingGroupEditViewControllerDelegate> delegate;
 
 @property (nonatomic) ControllerEmu::EmulatedController* controller;
 @property (nonatomic) ControllerEmu::ControlGroup* controlGroup;
