@@ -8,6 +8,7 @@
 #import "FoundationStringUtil.h"
 #import "LocalizationUtil.h"
 #import "MappingExtensionCell.h"
+#import "MappingExtensionViewControllerDelegate.h"
 #import "MappingUtil.h"
 
 @interface MappingExtensionViewController ()
@@ -53,6 +54,8 @@
     
     MappingExtensionCell* oldCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:selectedAttachment inSection:0]];
     oldCell.accessoryType = UITableViewCellAccessoryNone;
+    
+    [self.delegate extensionDidChange:self];
   }
   
   [tableView deselectRowAtIndexPath:indexPath animated:true];

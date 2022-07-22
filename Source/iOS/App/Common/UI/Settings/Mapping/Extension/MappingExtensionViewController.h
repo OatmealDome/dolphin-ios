@@ -7,9 +7,13 @@ namespace ControllerEmu {
 class Attachments;
 }
 
+@protocol MappingExtensionViewControllerDelegate;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MappingExtensionViewController : UITableViewController
+
+@property (weak, nonatomic, nullable) id<MappingExtensionViewControllerDelegate> delegate;
 
 @property (nonatomic) ControllerEmu::Attachments* attachments;
 
