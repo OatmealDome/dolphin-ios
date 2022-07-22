@@ -204,6 +204,7 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
     }
     case DOLMappingGroupEditSectionNumericSettings: {
       const auto& setting = self.controlGroup->numeric_settings[indexPath.row];
+      UITableViewCell* numericCell;
       
       switch (setting->GetType()) {
         case ControllerEmu::SettingType::Double: {
@@ -218,7 +219,9 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
           
           [self updateDoubleCell:doubleCell withSetting:doubleSetting];
           
-          return doubleCell;
+          numericCell = doubleCell;
+         
+          break;
         }
         case ControllerEmu::SettingType::Bool: {
           const auto& boolSetting = static_cast<ControllerEmu::NumericSetting<bool>*>(setting.get());
@@ -230,11 +233,21 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
           
           [self updateBoolCellBasedOnEnabled:boolCell];
           
-          return boolCell;
+          numericCell = boolCell;
+          
+          break;
         }
         default:
-          break;
+          return nil;
       }
+      
+      if (setting->GetUIDescription()) {
+        numericCell.accessoryType = UITableViewCellAccessoryDetailButton;
+      } else {
+        numericCell.accessoryType = UITableViewCellAccessoryNone;
+      }
+      
+      return numericCell;
     }
     default:
       return nil;
@@ -269,6 +282,20 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
   } else {
     [tableView deselectRowAtIndexPath:indexPath animated:true];
   }
+}
+
+- (void)tableView:(UITableView*)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath*)indexPath {
+  if (indexPath.section != DOLMappingGroupEditSectionNumericSettings) {
+    return;
+  }
+  
+  const auto& setting = self.controlGroup->numeric_settings[indexPath.row];
+  NSString* description = DOLCoreLocalizedString(CToFoundationString(setting->GetUIDescription()));
+  
+  UIAlertController* alertController = [UIAlertController alertControllerWithTitle:DOLCoreLocalizedString(@"Help") message:description preferredStyle:UIAlertControllerStyleAlert];
+  [alertController addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"OK") style:UIAlertActionStyleDefault handler:nil]];
+  
+  [self presentViewController:alertController animated:true completion:nil];
 }
 
 @end
