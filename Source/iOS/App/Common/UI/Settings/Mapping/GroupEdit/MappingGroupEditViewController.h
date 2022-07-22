@@ -3,6 +3,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "MappingGroupEditDoubleCellDelegate.h"
 #import "MappingGroupEditEnabledCellDelegate.h"
 
 namespace ControllerEmu {
@@ -14,7 +15,7 @@ class ControlGroup;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MappingGroupEditViewController : UITableViewController <MappingGroupEditEnabledCellDelegate>
+@interface MappingGroupEditViewController : UITableViewController <MappingGroupEditDoubleCellDelegate, MappingGroupEditEnabledCellDelegate>
 
 @property (weak, nonatomic, nullable) id<MappingGroupEditViewControllerDelegate> delegate;
 

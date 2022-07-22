@@ -112,6 +112,39 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
   cell.textField.text = textString;
 }
 
+- (void)textFieldDidChange:(MappingGroupEditDoubleCell*)cell {
+  NSIndexPath* indexPath = [self.tableView indexPathForCell:cell];
+  
+  // TODO: Handling of non-simple values?
+  
+  auto& setting = self.controlGroup->numeric_settings[indexPath.row];
+  auto doubleSetting = static_cast<ControllerEmu::NumericSetting<double>*>(setting.get());
+  
+  double value;
+  
+  NSScanner* scanner = [NSScanner localizedScannerWithString:cell.textField.text];
+  if (![scanner scanDouble:&value]) {
+    [self updateDoubleCell:cell withSetting:doubleSetting];
+    
+    return;
+  }
+  
+  double minValue = doubleSetting->GetMinValue();
+  double maxValue = doubleSetting->GetMaxValue();
+  
+  if (value < minValue) {
+    value = minValue;
+  } else if (value > maxValue) {
+    value = maxValue;
+  }
+  
+  doubleSetting->SetValue(value);
+  
+  [self.delegate controlGroupDidChange:self];
+  
+  [self updateDoubleCell:cell withSetting:doubleSetting];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
@@ -178,6 +211,7 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
           
           MappingGroupEditDoubleCell* doubleCell = [tableView dequeueReusableCellWithIdentifier:@"DoubleCell" forIndexPath:indexPath];
           
+          doubleCell.delegate = self;
           doubleCell.nameLabel.text = DOLCoreLocalizedString(CToFoundationString(doubleSetting->GetUIName()));
           
           [self updateDoubleCellBasedOnEnabled:doubleCell];
