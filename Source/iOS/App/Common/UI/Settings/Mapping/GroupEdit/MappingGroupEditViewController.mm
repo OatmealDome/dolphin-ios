@@ -6,6 +6,8 @@
 #import "InputCommon/ControllerEmu/ControlGroup/ControlGroup.h"
 #import "InputCommon/ControllerEmu/ControllerEmu.h"
 #import "InputCommon/ControllerEmu/Setting/NumericSetting.h"
+#import "InputCommon/ControllerInterface/ControllerInterface.h"
+#import "InputCommon/ControllerInterface/MappingCommon.h"
 
 #import "FoundationStringUtil.h"
 #import "LocalizationUtil.h"
@@ -13,6 +15,7 @@
 #import "MappingGroupEditControlCell.h"
 #import "MappingGroupEditDoubleCell.h"
 #import "MappingGroupEditEnabledCell.h"
+#import "MappingUtil.h"
 
 typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
   DOLMappingGroupEditSectionEnableSwitch,
@@ -190,6 +193,32 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
   }
   
   return nil;
+}
+
+- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+  if (indexPath.section == DOLMappingGroupEditSectionControls) {
+    MappingGroupEditControlCell* controlCell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    // TODO: All devices
+    [MappingUtil detectExpressionWithDefaultDevice:self.controller->GetDefaultDevice()
+                                        allDevices:false
+                                             quote:ciface::MappingCommon::Quote::On
+                                    viewController:self
+                                          callback:^(std::string expression) {
+      if (!expression.empty()) {
+        auto& controlRef = self.controlGroup->controls[indexPath.row]->control_ref;
+        
+        controlRef->SetExpression(expression);
+        self.controller->UpdateSingleControlReference(g_controller_interface, controlRef.get());
+        
+        [self updateControlCell:controlCell withExpression:expression];
+      }
+      
+      [tableView deselectRowAtIndexPath:indexPath animated:true];
+    }];
+  } else {
+    [tableView deselectRowAtIndexPath:indexPath animated:true];
+  }
 }
 
 @end
