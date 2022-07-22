@@ -312,4 +312,33 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
   [self presentViewController:alertController animated:true completion:nil];
 }
 
+- (UISwipeActionsConfiguration*)tableView:(UITableView*)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath*)indexPath
+{
+  if (indexPath.section != DOLMappingGroupEditSectionControls) {
+    return nil;
+  }
+  
+  UIContextualAction* clearAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:DOLCoreLocalizedString(@"Clear") handler:^(UIContextualAction* action, __kindof UIView* source_view, void (^completion_handler)(bool)) {
+    auto& controlRef = self.controlGroup->controls[indexPath.row]->control_ref;
+    
+    controlRef->range = 1.0;
+    
+    controlRef->SetExpression("");
+    self.controller->UpdateSingleControlReference(g_controller_interface, controlRef.get());
+    
+    MappingGroupEditControlCell* controlCell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    [self updateControlCell:controlCell withExpression:""];
+    
+    [self.delegate controlGroupDidChange:self];
+    
+    completion_handler(true);
+  }];
+
+  UISwipeActionsConfiguration* actions = [UISwipeActionsConfiguration configurationWithActions:@[clearAction]];
+  actions.performsFirstActionWithFullSwipe = false;
+  
+  return actions;
+}
+
 @end
