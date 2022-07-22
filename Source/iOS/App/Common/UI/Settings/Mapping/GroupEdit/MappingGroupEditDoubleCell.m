@@ -3,6 +3,8 @@
 
 #import "MappingGroupEditDoubleCell.h"
 
+#import "MappingGroupEditDoubleCellDelegate.h"
+
 @implementation MappingGroupEditDoubleCell
 
 - (void)awakeFromNib {
@@ -24,6 +26,8 @@
 
 - (void)donePressed {
   [self endEditing:false];
+  
+  [self.delegate textFieldDidChange:self];
 }
 
 @end
