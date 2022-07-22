@@ -103,6 +103,12 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
 - (void)updateDoubleCell:(MappingGroupEditDoubleCell*)cell withSetting:(ControllerEmu::NumericSetting<double>*)setting {
   NSString* textString = [NSString stringWithFormat:@"%g", setting->GetValue()];
   
+  const char* suffix = setting->GetUISuffix();
+  if (suffix) {
+    NSString* localizedSuffix = DOLCoreLocalizedString(CToFoundationString(suffix));
+    textString = [textString stringByAppendingFormat:@"%@", localizedSuffix];
+  }
+  
   cell.textField.text = textString;
 }
 
