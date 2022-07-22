@@ -101,7 +101,7 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
 }
 
 - (void)updateDoubleCell:(MappingGroupEditDoubleCell*)cell withSetting:(ControllerEmu::NumericSetting<double>*)setting {
-  NSString* textString = [NSString stringWithFormat:@"%f", setting->GetValue()];
+  NSString* textString = [NSString stringWithFormat:@"%g", setting->GetValue()];
   
   cell.textField.text = textString;
 }
