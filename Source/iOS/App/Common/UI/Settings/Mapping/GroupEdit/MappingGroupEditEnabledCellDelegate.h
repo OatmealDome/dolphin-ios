@@ -7,7 +7,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol MappingGroupEditEnableCellDelegate <NSObject>
+@protocol MappingGroupEditEnabledCellDelegate <NSObject>
 
 - (void)enableSwitchValueDidChange:(MappingGroupEditEnabledCell*)cell;
 

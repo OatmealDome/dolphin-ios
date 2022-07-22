@@ -3,7 +3,7 @@
 
 #import "MappingGroupEditEnabledCell.h"
 
-#import "MappingGroupEditEnableCellDelegate.h"
+#import "MappingGroupEditEnabledCellDelegate.h"
 
 @implementation MappingGroupEditEnabledCell
 

@@ -5,13 +5,13 @@
 
 #import "DOLSwitch.h"
 
-@protocol MappingGroupEditEnableCellDelegate;
+@protocol MappingGroupEditEnabledCellDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MappingGroupEditEnabledCell : UITableViewCell
 
-@property (weak, nonatomic, nullable) id<MappingGroupEditEnableCellDelegate> delegate;
+@property (weak, nonatomic, nullable) id<MappingGroupEditEnabledCellDelegate> delegate;
 
 @property (weak, nonatomic) IBOutlet DOLUIKitSwitch* enabledSwitch;
 
