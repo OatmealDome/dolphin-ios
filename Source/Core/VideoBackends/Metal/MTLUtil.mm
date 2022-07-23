@@ -7,6 +7,7 @@
 #include <string>
 
 #include <spirv_msl.hpp>
+#include <TargetConditionals.h>
 
 #include "Common/MsgHandler.h"
 
