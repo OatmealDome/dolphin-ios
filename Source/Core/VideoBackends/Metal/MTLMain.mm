@@ -51,6 +51,7 @@ static bool WindowSystemTypeSupportsMetal(WindowSystemType type)
   switch (type)
   {
   case WindowSystemType::MacOS:
+  case WindowSystemType::iOS:
     return true;
   default:
     return false;
