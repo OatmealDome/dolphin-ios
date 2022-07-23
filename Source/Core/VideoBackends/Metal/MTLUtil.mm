@@ -6,8 +6,8 @@
 #include <fstream>
 #include <string>
 
-#include <spirv_msl.hpp>
 #include <TargetConditionals.h>
+#include <spirv_msl.hpp>
 
 #include "Common/MsgHandler.h"
 
