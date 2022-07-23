@@ -295,6 +295,7 @@ void VulkanContext::PopulateBackendInfo(VideoConfig* config)
   config->backend_info.bSupportsTextureQueryLevels = true;         // Assumed support.
   config->backend_info.bSupportsLodBiasInSampler = false;          // Dependent on OS.
   config->backend_info.bSupportsSettingObjectNames = false;        // Dependent on features.
+  config->backend_info.bSupportsPartialMultisampleResolve = true;  // Assumed support.
 }
 
 void VulkanContext::PopulateBackendInfoAdapters(VideoConfig* config, const GPUList& gpu_list)
@@ -371,13 +372,6 @@ void VulkanContext::PopulateBackendInfoFeatures(VideoConfig* config, VkPhysicalD
   // with depth clamping. Fall back to inverted depth range for these.
   if (DriverDetails::HasBug(DriverDetails::BUG_BROKEN_REVERSED_DEPTH_RANGE))
     config->backend_info.bSupportsReversedDepthRange = false;
-
-  // Calling discard when early depth test is enabled can break on some Apple Silicon GPU drivers.
-  if (DriverDetails::HasBug(DriverDetails::BUG_BROKEN_DISCARD_WITH_EARLY_Z))
-  {
-    // We will use shader blending, so disable hardware dual source blending.
-    config->backend_info.bSupportsDualSourceBlend = false;
-  }
 
   // Dynamic sampler indexing locks up Intel GPUs on MoltenVK/Metal
   if (DriverDetails::HasBug(DriverDetails::BUG_BROKEN_DYNAMIC_SAMPLER_INDEXING))

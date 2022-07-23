@@ -13,7 +13,8 @@ namespace DriverDetails
 enum API
 {
   API_OPENGL = (1 << 0),
-  API_VULKAN = (1 << 1)
+  API_VULKAN = (1 << 1),
+  API_METAL = (1 << 2),
 };
 
 // Enum of supported operating systems
@@ -64,6 +65,7 @@ enum Driver
   DRIVER_IMGTEC,       // Official PowerVR driver
   DRIVER_VIVANTE,      // Official Vivante driver
   DRIVER_PORTABILITY,  // Vulkan via Metal on macOS
+  DRIVER_APPLE,        // Metal on macOS
   DRIVER_UNKNOWN       // Unknown driver, default to official hardware driver
 };
 
@@ -237,7 +239,8 @@ enum Bug
   // crash. Sometimes this happens in the kernel mode part of the driver, resulting in a BSOD.
   // These shaders are also particularly problematic on macOS's Intel drivers. On OpenGL, they can
   // cause depth issues. On Metal, they can cause the driver to not write a primitive to the depth
-  // buffer whenever a fragment is discarded. Disable dual-source blending support on these drivers.
+  // buffer if dual source blending is output in the shader but not subsequently used in blending.
+  // Compile separate shaders for DSB on vs off for these drivers.
   BUG_BROKEN_DUAL_SOURCE_BLENDING,
 
   // BUG: ImgTec GLSL shader compiler fails when negating the input to a bitwise operation
