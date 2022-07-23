@@ -518,6 +518,8 @@ if(IOS)
   SET(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
   find_library(AUDIOTOOLBOX_LIBRARY AudioToolbox)
+  find_library(COREFOUNDATION_LIBRARY CoreFoundation)
+  find_library(FOUNDATION_LIBRARY Foundation)
 
   set(USE_SHARED_LIBPNG OFF)
 endif()
