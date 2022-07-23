@@ -308,7 +308,7 @@ if(OPROFILE_FOUND)
   target_link_libraries(common PRIVATE OProfile::OProfile)
 endif()
 
-if(UNIX)
+if(UNIX AND NOT IOS)
   # Posix networking code needs to be fixed for Windows
   add_executable(traversal_server TraversalServer.cpp)
   target_link_libraries(traversal_server PRIVATE common)
