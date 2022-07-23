@@ -164,6 +164,8 @@ void Metal::VideoBackend::InitBackendInfo()
 void Metal::VideoBackend::PrepareWindow(WindowSystemInfo& wsi)
 {
 #if TARGET_OS_OSX
+  if (wsi.type != WindowSystemType::MacOS)
+    return;
   NSView* view = static_cast<NSView*>(wsi.render_surface);
   CAMetalLayer* layer = [CAMetalLayer layer];
   [view setWantsLayer:YES];
