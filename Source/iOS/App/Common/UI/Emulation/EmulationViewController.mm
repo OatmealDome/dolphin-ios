@@ -21,12 +21,14 @@
 
 @implementation EmulationViewController {
   NSCondition* _hostJobCondition;
+  bool _didStartEmulation;
 }
 
 - (void)viewDidLoad {
   [super viewDidLoad];
   
   _hostJobCondition = [[NSCondition alloc] init];
+  _didStartEmulation = false;
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveDispatchJobNotification) name:DOLHostDidReceiveDispatchJobNotification object:nil];
 }
@@ -34,9 +36,13 @@
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
   
-  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    [self runEmulation];
-  });
+  if (!_didStartEmulation) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      [self runEmulation];
+    });
+    
+    _didStartEmulation = true;
+  }
 }
 
 - (void)runEmulation {
