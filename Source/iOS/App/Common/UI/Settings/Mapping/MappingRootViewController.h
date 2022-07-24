@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) DOLMappingType mappingType;
 @property (nonatomic) int mappingPort;
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem* profilesButton;
+
 @end
 
 NS_ASSUME_NONNULL_END

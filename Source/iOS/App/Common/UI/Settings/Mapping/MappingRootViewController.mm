@@ -19,6 +19,9 @@
 #import "Core/HW/WiimoteEmu/Extension/UDrawTablet.h"
 #import "Core/HW/WiimoteEmu/WiimoteEmu.h"
 
+#import "Common/FileUtil.h"
+#import "Common/IniFile.h"
+
 #import "InputCommon/ControllerEmu/ControlGroup/Attachments.h"
 #import "InputCommon/ControllerEmu/ControllerEmu.h"
 #import "InputCommon/InputConfig.h"
@@ -204,20 +207,27 @@ struct Section {
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
-  return _sections.size() + 1; // Device section is always present
+  // Device and profiles sections are always present
+  return _sections.size() + 2;
 }
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
   switch (section) {
     case 0: // Devices
       return 1;
+    case 1: // Profiles
+      return 2;
     default:
-      return _sections[section - 1].groups.size();
+      return _sections[section - 2].groups.size();
   }
 }
 
 - (NSString *)tableView:(UITableView*)tableView titleForHeaderInSection:(NSInteger)section {
-  NSInteger actualSection = section - 1;
+  if (section == 1) {
+    return DOLCoreLocalizedString(@"Profile");
+  }
+  
+  NSInteger actualSection = section - 2;
   
   if (actualSection < 0) {
     return @"";
@@ -228,7 +238,7 @@ struct Section {
 }
 
 - (NSString *)tableView:(UITableView*)tableView titleForFooterInSection:(NSInteger)section {
-  NSInteger actualSection = section - 1;
+  NSInteger actualSection = section - 2;
   
   if (actualSection < 0) {
     return @"";
@@ -239,7 +249,7 @@ struct Section {
 }
 
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
-  if (indexPath.section == 0) {
+  if (indexPath.section == 0) { // Devices
     MappingRootDeviceCell* deviceCell = [tableView dequeueReusableCellWithIdentifier:@"DeviceCell" forIndexPath:indexPath];
     
     const auto deviceString = _controller->GetDefaultDevice().ToString();
@@ -251,9 +261,13 @@ struct Section {
     }
     
     return deviceCell;
+  } else if (indexPath.section == 1) { // Profiles
+    NSString* profileCellIdentifier = indexPath.row == 1 ? @"ProfileSaveCell" : @"ProfileLoadCell";
+    
+    return [tableView dequeueReusableCellWithIdentifier:profileCellIdentifier];
   }
   
-  NSInteger actualSection = indexPath.section - 1;
+  NSInteger actualSection = indexPath.section - 2;
   
   const auto& group = _sections[actualSection].groups[indexPath.row];
   
@@ -269,6 +283,45 @@ struct Section {
   groupCell.nameCell.text = DOLCoreLocalizedString(CppToFoundationString(group.name));
   
   return groupCell;
+}
+
+- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+  if (indexPath.section == 1 && indexPath.row == 1) { // Profiles -> Save
+    // TODO: Localization
+    UIAlertController* nameAlert = [UIAlertController alertControllerWithTitle:@"Enter Name" message:@"Please enter a name for this profile." preferredStyle:UIAlertControllerStyleAlert];
+    
+    [nameAlert addTextFieldWithConfigurationHandler:^(UITextField* textField) {
+      textField.placeholder = DOLCoreLocalizedString(@"Name");
+    }];
+    
+    [nameAlert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"Cancel") style:UIAlertActionStyleDefault handler:nil]];
+    
+    [nameAlert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"Save") style:UIAlertActionStyleDefault handler:^(UIAlertAction*) {
+      const std::string profileName = FoundationToCppString(nameAlert.textFields[0].text);
+      
+      if (profileName.empty()) {
+        UIAlertController* badNameAlert = [UIAlertController alertControllerWithTitle:@"Invalid Name" message:@"Please enter a profile name." preferredStyle:UIAlertControllerStyleAlert];
+        [badNameAlert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"OK") style:UIAlertActionStyleDefault handler:nil]];
+        
+        [self presentViewController:badNameAlert animated:true completion:nil];
+        
+        return;
+      }
+      
+      const std::string profilePath = File::GetUserPath(D_CONFIG_IDX) + "Profiles/" + self->_config->GetProfileName() + "/" + profileName + ".ini";
+
+      File::CreateFullPath(profilePath);
+
+      IniFile ini;
+
+      self->_controller->SaveConfig(ini.GetOrCreateSection("Profile"));
+      ini.Save(profilePath);
+    }]];
+    
+    [self presentViewController:nameAlert animated:true completion:nil];
+  }
+  
+  [self.tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
@@ -290,7 +343,7 @@ struct Section {
     editController.controller = _controller;
     
     NSIndexPath* indexPath = self.tableView.indexPathForSelectedRow;
-    editController.controlGroup = _sections[indexPath.section - 1].groups[indexPath.row].controlGroup;
+    editController.controlGroup = _sections[indexPath.section - 2].groups[indexPath.row].controlGroup;
   }
 }
 
