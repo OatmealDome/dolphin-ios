@@ -58,6 +58,8 @@ struct Section {
 }
 
 - (void)viewDidLoad {
+  [super viewDidLoad];
+  
   if (self.mappingType == DOLMappingTypePad) {
     _config = Pad::GetConfig();
   } else if (self.mappingType == DOLMappingTypeWiimote) {
@@ -68,6 +70,8 @@ struct Section {
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  
   _sections.clear();
   
   switch (self.mappingType) {
