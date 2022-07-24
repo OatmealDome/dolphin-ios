@@ -73,6 +73,7 @@ void Host_YieldToUI()
 
 void Host_TitleChanged()
 {
+  [[NSNotificationCenter defaultCenter] postNotificationName:DOLHostTitleChangedNotification object:nil];
 }
 
 std::unique_ptr<GBAHostInterface> Host_CreateGBAHost(std::weak_ptr<HW::GBA::Core> core)

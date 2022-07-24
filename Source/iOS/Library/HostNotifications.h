@@ -4,3 +4,4 @@
 #pragma once
 
 NSString* const DOLHostDidReceiveDispatchJobNotification = @"DOLHostDidReceiveDispatchJobNotification";
+NSString* const DOLHostTitleChangedNotification = @"DOLHostTitleChangedNotification";
