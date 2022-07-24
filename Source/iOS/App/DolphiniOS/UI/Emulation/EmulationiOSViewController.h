@@ -9,6 +9,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EmulationiOSViewController : EmulationViewController
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint* metalHalfConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *metalBottomConstraint;
+
 @property (strong, nonatomic) IBOutletCollection(TCView) NSArray* touchPads;
 
 @end
