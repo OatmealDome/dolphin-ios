@@ -92,6 +92,12 @@
 		B9B2C5E2288D0A9800CB6569 /* MappingLoadProfileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C5E1288D0A9800CB6569 /* MappingLoadProfileViewController.mm */; };
 		B9B2C5E5288D0C5500CB6569 /* MappingLoadProfileIniCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C5E4288D0C5500CB6569 /* MappingLoadProfileIniCell.m */; };
 		B9B2C61A288D3A7F00CB6569 /* EmulationiOSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C619288D3A7F00CB6569 /* EmulationiOSViewController.mm */; };
+		B9B2C620288DB62D00CB6569 /* TCClassicWiiPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C61B288DB62D00CB6569 /* TCClassicWiiPad.swift */; };
+		B9B2C621288DB62D00CB6569 /* TCClassicWiiPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9B2C61C288DB62D00CB6569 /* TCClassicWiiPad.xib */; };
+		B9B2C622288DB62D00CB6569 /* TCSidewaysWiiPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C61D288DB62D00CB6569 /* TCSidewaysWiiPad.swift */; };
+		B9B2C623288DB62D00CB6569 /* TCSidewaysWiiPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9B2C61E288DB62D00CB6569 /* TCSidewaysWiiPad.xib */; };
+		B9B2C624288DB62D00CB6569 /* TCWiiPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9B2C61F288DB62D00CB6569 /* TCWiiPad.xib */; };
+		B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C625288DB64700CB6569 /* TCWiiPad.swift */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -307,6 +313,12 @@
 		B9B2C5E6288D1BF400CB6569 /* MappingLoadProfileViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingLoadProfileViewControllerDelegate.h; sourceTree = "<group>"; };
 		B9B2C618288D3A7F00CB6569 /* EmulationiOSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationiOSViewController.h; sourceTree = "<group>"; };
 		B9B2C619288D3A7F00CB6569 /* EmulationiOSViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationiOSViewController.mm; sourceTree = "<group>"; };
+		B9B2C61B288DB62D00CB6569 /* TCClassicWiiPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCClassicWiiPad.swift; sourceTree = "<group>"; };
+		B9B2C61C288DB62D00CB6569 /* TCClassicWiiPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TCClassicWiiPad.xib; sourceTree = "<group>"; };
+		B9B2C61D288DB62D00CB6569 /* TCSidewaysWiiPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCSidewaysWiiPad.swift; sourceTree = "<group>"; };
+		B9B2C61E288DB62D00CB6569 /* TCSidewaysWiiPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TCSidewaysWiiPad.xib; sourceTree = "<group>"; };
+		B9B2C61F288DB62D00CB6569 /* TCWiiPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TCWiiPad.xib; sourceTree = "<group>"; };
+		B9B2C625288DB64700CB6569 /* TCWiiPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCWiiPad.swift; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -869,12 +881,18 @@
 			children = (
 				B9447AFC28418D7600BC9110 /* TCButton.swift */,
 				B9D938A0283F239F00B290FC /* TCButtonType.swift */,
+				B9B2C61B288DB62D00CB6569 /* TCClassicWiiPad.swift */,
+				B9B2C61C288DB62D00CB6569 /* TCClassicWiiPad.xib */,
 				B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */,
 				B9447B032841901200BC9110 /* TCGameCubePad.swift */,
 				B9447B022841901200BC9110 /* TCGameCubePad.xib */,
 				B9447B0028418F2600BC9110 /* TCJoystick.swift */,
 				B9D938A528418AFD00B290FC /* TCManagerInterface.h */,
 				B9D938A628418AFD00B290FC /* TCManagerInterface.mm */,
+				B9B2C61D288DB62D00CB6569 /* TCSidewaysWiiPad.swift */,
+				B9B2C61E288DB62D00CB6569 /* TCSidewaysWiiPad.xib */,
+				B9B2C625288DB64700CB6569 /* TCWiiPad.swift */,
+				B9B2C61F288DB62D00CB6569 /* TCWiiPad.xib */,
 				B9447B062841906000BC9110 /* TCView.swift */,
 			);
 			path = TouchController;
@@ -1029,15 +1047,18 @@
 			files = (
 				B99137AC28827AD200588446 /* SettingsRoot.storyboard in Resources */,
 				B991379E2881F23A00588446 /* Core.strings in Resources */,
+				B9B2C624288DB62D00CB6569 /* TCWiiPad.xib in Resources */,
 				B904ACF42886AB06008B6BE9 /* ButtonMapping.storyboard in Resources */,
 				B950CA942846A13100F45219 /* Sys in Resources */,
 				B99137BF288327AC00588446 /* ConfigSettings.storyboard in Resources */,
 				B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */,
 				B904ACDE28863119008B6BE9 /* GraphicsSettings.storyboard in Resources */,
 				B99137B52882A58000588446 /* SoftwareList.storyboard in Resources */,
+				B9B2C623288DB62D00CB6569 /* TCSidewaysWiiPad.xib in Resources */,
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
+				B9B2C621288DB62D00CB6569 /* TCClassicWiiPad.xib in Resources */,
 				B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */,
 				B904ACE828866E2D008B6BE9 /* ControllersSettings.storyboard in Resources */,
 				B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */,
@@ -1154,9 +1175,11 @@
 				B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */,
 				B904ACF82886AC58008B6BE9 /* MappingRootViewController.mm in Sources */,
 				B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */,
+				B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */,
 				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
+				B9B2C620288DB62D00CB6569 /* TCClassicWiiPad.swift in Sources */,
 				B904ACCB28854782008B6BE9 /* GraphicsEnhancementsViewController.mm in Sources */,
 				B9B2C61A288D3A7F00CB6569 /* EmulationiOSViewController.mm in Sources */,
 				B904AD082887DAEE008B6BE9 /* ControllersTypeCell.m in Sources */,
@@ -1169,6 +1192,7 @@
 				B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */,
 				B9447AFF28418EA100BC9110 /* TCDirectionalPad.swift in Sources */,
 				B9398710287FBB80008E8E47 /* SpeedLimitCell.m in Sources */,
+				B9B2C622288DB62D00CB6569 /* TCSidewaysWiiPad.swift in Sources */,
 				B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */,
 				B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */,
 				B9398707287F998C008E8E47 /* ConfigGeneralViewController.mm in Sources */,
