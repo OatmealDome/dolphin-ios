@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Emulation View Controller-->
+        <!--EmulationiOS View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="emulationViewController" modalPresentationStyle="fullScreen" id="Y6W-OH-hqX" customClass="EmulationViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="emulationViewController" modalPresentationStyle="fullScreen" id="Y6W-OH-hqX" customClass="EmulationiOSViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -21,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
-                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lCX-ua-MqQ" userLabel="GameCube Controller" customClass="TCGameCubePad" customModule="DolphiniOS" customModuleProvider="target">
+                            <view opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lCX-ua-MqQ" userLabel="GameCube Controller" customClass="TCGameCubePad" customModule="DolphiniOS" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                             </view>
                         </subviews>

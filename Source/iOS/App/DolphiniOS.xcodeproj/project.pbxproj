@@ -91,6 +91,7 @@
 		B99137C928832A0800588446 /* LocalizationUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B99137C828832A0800588446 /* LocalizationUtil.m */; };
 		B9B2C5E2288D0A9800CB6569 /* MappingLoadProfileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C5E1288D0A9800CB6569 /* MappingLoadProfileViewController.mm */; };
 		B9B2C5E5288D0C5500CB6569 /* MappingLoadProfileIniCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C5E4288D0C5500CB6569 /* MappingLoadProfileIniCell.m */; };
+		B9B2C61A288D3A7F00CB6569 /* EmulationiOSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C619288D3A7F00CB6569 /* EmulationiOSViewController.mm */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -304,6 +305,8 @@
 		B9B2C5E3288D0C5500CB6569 /* MappingLoadProfileIniCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingLoadProfileIniCell.h; sourceTree = "<group>"; };
 		B9B2C5E4288D0C5500CB6569 /* MappingLoadProfileIniCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingLoadProfileIniCell.m; sourceTree = "<group>"; };
 		B9B2C5E6288D1BF400CB6569 /* MappingLoadProfileViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingLoadProfileViewControllerDelegate.h; sourceTree = "<group>"; };
+		B9B2C618288D3A7F00CB6569 /* EmulationiOSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationiOSViewController.h; sourceTree = "<group>"; };
+		B9B2C619288D3A7F00CB6569 /* EmulationiOSViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationiOSViewController.mm; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -830,6 +833,8 @@
 			children = (
 				B9D9389F283F239200B290FC /* TouchController */,
 				B9D93891283DE63800B290FC /* Emulation.storyboard */,
+				B9B2C618288D3A7F00CB6569 /* EmulationiOSViewController.h */,
+				B9B2C619288D3A7F00CB6569 /* EmulationiOSViewController.mm */,
 			);
 			path = Emulation;
 			sourceTree = "<group>";
@@ -1153,6 +1158,7 @@
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
 				B904ACCB28854782008B6BE9 /* GraphicsEnhancementsViewController.mm in Sources */,
+				B9B2C61A288D3A7F00CB6569 /* EmulationiOSViewController.mm in Sources */,
 				B904AD082887DAEE008B6BE9 /* ControllersTypeCell.m in Sources */,
 				B991378B288149F100588446 /* WiiSoundViewController.mm in Sources */,
 				B904AD322888FF17008B6BE9 /* MappingGroupEditViewController.mm in Sources */,
