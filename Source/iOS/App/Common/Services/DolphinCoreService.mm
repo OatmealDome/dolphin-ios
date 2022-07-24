@@ -6,6 +6,7 @@
 #import "Core/Config/UISettings.h"
 #import "Core/Config/MainSettings.h"
 #import "Core/Config/GraphicsSettings.h"
+#import "Core/Core.h"
 #import "Core/HW/GCPad.h"
 #import "Core/HW/Wiimote.h"
 
@@ -114,6 +115,21 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
   Pad::GetConfig()->SaveConfig();
 
   return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication*)application {
+  if (Core::IsRunning()) {
+    Core::SetState(Core::State::Running);
+  }
+}
+
+- (void)applicationWillResignActive:(UIApplication*)application {
+  if (Core::IsRunning()) {
+    Core::SetState(Core::State::Paused);
+  }
+  
+  // Write out the configuration in case we don't get a chance later
+  Config::Save();
 }
 
 @end
