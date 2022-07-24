@@ -31,6 +31,7 @@
 #import "MappingDeviceViewController.h"
 #import "MappingExtensionViewController.h"
 #import "MappingGroupEditViewController.h"
+#import "MappingLoadProfileViewController.h"
 #import "MappingRootDeviceCell.h"
 #import "MappingRootExtensionCell.h"
 #import "MappingRootGroupCell.h"
@@ -72,6 +73,14 @@ struct Section {
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
   
+  [self populateSections];
+}
+
+- (void)profileDidLoad:(MappingLoadProfileViewController*)viewController {
+  [self populateSections];
+}
+
+- (void)populateSections {
   _sections.clear();
   
   switch (self.mappingType) {
@@ -348,6 +357,13 @@ struct Section {
     
     NSIndexPath* indexPath = self.tableView.indexPathForSelectedRow;
     editController.controlGroup = _sections[indexPath.section - 2].groups[indexPath.row].controlGroup;
+  } else if ([segue.identifier isEqualToString:@"toProfileLoad"]) {
+    UINavigationController* loadRootController = segue.destinationViewController;
+    MappingLoadProfileViewController* loadController = loadRootController.viewControllers[0];
+    
+    loadController.delegate = self;
+    loadController.inputConfig = _config;
+    loadController.emulatedController = _controller;
   }
 }
 

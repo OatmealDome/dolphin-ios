@@ -89,6 +89,8 @@
 		B99137B52882A58000588446 /* SoftwareList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B99137B72882A58000588446 /* SoftwareList.storyboard */; };
 		B99137BF288327AC00588446 /* ConfigSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B99137C1288327AC00588446 /* ConfigSettings.storyboard */; };
 		B99137C928832A0800588446 /* LocalizationUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B99137C828832A0800588446 /* LocalizationUtil.m */; };
+		B9B2C5E2288D0A9800CB6569 /* MappingLoadProfileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C5E1288D0A9800CB6569 /* MappingLoadProfileViewController.mm */; };
+		B9B2C5E5288D0C5500CB6569 /* MappingLoadProfileIniCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C5E4288D0C5500CB6569 /* MappingLoadProfileIniCell.m */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -297,6 +299,11 @@
 		B99137C5288327BB00588446 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/ConfigSettings.strings; sourceTree = "<group>"; };
 		B99137C728832A0800588446 /* LocalizationUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalizationUtil.h; sourceTree = "<group>"; };
 		B99137C828832A0800588446 /* LocalizationUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalizationUtil.m; sourceTree = "<group>"; };
+		B9B2C5E0288D0A9800CB6569 /* MappingLoadProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingLoadProfileViewController.h; sourceTree = "<group>"; };
+		B9B2C5E1288D0A9800CB6569 /* MappingLoadProfileViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingLoadProfileViewController.mm; sourceTree = "<group>"; };
+		B9B2C5E3288D0C5500CB6569 /* MappingLoadProfileIniCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingLoadProfileIniCell.h; sourceTree = "<group>"; };
+		B9B2C5E4288D0C5500CB6569 /* MappingLoadProfileIniCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingLoadProfileIniCell.m; sourceTree = "<group>"; };
+		B9B2C5E6288D1BF400CB6569 /* MappingLoadProfileViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingLoadProfileViewControllerDelegate.h; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -500,6 +507,7 @@
 				B904AD172888AB3B008B6BE9 /* Device */,
 				B904AD282888D719008B6BE9 /* Extension */,
 				B904AD2F2888FEDE008B6BE9 /* GroupEdit */,
+				B9B2C5DF288D0A7900CB6569 /* LoadProfile */,
 				B904AD0A28886AE6008B6BE9 /* MappingRootDeviceCell.h */,
 				B904AD0B28886AE6008B6BE9 /* MappingRootDeviceCell.m */,
 				B904AD1028886B0D008B6BE9 /* MappingRootExtensionCell.h */,
@@ -803,6 +811,18 @@
 				B99137C828832A0800588446 /* LocalizationUtil.m */,
 			);
 			path = Localization;
+			sourceTree = "<group>";
+		};
+		B9B2C5DF288D0A7900CB6569 /* LoadProfile */ = {
+			isa = PBXGroup;
+			children = (
+				B9B2C5E3288D0C5500CB6569 /* MappingLoadProfileIniCell.h */,
+				B9B2C5E4288D0C5500CB6569 /* MappingLoadProfileIniCell.m */,
+				B9B2C5E0288D0A9800CB6569 /* MappingLoadProfileViewController.h */,
+				B9B2C5E1288D0A9800CB6569 /* MappingLoadProfileViewController.mm */,
+				B9B2C5E6288D1BF400CB6569 /* MappingLoadProfileViewControllerDelegate.h */,
+			);
+			path = LoadProfile;
 			sourceTree = "<group>";
 		};
 		B9D93890283DE62700B290FC /* Emulation */ = {
@@ -1170,6 +1190,7 @@
 				B991378E28814BCD00588446 /* WiiSensorBarViewController.mm in Sources */,
 				B904ACD22885561E008B6BE9 /* InternalResolutionCell.m in Sources */,
 				B9447B052841901200BC9110 /* TCGameCubePad.swift in Sources */,
+				B9B2C5E5288D0C5500CB6569 /* MappingLoadProfileIniCell.m in Sources */,
 				B904ACEB28866FF4008B6BE9 /* ControllersRootViewController.mm in Sources */,
 				B904AD3828890489008B6BE9 /* MappingGroupEditControlCell.m in Sources */,
 				B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */,
@@ -1190,6 +1211,7 @@
 				B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */,
 				B904AD1228886B0D008B6BE9 /* MappingRootExtensionCell.m in Sources */,
 				B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */,
+				B9B2C5E2288D0A9800CB6569 /* MappingLoadProfileViewController.mm in Sources */,
 				B99137C928832A0800588446 /* LocalizationUtil.m in Sources */,
 				B904AD2B2888D72F008B6BE9 /* MappingExtensionViewController.mm in Sources */,
 				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
