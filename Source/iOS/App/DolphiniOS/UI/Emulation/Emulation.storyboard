@@ -39,6 +39,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="gamecubePad" destination="lCX-ua-MqQ" id="Yl7-c8-Yhj"/>
                         <outlet property="metalView" destination="jUv-WO-T8S" id="BQ5-ZR-lNA"/>
                     </connections>
                 </viewController>
