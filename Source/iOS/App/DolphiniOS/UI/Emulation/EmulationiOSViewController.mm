@@ -13,6 +13,8 @@
 
 #import "InputCommon/InputConfig.h"
 
+#import "VideoCommon/RenderBase.h"
+
 #import "HostNotifications.h"
 
 typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
@@ -35,6 +37,12 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   [super viewDidLoad];
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTitleChangedNotification) name:DOLHostTitleChangedNotification object:nil];
+}
+
+- (void)viewDidLayoutSubviews {
+  if (g_renderer) {
+    g_renderer->ResizeSurface();
+  }
 }
 
 - (void)receiveTitleChangedNotification {
