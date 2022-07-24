@@ -137,6 +137,8 @@ public:
   // Active extension number is exposed for TAS.
   ExtensionNumber GetActiveExtensionNumber() const;
 
+  bool IsSideways() const;
+
 private:
   // Used only for error generation:
   static constexpr u8 EEPROM_I2C_ADDR = 0x50;
@@ -194,7 +196,6 @@ private:
 
   void SendAck(WiimoteCommon::OutputReportID rpt_id, WiimoteCommon::ErrorCode err);
 
-  bool IsSideways() const;
   bool IsUpright() const;
 
   Extension* GetActiveExtension() const;
