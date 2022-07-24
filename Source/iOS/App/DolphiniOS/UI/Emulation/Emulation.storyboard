@@ -24,23 +24,47 @@
                             <view opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lCX-ua-MqQ" userLabel="GameCube Controller" customClass="TCGameCubePad" customModule="DolphiniOS" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                             </view>
+                            <view opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xut-b8-xfZ" userLabel="Wii Remote" customClass="TCWiiPad" customModule="DolphiniOS" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            </view>
+                            <view opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vI4-cN-k3w" userLabel="Sideways Wii Remote" customClass="TCSidewaysWiiPad" customModule="DolphiniOS" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            </view>
+                            <view opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VU3-Iy-TyQ" userLabel="Classic Controller" customClass="TCClassicWiiPad" customModule="DolphiniOS" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="VU3-Iy-TyQ" secondAttribute="bottom" id="1Sj-Ll-x5G"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="Xut-b8-xfZ" secondAttribute="bottom" id="1nu-Tb-Si6"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="jUv-WO-T8S" secondAttribute="trailing" id="21u-m5-3Pf"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="Xut-b8-xfZ" secondAttribute="leading" id="3U0-0U-Zd0"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="VU3-Iy-TyQ" secondAttribute="trailing" id="6GX-VT-A2R"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="vI4-cN-k3w" secondAttribute="bottom" id="Kjg-ek-dms"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="top" secondItem="vI4-cN-k3w" secondAttribute="top" id="No0-6U-MXt"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="vI4-cN-k3w" secondAttribute="leading" id="Ozq-ki-gLT"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="top" secondItem="Xut-b8-xfZ" secondAttribute="top" id="PVd-pB-KyF"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="lCX-ua-MqQ" secondAttribute="trailing" id="Pi4-Rh-NpV"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="jUv-WO-T8S" secondAttribute="leading" id="RmJ-bG-Qc7"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="jUv-WO-T8S" secondAttribute="bottom" id="TK6-ZL-CFi"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="top" secondItem="jUv-WO-T8S" secondAttribute="top" id="U4Z-cR-9dT"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Xut-b8-xfZ" secondAttribute="trailing" id="ULw-cT-v4X"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="lCX-ua-MqQ" secondAttribute="bottom" id="gMq-Nn-1QC"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="vI4-cN-k3w" secondAttribute="trailing" id="jDV-xd-eq4"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="VU3-Iy-TyQ" secondAttribute="leading" id="pwS-m7-5oo"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="lCX-ua-MqQ" secondAttribute="leading" id="pza-JV-H8e"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="top" secondItem="lCX-ua-MqQ" secondAttribute="top" id="rUK-cL-Frz"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="top" secondItem="VU3-Iy-TyQ" secondAttribute="top" id="x52-7l-sQ4"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="gamecubePad" destination="lCX-ua-MqQ" id="Yl7-c8-Yhj"/>
                         <outlet property="metalView" destination="jUv-WO-T8S" id="BQ5-ZR-lNA"/>
+                        <outletCollection property="touchPads" destination="lCX-ua-MqQ" id="Grw-rU-jt4"/>
+                        <outletCollection property="touchPads" destination="Xut-b8-xfZ" id="sHj-sW-Nw0"/>
+                        <outletCollection property="touchPads" destination="vI4-cN-k3w" id="IOe-gH-eol"/>
+                        <outletCollection property="touchPads" destination="VU3-Iy-TyQ" id="QM9-zL-Ob4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
