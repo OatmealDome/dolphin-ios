@@ -26,6 +26,8 @@ add_library(core
   Config/FreeLookSettings.h
   Config/GraphicsSettings.cpp
   Config/GraphicsSettings.h
+  Config/iOSSettings.cpp
+  Config/iOSSettings.h
   Config/MainSettings.cpp
   Config/MainSettings.h
   Config/NetplaySettings.cpp
