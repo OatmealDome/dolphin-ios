@@ -105,6 +105,8 @@
     [NSThread sleepForTimeInterval:0.025];
   }
   
+  [[NSNotificationCenter defaultCenter] postNotificationName:DOLEmulationDidStartNotification object:self userInfo:nil];
+  
   while (Core::IsRunning()) {
     [_hostJobCondition lock];
     [_hostJobCondition wait];
@@ -113,6 +115,8 @@
     
     [_hostJobCondition unlock];
   }
+  
+  [[NSNotificationCenter defaultCenter] postNotificationName:DOLEmulationDidEndNotification object:self userInfo:nil];
   
   _mainDisplayView = nil;
 }

@@ -6,6 +6,9 @@
 @class EmulationBootParameter;
 @class UIView;
 
+NSString* const DOLEmulationDidStartNotification = @"DOLEmulationDidStartNotification";
+NSString* const DOLEmulationDidEndNotification = @"DOLEmulationDidEndNotification";
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EmulationCoordinator : NSObject
