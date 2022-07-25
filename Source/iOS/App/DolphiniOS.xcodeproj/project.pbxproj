@@ -98,6 +98,7 @@
 		B9B2C623288DB62D00CB6569 /* TCSidewaysWiiPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9B2C61E288DB62D00CB6569 /* TCSidewaysWiiPad.xib */; };
 		B9B2C624288DB62D00CB6569 /* TCWiiPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9B2C61F288DB62D00CB6569 /* TCWiiPad.xib */; };
 		B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C625288DB64700CB6569 /* TCWiiPad.swift */; };
+		B9B2C64D288E170600CB6569 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C64C288E170600CB6569 /* ServiceManager.swift */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -319,6 +320,7 @@
 		B9B2C61E288DB62D00CB6569 /* TCSidewaysWiiPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TCSidewaysWiiPad.xib; sourceTree = "<group>"; };
 		B9B2C61F288DB62D00CB6569 /* TCWiiPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TCWiiPad.xib; sourceTree = "<group>"; };
 		B9B2C625288DB64700CB6569 /* TCWiiPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCWiiPad.swift; sourceTree = "<group>"; };
+		B9B2C64C288E170600CB6569 /* ServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceManager.swift; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 				B900A7AC27F27F36000361DD /* DolphinCoreService.h */,
 				B900A7AD27F27F36000361DD /* DolphinCoreService.mm */,
 				B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */,
+				B9B2C64C288E170600CB6569 /* ServiceManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1173,6 +1176,7 @@
 			files = (
 				B904AD092887DAF1008B6BE9 /* ControllersTypeViewController.mm in Sources */,
 				B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */,
+				B9B2C64D288E170600CB6569 /* ServiceManager.swift in Sources */,
 				B904ACF82886AC58008B6BE9 /* MappingRootViewController.mm in Sources */,
 				B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */,
 				B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */,

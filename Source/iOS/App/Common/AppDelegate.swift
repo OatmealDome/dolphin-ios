@@ -7,67 +7,31 @@ import UIKit
 class AppDelegate : UIResponder, UIApplicationDelegate {
   var window: UIWindow?
   
-  let services: [UIApplicationDelegate] = [
-    DefaultsInitService(),
-    DolphinCoreService(),
-    GameFileCacheService()
-  ]
-  
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    var returnedResult: Bool = true
-        
-    for service in services {
-      let result = service.application?(application, didFinishLaunchingWithOptions: launchOptions) ?? true
-      
-      if (!result) {
-        returnedResult = false
-      }
-    }
-    
-    return returnedResult;
+    ServiceManager.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
   
   func applicationWillTerminate(_ application: UIApplication) {
-    for service in services {
-      service.applicationWillTerminate?(application)
-    }
+    ServiceManager.shared.applicationWillTerminate()
   }
   
   func applicationDidBecomeActive(_ application: UIApplication) {
-    for service in services {
-      service.applicationDidBecomeActive?(application)
-    }
+    ServiceManager.shared.applicationDidBecomeActive()
   }
   
   func applicationWillResignActive(_ application: UIApplication) {
-    for service in services {
-      service.applicationWillResignActive?(application)
-    }
+    ServiceManager.shared.applicationWillResignActive()
   }
   
   func applicationDidEnterBackground(_ application: UIApplication) {
-    for service in services {
-      service.applicationDidEnterBackground?(application)
-    }
+    ServiceManager.shared.applicationDidEnterBackground()
   }
   
   func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-    for service in services {
-      service.applicationDidReceiveMemoryWarning?(application)
-    }
+    ServiceManager.shared.applicationDidReceiveMemoryWarning()
   }
   
   func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-    var returnedResult: Bool = true
-    
-    for service in services {
-      let result = service.application?(app, open: url, options: options) ?? true
-      
-      if (!result) {
-        returnedResult = false
-      }
-    }
-    
-    return returnedResult;
+    ServiceManager.shared.open(url: url, options: options)
   }
 }
