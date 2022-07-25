@@ -380,6 +380,7 @@
 		B900A7A427F26F17000361DD /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				B9B2C65C288E481300CB6569 /* Emulation */,
 				B900A7BB27F4CD16000361DD /* FoundationUtil */,
 				B900A7A827F27EB9000361DD /* Services */,
 				B933EDBB27F6A5C7004D7DD7 /* Swift */,
@@ -613,9 +614,6 @@
 		B933EDC527F8E8D6004D7DD7 /* Emulation */ = {
 			isa = PBXGroup;
 			children = (
-				B9D93889283DD83E00B290FC /* EmulationBootType.h */,
-				B9D9388A283DD86100B290FC /* EmulationBootParameter.h */,
-				B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */,
 				B9D9388D283DE3C800B290FC /* EmulationViewController.h */,
 				B9D9388E283DE3C800B290FC /* EmulationViewController.mm */,
 			);
@@ -844,6 +842,16 @@
 				B9B2C5E6288D1BF400CB6569 /* MappingLoadProfileViewControllerDelegate.h */,
 			);
 			path = LoadProfile;
+			sourceTree = "<group>";
+		};
+		B9B2C65C288E481300CB6569 /* Emulation */ = {
+			isa = PBXGroup;
+			children = (
+				B9D93889283DD83E00B290FC /* EmulationBootType.h */,
+				B9D9388A283DD86100B290FC /* EmulationBootParameter.h */,
+				B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */,
+			);
+			path = Emulation;
 			sourceTree = "<group>";
 		};
 		B9D93890283DE62700B290FC /* Emulation */ = {
