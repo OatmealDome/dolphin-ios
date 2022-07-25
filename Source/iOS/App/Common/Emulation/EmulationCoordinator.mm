@@ -127,4 +127,24 @@
   [_hostJobCondition unlock];
 }
 
+- (void)clearMetalLayer {
+  id<CAMetalDrawable> drawable = [_metalLayer nextDrawable];
+  
+  MTLRenderPassDescriptor* renderPass = [MTLRenderPassDescriptor renderPassDescriptor];
+  renderPass.colorAttachments[0].texture = drawable.texture;
+  renderPass.colorAttachments[0].loadAction = MTLLoadActionClear;
+  renderPass.colorAttachments[0].storeAction = MTLStoreActionStore;
+  renderPass.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 0.0, 0.0, 1.0);
+  
+  id<MTLCommandQueue> commandQueue = [_mtkView.preferredDevice newCommandQueue];
+  id<MTLCommandBuffer> commandBuffer = [commandQueue commandBuffer];
+  
+  id<MTLRenderCommandEncoder> commandEncoder = [commandBuffer renderCommandEncoderWithDescriptor:renderPass];
+  commandEncoder.label = @"Clear";
+  [commandEncoder endEncoding];
+ 
+  [commandBuffer presentDrawable:drawable];
+  [commandBuffer commit];
+}
+
 @end

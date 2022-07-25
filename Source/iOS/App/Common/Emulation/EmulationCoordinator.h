@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)registerMainDisplayView:(UIView*)mainView;
 - (void)registerExternalDisplayView:(UIView*)externalView;
 - (void)runEmulationWithBootParameter:(EmulationBootParameter*)bootParameter;
+- (void)clearMetalLayer;
 
 @end
 
