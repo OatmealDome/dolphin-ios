@@ -14,6 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) IBOutlet UIView* rendererView;
 
+@property (nonatomic) UIBarButtonItem* pauseButton;
+@property (nonatomic) UIBarButtonItem* playButton;
+
 @property (nonatomic) EmulationBootParameter* bootParameter;
 
 - (void)updateNavigationBar:(bool)hidden;

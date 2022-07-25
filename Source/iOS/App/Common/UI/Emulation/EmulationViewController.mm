@@ -3,6 +3,8 @@
 
 #import "EmulationViewController.h"
 
+#import "Core/Core.h"
+
 #import "EmulationCoordinator.h"
 
 @interface EmulationViewController ()
@@ -19,6 +21,14 @@
   _didStartEmulation = false;
   
   [[EmulationCoordinator shared] registerMainDisplayView:self.rendererView];
+  
+  // Create right bar button items
+  self.pauseButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pausePressed)];
+  self.playButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playPressed)];
+  
+  self.navigationItem.rightBarButtonItems = @[
+    self.pauseButton
+  ];
   
   [self.navigationController setNavigationBarHidden:true animated:true];
 }
@@ -49,6 +59,22 @@
   }
   
   self.additionalSafeAreaInsets = insets;
+}
+
+- (void)pausePressed {
+  Core::SetState(Core::State::Paused);
+  
+  self.navigationItem.rightBarButtonItems = @[
+    self.playButton
+  ];
+}
+
+- (void)playPressed {
+  Core::SetState(Core::State::Running);
+  
+  self.navigationItem.rightBarButtonItems = @[
+    self.pauseButton
+  ];
 }
 
 @end
