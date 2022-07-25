@@ -20,6 +20,7 @@
   NSCondition* _hostJobCondition;
   MTKView* _mtkView;
   CAMetalLayer* _metalLayer;
+  UIView* _mainDisplayView;
 }
 
 + (EmulationCoordinator*)shared {
@@ -42,14 +43,32 @@
     
     _metalLayer = (CAMetalLayer*)_mtkView.layer;
     
+    self.isExternalDisplayConnected = false;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveDispatchJobNotification) name:DOLHostDidReceiveDispatchJobNotification object:nil];
   }
   
   return self;
 }
 
+- (void)setIsExternalDisplayConnected:(bool)connected {
+  self->_isExternalDisplayConnected = connected;
+  
+  if (!_isExternalDisplayConnected) {
+    [self requestDisplayOnSuperview:_mainDisplayView];
+  }
+}
+
 - (void)registerMainDisplayView:(UIView*)mainView {
-  [self requestDisplayOnSuperview:mainView];
+  _mainDisplayView = mainView;
+  
+  if (!self.isExternalDisplayConnected) {
+    [self requestDisplayOnSuperview:mainView];
+  }
+}
+
+- (void)registerExternalDisplayView:(UIView*)externalView {
+  [self requestDisplayOnSuperview:externalView];
 }
 
 - (void)requestDisplayOnSuperview:(UIView*)superview {
@@ -57,6 +76,10 @@
   
   [superview addSubview:_mtkView];
   [_mtkView setFrame:superview.bounds];
+  
+  if (g_renderer) {
+    g_renderer->ResizeSurface();
+  }
 }
 
 - (void)runEmulationWithBootParameter:(EmulationBootParameter*)bootParameter {
@@ -90,6 +113,8 @@
     
     [_hostJobCondition unlock];
   }
+  
+  _mainDisplayView = nil;
 }
 
 - (void)receiveDispatchJobNotification {
