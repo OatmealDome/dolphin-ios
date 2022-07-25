@@ -41,6 +41,8 @@
     [UIView animateWithDuration:1.0f animations:^{
       self.rendererView.alpha = 0.0f;
       self.waitView.alpha = 1.0f;
+    } completion:^(bool) {
+      [[EmulationCoordinator shared] clearMetalLayer];
     }];
   });
 }
