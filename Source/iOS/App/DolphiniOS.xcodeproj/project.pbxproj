@@ -101,6 +101,9 @@
 		B9B2C64D288E170600CB6569 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C64C288E170600CB6569 /* ServiceManager.swift */; };
 		B9B2C64F288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C64E288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift */; };
 		B9B2C652288E252900CB6569 /* EmulationCoordinator.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C651288E252900CB6569 /* EmulationCoordinator.mm */; };
+		B9B2C654288E400100CB6569 /* ExternalDisplay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9B2C653288E400100CB6569 /* ExternalDisplay.storyboard */; };
+		B9B2C65B288E454700CB6569 /* ExternalDisplaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C65A288E454700CB6569 /* ExternalDisplaySceneDelegate.swift */; };
+		B9B2C661288E569E00CB6569 /* ExternalDisplayEmulationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C660288E569E00CB6569 /* ExternalDisplayEmulationViewController.m */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -326,6 +329,10 @@
 		B9B2C64E288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainDisplaySceneDelegate.swift; sourceTree = "<group>"; };
 		B9B2C650288E252900CB6569 /* EmulationCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationCoordinator.h; sourceTree = "<group>"; };
 		B9B2C651288E252900CB6569 /* EmulationCoordinator.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationCoordinator.mm; sourceTree = "<group>"; };
+		B9B2C653288E400100CB6569 /* ExternalDisplay.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = ExternalDisplay.storyboard; path = ../ExternalDisplay/ExternalDisplay.storyboard; sourceTree = "<group>"; };
+		B9B2C65A288E454700CB6569 /* ExternalDisplaySceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalDisplaySceneDelegate.swift; sourceTree = "<group>"; };
+		B9B2C65F288E569E00CB6569 /* ExternalDisplayEmulationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExternalDisplayEmulationViewController.h; sourceTree = "<group>"; };
+		B9B2C660288E569E00CB6569 /* ExternalDisplayEmulationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExternalDisplayEmulationViewController.m; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -391,6 +398,7 @@
 				B900A7A627F26F61000361DD /* AppDelegate.swift */,
 				B933EDC227F8E215004D7DD7 /* Assets.xcassets */,
 				B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */,
+				B9B2C65A288E454700CB6569 /* ExternalDisplaySceneDelegate.swift */,
 				B9B2C64E288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift */,
 				B900A7AF27F2866D000361DD /* UserFolderUtil.swift */,
 			);
@@ -449,6 +457,7 @@
 			children = (
 				B9D9389B283ECF0B00B290FC /* Controls */,
 				B9D93890283DE62700B290FC /* Emulation */,
+				B9B2C655288E40A400CB6569 /* ExternalDisplay */,
 				B938835B287EBA5500910606 /* Settings */,
 				B900A7C527F4D4E2000361DD /* SoftwareList */,
 			);
@@ -847,6 +856,16 @@
 			path = LoadProfile;
 			sourceTree = "<group>";
 		};
+		B9B2C655288E40A400CB6569 /* ExternalDisplay */ = {
+			isa = PBXGroup;
+			children = (
+				B9B2C653288E400100CB6569 /* ExternalDisplay.storyboard */,
+				B9B2C65F288E569E00CB6569 /* ExternalDisplayEmulationViewController.h */,
+				B9B2C660288E569E00CB6569 /* ExternalDisplayEmulationViewController.m */,
+			);
+			path = ExternalDisplay;
+			sourceTree = "<group>";
+		};
 		B9B2C65C288E481300CB6569 /* Emulation */ = {
 			isa = PBXGroup;
 			children = (
@@ -1077,6 +1096,7 @@
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
+				B9B2C654288E400100CB6569 /* ExternalDisplay.storyboard in Resources */,
 				B9B2C621288DB62D00CB6569 /* TCClassicWiiPad.xib in Resources */,
 				B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */,
 				B904ACE828866E2D008B6BE9 /* ControllersSettings.storyboard in Resources */,
@@ -1252,6 +1272,7 @@
 				B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */,
 				B9DC5FAF28849640004BD94A /* GraphicsTabViewController.m in Sources */,
 				B904ACD52885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm in Sources */,
+				B9B2C65B288E454700CB6569 /* ExternalDisplaySceneDelegate.swift in Sources */,
 				B904ACC128851C6F008B6BE9 /* GraphicsBackendViewController.mm in Sources */,
 				B904ACCF288555E8008B6BE9 /* InternalResolutionViewController.mm in Sources */,
 				B9398724287FFBEC008E8E47 /* ConfigSoundViewController.mm in Sources */,
@@ -1273,6 +1294,7 @@
 				B904ACC4288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm in Sources */,
 				B9DC5FB62884A563004BD94A /* GraphicsBoolCell.mm in Sources */,
 				B9D938A728418AFE00B290FC /* TCManagerInterface.mm in Sources */,
+				B9B2C661288E569E00CB6569 /* ExternalDisplayEmulationViewController.m in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
 				B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */,
 			);
