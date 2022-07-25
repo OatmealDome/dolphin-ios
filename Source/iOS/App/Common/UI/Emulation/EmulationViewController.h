@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EmulationViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet MTKView* metalView;
+@property (weak, nonatomic) IBOutlet UIView* rendererView;
 
 @property (nonatomic) EmulationBootParameter* bootParameter;
 

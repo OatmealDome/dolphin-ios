@@ -1,0 +1,101 @@
+// Copyright 2022 DolphiniOS Project
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+#import "EmulationCoordinator.h"
+
+#import <MetalKit/MetalKit.h>
+
+#import "Common/WindowSystemInfo.h"
+
+#import "Core/Boot/Boot.h"
+#import "Core/BootManager.h"
+#import "Core/Core.h"
+
+#import "VideoCommon/RenderBase.h"
+
+#import "EmulationBootParameter.h"
+#import "HostNotifications.h"
+
+@implementation EmulationCoordinator {
+  NSCondition* _hostJobCondition;
+  MTKView* _mtkView;
+  CAMetalLayer* _metalLayer;
+}
+
++ (EmulationCoordinator*)shared {
+  static EmulationCoordinator* sharedInstance = nil;
+  static dispatch_once_t onceToken;
+
+  dispatch_once(&onceToken, ^{
+    sharedInstance = [[self alloc] init];
+  });
+
+  return sharedInstance;
+}
+
+- (id)init {
+  if (self = [super init]) {
+    _hostJobCondition = [[NSCondition alloc] init];
+    
+    _mtkView = [[MTKView alloc] init];
+    _mtkView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    _metalLayer = (CAMetalLayer*)_mtkView.layer;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveDispatchJobNotification) name:DOLHostDidReceiveDispatchJobNotification object:nil];
+  }
+  
+  return self;
+}
+
+- (void)registerMainDisplayView:(UIView*)mainView {
+  [self requestDisplayOnSuperview:mainView];
+}
+
+- (void)requestDisplayOnSuperview:(UIView*)superview {
+  [_mtkView removeFromSuperview];
+  
+  [superview addSubview:_mtkView];
+  [_mtkView setFrame:superview.bounds];
+}
+
+- (void)runEmulationWithBootParameter:(EmulationBootParameter*)bootParameter {
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [self emulationLoopWithBootParameter:bootParameter];
+  });
+}
+
+- (void)emulationLoopWithBootParameter:(EmulationBootParameter*)bootParameter {
+  __block WindowSystemInfo wsi;
+  wsi.type = WindowSystemType::iOS;
+  wsi.render_surface = (__bridge void*)_metalLayer;
+  wsi.render_surface_scale = UIScreen.mainScreen.scale;
+  
+  std::unique_ptr<BootParameters> boot = [bootParameter generateDolphinBootParameter];
+  
+  if (!BootManager::BootCore(std::move(boot), wsi)) {
+    PanicAlertFmt("Failed to init core!");
+    return;
+  }
+  
+  while (Core::GetState() == Core::State::Starting) {
+    [NSThread sleepForTimeInterval:0.025];
+  }
+  
+  while (Core::IsRunning()) {
+    [_hostJobCondition lock];
+    [_hostJobCondition wait];
+    
+    Core::HostDispatchJobs();
+    
+    [_hostJobCondition unlock];
+  }
+}
+
+- (void)receiveDispatchJobNotification {
+  [_hostJobCondition lock];
+  [_hostJobCondition signal];
+  [_hostJobCondition unlock];
+}
+
+@end

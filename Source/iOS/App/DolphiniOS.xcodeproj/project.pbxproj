@@ -100,6 +100,7 @@
 		B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C625288DB64700CB6569 /* TCWiiPad.swift */; };
 		B9B2C64D288E170600CB6569 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C64C288E170600CB6569 /* ServiceManager.swift */; };
 		B9B2C64F288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C64E288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift */; };
+		B9B2C652288E252900CB6569 /* EmulationCoordinator.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C651288E252900CB6569 /* EmulationCoordinator.mm */; };
 		B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */; };
 		B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9D9388E283DE3C800B290FC /* EmulationViewController.mm */; };
 		B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9D93891283DE63800B290FC /* Emulation.storyboard */; };
@@ -323,6 +324,8 @@
 		B9B2C625288DB64700CB6569 /* TCWiiPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCWiiPad.swift; sourceTree = "<group>"; };
 		B9B2C64C288E170600CB6569 /* ServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceManager.swift; sourceTree = "<group>"; };
 		B9B2C64E288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainDisplaySceneDelegate.swift; sourceTree = "<group>"; };
+		B9B2C650288E252900CB6569 /* EmulationCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationCoordinator.h; sourceTree = "<group>"; };
+		B9B2C651288E252900CB6569 /* EmulationCoordinator.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationCoordinator.mm; sourceTree = "<group>"; };
 		B9D93889283DD83E00B290FC /* EmulationBootType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootType.h; sourceTree = "<group>"; };
 		B9D9388A283DD86100B290FC /* EmulationBootParameter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulationBootParameter.h; sourceTree = "<group>"; };
 		B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationBootParameter.mm; sourceTree = "<group>"; };
@@ -850,6 +853,8 @@
 				B9D93889283DD83E00B290FC /* EmulationBootType.h */,
 				B9D9388A283DD86100B290FC /* EmulationBootParameter.h */,
 				B9D9388B283DD86100B290FC /* EmulationBootParameter.mm */,
+				B9B2C650288E252900CB6569 /* EmulationCoordinator.h */,
+				B9B2C651288E252900CB6569 /* EmulationCoordinator.mm */,
 			);
 			path = Emulation;
 			sourceTree = "<group>";
@@ -1224,6 +1229,7 @@
 				B900A7CA27F4DA97000361DD /* SoftwareListViewController.mm in Sources */,
 				B9DC5FB3288497B0004BD94A /* GraphicsGeneralViewController.mm in Sources */,
 				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
+				B9B2C652288E252900CB6569 /* EmulationCoordinator.mm in Sources */,
 				B904ACDD28862941008B6BE9 /* GraphicsAdvancedViewController.mm in Sources */,
 				B904AD3B288904AC008B6BE9 /* MappingGroupEditBoolCell.m in Sources */,
 				B9B2C64F288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift in Sources */,

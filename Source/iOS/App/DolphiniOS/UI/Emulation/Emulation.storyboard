@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jUv-WO-T8S" customClass="MTKView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jUv-WO-T8S" userLabel="Renderer Container View">
                                 <rect key="frame" x="0.0" y="44" width="414" height="409"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
@@ -84,7 +84,7 @@
                     <connections>
                         <outlet property="metalBottomConstraint" destination="TK6-ZL-CFi" id="X2K-tT-8F0"/>
                         <outlet property="metalHalfConstraint" destination="brs-ud-Uxx" id="zPc-8h-qjX"/>
-                        <outlet property="metalView" destination="jUv-WO-T8S" id="BQ5-ZR-lNA"/>
+                        <outlet property="rendererView" destination="jUv-WO-T8S" id="wJC-vL-Nz0"/>
                         <outletCollection property="touchPads" destination="lCX-ua-MqQ" id="Grw-rU-jt4"/>
                         <outletCollection property="touchPads" destination="Xut-b8-xfZ" id="sHj-sW-Nw0"/>
                         <outletCollection property="touchPads" destination="vI4-cN-k3w" id="IOe-gH-eol"/>
