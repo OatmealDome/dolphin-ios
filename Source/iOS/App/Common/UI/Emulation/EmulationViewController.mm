@@ -108,7 +108,11 @@
 
 - (void)receiveEmulationEndNotification {
   dispatch_async(dispatch_get_main_queue(), ^{
-    [self.navigationController dismissViewControllerAnimated:true completion:nil];
+    [self.navigationController dismissViewControllerAnimated:true completion:^{
+      if (![EmulationCoordinator shared].isExternalDisplayConnected) {
+        [[EmulationCoordinator shared] clearMetalLayer];
+      }
+    }];
   });
 }
 
