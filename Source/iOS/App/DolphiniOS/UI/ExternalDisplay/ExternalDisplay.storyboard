@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,14 +16,68 @@
                     <view key="view" contentMode="scaleToFill" id="J3Z-NU-v6T">
                         <rect key="frame" x="0.0" y="0.0" width="1080" height="810"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hSc-x1-tWw">
+                                <rect key="frame" x="0.0" y="0.0" width="1080" height="810"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="0jn-Yt-yhe">
+                                <rect key="frame" x="310" y="291.5" width="460" height="227"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tv" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="kBb-T4-R1N">
+                                        <rect key="frame" x="0.0" y="0.5" width="460" height="127"/>
+                                        <color key="tintColor" systemColor="labelColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="128" id="Xuq-Hu-VbS"/>
+                                        </constraints>
+                                    </imageView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="qDQ-Wf-jjj">
+                                        <rect key="frame" x="0.0" y="152" width="460" height="75"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="External Display" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VYK-46-tR2">
+                                                <rect key="frame" x="0.0" y="0.0" width="460" height="37"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DolphiniOS is waiting for emulation to start." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="405-Gl-z3C">
+                                                <rect key="frame" x="0.0" y="45" width="460" height="30"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="xSW-t0-24L"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="hSc-x1-tWw" secondAttribute="bottom" id="O41-28-WK6"/>
+                            <constraint firstItem="0jn-Yt-yhe" firstAttribute="centerY" secondItem="J3Z-NU-v6T" secondAttribute="centerY" id="XGO-Vg-NwE"/>
+                            <constraint firstItem="0jn-Yt-yhe" firstAttribute="centerX" secondItem="J3Z-NU-v6T" secondAttribute="centerX" id="gJo-aD-Rdb"/>
+                            <constraint firstItem="hSc-x1-tWw" firstAttribute="leading" secondItem="J3Z-NU-v6T" secondAttribute="leading" id="h3v-LD-qH9"/>
+                            <constraint firstAttribute="trailing" secondItem="hSc-x1-tWw" secondAttribute="trailing" id="ofq-je-HLO"/>
+                            <constraint firstItem="hSc-x1-tWw" firstAttribute="top" secondItem="J3Z-NU-v6T" secondAttribute="top" id="rsI-PR-Xnu"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="iv6-Ph-X9f"/>
+                    <connections>
+                        <outlet property="rendererView" destination="hSc-x1-tWw" id="Rid-lW-ni2"/>
+                        <outlet property="waitView" destination="0jn-Yt-yhe" id="kvZ-Su-WzZ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bCW-Wg-NKT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="721" y="173"/>
+            <point key="canvasLocation" x="720.55555555555554" y="172.59259259259258"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="tv" catalog="system" width="128" height="97"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
