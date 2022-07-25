@@ -77,6 +77,8 @@ struct Section {
 }
 
 - (void)profileDidLoad:(MappingLoadProfileViewController*)viewController {
+  _config->SaveConfig();
+  
   [self populateSections];
 }
 
