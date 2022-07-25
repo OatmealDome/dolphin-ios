@@ -121,4 +121,13 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   }];
 }
 
+- (IBAction)pullDownPressed:(id)sender {
+  [self updateNavigationBar:false];
+  
+  // Automatic hide after 5 seconds
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    [self updateNavigationBar:true];
+  });
+}
+
 @end

@@ -32,6 +32,21 @@
                             <view opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VU3-Iy-TyQ" userLabel="Classic Controller" customClass="TCClassicWiiPad" customModule="DolphiniOS" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="agl-Jo-GPL">
+                                <rect key="frame" x="8" y="100" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="32" id="6Lq-kF-8lD"/>
+                                    <constraint firstAttribute="height" constant="32" id="xSW-kQ-TrR"/>
+                                </constraints>
+                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="arrow.down.circle" catalog="system">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                </state>
+                                <connections>
+                                    <action selector="pullDownPressed:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="qWD-UH-ORZ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -41,6 +56,7 @@
                             <constraint firstItem="jUv-WO-T8S" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="21u-m5-3Pf"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="Xut-b8-xfZ" secondAttribute="leading" id="3U0-0U-Zd0"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="VU3-Iy-TyQ" secondAttribute="trailing" id="6GX-VT-A2R"/>
+                            <constraint firstItem="agl-Jo-GPL" firstAttribute="top" secondItem="jUv-WO-T8S" secondAttribute="top" constant="12" id="GBP-J7-UC5"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="vI4-cN-k3w" secondAttribute="bottom" id="Kjg-ek-dms"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="top" secondItem="vI4-cN-k3w" secondAttribute="top" id="No0-6U-MXt"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="vI4-cN-k3w" secondAttribute="leading" id="Ozq-ki-gLT"/>
@@ -50,6 +66,7 @@
                             <constraint firstItem="jUv-WO-T8S" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="bottom" id="TK6-ZL-CFi"/>
                             <constraint firstItem="jUv-WO-T8S" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="U4Z-cR-9dT"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Xut-b8-xfZ" secondAttribute="trailing" id="ULw-cT-v4X"/>
+                            <constraint firstItem="agl-Jo-GPL" firstAttribute="leading" secondItem="jUv-WO-T8S" secondAttribute="leading" constant="8" id="YEt-i2-3vu"/>
                             <constraint firstItem="jUv-WO-T8S" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="centerY" id="brs-ud-Uxx"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="lCX-ua-MqQ" secondAttribute="bottom" id="gMq-Nn-1QC"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="vI4-cN-k3w" secondAttribute="trailing" id="jDV-xd-eq4"/>
@@ -84,6 +101,7 @@
                     <connections>
                         <outlet property="metalBottomConstraint" destination="TK6-ZL-CFi" id="X2K-tT-8F0"/>
                         <outlet property="metalHalfConstraint" destination="brs-ud-Uxx" id="zPc-8h-qjX"/>
+                        <outlet property="pullDownButton" destination="agl-Jo-GPL" id="ceZ-5L-VJ1"/>
                         <outlet property="rendererView" destination="jUv-WO-T8S" id="wJC-vL-Nz0"/>
                         <outletCollection property="touchPads" destination="lCX-ua-MqQ" id="Grw-rU-jt4"/>
                         <outletCollection property="touchPads" destination="Xut-b8-xfZ" id="sHj-sW-Nw0"/>
@@ -112,4 +130,7 @@
             <point key="canvasLocation" x="-861" y="84"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="arrow.down.circle" catalog="system" width="128" height="121"/>
+    </resources>
 </document>

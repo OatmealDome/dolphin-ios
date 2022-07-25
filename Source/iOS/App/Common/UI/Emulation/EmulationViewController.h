@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) EmulationBootParameter* bootParameter;
 
+- (void)updateNavigationBar:(bool)hidden;
+
 @end
 
 NS_ASSUME_NONNULL_END
