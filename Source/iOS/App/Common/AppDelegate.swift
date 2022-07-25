@@ -15,23 +15,19 @@ class AppDelegate : UIResponder, UIApplicationDelegate {
     ServiceManager.shared.applicationWillTerminate()
   }
   
-  func applicationDidBecomeActive(_ application: UIApplication) {
-    ServiceManager.shared.applicationDidBecomeActive()
-  }
-  
-  func applicationWillResignActive(_ application: UIApplication) {
-    ServiceManager.shared.applicationWillResignActive()
-  }
-  
-  func applicationDidEnterBackground(_ application: UIApplication) {
-    ServiceManager.shared.applicationDidEnterBackground()
-  }
-  
   func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
     ServiceManager.shared.applicationDidReceiveMemoryWarning()
   }
   
   func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     ServiceManager.shared.open(url: url, options: options)
+  }
+  
+  func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+    return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+  }
+  
+  func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+    //
   }
 }
