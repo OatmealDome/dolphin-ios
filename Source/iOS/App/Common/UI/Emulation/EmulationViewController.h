@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) IBOutlet UIView* rendererView;
 
+@property (nonatomic) UIBarButtonItem* stopButton;
 @property (nonatomic) UIBarButtonItem* pauseButton;
 @property (nonatomic) UIBarButtonItem* playButton;
 
