@@ -92,9 +92,10 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
 {
-  if ([segue.identifier isEqualToString:@"emulation"])
-  {
-    EmulationViewController* viewController = (EmulationViewController*)segue.destinationViewController;
+  if ([segue.identifier isEqualToString:@"emulation"]) {
+    UINavigationController* navigationController = segue.destinationViewController;
+    EmulationViewController* viewController = navigationController.viewControllers[0];
+    
     viewController.bootParameter = _bootParameter;
   }
 }

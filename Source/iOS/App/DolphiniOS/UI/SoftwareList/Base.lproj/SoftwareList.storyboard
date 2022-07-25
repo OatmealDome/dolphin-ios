@@ -93,13 +93,13 @@
             </objects>
             <point key="canvasLocation" x="710" y="147"/>
         </scene>
-        <!--emulationViewController-->
+        <!--Emulation-->
         <scene sceneID="ewQ-iN-4BB">
             <objects>
-                <viewControllerPlaceholder storyboardName="Emulation" referencedIdentifier="emulationViewController" id="TaY-Qy-7UM" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="Emulation" id="TaY-Qy-7UM" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a5U-HV-bzh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1414" y="147"/>
+            <point key="canvasLocation" x="1378" y="147"/>
         </scene>
     </scenes>
     <resources>
