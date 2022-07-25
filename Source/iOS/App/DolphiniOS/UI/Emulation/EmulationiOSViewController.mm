@@ -36,6 +36,17 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 - (void)viewDidLoad {
   [super viewDidLoad];
   
+  for (int i = 0; i < [self.touchPads count]; i++) {
+    TCView* padView = self.touchPads[i];
+    
+    if (i + 1 == DOLEmulationVisibleTouchPadGameCube) {
+      padView.port = 0;
+    } else {
+      // Wii pads are mapped to touchscreen device 4
+      padView.port = 4;
+    }
+  }
+  
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTitleChangedNotification) name:DOLHostTitleChangedNotification object:nil];
 }
 
