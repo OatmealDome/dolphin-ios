@@ -6,6 +6,7 @@
 
 #include <Foundation/Foundation.h>
 
+#include "Core/Core.h"
 #include "Core/Host.h"
 
 #include "HostNotifications.h"
@@ -28,6 +29,13 @@ void Host_Message(HostMessageID message)
   if (message == HostMessageID::WMUserJobDispatch)
   {
     [[NSNotificationCenter defaultCenter] postNotificationName:DOLHostDidReceiveDispatchJobNotification object:nil];
+  }
+  else if (message == HostMessageID::WMUserStop)
+  {
+    if (Core::IsRunning())
+    {
+      Core::QueueHostJob(&Core::Stop);
+    }
   }
 }
 
