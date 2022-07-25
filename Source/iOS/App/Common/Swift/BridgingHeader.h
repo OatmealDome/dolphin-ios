@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #import "DolphinCoreService.h"
+#import "EmulationCoordinator.h"
 #import "GameFileCacheManager.h"
 
 #if TARGET_OS_IOS
