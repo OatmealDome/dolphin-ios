@@ -5,7 +5,7 @@
 
 #include <Metal/Metal.h>
 
-#include "VideoBackends/Metal/MRCHelpers.h"
+#include "Common/MRCHelpers.h"
 
 #include "VideoCommon/AbstractPipeline.h"
 #include "VideoCommon/AbstractShader.h"

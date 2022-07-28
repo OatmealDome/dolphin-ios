@@ -6,11 +6,11 @@
 #include <Metal/Metal.h>
 #include <vector>
 
+#include "Common/MRCHelpers.h"
+
 #include "VideoCommon/AbstractShader.h"
 #include "VideoCommon/TextureConfig.h"
 #include "VideoCommon/VideoConfig.h"
-
-#include "VideoBackends/Metal/MRCHelpers.h"
 
 namespace Metal
 {

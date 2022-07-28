@@ -11,8 +11,8 @@
 #include "Common/Assert.h"
 #include "Common/CommonTypes.h"
 #include "Common/MathUtil.h"
+#include "Common/MRCHelpers.h"
 
-#include "VideoBackends/Metal/MRCHelpers.h"
 #include "VideoBackends/Metal/MTLObjectCache.h"
 #include "VideoBackends/Metal/MTLTexture.h"
 #include "VideoBackends/Metal/MTLUtil.h"

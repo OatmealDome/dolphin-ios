@@ -87,6 +87,7 @@ add_library(common
   MemoryUtil.cpp
   MemoryUtil.h
   MinizipUtil.h
+  MRCHelpers.h
   MsgHandler.cpp
   MsgHandler.h
   NandPaths.cpp

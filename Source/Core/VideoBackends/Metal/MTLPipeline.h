@@ -5,7 +5,8 @@
 
 #include <Metal/Metal.h>
 
-#include "VideoBackends/Metal/MRCHelpers.h"
+#include "Common/MRCHelpers.h"
+
 #include "VideoBackends/Metal/MTLObjectCache.h"
 #include "VideoBackends/Metal/MTLShader.h"
 

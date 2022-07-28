@@ -5,11 +5,11 @@
 
 #include <Metal/Metal.h>
 
+#include "Common/MRCHelpers.h"
+
 #include "VideoCommon/AbstractFramebuffer.h"
 #include "VideoCommon/AbstractStagingTexture.h"
 #include "VideoCommon/AbstractTexture.h"
-
-#include "VideoBackends/Metal/MRCHelpers.h"
 
 namespace Metal
 {

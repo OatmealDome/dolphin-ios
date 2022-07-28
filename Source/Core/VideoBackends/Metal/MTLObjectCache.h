@@ -6,7 +6,7 @@
 #include <Metal/Metal.h>
 #include <memory>
 
-#include "VideoBackends/Metal/MRCHelpers.h"
+#include "Common/MRCHelpers.h"
 
 #include "VideoCommon/RenderState.h"
 
