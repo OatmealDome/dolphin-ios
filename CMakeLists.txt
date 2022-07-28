@@ -520,6 +520,7 @@ if(IOS)
   find_library(AUDIOTOOLBOX_LIBRARY AudioToolbox)
   find_library(COREFOUNDATION_LIBRARY CoreFoundation)
   find_library(FOUNDATION_LIBRARY Foundation)
+  find_library(GAMECONTROLLER_LIBRARY GameController)
 
   set(USE_SHARED_LIBPNG OFF)
 endif()

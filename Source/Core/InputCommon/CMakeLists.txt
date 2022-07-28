@@ -127,12 +127,19 @@ elseif(APPLE AND NOT IOS)
 elseif(IOS)
   target_sources(inputcommon PRIVATE
     ControllerInterface/iOS/ButtonType.h
+    ControllerInterface/iOS/MFiController.h
+    ControllerInterface/iOS/MFiController.mm
+    ControllerInterface/iOS/MFiControllerScanner.h
+    ControllerInterface/iOS/MFiControllerScanner.mm
     ControllerInterface/iOS/iOS.h
     ControllerInterface/iOS/iOS.mm
     ControllerInterface/iOS/StateManager.h
     ControllerInterface/iOS/StateManager.cpp
     ControllerInterface/iOS/Touchscreen.h
     ControllerInterface/iOS/Touchscreen.cpp
+  )
+  target_link_libraries(inputcommon PRIVATE
+    ${GAMECONTROLLER_LIBRARY}
   )
 elseif(X11_FOUND)
   target_sources(inputcommon PRIVATE
