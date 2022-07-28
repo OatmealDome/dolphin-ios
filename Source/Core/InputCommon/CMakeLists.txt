@@ -136,7 +136,7 @@ elseif(IOS)
     ControllerInterface/iOS/StateManager.h
     ControllerInterface/iOS/StateManager.cpp
     ControllerInterface/iOS/Touchscreen.h
-    ControllerInterface/iOS/Touchscreen.cpp
+    ControllerInterface/iOS/Touchscreen.mm
   )
   target_link_libraries(inputcommon PRIVATE
     ${GAMECONTROLLER_LIBRARY}
