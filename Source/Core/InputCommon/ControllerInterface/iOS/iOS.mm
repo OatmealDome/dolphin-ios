@@ -12,7 +12,7 @@
 
 namespace ciface::iOS
 {
-MRCOwned<MFiControllerScanner*> g_mfi_scanner;
+static MRCOwned<MFiControllerScanner*> g_mfi_scanner;
 
 void Init()
 {
