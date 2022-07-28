@@ -7,7 +7,4 @@
 
 @interface MFiControllerScanner : NSObject
 
-- (void)beginScan;
-- (void)endScan;
-
 @end
