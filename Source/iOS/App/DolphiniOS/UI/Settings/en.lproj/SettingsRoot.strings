@@ -30,3 +30,6 @@
 
 /* Class = "UILabel"; text = "Controllers"; ObjectID = "kW4-Qw-tfg"; */
 "kW4-Qw-tfg.text" = "Controllers";
+
+/* Class = "UILabel"; text = "Debug"; ObjectID = "Bss-xh-SL3"; */
+"Bss-xh-SL3.text" = "Debug";

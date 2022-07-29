@@ -52,6 +52,8 @@
 		B904AD3828890489008B6BE9 /* MappingGroupEditControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3728890489008B6BE9 /* MappingGroupEditControlCell.m */; };
 		B904AD3B288904AC008B6BE9 /* MappingGroupEditBoolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3A288904AC008B6BE9 /* MappingGroupEditBoolCell.m */; };
 		B904AD3E288904D9008B6BE9 /* MappingGroupEditDoubleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3D288904D9008B6BE9 /* MappingGroupEditDoubleCell.m */; };
+		B9114F972893C5E600B9C57A /* DebugSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9114F962893C5E600B9C57A /* DebugSettings.storyboard */; };
+		B9114F9C2893C6CA00B9C57A /* DebugRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9114F9B2893C6CA00B9C57A /* DebugRootViewController.m */; };
 		B9114FA02893C71E00B9C57A /* VirtualMFiControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9114F9F2893C71E00B9C57A /* VirtualMFiControllerManager.m */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
@@ -223,6 +225,9 @@
 		B904AD41288A54B0008B6BE9 /* MappingGroupEditDoubleCellDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditDoubleCellDelegate.h; sourceTree = "<group>"; };
 		B904AD42288B4C80008B6BE9 /* MappingGroupEditBoolCellDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditBoolCellDelegate.h; sourceTree = "<group>"; };
 		B904AD43288B5426008B6BE9 /* MappingExtensionViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingExtensionViewControllerDelegate.h; sourceTree = "<group>"; };
+		B9114F962893C5E600B9C57A /* DebugSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DebugSettings.storyboard; sourceTree = "<group>"; };
+		B9114F9A2893C6CA00B9C57A /* DebugRootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DebugRootViewController.h; sourceTree = "<group>"; };
+		B9114F9B2893C6CA00B9C57A /* DebugRootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DebugRootViewController.m; sourceTree = "<group>"; };
 		B9114F9E2893C71E00B9C57A /* VirtualMFiControllerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VirtualMFiControllerManager.h; sourceTree = "<group>"; };
 		B9114F9F2893C71E00B9C57A /* VirtualMFiControllerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VirtualMFiControllerManager.m; sourceTree = "<group>"; };
 		B9114FA12893D10B00B9C57A /* MappingDeviceViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingDeviceViewControllerDelegate.h; sourceTree = "<group>"; };
@@ -619,6 +624,23 @@
 			path = GroupEdit;
 			sourceTree = "<group>";
 		};
+		B9114F952893C5D600B9C57A /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				B9114F962893C5E600B9C57A /* DebugSettings.storyboard */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		B9114F982893C69E00B9C57A /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				B9114F9A2893C6CA00B9C57A /* DebugRootViewController.h */,
+				B9114F9B2893C6CA00B9C57A /* DebugRootViewController.m */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
 		B9114F9D2893C6FD00B9C57A /* VirtualMFi */ = {
 			isa = PBXGroup;
 			children = (
@@ -651,6 +673,7 @@
 			children = (
 				B93986FD287F8F0F008E8E47 /* Config */,
 				B904ACE5288666D3008B6BE9 /* Controllers */,
+				B9114F952893C5D600B9C57A /* Debug */,
 				B9DC5FA628849467004BD94A /* Graphics */,
 				B904ACF22886AAED008B6BE9 /* Mapping */,
 				B99137AE28827AD200588446 /* SettingsRoot.storyboard */,
@@ -663,6 +686,7 @@
 			children = (
 				B9398700287F98E7008E8E47 /* Config */,
 				B904ACE628866E12008B6BE9 /* Controllers */,
+				B9114F982893C69E00B9C57A /* Debug */,
 				B9DC5FA52884945C004BD94A /* Graphics */,
 				B904ACF52886AC2F008B6BE9 /* Mapping */,
 				B93986FA287F45A3008E8E47 /* SettingsRootViewController.swift */,
@@ -1113,6 +1137,7 @@
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
 				B9B2C654288E400100CB6569 /* ExternalDisplay.storyboard in Resources */,
 				B9B2C621288DB62D00CB6569 /* TCClassicWiiPad.xib in Resources */,
+				B9114F972893C5E600B9C57A /* DebugSettings.storyboard in Resources */,
 				B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */,
 				B904ACE828866E2D008B6BE9 /* ControllersSettings.storyboard in Resources */,
 				B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */,
@@ -1231,6 +1256,7 @@
 				B904ACF82886AC58008B6BE9 /* MappingRootViewController.mm in Sources */,
 				B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */,
 				B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */,
+				B9114F9C2893C6CA00B9C57A /* DebugRootViewController.m in Sources */,
 				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
