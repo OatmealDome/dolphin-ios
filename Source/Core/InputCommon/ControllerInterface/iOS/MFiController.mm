@@ -127,22 +127,15 @@ MFiController::MFiController(GCController* controller) : m_controller(MRCRetain(
         motion.sensorsActive = true;
       }
     }
-
-    bool separate_gravity = true;
-
-    if (@available(iOS 14.0, *))
-    {
-      // Query GCMotion to see if the controller doeson't separate gravity
-      // and acceleration, like the DualShock 4
-      separate_gravity = motion.hasGravityAndUserAcceleration;
-    } 
     
-    AddInput(new AccelerometerAxis(motion, X, -1.0, separate_gravity, "Accel Left"));
-    AddInput(new AccelerometerAxis(motion, X, 1.0, separate_gravity, "Accel Right"));
-    AddInput(new AccelerometerAxis(motion, Y, 1.0, separate_gravity, "Accel Forward"));
-    AddInput(new AccelerometerAxis(motion, Y, -1.0, separate_gravity, "Accel Back"));
-    AddInput(new AccelerometerAxis(motion, Z, 1.0, separate_gravity, "Accel Up"));
-    AddInput(new AccelerometerAxis(motion, Z, -1.0, separate_gravity, "Accel Down"));
+    AddInput(new AccelerometerAxis(motion, X, -1.0, "Accel Left"));
+    AddInput(new AccelerometerAxis(motion, X, 1.0, "Accel Right"));
+    AddInput(new AccelerometerAxis(motion, Y, 1.0, "Accel Forward"));
+    AddInput(new AccelerometerAxis(motion, Y, -1.0, "Accel Back"));
+    AddInput(new AccelerometerAxis(motion, Z, 1.0, "Accel Up"));
+    AddInput(new AccelerometerAxis(motion, Z, -1.0, "Accel Down"));
+    
+    m_supports_accelerometer = true;
 
     if (@available(iOS 14.0, *))
     {
@@ -162,8 +155,6 @@ MFiController::MFiController(GCController* controller) : m_controller(MRCRetain(
       AddInput(new GyroscopeAxis(motion, Z, -1.0, "Gyro Yaw Left"));
       AddInput(new GyroscopeAxis(motion, Z, 1.0, "Gyro Yaw Right"));
     }
-
-    m_supports_accelerometer = true;
   }
   else
   {
@@ -246,10 +237,8 @@ ControlState MFiController::Axis::GetState() const
 }
 
 MFiController::AccelerometerAxis::AccelerometerAxis(GCMotion* motion, MotionPlane plane,
-                                                    const double multiplier, bool separate_gravity,
-                                                    const std::string name)
-    : m_motion(MRCRetain(motion)), m_plane(plane), m_separate_gravity(separate_gravity),
-      m_name(name) 
+                                                    const double multiplier, const std::string name)
+    : m_motion(MRCRetain(motion)), m_plane(plane), m_name(name)
 {
   if (plane == X || plane == Y)
   {
@@ -270,27 +259,36 @@ std::string MFiController::AccelerometerAxis::GetName() const
 
 ControlState MFiController::AccelerometerAxis::GetState() const
 {
-  GCAcceleration acceleration;
-  double full_multiplier = m_multiplier;
-
-  if (m_separate_gravity)
+  if (@available(iOS 14.0, *))
   {
-    full_multiplier *= -9.81;
-    acceleration = [m_motion userAcceleration];
+    // The DualShock 4 only returns combined gravity + acceleration.
+    if ([m_motion hasGravityAndUserAcceleration])
+    {
+      GCAcceleration totalAcceleration = [m_motion acceleration];
+      
+      switch (m_plane)
+      {
+      case X:
+        return totalAcceleration.x * m_multiplier;
+      case Y:
+        return totalAcceleration.y * m_multiplier;
+      case Z:
+        return totalAcceleration.z * m_multiplier;
+      }
+    }
   }
-  else
-  {
-    acceleration = [m_motion acceleration];
-  }
+  
+  GCAcceleration acceleration = [m_motion userAcceleration];
+  GCAcceleration gravity = [m_motion gravity];
 
   switch (m_plane)
   {
   case X:
-    return acceleration.x * full_multiplier;
+    return acceleration.x * gravity.x * m_multiplier;
   case Y:
-    return acceleration.y * full_multiplier;
+    return acceleration.y * gravity.y * m_multiplier;
   case Z:
-    return acceleration.z * full_multiplier;
+    return acceleration.z * gravity.z * m_multiplier;
   }
 }
 
