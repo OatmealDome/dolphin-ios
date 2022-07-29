@@ -343,6 +343,7 @@ struct Section {
   if ([segue.identifier isEqualToString:@"toDevice"]) {
     MappingDeviceViewController* deviceController = segue.destinationViewController;
     
+    deviceController.delegate = self;
     deviceController.emulatedController = _controller;
   } else if ([segue.identifier isEqualToString:@"toExtension"]) {
     ControllerEmu::ControlGroup* extensionGroup = Wiimote::GetWiimoteGroup(self.mappingPort, WiimoteEmu::WiimoteGroup::Attachments);
@@ -367,6 +368,10 @@ struct Section {
     loadController.inputConfig = _config;
     loadController.emulatedController = _controller;
   }
+}
+
+- (void)deviceDidChange:(MappingDeviceViewController*)viewController {
+  _config->SaveConfig();
 }
 
 - (void)controlGroupDidChange:(MappingGroupEditViewController*)viewController {
