@@ -46,12 +46,18 @@ MFiController::MFiController(GCController* controller) : m_controller(MRCRetain(
       {
         GCDualShockGamepad* ds_gamepad = (GCDualShockGamepad*)gamepad;
         AddInput(new Button(ds_gamepad.touchpadButton, "Touchpad"));
+        
+        // The user's first finger on the touchpad.
         AddInput(new Axis(ds_gamepad.touchpadPrimary.xAxis, 1.0f, "Touchpad X+"));
         AddInput(new Axis(ds_gamepad.touchpadPrimary.xAxis, -1.0f, "Touchpad X-"));
         AddInput(new Axis(ds_gamepad.touchpadPrimary.yAxis, 1.0f, "Touchpad Y+"));
         AddInput(new Axis(ds_gamepad.touchpadPrimary.yAxis, -1.0f, "Touchpad Y-"));
 
-        // TODO: WTF is touchpadSecondary?
+        // The user's second finger on the touchpad.
+        AddInput(new Axis(ds_gamepad.touchpadSecondary.xAxis, 1.0f, "Touchpad Secondary X+"));
+        AddInput(new Axis(ds_gamepad.touchpadSecondary.xAxis, -1.0f, "Touchpad Secondary X-"));
+        AddInput(new Axis(ds_gamepad.touchpadSecondary.yAxis, 1.0f, "Touchpad Secondary Y+"));
+        AddInput(new Axis(ds_gamepad.touchpadSecondary.yAxis, -1.0f, "Touchpad Secondary Y-"));
       }
       else if ([gamepad isKindOfClass:[GCXboxGamepad class]])
       {
