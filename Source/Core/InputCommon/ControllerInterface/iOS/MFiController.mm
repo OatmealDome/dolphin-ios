@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "InputCommon/ControllerInterface/iOS/MFiController.h"
+
+#include "InputCommon/ControllerInterface/iOS/Motor.h"
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
 
 namespace ciface::iOS
@@ -173,8 +175,9 @@ MFiController::MFiController(GCController* controller) : m_controller(MRCRetain(
     GCDeviceHaptics* haptics = controller.haptics;
     if (haptics != nil)
     {
-      // TODO: Reimplement haptics
-      // AddOutput(new Motor("Rumble", [haptics createEngineWithLocality:GCHapticsLocalityDefault]));
+      MRCOwned<CHHapticEngine*> engine = MRCRetain([haptics createEngineWithLocality:GCHapticsLocalityDefault]);
+      
+      AddOutput(new Motor(std::move(engine), "Rumble"));
     }
   }
 }
