@@ -37,6 +37,11 @@ MFiController::MFiController(GCController* controller) : m_controller(MRCRetain(
     // Optionals and buttons only on newer iOS versions
     if (@available(iOS 14, *))
     {
+      if (gamepad.buttonHome != nil)
+      {
+        AddInput(new Button(gamepad.buttonHome, "Home"));
+      }
+      
       if ([gamepad isKindOfClass:[GCDualShockGamepad class]])
       {
         GCDualShockGamepad* ds_gamepad = (GCDualShockGamepad*)gamepad;
