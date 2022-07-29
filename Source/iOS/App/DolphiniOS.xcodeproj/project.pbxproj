@@ -52,6 +52,7 @@
 		B904AD3828890489008B6BE9 /* MappingGroupEditControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3728890489008B6BE9 /* MappingGroupEditControlCell.m */; };
 		B904AD3B288904AC008B6BE9 /* MappingGroupEditBoolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3A288904AC008B6BE9 /* MappingGroupEditBoolCell.m */; };
 		B904AD3E288904D9008B6BE9 /* MappingGroupEditDoubleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3D288904D9008B6BE9 /* MappingGroupEditDoubleCell.m */; };
+		B9114FA02893C71E00B9C57A /* VirtualMFiControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9114F9F2893C71E00B9C57A /* VirtualMFiControllerManager.m */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
 		B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = B933EDC027F77D1E004D7DD7 /* GameFilePtrWrapper.mm */; };
 		B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B933EDC227F8E215004D7DD7 /* Assets.xcassets */; };
@@ -222,6 +223,8 @@
 		B904AD41288A54B0008B6BE9 /* MappingGroupEditDoubleCellDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditDoubleCellDelegate.h; sourceTree = "<group>"; };
 		B904AD42288B4C80008B6BE9 /* MappingGroupEditBoolCellDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditBoolCellDelegate.h; sourceTree = "<group>"; };
 		B904AD43288B5426008B6BE9 /* MappingExtensionViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingExtensionViewControllerDelegate.h; sourceTree = "<group>"; };
+		B9114F9E2893C71E00B9C57A /* VirtualMFiControllerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VirtualMFiControllerManager.h; sourceTree = "<group>"; };
+		B9114F9F2893C71E00B9C57A /* VirtualMFiControllerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VirtualMFiControllerManager.m; sourceTree = "<group>"; };
 		B9114FA12893D10B00B9C57A /* MappingDeviceViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingDeviceViewControllerDelegate.h; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
@@ -616,6 +619,15 @@
 			path = GroupEdit;
 			sourceTree = "<group>";
 		};
+		B9114F9D2893C6FD00B9C57A /* VirtualMFi */ = {
+			isa = PBXGroup;
+			children = (
+				B9114F9E2893C71E00B9C57A /* VirtualMFiControllerManager.h */,
+				B9114F9F2893C71E00B9C57A /* VirtualMFiControllerManager.m */,
+			);
+			path = VirtualMFi;
+			sourceTree = "<group>";
+		};
 		B933EDBB27F6A5C7004D7DD7 /* Swift */ = {
 			isa = PBXGroup;
 			children = (
@@ -884,6 +896,7 @@
 			isa = PBXGroup;
 			children = (
 				B9D9389F283F239200B290FC /* TouchController */,
+				B9114F9D2893C6FD00B9C57A /* VirtualMFi */,
 				B9D93891283DE63800B290FC /* Emulation.storyboard */,
 				B9B2C618288D3A7F00CB6569 /* EmulationiOSViewController.h */,
 				B9B2C619288D3A7F00CB6569 /* EmulationiOSViewController.mm */,
@@ -1240,6 +1253,7 @@
 				B9398707287F998C008E8E47 /* ConfigGeneralViewController.mm in Sources */,
 				B904AD3E288904D9008B6BE9 /* MappingGroupEditDoubleCell.m in Sources */,
 				B93986FB287F45A3008E8E47 /* SettingsRootViewController.swift in Sources */,
+				B9114FA02893C71E00B9C57A /* VirtualMFiControllerManager.m in Sources */,
 				B904ACEE2886701C008B6BE9 /* ControllersRootPortCell.m in Sources */,
 				B904AD3528890477008B6BE9 /* MappingGroupEditEnabledCell.m in Sources */,
 				B9913792288153D000588446 /* ConfigAdvancedViewController.mm in Sources */,
