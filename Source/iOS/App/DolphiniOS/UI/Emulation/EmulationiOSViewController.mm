@@ -47,6 +47,14 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     }
   }
   
+  // Stupidity - iOS 15 now uses the scrollEdgeAppearance when the UINavigationBar is off screen.
+  // https://developer.apple.com/forums/thread/682420
+  if (@available(iOS 15.0, *)) {
+    UINavigationBar* bar = self.navigationController.navigationBar;
+    bar.scrollEdgeAppearance = bar.standardAppearance;
+  }
+  
+  
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTitleChangedNotification) name:DOLHostTitleChangedNotification object:nil];
 }
 
