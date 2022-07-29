@@ -3,9 +3,14 @@
 
 #include "InputCommon/ControllerInterface/iOS/Touchscreen.h"
 
+#include <CoreHaptics/CoreHaptics.h>
+#include <Foundation/Foundation.h>
 #include <sstream>
 
+#include "Common/Logging/Log.h"
+
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
+#include "InputCommon/ControllerInterface/iOS/Motor.h"
 #include "InputCommon/ControllerInterface/iOS/StateManager.h"
 
 namespace ciface::iOS
@@ -146,7 +151,23 @@ Touchscreen::Touchscreen(int controller_id, bool wiimote)
   }
 
   // Rumble
-  AddOutput(new Motor(m_controller_id, ButtonType::RUMBLE));
+  if ([[CHHapticEngine capabilitiesForHardware] supportsHaptics])
+  {
+    std::ostringstream ss;
+    ss << "Rumble " << static_cast<int>(ButtonType::RUMBLE);
+
+    NSError* error;
+    MRCOwned<CHHapticEngine*> engine = MRCTransfer([[CHHapticEngine alloc] initAndReturnError:&error]);
+
+    if (error != nil)
+    {
+      ERROR_LOG_FMT(SERIALINTERFACE, "Touchscreen failed to create CHHapticEngine: {}",
+                    [[error localizedDescription] UTF8String]);
+      return;
+    }
+
+    AddOutput(new Motor(std::move(engine), ss.str()));
+  }
 }
 
 std::string Touchscreen::Button::GetName() const
@@ -172,21 +193,5 @@ std::string Touchscreen::Axis::GetName() const
 ControlState Touchscreen::Axis::GetState() const
 {
   return StateManager::GetInstance()->GetAxisValue(m_controller_id, m_index) * m_neg;
-}
-
-Touchscreen::Motor::~Motor()
-{
-}
-
-std::string Touchscreen::Motor::GetName() const
-{
-  std::ostringstream ss;
-  ss << "Rumble " << static_cast<int>(m_index);
-  return ss.str();
-}
-
-void Touchscreen::Motor::SetState(ControlState state)
-{
-  // TODO
 }
 }  // namespace ciface::iOS

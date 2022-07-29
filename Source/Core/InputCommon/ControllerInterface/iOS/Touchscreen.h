@@ -38,18 +38,6 @@ private:
     const ButtonType m_index;
     const float m_neg;
   };
-  class Motor : public Core::Device::Output
-  {
-  public:
-    Motor(int controller_id, ButtonType index) : m_controller_id(controller_id), m_index(index) {}
-    ~Motor();
-    std::string GetName() const override;
-    void SetState(ControlState state) override;
-
-  private:
-    const int m_controller_id;
-    const ButtonType m_index;
-  };
 
 public:
   Touchscreen(int controller_id, bool wiimote);
