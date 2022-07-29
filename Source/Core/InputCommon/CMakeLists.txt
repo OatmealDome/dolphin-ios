@@ -131,6 +131,8 @@ elseif(IOS)
     ControllerInterface/iOS/MFiController.mm
     ControllerInterface/iOS/MFiControllerScanner.h
     ControllerInterface/iOS/MFiControllerScanner.mm
+    ControllerInterface/iOS/Motor.h
+    ControllerInterface/iOS/Motor.mm
     ControllerInterface/iOS/iOS.h
     ControllerInterface/iOS/iOS.mm
     ControllerInterface/iOS/StateManager.h
@@ -139,6 +141,7 @@ elseif(IOS)
     ControllerInterface/iOS/Touchscreen.mm
   )
   target_link_libraries(inputcommon PRIVATE
+    ${COREHAPTICS_LIBRARY}
     ${GAMECONTROLLER_LIBRARY}
   )
 elseif(X11_FOUND)
