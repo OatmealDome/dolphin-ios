@@ -222,6 +222,7 @@
 		B904AD41288A54B0008B6BE9 /* MappingGroupEditDoubleCellDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditDoubleCellDelegate.h; sourceTree = "<group>"; };
 		B904AD42288B4C80008B6BE9 /* MappingGroupEditBoolCellDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingGroupEditBoolCellDelegate.h; sourceTree = "<group>"; };
 		B904AD43288B5426008B6BE9 /* MappingExtensionViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingExtensionViewControllerDelegate.h; sourceTree = "<group>"; };
+		B9114FA12893D10B00B9C57A /* MappingDeviceViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingDeviceViewControllerDelegate.h; sourceTree = "<group>"; };
 		B933EDBC27F6A61B004D7DD7 /* Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swift.h; sourceTree = "<group>"; };
 		B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFileCacheService.swift; sourceTree = "<group>"; };
 		B933EDBF27F77D1E004D7DD7 /* GameFilePtrWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameFilePtrWrapper.h; sourceTree = "<group>"; };
@@ -577,6 +578,7 @@
 				B904AD192888AB5E008B6BE9 /* MappingDeviceCell.m */,
 				B904AD1B2888AB6B008B6BE9 /* MappingDeviceViewController.h */,
 				B904AD1C2888AB6B008B6BE9 /* MappingDeviceViewController.mm */,
+				B9114FA12893D10B00B9C57A /* MappingDeviceViewControllerDelegate.h */,
 			);
 			path = Device;
 			sourceTree = "<group>";

@@ -12,6 +12,7 @@
 #import "FoundationStringUtil.h"
 #import "LocalizationUtil.h"
 #import "MappingDeviceCell.h"
+#import "MappingDeviceViewControllerDelegate.h"
 
 struct Device {
   std::string actualName;
@@ -113,6 +114,8 @@ struct Device {
     }
     
     _lastSelected = indexPath.row;
+    
+    [self.delegate deviceDidChange:self];
   }
   
   [tableView deselectRowAtIndexPath:indexPath animated:true];
