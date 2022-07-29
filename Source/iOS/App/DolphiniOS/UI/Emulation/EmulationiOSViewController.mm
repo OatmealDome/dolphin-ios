@@ -15,7 +15,9 @@
 
 #import "VideoCommon/RenderBase.h"
 
+#import "EmulationCoordinator.h"
 #import "HostNotifications.h"
+#import "VirtualMFiControllerManager.h"
 
 typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   DOLEmulationVisibleTouchPadNone,
@@ -47,15 +49,20 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     }
   }
   
-  // Stupidity - iOS 15 now uses the scrollEdgeAppearance when the UINavigationBar is off screen.
-  // https://developer.apple.com/forums/thread/682420
   if (@available(iOS 15.0, *)) {
+    // Stupidity - iOS 15 now uses the scrollEdgeAppearance when the UINavigationBar is off screen.
+    // https://developer.apple.com/forums/thread/682420
     UINavigationBar* bar = self.navigationController.navigationBar;
     bar.scrollEdgeAppearance = bar.standardAppearance;
+    
+    VirtualMFiControllerManager* virtualMfi = [VirtualMFiControllerManager shared];
+    if (virtualMfi.shouldConnectController) {
+      [virtualMfi connectControllerToView:self.view];
+    }
   }
   
-  
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTitleChangedNotification) name:DOLHostTitleChangedNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveEmulationEndNotificationiOS) name:DOLEmulationDidEndNotification object:nil];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -147,6 +154,14 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
     [self updateNavigationBar:true];
   });
+}
+
+- (void)receiveEmulationEndNotificationiOS {
+  if (@available(iOS 15.0, *)) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [[VirtualMFiControllerManager shared] disconnectController];
+    });
+  }
 }
 
 @end
