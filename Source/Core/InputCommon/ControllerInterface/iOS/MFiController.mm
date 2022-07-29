@@ -35,6 +35,28 @@ MFiController::MFiController(GCController* controller) : m_controller(MRCRetain(
     AddInput(new Axis(gamepad.rightThumbstick.yAxis, -1.0f, "R Stick Y-"));
 
     // Optionals and buttons only on newer iOS versions
+
+    if (@available(iOS 14.5, *))
+    {
+      if ([gamepad isKindOfClass:[GCDualSenseGamepad class]])
+      {
+        GCDualSenseGamepad* ds_gamepad = (GCDualSenseGamepad*)gamepad;
+        AddInput(new Button(ds_gamepad.touchpadButton, "Touchpad"));
+        
+        // The user's first finger on the touchpad.
+        AddInput(new Axis(ds_gamepad.touchpadPrimary.xAxis, 1.0f, "Touchpad X+"));
+        AddInput(new Axis(ds_gamepad.touchpadPrimary.xAxis, -1.0f, "Touchpad X-"));
+        AddInput(new Axis(ds_gamepad.touchpadPrimary.yAxis, 1.0f, "Touchpad Y+"));
+        AddInput(new Axis(ds_gamepad.touchpadPrimary.yAxis, -1.0f, "Touchpad Y-"));
+
+        // The user's second finger on the touchpad.
+        AddInput(new Axis(ds_gamepad.touchpadSecondary.xAxis, 1.0f, "Touchpad Secondary X+"));
+        AddInput(new Axis(ds_gamepad.touchpadSecondary.xAxis, -1.0f, "Touchpad Secondary X-"));
+        AddInput(new Axis(ds_gamepad.touchpadSecondary.yAxis, 1.0f, "Touchpad Secondary Y+"));
+        AddInput(new Axis(ds_gamepad.touchpadSecondary.yAxis, -1.0f, "Touchpad Secondary Y-"));
+      }
+    }
+
     if (@available(iOS 14, *))
     {
       if (gamepad.buttonHome != nil)
