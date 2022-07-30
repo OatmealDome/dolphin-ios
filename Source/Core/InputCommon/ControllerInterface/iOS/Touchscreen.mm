@@ -157,7 +157,7 @@ Touchscreen::Touchscreen(int controller_id, bool wiimote)
     ss << "Rumble " << static_cast<int>(ButtonType::RUMBLE);
 
     NSError* error;
-    MRCOwned<CHHapticEngine*> engine = MRCTransfer([[CHHapticEngine alloc] initAndReturnError:&error]);
+    CHHapticEngine* engine = [[CHHapticEngine alloc] initAndReturnError:&error];
 
     if (error != nil)
     {
