@@ -17,6 +17,7 @@
 
 #import "EmulationCoordinator.h"
 #import "HostNotifications.h"
+#import "LocalizationUtil.h"
 #import "VirtualMFiControllerManager.h"
 
 typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
@@ -65,6 +66,41 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveEmulationEndNotificationiOS) name:DOLEmulationDidEndNotification object:nil];
 }
 
+- (void)recreateMenu API_AVAILABLE(ios(14.0)) {
+  NSMutableArray<UIAction*>* controllerActions = [[NSMutableArray alloc] init];
+  
+  if (_visibleTouchPad != DOLEmulationVisibleTouchPadWiimote && SConfig::GetInstance().bWii) {
+    [controllerActions addObject:[UIAction actionWithTitle:DOLCoreLocalizedString(@"Wii Remote") image:[UIImage systemImageNamed:@"gamecontroller"] identifier:nil handler:^(UIAction*) {
+      [self updateVisibleTouchPadToWii];
+      [self recreateMenu];
+      
+      [self.navigationController setNavigationBarHidden:true animated:true];
+    }]];
+  }
+  
+  if (_visibleTouchPad != DOLEmulationVisibleTouchPadGameCube) {
+    [controllerActions addObject:[UIAction actionWithTitle:DOLCoreLocalizedString(@"GameCube Controller") image:[UIImage systemImageNamed:@"gamecontroller"] identifier:nil handler:^(UIAction*) {
+      [self updateVisibleTouchPadToGameCube];
+      [self recreateMenu];
+      
+      [self.navigationController setNavigationBarHidden:true animated:true];
+    }]];
+  }
+  
+  if (_visibleTouchPad != DOLEmulationVisibleTouchPadNone) {
+    [controllerActions addObject:[UIAction actionWithTitle:DOLCoreLocalizedString(@"None") image:[UIImage systemImageNamed:@"x.circle"] identifier:nil handler:^(UIAction*) {
+      [self updateVisibleTouchPadWithType:DOLEmulationVisibleTouchPadNone];
+      [self recreateMenu];
+      
+      [self.navigationController setNavigationBarHidden:true animated:true];
+    }]];
+  }
+  
+  self.navigationItem.leftBarButtonItem.menu = [UIMenu menuWithChildren:@[
+    [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Controllers") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:controllerActions]
+  ]];
+}
+
 - (void)viewDidLayoutSubviews {
   if (g_renderer) {
     g_renderer->ResizeSurface();
@@ -77,6 +113,10 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
       [self updateVisibleTouchPadToWii];
     } else {
       [self updateVisibleTouchPadToGameCube];
+    }
+    
+    if (@available(iOS 14.0, *)) {
+      [self recreateMenu];
     }
   });
 }
@@ -145,6 +185,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
       padView.alpha = i == targetIdx ? 1.0f : 0.0f;
     }
   }];
+  
+  _visibleTouchPad = touchPad;
 }
 
 - (IBAction)pullDownPressed:(id)sender {
