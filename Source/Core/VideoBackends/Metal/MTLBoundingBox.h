@@ -5,7 +5,7 @@
 
 #include <Metal/Metal.h>
 
-#include "Common/MRCHelpers.h"
+#include "VideoBackends/Metal/MRCHelpers.h"
 
 namespace Metal
 {

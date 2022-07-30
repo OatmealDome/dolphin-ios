@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include "Common/MRCHelpers.h"
-
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
 
 @class CHHapticEngine;
@@ -16,15 +14,15 @@ namespace ciface::iOS
 class Motor : public Core::Device::Output
 {
 public:
-  Motor(MRCOwned<CHHapticEngine*> engine, const std::string name);
+  Motor(CHHapticEngine* engine, const std::string name);
   ~Motor();
   std::string GetName() const override;
   void SetState(ControlState state) override;
 
 private:
   bool m_player_created = false;
-  MRCOwned<CHHapticEngine*> m_haptic_engine;
-  MRCOwned<id<CHHapticAdvancedPatternPlayer>> m_haptic_player;
+  CHHapticEngine* m_haptic_engine;
+  id<CHHapticAdvancedPatternPlayer> m_haptic_player;
 
   const std::string m_name;
   ControlState m_last_state = 0.0;

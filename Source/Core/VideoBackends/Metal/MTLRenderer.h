@@ -6,7 +6,7 @@
 #include <Metal/Metal.h>
 #include <QuartzCore/QuartzCore.h>
 
-#include "Common/MRCHelpers.h"
+#include "VideoBackends/Metal/MRCHelpers.h"
 
 #include "VideoCommon/RenderBase.h"
 

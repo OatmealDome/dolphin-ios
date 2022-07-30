@@ -3,8 +3,6 @@
 
 #include "InputCommon/ControllerInterface/iOS/iOS.h"
 
-#include "Common/MRCHelpers.h"
-
 #include "InputCommon/ControllerInterface/iOS/MFiController.h"
 #include "InputCommon/ControllerInterface/iOS/MFiControllerScanner.h"
 #include "InputCommon/ControllerInterface/iOS/StateManager.h"
@@ -12,20 +10,20 @@
 
 namespace ciface::iOS
 {
-static MRCOwned<MFiControllerScanner*> g_mfi_scanner;
+static MFiControllerScanner* g_mfi_scanner;
 
 void Init()
 {
   StateManager::GetInstance()->Init();
 
-  g_mfi_scanner = MRCTransfer([[MFiControllerScanner alloc] init]);
+  g_mfi_scanner = [[MFiControllerScanner alloc] init];
 }
 
 void DeInit()
 {
   StateManager::GetInstance()->DeInit();
 
-  g_mfi_scanner.Reset();
+  g_mfi_scanner = nil;
 }
 
 void PopulateDevices()
