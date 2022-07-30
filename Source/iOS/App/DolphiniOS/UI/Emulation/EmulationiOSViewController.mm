@@ -71,31 +71,51 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 - (void)recreateMenu API_AVAILABLE(ios(14.0)) {
   NSMutableArray<UIAction*>* controllerActions = [[NSMutableArray alloc] init];
   
-  if (_visibleTouchPad != DOLEmulationVisibleTouchPadWiimote && SConfig::GetInstance().bWii) {
-    [controllerActions addObject:[UIAction actionWithTitle:DOLCoreLocalizedString(@"Wii Remote") image:[UIImage systemImageNamed:@"gamecontroller"] identifier:nil handler:^(UIAction*) {
+  if ([self isWiimoteTouchPadAttached] && SConfig::GetInstance().bWii) {
+    UIAction* wiimoteAction = [UIAction actionWithTitle:DOLCoreLocalizedString(@"Wii Remote") image:[UIImage systemImageNamed:@"gamecontroller"] identifier:nil handler:^(UIAction*) {
       [self updateVisibleTouchPadToWii];
       [self recreateMenu];
       
       [self.navigationController setNavigationBarHidden:true animated:true];
-    }]];
+    }];
+    
+    if (_visibleTouchPad == DOLEmulationVisibleTouchPadWiimote ||
+        _visibleTouchPad == DOLEmulationVisibleTouchPadSidewaysWiimote ||
+        _visibleTouchPad == DOLEmulationVisibleTouchPadClassic) {
+      wiimoteAction.state = UIMenuElementStateOn;
+    }
+    
+    [controllerActions addObject:wiimoteAction];
   }
   
-  if (_visibleTouchPad != DOLEmulationVisibleTouchPadGameCube) {
-    [controllerActions addObject:[UIAction actionWithTitle:DOLCoreLocalizedString(@"GameCube Controller") image:[UIImage systemImageNamed:@"gamecontroller"] identifier:nil handler:^(UIAction*) {
+  if ([self isGameCubeTouchPadAttached]) {
+    UIAction* gamecubeAction = [UIAction actionWithTitle:DOLCoreLocalizedString(@"GameCube Controller") image:[UIImage systemImageNamed:@"gamecontroller"] identifier:nil handler:^(UIAction*) {
       [self updateVisibleTouchPadToGameCube];
       [self recreateMenu];
       
       [self.navigationController setNavigationBarHidden:true animated:true];
-    }]];
+    }];
+    
+    if (_visibleTouchPad == DOLEmulationVisibleTouchPadGameCube) {
+      gamecubeAction.state = UIMenuElementStateOn;
+    }
+    
+    [controllerActions addObject:gamecubeAction];
   }
   
-  if (_visibleTouchPad != DOLEmulationVisibleTouchPadNone) {
-    [controllerActions addObject:[UIAction actionWithTitle:DOLCoreLocalizedString(@"Hide") image:[UIImage systemImageNamed:@"x.circle"] identifier:nil handler:^(UIAction*) {
+  if ([controllerActions count] > 0) {
+    UIAction* noneAction = [UIAction actionWithTitle:DOLCoreLocalizedString(@"Hide") image:[UIImage systemImageNamed:@"x.circle"] identifier:nil handler:^(UIAction*) {
       [self updateVisibleTouchPadWithType:DOLEmulationVisibleTouchPadNone];
       [self recreateMenu];
       
       [self.navigationController setNavigationBarHidden:true animated:true];
-    }]];
+    }];
+    
+    if (_visibleTouchPad == DOLEmulationVisibleTouchPadNone) {
+      noneAction.state = UIMenuElementStateOn;
+    }
+    
+    [controllerActions addObject:noneAction];
   }
   
   self.navigationItem.leftBarButtonItem.menu = [UIMenu menuWithChildren:@[
