@@ -139,24 +139,49 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   });
 }
 
-- (void)updateVisibleTouchPadToWii {
-  DOLEmulationVisibleTouchPad targetTouchPad;
-  
+- (bool)isWiimoteTouchPadAttached {
   if (Config::Get(Config::GetInfoForWiimoteSource(0)) != WiimoteSource::Emulated) {
-    // No Wiimote is attached to this port. Fallback to GameCube if possible.
-    [self updateVisibleTouchPadToGameCube];
-    
-    return;
+    // Nothing is plugged in to this port.
+    return false;
   }
   
   const auto wiimote = static_cast<WiimoteEmu::Wiimote*>(Wiimote::GetConfig()->GetController(0));
   
   if (wiimote->GetDefaultDevice().source != "iOS") {
-    // A real controller is mapped to this port. Fallback to GameCube in case port 1 is bound to the touchscreen.
+    // A real controller is mapped to this port.
+    return false;
+  }
+  
+  return true;
+}
+
+- (bool)isGameCubeTouchPadAttached {
+  if (Config::Get(Config::GetInfoForSIDevice(0)) == SerialInterface::SIDEVICE_NONE) {
+    // Nothing is plugged in to this port.
+    return false;
+  }
+  
+  const auto device = Pad::GetConfig()->GetController(0);
+  
+  if (device->GetDefaultDevice().source != "iOS") {
+    // A real controller is mapped to this port.
+    return false;
+  }
+  
+  return true;
+}
+
+- (void)updateVisibleTouchPadToWii {
+  if (![self isWiimoteTouchPadAttached]) {
+    // Fallback to GameCube in case port 1 is bound to the touchscreen.
     [self updateVisibleTouchPadToGameCube];
     
     return;
   }
+  
+  DOLEmulationVisibleTouchPad targetTouchPad;
+  
+  const auto wiimote = static_cast<WiimoteEmu::Wiimote*>(Wiimote::GetConfig()->GetController(0));
   
   if (wiimote->GetActiveExtensionNumber() == WiimoteEmu::ExtensionNumber::CLASSIC) {
     targetTouchPad = DOLEmulationVisibleTouchPadClassic;
@@ -170,15 +195,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 }
 
 - (void)updateVisibleTouchPadToGameCube {
-  if (Config::Get(Config::GetInfoForSIDevice(0)) == SerialInterface::SIDEVICE_NONE) {
-    // Nothing is plugged in to this port.
-    return;
-  }
-  
-  const auto device = Pad::GetConfig()->GetController(0);
-  
-  if (device->GetDefaultDevice().source != "iOS") {
-    // A real controller is mapped to this port.
+  if (![self isGameCubeTouchPadAttached]) {
     return;
   }
   
