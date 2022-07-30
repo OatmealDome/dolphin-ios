@@ -10,6 +10,7 @@
 #import "Core/HW/SI/SI_Device.h"
 #import "Core/HW/Wiimote.h"
 #import "Core/HW/WiimoteEmu/WiimoteEmu.h"
+#import "Core/State.h"
 
 #import "InputCommon/InputConfig.h"
 
@@ -34,6 +35,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 
 @implementation EmulationiOSViewController {
   DOLEmulationVisibleTouchPad _visibleTouchPad;
+  int _stateSlot;
 }
 
 - (void)viewDidLoad {
@@ -97,7 +99,23 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   }
   
   self.navigationItem.leftBarButtonItem.menu = [UIMenu menuWithChildren:@[
-    [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Controllers") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:controllerActions]
+    [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Controllers") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:controllerActions],
+    [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Save State") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[
+      [UIAction actionWithTitle:DOLCoreLocalizedString(@"Load State") image:[UIImage systemImageNamed:@"tray.and.arrow.down"] identifier:nil handler:^(UIAction*) {
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+          State::Load(self->_stateSlot);
+        });
+      
+        [self.navigationController setNavigationBarHidden:true animated:true];
+      }],
+      [UIAction actionWithTitle:DOLCoreLocalizedString(@"Save State") image:[UIImage systemImageNamed:@"tray.and.arrow.up"] identifier:nil handler:^(UIAction*) {
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+          State::Save(self->_stateSlot);
+        });
+      
+        [self.navigationController setNavigationBarHidden:true animated:true];
+      }]
+    ]]
   ]];
 }
 
