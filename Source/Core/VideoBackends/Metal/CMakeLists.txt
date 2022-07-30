@@ -1,4 +1,5 @@
 add_library(videometal
+  MRCHelpers.h
   MTLBoundingBox.mm
   MTLBoundingBox.h
   MTLMain.mm
@@ -38,3 +39,5 @@ PRIVATE
   ${METAL_LIBRARY}
   ${QUARTZCORE_LIBRARY}
 )
+
+target_compile_options(videometal PRIVATE -fno-objc-arc)

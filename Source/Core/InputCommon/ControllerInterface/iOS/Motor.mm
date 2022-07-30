@@ -14,7 +14,7 @@
 
 namespace ciface::iOS
 {
-Motor::Motor(MRCOwned<CHHapticEngine*> engine, const std::string name) : m_name(std::move(name))
+Motor::Motor(CHHapticEngine* engine, const std::string name) : m_name(std::move(name))
 {
   m_haptic_engine = std::move(engine);
   
@@ -43,7 +43,7 @@ Motor::Motor(MRCOwned<CHHapticEngine*> engine, const std::string name) : m_name(
     return;
   }
   
-  m_haptic_player = MRCRetain([m_haptic_engine createAdvancedPlayerWithPattern:pattern error:&error]);
+  m_haptic_player = [m_haptic_engine createAdvancedPlayerWithPattern:pattern error:&error];
 
   if (error != nil)
   {
@@ -51,10 +51,6 @@ Motor::Motor(MRCOwned<CHHapticEngine*> engine, const std::string name) : m_name(
 
     return;
   }
-  
-  [pattern release];
-  [event release];
-  [intensity_param release];
 
   [m_haptic_player setLoopEnabled:true];
   [m_haptic_player setLoopEnd:0.0f];

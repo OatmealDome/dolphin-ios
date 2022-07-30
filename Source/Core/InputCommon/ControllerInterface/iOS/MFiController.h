@@ -5,8 +5,6 @@
 
 #include <GameController/GameController.h>
 
-#include "Common/MRCHelpers.h"
-
 #include "InputCommon/ControllerInterface/CoreDevice.h"
 
 namespace ciface::iOS
@@ -25,12 +23,12 @@ private:
   {
   public:
     Button(GCControllerButtonInput* input, const std::string name)
-        : m_input(MRCRetain(input)), m_name(name) {}
+        : m_input(input), m_name(name) {}
     std::string GetName() const override;
     ControlState GetState() const override;
 
   private:
-    MRCOwned<GCControllerButtonInput*> m_input;
+    GCControllerButtonInput* m_input;
     const std::string m_name;
   };
 
@@ -38,14 +36,14 @@ private:
   {
   public:
     PressureSensitiveButton(GCControllerButtonInput* input, const std::string name)
-        : m_input(MRCRetain(input)), m_name(name)
+        : m_input(input), m_name(name)
     {
     }
     std::string GetName() const override;
     ControlState GetState() const override;
 
   private:
-    MRCOwned<GCControllerButtonInput*> m_input;
+    GCControllerButtonInput* m_input;
     const std::string m_name;
   };
 
@@ -53,14 +51,14 @@ private:
   {
   public:
     Axis(GCControllerAxisInput* input, const float multiplier, const std::string name)
-        : m_input(MRCRetain(input)), m_multiplier(multiplier), m_name(name)
+        : m_input(input), m_multiplier(multiplier), m_name(name)
     {
     }
     std::string GetName() const override;
     ControlState GetState() const override;
 
   private:
-    MRCOwned<GCControllerAxisInput*> m_input;
+    GCControllerAxisInput* m_input;
     float m_multiplier;
     const std::string m_name;
   };
@@ -74,7 +72,7 @@ private:
     ControlState GetState() const override;
 
   private:
-    MRCOwned<GCMotion*> m_motion;
+    GCMotion* m_motion;
     MotionPlane m_plane;
     double m_multiplier;
     const std::string m_name;
@@ -89,7 +87,7 @@ private:
     ControlState GetState() const override;
 
   private:
-    MRCOwned<GCMotion*> m_motion;
+    GCMotion* m_motion;
     MotionPlane m_plane;
     double m_multiplier;
     const std::string m_name;
@@ -106,7 +104,7 @@ public:
   // std::optional<int> GetPreferredId() const final override;
 
 private:
-  MRCOwned<GCController*> m_controller;
+  GCController* m_controller;
   bool m_supports_accelerometer;
   bool m_supports_gyroscope;
 };

@@ -8,7 +8,7 @@
 
 namespace ciface::iOS
 {
-MFiController::MFiController(GCController* controller) : m_controller(MRCRetain(controller))
+MFiController::MFiController(GCController* controller) : m_controller(controller)
 {
   if (controller.extendedGamepad != nil)
   {
@@ -199,7 +199,7 @@ MFiController::MFiController(GCController* controller) : m_controller(MRCRetain(
     GCDeviceHaptics* haptics = controller.haptics;
     if (haptics != nil)
     {
-      MRCOwned<CHHapticEngine*> engine = MRCRetain([haptics createEngineWithLocality:GCHapticsLocalityDefault]);
+      CHHapticEngine* engine = [haptics createEngineWithLocality:GCHapticsLocalityDefault];
       
       AddOutput(new Motor(std::move(engine), "Rumble"));
     }
@@ -271,7 +271,7 @@ ControlState MFiController::Axis::GetState() const
 
 MFiController::AccelerometerAxis::AccelerometerAxis(GCMotion* motion, MotionPlane plane,
                                                     const double multiplier, const std::string name)
-    : m_motion(MRCRetain(motion)), m_plane(plane), m_name(name)
+    : m_motion(motion), m_plane(plane), m_name(name)
 {
   if (plane == X || plane == Y)
   {
@@ -327,7 +327,7 @@ ControlState MFiController::AccelerometerAxis::GetState() const
 
 MFiController::GyroscopeAxis::GyroscopeAxis(GCMotion* motion, MotionPlane plane,
                                          const double multiplier, const std::string name)
-    : m_motion(MRCRetain(motion)), m_plane(plane), m_name(name)
+    : m_motion(motion), m_plane(plane), m_name(name)
 {
   if (plane == X || plane == Y)
   {
