@@ -90,7 +90,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   }
   
   if (_visibleTouchPad != DOLEmulationVisibleTouchPadNone) {
-    [controllerActions addObject:[UIAction actionWithTitle:DOLCoreLocalizedString(@"None") image:[UIImage systemImageNamed:@"x.circle"] identifier:nil handler:^(UIAction*) {
+    [controllerActions addObject:[UIAction actionWithTitle:DOLCoreLocalizedString(@"Hide") image:[UIImage systemImageNamed:@"x.circle"] identifier:nil handler:^(UIAction*) {
       [self updateVisibleTouchPadWithType:DOLEmulationVisibleTouchPadNone];
       [self recreateMenu];
       
