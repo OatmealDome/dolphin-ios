@@ -131,6 +131,8 @@ elseif(IOS)
     ControllerInterface/iOS/MFiController.mm
     ControllerInterface/iOS/MFiControllerScanner.h
     ControllerInterface/iOS/MFiControllerScanner.mm
+    ControllerInterface/iOS/MFiKeyboard.h
+    ControllerInterface/iOS/MFiKeyboard.mm
     ControllerInterface/iOS/Motor.h
     ControllerInterface/iOS/Motor.mm
     ControllerInterface/iOS/iOS.h
