@@ -7,6 +7,7 @@
 
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
 #include "InputCommon/ControllerInterface/iOS/MFiController.h"
+#include "InputCommon/ControllerInterface/iOS/MFiKeyboard.h"
 
 @implementation MFiControllerScanner
 
@@ -21,6 +22,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(controllerDisconnected:)
                                                  name:GCControllerDidDisconnectNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardConnected:)
+                                                 name:GCKeyboardDidConnectNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDisconnected:)
+                                                 name:GCKeyboardDidDisconnectNotification
                                                object:nil];
   }
 
@@ -45,6 +54,21 @@
     const ciface::iOS::MFiController* controller =
         dynamic_cast<const ciface::iOS::MFiController*>(device);
     return controller && controller->IsSameController(gc_controller);
+  });
+}
+
+- (void)keyboardConnected:(NSNotification*)notification
+{
+  GCKeyboard* keyboard = (GCKeyboard*)notification.object;
+  g_controller_interface.AddDevice(std::make_shared<ciface::iOS::MFiKeyboard>(keyboard));
+}
+
+- (void)keyboardDisconnected:(NSNotification*)notification
+{
+  g_controller_interface.RemoveDevice([](const auto* device) {
+    const ciface::iOS::MFiKeyboard* keyboard =
+        dynamic_cast<const ciface::iOS::MFiKeyboard*>(device);
+    return keyboard != nullptr;
   });
 }
 
