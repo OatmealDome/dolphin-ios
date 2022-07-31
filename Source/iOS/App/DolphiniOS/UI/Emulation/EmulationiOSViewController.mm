@@ -83,6 +83,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
         _visibleTouchPad == DOLEmulationVisibleTouchPadSidewaysWiimote ||
         _visibleTouchPad == DOLEmulationVisibleTouchPadClassic) {
       wiimoteAction.state = UIMenuElementStateOn;
+    } else {
+      wiimoteAction.state = UIMenuElementStateOff;
     }
     
     [controllerActions addObject:wiimoteAction];
@@ -98,6 +100,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     
     if (_visibleTouchPad == DOLEmulationVisibleTouchPadGameCube) {
       gamecubeAction.state = UIMenuElementStateOn;
+    } else {
+      gamecubeAction.state = UIMenuElementStateOff;
     }
     
     [controllerActions addObject:gamecubeAction];
@@ -113,6 +117,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     
     if (_visibleTouchPad == DOLEmulationVisibleTouchPadNone) {
       noneAction.state = UIMenuElementStateOn;
+    } else {
+      noneAction.state = UIMenuElementStateOff;
     }
     
     [controllerActions addObject:noneAction];
