@@ -16,13 +16,38 @@ namespace ciface::iOS
 {
 Motor::Motor(CHHapticEngine* engine, const std::string name) : m_haptic_engine(engine), m_name(std::move(name))
 {
+  if (!StartEngine())
+  {
+    return;
+  }
+
+  m_haptic_engine.resetHandler = ^{
+    m_player_created = false;
+
+    m_haptic_player = nil;
+
+    StartEngine();
+  };
+}
+
+Motor::~Motor()
+{
+  if (m_player_created)
+  {
+    [m_haptic_player cancelAndReturnError:nil];
+    [m_haptic_engine stopWithCompletionHandler:nil];
+  }
+}
+
+bool Motor::StartEngine()
+{
   NSError* error;
   
   if (![m_haptic_engine startAndReturnError:&error])
   {
     MOTOR_ERROR_LOG("Motor failed to start CHHapticEngine: {}", error);
 
-    return;
+    return false;
   }
   
   CHHapticEventParameter* intensity_param = [[CHHapticEventParameter alloc] initWithParameterID:CHHapticEventParameterIDHapticIntensity value:1.0f];
@@ -38,7 +63,7 @@ Motor::Motor(CHHapticEngine* engine, const std::string name) : m_haptic_engine(e
   {
     MOTOR_ERROR_LOG("Motor failed to create CHHapticPattern: {}", error);
 
-    return;
+    return false;
   }
   
   m_haptic_player = [m_haptic_engine createAdvancedPlayerWithPattern:pattern error:&error];
@@ -47,22 +72,15 @@ Motor::Motor(CHHapticEngine* engine, const std::string name) : m_haptic_engine(e
   {
     MOTOR_ERROR_LOG("Motor failed to create CHHapticAdvancedPatternPlayer: {}", error);
 
-    return;
+    return false;
   }
 
   [m_haptic_player setLoopEnabled:true];
   [m_haptic_player setLoopEnd:0.0f];
 
   m_player_created = true;
-}
 
-Motor::~Motor()
-{
-  if (m_player_created)
-  {
-    [m_haptic_player cancelAndReturnError:nil];
-    [m_haptic_engine stopWithCompletionHandler:nil];
-  }
+  return true;
 }
 
 std::string Motor::GetName() const

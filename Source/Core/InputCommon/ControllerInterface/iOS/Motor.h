@@ -16,6 +16,9 @@ class Motor : public Core::Device::Output
 public:
   Motor(CHHapticEngine* engine, const std::string name);
   ~Motor();
+
+  bool StartEngine();
+  
   std::string GetName() const override;
   void SetState(ControlState state) override;
 
