@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <mutex>
+
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
 
 @class CHHapticEngine;
@@ -18,11 +20,13 @@ public:
   ~Motor();
 
   bool StartEngine();
-  
+
   std::string GetName() const override;
   void SetState(ControlState state) override;
 
 private:
+  std::mutex m_lock;
+
   bool m_player_created = false;
   CHHapticEngine* m_haptic_engine;
   id<CHHapticAdvancedPatternPlayer> m_haptic_player;

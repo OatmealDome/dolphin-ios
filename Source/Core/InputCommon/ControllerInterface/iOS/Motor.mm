@@ -16,12 +16,16 @@ namespace ciface::iOS
 {
 Motor::Motor(CHHapticEngine* engine, const std::string name) : m_haptic_engine(engine), m_name(std::move(name))
 {
+  std::lock_guard<std::mutex> guard(m_lock);
+
   if (!StartEngine())
   {
     return;
   }
 
   m_haptic_engine.resetHandler = ^{
+    std::lock_guard<std::mutex> reset_guard(m_lock);
+
     m_player_created = false;
 
     m_haptic_player = nil;
@@ -90,6 +94,8 @@ std::string Motor::GetName() const
 
 void Motor::SetState(ControlState state)
 {
+  std::lock_guard<std::mutex> guard(m_lock);
+
   if (!m_player_created || state == m_last_state)
   {
     return;
