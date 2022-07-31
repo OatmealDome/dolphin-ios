@@ -28,6 +28,8 @@ private:
   std::mutex m_lock;
 
   bool m_player_created = false;
+  bool m_player_needs_restart = false;
+
   CHHapticEngine* m_haptic_engine;
   id<CHHapticAdvancedPatternPlayer> m_haptic_player;
 
