@@ -122,6 +122,8 @@
 		B9DC5FB3288497B0004BD94A /* GraphicsGeneralViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB2288497B0004BD94A /* GraphicsGeneralViewController.mm */; };
 		B9DC5FB62884A563004BD94A /* GraphicsBoolCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */; };
 		B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */; };
+		B9FCB7B9289670830020E233 /* JitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7B8289670830020E233 /* JitManager.m */; };
+		B9FCB7BC289672830020E233 /* JitManager+Debugger.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BB289672830020E233 /* JitManager+Debugger.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -370,6 +372,10 @@
 		B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsBoolCell.mm; sourceTree = "<group>"; };
 		B9DC5FB72884CB7C004BD94A /* GraphicsChoiceCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsChoiceCell.h; sourceTree = "<group>"; };
 		B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsChoiceCell.mm; sourceTree = "<group>"; };
+		B9FCB7B7289670830020E233 /* JitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JitManager.h; sourceTree = "<group>"; };
+		B9FCB7B8289670830020E233 /* JitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JitManager.m; sourceTree = "<group>"; };
+		B9FCB7BA289672830020E233 /* JitManager+Debugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+Debugger.h"; sourceTree = "<group>"; };
+		B9FCB7BB289672830020E233 /* JitManager+Debugger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+Debugger.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -399,6 +405,7 @@
 		B900A7A427F26F17000361DD /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				B9FCB7B6289658FC0020E233 /* Jit */,
 				B9B2C65C288E481300CB6569 /* Emulation */,
 				B900A7BB27F4CD16000361DD /* FoundationUtil */,
 				B900A7A827F27EB9000361DD /* Services */,
@@ -1051,6 +1058,17 @@
 			path = General;
 			sourceTree = "<group>";
 		};
+		B9FCB7B6289658FC0020E233 /* Jit */ = {
+			isa = PBXGroup;
+			children = (
+				B9FCB7B7289670830020E233 /* JitManager.h */,
+				B9FCB7B8289670830020E233 /* JitManager.m */,
+				B9FCB7BA289672830020E233 /* JitManager+Debugger.h */,
+				B9FCB7BB289672830020E233 /* JitManager+Debugger.m */,
+			);
+			path = Jit;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1257,6 +1275,7 @@
 				B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */,
 				B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */,
 				B9114F9C2893C6CA00B9C57A /* DebugRootViewController.m in Sources */,
+				B9FCB7B9289670830020E233 /* JitManager.m in Sources */,
 				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
@@ -1317,6 +1336,7 @@
 				B9B2C65B288E454700CB6569 /* ExternalDisplaySceneDelegate.swift in Sources */,
 				B904ACC128851C6F008B6BE9 /* GraphicsBackendViewController.mm in Sources */,
 				B904ACCF288555E8008B6BE9 /* InternalResolutionViewController.mm in Sources */,
+				B9FCB7BC289672830020E233 /* JitManager+Debugger.m in Sources */,
 				B9398724287FFBEC008E8E47 /* ConfigSoundViewController.mm in Sources */,
 				B9447B072841906000BC9110 /* TCView.swift in Sources */,
 				B904AD1D2888AB6B008B6BE9 /* MappingDeviceViewController.mm in Sources */,
