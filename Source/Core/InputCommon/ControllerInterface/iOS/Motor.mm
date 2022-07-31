@@ -10,7 +10,7 @@
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
 #include "InputCommon/ControllerInterface/iOS/Motor.h"
 
-#define MOTOR_ERROR_LOG(x, y) ERROR_LOG_FMT(SERIALINTERFACE, x, [[y localizedDescription] UTF8String])
+#define MOTOR_ERROR_LOG(x, y) ERROR_LOG_FMT(CONTROLLERINTERFACE, x, [[y localizedDescription] UTF8String])
 
 namespace ciface::iOS
 {
