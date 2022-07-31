@@ -124,6 +124,7 @@
 		B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */; };
 		B9FCB7B9289670830020E233 /* JitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7B8289670830020E233 /* JitManager.m */; };
 		B9FCB7BC289672830020E233 /* JitManager+Debugger.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BB289672830020E233 /* JitManager+Debugger.m */; };
+		B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BD28967C130020E233 /* JitAcquisitionService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -376,6 +377,7 @@
 		B9FCB7B8289670830020E233 /* JitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JitManager.m; sourceTree = "<group>"; };
 		B9FCB7BA289672830020E233 /* JitManager+Debugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+Debugger.h"; sourceTree = "<group>"; };
 		B9FCB7BB289672830020E233 /* JitManager+Debugger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+Debugger.m"; sourceTree = "<group>"; };
+		B9FCB7BD28967C130020E233 /* JitAcquisitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitAcquisitionService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -428,6 +430,7 @@
 				B900A7AC27F27F36000361DD /* DolphinCoreService.h */,
 				B900A7AD27F27F36000361DD /* DolphinCoreService.mm */,
 				B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */,
+				B9FCB7BD28967C130020E233 /* JitAcquisitionService.swift */,
 				B9B2C64C288E170600CB6569 /* ServiceManager.swift */,
 			);
 			path = Services;
@@ -1275,6 +1278,7 @@
 				B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */,
 				B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */,
 				B9114F9C2893C6CA00B9C57A /* DebugRootViewController.m in Sources */,
+				B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */,
 				B9FCB7B9289670830020E233 /* JitManager.m in Sources */,
 				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,

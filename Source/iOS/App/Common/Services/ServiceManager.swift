@@ -12,7 +12,8 @@ class ServiceManager {
   let services: [UIApplicationDelegate] = [
     DefaultsInitService(),
     DolphinCoreService(),
-    GameFileCacheService()
+    GameFileCacheService(),
+    JitAcquisitionService()
   ]
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {

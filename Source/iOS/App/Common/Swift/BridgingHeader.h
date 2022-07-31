@@ -4,6 +4,7 @@
 #import "DolphinCoreService.h"
 #import "EmulationCoordinator.h"
 #import "GameFileCacheManager.h"
+#import "JitManager.h"
 
 #if TARGET_OS_IOS
 #import "TCManagerInterface.h"
