@@ -201,7 +201,7 @@ MFiController::MFiController(GCController* controller) : m_controller(controller
     {
       CHHapticEngine* engine = [haptics createEngineWithLocality:GCHapticsLocalityDefault];
       
-      AddOutput(new Motor(std::move(engine), "Rumble"));
+      AddOutput(new Motor(engine, "Rumble"));
     }
   }
 }

@@ -166,7 +166,7 @@ Touchscreen::Touchscreen(int controller_id, bool wiimote)
       return;
     }
 
-    AddOutput(new Motor(std::move(engine), ss.str()));
+    AddOutput(new Motor(engine, ss.str()));
   }
 }
 

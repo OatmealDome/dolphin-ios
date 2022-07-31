@@ -14,10 +14,8 @@
 
 namespace ciface::iOS
 {
-Motor::Motor(CHHapticEngine* engine, const std::string name) : m_name(std::move(name))
+Motor::Motor(CHHapticEngine* engine, const std::string name) : m_haptic_engine(engine), m_name(std::move(name))
 {
-  m_haptic_engine = std::move(engine);
-  
   NSError* error;
   
   if (![m_haptic_engine startAndReturnError:&error])
