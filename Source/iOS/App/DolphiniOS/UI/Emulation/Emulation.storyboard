@@ -98,7 +98,7 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Dolphin" id="8R3-bp-VoF">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="gearshape" catalog="system" changesSelectionAsPrimaryAction="YES" id="P9h-SU-AWn"/>
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="gearshape" catalog="system" id="P9h-SU-AWn"/>
                     </navigationItem>
                     <connections>
                         <outlet property="metalBottomConstraint" destination="TK6-ZL-CFi" id="X2K-tT-8F0"/>
