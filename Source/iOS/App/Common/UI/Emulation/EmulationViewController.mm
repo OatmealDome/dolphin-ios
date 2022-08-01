@@ -7,9 +7,11 @@
 #import "Core/Core.h"
 #import "Core/Host.h"
 
+#import "EmulationBootParameter.h"
 #import "EmulationCoordinator.h"
 #import "LocalizationUtil.h"
 #import "JitManager.h"
+#import "NKitWarningViewController.h"
 
 @interface EmulationViewController ()
 
@@ -45,14 +47,16 @@
   [super viewDidAppear:animated];
   
   if (!_didStartEmulation) {
-    if ([JitManager shared].acquiredJit) {
-      [self startEmulation];
-    } else {
+    if (![JitManager shared].acquiredJit) {
       JitWaitViewController* jitController = [[JitWaitViewController alloc] initWithNibName:@"JitWait" bundle:nil];
       jitController.delegate = self;
       jitController.modalInPresentation = true;
       
       [self presentViewController:jitController animated:true completion:nil];
+    } else if ([self checkIfNeedToShowNKitWarning]) {
+      [self showNKitWarning];
+    } else {
+      [self startEmulation];
     }
     
     _didStartEmulation = true;
@@ -60,6 +64,36 @@
 }
 
 - (void)didFinishJitScreenWithResult:(BOOL)result sender:(id)sender {
+  [self dismissViewControllerAnimated:true completion:^{
+    if (result) {
+      if ([self checkIfNeedToShowNKitWarning]) {
+        [self showNKitWarning];
+      } else {
+        [self startEmulation];
+      }
+    } else {
+      [self.navigationController dismissViewControllerAnimated:true completion:nil];
+    }
+  }];
+}
+
+- (BOOL)checkIfNeedToShowNKitWarning {
+  if (Config::GetBase(Config::MAIN_SKIP_NKIT_WARNING)) {
+    return false;
+  }
+  
+  return self.bootParameter.isNKit;
+}
+
+- (void)showNKitWarning {
+  NKitWarningViewController* nkitController = [[NKitWarningViewController alloc] initWithNibName:@"NKitWarning" bundle:nil];
+  nkitController.delegate = self;
+  nkitController.modalInPresentation = true;
+  
+  [self presentViewController:nkitController animated:true completion:nil];
+}
+
+- (void)didFinishNKitWarningScreenWithResult:(BOOL)result sender:(id)sender {
   [self dismissViewControllerAnimated:true completion:^{
     if (result) {
       [self startEmulation];
