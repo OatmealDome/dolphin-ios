@@ -125,6 +125,9 @@
 		B9FCB7B9289670830020E233 /* JitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7B8289670830020E233 /* JitManager.m */; };
 		B9FCB7BC289672830020E233 /* JitManager+Debugger.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BB289672830020E233 /* JitManager+Debugger.m */; };
 		B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BD28967C130020E233 /* JitAcquisitionService.swift */; };
+		B9FCB7C828976CE60020E233 /* JitWait.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9FCB7C728976CE60020E233 /* JitWait.xib */; };
+		B9FCB7CC2897700C0020E233 /* JitWaitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7CB2897700C0020E233 /* JitWaitViewController.swift */; };
+		B9FCB7CE2897998B0020E233 /* JitWaitViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7CD2897998B0020E233 /* JitWaitViewControllerDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -378,6 +381,9 @@
 		B9FCB7BA289672830020E233 /* JitManager+Debugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+Debugger.h"; sourceTree = "<group>"; };
 		B9FCB7BB289672830020E233 /* JitManager+Debugger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+Debugger.m"; sourceTree = "<group>"; };
 		B9FCB7BD28967C130020E233 /* JitAcquisitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitAcquisitionService.swift; sourceTree = "<group>"; };
+		B9FCB7C728976CE60020E233 /* JitWait.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JitWait.xib; sourceTree = "<group>"; };
+		B9FCB7CB2897700C0020E233 /* JitWaitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitWaitViewController.swift; sourceTree = "<group>"; };
+		B9FCB7CD2897998B0020E233 /* JitWaitViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JitWaitViewControllerDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -672,6 +678,7 @@
 		B933EDC527F8E8D6004D7DD7 /* Emulation */ = {
 			isa = PBXGroup;
 			children = (
+				B9FCB7C328976C340020E233 /* JitWait */,
 				B9D9388D283DE3C800B290FC /* EmulationViewController.h */,
 				B9D9388E283DE3C800B290FC /* EmulationViewController.mm */,
 			);
@@ -929,6 +936,7 @@
 		B9D93890283DE62700B290FC /* Emulation */ = {
 			isa = PBXGroup;
 			children = (
+				B9FCB7C2289762840020E233 /* JitWait */,
 				B9D9389F283F239200B290FC /* TouchController */,
 				B9114F9D2893C6FD00B9C57A /* VirtualMFi */,
 				B9D93891283DE63800B290FC /* Emulation.storyboard */,
@@ -1072,6 +1080,23 @@
 			path = Jit;
 			sourceTree = "<group>";
 		};
+		B9FCB7C2289762840020E233 /* JitWait */ = {
+			isa = PBXGroup;
+			children = (
+				B9FCB7C728976CE60020E233 /* JitWait.xib */,
+			);
+			path = JitWait;
+			sourceTree = "<group>";
+		};
+		B9FCB7C328976C340020E233 /* JitWait */ = {
+			isa = PBXGroup;
+			children = (
+				B9FCB7CB2897700C0020E233 /* JitWaitViewController.swift */,
+				B9FCB7CD2897998B0020E233 /* JitWaitViewControllerDelegate.swift */,
+			);
+			path = JitWait;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1157,6 +1182,7 @@
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
 				B9B2C654288E400100CB6569 /* ExternalDisplay.storyboard in Resources */,
+				B9FCB7C828976CE60020E233 /* JitWait.xib in Resources */,
 				B9B2C621288DB62D00CB6569 /* TCClassicWiiPad.xib in Resources */,
 				B9114F972893C5E600B9C57A /* DebugSettings.storyboard in Resources */,
 				B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */,
@@ -1290,10 +1316,12 @@
 				B991378B288149F100588446 /* WiiSoundViewController.mm in Sources */,
 				B904AD322888FF17008B6BE9 /* MappingGroupEditViewController.mm in Sources */,
 				B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */,
+				B9FCB7CC2897700C0020E233 /* JitWaitViewController.swift in Sources */,
 				B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */,
 				B9398716287FE28F008E8E47 /* FallbackRegionCell.m in Sources */,
 				B939871A287FF135008E8E47 /* ConfigInterfaceViewController.mm in Sources */,
 				B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */,
+				B9FCB7CE2897998B0020E233 /* JitWaitViewControllerDelegate.swift in Sources */,
 				B9447AFF28418EA100BC9110 /* TCDirectionalPad.swift in Sources */,
 				B9398710287FBB80008E8E47 /* SpeedLimitCell.m in Sources */,
 				B9B2C622288DB62D00CB6569 /* TCSidewaysWiiPad.swift in Sources */,

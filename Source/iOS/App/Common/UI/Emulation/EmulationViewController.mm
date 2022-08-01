@@ -9,6 +9,7 @@
 
 #import "EmulationCoordinator.h"
 #import "LocalizationUtil.h"
+#import "JitManager.h"
 
 @interface EmulationViewController ()
 
@@ -44,10 +45,32 @@
   [super viewDidAppear:animated];
   
   if (!_didStartEmulation) {
-    [[EmulationCoordinator shared] runEmulationWithBootParameter:self.bootParameter];
+    if ([JitManager shared].acquiredJit) {
+      [self startEmulation];
+    } else {
+      JitWaitViewController* jitController = [[JitWaitViewController alloc] initWithNibName:@"JitWait" bundle:nil];
+      jitController.delegate = self;
+      jitController.modalInPresentation = true;
+      
+      [self presentViewController:jitController animated:true completion:nil];
+    }
     
     _didStartEmulation = true;
   }
+}
+
+- (void)didFinishJitScreenWithResult:(BOOL)result sender:(id)sender {
+  [self dismissViewControllerAnimated:true completion:^{
+    if (result) {
+      [self startEmulation];
+    } else {
+      [self.navigationController dismissViewControllerAnimated:true completion:nil];
+    }
+  }];
+}
+
+- (void)startEmulation {
+  [[EmulationCoordinator shared] runEmulationWithBootParameter:self.bootParameter];
 }
 
 - (void)updateNavigationBar:(bool)hidden {

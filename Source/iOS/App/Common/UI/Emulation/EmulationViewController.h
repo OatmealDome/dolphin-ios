@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EmulationViewController : UIViewController
+@interface EmulationViewController : UIViewController <JitWaitViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView* rendererView;
 
