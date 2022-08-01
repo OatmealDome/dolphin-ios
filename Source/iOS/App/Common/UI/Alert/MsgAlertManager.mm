@@ -50,16 +50,22 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
   // Log to console as a backup
   NSLog(@"MsgAlert - %@: %@ (question: %d)", foundationCaption, foundationText, question ? 1 : 0);
 
+  if (_mainScene == nil) {
+    // Dunno what we can do here - the main scene is somehow disconnected?
+    return false;
+  }
+  
   NSCondition* condition = [[NSCondition alloc] init];
   
   __block bool confirmed = false;
   
   dispatch_async(dispatch_get_main_queue(), ^{
-    UIWindow* window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    UIWindow* window = [[UIWindow alloc] initWithWindowScene:self->_mainScene];
+    window.frame = [UIScreen mainScreen].bounds;
     window.rootViewController = [[UIViewController alloc] init];
     window.windowLevel = UIWindowLevelAlert;
     
-    UIWindow* topWindow = [UIApplication sharedApplication].windows.lastObject;
+    UIWindow* topWindow = self->_mainScene.windows.lastObject;
     window.windowLevel = topWindow.windowLevel + 1;
     
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:foundationCaption message:foundationText preferredStyle:UIAlertControllerStyleAlert];
