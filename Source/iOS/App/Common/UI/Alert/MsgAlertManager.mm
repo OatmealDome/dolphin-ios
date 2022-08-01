@@ -3,6 +3,7 @@
 
 #import "MsgAlertManager.h"
 
+#import <mutex>
 #import <UIKit/UIKit.h>
 
 #import "Common/Event.h"
@@ -23,6 +24,7 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
 
 @implementation MsgAlertManager {
   __weak UIWindowScene* _mainScene;
+  std::mutex _alertLock;
   Common::Event _waitEvent;
 }
 
@@ -46,6 +48,8 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
 }
 
 - (bool)handleAlertWithCaption:(const char*)caption text:(const char*)text question:(bool)question style:(Common::MsgType)style {
+  std::lock_guard<std::mutex> guard(_alertLock);
+  
   NSString* foundationCaption = CToFoundationString(caption);
   NSString* foundationText = CToFoundationString(text);
   
