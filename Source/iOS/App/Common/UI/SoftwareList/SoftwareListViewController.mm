@@ -73,6 +73,7 @@
   _bootParameter = [[EmulationBootParameter alloc] init];
   _bootParameter.bootType = EmulationBootTypeFile;
   _bootParameter.path = CppToFoundationString(gameFileWrapper.gameFile->GetFilePath());
+  _bootParameter.isNKit = gameFileWrapper.gameFile->IsNKit();
   
   [self performSegueWithIdentifier:@"emulation" sender:nil];
 }
