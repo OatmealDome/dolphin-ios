@@ -5,7 +5,15 @@ import UIKit
 
 class JitAcquisitionService : UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    JitManager.shared().recheckIfJitIsAcquired()
+    let manager = JitManager.shared()
+    
+    manager.recheckIfJitIsAcquired()
+    
+    if (!manager.acquiredJit) {
+#if NONJAILBROKEN
+      manager.acquireJitByAltServer()
+#endif
+    }
     
     return true
   }
