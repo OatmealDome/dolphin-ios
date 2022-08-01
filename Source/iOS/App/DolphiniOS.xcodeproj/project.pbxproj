@@ -131,6 +131,7 @@
 		B9FCB7CE2897998B0020E233 /* JitWaitViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7CD2897998B0020E233 /* JitWaitViewControllerDelegate.swift */; };
 		B9FCB7D22897B9D60020E233 /* NKitWarningViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7D12897B9D60020E233 /* NKitWarningViewController.mm */; };
 		B9FCB7D42897C7D80020E233 /* NKitWarningViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7D32897C7D80020E233 /* NKitWarningViewControllerDelegate.swift */; };
+		B9FCB7D8289841730020E233 /* MsgAlertManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7D7289841730020E233 /* MsgAlertManager.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -391,6 +392,8 @@
 		B9FCB7D02897B9D60020E233 /* NKitWarningViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NKitWarningViewController.h; sourceTree = "<group>"; };
 		B9FCB7D12897B9D60020E233 /* NKitWarningViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NKitWarningViewController.mm; sourceTree = "<group>"; };
 		B9FCB7D32897C7D80020E233 /* NKitWarningViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NKitWarningViewControllerDelegate.swift; sourceTree = "<group>"; };
+		B9FCB7D6289841730020E233 /* MsgAlertManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MsgAlertManager.h; sourceTree = "<group>"; };
+		B9FCB7D7289841730020E233 /* MsgAlertManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MsgAlertManager.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -461,6 +464,7 @@
 		B900A7BF27F4D2E4000361DD /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				B9FCB7D5289841600020E233 /* Alert */,
 				B9D93893283ECD6F00B290FC /* Controls */,
 				B933EDC527F8E8D6004D7DD7 /* Emulation */,
 				B99137C62883290000588446 /* Localization */,
@@ -1124,6 +1128,15 @@
 			path = NKitWarning;
 			sourceTree = "<group>";
 		};
+		B9FCB7D5289841600020E233 /* Alert */ = {
+			isa = PBXGroup;
+			children = (
+				B9FCB7D6289841730020E233 /* MsgAlertManager.h */,
+				B9FCB7D7289841730020E233 /* MsgAlertManager.mm */,
+			);
+			path = Alert;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1329,6 +1342,7 @@
 				B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */,
 				B9B2C64D288E170600CB6569 /* ServiceManager.swift in Sources */,
 				B904ACF82886AC58008B6BE9 /* MappingRootViewController.mm in Sources */,
+				B9FCB7D8289841730020E233 /* MsgAlertManager.mm in Sources */,
 				B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */,
 				B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */,
 				B9114F9C2893C6CA00B9C57A /* DebugRootViewController.m in Sources */,
