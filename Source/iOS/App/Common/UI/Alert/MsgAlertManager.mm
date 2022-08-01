@@ -20,7 +20,9 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
   return [[MsgAlertManager shared] handleAlertWithCaption:caption text:text question:question style:style];
 }
 
-@implementation MsgAlertManager
+@implementation MsgAlertManager {
+  __weak UIWindowScene* _mainScene;
+}
 
 + (MsgAlertManager*)shared {
   static MsgAlertManager* sharedInstance = nil;
@@ -35,6 +37,10 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
 
 - (void)registerHandler {
   Common::RegisterMsgAlertHandler(MsgAlert);
+}
+
+- (void)registerMainDisplayScene:(nullable UIWindowScene*)scene {
+  _mainScene = scene;
 }
 
 - (bool)handleAlertWithCaption:(const char*)caption text:(const char*)text question:(bool)question style:(Common::MsgType)style {

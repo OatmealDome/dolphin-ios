@@ -3,6 +3,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class UIWindowScene;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MsgAlertManager : NSObject
@@ -10,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (MsgAlertManager*)shared;
 
 - (void)registerHandler;
+- (void)registerMainDisplayScene:(nullable UIWindowScene*)scene;
 
 @end
 

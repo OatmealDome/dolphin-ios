@@ -5,6 +5,7 @@
 #import "EmulationCoordinator.h"
 #import "GameFileCacheManager.h"
 #import "JitManager.h"
+#import "MsgAlertManager.h"
 
 #if TARGET_OS_IOS
 #import "TCManagerInterface.h"
