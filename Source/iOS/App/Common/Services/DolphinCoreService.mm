@@ -19,6 +19,7 @@
 
 #import "DolphiniOS-Swift.h"
 #import "FoundationStringUtil.h"
+#import "LocalizationUtil.h"
 #import "MsgAlertManager.h"
 
 @implementation DolphinCoreService
@@ -29,6 +30,10 @@
   UICommon::Init();
   
   [[MsgAlertManager shared] registerHandler];
+  
+  Common::RegisterStringTranslator([](const char* text) {
+    return FoundationToCppString(DOLCoreLocalizedString(CToFoundationString(text)));
+  });
   
   Config::SetBase(Config::MAIN_USE_GAME_COVERS, true);
   
