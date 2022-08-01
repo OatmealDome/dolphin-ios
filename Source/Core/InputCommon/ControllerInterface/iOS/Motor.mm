@@ -61,7 +61,6 @@ Motor::~Motor()
 
   if (m_player_created)
   {
-    [m_haptic_player cancelAndReturnError:nil];
     [m_haptic_engine stopWithCompletionHandler:nil];
   }
 }
