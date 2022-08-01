@@ -45,7 +45,7 @@ typedef NS_ENUM(NSInteger, DOLJitType) {
   return self;
 }
 
-- (void)acquireJitOnStartup {
+- (void)recheckIfJitIsAcquired {
   if (_jitType == DOLJitTypeDebugger) {
     self.acquiredJit = [self checkIfProcessIsDebugged];
   } else if (_jitType == DOLJitTypeUnrestricted) {

@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (JitManager*)shared;
 
-- (void)acquireJitOnStartup;
+- (void)recheckIfJitIsAcquired;
 
 @end
 

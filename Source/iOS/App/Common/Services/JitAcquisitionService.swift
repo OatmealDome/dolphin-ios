@@ -5,7 +5,7 @@ import UIKit
 
 class JitAcquisitionService : UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    JitManager.shared().acquireJitOnStartup()
+    JitManager.shared().recheckIfJitIsAcquired()
     
     return true
   }
