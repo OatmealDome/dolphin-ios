@@ -10,6 +10,7 @@
 #import "Common/MsgHandler.h"
 
 #import "FoundationStringUtil.h"
+#import "LocalizationUtil.h"
 
 @interface MsgAlertManager ()
 
@@ -80,14 +81,14 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
     };
 
     if (question) {
-      [alert addAction:[UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault
+      [alert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"No") style:UIAlertActionStyleDefault
         handler:^(UIAlertAction* action) {
         confirmed = false;
 
         finish();
       }]];
 
-      [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault
+      [alert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"Yes") style:UIAlertActionStyleDefault
         handler:^(UIAlertAction * action) {
         confirmed = true;
 
@@ -96,7 +97,7 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
     }
     else
     {
-      [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+      [alert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"OK") style:UIAlertActionStyleDefault
         handler:^(UIAlertAction* action) {
         confirmed = true;
         
