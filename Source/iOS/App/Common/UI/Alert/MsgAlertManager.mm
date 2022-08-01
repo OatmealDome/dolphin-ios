@@ -5,6 +5,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "Common/Event.h"
 #import "Common/MsgHandler.h"
 
 #import "FoundationStringUtil.h"
@@ -22,6 +23,7 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
 
 @implementation MsgAlertManager {
   __weak UIWindowScene* _mainScene;
+  Common::Event _waitEvent;
 }
 
 + (MsgAlertManager*)shared {
@@ -55,8 +57,6 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
     return false;
   }
   
-  NSCondition* condition = [[NSCondition alloc] init];
-  
   __block bool confirmed = false;
   
   dispatch_async(dispatch_get_main_queue(), ^{
@@ -71,10 +71,8 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:foundationCaption message:foundationText preferredStyle:UIAlertControllerStyleAlert];
     
     void (^finish)() = ^void() {
-      [condition lock];
-      [condition signal];
       [window setHidden:true];
-      [condition unlock];
+      self->_waitEvent.Set();
     };
 
     if (question) {
@@ -108,9 +106,7 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
   });
 
   // Wait for a button press
-  [condition lock];
-  [condition wait];
-  [condition unlock];
+  _waitEvent.Wait();
 
   return confirmed;
 }
