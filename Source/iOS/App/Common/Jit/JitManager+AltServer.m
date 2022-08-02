@@ -18,6 +18,10 @@
 - (bool)checkAppInstalledByAltServer {
   NSString* deviceId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"ALTDeviceID"];
   
+  if (!deviceId) {
+    return false;
+  }
+  
   // If ALTDeviceID isn't our dummy value, then we can use AltServer to enable JIT.
   return ![deviceId isEqualToString:@"NotSet"];
 }
