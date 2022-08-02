@@ -134,6 +134,7 @@
 		B9FCB7D8289841730020E233 /* MsgAlertManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7D7289841730020E233 /* MsgAlertManager.mm */; };
 		B9FCB7DB28988E4C0020E233 /* JitManager+AltServer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7DA28988E4B0020E233 /* JitManager+AltServer.m */; };
 		B9FCB7DE28988E7E0020E233 /* AltKit in Frameworks */ = {isa = PBXBuildFile; productRef = B9FCB7DD28988E7E0020E233 /* AltKit */; };
+		B9FCB7E12898D1E80020E233 /* SwiftLocalizationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7E02898D1E80020E233 /* SwiftLocalizationUtil.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -398,6 +399,7 @@
 		B9FCB7D7289841730020E233 /* MsgAlertManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MsgAlertManager.mm; sourceTree = "<group>"; };
 		B9FCB7D928988E4B0020E233 /* JitManager+AltServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+AltServer.h"; sourceTree = "<group>"; };
 		B9FCB7DA28988E4B0020E233 /* JitManager+AltServer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+AltServer.m"; sourceTree = "<group>"; };
+		B9FCB7E02898D1E80020E233 /* SwiftLocalizationUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLocalizationUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -920,6 +922,7 @@
 				B99137A02881F23A00588446 /* Core.strings */,
 				B99137C728832A0800588446 /* LocalizationUtil.h */,
 				B99137C828832A0800588446 /* LocalizationUtil.m */,
+				B9FCB7E02898D1E80020E233 /* SwiftLocalizationUtil.swift */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -1435,6 +1438,7 @@
 				B99137C928832A0800588446 /* LocalizationUtil.m in Sources */,
 				B9FCB7DB28988E4C0020E233 /* JitManager+AltServer.m in Sources */,
 				B904AD2B2888D72F008B6BE9 /* MappingExtensionViewController.mm in Sources */,
+				B9FCB7E12898D1E80020E233 /* SwiftLocalizationUtil.swift in Sources */,
 				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
 				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
 				B904ACF128868E4B008B6BE9 /* ControllersSettingsUtil.mm in Sources */,
