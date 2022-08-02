@@ -40,5 +40,13 @@
 			</array>
 		</dict>
 	</dict>
+  <key>NSBonjourServices</key>
+  <array>
+      <string>_altserver._tcp</string>
+  </array>
+  <key>NSLocalNetworkUsageDescription</key>
+  <string>DolphiniOS uses the local network to find and communicate with AltServer.</string>
+  <key>ALTDeviceID</key>
+  <string>NotSet</string>
 </dict>
 </plist>
