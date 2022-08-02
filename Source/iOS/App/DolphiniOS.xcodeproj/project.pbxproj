@@ -132,6 +132,8 @@
 		B9FCB7D22897B9D60020E233 /* NKitWarningViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7D12897B9D60020E233 /* NKitWarningViewController.mm */; };
 		B9FCB7D42897C7D80020E233 /* NKitWarningViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7D32897C7D80020E233 /* NKitWarningViewControllerDelegate.swift */; };
 		B9FCB7D8289841730020E233 /* MsgAlertManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7D7289841730020E233 /* MsgAlertManager.mm */; };
+		B9FCB7DB28988E4C0020E233 /* JitManager+AltServer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7DA28988E4B0020E233 /* JitManager+AltServer.m */; };
+		B9FCB7DE28988E7E0020E233 /* AltKit in Frameworks */ = {isa = PBXBuildFile; productRef = B9FCB7DD28988E7E0020E233 /* AltKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -394,6 +396,8 @@
 		B9FCB7D32897C7D80020E233 /* NKitWarningViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NKitWarningViewControllerDelegate.swift; sourceTree = "<group>"; };
 		B9FCB7D6289841730020E233 /* MsgAlertManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MsgAlertManager.h; sourceTree = "<group>"; };
 		B9FCB7D7289841730020E233 /* MsgAlertManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MsgAlertManager.mm; sourceTree = "<group>"; };
+		B9FCB7D928988E4B0020E233 /* JitManager+AltServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+AltServer.h"; sourceTree = "<group>"; };
+		B9FCB7DA28988E4B0020E233 /* JitManager+AltServer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+AltServer.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -401,6 +405,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9FCB7DE28988E7E0020E233 /* AltKit in Frameworks */,
 				B9D9389E283EF7AD00B290FC /* MetalKit.framework in Frameworks */,
 				B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */,
 				B900A7B527F2D3C0000361DD /* MoltenVK.xcframework in Frameworks */,
@@ -1095,6 +1100,8 @@
 			children = (
 				B9FCB7B7289670830020E233 /* JitManager.h */,
 				B9FCB7B8289670830020E233 /* JitManager.m */,
+				B9FCB7D928988E4B0020E233 /* JitManager+AltServer.h */,
+				B9FCB7DA28988E4B0020E233 /* JitManager+AltServer.m */,
 				B9FCB7BA289672830020E233 /* JitManager+Debugger.h */,
 				B9FCB7BB289672830020E233 /* JitManager+Debugger.m */,
 			);
@@ -1161,6 +1168,7 @@
 			name = DolphiniOS;
 			packageProductDependencies = (
 				B900A7D127F5228B000361DD /* UICollectionViewLeftAlignedLayout */,
+				B9FCB7DD28988E7E0020E233 /* AltKit */,
 			);
 			productName = DolphiniOS;
 			productReference = B9DC3DF627EFBD2C0084DAA4 /* DolphiniOS.app */;
@@ -1193,6 +1201,7 @@
 			mainGroup = B9DC3DED27EFBD2C0084DAA4;
 			packageReferences = (
 				B900A7D027F5228B000361DD /* XCRemoteSwiftPackageReference "UICollectionViewLeftAlignedLayout" */,
+				B9FCB7DC28988E7E0020E233 /* XCRemoteSwiftPackageReference "AltKit" */,
 			);
 			productRefGroup = B9DC3DF727EFBD2C0084DAA4 /* Products */;
 			projectDirPath = "";
@@ -1424,6 +1433,7 @@
 				B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */,
 				B9B2C5E2288D0A9800CB6569 /* MappingLoadProfileViewController.mm in Sources */,
 				B99137C928832A0800588446 /* LocalizationUtil.m in Sources */,
+				B9FCB7DB28988E4C0020E233 /* JitManager+AltServer.m in Sources */,
 				B904AD2B2888D72F008B6BE9 /* MappingExtensionViewController.mm in Sources */,
 				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
 				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
@@ -2079,6 +2089,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		B9FCB7DC28988E7E0020E233 /* XCRemoteSwiftPackageReference "AltKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rileytestut/AltKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2086,6 +2104,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B900A7D027F5228B000361DD /* XCRemoteSwiftPackageReference "UICollectionViewLeftAlignedLayout" */;
 			productName = UICollectionViewLeftAlignedLayout;
+		};
+		B9FCB7DD28988E7E0020E233 /* AltKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9FCB7DC28988E7E0020E233 /* XCRemoteSwiftPackageReference "AltKit" */;
+			productName = AltKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
