@@ -6,6 +6,7 @@
 #import "GameFileCacheManager.h"
 #import "JitManager.h"
 #import "JitManager+AltServer.h"
+#import "JitManager+JitStreamer.h"
 #import "MsgAlertManager.h"
 
 #if TARGET_OS_IOS

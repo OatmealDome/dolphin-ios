@@ -15,6 +15,7 @@ class JitWaitViewController: UIViewController {
     self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(checkJit), userInfo: nil, repeats: true)
     
     JitManager.shared().acquireJitByAltServer()
+    JitManager.shared().acquireJitByJitStreamer()
   }
   
   override func viewWillAppear(_ animated: Bool) {
