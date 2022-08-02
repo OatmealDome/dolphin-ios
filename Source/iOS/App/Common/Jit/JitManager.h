@@ -8,7 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface JitManager : NSObject
 
 @property (readonly, assign) bool acquiredJit;
-@property (nonatomic) NSString* acquisitionError;
+@property (nonatomic, nullable) NSString* acquisitionError;
 
 + (JitManager*)shared;
 
