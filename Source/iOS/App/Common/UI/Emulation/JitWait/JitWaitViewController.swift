@@ -12,6 +12,8 @@ class JitWaitViewController: UIViewController {
     super.viewDidLoad()
     
     self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(checkJit), userInfo: nil, repeats: true)
+    
+    JitManager.shared().acquireJitByAltServer()
   }
   
   @objc func checkJit() {
