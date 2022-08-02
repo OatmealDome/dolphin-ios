@@ -7,6 +7,7 @@ class JitWaitViewController: UIViewController {
   @objc weak var delegate: JitWaitViewControllerDelegate?
   
   var timer: Timer?
+  var isShowingError: Bool = false
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -16,7 +17,15 @@ class JitWaitViewController: UIViewController {
     JitManager.shared().acquireJitByAltServer()
   }
   
+  override func viewWillAppear(_ animated: Bool) {
+    self.showAcquisitionErrorIfNecessary()
+  }
+  
   @objc func checkJit() {
+    if (self.isShowingError) {
+      return
+    }
+    
     let manager = JitManager.shared()
     
     manager.recheckIfJitIsAcquired()
@@ -24,6 +33,26 @@ class JitWaitViewController: UIViewController {
     if (manager.acquiredJit) {
       self.timer?.invalidate()
       self.delegate?.didFinishJitScreen(result: true, sender: self)
+      
+      return
+    }
+    
+    self.showAcquisitionErrorIfNecessary()
+  }
+  
+  func showAcquisitionErrorIfNecessary() {
+    let manager = JitManager.shared()
+    
+    if let error = manager.acquisitionError {
+      manager.acquisitionError = nil
+      self.isShowingError = true
+      
+      let alertController = UIAlertController(title: DOLCoreLocalizedString("Error"), message: error, preferredStyle: .alert)
+      alertController.addAction(UIAlertAction(title: DOLCoreLocalizedString("OK"), style: .default, handler: {_ in
+        self.isShowingError = false
+      }))
+      
+      self.present(alertController, animated: true, completion: nil)
     }
   }
   
