@@ -135,6 +135,7 @@
 		B9FCB7DB28988E4C0020E233 /* JitManager+AltServer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7DA28988E4B0020E233 /* JitManager+AltServer.m */; };
 		B9FCB7DE28988E7E0020E233 /* AltKit in Frameworks */ = {isa = PBXBuildFile; productRef = B9FCB7DD28988E7E0020E233 /* AltKit */; };
 		B9FCB7E12898D1E80020E233 /* SwiftLocalizationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7E02898D1E80020E233 /* SwiftLocalizationUtil.swift */; };
+		B9FCB7E42898F4D60020E233 /* JitManager+JitStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7E32898F4D60020E233 /* JitManager+JitStreamer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -400,6 +401,8 @@
 		B9FCB7D928988E4B0020E233 /* JitManager+AltServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+AltServer.h"; sourceTree = "<group>"; };
 		B9FCB7DA28988E4B0020E233 /* JitManager+AltServer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+AltServer.m"; sourceTree = "<group>"; };
 		B9FCB7E02898D1E80020E233 /* SwiftLocalizationUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLocalizationUtil.swift; sourceTree = "<group>"; };
+		B9FCB7E22898F4D60020E233 /* JitManager+JitStreamer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+JitStreamer.h"; sourceTree = "<group>"; };
+		B9FCB7E32898F4D60020E233 /* JitManager+JitStreamer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+JitStreamer.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1107,6 +1110,8 @@
 				B9FCB7DA28988E4B0020E233 /* JitManager+AltServer.m */,
 				B9FCB7BA289672830020E233 /* JitManager+Debugger.h */,
 				B9FCB7BB289672830020E233 /* JitManager+Debugger.m */,
+				B9FCB7E22898F4D60020E233 /* JitManager+JitStreamer.h */,
+				B9FCB7E32898F4D60020E233 /* JitManager+JitStreamer.m */,
 			);
 			path = Jit;
 			sourceTree = "<group>";
@@ -1444,6 +1449,7 @@
 				B904ACF128868E4B008B6BE9 /* ControllersSettingsUtil.mm in Sources */,
 				B99137952881D62C00588446 /* CpuEngineCell.m in Sources */,
 				B904ACC4288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm in Sources */,
+				B9FCB7E42898F4D60020E233 /* JitManager+JitStreamer.m in Sources */,
 				B9DC5FB62884A563004BD94A /* GraphicsBoolCell.mm in Sources */,
 				B9D938A728418AFE00B290FC /* TCManagerInterface.mm in Sources */,
 				B9B2C661288E569E00CB6569 /* ExternalDisplayEmulationViewController.mm in Sources */,
