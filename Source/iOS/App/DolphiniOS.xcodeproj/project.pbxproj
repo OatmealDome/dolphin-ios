@@ -136,6 +136,7 @@
 		B9FCB7DE28988E7E0020E233 /* AltKit in Frameworks */ = {isa = PBXBuildFile; productRef = B9FCB7DD28988E7E0020E233 /* AltKit */; };
 		B9FCB7E12898D1E80020E233 /* SwiftLocalizationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7E02898D1E80020E233 /* SwiftLocalizationUtil.swift */; };
 		B9FCB7E42898F4D60020E233 /* JitManager+JitStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7E32898F4D60020E233 /* JitManager+JitStreamer.m */; };
+		B9FCB7E62898FAC10020E233 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FCB7E52898FAC10020E233 /* GameController.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -403,6 +404,7 @@
 		B9FCB7E02898D1E80020E233 /* SwiftLocalizationUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLocalizationUtil.swift; sourceTree = "<group>"; };
 		B9FCB7E22898F4D60020E233 /* JitManager+JitStreamer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+JitStreamer.h"; sourceTree = "<group>"; };
 		B9FCB7E32898F4D60020E233 /* JitManager+JitStreamer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+JitStreamer.m"; sourceTree = "<group>"; };
+		B9FCB7E52898FAC10020E233 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -412,6 +414,7 @@
 			files = (
 				B9FCB7DE28988E7E0020E233 /* AltKit in Frameworks */,
 				B9D9389E283EF7AD00B290FC /* MetalKit.framework in Frameworks */,
+				B9FCB7E62898FAC10020E233 /* GameController.framework in Frameworks */,
 				B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */,
 				B900A7B527F2D3C0000361DD /* MoltenVK.xcframework in Frameworks */,
 				B900A7D227F5228B000361DD /* UICollectionViewLeftAlignedLayout in Frameworks */,
@@ -998,6 +1001,7 @@
 		B9D9389C283EF7AD00B290FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B9FCB7E52898FAC10020E233 /* GameController.framework */,
 				B9D9389D283EF7AD00B290FC /* MetalKit.framework */,
 			);
 			name = Frameworks;
@@ -1603,6 +1607,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "DolphiniOS uses the local network to find and communicate with AltServer.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1691,6 +1696,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "DolphiniOS uses the local network to find and communicate with AltServer.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1778,6 +1784,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "DolphiniOS uses the local network to find and communicate with AltServer.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1865,6 +1872,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "DolphiniOS uses the local network to find and communicate with AltServer.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -2010,6 +2018,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "DolphiniOS uses the local network to find and communicate with AltServer.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -2041,6 +2050,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "DolphiniOS uses the local network to find and communicate with AltServer.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

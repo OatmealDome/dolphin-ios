@@ -2,14 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIFileSharingEnabled</key>
-	<true/>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
+	<key>ALTDeviceID</key>
+	<string>NotSet</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>DOLCoreVersion</key>
 	<string>$(DOL_CORE_VERSION)</string>
+	<key>GCSupportedGameControllers</key>
+	<array>
+		<dict>
+			<key>ProfileName</key>
+			<string>ExtendedGamepad</string>
+		</dict>
+		<dict>
+			<key>ProfileName</key>
+			<string>MicroGamepad</string>
+		</dict>
+		<dict>
+			<key>ProfileName</key>
+			<string>DirectionalGamepad</string>
+		</dict>
+	</array>
+	<key>GCSupportsControllerUserInteraction</key>
+	<true/>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_altserver._tcp</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -19,10 +38,10 @@
 			<key>UIWindowSceneSessionRoleApplication</key>
 			<array>
 				<dict>
-					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).MainDisplaySceneDelegate</string>
 					<key>UISceneConfigurationName</key>
 					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).MainDisplaySceneDelegate</string>
 					<key>UISceneStoryboardFile</key>
 					<string>Main</string>
 				</dict>
@@ -30,23 +49,17 @@
 			<key>UIWindowSceneSessionRoleExternalDisplay</key>
 			<array>
 				<dict>
-					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).ExternalDisplaySceneDelegate</string>
 					<key>UISceneConfigurationName</key>
 					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).ExternalDisplaySceneDelegate</string>
 					<key>UISceneStoryboardFile</key>
 					<string>ExternalDisplay</string>
 				</dict>
 			</array>
 		</dict>
 	</dict>
-  <key>NSBonjourServices</key>
-  <array>
-      <string>_altserver._tcp</string>
-  </array>
-  <key>NSLocalNetworkUsageDescription</key>
-  <string>DolphiniOS uses the local network to find and communicate with AltServer.</string>
-  <key>ALTDeviceID</key>
-  <string>NotSet</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 </dict>
 </plist>
