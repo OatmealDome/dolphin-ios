@@ -45,6 +45,7 @@
   [[ALTServerManager sharedManager] autoconnectWithCompletionHandler:^(ALTServerConnection *connection, NSError *error) {
     if (error != nil) {
       self.acquisitionError = [NSString stringWithFormat:@"Failed to connect to AltServer: %@", [error localizedDescription]];
+      self.isAltServerAutoConnecting = false;
     } else {
       [connection enableUnsignedCodeExecutionWithCompletionHandler:^(bool success, NSError* error) {
         if (!success) {
@@ -52,6 +53,8 @@
         }
         
         [connection disconnect];
+        
+        self.isAltServerAutoConnecting = false;
       }];
     }
   }];
