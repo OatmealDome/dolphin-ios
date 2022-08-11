@@ -79,27 +79,27 @@ class TCJoystick: UIView
       // Calculate distance
       var distance = sqrt(pow(xDiff, 2) + pow(yDiff, 2))
       let maxDistance = self.frame.width / 3
-      
+
       if (distance > maxDistance)
       {
         // Calculate maximum points
         let xMax = joystickCenter.x + maxDistance * (xDiff / distance)
         let yMax = joystickCenter.y + maxDistance * (yDiff / distance)
-        
+
         point = CGPoint(x: xMax, y: yMax)
       }
-      
+
       // Calculate axis values for ButtonManager
       // Based on Android's getAxisValues()
-      let axises = [ yDiff / maxDistance, xDiff / maxDistance ]
-      joyAxises = [ min(axises[0], 0), min(axises[0], 1), min(axises[1], 0), min(axises[1], 1)]
+      let axises = (y: yDiff / maxDistance, x: xDiff / maxDistance)
+      joyAxises = [min(axises.y, 0), min(axises.y, 1), min(axises.x, 0), min(axises.x, 1)]
     }
     
     // Send axises values
     let axisStartIdx = joystickType
-    for i in 0...3
+    for (i, axis) in joyAxises.enumerated()
     {
-      TCManagerInterface.setAxisValueFor(axisStartIdx + i + 1, controller: port, value: Float(joyAxises[i]))
+      TCManagerInterface.setAxisValueFor(axisStartIdx + i + 1, controller: port, value: Float(axis))
     }
     
     gesture.view?.center = point

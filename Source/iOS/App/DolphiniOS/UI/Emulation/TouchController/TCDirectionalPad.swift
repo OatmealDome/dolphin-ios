@@ -83,7 +83,7 @@ class TCDirectionalPad: UIView
       }
       
       // Get button boundary
-      let buttonBounds = (gesture.view?.frame.width)! / 3
+      let buttonBounds = gesture.view!.frame.width / 3
       
       // Up
       if (point.y <= buttonBounds)
@@ -159,9 +159,9 @@ class TCDirectionalPad: UIView
     }
     
     // Send button values
-    for i in 0...3
+    for (i, press) in buttonPresses.enumerated()
     {
-      TCManagerInterface.setButtonStateFor(directionalPadType + i, controller: port, state: buttonPresses[i])
+      TCManagerInterface.setButtonStateFor(directionalPadType + i, controller: port, state: press)
     }
   }
   
