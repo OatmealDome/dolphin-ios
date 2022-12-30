@@ -55,6 +55,7 @@ static bool WindowSystemTypeSupportsMetal(WindowSystemType type)
   {
   case WindowSystemType::MacOS:
   case WindowSystemType::iOS:
+  case WindowSystemType::Headless:
     return true;
   default:
     return false;
@@ -65,7 +66,8 @@ bool Metal::VideoBackend::Initialize(const WindowSystemInfo& wsi)
 {
   @autoreleasepool
   {
-    if (!WindowSystemTypeSupportsMetal(wsi.type) || !wsi.render_surface)
+    const bool surface_ok = wsi.type == WindowSystemType::Headless || wsi.render_surface;
+    if (!WindowSystemTypeSupportsMetal(wsi.type) || !surface_ok)
     {
       PanicAlertFmt("Bad WindowSystemInfo for Metal renderer.");
       return false;
@@ -101,6 +103,8 @@ bool Metal::VideoBackend::Initialize(const WindowSystemInfo& wsi)
       [layer setPixelFormat:MTLPixelFormatBGRA8Unorm];
     CGSize size = [layer bounds].size;
     float scale = [layer contentsScale];
+    if (!layer)  // headless
+      scale = 1.0;
 
     ObjectCache::Initialize(std::move(adapter));
     g_state_tracker = std::make_unique<StateTracker>();

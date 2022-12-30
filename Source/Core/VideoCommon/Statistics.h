@@ -71,6 +71,10 @@ struct Statistics
 
     int num_efb_peeks;
     int num_efb_pokes;
+
+    int num_draw_done;
+    int num_token;
+    int num_token_int;
   };
   ThisFrame this_frame;
   void ResetFrame();
@@ -86,11 +90,32 @@ extern Statistics g_stats;
 #define STATISTICS
 
 #ifdef STATISTICS
-#define INCSTAT(a) (a)++;
-#define ADDSTAT(a, b) (a) += (b);
-#define SETSTAT(a, x) (a) = (int)(x);
+#define INCSTAT(a)                                                                                 \
+  do                                                                                               \
+  {                                                                                                \
+    (a)++;                                                                                         \
+  } while (false)
+#define ADDSTAT(a, b)                                                                              \
+  do                                                                                               \
+  {                                                                                                \
+    (a) += (b);                                                                                    \
+  } while (false)
+#define SETSTAT(a, x)                                                                              \
+  do                                                                                               \
+  {                                                                                                \
+    (a) = static_cast<int>(x);                                                                     \
+  } while (false)
 #else
-#define INCSTAT(a) ;
-#define ADDSTAT(a, b) ;
-#define SETSTAT(a, x) ;
+#define INCSTAT(a)                                                                                 \
+  do                                                                                               \
+  {                                                                                                \
+  } while (false)
+#define ADDSTAT(a, b)                                                                              \
+  do                                                                                               \
+  {                                                                                                \
+  } while (false)
+#define SETSTAT(a, x)                                                                              \
+  do                                                                                               \
+  {                                                                                                \
+  } while (false)
 #endif

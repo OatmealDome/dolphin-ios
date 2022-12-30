@@ -56,6 +56,8 @@ add_library(inputcommon
   ControllerInterface/ControllerInterface.h
   ControllerInterface/CoreDevice.cpp
   ControllerInterface/CoreDevice.h
+  ControllerInterface/InputBackend.cpp
+  ControllerInterface/InputBackend.h
   ControllerInterface/MappingCommon.cpp
   ControllerInterface/MappingCommon.h
   ControllerInterface/Wiimote/WiimoteController.cpp
@@ -79,7 +81,7 @@ PUBLIC
 
 PRIVATE
   fmt::fmt
-  png
+  spng
 )
 
 if(WIN32)
@@ -124,6 +126,9 @@ elseif(APPLE AND NOT IOS)
     ${FORCEFEEDBACK_LIBRARY}
     ${IOK_LIBRARY}
   )
+  target_compile_options(inputcommon PRIVATE
+    -fobjc-arc
+  )
 elseif(IOS)
   target_sources(inputcommon PRIVATE
     ControllerInterface/iOS/ButtonType.h
@@ -162,6 +167,8 @@ elseif(ANDROID)
     ControllerInterface/Android/Android.h
     ControllerInterface/Touch/ButtonManager.cpp
     ControllerInterface/Touch/ButtonManager.h
+    ControllerInterface/Touch/InputOverrider.cpp
+    ControllerInterface/Touch/InputOverrider.h
     ControllerInterface/Touch/Touchscreen.cpp
     ControllerInterface/Touch/Touchscreen.h
   )

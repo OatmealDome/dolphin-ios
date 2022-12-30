@@ -41,8 +41,9 @@ GeneralWidget::GeneralWidget(X11Utils::XRRConfiguration* xrr_config, GraphicsWin
   emit BackendChanged(QString::fromStdString(Config::Get(Config::MAIN_GFX_BACKEND)));
 
   connect(parent, &GraphicsWindow::BackendChanged, this, &GeneralWidget::OnBackendChanged);
-  connect(&Settings::Instance(), &Settings::EmulationStateChanged, this,
-          [=](Core::State state) { OnEmulationStateChanged(state != Core::State::Uninitialized); });
+  connect(&Settings::Instance(), &Settings::EmulationStateChanged, this, [this](Core::State state) {
+    OnEmulationStateChanged(state != Core::State::Uninitialized);
+  });
   OnEmulationStateChanged(Core::GetState() != Core::State::Uninitialized);
 }
 
@@ -86,10 +87,7 @@ void GeneralWidget::CreateWidgets()
   auto* m_options_box = new QGroupBox(tr("Other"));
   auto* m_options_layout = new QGridLayout();
 
-  m_show_fps = new GraphicsBool(tr("Show FPS"), Config::GFX_SHOW_FPS);
   m_show_ping = new GraphicsBool(tr("Show NetPlay Ping"), Config::GFX_SHOW_NETPLAY_PING);
-  m_log_render_time =
-      new GraphicsBool(tr("Log Render Time to File"), Config::GFX_LOG_RENDER_TIME_TO_FILE);
   m_autoadjust_window_size =
       new GraphicsBool(tr("Auto-Adjust Window Size"), Config::MAIN_RENDER_WINDOW_AUTOSIZE);
   m_show_messages =
@@ -98,14 +96,11 @@ void GeneralWidget::CreateWidgets()
 
   m_options_box->setLayout(m_options_layout);
 
-  m_options_layout->addWidget(m_show_fps, 0, 0);
-  m_options_layout->addWidget(m_log_render_time, 0, 1);
+  m_options_layout->addWidget(m_render_main_window, 0, 0);
+  m_options_layout->addWidget(m_autoadjust_window_size, 1, 0);
 
-  m_options_layout->addWidget(m_render_main_window, 1, 0);
-  m_options_layout->addWidget(m_autoadjust_window_size, 1, 1);
-
-  m_options_layout->addWidget(m_show_messages, 2, 0);
-  m_options_layout->addWidget(m_show_ping, 2, 1);
+  m_options_layout->addWidget(m_show_messages, 0, 1);
+  m_options_layout->addWidget(m_show_ping, 1, 1);
 
   // Other
   auto* shader_compilation_box = new QGroupBox(tr("Shader Compilation"));
@@ -225,17 +220,9 @@ void GeneralWidget::AddDescriptions()
       "if emulation speed is below 100%.<br><br><dolphin_emphasis>If unsure, leave "
       "this "
       "unchecked.</dolphin_emphasis>");
-  static const char TR_SHOW_FPS_DESCRIPTION[] =
-      QT_TR_NOOP("Shows the number of frames rendered per second as a measure of "
-                 "emulation speed.<br><br><dolphin_emphasis>If unsure, leave this "
-                 "unchecked.</dolphin_emphasis>");
   static const char TR_SHOW_NETPLAY_PING_DESCRIPTION[] = QT_TR_NOOP(
       "Shows the player's maximum ping while playing on "
       "NetPlay.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>");
-  static const char TR_LOG_RENDERTIME_DESCRIPTION[] = QT_TR_NOOP(
-      "Logs the render time of every frame to User/Logs/render_time.txt.<br><br>Use this "
-      "feature to measure Dolphin's performance.<br><br><dolphin_emphasis>If "
-      "unsure, leave this unchecked.</dolphin_emphasis>");
   static const char TR_SHOW_NETPLAY_MESSAGES_DESCRIPTION[] =
       QT_TR_NOOP("Shows chat messages, buffer changes, and desync alerts "
                  "while playing NetPlay.<br><br><dolphin_emphasis>If unsure, leave "
@@ -280,11 +267,7 @@ void GeneralWidget::AddDescriptions()
 
   m_enable_fullscreen->SetDescription(tr(TR_FULLSCREEN_DESCRIPTION));
 
-  m_show_fps->SetDescription(tr(TR_SHOW_FPS_DESCRIPTION));
-
   m_show_ping->SetDescription(tr(TR_SHOW_NETPLAY_PING_DESCRIPTION));
-
-  m_log_render_time->SetDescription(tr(TR_LOG_RENDERTIME_DESCRIPTION));
 
   m_autoadjust_window_size->SetDescription(tr(TR_AUTOSIZE_DESCRIPTION));
 

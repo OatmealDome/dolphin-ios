@@ -18,6 +18,7 @@
 
 #include "Core/DolphinAnalytics.h"
 #include "Core/HW/Memmap.h"
+#include "Core/System.h"
 
 #include "VideoCommon/BPMemory.h"
 #include "VideoCommon/CPMemory.h"
@@ -54,9 +55,9 @@ Common::EnumMap<u8*, CPArray::TexCoord7> cached_arraybases;
 BitSet8 g_main_vat_dirty;
 BitSet8 g_preprocess_vat_dirty;
 bool g_bases_dirty;  // Main only
-u8 g_current_vat;    // Main only
 std::array<VertexLoaderBase*, CP_NUM_VAT_REG> g_main_vertex_loaders;
 std::array<VertexLoaderBase*, CP_NUM_VAT_REG> g_preprocess_vertex_loaders;
+bool g_needs_cp_xf_consistency_check;
 
 void Init()
 {
@@ -78,8 +79,11 @@ void Clear()
 void UpdateVertexArrayPointers()
 {
   // Anything to update?
-  if (!g_bases_dirty)
+  if (!g_bases_dirty) [[likely]]
     return;
+
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
 
   // Some games such as Burnout 2 can put invalid addresses into
   // the array base registers. (see issue 8591)
@@ -89,24 +93,24 @@ void UpdateVertexArrayPointers()
   // We also only update the array base if the vertex description states we are going to use it.
   if (IsIndexed(g_main_cp_state.vtx_desc.low.Position))
     cached_arraybases[CPArray::Position] =
-        Memory::GetPointer(g_main_cp_state.array_bases[CPArray::Position]);
+        memory.GetPointer(g_main_cp_state.array_bases[CPArray::Position]);
 
   if (IsIndexed(g_main_cp_state.vtx_desc.low.Normal))
     cached_arraybases[CPArray::Normal] =
-        Memory::GetPointer(g_main_cp_state.array_bases[CPArray::Normal]);
+        memory.GetPointer(g_main_cp_state.array_bases[CPArray::Normal]);
 
   for (u8 i = 0; i < g_main_cp_state.vtx_desc.low.Color.Size(); i++)
   {
     if (IsIndexed(g_main_cp_state.vtx_desc.low.Color[i]))
       cached_arraybases[CPArray::Color0 + i] =
-          Memory::GetPointer(g_main_cp_state.array_bases[CPArray::Color0 + i]);
+          memory.GetPointer(g_main_cp_state.array_bases[CPArray::Color0 + i]);
   }
 
   for (u8 i = 0; i < g_main_cp_state.vtx_desc.high.TexCoord.Size(); i++)
   {
     if (IsIndexed(g_main_cp_state.vtx_desc.high.TexCoord[i]))
       cached_arraybases[CPArray::TexCoord0 + i] =
-          Memory::GetPointer(g_main_cp_state.array_bases[CPArray::TexCoord0 + i]);
+          memory.GetPointer(g_main_cp_state.array_bases[CPArray::TexCoord0 + i]);
   }
 
   g_bases_dirty = false;
@@ -124,8 +128,10 @@ struct entry
 
 void MarkAllDirty()
 {
+  g_bases_dirty = true;
   g_main_vat_dirty = BitSet8::AllTrue(8);
   g_preprocess_vat_dirty = BitSet8::AllTrue(8);
+  g_needs_cp_xf_consistency_check = true;
 }
 
 NativeVertexFormat* GetOrCreateMatchingFormat(const PortableVertexDeclaration& decl)
@@ -198,61 +204,57 @@ NativeVertexFormat* GetUberVertexFormat(const PortableVertexDeclaration& decl)
   return GetOrCreateMatchingFormat(new_decl);
 }
 
-static VertexLoaderBase* RefreshLoader(int vtx_attr_group, bool preprocess = false)
+namespace detail
 {
-  CPState* state = preprocess ? &g_preprocess_cp_state : &g_main_cp_state;
-  BitSet8& attr_dirty = preprocess ? g_preprocess_vat_dirty : g_main_vat_dirty;
-  auto& vertex_loaders = preprocess ? g_main_vertex_loaders : g_preprocess_vertex_loaders;
-  g_current_vat = vtx_attr_group;
+template <bool IsPreprocess>
+VertexLoaderBase* GetOrCreateLoader(int vtx_attr_group)
+{
+  constexpr CPState* state = IsPreprocess ? &g_preprocess_cp_state : &g_main_cp_state;
+  constexpr BitSet8& attr_dirty = IsPreprocess ? g_preprocess_vat_dirty : g_main_vat_dirty;
+  constexpr auto& vertex_loaders =
+      IsPreprocess ? g_preprocess_vertex_loaders : g_main_vertex_loaders;
 
   VertexLoaderBase* loader;
-  if (attr_dirty[vtx_attr_group])
-  {
-    // We are not allowed to create a native vertex format on preprocessing as this is on the wrong
-    // thread
-    bool check_for_native_format = !preprocess;
 
-    VertexLoaderUID uid(state->vtx_desc, state->vtx_attr[vtx_attr_group]);
-    std::lock_guard<std::mutex> lk(s_vertex_loader_map_lock);
-    VertexLoaderMap::iterator iter = s_vertex_loader_map.find(uid);
-    if (iter != s_vertex_loader_map.end())
-    {
-      loader = iter->second.get();
-      check_for_native_format &= !loader->m_native_vertex_format;
-    }
-    else
-    {
-      s_vertex_loader_map[uid] =
-          VertexLoaderBase::CreateVertexLoader(state->vtx_desc, state->vtx_attr[vtx_attr_group]);
-      loader = s_vertex_loader_map[uid].get();
-      INCSTAT(g_stats.num_vertex_loaders);
-    }
-    if (check_for_native_format)
-    {
-      // search for a cached native vertex format
-      const PortableVertexDeclaration& format = loader->m_native_vtx_decl;
-      std::unique_ptr<NativeVertexFormat>& native = s_native_vertex_map[format];
-      if (!native)
-        native = g_renderer->CreateNativeVertexFormat(format);
-      loader->m_native_vertex_format = native.get();
-    }
-    vertex_loaders[vtx_attr_group] = loader;
-    attr_dirty[vtx_attr_group] = false;
+  // We are not allowed to create a native vertex format on preprocessing as this is on the wrong
+  // thread
+  bool check_for_native_format = !IsPreprocess;
+
+  VertexLoaderUID uid(state->vtx_desc, state->vtx_attr[vtx_attr_group]);
+  std::lock_guard<std::mutex> lk(s_vertex_loader_map_lock);
+  VertexLoaderMap::iterator iter = s_vertex_loader_map.find(uid);
+  if (iter != s_vertex_loader_map.end())
+  {
+    loader = iter->second.get();
+    check_for_native_format &= !loader->m_native_vertex_format;
   }
   else
   {
-    loader = vertex_loaders[vtx_attr_group];
+    auto [it, added] = s_vertex_loader_map.try_emplace(
+        uid,
+        VertexLoaderBase::CreateVertexLoader(state->vtx_desc, state->vtx_attr[vtx_attr_group]));
+    loader = it->second.get();
+    INCSTAT(g_stats.num_vertex_loaders);
   }
-
-  // Lookup pointers for any vertex arrays.
-  if (!preprocess)
-    UpdateVertexArrayPointers();
-
+  if (check_for_native_format)
+  {
+    // search for a cached native vertex format
+    loader->m_native_vertex_format = GetOrCreateMatchingFormat(loader->m_native_vtx_decl);
+  }
+  vertex_loaders[vtx_attr_group] = loader;
+  attr_dirty[vtx_attr_group] = false;
   return loader;
 }
 
+}  // namespace detail
+
 static void CheckCPConfiguration(int vtx_attr_group)
 {
+  if (!g_needs_cp_xf_consistency_check) [[likely]]
+    return;
+
+  g_needs_cp_xf_consistency_check = false;
+
   // Validate that the XF input configuration matches the CP configuration
   u32 num_cp_colors = std::count_if(
       g_main_cp_state.vtx_desc.low.Color.begin(), g_main_cp_state.vtx_desc.low.Color.end(),
@@ -279,15 +281,13 @@ static void CheckCPConfiguration(int vtx_attr_group)
     num_xf_normals = 1;
     break;
   case NormalCount::NormalTangentBinormal:
+  case NormalCount::Invalid:  // see https://bugs.dolphin-emu.org/issues/13070
     num_xf_normals = 3;
-    break;
-  default:
-    PanicAlertFmt("xfmem.invtxspec.numnormals is invalid: {}", xfmem.invtxspec.numnormals);
     break;
   }
 
   if (num_cp_colors != xfmem.invtxspec.numcolors || num_cp_normals != num_xf_normals ||
-      num_cp_tex_coords != xfmem.invtxspec.numtextures)
+      num_cp_tex_coords != xfmem.invtxspec.numtextures) [[unlikely]]
   {
     PanicAlertFmt("Mismatched configuration between CP and XF stages - {}/{} colors, {}/{} "
                   "normals, {}/{} texture coordinates. Please report on the issue tracker.\n\n"
@@ -302,17 +302,17 @@ static void CheckCPConfiguration(int vtx_attr_group)
 
     // Analytics reporting so we can discover which games have this problem, that way when we
     // eventually simulate the behavior we have test cases for it.
-    if (num_cp_colors != xfmem.invtxspec.numcolors)
+    if (num_cp_colors != xfmem.invtxspec.numcolors) [[unlikely]]
     {
       DolphinAnalytics::Instance().ReportGameQuirk(
           GameQuirk::MISMATCHED_GPU_COLORS_BETWEEN_CP_AND_XF);
     }
-    if (num_cp_normals != num_xf_normals)
+    if (num_cp_normals != num_xf_normals) [[unlikely]]
     {
       DolphinAnalytics::Instance().ReportGameQuirk(
           GameQuirk::MISMATCHED_GPU_NORMALS_BETWEEN_CP_AND_XF);
     }
-    if (num_cp_tex_coords != xfmem.invtxspec.numtextures)
+    if (num_cp_tex_coords != xfmem.invtxspec.numtextures) [[unlikely]]
     {
       DolphinAnalytics::Instance().ReportGameQuirk(
           GameQuirk::MISMATCHED_GPU_TEX_COORDS_BETWEEN_CP_AND_XF);
@@ -323,64 +323,73 @@ static void CheckCPConfiguration(int vtx_attr_group)
   }
 
   if (g_main_cp_state.matrix_index_a.Hex != xfmem.MatrixIndexA.Hex ||
-      g_main_cp_state.matrix_index_b.Hex != xfmem.MatrixIndexB.Hex)
+      g_main_cp_state.matrix_index_b.Hex != xfmem.MatrixIndexB.Hex) [[unlikely]]
   {
-    PanicAlertFmt("Mismatched matrix index configuration between CP and XF stages - "
-                  "index A: {:08x}/{:08x}, index B {:08x}/{:08x}. "
-                  "Please report on the issue tracker.",
-                  g_main_cp_state.matrix_index_a.Hex, xfmem.MatrixIndexA.Hex,
-                  g_main_cp_state.matrix_index_b.Hex, xfmem.MatrixIndexB.Hex);
+    WARN_LOG_FMT(VIDEO,
+                 "Mismatched matrix index configuration between CP and XF stages - "
+                 "index A: {:08x}/{:08x}, index B {:08x}/{:08x}.",
+                 g_main_cp_state.matrix_index_a.Hex, xfmem.MatrixIndexA.Hex,
+                 g_main_cp_state.matrix_index_b.Hex, xfmem.MatrixIndexB.Hex);
     DolphinAnalytics::Instance().ReportGameQuirk(
         GameQuirk::MISMATCHED_GPU_MATRIX_INDICES_BETWEEN_CP_AND_XF);
   }
 }
 
-int RunVertices(int vtx_attr_group, OpcodeDecoder::Primitive primitive, int count, DataReader src,
-                bool is_preprocess)
+template <bool IsPreprocess>
+int RunVertices(int vtx_attr_group, OpcodeDecoder::Primitive primitive, int count, const u8* src)
 {
-  if (count == 0)
+  if (count == 0) [[unlikely]]
     return 0;
   ASSERT(count > 0);
 
-  VertexLoaderBase* loader = RefreshLoader(vtx_attr_group, is_preprocess);
+  VertexLoaderBase* loader = RefreshLoader<IsPreprocess>(vtx_attr_group);
 
   int size = count * loader->m_vertex_size;
-  if ((int)src.size() < size)
-    return -1;
 
-  if (is_preprocess)
-    return size;
-
-  CheckCPConfiguration(vtx_attr_group);
-
-  // If the native vertex format changed, force a flush.
-  if (loader->m_native_vertex_format != s_current_vtx_fmt ||
-      loader->m_native_components != g_current_components)
+  if constexpr (!IsPreprocess)
   {
-    g_vertex_manager->Flush();
+    // Doing early return for the opposite case would be cleaner
+    // but triggers a false unreachable code warning in MSVC debug builds.
+
+    CheckCPConfiguration(vtx_attr_group);
+
+    // If the native vertex format changed, force a flush.
+    if (loader->m_native_vertex_format != s_current_vtx_fmt ||
+        loader->m_native_components != g_current_components) [[unlikely]]
+    {
+      g_vertex_manager->Flush();
+    }
+    s_current_vtx_fmt = loader->m_native_vertex_format;
+    g_current_components = loader->m_native_components;
+    auto& system = Core::System::GetInstance();
+    auto& vertex_shader_manager = system.GetVertexShaderManager();
+    vertex_shader_manager.SetVertexFormat(loader->m_native_components,
+                                          loader->m_native_vertex_format->GetVertexDeclaration());
+
+    // if cull mode is CULL_ALL, tell VertexManager to skip triangles and quads.
+    // They still need to go through vertex loading, because we need to calculate a zfreeze refrence
+    // slope.
+    bool cullall = (bpmem.genMode.cullmode == CullMode::All &&
+                    primitive < OpcodeDecoder::Primitive::GX_DRAW_LINES);
+
+    DataReader dst = g_vertex_manager->PrepareForAdditionalData(
+        primitive, count, loader->m_native_vtx_decl.stride, cullall);
+
+    count = loader->RunVertices(src, dst.GetPointer(), count);
+
+    g_vertex_manager->AddIndices(primitive, count);
+    g_vertex_manager->FlushData(count, loader->m_native_vtx_decl.stride);
+
+    ADDSTAT(g_stats.this_frame.num_prims, count);
+    INCSTAT(g_stats.this_frame.num_primitive_joins);
   }
-  s_current_vtx_fmt = loader->m_native_vertex_format;
-  g_current_components = loader->m_native_components;
-  VertexShaderManager::SetVertexFormat(loader->m_native_components);
-
-  // if cull mode is CULL_ALL, tell VertexManager to skip triangles and quads.
-  // They still need to go through vertex loading, because we need to calculate a zfreeze refrence
-  // slope.
-  bool cullall = (bpmem.genMode.cullmode == CullMode::All &&
-                  primitive < OpcodeDecoder::Primitive::GX_DRAW_LINES);
-
-  DataReader dst = g_vertex_manager->PrepareForAdditionalData(
-      primitive, count, loader->m_native_vtx_decl.stride, cullall);
-
-  count = loader->RunVertices(src, dst, count);
-
-  g_vertex_manager->AddIndices(primitive, count);
-  g_vertex_manager->FlushData(count, loader->m_native_vtx_decl.stride);
-
-  ADDSTAT(g_stats.this_frame.num_prims, count);
-  INCSTAT(g_stats.this_frame.num_primitive_joins);
   return size;
 }
+
+template int RunVertices<false>(int vtx_attr_group, OpcodeDecoder::Primitive primitive, int count,
+                                const u8* src);
+template int RunVertices<true>(int vtx_attr_group, OpcodeDecoder::Primitive primitive, int count,
+                               const u8* src);
 
 NativeVertexFormat* GetCurrentVertexFormat()
 {

@@ -44,9 +44,7 @@
 #include "Core/PowerPC/PPCAnalyst.h"
 #include "Core/PowerPC/PowerPC.h"
 #include "Core/PowerPC/Profiler.h"
-#if defined(_DEBUG) || defined(DEBUGFAST)
-#include "Common/GekkoDisassembler.h"
-#endif
+#include "Core/System.h"
 
 using namespace Gen;
 using namespace PowerPC;
@@ -208,7 +206,7 @@ bool Jit64::HandleStackFault()
   // to reset the guard page.
   // Yeah, it's kind of gross.
   GetBlockCache()->InvalidateICache(0, 0xffffffff, true);
-  CoreTiming::ForceExceptionCheck(0);
+  Core::System::GetInstance().GetCoreTiming().ForceExceptionCheck(0);
   m_cleanup_after_stackfault = true;
 
   return true;
@@ -226,12 +224,15 @@ bool Jit64::HandleFault(uintptr_t access_address, SContext* ctx)
   // Only instructions that access I/O will get these, and there won't be that
   // many of them in a typical program/game.
 
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
+
   // TODO: do we properly handle off-the-end?
-  const auto base_ptr = reinterpret_cast<uintptr_t>(Memory::physical_base);
+  const auto base_ptr = reinterpret_cast<uintptr_t>(memory.GetPhysicalBase());
   if (access_address >= base_ptr && access_address < base_ptr + 0x100010000)
     return BackPatch(static_cast<u32>(access_address - base_ptr), ctx);
 
-  const auto logical_base_ptr = reinterpret_cast<uintptr_t>(Memory::logical_base);
+  const auto logical_base_ptr = reinterpret_cast<uintptr_t>(memory.GetLogicalBase());
   if (access_address >= logical_base_ptr && access_address < logical_base_ptr + 0x100010000)
     return BackPatch(static_cast<u32>(access_address - logical_base_ptr), ctx);
 
@@ -332,7 +333,10 @@ void Jit64::Init()
 {
   EnableBlockLink();
 
-  jo.fastmem_arena = m_fastmem_enabled && Memory::InitFastmemArena();
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
+
+  jo.fastmem_arena = m_fastmem_enabled && memory.InitFastmemArena();
   jo.optimizeGatherPipe = true;
   jo.accurateSinglePrecision = true;
   UpdateMemoryAndExceptionOptions();
@@ -406,7 +410,9 @@ void Jit64::Shutdown()
   FreeStack();
   FreeCodeSpace();
 
-  Memory::ShutdownFastmemArena();
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
+  memory.ShutdownFastmemArena();
 
   blocks.Shutdown();
   m_far_code.Shutdown();
@@ -601,10 +607,6 @@ void Jit64::JustWriteExit(u32 destination, bool bl, u32 after)
 
   MOV(32, PPCSTATE(pc), Imm32(destination));
 
-  // Do not skip breakpoint check if debugging.
-  const u8* dispatcher =
-      m_enable_debugging ? asm_routines.dispatcher : asm_routines.dispatcher_no_check;
-
   // Perform downcount flag check, followed by the requested exit
   if (bl)
   {
@@ -616,7 +618,7 @@ void Jit64::JustWriteExit(u32 destination, bool bl, u32 after)
     SwitchToNearCode();
 
     linkData.exitPtrs = GetWritableCodePtr();
-    CALL(dispatcher);
+    CALL(asm_routines.dispatcher_no_timing_check);
 
     SetJumpTarget(after_fixup);
     POP(RSCRATCH);
@@ -627,7 +629,7 @@ void Jit64::JustWriteExit(u32 destination, bool bl, u32 after)
     J_CC(CC_LE, asm_routines.do_timing);
 
     linkData.exitPtrs = GetWritableCodePtr();
-    JMP(dispatcher, true);
+    JMP(asm_routines.dispatcher_no_timing_check, true);
   }
 
   b->linkData.push_back(linkData);
@@ -692,7 +694,7 @@ void Jit64::WriteRfiExitDestInRSCRATCH()
 void Jit64::WriteIdleExit(u32 destination)
 {
   ABI_PushRegistersAndAdjustStack({}, 0);
-  ABI_CallFunction(CoreTiming::Idle);
+  ABI_CallFunction(CoreTiming::GlobalIdle);
   ABI_PopRegistersAndAdjustStack({}, 0);
   MOV(32, PPCSTATE(pc), Imm32(destination));
   WriteExceptionExit();
@@ -951,7 +953,7 @@ bool Jit64::DoJit(u32 em_address, JitBlock* b, u32 nextPC)
   js.downcountAmount = 0;
   js.skipInstructions = 0;
   js.carryFlag = CarryFlag::InPPCState;
-  js.constantGqr.clear();
+  js.constantGqrValid = BitSet8();
 
   // Assume that GQR values don't change often at runtime. Many paired-heavy games use largely float
   // loads and stores,
@@ -982,6 +984,7 @@ bool Jit64::DoJit(u32 em_address, JitBlock* b, u32 nextPC)
         CMP_or_TEST(32, PPCSTATE(spr[SPR_GQR0 + gqr]), Imm32(value));
         J_CC(CC_NZ, target);
       }
+      js.constantGqrValid = gqr_static;
     }
   }
 
@@ -1284,7 +1287,7 @@ void Jit64::IntializeSpeculativeConstants()
         ABI_CallFunctionC(JitInterface::CompileExceptionCheck,
                           static_cast<u32>(JitInterface::ExceptionType::SpeculativeConstants));
         ABI_PopRegistersAndAdjustStack({}, 0);
-        JMP(asm_routines.dispatcher, true);
+        JMP(asm_routines.dispatcher_no_check, true);
         SwitchToNearCode();
       }
       CMP(32, PPCSTATE(gpr[i]), Imm32(compileTimeValue));

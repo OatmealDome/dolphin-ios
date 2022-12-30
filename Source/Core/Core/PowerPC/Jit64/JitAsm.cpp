@@ -16,6 +16,7 @@
 #include "Core/PowerPC/Jit64/Jit.h"
 #include "Core/PowerPC/Jit64Common/Jit64PowerPCState.h"
 #include "Core/PowerPC/PowerPC.h"
+#include "Core/System.h"
 
 using namespace Gen;
 
@@ -65,7 +66,7 @@ void Jit64AsmRoutineManager::Generate()
 
   const u8* outerLoop = GetCodePtr();
   ABI_PushRegistersAndAdjustStack({}, 0);
-  ABI_CallFunction(CoreTiming::Advance);
+  ABI_CallFunction(CoreTiming::GlobalAdvance);
   ABI_PopRegistersAndAdjustStack({}, 0);
   FixupBranch skipToRealDispatch = J(enable_debugging);  // skip the sync and compare first time
   dispatcher_mispredicted_blr = GetCodePtr();
@@ -83,29 +84,27 @@ void Jit64AsmRoutineManager::Generate()
   SUB(32, PPCSTATE(downcount), R(RSCRATCH2));
 
   dispatcher = GetCodePtr();
+
   // Expected result of SUB(32, PPCSTATE(downcount), Imm32(block_cycles)) is in RFLAGS.
   // Branch if downcount is <= 0 (signed).
   FixupBranch bail = J_CC(CC_LE, true);
 
-  FixupBranch dbg_exit;
+  dispatcher_no_timing_check = GetCodePtr();
 
+  FixupBranch dbg_exit;
   if (enable_debugging)
   {
     MOV(64, R(RSCRATCH), ImmPtr(CPU::GetStatePtr()));
-    TEST(32, MatR(RSCRATCH), Imm32(static_cast<u32>(CPU::State::Stepping)));
-    FixupBranch notStepping = J_CC(CC_Z);
-    ABI_PushRegistersAndAdjustStack({}, 0);
-    ABI_CallFunction(PowerPC::CheckBreakPoints);
-    ABI_PopRegistersAndAdjustStack({}, 0);
-    MOV(64, R(RSCRATCH), ImmPtr(CPU::GetStatePtr()));
     TEST(32, MatR(RSCRATCH), Imm32(0xFFFFFFFF));
     dbg_exit = J_CC(CC_NZ, true);
-    SetJumpTarget(notStepping);
   }
 
   SetJumpTarget(skipToRealDispatch);
 
   dispatcher_no_check = GetCodePtr();
+
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
 
   // The following is a translation of JitBaseBlockCache::Dispatch into assembly.
   const bool assembly_dispatcher = true;
@@ -146,10 +145,10 @@ void Jit64AsmRoutineManager::Generate()
     // Switch to the correct memory base, in case MSR.DR has changed.
     TEST(32, PPCSTATE(msr), Imm32(1 << (31 - 27)));
     FixupBranch physmem = J_CC(CC_Z);
-    MOV(64, R(RMEM), ImmPtr(Memory::logical_base));
+    MOV(64, R(RMEM), ImmPtr(memory.GetLogicalBase()));
     JMPptr(MDisp(RSCRATCH, static_cast<s32>(offsetof(JitBlockData, normalEntry))));
     SetJumpTarget(physmem);
-    MOV(64, R(RMEM), ImmPtr(Memory::physical_base));
+    MOV(64, R(RMEM), ImmPtr(memory.GetPhysicalBase()));
     JMPptr(MDisp(RSCRATCH, static_cast<s32>(offsetof(JitBlockData, normalEntry))));
 
     SetJumpTarget(not_found);
@@ -170,10 +169,10 @@ void Jit64AsmRoutineManager::Generate()
   // Switch to the correct memory base, in case MSR.DR has changed.
   TEST(32, PPCSTATE(msr), Imm32(1 << (31 - 27)));
   FixupBranch physmem = J_CC(CC_Z);
-  MOV(64, R(RMEM), ImmPtr(Memory::logical_base));
+  MOV(64, R(RMEM), ImmPtr(memory.GetLogicalBase()));
   JMPptr(R(ABI_RETURN));
   SetJumpTarget(physmem);
-  MOV(64, R(RMEM), ImmPtr(Memory::physical_base));
+  MOV(64, R(RMEM), ImmPtr(memory.GetPhysicalBase()));
   JMPptr(R(ABI_RETURN));
 
   SetJumpTarget(no_block_available);
@@ -246,21 +245,4 @@ void Jit64AsmRoutineManager::GenerateCommon()
   GenQuantizedSingleLoads();
   GenQuantizedStores();
   GenQuantizedSingleStores();
-
-  // CMPSD(R(XMM0), M(&zero),
-  // TODO
-
-  // Fast write routines - special case the most common hardware write
-  // TODO: use this.
-  // Even in x86, the param values will be in the right registers.
-  /*
-  const u8 *fastMemWrite8 = AlignCode16();
-  CMP(32, R(ABI_PARAM2), Imm32(0xCC008000));
-  FixupBranch skip_fast_write = J_CC(CC_NE, false);
-  MOV(32, RSCRATCH, M(&m_gatherPipeCount));
-  MOV(8, MDisp(RSCRATCH, (u32)&m_gatherPipe), ABI_PARAM1);
-  ADD(32, 1, M(&m_gatherPipeCount));
-  RET();
-  SetJumpTarget(skip_fast_write);
-  CALL((void *)&PowerPC::Write_U8);*/
 }

@@ -68,6 +68,8 @@ struct TMDHeader
   u8 tmd_version;
   u8 ca_crl_version;
   u8 signer_crl_version;
+  // This is usually an always 0 padding byte, which is set to 1 on vWii TMDs
+  u8 is_vwii;
   u64 ios_id;
   u64 title_id;
   u32 title_flags;
@@ -85,6 +87,7 @@ struct TMDHeader
   u16 fill2;
 };
 static_assert(sizeof(TMDHeader) == 0x1e4, "TMDHeader has the wrong size");
+static_assert(offsetof(TMDHeader, ios_id) == 0x184);
 
 struct Content
 {
@@ -108,7 +111,7 @@ struct TimeLimit
 
 struct TicketView
 {
-  u32 version;
+  u8 version;
   u64 ticket_id;
   u32 device_id;
   u64 title_id;
@@ -148,6 +151,18 @@ struct Ticket
   TimeLimit time_limits[8];
 };
 static_assert(sizeof(Ticket) == 0x2A4, "Ticket has the wrong size");
+
+struct V1TicketHeader
+{
+  u16 version;
+  u16 header_size;
+  u32 v1_ticket_size;
+  u32 section_header_table_offset;
+  u16 number_of_section_headers;
+  u16 section_header_size;
+  u32 flags;
+};
+static_assert(sizeof(V1TicketHeader) == 0x14, "V1TicketHeader has the wrong size");
 #pragma pack(pop)
 
 constexpr u32 MAX_TMD_SIZE = 0x49e4;
@@ -200,6 +215,7 @@ public:
   u16 GetTitleVersion() const;
   u16 GetGroupId() const;
   DiscIO::Region GetRegion() const;
+  bool IsvWii() const;
 
   // Constructs a 6-character game ID in the format typically used by Dolphin.
   // If the 6-character game ID would contain unprintable characters,
@@ -225,6 +241,7 @@ public:
   explicit TicketReader(std::vector<u8> bytes);
 
   bool IsValid() const;
+  bool IsV1Ticket() const;
 
   std::vector<u8> GetRawTicket(u64 ticket_id) const;
   size_t GetNumberOfTickets() const;
@@ -235,7 +252,9 @@ public:
   // more than just one ticket and generate ticket views for them, so we implement it too.
   std::vector<u8> GetRawTicketView(u32 ticket_num) const;
 
+  u8 GetVersion() const;
   u32 GetDeviceId() const;
+  u32 GetTicketSize() const;
   u64 GetTitleId() const;
   u8 GetCommonKeyIndex() const;
   // Get the decrypted title key.

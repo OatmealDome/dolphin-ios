@@ -11,11 +11,12 @@
 #include <optional>
 #include <string>
 
+#include "Core/Boot/Boot.h"
+
 class QStackedWidget;
 class QString;
 
 class BreakpointWidget;
-class BootSessionData;
 struct BootParameters;
 class CheatsManager;
 class CodeWidget;
@@ -25,6 +26,7 @@ class DragEnterEvent;
 class FIFOPlayerWindow;
 class FreeLookWindow;
 class GameList;
+class GBATASInputWindow;
 class GCTASInputWindow;
 class GraphicsWindow;
 class HotkeyScheduler;
@@ -101,6 +103,8 @@ private:
   void StateSaveUndo();
   void StateSaveOldest();
   void SetStateSlot(int slot);
+  void IncrementSelectedStateSlot();
+  void DecrementSelectedStateSlot();
   void BootWiiSystemMenu();
 
   void PerformOnlineUpdate(const std::string& region);
@@ -225,6 +229,7 @@ private:
   NetPlaySetupDialog* m_netplay_setup_dialog;
   static constexpr int num_gc_controllers = 4;
   std::array<GCTASInputWindow*, num_gc_controllers> m_gc_tas_input_windows{};
+  std::array<GBATASInputWindow*, num_gc_controllers> m_gba_tas_input_windows{};
   static constexpr int num_wii_controllers = 4;
   std::array<WiiTASInputWindow*, num_wii_controllers> m_wii_tas_input_windows{};
 

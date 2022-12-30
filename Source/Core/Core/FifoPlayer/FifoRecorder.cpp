@@ -12,6 +12,7 @@
 
 #include "Core/ConfigManager.h"
 #include "Core/HW/Memmap.h"
+#include "Core/System.h"
 
 #include "VideoCommon/OpcodeDecoding.h"
 #include "VideoCommon/XFStructs.h"
@@ -45,10 +46,15 @@ public:
 
   OPCODE_CALLBACK(CPState& GetCPState()) { return m_cpmem; }
 
+  OPCODE_CALLBACK(u32 GetVertexSize(u8 vat))
+  {
+    return VertexLoaderBase::GetVertexSize(GetCPState().vtx_desc, GetCPState().vtx_attr[vat]);
+  }
+
 private:
   void ProcessVertexComponent(CPArray array_index, VertexComponentFormat array_type,
-                              u32 component_offset, u32 vertex_size, u16 num_vertices,
-                              const u8* vertex_data);
+                              u32 component_offset, u32 component_size, u32 vertex_size,
+                              u16 num_vertices, const u8* vertex_data, u32 byte_offset = 0);
 
   FifoRecorder* const m_owner;
   CPState m_cpmem;
@@ -86,31 +92,67 @@ void FifoRecorder::FifoRecordAnalyzer::OnPrimitiveCommand(OpcodeDecoder::Primiti
   }
   const u32 pos_size = VertexLoader_Position::GetSize(vtx_desc.low.Position, vtx_attr.g0.PosFormat,
                                                       vtx_attr.g0.PosElements);
-  ProcessVertexComponent(CPArray::Position, vtx_desc.low.Position, offset, vertex_size,
-                         num_vertices, vertex_data);
+  const u32 pos_direct_size = VertexLoader_Position::GetSize(
+      VertexComponentFormat::Direct, vtx_attr.g0.PosFormat, vtx_attr.g0.PosElements);
+  ProcessVertexComponent(CPArray::Position, vtx_desc.low.Position, offset, pos_direct_size,
+                         vertex_size, num_vertices, vertex_data);
   offset += pos_size;
 
   const u32 norm_size =
       VertexLoader_Normal::GetSize(vtx_desc.low.Normal, vtx_attr.g0.NormalFormat,
                                    vtx_attr.g0.NormalElements, vtx_attr.g0.NormalIndex3);
-  ProcessVertexComponent(CPArray::Normal, vtx_desc.low.Position, offset, vertex_size, num_vertices,
-                         vertex_data);
+  const u32 norm_direct_size =
+      VertexLoader_Normal::GetSize(VertexComponentFormat::Direct, vtx_attr.g0.NormalFormat,
+                                   vtx_attr.g0.NormalElements, vtx_attr.g0.NormalIndex3);
+  if (vtx_attr.g0.NormalIndex3 && IsIndexed(vtx_desc.low.Normal) &&
+      vtx_attr.g0.NormalElements == NormalComponentCount::NTB)
+  {
+    // We're in 3-index mode, and we're using an indexed format and have the
+    // normal/tangent/binormal, so we actually need to deal with 3-index mode.
+    const u32 index_size = vtx_desc.low.Normal == VertexComponentFormat::Index16 ? 2 : 1;
+    ASSERT(norm_size == index_size * 3);
+    // 3-index mode uses one index each for the normal, tangent and binormal;
+    // the tangent and binormal are internally offset.
+    // The offset is based on the component size, not to the index itself;
+    // for instance, with 32-bit float normals, each normal vector is 3*sizeof(float) = 12 bytes,
+    // so the normal vector is offset by 0 bytes, the tangent by 12, and the binormal by 24.
+    // Using a byte offset instead of increasing the index means that using the same index for all
+    // elements is the same as not using the 3-index mode (increasing the index would give differing
+    // results if the normal array's stride was something other than 12, for instance if vertices
+    // were contiguous in main memory instead of individual components being used).
+    const u32 element_size = GetElementSize(vtx_attr.g0.NormalFormat) * 3;
+    ProcessVertexComponent(CPArray::Normal, vtx_desc.low.Normal, offset, element_size, vertex_size,
+                           num_vertices, vertex_data);
+    ProcessVertexComponent(CPArray::Normal, vtx_desc.low.Normal, offset + index_size, element_size,
+                           vertex_size, num_vertices, vertex_data, element_size);
+    ProcessVertexComponent(CPArray::Normal, vtx_desc.low.Normal, offset + 2 * index_size,
+                           element_size, vertex_size, num_vertices, vertex_data, 2 * element_size);
+  }
+  else
+  {
+    ProcessVertexComponent(CPArray::Normal, vtx_desc.low.Normal, offset, norm_direct_size,
+                           vertex_size, num_vertices, vertex_data);
+  }
   offset += norm_size;
 
   for (u32 i = 0; i < vtx_desc.low.Color.Size(); i++)
   {
     const u32 color_size =
         VertexLoader_Color::GetSize(vtx_desc.low.Color[i], vtx_attr.GetColorFormat(i));
-    ProcessVertexComponent(CPArray::Color0 + i, vtx_desc.low.Position, offset, vertex_size,
-                           num_vertices, vertex_data);
+    const u32 color_direct_size =
+        VertexLoader_Color::GetSize(VertexComponentFormat::Direct, vtx_attr.GetColorFormat(i));
+    ProcessVertexComponent(CPArray::Color0 + i, vtx_desc.low.Color[i], offset, color_direct_size,
+                           vertex_size, num_vertices, vertex_data);
     offset += color_size;
   }
   for (u32 i = 0; i < vtx_desc.high.TexCoord.Size(); i++)
   {
     const u32 tc_size = VertexLoader_TextCoord::GetSize(
         vtx_desc.high.TexCoord[i], vtx_attr.GetTexFormat(i), vtx_attr.GetTexElements(i));
-    ProcessVertexComponent(CPArray::TexCoord0 + i, vtx_desc.low.Position, offset, vertex_size,
-                           num_vertices, vertex_data);
+    const u32 tc_direct_size = VertexLoader_TextCoord::GetSize(
+        VertexComponentFormat::Direct, vtx_attr.GetTexFormat(i), vtx_attr.GetTexElements(i));
+    ProcessVertexComponent(CPArray::TexCoord0 + i, vtx_desc.high.TexCoord[i], offset,
+                           tc_direct_size, vertex_size, num_vertices, vertex_data);
     offset += tc_size;
   }
 
@@ -118,11 +160,9 @@ void FifoRecorder::FifoRecordAnalyzer::OnPrimitiveCommand(OpcodeDecoder::Primiti
 }
 
 // If a component is indexed, the array it indexes into for data must be saved.
-void FifoRecorder::FifoRecordAnalyzer::ProcessVertexComponent(CPArray array_index,
-                                                              VertexComponentFormat array_type,
-                                                              u32 component_offset, u32 vertex_size,
-                                                              u16 num_vertices,
-                                                              const u8* vertex_data)
+void FifoRecorder::FifoRecordAnalyzer::ProcessVertexComponent(
+    CPArray array_index, VertexComponentFormat array_type, u32 component_offset, u32 component_size,
+    u32 vertex_size, u16 num_vertices, const u8* vertex_data, u32 byte_offset)
 {
   // Skip if not indexed array
   if (!IsIndexed(array_type))
@@ -162,8 +202,8 @@ void FifoRecorder::FifoRecordAnalyzer::ProcessVertexComponent(CPArray array_inde
     }
   }
 
-  const u32 array_start = m_cpmem.array_bases[array_index];
-  const u32 array_size = m_cpmem.array_strides[array_index] * (max_index + 1);
+  const u32 array_start = m_cpmem.array_bases[array_index] + byte_offset;
+  const u32 array_size = m_cpmem.array_strides[array_index] * max_index + component_size;
 
   m_owner->UseMemory(array_start, array_size, MemoryUpdate::VERTEX_STREAM);
 }
@@ -190,8 +230,10 @@ void FifoRecorder::StartRecording(s32 numFrames, CallbackFunc finishedCb)
   //   - Global variables suck
   //   - Multithreading with the above two sucks
   //
-  m_Ram.resize(Memory::GetRamSize());
-  m_ExRam.resize(Memory::GetExRamSize());
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
+  m_Ram.resize(memory.GetRamSize());
+  m_ExRam.resize(memory.GetExRamSize());
 
   std::fill(m_Ram.begin(), m_Ram.end(), 0);
   std::fill(m_ExRam.begin(), m_ExRam.end(), 0);
@@ -271,17 +313,20 @@ void FifoRecorder::WriteGPCommand(const u8* data, u32 size)
 
 void FifoRecorder::UseMemory(u32 address, u32 size, MemoryUpdate::Type type, bool dynamicUpdate)
 {
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
+
   u8* curData;
   u8* newData;
   if (address & 0x10000000)
   {
-    curData = &m_ExRam[address & Memory::GetExRamMask()];
-    newData = &Memory::m_pEXRAM[address & Memory::GetExRamMask()];
+    curData = &m_ExRam[address & memory.GetExRamMask()];
+    newData = &memory.GetEXRAM()[address & memory.GetExRamMask()];
   }
   else
   {
-    curData = &m_Ram[address & Memory::GetRamMask()];
-    newData = &Memory::m_pRAM[address & Memory::GetRamMask()];
+    curData = &m_Ram[address & memory.GetRamMask()];
+    newData = &memory.GetRAM()[address & memory.GetRamMask()];
   }
 
   if (!dynamicUpdate && memcmp(curData, newData, size) != 0)

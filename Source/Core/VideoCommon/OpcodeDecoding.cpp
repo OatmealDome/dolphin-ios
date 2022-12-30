@@ -18,6 +18,7 @@
 #include "Common/Logging/Log.h"
 #include "Core/FifoPlayer/FifoRecorder.h"
 #include "Core/HW/Memmap.h"
+#include "Core/System.h"
 #include "VideoCommon/BPMemory.h"
 #include "VideoCommon/CPMemory.h"
 #include "VideoCommon/CommandProcessor.h"
@@ -56,18 +57,28 @@ public:
     if constexpr (!is_preprocess)
     {
       if (sub_command == MATINDEX_A)
-        VertexShaderManager::SetTexMatrixChangedA(value);
+      {
+        VertexLoaderManager::g_needs_cp_xf_consistency_check = true;
+        auto& system = Core::System::GetInstance();
+        system.GetVertexShaderManager().SetTexMatrixChangedA(value);
+      }
       else if (sub_command == MATINDEX_B)
-        VertexShaderManager::SetTexMatrixChangedB(value);
+      {
+        VertexLoaderManager::g_needs_cp_xf_consistency_check = true;
+        auto& system = Core::System::GetInstance();
+        system.GetVertexShaderManager().SetTexMatrixChangedB(value);
+      }
       else if (sub_command == VCD_LO || sub_command == VCD_HI)
       {
         VertexLoaderManager::g_main_vat_dirty = BitSet8::AllTrue(CP_NUM_VAT_REG);
         VertexLoaderManager::g_bases_dirty = true;
+        VertexLoaderManager::g_needs_cp_xf_consistency_check = true;
       }
       else if (sub_command == CP_VAT_REG_A || sub_command == CP_VAT_REG_B ||
                sub_command == CP_VAT_REG_C)
       {
         VertexLoaderManager::g_main_vat_dirty[command & CP_VAT_MASK] = true;
+        VertexLoaderManager::g_needs_cp_xf_consistency_check = true;
       }
       else if (sub_command == ARRAY_BASE)
       {
@@ -119,10 +130,8 @@ public:
     // load vertices
     const u32 size = vertex_size * num_vertices;
 
-    // HACK
-    DataReader src{const_cast<u8*>(vertex_data), const_cast<u8*>(vertex_data) + size};
     const u32 bytes =
-        VertexLoaderManager::RunVertices(vat, primitive, num_vertices, src, is_preprocess);
+        VertexLoaderManager::RunVertices<is_preprocess>(vat, primitive, num_vertices, vertex_data);
 
     ASSERT(bytes == size);
 
@@ -144,11 +153,14 @@ public:
     {
       m_in_display_list = true;
 
+      auto& system = Core::System::GetInstance();
+
       if constexpr (is_preprocess)
       {
-        const u8* const start_address = Memory::GetPointer(address);
+        auto& memory = system.GetMemory();
+        const u8* const start_address = memory.GetPointer(address);
 
-        Fifo::PushFifoAuxBuffer(start_address, size);
+        system.GetFifo().PushFifoAuxBuffer(start_address, size);
 
         if (start_address != nullptr)
         {
@@ -159,12 +171,18 @@ public:
       {
         const u8* start_address;
 
-        if (Fifo::UseDeterministicGPUThread())
-          start_address = static_cast<u8*>(Fifo::PopFifoAuxBuffer(size));
+        auto& fifo = system.GetFifo();
+        if (fifo.UseDeterministicGPUThread())
+        {
+          start_address = static_cast<u8*>(fifo.PopFifoAuxBuffer(size));
+        }
         else
-          start_address = Memory::GetPointer(address);
+        {
+          auto& memory = system.GetMemory();
+          start_address = memory.GetPointer(address);
+        }
 
-        // Avoid the crash if Memory::GetPointer failed ..
+        // Avoid the crash if memory.GetPointer failed ..
         if (start_address != nullptr)
         {
           // temporarily swap dl and non-dl (small "hack" for the stats)
@@ -201,7 +219,8 @@ public:
     }
     else
     {
-      CommandProcessor::HandleUnknownOpcode(opcode, data, is_preprocess);
+      Core::System::GetInstance().GetCommandProcessor().HandleUnknownOpcode(opcode, data,
+                                                                            is_preprocess);
       m_cycles += 1;
     }
   }
@@ -226,6 +245,12 @@ public:
       return g_preprocess_cp_state;
     else
       return g_main_cp_state;
+  }
+
+  OPCODE_CALLBACK(u32 GetVertexSize(u8 vat))
+  {
+    VertexLoaderBase* loader = VertexLoaderManager::RefreshLoader<is_preprocess>(vat);
+    return loader->m_vertex_size;
   }
 
   u32 m_cycles = 0;

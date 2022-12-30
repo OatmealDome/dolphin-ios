@@ -19,9 +19,13 @@
 #include "Core/HW/Memmap.h"
 #include "Core/HW/SystemTimers.h"
 #include "Core/HW/Wiimote.h"
+#include "Core/HW/WiimoteEmu/DesiredWiimoteState.h"
 #include "Core/IOS/Device.h"
 #include "Core/IOS/IOS.h"
+#include "Core/NetPlayClient.h"
+#include "Core/NetPlayProto.h"
 #include "Core/SysConf.h"
+#include "Core/System.h"
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
 
 namespace IOS::HLE
@@ -58,7 +62,9 @@ BluetoothEmuDevice::BluetoothEmuDevice(Kernel& ios, const std::string& device_na
     DEBUG_LOG_FMT(IOS_WIIMOTE, "Wii Remote {} BT ID {:x},{:x},{:x},{:x},{:x},{:x}", i, tmp_bd[0],
                   tmp_bd[1], tmp_bd[2], tmp_bd[3], tmp_bd[4], tmp_bd[5]);
 
-    m_wiimotes.emplace_back(std::make_unique<WiimoteDevice>(this, i, tmp_bd));
+    const unsigned int hid_source_number =
+        NetPlay::IsNetPlayRunning() ? NetPlay::NetPlay_GetLocalWiimoteForSlot(i) : i;
+    m_wiimotes[i] = std::make_unique<WiimoteDevice>(this, tmp_bd, hid_source_number);
   }
 
   bt_dinf.num_registered = MAX_BBMOTES;
@@ -97,7 +103,7 @@ void BluetoothEmuDevice::DoState(PointerWrap& p)
     return;
   }
 
-  p.Do(m_is_active);
+  Device::DoState(p);
   p.Do(m_controller_bd);
   DoStateForMessage(m_ios, p, m_hci_endpoint);
   DoStateForMessage(m_ios, p, m_acl_endpoint);
@@ -158,15 +164,18 @@ std::optional<IPCReply> BluetoothEmuDevice::IOCtlV(const IOCtlVRequest& request)
     {
     case ACL_DATA_OUT:  // ACL data is received from the stack
     {
+      auto& system = Core::System::GetInstance();
+      auto& memory = system.GetMemory();
+
       // This is the ACL datapath from CPU to Wii Remote
       const auto* acl_header =
-          reinterpret_cast<hci_acldata_hdr_t*>(Memory::GetPointer(ctrl.data_address));
+          reinterpret_cast<hci_acldata_hdr_t*>(memory.GetPointer(ctrl.data_address));
 
       DEBUG_ASSERT(HCI_BC_FLAG(acl_header->con_handle) == HCI_POINT2POINT);
       DEBUG_ASSERT(HCI_PB_FLAG(acl_header->con_handle) == HCI_PACKET_START);
 
       SendToDevice(HCI_CON_HANDLE(acl_header->con_handle),
-                   Memory::GetPointer(ctrl.data_address + sizeof(hci_acldata_hdr_t)),
+                   memory.GetPointer(ctrl.data_address + sizeof(hci_acldata_hdr_t)),
                    acl_header->length);
       break;
     }
@@ -238,8 +247,11 @@ void BluetoothEmuDevice::SendACLPacket(const bdaddr_t& source, const u8* data, u
     DEBUG_LOG_FMT(IOS_WIIMOTE, "ACL endpoint valid, sending packet to {:08x}",
                   m_acl_endpoint->ios_request.address);
 
+    auto& system = Core::System::GetInstance();
+    auto& memory = system.GetMemory();
+
     hci_acldata_hdr_t* header =
-        reinterpret_cast<hci_acldata_hdr_t*>(Memory::GetPointer(m_acl_endpoint->data_address));
+        reinterpret_cast<hci_acldata_hdr_t*>(memory.GetPointer(m_acl_endpoint->data_address));
     header->con_handle = HCI_MK_CON_HANDLE(connection_handle, HCI_PACKET_START, HCI_POINT2POINT);
     header->length = size;
 
@@ -334,14 +346,51 @@ void BluetoothEmuDevice::Update()
     wiimote->Update();
 
   const u64 interval = SystemTimers::GetTicksPerSecond() / Wiimote::UPDATE_FREQ;
-  const u64 now = CoreTiming::GetTicks();
+  const u64 now = Core::System::GetInstance().GetCoreTiming().GetTicks();
 
   if (now - m_last_ticks > interval)
   {
     g_controller_interface.SetCurrentInputChannel(ciface::InputChannel::Bluetooth);
     g_controller_interface.UpdateInput();
-    for (auto& wiimote : m_wiimotes)
-      wiimote->UpdateInput();
+
+    std::array<WiimoteEmu::DesiredWiimoteState, MAX_BBMOTES> wiimote_states;
+    std::array<WiimoteDevice::NextUpdateInputCall, MAX_BBMOTES> next_call;
+
+    for (size_t i = 0; i < m_wiimotes.size(); ++i)
+      next_call[i] = m_wiimotes[i]->PrepareInput(&wiimote_states[i]);
+
+    if (NetPlay::IsNetPlayRunning())
+    {
+      std::array<WiimoteEmu::SerializedWiimoteState, MAX_BBMOTES> serialized;
+      std::array<NetPlay::NetPlayClient::WiimoteDataBatchEntry, MAX_BBMOTES> batch;
+      size_t batch_count = 0;
+      for (size_t i = 0; i < 4; ++i)
+      {
+        if (next_call[i] == WiimoteDevice::NextUpdateInputCall::None)
+          continue;
+        serialized[i] = WiimoteEmu::SerializeDesiredState(wiimote_states[i]);
+        batch[batch_count].state = &serialized[i];
+        batch[batch_count].wiimote = static_cast<int>(i);
+        ++batch_count;
+      }
+
+      if (batch_count > 0)
+      {
+        NetPlay::NetPlay_GetWiimoteData(
+            std::span<NetPlay::NetPlayClient::WiimoteDataBatchEntry>(batch.data(), batch_count));
+
+        for (size_t i = 0; i < batch_count; ++i)
+        {
+          const int wiimote = batch[i].wiimote;
+          if (!WiimoteEmu::DeserializeDesiredState(&wiimote_states[wiimote], serialized[wiimote]))
+            PanicAlertFmtT("Received invalid Wii Remote data from Netplay.");
+        }
+      }
+    }
+
+    for (size_t i = 0; i < m_wiimotes.size(); ++i)
+      m_wiimotes[i]->UpdateInput(next_call[i], wiimote_states[i]);
+
     m_last_ticks = now;
   }
 
@@ -378,7 +427,10 @@ void BluetoothEmuDevice::ACLPool::WriteToEndpoint(const USB::V0BulkMessage& endp
   DEBUG_LOG_FMT(IOS_WIIMOTE, "ACL packet being written from queue to {:08x}",
                 endpoint.ios_request.address);
 
-  hci_acldata_hdr_t* header = (hci_acldata_hdr_t*)Memory::GetPointer(endpoint.data_address);
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
+
+  hci_acldata_hdr_t* header = (hci_acldata_hdr_t*)memory.GetPointer(endpoint.data_address);
   header->con_handle = HCI_MK_CON_HANDLE(conn_handle, HCI_PACKET_START, HCI_POINT2POINT);
   header->length = size;
 
@@ -914,10 +966,13 @@ bool BluetoothEmuDevice::SendEventConPacketTypeChange(u16 connection_handle, u16
 // This is called from the USB::IOCTLV_USBV0_CTRLMSG Ioctlv
 void BluetoothEmuDevice::ExecuteHCICommandMessage(const USB::V0CtrlMessage& ctrl_message)
 {
-  const u8* input = Memory::GetPointer(ctrl_message.data_address + 3);
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
+
+  const u8* input = memory.GetPointer(ctrl_message.data_address + 3);
 
   SCommandMessage msg;
-  std::memcpy(&msg, Memory::GetPointer(ctrl_message.data_address), sizeof(msg));
+  std::memcpy(&msg, memory.GetPointer(ctrl_message.data_address), sizeof(msg));
 
   const u16 ocf = HCI_OCF(msg.Opcode);
   const u16 ogf = HCI_OGF(msg.Opcode);

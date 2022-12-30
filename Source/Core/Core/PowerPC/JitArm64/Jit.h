@@ -152,9 +152,8 @@ public:
   void frsqrtex(UGeckoInstruction inst);
 
   // Paired
-  void ps_maddXX(UGeckoInstruction inst);
   void ps_mergeXX(UGeckoInstruction inst);
-  void ps_mulsX(UGeckoInstruction inst);
+  void ps_arith(UGeckoInstruction inst);
   void ps_sel(UGeckoInstruction inst);
   void ps_sumX(UGeckoInstruction inst);
   void ps_res(UGeckoInstruction inst);
@@ -177,6 +176,10 @@ public:
                                  Arm64Gen::ARM64Reg scratch_reg = Arm64Gen::ARM64Reg::INVALID_REG);
 
   void FloatCompare(UGeckoInstruction inst, bool upper = false);
+
+  // temp_gpr can be INVALID_REG if single is true
+  void EmitQuietNaNBitConstant(Arm64Gen::ARM64Reg dest_reg, bool single,
+                               Arm64Gen::ARM64Reg temp_gpr);
 
   bool IsFPRStoreSafe(size_t guest_reg) const;
 
@@ -285,6 +288,8 @@ protected:
 
   void ResetFreeMemoryRanges();
 
+  void IntializeSpeculativeConstants();
+
   // AsmRoutines
   void GenerateAsm();
   void GenerateCommonAsm();
@@ -331,10 +336,10 @@ protected:
                void (ARM64XEmitter::*op)(Arm64Gen::ARM64Reg, Arm64Gen::ARM64Reg, u64,
                                          Arm64Gen::ARM64Reg),
                bool Rc = false);
+  bool MultiplyImmediate(u32 imm, int a, int d, bool rc);
 
   void SetFPRFIfNeeded(bool single, Arm64Gen::ARM64Reg reg);
-  void Force25BitPrecision(Arm64Gen::ARM64Reg output, Arm64Gen::ARM64Reg input,
-                           Arm64Gen::ARM64Reg temp);
+  void Force25BitPrecision(Arm64Gen::ARM64Reg output, Arm64Gen::ARM64Reg input);
 
   // <Fastmem fault location, slowmem handler location>
   std::map<const u8*, FastmemArea> m_fault_to_handler;

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.dolphinemu.dolphinemu">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -45,24 +45,27 @@
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1"/>
+        <profileable
+            android:shell="true"
+            tools:targetApi="29" />
 
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Dolphin.Main">
+            android:theme="@style/Theme.Dolphin.Splash.Main">
 
             <!-- This intentfilter marks this Activity as the one that gets launched from Home screen. -->
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".ui.main.TvMainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Dolphin.TV">
+            android:theme="@style/Theme.Dolphin.Splash.TV">
 
             <!-- This intentfilter marks this Activity as the one that gets launched from Home screen. -->
             <intent-filter>
@@ -76,19 +79,19 @@
             android:name=".features.settings.ui.SettingsActivity"
             android:exported="false"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.Dolphin.Settings"
+            android:theme="@style/Theme.Dolphin.Main"
             android:label="@string/settings"/>
 
         <activity
             android:name=".features.cheats.ui.CheatsActivity"
             android:exported="false"
-            android:theme="@style/Theme.Dolphin.Settings"
+            android:theme="@style/Theme.Dolphin.Main"
             android:label="@string/cheats"/>
 
         <activity
             android:name=".activities.EmulationActivity"
             android:exported="false"
-            android:theme="@style/Theme.Dolphin.Main.Emulation"
+            android:theme="@style/Theme.Dolphin.Main"
             android:preferMinimalPostProcessing="true"/>
 
         <activity
@@ -125,7 +128,7 @@
             android:name=".activities.UserDataActivity"
             android:exported="false"
             android:label="@string/user_data_submenu"
-            android:theme="@style/Theme.Dolphin.Settings" />
+            android:theme="@style/Theme.Dolphin.Main" />
 
         <activity
             android:name=".features.riivolution.ui.RiivolutionBootActivity"

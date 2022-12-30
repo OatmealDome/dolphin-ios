@@ -23,6 +23,7 @@
 
 #include <fmt/format.h>
 #include <imgui.h>
+#include <implot.h>
 
 #include "Common/Assert.h"
 #include "Common/ChunkFile.h"
@@ -51,6 +52,7 @@
 #include "Core/HW/VideoInterface.h"
 #include "Core/Host.h"
 #include "Core/Movie.h"
+#include "Core/System.h"
 
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
 
@@ -62,7 +64,6 @@
 #include "VideoCommon/BoundingBox.h"
 #include "VideoCommon/CPMemory.h"
 #include "VideoCommon/CommandProcessor.h"
-#include "VideoCommon/FPSCounter.h"
 #include "VideoCommon/FrameDump.h"
 #include "VideoCommon/FramebufferManager.h"
 #include "VideoCommon/FramebufferShaderGen.h"
@@ -217,14 +218,14 @@ bool Renderer::IsBBoxEnabled() const
   return m_bounding_box->IsEnabled();
 }
 
-void Renderer::BBoxEnable()
+void Renderer::BBoxEnable(PixelShaderManager& pixel_shader_manager)
 {
-  m_bounding_box->Enable();
+  m_bounding_box->Enable(pixel_shader_manager);
 }
 
-void Renderer::BBoxDisable()
+void Renderer::BBoxDisable(PixelShaderManager& pixel_shader_manager)
 {
-  m_bounding_box->Disable();
+  m_bounding_box->Disable(pixel_shader_manager);
 }
 
 u16 Renderer::BBoxRead(u32 index)
@@ -277,7 +278,8 @@ u32 Renderer::AccessEFB(EFBAccessType type, u32 x, u32 y, u32 poke_data)
     }
 
     // check what to do with the alpha channel (GX_PokeAlphaRead)
-    PixelEngine::AlphaReadMode alpha_read_mode = PixelEngine::GetAlphaReadMode();
+    PixelEngine::AlphaReadMode alpha_read_mode =
+        Core::System::GetInstance().GetPixelEngine().GetAlphaReadMode();
 
     if (alpha_read_mode == PixelEngine::AlphaReadMode::ReadNone)
     {
@@ -419,7 +421,9 @@ bool Renderer::CalculateTargetSize()
   {
     m_target_width = new_efb_width;
     m_target_height = new_efb_height;
-    PixelShaderManager::SetEfbScaleChanged(EFBToScaledXf(1), EFBToScaledYf(1));
+    auto& system = Core::System::GetInstance();
+    auto& pixel_shader_manager = system.GetPixelShaderManager();
+    pixel_shader_manager.SetEfbScaleChanged(EFBToScaledXf(1), EFBToScaledYf(1));
     return true;
   }
   return false;
@@ -479,7 +483,7 @@ void Renderer::CheckForConfigChanges()
   const u32 old_multisamples = g_ActiveConfig.iMultisamples;
   const int old_anisotropy = g_ActiveConfig.iMaxAnisotropy;
   const int old_efb_access_tile_size = g_ActiveConfig.iEFBAccessTileSize;
-  const bool old_force_filtering = g_ActiveConfig.bForceFiltering;
+  const auto old_texture_filtering_mode = g_ActiveConfig.texture_filtering_mode;
   const bool old_vsync = g_ActiveConfig.bVSyncActive;
   const bool old_bbox = g_ActiveConfig.bBBoxEnable;
   const u32 old_game_mod_changes =
@@ -488,6 +492,7 @@ void Renderer::CheckForConfigChanges()
 
   UpdateActiveConfig();
   FreeLook::UpdateActiveConfig();
+  g_vertex_manager->OnConfigChange();
 
   g_freelook_camera.SetControlType(FreeLook::GetActiveConfig().camera_config.control_type);
 
@@ -531,7 +536,7 @@ void Renderer::CheckForConfigChanges()
     changed_bits |= CONFIG_CHANGE_BIT_MULTISAMPLES;
   if (old_anisotropy != g_ActiveConfig.iMaxAnisotropy)
     changed_bits |= CONFIG_CHANGE_BIT_ANISOTROPY;
-  if (old_force_filtering != g_ActiveConfig.bForceFiltering)
+  if (old_texture_filtering_mode != g_ActiveConfig.texture_filtering_mode)
     changed_bits |= CONFIG_CHANGE_BIT_FORCE_TEXTURE_FILTERING;
   if (old_vsync != g_ActiveConfig.bVSyncActive)
     changed_bits |= CONFIG_CHANGE_BIT_VSYNC;
@@ -589,25 +594,6 @@ void Renderer::CheckForConfigChanges()
 // Create On-Screen-Messages
 void Renderer::DrawDebugText()
 {
-  if (g_ActiveConfig.bShowFPS)
-  {
-    // Position in the top-right corner of the screen.
-    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - (10.0f * m_backbuffer_scale),
-                                   10.0f * m_backbuffer_scale),
-                            ImGuiCond_Always, ImVec2(1.0f, 0.0f));
-    ImGui::SetNextWindowSize(ImVec2(100.0f * m_backbuffer_scale, 30.0f * m_backbuffer_scale));
-
-    if (ImGui::Begin("FPS", nullptr,
-                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs |
-                         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings |
-                         ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoNav |
-                         ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing))
-    {
-      ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "FPS: %.2f", m_fps_counter.GetFPS());
-    }
-    ImGui::End();
-  }
-
   const bool show_movie_window =
       Config::Get(Config::MAIN_SHOW_FRAME_COUNT) || Config::Get(Config::MAIN_SHOW_LAG) ||
       Config::Get(Config::MAIN_MOVIE_SHOW_INPUT_DISPLAY) ||
@@ -615,9 +601,9 @@ void Renderer::DrawDebugText()
   if (show_movie_window)
   {
     // Position under the FPS display.
-    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - (10.0f * m_backbuffer_scale),
-                                   50.0f * m_backbuffer_scale),
-                            ImGuiCond_FirstUseEver, ImVec2(1.0f, 0.0f));
+    ImGui::SetNextWindowPos(
+        ImVec2(ImGui::GetIO().DisplaySize.x - 10.f * m_backbuffer_scale, 80.f * m_backbuffer_scale),
+        ImGuiCond_FirstUseEver, ImVec2(1.0f, 0.0f));
     ImGui::SetNextWindowSizeConstraints(
         ImVec2(150.0f * m_backbuffer_scale, 20.0f * m_backbuffer_scale),
         ImGui::GetIO().DisplaySize);
@@ -985,9 +971,11 @@ void Renderer::CheckFifoRecording()
     RecordVideoMemory();
   }
 
-  FifoRecorder::GetInstance().EndFrame(
-      CommandProcessor::fifo.CPBase.load(std::memory_order_relaxed),
-      CommandProcessor::fifo.CPEnd.load(std::memory_order_relaxed));
+  auto& system = Core::System::GetInstance();
+  auto& command_processor = system.GetCommandProcessor();
+  const auto& fifo = command_processor.GetFifo();
+  FifoRecorder::GetInstance().EndFrame(fifo.CPBase.load(std::memory_order_relaxed),
+                                       fifo.CPEnd.load(std::memory_order_relaxed));
 }
 
 void Renderer::RecordVideoMemory()
@@ -1008,6 +996,8 @@ void Renderer::RecordVideoMemory()
 
 bool Renderer::InitializeImGui()
 {
+  std::unique_lock<std::mutex> imgui_lock(m_imgui_mutex);
+
   if (!IMGUI_CHECKVERSION())
   {
     PanicAlertFmt("ImGui version check failed");
@@ -1016,6 +1006,11 @@ bool Renderer::InitializeImGui()
   if (!ImGui::CreateContext())
   {
     PanicAlertFmt("Creating ImGui context failed");
+    return false;
+  }
+  if (!ImPlot::CreateContext())
+  {
+    PanicAlertFmt("Creating ImPlot context failed");
     return false;
   }
 
@@ -1066,8 +1061,8 @@ bool Renderer::InitializeImGui()
   if (!RecompileImGuiPipeline())
     return false;
 
-  m_imgui_last_frame_time = Common::Timer::GetTimeUs();
-  BeginImGuiFrame();
+  m_imgui_last_frame_time = Common::Timer::NowUs();
+  BeginImGuiFrameUnlocked();  // lock is already held
   return true;
 }
 
@@ -1128,7 +1123,10 @@ bool Renderer::RecompileImGuiPipeline()
 
 void Renderer::ShutdownImGui()
 {
+  std::unique_lock<std::mutex> imgui_lock(m_imgui_mutex);
+
   ImGui::EndFrame();
+  ImPlot::DestroyContext();
   ImGui::DestroyContext();
   m_imgui_pipeline.reset();
   m_imgui_vertex_format.reset();
@@ -1138,8 +1136,12 @@ void Renderer::ShutdownImGui()
 void Renderer::BeginImGuiFrame()
 {
   std::unique_lock<std::mutex> imgui_lock(m_imgui_mutex);
+  BeginImGuiFrameUnlocked();
+}
 
-  const u64 current_time_us = Common::Timer::GetTimeUs();
+void Renderer::BeginImGuiFrameUnlocked()
+{
+  const u64 current_time_us = Common::Timer::NowUs();
   const u64 time_diff_us = current_time_us - m_imgui_last_frame_time;
   const float time_diff_secs = static_cast<float>(time_diff_us / 1000000.0);
   m_imgui_last_frame_time = current_time_us;
@@ -1346,16 +1348,18 @@ void Renderer::Swap(u32 xfb_addr, u32 fb_width, u32 fb_stride, u32 fb_height, u6
     m_graphics_mod_manager.EndOfFrame();
   }
 
+  g_framebuffer_manager->EndOfFrame();
+
   if (xfb_addr && fb_width && fb_stride && fb_height)
   {
     // Get the current XFB from texture cache
     MathUtil::Rectangle<int> xfb_rect;
     const auto* xfb_entry =
         g_texture_cache->GetXFBTexture(xfb_addr, fb_width, fb_height, fb_stride, &xfb_rect);
-    if (xfb_entry &&
-        (!g_ActiveConfig.bSkipPresentingDuplicateXFBs || xfb_entry->id != m_last_xfb_id))
+    const bool is_duplicate_frame = xfb_entry->id == m_last_xfb_id;
+
+    if (xfb_entry && (!g_ActiveConfig.bSkipPresentingDuplicateXFBs || !is_duplicate_frame))
     {
-      const bool is_duplicate_frame = xfb_entry->id == m_last_xfb_id;
       m_last_xfb_id = xfb_entry->id;
 
       // Since we use the common pipelines here and draw vertices if a batch is currently being
@@ -1367,6 +1371,7 @@ void Renderer::Swap(u32 xfb_addr, u32 fb_width, u32 fb_stride, u32 fb_height, u6
       {
         auto lock = GetImGuiLock();
 
+        g_perf_metrics.DrawImGuiStats(m_backbuffer_scale);
         DrawDebugText();
         OSD::DrawMessages();
         ImGui::Render();
@@ -1405,8 +1410,6 @@ void Renderer::Swap(u32 xfb_addr, u32 fb_width, u32 fb_stride, u32 fb_height, u6
 
       if (!is_duplicate_frame)
       {
-        m_fps_counter.Update();
-
         DolphinAnalytics::PerformanceSample perf_sample;
         perf_sample.speed_ratio = SystemTimers::GetEstimatedEmulationPerformance();
         perf_sample.num_prims = g_stats.this_frame.num_prims + g_stats.this_frame.num_dl_prims;
@@ -1447,8 +1450,7 @@ void Renderer::Swap(u32 xfb_addr, u32 fb_width, u32 fb_stride, u32 fb_height, u6
       {
         // Remove stale EFB/XFB copies.
         g_texture_cache->Cleanup(m_frame_count);
-        const double last_speed_denominator =
-            m_fps_counter.GetDeltaTime() * VideoInterface::GetTargetRefreshRate();
+        const double last_speed_denominator = g_perf_metrics.GetLastSpeedDenominator();
         // The denominator should always be > 0 but if it's not, just return 1
         const double last_speed =
             last_speed_denominator > 0.0 ? (1.0 / last_speed_denominator) : 1.0;

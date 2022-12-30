@@ -3,8 +3,10 @@
 
 #include "Core/State.h"
 
-#include <lzo/lzo1x.h>
+#include <atomic>
+#include <condition_variable>
 #include <map>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -13,16 +15,18 @@
 
 #include <fmt/format.h>
 
+#include <lzo/lzo1x.h>
+
 #include "Common/ChunkFile.h"
 #include "Common/CommonTypes.h"
 #include "Common/Event.h"
 #include "Common/FileUtil.h"
 #include "Common/IOFile.h"
 #include "Common/MsgHandler.h"
-#include "Common/ScopeGuard.h"
 #include "Common/Thread.h"
 #include "Common/Timer.h"
 #include "Common/Version.h"
+#include "Common/WorkQueueThread.h"
 
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
@@ -35,6 +39,7 @@
 #include "Core/Movie.h"
 #include "Core/NetPlayClient.h"
 #include "Core/PowerPC/PowerPC.h"
+#include "Core/System.h"
 
 #include "VideoCommon/FrameDump.h"
 #include "VideoCommon/OnScreenDisplay.h"
@@ -62,19 +67,35 @@ static HEAP_ALLOC(wrkmem, LZO1X_1_MEM_COMPRESS);
 static AfterLoadCallbackFunc s_on_after_load_callback;
 
 // Temporary undo state buffer
-static std::vector<u8> g_undo_load_buffer;
-static std::vector<u8> g_current_buffer;
+static std::vector<u8> s_undo_load_buffer;
+static std::mutex s_undo_load_buffer_mutex;
+
 static std::mutex s_load_or_save_in_progress_mutex;
 
-static std::mutex g_cs_undo_load_buffer;
-static std::mutex g_cs_current_buffer;
-static Common::Event g_compressAndDumpStateSyncEvent;
+struct CompressAndDumpState_args
+{
+  std::vector<u8> buffer_vector;
+  std::string filename;
+  std::shared_ptr<Common::Event> state_write_done_event;
+};
 
-static std::recursive_mutex g_save_thread_mutex;
-static std::thread g_save_thread;
+// Protects against simultaneous reads and writes to the final savestate location from multiple
+// threads.
+static std::mutex s_save_thread_mutex;
+
+// Queue for compressing and writing savestates to disk.
+static Common::WorkQueueThread<CompressAndDumpState_args> s_save_thread;
+
+// Keeps track of savestate writes that are currently happening, so we don't load a state while
+// another one is still saving. This is particularly important so if you save to a slot and then
+// immediately load from the same one, you don't accidentally load the state that's still at that
+// file path before the write is done.
+static std::mutex s_state_writes_in_queue_mutex;
+static size_t s_state_writes_in_queue;
+static std::condition_variable s_state_write_queue_is_empty;
 
 // Don't forget to increase this after doing changes on the savestate system
-constexpr u32 STATE_VERSION = 145;  // Last changed in PR 10879
+constexpr u32 STATE_VERSION = 156;  // Last changed in PR 11184
 
 // Maps savestate versions to Dolphin versions.
 // Versions after 42 don't need to be added to this list,
@@ -173,17 +194,19 @@ static void DoState(PointerWrap& p)
   }
 
   // Check to make sure the emulated memory sizes are the same as the savestate
-  u32 state_mem1_size = Memory::GetRamSizeReal();
-  u32 state_mem2_size = Memory::GetExRamSizeReal();
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
+  u32 state_mem1_size = memory.GetRamSizeReal();
+  u32 state_mem2_size = memory.GetExRamSizeReal();
   p.Do(state_mem1_size);
   p.Do(state_mem2_size);
-  if (state_mem1_size != Memory::GetRamSizeReal() || state_mem2_size != Memory::GetExRamSizeReal())
+  if (state_mem1_size != memory.GetRamSizeReal() || state_mem2_size != memory.GetExRamSizeReal())
   {
     OSD::AddMessage(fmt::format("Memory size mismatch!\n"
                                 "Current | MEM1 {:08X} ({:3}MB)    MEM2 {:08X} ({:3}MB)\n"
                                 "State   | MEM1 {:08X} ({:3}MB)    MEM2 {:08X} ({:3}MB)",
-                                Memory::GetRamSizeReal(), Memory::GetRamSizeReal() / 0x100000U,
-                                Memory::GetExRamSizeReal(), Memory::GetExRamSizeReal() / 0x100000U,
+                                memory.GetRamSizeReal(), memory.GetRamSizeReal() / 0x100000U,
+                                memory.GetExRamSizeReal(), memory.GetExRamSizeReal() / 0x100000U,
                                 state_mem1_size, state_mem1_size / 0x100000U, state_mem2_size,
                                 state_mem2_size / 0x100000U));
     p.SetMeasureMode();
@@ -204,7 +227,7 @@ static void DoState(PointerWrap& p)
   p.DoMarker("PowerPC");
   // CoreTiming needs to be restored before restoring Hardware because
   // the controller code might need to schedule an event if the controller has changed.
-  CoreTiming::DoState(p);
+  system.GetCoreTiming().DoState(p);
   p.DoMarker("CoreTiming");
   HW::DoState(p);
   p.DoMarker("HW");
@@ -270,6 +293,35 @@ static int GetEmptySlot(std::map<double, int> m)
   return -1;
 }
 
+// Arbitrarily chosen value (38 years) that is subtracted in GetSystemTimeAsDouble()
+// to increase sub-second precision of the resulting double timestamp
+static constexpr int DOUBLE_TIME_OFFSET = (38 * 365 * 24 * 60 * 60);
+
+static double GetSystemTimeAsDouble()
+{
+  const auto since_epoch = std::chrono::system_clock::now().time_since_epoch();
+
+  const auto since_double_time_epoch = since_epoch - std::chrono::seconds(DOUBLE_TIME_OFFSET);
+  return std::chrono::duration_cast<std::chrono::duration<double>>(since_double_time_epoch).count();
+}
+
+static std::string SystemTimeAsDoubleToString(double time)
+{
+  // revert adjustments from GetSystemTimeAsDouble() to get a normal Unix timestamp again
+  time_t seconds = (time_t)time + DOUBLE_TIME_OFFSET;
+  tm* localTime = localtime(&seconds);
+
+#ifdef _WIN32
+  wchar_t tmp[32] = {};
+  wcsftime(tmp, std::size(tmp), L"%x %X", localTime);
+  return WStringToUTF8(tmp);
+#else
+  char tmp[32] = {};
+  strftime(tmp, sizeof(tmp), "%x %X", localTime);
+  return tmp;
+#endif
+}
+
 static std::string MakeStateFilename(int number);
 
 // read state timestamps
@@ -284,7 +336,7 @@ static std::map<double, int> GetSavedStates()
     {
       if (ReadHeader(filename, header))
       {
-        double d = Common::Timer::GetDoubleTime() - header.time;
+        double d = GetSystemTimeAsDouble() - header.time;
 
         // increase time until unique value is obtained
         while (m.find(d) != m.end())
@@ -297,58 +349,24 @@ static std::map<double, int> GetSavedStates()
   return m;
 }
 
-struct CompressAndDumpState_args
+static void CompressAndDumpState(CompressAndDumpState_args& save_args)
 {
-  std::vector<u8>* buffer_vector = nullptr;
-  std::mutex* buffer_mutex = nullptr;
-  std::string filename;
-  bool wait = false;
-};
+  const u8* const buffer_data = save_args.buffer_vector.data();
+  const size_t buffer_size = save_args.buffer_vector.size();
+  const std::string& filename = save_args.filename;
 
-static void CompressAndDumpState(CompressAndDumpState_args save_args)
-{
-  std::lock_guard lk(*save_args.buffer_mutex);
-
-  // ScopeGuard is used here to ensure that g_compressAndDumpStateSyncEvent.Set()
-  // will be called and that it will happen after the IOFile is closed.
-  // Both ScopeGuard's and IOFile's finalization occur at respective object destruction time.
-  // As Local (stack) objects are destructed in the reverse order of construction and "ScopeGuard
-  // on_exit"
-  // is created before the "IOFile f", it is guaranteed that the file will be finalized before
-  // the ScopeGuard's finalization (i.e. "g_compressAndDumpStateSyncEvent.Set()" call).
-  Common::ScopeGuard on_exit([]() { g_compressAndDumpStateSyncEvent.Set(); });
-  // If it is not required to wait, we call finalizer early (and it won't be called again at
-  // destruction).
-  if (!save_args.wait)
-    on_exit.Exit();
-
-  const u8* const buffer_data = &(*(save_args.buffer_vector))[0];
-  const size_t buffer_size = (save_args.buffer_vector)->size();
-  std::string& filename = save_args.filename;
-
-  // For easy debugging
-  Common::SetCurrentThreadName("SaveState thread");
-
-  // Moving to last overwritten save-state
-  if (File::Exists(filename))
+  // Find free temporary filename.
+  // TODO: The file exists check and the actual opening of the file should be atomic, we don't have
+  // functions for that.
+  std::string temp_filename;
+  size_t temp_counter = static_cast<size_t>(Common::CurrentThreadId());
+  do
   {
-    if (File::Exists(File::GetUserPath(D_STATESAVES_IDX) + "lastState.sav"))
-      File::Delete((File::GetUserPath(D_STATESAVES_IDX) + "lastState.sav"));
-    if (File::Exists(File::GetUserPath(D_STATESAVES_IDX) + "lastState.sav.dtm"))
-      File::Delete((File::GetUserPath(D_STATESAVES_IDX) + "lastState.sav.dtm"));
+    temp_filename = fmt::format("{}{}.tmp", filename, temp_counter);
+    ++temp_counter;
+  } while (File::Exists(temp_filename));
 
-    if (!File::Rename(filename, File::GetUserPath(D_STATESAVES_IDX) + "lastState.sav"))
-      Core::DisplayMessage("Failed to move previous state to state undo backup", 1000);
-    else if (File::Exists(filename + ".dtm"))
-      File::Rename(filename + ".dtm", File::GetUserPath(D_STATESAVES_IDX) + "lastState.sav.dtm");
-  }
-
-  if ((Movie::IsMovieActive()) && !Movie::IsJustStartingRecordingInputFromSaveState())
-    Movie::SaveRecording(filename + ".dtm");
-  else if (!Movie::IsMovieActive())
-    File::Delete(filename + ".dtm");
-
-  File::IOFile f(filename, "wb");
+  File::IOFile f(temp_filename, "wb");
   if (!f)
   {
     Core::DisplayMessage("Could not save state", 2000);
@@ -359,7 +377,7 @@ static void CompressAndDumpState(CompressAndDumpState_args save_args)
   StateHeader header{};
   SConfig::GetInstance().GetGameID().copy(header.gameID, std::size(header.gameID));
   header.size = s_use_compression ? (u32)buffer_size : 0;
-  header.time = Common::Timer::GetDoubleTime();
+  header.time = GetSystemTimeAsDouble();
 
   f.WriteArray(&header, 1);
 
@@ -398,6 +416,44 @@ static void CompressAndDumpState(CompressAndDumpState_args save_args)
     f.WriteBytes(buffer_data, buffer_size);
   }
 
+  const std::string last_state_filename = File::GetUserPath(D_STATESAVES_IDX) + "lastState.sav";
+  const std::string last_state_dtmname = last_state_filename + ".dtm";
+  const std::string dtmname = filename + ".dtm";
+
+  {
+    std::lock_guard lk(s_save_thread_mutex);
+
+    // Backup existing state (overwriting an existing backup, if any).
+    if (File::Exists(filename))
+    {
+      if (File::Exists(last_state_filename))
+        File::Delete((last_state_filename));
+      if (File::Exists(last_state_dtmname))
+        File::Delete((last_state_dtmname));
+
+      if (!File::Rename(filename, last_state_filename))
+      {
+        Core::DisplayMessage("Failed to move previous state to state undo backup", 1000);
+      }
+      else if (File::Exists(dtmname))
+      {
+        if (!File::Rename(dtmname, last_state_dtmname))
+          Core::DisplayMessage("Failed to move previous state's dtm to state undo backup", 1000);
+      }
+    }
+
+    if ((Movie::IsMovieActive()) && !Movie::IsJustStartingRecordingInputFromSaveState())
+      Movie::SaveRecording(dtmname);
+    else if (!Movie::IsMovieActive())
+      File::Delete(dtmname);
+
+    // Move written state to final location.
+    // TODO: This should also be atomic. This is possible on all systems, but needs a special
+    // implementation of IOFile on Windows.
+    f.Close();
+    File::Rename(temp_filename, filename);
+  }
+
   Core::DisplayMessage(fmt::format("Saved State to {}", filename), 2000);
   Host_UpdateMainFrame();
 }
@@ -410,6 +466,11 @@ void SaveAs(const std::string& filename, bool wait)
 
   Core::RunOnCPUThread(
       [&] {
+        {
+          std::lock_guard lk(s_state_writes_in_queue_mutex);
+          ++s_state_writes_in_queue;
+        }
+
         // Measure the size of the buffer.
         u8* ptr = nullptr;
         PointerWrap p_measure(&ptr, 0, PointerWrap::Mode::Measure);
@@ -417,37 +478,41 @@ void SaveAs(const std::string& filename, bool wait)
         const size_t buffer_size = reinterpret_cast<size_t>(ptr);
 
         // Then actually do the write.
-        bool is_write_mode;
-        {
-          std::lock_guard lk2(g_cs_current_buffer);
-          g_current_buffer.resize(buffer_size);
-          ptr = g_current_buffer.data();
-          PointerWrap p(&ptr, buffer_size, PointerWrap::Mode::Write);
-          DoState(p);
-          is_write_mode = p.IsWriteMode();
-        }
+        std::vector<u8> current_buffer;
+        current_buffer.resize(buffer_size);
+        ptr = current_buffer.data();
+        PointerWrap p(&ptr, buffer_size, PointerWrap::Mode::Write);
+        DoState(p);
 
-        if (is_write_mode)
+        if (p.IsWriteMode())
         {
           Core::DisplayMessage("Saving State...", 1000);
 
-          CompressAndDumpState_args save_args;
-          save_args.buffer_vector = &g_current_buffer;
-          save_args.buffer_mutex = &g_cs_current_buffer;
-          save_args.filename = filename;
-          save_args.wait = wait;
+          std::shared_ptr<Common::Event> sync_event;
 
+          CompressAndDumpState_args save_args;
+          save_args.buffer_vector = std::move(current_buffer);
+          save_args.filename = filename;
+          if (wait)
           {
-            std::lock_guard lk3(g_save_thread_mutex);
-            Flush();
-            g_save_thread = std::thread(CompressAndDumpState, save_args);
+            sync_event = std::make_shared<Common::Event>();
+            save_args.state_write_done_event = sync_event;
           }
 
-          g_compressAndDumpStateSyncEvent.Wait();
+          s_save_thread.EmplaceItem(std::move(save_args));
+
+          if (sync_event)
+            sync_event->Wait();
         }
         else
         {
           // someone aborted the save by changing the mode?
+          {
+            // Note: The worker thread takes care of this in the other branch.
+            std::lock_guard lk(s_state_writes_in_queue_mutex);
+            if (--s_state_writes_in_queue == 0)
+              s_state_write_queue_is_empty.notify_all();
+          }
           Core::DisplayMessage("Unable to save: Internal DoState Error", 4000);
         }
       },
@@ -456,7 +521,9 @@ void SaveAs(const std::string& filename, bool wait)
 
 bool ReadHeader(const std::string& filename, StateHeader& header)
 {
-  Flush();
+  // ensure that the savestate write thread isn't moving around states while we do this
+  std::lock_guard lk(s_save_thread_mutex);
+
   File::IOFile f(filename, "rb");
   return f.ReadArray(&header, 1);
 }
@@ -471,7 +538,7 @@ std::string GetInfoStringOfSlot(int slot, bool translate)
   if (!ReadHeader(filename, header))
     return translate ? Common::GetStringT("Unknown") : "Unknown";
 
-  return Common::Timer::GetDateTimeFormatted(header.time);
+  return SystemTimeAsDoubleToString(header.time);
 }
 
 u64 GetUnixTimeOfSlot(int slot)
@@ -481,14 +548,28 @@ u64 GetUnixTimeOfSlot(int slot)
     return 0;
 
   constexpr u64 MS_PER_SEC = 1000;
-  return static_cast<u64>(header.time * MS_PER_SEC) +
-         (Common::Timer::DOUBLE_TIME_OFFSET * MS_PER_SEC);
+  return static_cast<u64>(header.time * MS_PER_SEC) + (DOUBLE_TIME_OFFSET * MS_PER_SEC);
 }
 
 static void LoadFileStateData(const std::string& filename, std::vector<u8>& ret_data)
 {
-  Flush();
-  File::IOFile f(filename, "rb");
+  File::IOFile f;
+
+  {
+    // If a state is currently saving, wait for that to end or time out.
+    std::unique_lock lk(s_state_writes_in_queue_mutex);
+    if (s_state_writes_in_queue != 0)
+    {
+      if (!s_state_write_queue_is_empty.wait_for(lk, std::chrono::seconds(3),
+                                                 []() { return s_state_writes_in_queue == 0; }))
+      {
+        Core::DisplayMessage(
+            "A previous state saving operation is still in progress, cancelling load.", 2000);
+        return;
+      }
+    }
+    f.Open(filename, "rb");
+  }
 
   StateHeader header;
   if (!f.ReadArray(&header, 1))
@@ -572,12 +653,13 @@ void LoadAs(const std::string& filename)
         // Save temp buffer for undo load state
         if (!Movie::IsJustStartingRecordingInputFromSaveState())
         {
-          std::lock_guard lk2(g_cs_undo_load_buffer);
-          SaveToBuffer(g_undo_load_buffer);
+          std::lock_guard lk2(s_undo_load_buffer_mutex);
+          SaveToBuffer(s_undo_load_buffer);
+          const std::string dtmpath = File::GetUserPath(D_STATESAVES_IDX) + "undo.dtm";
           if (Movie::IsMovieActive())
-            Movie::SaveRecording(File::GetUserPath(D_STATESAVES_IDX) + "undo.dtm");
-          else if (File::Exists(File::GetUserPath(D_STATESAVES_IDX) + "undo.dtm"))
-            File::Delete(File::GetUserPath(D_STATESAVES_IDX) + "undo.dtm");
+            Movie::SaveRecording(dtmpath);
+          else if (File::Exists(dtmpath))
+            File::Delete(dtmpath);
         }
 
         bool loaded = false;
@@ -633,23 +715,31 @@ void Init()
 {
   if (lzo_init() != LZO_E_OK)
     PanicAlertFmtT("Internal LZO Error - lzo_init() failed");
+
+  s_save_thread.Reset([](CompressAndDumpState_args args) {
+    CompressAndDumpState(args);
+
+    {
+      std::lock_guard lk(s_state_writes_in_queue_mutex);
+      if (--s_state_writes_in_queue == 0)
+        s_state_write_queue_is_empty.notify_all();
+    }
+
+    if (args.state_write_done_event)
+      args.state_write_done_event->Set();
+  });
 }
 
 void Shutdown()
 {
-  Flush();
+  s_save_thread.Shutdown();
 
   // swapping with an empty vector, rather than clear()ing
   // this gives a better guarantee to free the allocated memory right NOW (as opposed to, actually,
   // never)
   {
-    std::lock_guard lk(g_cs_current_buffer);
-    std::vector<u8>().swap(g_current_buffer);
-  }
-
-  {
-    std::lock_guard lk(g_cs_undo_load_buffer);
-    std::vector<u8>().swap(g_undo_load_buffer);
+    std::lock_guard lk(s_undo_load_buffer_mutex);
+    std::vector<u8>().swap(s_undo_load_buffer);
   }
 }
 
@@ -700,30 +790,28 @@ void SaveFirstSaved()
   }
 }
 
-void Flush()
-{
-  std::lock_guard lk(g_save_thread_mutex);
-
-  // If already saving state, wait for it to finish
-  if (g_save_thread.joinable())
-    g_save_thread.join();
-}
-
 // Load the last state before loading the state
 void UndoLoadState()
 {
-  std::lock_guard lk(g_cs_undo_load_buffer);
-  if (!g_undo_load_buffer.empty())
+  std::lock_guard lk(s_undo_load_buffer_mutex);
+  if (!s_undo_load_buffer.empty())
   {
-    if (File::Exists(File::GetUserPath(D_STATESAVES_IDX) + "undo.dtm") || (!Movie::IsMovieActive()))
+    if (Movie::IsMovieActive())
     {
-      LoadFromBuffer(g_undo_load_buffer);
-      if (Movie::IsMovieActive())
-        Movie::LoadInput(File::GetUserPath(D_STATESAVES_IDX) + "undo.dtm");
+      const std::string dtmpath = File::GetUserPath(D_STATESAVES_IDX) + "undo.dtm";
+      if (File::Exists(dtmpath))
+      {
+        LoadFromBuffer(s_undo_load_buffer);
+        Movie::LoadInput(dtmpath);
+      }
+      else
+      {
+        PanicAlertFmtT("No undo.dtm found, aborting undo load state to prevent movie desyncs");
+      }
     }
     else
     {
-      PanicAlertFmtT("No undo.dtm found, aborting undo load state to prevent movie desyncs");
+      LoadFromBuffer(s_undo_load_buffer);
     }
   }
   else

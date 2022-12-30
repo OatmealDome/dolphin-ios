@@ -83,7 +83,8 @@ std::string VideoBackendBase::BadShaderFilename(const char* shader_stage, int co
 
 void VideoBackendBase::Video_ExitLoop()
 {
-  Fifo::ExitGpuLoop();
+  auto& system = Core::System::GetInstance();
+  system.GetFifo().ExitGpuLoop(system);
 }
 
 // Run from the CPU thread (from VideoInterface.cpp)
@@ -92,7 +93,8 @@ void VideoBackendBase::Video_OutputXFB(u32 xfb_addr, u32 fb_width, u32 fb_stride
 {
   if (m_initialized && g_renderer && !g_ActiveConfig.bImmediateXFB)
   {
-    Fifo::SyncGPU(Fifo::SyncGPUReason::Swap);
+    auto& system = Core::System::GetInstance();
+    system.GetFifo().SyncGPU(Fifo::SyncGPUReason::Swap);
 
     AsyncRequests::Event e;
     e.time = ticks;
@@ -147,7 +149,8 @@ u32 VideoBackendBase::Video_GetQueryResult(PerfQueryType type)
     return 0;
   }
 
-  Fifo::SyncGPU(Fifo::SyncGPUReason::PerfQuery);
+  auto& system = Core::System::GetInstance();
+  system.GetFifo().SyncGPU(Fifo::SyncGPUReason::PerfQuery);
 
   AsyncRequests::Event e;
   e.time = 0;
@@ -185,7 +188,8 @@ u16 VideoBackendBase::Video_GetBoundingBox(int index)
     warn_once = false;
   }
 
-  Fifo::SyncGPU(Fifo::SyncGPUReason::BBox);
+  auto& system = Core::System::GetInstance();
+  system.GetFifo().SyncGPU(Fifo::SyncGPUReason::BBox);
 
   AsyncRequests::Event e;
   u16 result;
@@ -226,11 +230,13 @@ const std::vector<std::unique_ptr<VideoBackendBase>>& VideoBackendBase::GetAvail
     backends.push_back(std::make_unique<DX11::VideoBackend>());
     backends.push_back(std::make_unique<DX12::VideoBackend>());
 #endif
+#ifdef __APPLE__
+    backends.push_back(std::make_unique<Metal::VideoBackend>());
+#endif
 #ifdef HAS_VULKAN
 #ifdef __APPLE__
     // Emplace the Vulkan backend at the beginning so it takes precedence over OpenGL.
     backends.emplace(backends.begin(), std::make_unique<Vulkan::VideoBackend>());
-    backends.push_back(std::make_unique<Metal::VideoBackend>());
 #else
     backends.push_back(std::make_unique<Vulkan::VideoBackend>());
 #endif
@@ -272,6 +278,7 @@ void VideoBackendBase::PopulateBackendInfo()
   // a value from the previously used renderer
   g_Config.backend_info = {};
   ActivateBackend(Config::Get(Config::MAIN_GFX_BACKEND));
+  g_Config.backend_info.DisplayName = g_video_backend->GetDisplayName();
   g_video_backend->InitBackendInfo();
   // We validate the config after initializing the backend info, as system-specific settings
   // such as anti-aliasing, or the selected adapter may be invalid, and should be checked.
@@ -288,7 +295,8 @@ void VideoBackendBase::PopulateBackendInfoFromUI()
 
 void VideoBackendBase::DoState(PointerWrap& p)
 {
-  if (!Core::System::GetInstance().IsDualCoreMode())
+  auto& system = Core::System::GetInstance();
+  if (!system.IsDualCoreMode())
   {
     VideoCommon_DoState(p);
     return;
@@ -301,7 +309,7 @@ void VideoBackendBase::DoState(PointerWrap& p)
 
   // Let the GPU thread sleep after loading the state, so we're not spinning if paused after loading
   // a state. The next GP burst will wake it up again.
-  Fifo::GpuMaySleep();
+  system.GetFifo().GpuMaySleep();
 }
 
 void VideoBackendBase::InitializeShared()
@@ -313,14 +321,16 @@ void VideoBackendBase::InitializeShared()
   // do not initialize again for the config window
   m_initialized = true;
 
-  CommandProcessor::Init();
-  Fifo::Init();
-  PixelEngine::Init();
+  auto& system = Core::System::GetInstance();
+  auto& command_processor = system.GetCommandProcessor();
+  command_processor.Init(system);
+  system.GetFifo().Init(system);
+  system.GetPixelEngine().Init(system);
   BPInit();
   VertexLoaderManager::Init();
-  VertexShaderManager::Init();
-  GeometryShaderManager::Init();
-  PixelShaderManager::Init();
+  system.GetVertexShaderManager().Init();
+  system.GetGeometryShaderManager().Init();
+  system.GetPixelShaderManager().Init();
   TMEM::Init();
 
   g_Config.VerifyValidity();
@@ -331,6 +341,7 @@ void VideoBackendBase::ShutdownShared()
 {
   m_initialized = false;
 
+  auto& system = Core::System::GetInstance();
   VertexLoaderManager::Clear();
-  Fifo::Shutdown();
+  system.GetFifo().Shutdown();
 }

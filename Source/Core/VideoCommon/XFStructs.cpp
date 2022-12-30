@@ -10,22 +10,26 @@
 
 #include "Core/DolphinAnalytics.h"
 #include "Core/HW/Memmap.h"
+#include "Core/System.h"
 
 #include "VideoCommon/CPMemory.h"
 #include "VideoCommon/Fifo.h"
 #include "VideoCommon/GeometryShaderManager.h"
 #include "VideoCommon/PixelShaderManager.h"
+#include "VideoCommon/VertexLoaderManager.h"
 #include "VideoCommon/VertexManagerBase.h"
 #include "VideoCommon/VertexShaderManager.h"
 #include "VideoCommon/XFMemory.h"
 
-static void XFMemWritten(u32 transferSize, u32 baseAddress)
+static void XFMemWritten(VertexShaderManager& vertex_shader_manager, u32 transferSize,
+                         u32 baseAddress)
 {
   g_vertex_manager->Flush();
-  VertexShaderManager::InvalidateXFRange(baseAddress, baseAddress + transferSize);
+  vertex_shader_manager.InvalidateXFRange(baseAddress, baseAddress + transferSize);
 }
 
-static void XFRegWritten(u32 address, u32 value)
+static void XFRegWritten(Core::System& system, VertexShaderManager& vertex_shader_manager,
+                         u32 address, u32 value)
 {
   if (address >= XFMEM_REGISTERS_START && address < XFMEM_REGISTERS_END)
   {
@@ -53,12 +57,13 @@ static void XFRegWritten(u32 address, u32 value)
     }
 
     case XFMEM_VTXSPECS:  //__GXXfVtxSpecs, wrote 0004
+      VertexLoaderManager::g_needs_cp_xf_consistency_check = true;
       break;
 
     case XFMEM_SETNUMCHAN:
       if (xfmem.numChan.numColorChans != (value & 3))
         g_vertex_manager->Flush();
-      VertexShaderManager::SetLightingConfigChanged();
+      vertex_shader_manager.SetLightingConfigChanged();
       break;
 
     case XFMEM_SETCHAN0_AMBCOLOR:  // Channel Ambient Color
@@ -68,7 +73,7 @@ static void XFRegWritten(u32 address, u32 value)
       if (xfmem.ambColor[chan] != value)
       {
         g_vertex_manager->Flush();
-        VertexShaderManager::SetMaterialColorChanged(chan);
+        vertex_shader_manager.SetMaterialColorChanged(chan);
       }
       break;
     }
@@ -80,7 +85,7 @@ static void XFRegWritten(u32 address, u32 value)
       if (xfmem.matColor[chan] != value)
       {
         g_vertex_manager->Flush();
-        VertexShaderManager::SetMaterialColorChanged(chan + 2);
+        vertex_shader_manager.SetMaterialColorChanged(chan + 2);
       }
       break;
     }
@@ -91,20 +96,22 @@ static void XFRegWritten(u32 address, u32 value)
     case XFMEM_SETCHAN1_ALPHA:
       if (((u32*)&xfmem)[address] != (value & 0x7fff))
         g_vertex_manager->Flush();
-      VertexShaderManager::SetLightingConfigChanged();
+      vertex_shader_manager.SetLightingConfigChanged();
       break;
 
     case XFMEM_DUALTEX:
       if (xfmem.dualTexTrans.enabled != bool(value & 1))
         g_vertex_manager->Flush();
-      VertexShaderManager::SetTexMatrixInfoChanged(-1);
+      vertex_shader_manager.SetTexMatrixInfoChanged(-1);
       break;
 
     case XFMEM_SETMATRIXINDA:
-      VertexShaderManager::SetTexMatrixChangedA(value);
+      vertex_shader_manager.SetTexMatrixChangedA(value);
+      VertexLoaderManager::g_needs_cp_xf_consistency_check = true;
       break;
     case XFMEM_SETMATRIXINDB:
-      VertexShaderManager::SetTexMatrixChangedB(value);
+      vertex_shader_manager.SetTexMatrixChangedB(value);
+      VertexLoaderManager::g_needs_cp_xf_consistency_check = true;
       break;
 
     case XFMEM_SETVIEWPORT:
@@ -114,9 +121,9 @@ static void XFRegWritten(u32 address, u32 value)
     case XFMEM_SETVIEWPORT + 4:
     case XFMEM_SETVIEWPORT + 5:
       g_vertex_manager->Flush();
-      VertexShaderManager::SetViewportChanged();
-      PixelShaderManager::SetViewportChanged();
-      GeometryShaderManager::SetViewportChanged();
+      vertex_shader_manager.SetViewportChanged();
+      system.GetPixelShaderManager().SetViewportChanged();
+      system.GetGeometryShaderManager().SetViewportChanged();
       break;
 
     case XFMEM_SETPROJECTION:
@@ -127,8 +134,8 @@ static void XFRegWritten(u32 address, u32 value)
     case XFMEM_SETPROJECTION + 5:
     case XFMEM_SETPROJECTION + 6:
       g_vertex_manager->Flush();
-      VertexShaderManager::SetProjectionChanged();
-      GeometryShaderManager::SetProjectionChanged();
+      vertex_shader_manager.SetProjectionChanged();
+      system.GetGeometryShaderManager().SetProjectionChanged();
       break;
 
     case XFMEM_SETNUMTEXGENS:  // GXSetNumTexGens
@@ -145,7 +152,7 @@ static void XFRegWritten(u32 address, u32 value)
     case XFMEM_SETTEXMTXINFO + 6:
     case XFMEM_SETTEXMTXINFO + 7:
       g_vertex_manager->Flush();
-      VertexShaderManager::SetTexMatrixInfoChanged(address - XFMEM_SETTEXMTXINFO);
+      vertex_shader_manager.SetTexMatrixInfoChanged(address - XFMEM_SETTEXMTXINFO);
       break;
 
     case XFMEM_SETPOSTMTXINFO:
@@ -157,7 +164,7 @@ static void XFRegWritten(u32 address, u32 value)
     case XFMEM_SETPOSTMTXINFO + 6:
     case XFMEM_SETPOSTMTXINFO + 7:
       g_vertex_manager->Flush();
-      VertexShaderManager::SetTexMatrixInfoChanged(address - XFMEM_SETPOSTMTXINFO);
+      vertex_shader_manager.SetTexMatrixInfoChanged(address - XFMEM_SETPOSTMTXINFO);
       break;
 
     // --------------
@@ -210,6 +217,9 @@ void LoadXFReg(u16 base_address, u8 transfer_size, const u8* data)
     end_address = XFMEM_REGISTERS_END;
   }
 
+  auto& system = Core::System::GetInstance();
+  auto& vertex_shader_manager = system.GetVertexShaderManager();
+
   // write to XF mem
   if (base_address < XFMEM_REGISTERS_START)
   {
@@ -222,7 +232,7 @@ void LoadXFReg(u16 base_address, u8 transfer_size, const u8* data)
       base_address = XFMEM_REGISTERS_START;
     }
 
-    XFMemWritten(xf_mem_transfer_size, xf_mem_base);
+    XFMemWritten(vertex_shader_manager, xf_mem_transfer_size, xf_mem_base);
     for (u32 i = 0; i < xf_mem_transfer_size; i++)
     {
       ((u32*)&xfmem)[xf_mem_base + i] = Common::swap32(data);
@@ -237,7 +247,7 @@ void LoadXFReg(u16 base_address, u8 transfer_size, const u8* data)
     {
       const u32 value = Common::swap32(data);
 
-      XFRegWritten(address, value);
+      XFRegWritten(system, vertex_shader_manager, address, value);
       ((u32*)&xfmem)[address] = value;
 
       data += 4;
@@ -252,22 +262,27 @@ void LoadIndexedXF(CPArray array, u32 index, u16 address, u8 size)
 
   u32* currData = (u32*)(&xfmem) + address;
   u32* newData;
-  if (Fifo::UseDeterministicGPUThread())
+  auto& system = Core::System::GetInstance();
+  auto& fifo = system.GetFifo();
+  if (fifo.UseDeterministicGPUThread())
   {
-    newData = (u32*)Fifo::PopFifoAuxBuffer(size * sizeof(u32));
+    newData = (u32*)fifo.PopFifoAuxBuffer(size * sizeof(u32));
   }
   else
   {
-    newData = (u32*)Memory::GetPointer(g_main_cp_state.array_bases[array] +
-                                       g_main_cp_state.array_strides[array] * index);
+    auto& memory = system.GetMemory();
+    newData = (u32*)memory.GetPointer(g_main_cp_state.array_bases[array] +
+                                      g_main_cp_state.array_strides[array] * index);
   }
+
+  auto& vertex_shader_manager = system.GetVertexShaderManager();
   bool changed = false;
   for (u32 i = 0; i < size; ++i)
   {
     if (currData[i] != Common::swap32(newData[i]))
     {
       changed = true;
-      XFMemWritten(size, address);
+      XFMemWritten(vertex_shader_manager, size, address);
       break;
     }
   }
@@ -280,11 +295,13 @@ void LoadIndexedXF(CPArray array, u32 index, u16 address, u8 size)
 
 void PreprocessIndexedXF(CPArray array, u32 index, u16 address, u8 size)
 {
-  const u8* new_data = Memory::GetPointer(g_preprocess_cp_state.array_bases[array] +
-                                          g_preprocess_cp_state.array_strides[array] * index);
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
+  const u8* new_data = memory.GetPointer(g_preprocess_cp_state.array_bases[array] +
+                                         g_preprocess_cp_state.array_strides[array] * index);
 
   const size_t buf_size = size * sizeof(u32);
-  Fifo::PushFifoAuxBuffer(new_data, buf_size);
+  system.GetFifo().PushFifoAuxBuffer(new_data, buf_size);
 }
 
 std::pair<std::string, std::string> GetXFRegInfo(u32 address, u32 value)
@@ -321,17 +338,17 @@ std::pair<std::string, std::string> GetXFRegInfo(u32 address, u32 value)
 
   case XFMEM_SETCHAN0_AMBCOLOR:
     return std::make_pair(RegName(XFMEM_SETCHAN0_AMBCOLOR),
-                          fmt::format("Channel 0 Ambient Color: {:06x}", value));
+                          fmt::format("Channel 0 Ambient Color: {:08x}", value));
   case XFMEM_SETCHAN1_AMBCOLOR:
     return std::make_pair(RegName(XFMEM_SETCHAN1_AMBCOLOR),
-                          fmt::format("Channel 1 Ambient Color: {:06x}", value));
+                          fmt::format("Channel 1 Ambient Color: {:08x}", value));
 
   case XFMEM_SETCHAN0_MATCOLOR:
     return std::make_pair(RegName(XFMEM_SETCHAN0_MATCOLOR),
-                          fmt::format("Channel 0 Material Color: {:06x}", value));
+                          fmt::format("Channel 0 Material Color: {:08x}", value));
   case XFMEM_SETCHAN1_MATCOLOR:
     return std::make_pair(RegName(XFMEM_SETCHAN1_MATCOLOR),
-                          fmt::format("Channel 1 Material Color: {:06x}", value));
+                          fmt::format("Channel 1 Material Color: {:08x}", value));
 
   case XFMEM_SETCHAN0_COLOR:  // Channel Color
     return std::make_pair(RegName(XFMEM_SETCHAN0_COLOR),
@@ -474,8 +491,8 @@ std::string GetXFMemName(u32 address)
   }
   else if (address >= XFMEM_POSTMATRICES && address < XFMEM_POSTMATRICES_END)
   {
-    const u32 row = (address - XFMEM_POSMATRICES) / 4;
-    const u32 col = (address - XFMEM_POSMATRICES) % 4;
+    const u32 row = (address - XFMEM_POSTMATRICES) / 4;
+    const u32 col = (address - XFMEM_POSTMATRICES) % 4;
     return fmt::format("Post matrix row {:2d} col {:2d}", row, col);
   }
   else if (address >= XFMEM_LIGHTS && address < XFMEM_LIGHTS_END)
@@ -508,9 +525,9 @@ std::string GetXFMemName(u32 address)
     case 15:
       // Yagcd says light dir or "1/2 angle", dolphin has union for ddir or shalfangle.
       // It would make sense if d stood for direction and s for specular, but it's ddir and
-      // shalfhangle that have the comment "specular lights only", both at the same offset,
+      // shalfangle that have the comment "specular lights only", both at the same offset,
       // while dpos and sdir have none...
-      return fmt::format("Light {0} {1} direction or half hangle {1}", light, "xyz"[offset - 13]);
+      return fmt::format("Light {0} {1} direction or half angle {1}", light, "xyz"[offset - 13]);
     }
   }
   else

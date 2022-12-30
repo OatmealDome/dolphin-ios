@@ -13,6 +13,7 @@
 #include "Core/PowerPC/Interpreter/ExceptionUtils.h"
 #include "Core/PowerPC/PPCTables.h"
 #include "Core/PowerPC/PowerPC.h"
+#include "Core/System.h"
 
 using namespace Arm64Gen;
 
@@ -306,7 +307,8 @@ void JitArm64::mfspr(UGeckoInstruction inst)
     // An inline implementation of CoreTiming::GetFakeTimeBase, since in timer-heavy games the
     // cost of calling out to C for this is actually significant.
 
-    MOVP2R(Xg, &CoreTiming::g);
+    auto& core_timing_globals = Core::System::GetInstance().GetCoreTiming().GetGlobals();
+    MOVP2R(Xg, &core_timing_globals);
 
     LDR(IndexType::Unsigned, WA, PPC_REG, PPCSTATE_OFF(downcount));
     m_float_emit.SCVTF(SC, WA);
@@ -336,6 +338,7 @@ void JitArm64::mfspr(UGeckoInstruction inst)
 
     ADD(Xresult, XA, Xresult, ArithOption(Xresult, ShiftType::LSR, 3));
     STR(IndexType::Unsigned, Xresult, PPC_REG, PPCSTATE_OFF_SPR(SPR_TL));
+    static_assert((PPCSTATE_OFF_SPR(SPR_TL) & 0x7) == 0);
 
     if (CanMergeNextInstructions(1))
     {

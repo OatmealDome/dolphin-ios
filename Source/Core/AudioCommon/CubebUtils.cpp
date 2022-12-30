@@ -6,7 +6,9 @@
 #include <cstdarg>
 #include <cstddef>
 #include <cstring>
+#include <thread>
 
+#include "Common/Assert.h"
 #include "Common/CommonPaths.h"
 #include "Common/Logging/Log.h"
 #include "Common/Logging/LogManager.h"
@@ -30,7 +32,7 @@ static void LogCallback(const char* format, ...)
   va_start(args, format);
   const char* filename = va_arg(args, const char*) + s_path_cutoff_point;
   const int lineno = va_arg(args, int);
-  const std::string adapted_format(StripSpaces(format + strlen("%s:%d:")));
+  const std::string adapted_format(StripWhitespace(format + strlen("%s:%d:")));
   const std::string message = StringFromFormatV(adapted_format.c_str(), args);
   va_end(args);
 

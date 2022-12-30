@@ -39,10 +39,12 @@ bool IsSettingSaveable(const Config::Location& config_location)
     // TODO: Kill the current Android controller mappings system
     if (config_location.section == "Android")
     {
-      static constexpr std::array<const char*, 10> android_setting_saveable = {
-          "ControlScale",    "ControlOpacity",  "EmulationOrientation", "JoystickRelCenter",
-          "LastPlatformTab", "MotionControls",  "PhoneRumble",          "ShowInputOverlay",
-          "IRMode",          "IRAlwaysRecenter"};
+      static constexpr std::array<const char*, 14> android_setting_saveable = {
+          "ControlScale",       "ControlOpacity",     "EmulationOrientation",
+          "JoystickRelCenter",  "LastPlatformTab",    "MotionControls",
+          "PhoneRumble",        "ShowInputOverlay",   "IRMode",
+          "IRAlwaysRecenter",   "ShowGameTitles",     "InterfaceTheme",
+          "InterfaceThemeMode", "UseBlackBackgrounds"};
 
       return std::any_of(
           android_setting_saveable.cbegin(), android_setting_saveable.cend(),
@@ -124,12 +126,15 @@ bool IsSettingSaveable(const Config::Location& config_location)
       &Config::GetInfoForSIDevice(3).GetLocation(),
       &Config::MAIN_CPU_THREAD.GetLocation(),
       &Config::MAIN_MMU.GetLocation(),
+      &Config::MAIN_PAUSE_ON_PANIC.GetLocation(),
       &Config::MAIN_BB_DUMP_PORT.GetLocation(),
       &Config::MAIN_SYNC_GPU.GetLocation(),
       &Config::MAIN_SYNC_GPU_MAX_DISTANCE.GetLocation(),
       &Config::MAIN_SYNC_GPU_MIN_DISTANCE.GetLocation(),
       &Config::MAIN_SYNC_GPU_OVERCLOCK.GetLocation(),
       &Config::MAIN_OVERRIDE_BOOT_IOS.GetLocation(),
+      &Config::MAIN_GCI_FOLDER_A_PATH.GetLocation(),
+      &Config::MAIN_GCI_FOLDER_B_PATH.GetLocation(),
 
       // UI.General
 

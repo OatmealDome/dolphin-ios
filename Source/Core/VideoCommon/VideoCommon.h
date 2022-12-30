@@ -4,6 +4,7 @@
 #pragma once
 
 #include <algorithm>
+#include <bit>
 
 #include "Common/BitUtils.h"
 #include "Common/CommonTypes.h"
@@ -24,7 +25,7 @@ constexpr u32 MAX_XFB_WIDTH = 720;
 // that are next to each other in memory (TODO: handle that situation).
 constexpr u32 MAX_XFB_HEIGHT = 576;
 
-#define PRIM_LOG(...) DEBUG_LOG_FMT(VIDEO, ##__VA_ARGS__)
+#define PRIM_LOG(t, ...) DEBUG_LOG_FMT(VIDEO, t __VA_OPT__(, ) __VA_ARGS__)
 
 // warning: mapping buffer should be disabled to use this
 // #define LOG_VTX() DEBUG_LOG_FMT(VIDEO, "vtx: {} {} {}, ",
@@ -82,7 +83,7 @@ inline u32 CompressZ16(u32 z24depth, DepthFormat format)
   // If exponent is at the MAX (3, 7, or 12) then the next bit might still be a one, and can't
   // be skipped, so the mantissa simply contains the next 14/13/12 bits
 
-  u32 leading_ones = Common::CountLeadingZeros((~z24depth) << 8);
+  u32 leading_ones = static_cast<u32>(std::countl_one(z24depth << 8));
   bool next_bit_is_one = false;  // AKA: Did we clamp leading_ones?
   u32 exp_bits;
 

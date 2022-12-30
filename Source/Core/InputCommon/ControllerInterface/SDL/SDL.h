@@ -22,12 +22,11 @@
 #endif
 
 #include "InputCommon/ControllerInterface/CoreDevice.h"
+#include "InputCommon/ControllerInterface/InputBackend.h"
 
 namespace ciface::SDL
 {
-void Init();
-void DeInit();
-void PopulateDevices();
+std::unique_ptr<ciface::InputBackend> CreateInputBackend(ControllerInterface* controller_interface);
 
 class Joystick : public Core::Device
 {
@@ -162,16 +161,16 @@ private:
   class MotionInput : public Input
   {
   public:
-    MotionInput(const char* name, SDL_GameController* gc, SDL_SensorType type, int index,
+    MotionInput(std::string name, SDL_GameController* gc, SDL_SensorType type, int index,
                 ControlState scale)
-        : m_name(name), m_gc(gc), m_type(type), m_index(index), m_scale(scale){};
+        : m_name(std::move(name)), m_gc(gc), m_type(type), m_index(index), m_scale(scale){};
 
     std::string GetName() const override { return m_name; };
     bool IsDetectable() const override { return false; };
     ControlState GetState() const override;
 
   private:
-    const char* m_name;
+    std::string m_name;
 
     SDL_GameController* const m_gc;
     SDL_SensorType const m_type;
@@ -182,8 +181,6 @@ private:
 #endif
 
 public:
-  void UpdateInput() override;
-
   Joystick(SDL_Joystick* const joystick, const int sdl_index);
   ~Joystick();
 

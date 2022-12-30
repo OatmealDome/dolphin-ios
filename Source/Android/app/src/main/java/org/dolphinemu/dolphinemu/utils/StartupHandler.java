@@ -8,10 +8,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.preference.PreferenceManager;
 
 import org.dolphinemu.dolphinemu.NativeLibrary;
 import org.dolphinemu.dolphinemu.activities.EmulationActivity;
@@ -26,10 +26,6 @@ public final class StartupHandler
 
   public static void HandleInit(FragmentActivity parent)
   {
-    // Ask the user to grant write permission if relevant and not already granted
-    if (DirectoryInitialization.isWaitingForWriteAccess(parent))
-      PermissionsHandler.requestWritePermission(parent);
-
     // Ask the user if he wants to enable analytics if we haven't yet.
     Analytics.checkAnalyticsInit(parent);
 
@@ -116,7 +112,7 @@ public final class StartupHandler
     final Instant lastOpened = Instant.ofEpochMilli(lastOpen);
     if (current.isAfter(lastOpened.plus(6, ChronoUnit.HOURS)))
     {
-      new AfterDirectoryInitializationRunner().runWithoutLifecycle(context, false,
+      new AfterDirectoryInitializationRunner().runWithoutLifecycle(
               NativeLibrary::ReportStartToAnalytics);
     }
   }

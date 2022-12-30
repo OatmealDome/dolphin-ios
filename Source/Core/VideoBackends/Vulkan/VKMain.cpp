@@ -35,8 +35,9 @@ void VideoBackend::InitBackendInfo()
 
   if (LoadVulkanLibrary())
   {
-    VkInstance temp_instance =
-        VulkanContext::CreateVulkanInstance(WindowSystemType::Headless, false, false);
+    u32 vk_api_version = 0;
+    VkInstance temp_instance = VulkanContext::CreateVulkanInstance(WindowSystemType::Headless,
+                                                                   false, false, &vk_api_version);
     if (temp_instance)
     {
       if (LoadVulkanInstanceFunctions(temp_instance))
@@ -83,13 +84,13 @@ static bool IsHostGPULoggingEnabled()
                                                            Common::Log::LogLevel::LERROR);
 }
 
-// Helper method to determine whether to enable the debug report extension.
-static bool ShouldEnableDebugReports(bool enable_validation_layers)
+// Helper method to determine whether to enable the debug utils extension.
+static bool ShouldEnableDebugUtils(bool enable_validation_layers)
 {
-  // Enable debug reports if the Host GPU log option is checked, or validation layers are enabled.
+  // Enable debug utils if the Host GPU log option is checked, or validation layers are enabled.
   // The only issue here is that if Host GPU is not checked when the instance is created, the debug
   // report extension will not be enabled, requiring the game to be restarted before any reports
-  // will be logged. Otherwise, we'd have to enable debug reports on every instance, when most
+  // will be logged. Otherwise, we'd have to enable debug utils on every instance, when most
   // users will never check the Host GPU logging category.
   return enable_validation_layers || IsHostGPULoggingEnabled();
 }
@@ -113,9 +114,10 @@ bool VideoBackend::Initialize(const WindowSystemInfo& wsi)
   // Create Vulkan instance, needed before we can create a surface, or enumerate devices.
   // We use this instance to fill in backend info, then re-use it for the actual device.
   bool enable_surface = wsi.type != WindowSystemType::Headless;
-  bool enable_debug_reports = ShouldEnableDebugReports(enable_validation_layer);
-  VkInstance instance =
-      VulkanContext::CreateVulkanInstance(wsi.type, enable_debug_reports, enable_validation_layer);
+  bool enable_debug_utils = ShouldEnableDebugUtils(enable_validation_layer);
+  u32 vk_api_version = 0;
+  VkInstance instance = VulkanContext::CreateVulkanInstance(
+      wsi.type, enable_debug_utils, enable_validation_layer, &vk_api_version);
   if (instance == VK_NULL_HANDLE)
   {
     PanicAlertFmt("Failed to create Vulkan instance.");
@@ -171,8 +173,9 @@ bool VideoBackend::Initialize(const WindowSystemInfo& wsi)
   }
 
   // Now we can create the Vulkan device. VulkanContext takes ownership of the instance and surface.
-  g_vulkan_context = VulkanContext::Create(instance, gpu_list[selected_adapter_index], surface,
-                                           enable_debug_reports, enable_validation_layer);
+  g_vulkan_context =
+      VulkanContext::Create(instance, gpu_list[selected_adapter_index], surface, enable_debug_utils,
+                            enable_validation_layer, vk_api_version);
   if (!g_vulkan_context)
   {
     PanicAlertFmt("Failed to create Vulkan device");

@@ -5,6 +5,7 @@
 
 #include <mutex>
 
+#include "Core/System.h"
 #include "VideoCommon/Fifo.h"
 #include "VideoCommon/RenderBase.h"
 #include "VideoCommon/Statistics.h"
@@ -90,7 +91,8 @@ void AsyncRequests::PushEvent(const AsyncRequests::Event& event, bool blocking)
 
   m_queue.push(event);
 
-  Fifo::RunGpu();
+  auto& system = Core::System::GetInstance();
+  system.GetFifo().RunGpu(system);
   if (blocking)
   {
     m_cond.wait(lock, [this] { return m_queue.empty(); });
@@ -156,6 +158,10 @@ void AsyncRequests::HandleEvent(const AsyncRequests::Event& e)
 
   case Event::BBOX_READ:
     *e.bbox.data = g_renderer->BBoxRead(e.bbox.index);
+    break;
+
+  case Event::FIFO_RESET:
+    Core::System::GetInstance().GetFifo().ResetVideoBuffer();
     break;
 
   case Event::PERF_QUERY:

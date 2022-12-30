@@ -5,18 +5,20 @@ package org.dolphinemu.dolphinemu.dialogs;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.dolphinemu.dolphinemu.NativeLibrary;
 import org.dolphinemu.dolphinemu.R;
+import org.dolphinemu.dolphinemu.databinding.DialogGameDetailsBinding;
+import org.dolphinemu.dolphinemu.databinding.DialogGameDetailsTvBinding;
 import org.dolphinemu.dolphinemu.model.GameFile;
 import org.dolphinemu.dolphinemu.services.GameFileCacheManager;
-import org.dolphinemu.dolphinemu.utils.PicassoUtils;
+import org.dolphinemu.dolphinemu.utils.GlideUtils;
 
 public final class GameDetailsDialog extends DialogFragment
 {
@@ -33,90 +35,138 @@ public final class GameDetailsDialog extends DialogFragment
     return fragment;
   }
 
+  @NonNull
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState)
   {
     GameFile gameFile = GameFileCacheManager.addOrGet(getArguments().getString(ARG_GAME_PATH));
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-    ViewGroup contents = (ViewGroup) getActivity().getLayoutInflater()
-            .inflate(R.layout.dialog_game_details, null);
-
-    ImageView banner = contents.findViewById(R.id.banner);
-
-    TextView textTitle = contents.findViewById(R.id.text_game_title);
-    TextView textDescription = contents.findViewById(R.id.text_description);
-
-    TextView textCountry = contents.findViewById(R.id.text_country);
-    TextView textCompany = contents.findViewById(R.id.text_company);
-    TextView textGameId = contents.findViewById(R.id.text_game_id);
-    TextView textRevision = contents.findViewById(R.id.text_revision);
-
-    TextView textFileFormat = contents.findViewById(R.id.text_file_format);
-    TextView textCompression = contents.findViewById(R.id.text_compression);
-    TextView textBlockSize = contents.findViewById(R.id.text_block_size);
-
-    TextView labelFileFormat = contents.findViewById(R.id.label_file_format);
-    TextView labelCompression = contents.findViewById(R.id.label_compression);
-    TextView labelBlockSize = contents.findViewById(R.id.label_block_size);
-
     String country = getResources().getStringArray(R.array.countryNames)[gameFile.getCountry()];
     String description = gameFile.getDescription();
     String fileSize = NativeLibrary.FormatSize(gameFile.getFileSize(), 2);
 
-    textTitle.setText(gameFile.getTitle());
-    textDescription.setText(gameFile.getDescription());
-    if (description.isEmpty())
+    // TODO: Remove dialog_game_details_tv if we switch to an AppCompatActivity for leanback
+    DialogGameDetailsBinding binding;
+    DialogGameDetailsTvBinding tvBinding;
+    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+    if (requireActivity() instanceof AppCompatActivity)
     {
-      textDescription.setVisibility(View.GONE);
-    }
+      binding = DialogGameDetailsBinding.inflate(getLayoutInflater());
 
-    textCountry.setText(country);
-    textCompany.setText(gameFile.getCompany());
-    textGameId.setText(gameFile.getGameId());
-    textRevision.setText(String.valueOf(gameFile.getRevision()));
+      binding.textGameTitle.setText(gameFile.getTitle());
+      binding.textDescription.setText(gameFile.getDescription());
+      if (description.isEmpty())
+      {
+        binding.textDescription.setVisibility(View.GONE);
+      }
 
-    if (!gameFile.shouldShowFileFormatDetails())
-    {
-      labelFileFormat.setText(R.string.game_details_file_size);
-      textFileFormat.setText(fileSize);
+      binding.textCountry.setText(country);
+      binding.textCompany.setText(gameFile.getCompany());
+      binding.textGameId.setText(gameFile.getGameId());
+      binding.textRevision.setText(String.valueOf(gameFile.getRevision()));
 
-      labelCompression.setVisibility(View.GONE);
-      textCompression.setVisibility(View.GONE);
-      labelBlockSize.setVisibility(View.GONE);
-      textBlockSize.setVisibility(View.GONE);
+      if (!gameFile.shouldShowFileFormatDetails())
+      {
+        binding.labelFileFormat.setText(R.string.game_details_file_size);
+        binding.textFileFormat.setText(fileSize);
+
+        binding.labelCompression.setVisibility(View.GONE);
+        binding.textCompression.setVisibility(View.GONE);
+        binding.labelBlockSize.setVisibility(View.GONE);
+        binding.textBlockSize.setVisibility(View.GONE);
+      }
+      else
+      {
+        long blockSize = gameFile.getBlockSize();
+        String compression = gameFile.getCompressionMethod();
+
+        binding.textFileFormat.setText(
+                getResources().getString(R.string.game_details_size_and_format,
+                        gameFile.getFileFormatName(), fileSize));
+
+        if (compression.isEmpty())
+        {
+          binding.textCompression.setText(R.string.game_details_no_compression);
+        }
+        else
+        {
+          binding.textCompression.setText(gameFile.getCompressionMethod());
+        }
+
+        if (blockSize > 0)
+        {
+          binding.textBlockSize.setText(NativeLibrary.FormatSize(blockSize, 0));
+        }
+        else
+        {
+          binding.labelBlockSize.setVisibility(View.GONE);
+          binding.textBlockSize.setVisibility(View.GONE);
+        }
+      }
+
+      GlideUtils.loadGameBanner(binding.banner, gameFile);
+
+      builder.setView(binding.getRoot());
     }
     else
     {
-      long blockSize = gameFile.getBlockSize();
-      String compression = gameFile.getCompressionMethod();
+      tvBinding = DialogGameDetailsTvBinding.inflate(getLayoutInflater());
 
-      textFileFormat.setText(getResources().getString(R.string.game_details_size_and_format,
-              gameFile.getFileFormatName(), fileSize));
-
-      if (compression.isEmpty())
+      tvBinding.textGameTitle.setText(gameFile.getTitle());
+      tvBinding.textDescription.setText(gameFile.getDescription());
+      if (description.isEmpty())
       {
-        textCompression.setText(R.string.game_details_no_compression);
+        tvBinding.textDescription.setVisibility(View.GONE);
+      }
+
+      tvBinding.textCountry.setText(country);
+      tvBinding.textCompany.setText(gameFile.getCompany());
+      tvBinding.textGameId.setText(gameFile.getGameId());
+      tvBinding.textRevision.setText(String.valueOf(gameFile.getRevision()));
+
+      if (!gameFile.shouldShowFileFormatDetails())
+      {
+        tvBinding.labelFileFormat.setText(R.string.game_details_file_size);
+        tvBinding.textFileFormat.setText(fileSize);
+
+        tvBinding.labelCompression.setVisibility(View.GONE);
+        tvBinding.textCompression.setVisibility(View.GONE);
+        tvBinding.labelBlockSize.setVisibility(View.GONE);
+        tvBinding.textBlockSize.setVisibility(View.GONE);
       }
       else
       {
-        textCompression.setText(gameFile.getCompressionMethod());
+        long blockSize = gameFile.getBlockSize();
+        String compression = gameFile.getCompressionMethod();
+
+        tvBinding.textFileFormat.setText(
+                getResources().getString(R.string.game_details_size_and_format,
+                        gameFile.getFileFormatName(), fileSize));
+
+        if (compression.isEmpty())
+        {
+          tvBinding.textCompression.setText(R.string.game_details_no_compression);
+        }
+        else
+        {
+          tvBinding.textCompression.setText(gameFile.getCompressionMethod());
+        }
+
+        if (blockSize > 0)
+        {
+          tvBinding.textBlockSize.setText(NativeLibrary.FormatSize(blockSize, 0));
+        }
+        else
+        {
+          tvBinding.labelBlockSize.setVisibility(View.GONE);
+          tvBinding.textBlockSize.setVisibility(View.GONE);
+        }
       }
 
-      if (blockSize > 0)
-      {
-        textBlockSize.setText(NativeLibrary.FormatSize(blockSize, 0));
-      }
-      else
-      {
-        labelBlockSize.setVisibility(View.GONE);
-        textBlockSize.setVisibility(View.GONE);
-      }
+      GlideUtils.loadGameBanner(tvBinding.banner, gameFile);
+
+      builder.setView(tvBinding.getRoot());
     }
-
-    PicassoUtils.loadGameBanner(banner, gameFile);
-
-    builder.setView(contents);
     return builder.create();
   }
 }

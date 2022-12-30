@@ -8,6 +8,8 @@
 #include "Common/Logging/Log.h"
 #include "Common/MsgHandler.h"
 
+#include "Core/System.h"
+
 #include "VideoBackends/D3D12/D3D12Renderer.h"
 #include "VideoBackends/D3D12/D3D12StreamBuffer.h"
 #include "VideoBackends/D3D12/DX12Context.h"
@@ -64,6 +66,18 @@ bool VertexManager::Initialize()
                                                         &srv_desc, dh.cpu_handle);
   }
 
+  if (!g_dx_context->GetDescriptorHeapManager().Allocate(&m_vertex_srv))
+  {
+    PanicAlertFmt("Failed to allocate descriptor for vertex srv");
+    return false;
+  }
+
+  D3D12_SHADER_RESOURCE_VIEW_DESC srv_desc = {DXGI_FORMAT_R32_UINT, D3D12_SRV_DIMENSION_BUFFER,
+                                              D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING};
+  srv_desc.Buffer.NumElements = m_vertex_stream_buffer.GetSize() / sizeof(u32);
+  g_dx_context->GetDevice()->CreateShaderResourceView(m_vertex_stream_buffer.GetBuffer(), &srv_desc,
+                                                      m_vertex_srv.cpu_handle);
+
   UploadAllConstants();
   return true;
 }
@@ -115,7 +129,8 @@ void VertexManager::CommitBuffer(u32 num_vertices, u32 vertex_stride, u32 num_in
   ADDSTAT(g_stats.this_frame.bytes_vertex_streamed, static_cast<int>(vertex_data_size));
   ADDSTAT(g_stats.this_frame.bytes_index_streamed, static_cast<int>(index_data_size));
 
-  Renderer::GetInstance()->SetVertexBuffer(m_vertex_stream_buffer.GetGPUPointer(), vertex_stride,
+  Renderer::GetInstance()->SetVertexBuffer(m_vertex_stream_buffer.GetGPUPointer(),
+                                           m_vertex_srv.cpu_handle, vertex_stride,
                                            m_vertex_stream_buffer.GetSize());
   Renderer::GetInstance()->SetIndexBuffer(m_index_stream_buffer.GetGPUPointer(),
                                           m_index_stream_buffer.GetSize(), DXGI_FORMAT_R16_UINT);
@@ -130,41 +145,50 @@ void VertexManager::UploadUniforms()
 
 void VertexManager::UpdateVertexShaderConstants()
 {
-  if (!VertexShaderManager::dirty || !ReserveConstantStorage())
+  auto& system = Core::System::GetInstance();
+  auto& vertex_shader_manager = system.GetVertexShaderManager();
+
+  if (!vertex_shader_manager.dirty || !ReserveConstantStorage())
     return;
 
   Renderer::GetInstance()->SetConstantBuffer(1, m_uniform_stream_buffer.GetCurrentGPUPointer());
-  std::memcpy(m_uniform_stream_buffer.GetCurrentHostPointer(), &VertexShaderManager::constants,
+  std::memcpy(m_uniform_stream_buffer.GetCurrentHostPointer(), &vertex_shader_manager.constants,
               sizeof(VertexShaderConstants));
   m_uniform_stream_buffer.CommitMemory(sizeof(VertexShaderConstants));
   ADDSTAT(g_stats.this_frame.bytes_uniform_streamed, sizeof(VertexShaderConstants));
-  VertexShaderManager::dirty = false;
+  vertex_shader_manager.dirty = false;
 }
 
 void VertexManager::UpdateGeometryShaderConstants()
 {
-  if (!GeometryShaderManager::dirty || !ReserveConstantStorage())
+  auto& system = Core::System::GetInstance();
+  auto& geometry_shader_manager = system.GetGeometryShaderManager();
+
+  if (!geometry_shader_manager.dirty || !ReserveConstantStorage())
     return;
 
   Renderer::GetInstance()->SetConstantBuffer(2, m_uniform_stream_buffer.GetCurrentGPUPointer());
-  std::memcpy(m_uniform_stream_buffer.GetCurrentHostPointer(), &GeometryShaderManager::constants,
+  std::memcpy(m_uniform_stream_buffer.GetCurrentHostPointer(), &geometry_shader_manager.constants,
               sizeof(GeometryShaderConstants));
   m_uniform_stream_buffer.CommitMemory(sizeof(GeometryShaderConstants));
   ADDSTAT(g_stats.this_frame.bytes_uniform_streamed, sizeof(GeometryShaderConstants));
-  GeometryShaderManager::dirty = false;
+  geometry_shader_manager.dirty = false;
 }
 
 void VertexManager::UpdatePixelShaderConstants()
 {
-  if (!PixelShaderManager::dirty || !ReserveConstantStorage())
+  auto& system = Core::System::GetInstance();
+  auto& pixel_shader_manager = system.GetPixelShaderManager();
+
+  if (!pixel_shader_manager.dirty || !ReserveConstantStorage())
     return;
 
   Renderer::GetInstance()->SetConstantBuffer(0, m_uniform_stream_buffer.GetCurrentGPUPointer());
-  std::memcpy(m_uniform_stream_buffer.GetCurrentHostPointer(), &PixelShaderManager::constants,
+  std::memcpy(m_uniform_stream_buffer.GetCurrentHostPointer(), &pixel_shader_manager.constants,
               sizeof(PixelShaderConstants));
   m_uniform_stream_buffer.CommitMemory(sizeof(PixelShaderConstants));
   ADDSTAT(g_stats.this_frame.bytes_uniform_streamed, sizeof(PixelShaderConstants));
-  PixelShaderManager::dirty = false;
+  pixel_shader_manager.dirty = false;
 }
 
 bool VertexManager::ReserveConstantStorage()
@@ -217,22 +241,27 @@ void VertexManager::UploadAllConstants()
   Renderer::GetInstance()->SetConstantBuffer(2, m_uniform_stream_buffer.GetCurrentGPUPointer() +
                                                     geometry_constants_offset);
 
+  auto& system = Core::System::GetInstance();
+  auto& pixel_shader_manager = system.GetPixelShaderManager();
+  auto& vertex_shader_manager = system.GetVertexShaderManager();
+  auto& geometry_shader_manager = system.GetGeometryShaderManager();
+
   // Copy the actual data in
   std::memcpy(m_uniform_stream_buffer.GetCurrentHostPointer() + pixel_constants_offset,
-              &PixelShaderManager::constants, sizeof(PixelShaderConstants));
+              &pixel_shader_manager.constants, sizeof(PixelShaderConstants));
   std::memcpy(m_uniform_stream_buffer.GetCurrentHostPointer() + vertex_constants_offset,
-              &VertexShaderManager::constants, sizeof(VertexShaderConstants));
+              &vertex_shader_manager.constants, sizeof(VertexShaderConstants));
   std::memcpy(m_uniform_stream_buffer.GetCurrentHostPointer() + geometry_constants_offset,
-              &GeometryShaderManager::constants, sizeof(GeometryShaderConstants));
+              &geometry_shader_manager.constants, sizeof(GeometryShaderConstants));
 
   // Finally, flush buffer memory after copying
   m_uniform_stream_buffer.CommitMemory(allocation_size);
   ADDSTAT(g_stats.this_frame.bytes_uniform_streamed, allocation_size);
 
   // Clear dirty flags
-  VertexShaderManager::dirty = false;
-  GeometryShaderManager::dirty = false;
-  PixelShaderManager::dirty = false;
+  vertex_shader_manager.dirty = false;
+  geometry_shader_manager.dirty = false;
+  pixel_shader_manager.dirty = false;
 }
 
 void VertexManager::UploadUtilityUniforms(const void* data, u32 data_size)

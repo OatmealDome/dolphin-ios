@@ -55,6 +55,8 @@ void VideoConfig::Refresh()
 
   bVSync = Config::Get(Config::GFX_VSYNC);
   iAdapter = Config::Get(Config::GFX_ADAPTER);
+  iManuallyUploadBuffers = Config::Get(Config::GFX_MTL_MANUALLY_UPLOAD_BUFFERS);
+  bUsePresentDrawable = Config::Get(Config::GFX_MTL_USE_PRESENT_DRAWABLE);
 
   bWidescreenHack = Config::Get(Config::GFX_WIDESCREEN_HACK);
   aspect_mode = Config::Get(Config::GFX_ASPECT_RATIO);
@@ -62,6 +64,13 @@ void VideoConfig::Refresh()
   bCrop = Config::Get(Config::GFX_CROP);
   iSafeTextureCache_ColorSamples = Config::Get(Config::GFX_SAFE_TEXTURE_CACHE_COLOR_SAMPLES);
   bShowFPS = Config::Get(Config::GFX_SHOW_FPS);
+  bShowFTimes = Config::Get(Config::GFX_SHOW_FTIMES);
+  bShowVPS = Config::Get(Config::GFX_SHOW_VPS);
+  bShowVTimes = Config::Get(Config::GFX_SHOW_VTIMES);
+  bShowGraphs = Config::Get(Config::GFX_SHOW_GRAPHS);
+  bShowSpeed = Config::Get(Config::GFX_SHOW_SPEED);
+  bShowSpeedColors = Config::Get(Config::GFX_SHOW_SPEED_COLORS);
+  iPerfSampleUSec = Config::Get(Config::GFX_PERF_SAMP_WINDOW) * 1000;
   bShowNetPlayPing = Config::Get(Config::GFX_SHOW_NETPLAY_PING);
   bShowNetPlayMessages = Config::Get(Config::GFX_SHOW_NETPLAY_MESSAGES);
   bLogRenderTimeToFile = Config::Get(Config::GFX_LOG_RENDER_TIME_TO_FILE);
@@ -85,6 +94,7 @@ void VideoConfig::Refresh()
   iBitrateKbps = Config::Get(Config::GFX_BITRATE_KBPS);
   bInternalResolutionFrameDumps = Config::Get(Config::GFX_INTERNAL_RESOLUTION_FRAME_DUMPS);
   bEnableGPUTextureDecoding = Config::Get(Config::GFX_ENABLE_GPU_TEXTURE_DECODING);
+  bPreferVSForLinePointExpansion = Config::Get(Config::GFX_PREFER_VS_FOR_LINE_POINT_EXPANSION);
   bEnablePixelLighting = Config::Get(Config::GFX_ENABLE_PIXEL_LIGHTING);
   bFastDepthCalc = Config::Get(Config::GFX_FAST_DEPTH_CALC);
   iMultisamples = Config::Get(Config::GFX_MSAA);
@@ -104,13 +114,7 @@ void VideoConfig::Refresh()
   iShaderCompilerThreads = Config::Get(Config::GFX_SHADER_COMPILER_THREADS);
   iShaderPrecompilerThreads = Config::Get(Config::GFX_SHADER_PRECOMPILER_THREADS);
 
-  bDumpObjects = Config::Get(Config::GFX_SW_DUMP_OBJECTS);
-  bDumpTevStages = Config::Get(Config::GFX_SW_DUMP_TEV_STAGES);
-  bDumpTevTextureFetches = Config::Get(Config::GFX_SW_DUMP_TEV_TEX_FETCHES);
-  drawStart = Config::Get(Config::GFX_SW_DRAW_START);
-  drawEnd = Config::Get(Config::GFX_SW_DRAW_END);
-
-  bForceFiltering = Config::Get(Config::GFX_ENHANCE_FORCE_FILTERING);
+  texture_filtering_mode = Config::Get(Config::GFX_ENHANCE_FORCE_TEXTURE_FILTERING);
   iMaxAnisotropy = Config::Get(Config::GFX_ENHANCE_MAX_ANISOTROPY);
   sPostProcessingShader = Config::Get(Config::GFX_ENHANCE_POST_SHADER);
   bForceTrueColor = Config::Get(Config::GFX_ENHANCE_FORCE_TRUE_COLOR);
@@ -143,6 +147,9 @@ void VideoConfig::Refresh()
   iEFBAccessTileSize = Config::Get(Config::GFX_HACK_EFB_ACCESS_TILE_SIZE);
   iMissingColorValue = Config::Get(Config::GFX_HACK_MISSING_COLOR_VALUE);
   bFastTextureSampling = Config::Get(Config::GFX_HACK_FAST_TEXTURE_SAMPLING);
+#ifdef __APPLE__
+  bNoMipmapping = Config::Get(Config::GFX_HACK_NO_MIPMAPPING);
+#endif
 
   bPerfQueriesEnable = Config::Get(Config::GFX_PERF_QUERIES_ENABLE);
 
@@ -179,8 +186,8 @@ bool VideoConfig::UsingUberShaders() const
 
 static u32 GetNumAutoShaderCompilerThreads()
 {
-  // Automatic number. We use clamp(cpus - 3, 1, 4).
-  return static_cast<u32>(std::min(std::max(cpu_info.num_cores - 3, 1), 4));
+  // Automatic number.
+  return static_cast<u32>(std::clamp(cpu_info.num_cores - 3, 1, 4));
 }
 
 static u32 GetNumAutoShaderPreCompilerThreads()

@@ -9,20 +9,26 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.splashscreen.SplashScreen;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.tabs.TabLayout;
 
+import org.dolphinemu.dolphinemu.fragments.GridOptionDialogFragment;
 import org.dolphinemu.dolphinemu.R;
 import org.dolphinemu.dolphinemu.activities.EmulationActivity;
 import org.dolphinemu.dolphinemu.adapters.PlatformPagerAdapter;
+import org.dolphinemu.dolphinemu.databinding.ActivityMainBinding;
 import org.dolphinemu.dolphinemu.features.settings.model.IntSetting;
 import org.dolphinemu.dolphinemu.features.settings.model.NativeConfig;
 import org.dolphinemu.dolphinemu.features.settings.ui.MenuTag;
@@ -34,8 +40,10 @@ import org.dolphinemu.dolphinemu.utils.Action1;
 import org.dolphinemu.dolphinemu.utils.AfterDirectoryInitializationRunner;
 import org.dolphinemu.dolphinemu.utils.DirectoryInitialization;
 import org.dolphinemu.dolphinemu.utils.FileBrowserHelper;
+import org.dolphinemu.dolphinemu.utils.InsetsHelper;
 import org.dolphinemu.dolphinemu.utils.PermissionsHandler;
 import org.dolphinemu.dolphinemu.utils.StartupHandler;
+import org.dolphinemu.dolphinemu.utils.ThemeHelper;
 import org.dolphinemu.dolphinemu.utils.WiiUtils;
 
 /**
@@ -43,58 +51,79 @@ import org.dolphinemu.dolphinemu.utils.WiiUtils;
  * individually display a grid of available games for each Fragment, in a tabbed layout.
  */
 public final class MainActivity extends AppCompatActivity
-        implements MainView, SwipeRefreshLayout.OnRefreshListener
+        implements MainView, SwipeRefreshLayout.OnRefreshListener, ThemeProvider
 {
-  private ViewPager mViewPager;
-  private Toolbar mToolbar;
-  private TabLayout mTabLayout;
-  private FloatingActionButton mFab;
+  private int mThemeId;
 
   private final MainPresenter mPresenter = new MainPresenter(this, this);
+
+  private ActivityMainBinding mBinding;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
+    SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+    splashScreen.setKeepOnScreenCondition(
+            () -> !DirectoryInitialization.areDolphinDirectoriesReady());
+
+    ThemeHelper.setTheme(this);
+
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
 
-    findViews();
+    mBinding = ActivityMainBinding.inflate(getLayoutInflater());
+    setContentView(mBinding.getRoot());
 
-    setSupportActionBar(mToolbar);
+    WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+    setInsets();
+    ThemeHelper.enableStatusBarScrollTint(this, mBinding.appbarMain);
+
+    setSupportActionBar(mBinding.toolbarMain);
 
     // Set up the FAB.
-    mFab.setOnClickListener(view -> mPresenter.onFabClick());
+    mBinding.buttonAddDirectory.setOnClickListener(view -> mPresenter.onFabClick());
+    mBinding.appbarMain.addOnOffsetChangedListener((appBarLayout, verticalOffset) ->
+    {
+      if (verticalOffset == 0)
+      {
+        mBinding.buttonAddDirectory.extend();
+      }
+      else if (appBarLayout.getTotalScrollRange() == -verticalOffset)
+      {
+        mBinding.buttonAddDirectory.shrink();
+      }
+    });
 
     mPresenter.onCreate();
 
     // Stuff in this block only happens when this activity is newly created (i.e. not a rotation)
     if (savedInstanceState == null)
+    {
       StartupHandler.HandleInit(this);
+      new AfterDirectoryInitializationRunner().runWithLifecycle(this, this::checkTheme);
+    }
 
     if (!DirectoryInitialization.isWaitingForWriteAccess(this))
     {
       new AfterDirectoryInitializationRunner()
-              .runWithLifecycle(this, false, this::setPlatformTabsAndStartGameFileCacheService);
+              .runWithLifecycle(this, this::setPlatformTabsAndStartGameFileCacheService);
     }
   }
 
   @Override
   protected void onResume()
   {
+    ThemeHelper.setCorrectTheme(this);
+
     super.onResume();
 
     if (DirectoryInitialization.shouldStart(this))
     {
       DirectoryInitialization.start(this);
       new AfterDirectoryInitializationRunner()
-              .runWithLifecycle(this, false, this::setPlatformTabsAndStartGameFileCacheService);
+              .runWithLifecycle(this, this::setPlatformTabsAndStartGameFileCacheService);
     }
 
     mPresenter.onResume();
-
-    // In case the user changed a setting that affects how games are displayed,
-    // such as system language, cover downloading...
-    forEachPlatformGamesView(PlatformGamesView::refetchMetadata);
   }
 
   @Override
@@ -129,15 +158,6 @@ public final class MainActivity extends AppCompatActivity
     StartupHandler.setSessionTime(this);
   }
 
-  // TODO: Replace with a ButterKnife injection.
-  private void findViews()
-  {
-    mToolbar = findViewById(R.id.toolbar_main);
-    mViewPager = findViewById(R.id.pager_platforms);
-    mTabLayout = findViewById(R.id.tabs_platforms);
-    mFab = findViewById(R.id.button_add_directory);
-  }
-
   @Override
   public boolean onCreateOptionsMenu(Menu menu)
   {
@@ -146,9 +166,12 @@ public final class MainActivity extends AppCompatActivity
 
     if (WiiUtils.isSystemMenuInstalled())
     {
+      int resId = WiiUtils.isSystemMenuvWii() ?
+              R.string.grid_menu_load_vwii_system_menu_installed :
+              R.string.grid_menu_load_wii_system_menu_installed;
+
       menu.findItem(R.id.menu_load_wii_system_menu).setTitle(
-              getString(R.string.grid_menu_load_wii_system_menu_installed,
-                      WiiUtils.getSystemMenuVersion()));
+              getString(resId, WiiUtils.getSystemMenuVersion()));
     }
 
     return true;
@@ -161,7 +184,7 @@ public final class MainActivity extends AppCompatActivity
   @Override
   public void setVersionString(String version)
   {
-    mToolbar.setSubtitle(version);
+    mBinding.toolbarMain.setSubtitle(version);
   }
 
   @Override
@@ -263,7 +286,7 @@ public final class MainActivity extends AppCompatActivity
 
       DirectoryInitialization.start(this);
       new AfterDirectoryInitializationRunner()
-              .runWithLifecycle(this, false, this::setPlatformTabsAndStartGameFileCacheService);
+              .runWithLifecycle(this, this::setPlatformTabsAndStartGameFileCacheService);
     }
   }
 
@@ -286,7 +309,7 @@ public final class MainActivity extends AppCompatActivity
   public void onRefresh()
   {
     setRefreshing(true);
-    GameFileCacheManager.startRescan(this);
+    GameFileCacheManager.startRescan();
   }
 
   /**
@@ -307,6 +330,18 @@ public final class MainActivity extends AppCompatActivity
     forEachPlatformGamesView(PlatformGamesView::showGames);
   }
 
+  @Override
+  public void reloadGrid()
+  {
+    forEachPlatformGamesView(PlatformGamesView::refetchMetadata);
+  }
+
+  @Override
+  public void showGridOptions()
+  {
+    new GridOptionDialogFragment().show(getSupportFragmentManager(), "gridOptions");
+  }
+
   private void forEachPlatformGamesView(Action1<PlatformGamesView> action)
   {
     for (Platform platform : Platform.values())
@@ -322,7 +357,8 @@ public final class MainActivity extends AppCompatActivity
   @Nullable
   private PlatformGamesView getPlatformGamesView(Platform platform)
   {
-    String fragmentTag = "android:switcher:" + mViewPager.getId() + ":" + platform.toInt();
+    String fragmentTag =
+            "android:switcher:" + mBinding.pagerPlatforms.getId() + ":" + platform.toInt();
 
     return (PlatformGamesView) getSupportFragmentManager().findFragmentByTag(fragmentTag);
   }
@@ -331,23 +367,74 @@ public final class MainActivity extends AppCompatActivity
   private void setPlatformTabsAndStartGameFileCacheService()
   {
     PlatformPagerAdapter platformPagerAdapter = new PlatformPagerAdapter(
-            getSupportFragmentManager(), this, this);
-    mViewPager.setAdapter(platformPagerAdapter);
-    mViewPager.setOffscreenPageLimit(platformPagerAdapter.getCount());
-    mTabLayout.setupWithViewPager(mViewPager);
-    mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager)
-    {
-      @Override
-      public void onTabSelected(@NonNull TabLayout.Tab tab)
-      {
-        super.onTabSelected(tab);
-        IntSetting.MAIN_LAST_PLATFORM_TAB.setIntGlobal(NativeConfig.LAYER_BASE, tab.getPosition());
-      }
-    });
+            getSupportFragmentManager(), this);
+    mBinding.pagerPlatforms.setAdapter(platformPagerAdapter);
+    mBinding.pagerPlatforms.setOffscreenPageLimit(platformPagerAdapter.getCount());
+    mBinding.tabsPlatforms.setupWithViewPager(mBinding.pagerPlatforms);
+    mBinding.tabsPlatforms.addOnTabSelectedListener(
+            new TabLayout.ViewPagerOnTabSelectedListener(mBinding.pagerPlatforms)
+            {
+              @Override
+              public void onTabSelected(@NonNull TabLayout.Tab tab)
+              {
+                super.onTabSelected(tab);
+                IntSetting.MAIN_LAST_PLATFORM_TAB.setIntGlobal(NativeConfig.LAYER_BASE,
+                        tab.getPosition());
+              }
+            });
 
-    mViewPager.setCurrentItem(IntSetting.MAIN_LAST_PLATFORM_TAB.getIntGlobal());
+    for (int i = 0; i < PlatformPagerAdapter.TAB_ICONS.length; i++)
+    {
+      mBinding.tabsPlatforms.getTabAt(i).setIcon(PlatformPagerAdapter.TAB_ICONS[i]);
+    }
+
+    mBinding.pagerPlatforms.setCurrentItem(IntSetting.MAIN_LAST_PLATFORM_TAB.getIntGlobal());
 
     showGames();
-    GameFileCacheManager.startLoad(this);
+    GameFileCacheManager.startLoad();
+  }
+
+  @Override
+  public void setTheme(int themeId)
+  {
+    super.setTheme(themeId);
+    this.mThemeId = themeId;
+  }
+
+  @Override
+  public int getThemeId()
+  {
+    return mThemeId;
+  }
+
+  private void checkTheme()
+  {
+    ThemeHelper.setCorrectTheme(this);
+  }
+
+  private void setInsets()
+  {
+    ViewCompat.setOnApplyWindowInsetsListener(mBinding.appbarMain, (v, windowInsets) ->
+    {
+      Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+      InsetsHelper.insetAppBar(insets, mBinding.appbarMain);
+
+      ViewGroup.MarginLayoutParams mlpFab =
+              (ViewGroup.MarginLayoutParams) mBinding.buttonAddDirectory.getLayoutParams();
+      int fabPadding = getResources().getDimensionPixelSize(R.dimen.spacing_large);
+      mlpFab.leftMargin = insets.left + fabPadding;
+      mlpFab.bottomMargin = insets.bottom + fabPadding;
+      mlpFab.rightMargin = insets.right + fabPadding;
+      mBinding.buttonAddDirectory.setLayoutParams(mlpFab);
+
+      mBinding.pagerPlatforms.setPadding(insets.left, 0, insets.right, 0);
+
+      InsetsHelper.applyNavbarWorkaround(insets.bottom, mBinding.workaroundView);
+      ThemeHelper.setNavigationBarColor(this,
+              MaterialColors.getColor(mBinding.appbarMain, R.attr.colorSurface));
+
+      return windowInsets;
+    });
   }
 }

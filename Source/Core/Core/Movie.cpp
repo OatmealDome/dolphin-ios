@@ -63,6 +63,7 @@
 #include "Core/IOS/USB/Bluetooth/WiimoteDevice.h"
 #include "Core/NetPlayProto.h"
 #include "Core/State.h"
+#include "Core/System.h"
 #include "Core/WiiUtils.h"
 
 #include "DiscIO/Enums.h"
@@ -121,9 +122,6 @@ static bool s_bPolled = false;
 // s_InputDisplay is used by both CPU and GPU (is mutable).
 static std::mutex s_input_display_lock;
 static std::string s_InputDisplay[8];
-
-static GCManipFunction s_gc_manip_func;
-static WiiManipFunction s_wii_manip_func;
 
 static std::string s_current_file_name;
 
@@ -293,9 +291,12 @@ void InputUpdate()
   s_currentInputCount++;
   if (IsRecordingInput())
   {
+    auto& system = Core::System::GetInstance();
+    auto& core_timing = system.GetCoreTiming();
+
     s_totalInputCount = s_currentInputCount;
-    s_totalTickCount += CoreTiming::GetTicks() - s_tickCountAtLastInput;
-    s_tickCountAtLastInput = CoreTiming::GetTicks();
+    s_totalTickCount += core_timing.GetTicks() - s_tickCountAtLastInput;
+    s_tickCountAtLastInput = core_timing.GetTicks();
   }
 }
 
@@ -1184,7 +1185,8 @@ void LoadInput(const std::string& movie_path)
 static void CheckInputEnd()
 {
   if (s_currentByte >= s_temp_input.size() ||
-      (CoreTiming::GetTicks() > s_totalTickCount && !IsRecordingInputFromSaveState()))
+      (Core::System::GetInstance().GetCoreTiming().GetTicks() > s_totalTickCount &&
+       !IsRecordingInputFromSaveState()))
   {
     EndPlayInput(!s_bReadOnly);
   }
@@ -1424,28 +1426,6 @@ void SaveRecording(const std::string& filename)
     Core::DisplayMessage(fmt::format("DTM {} saved", filename), 2000);
   else
     Core::DisplayMessage(fmt::format("Failed to save {}", filename), 2000);
-}
-
-void SetGCInputManip(GCManipFunction func)
-{
-  s_gc_manip_func = std::move(func);
-}
-void SetWiiInputManip(WiiManipFunction func)
-{
-  s_wii_manip_func = std::move(func);
-}
-
-// NOTE: CPU Thread
-void CallGCInputManip(GCPadStatus* PadStatus, int controllerID)
-{
-  if (s_gc_manip_func)
-    s_gc_manip_func(PadStatus, controllerID);
-}
-// NOTE: CPU Thread
-void CallWiiInputManip(DataReportBuilder& rpt, int controllerID, int ext, const EncryptionKey& key)
-{
-  if (s_wii_manip_func)
-    s_wii_manip_func(rpt, controllerID, ext, key);
 }
 
 // NOTE: GPU Thread

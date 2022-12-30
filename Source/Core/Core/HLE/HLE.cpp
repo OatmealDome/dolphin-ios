@@ -19,6 +19,7 @@
 #include "Core/IOS/ES/ES.h"
 #include "Core/PowerPC/PPCSymbolDB.h"
 #include "Core/PowerPC/PowerPC.h"
+#include "Core/System.h"
 
 namespace HLE
 {
@@ -58,7 +59,7 @@ constexpr std::array<Hook, 23> os_patches{{
 
     {"GeckoCodehandler",             HLE_Misc::GeckoCodeHandlerICacheFlush, HookType::Start,   HookFlag::Fixed},
     {"GeckoHandlerReturnTrampoline", HLE_Misc::GeckoReturnTrampoline,       HookType::Replace, HookFlag::Fixed},
-    {"AppLoaderReport",              HLE_OS::HLE_GeneralDebugPrint,         HookType::Replace, HookFlag::Fixed} // apploader needs OSReport-like function
+    {"AppLoaderReport",              HLE_OS::HLE_GeneralDebugPrint,         HookType::Start,   HookFlag::Fixed} // apploader needs OSReport-like function
 }};
 // clang-format on
 
@@ -90,7 +91,9 @@ void PatchFixedFunctions()
   if (!Config::Get(Config::MAIN_ENABLE_CHEATS))
   {
     Patch(0x80001800, "HBReload");
-    Memory::CopyToEmu(0x00001804, "STUBHAXX", 8);
+    auto& system = Core::System::GetInstance();
+    auto& memory = system.GetMemory();
+    memory.CopyToEmu(0x00001804, "STUBHAXX", 8);
   }
 
   // Not part of the binary itself, but either we or Gecko OS might insert

@@ -7,7 +7,6 @@
 #include <functional>  // for hash
 
 #include "Common/CommonTypes.h"
-#include "Common/Hash.h"
 #include "VideoCommon/CPMemory.h"
 
 // m_components
@@ -59,10 +58,13 @@ struct PortableVertexDeclaration
   int stride;
 
   AttributeFormat position;
-  AttributeFormat normals[3];
-  AttributeFormat colors[2];
-  AttributeFormat texcoords[8];
+  std::array<AttributeFormat, 3> normals;
+  std::array<AttributeFormat, 2> colors;
+  std::array<AttributeFormat, 8> texcoords;
   AttributeFormat posmtx;
+
+  // Make sure we initialize padding to 0 since padding is included in the == memcmp
+  PortableVertexDeclaration() { memset(this, 0, sizeof(*this)); }
 
   inline bool operator<(const PortableVertexDeclaration& b) const
   {
@@ -74,15 +76,45 @@ struct PortableVertexDeclaration
   }
 };
 
+static_assert(std::is_trivially_copyable_v<PortableVertexDeclaration>,
+              "Make sure we can memset-initialize");
+
 namespace std
 {
 template <>
 struct hash<PortableVertexDeclaration>
 {
-  size_t operator()(const PortableVertexDeclaration& decl) const
+  // Implementation from Wikipedia.
+  template <typename T>
+  u32 Fletcher32(const T& data) const
   {
-    return Common::HashFletcher(reinterpret_cast<const u8*>(&decl), sizeof(decl));
+    static_assert(sizeof(T) % sizeof(u16) == 0);
+
+    auto buf = reinterpret_cast<const u16*>(&data);
+    size_t len = sizeof(T) / sizeof(u16);
+    u32 sum1 = 0xffff, sum2 = 0xffff;
+
+    while (len)
+    {
+      size_t tlen = len > 360 ? 360 : len;
+      len -= tlen;
+
+      do
+      {
+        sum1 += *buf++;
+        sum2 += sum1;
+      } while (--tlen);
+
+      sum1 = (sum1 & 0xffff) + (sum1 >> 16);
+      sum2 = (sum2 & 0xffff) + (sum2 >> 16);
+    }
+
+    // Second reduction step to reduce sums to 16 bits
+    sum1 = (sum1 & 0xffff) + (sum1 >> 16);
+    sum2 = (sum2 & 0xffff) + (sum2 >> 16);
+    return (sum2 << 16 | sum1);
   }
+  size_t operator()(const PortableVertexDeclaration& decl) const { return Fletcher32(decl); }
 };
 }  // namespace std
 

@@ -19,6 +19,7 @@
 #include "Common/Swap.h"
 #include "Core/HW/DSPHLE/UCodes/UCodes.h"
 #include "Core/HW/Memmap.h"
+#include "Core/System.h"
 
 namespace DSP::HLE
 {
@@ -62,7 +63,7 @@ enum AXMixControl
   // clang-format on
 };
 
-class AXUCode : public UCodeInterface
+class AXUCode /* not final: subclassed by AXWiiUCode */ : public UCodeInterface
 {
 public:
   AXUCode(DSPHLE* dsphle, u32 crc);
@@ -142,8 +143,10 @@ protected:
   template <int Millis, size_t BufCount>
   void InitMixingBuffers(u32 init_addr, const std::array<BufferDesc, BufCount>& buffers)
   {
+    auto& system = Core::System::GetInstance();
+    auto& memory = system.GetMemory();
     std::array<u16, 3 * BufCount> init_array;
-    Memory::CopyFromEmuSwapped(init_array.data(), init_addr, sizeof(init_array));
+    memory.CopyFromEmuSwapped(init_array.data(), init_addr, sizeof(init_array));
     for (size_t i = 0; i < BufCount; ++i)
     {
       const BufferDesc& buf = buffers[i];
@@ -200,5 +203,14 @@ private:
     CMD_COMPRESSOR = 0x12,
     CMD_SEND_AUX_AND_MIX = 0x13,
   };
+
+  enum class MailState
+  {
+    WaitingForCmdListSize,
+    WaitingForCmdListAddress,
+    WaitingForNextTask,
+  };
+
+  MailState m_mail_state = MailState::WaitingForCmdListSize;
 };
 }  // namespace DSP::HLE

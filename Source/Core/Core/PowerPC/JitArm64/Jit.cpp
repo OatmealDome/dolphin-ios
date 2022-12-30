@@ -24,6 +24,7 @@
 #include "Core/PowerPC/JitArm64/JitArm64_RegCache.h"
 #include "Core/PowerPC/JitInterface.h"
 #include "Core/PowerPC/Profiler.h"
+#include "Core/System.h"
 
 using namespace Arm64Gen;
 
@@ -52,7 +53,10 @@ void JitArm64::Init()
   AllocCodeSpace(CODE_SIZE + child_code_size);
   AddChildCodeSpace(&m_far_code, child_code_size);
 
-  jo.fastmem_arena = m_fastmem_enabled && Memory::InitFastmemArena();
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
+
+  jo.fastmem_arena = m_fastmem_enabled && memory.InitFastmemArena();
   jo.enableBlocklink = true;
   jo.optimizeGatherPipe = true;
   UpdateMemoryAndExceptionOptions();
@@ -120,7 +124,7 @@ bool JitArm64::HandleStackFault()
   Common::UnWriteProtectMemory(m_stack_base + GUARD_OFFSET, GUARD_SIZE);
 #endif
   GetBlockCache()->InvalidateICache(0, 0xffffffff, true);
-  CoreTiming::ForceExceptionCheck(0);
+  Core::System::GetInstance().GetCoreTiming().ForceExceptionCheck(0);
   m_cleanup_after_stackfault = true;
 
   return true;
@@ -153,7 +157,9 @@ void JitArm64::ResetFreeMemoryRanges()
 
 void JitArm64::Shutdown()
 {
-  Memory::ShutdownFastmemArena();
+  auto& system = Core::System::GetInstance();
+  auto& memory = system.GetMemory();
+  memory.ShutdownFastmemArena();
   FreeCodeSpace();
   blocks.Shutdown();
   FreeStack();
@@ -318,6 +324,50 @@ void JitArm64::FreeStack()
   m_stack_base = nullptr;
   m_stack_pointer = nullptr;
 #endif
+}
+
+void JitArm64::IntializeSpeculativeConstants()
+{
+  // If the block depends on an input register which looks like a gather pipe or MMIO related
+  // constant, guess that it is actually a constant input, and specialize the block based on this
+  // assumption. This happens when there are branches in code writing to the gather pipe, but only
+  // the first block loads the constant.
+  // Insert a check at the start of the block to verify that the value is actually constant.
+  // This can save a lot of backpatching and optimize gather pipe writes in more places.
+  const u8* fail = nullptr;
+  for (auto i : code_block.m_gpr_inputs)
+  {
+    u32 compile_time_value = PowerPC::ppcState.gpr[i];
+    if (PowerPC::IsOptimizableGatherPipeWrite(compile_time_value) ||
+        PowerPC::IsOptimizableGatherPipeWrite(compile_time_value - 0x8000) ||
+        compile_time_value == 0xCC000000)
+    {
+      if (!fail)
+      {
+        SwitchToFarCode();
+        fail = GetCodePtr();
+        MOVI2R(DISPATCHER_PC, js.blockStart);
+        STR(IndexType::Unsigned, DISPATCHER_PC, PPC_REG, PPCSTATE_OFF(pc));
+        MOVP2R(ARM64Reg::X8, &JitInterface::CompileExceptionCheck);
+        MOVI2R(ARM64Reg::W0, static_cast<u32>(JitInterface::ExceptionType::SpeculativeConstants));
+        BLR(ARM64Reg::X8);
+        B(dispatcher_no_check);
+        SwitchToNearCode();
+      }
+
+      ARM64Reg tmp = gpr.GetReg();
+      ARM64Reg value = gpr.R(i);
+      MOVI2R(tmp, compile_time_value);
+      CMP(value, tmp);
+      gpr.Unlock(tmp);
+
+      FixupBranch no_fail = B(CCFlags::CC_EQ);
+      B(fail);
+      SetJumpTarget(no_fail);
+
+      gpr.SetImmediate(i, compile_time_value, true);
+    }
+  }
 }
 
 void JitArm64::WriteExit(u32 destination, bool LK, u32 exit_address_after_return)
@@ -806,6 +856,12 @@ bool JitArm64::DoJit(u32 em_address, JitBlock* b, u32 nextPC)
   gpr.Start(js.gpa);
   fpr.Start(js.fpa);
 
+  if (js.noSpeculativeConstantsAddresses.find(js.blockStart) ==
+      js.noSpeculativeConstantsAddresses.end())
+  {
+    IntializeSpeculativeConstants();
+  }
+
   // Translate instructions
   for (u32 i = 0; i < code_block.m_num_instructions; i++)
   {
@@ -863,8 +919,8 @@ bool JitArm64::DoJit(u32 em_address, JitBlock* b, u32 nextPC)
       SetJumpTarget(exception);
       LDR(IndexType::Unsigned, ARM64Reg::W30, PPC_REG, PPCSTATE_OFF(msr));
       TBZ(ARM64Reg::W30, 15, done_here);  // MSR.EE
-      MOVP2R(ARM64Reg::X30, &ProcessorInterface::m_InterruptCause);
-      LDR(IndexType::Unsigned, ARM64Reg::W30, ARM64Reg::X30, 0);
+      LDR(IndexType::Unsigned, ARM64Reg::W30, ARM64Reg::X30,
+          MOVPage2R(ARM64Reg::X30, &ProcessorInterface::m_InterruptCause));
       constexpr u32 cause_mask = ProcessorInterface::INT_CAUSE_CP |
                                  ProcessorInterface::INT_CAUSE_PE_TOKEN |
                                  ProcessorInterface::INT_CAUSE_PE_FINISH;
@@ -899,8 +955,7 @@ bool JitArm64::DoJit(u32 em_address, JitBlock* b, u32 nextPC)
       SetJumpTarget(exception);
       LDR(IndexType::Unsigned, WA, PPC_REG, PPCSTATE_OFF(msr));
       TBZ(WA, 15, done_here);  // MSR.EE
-      MOVP2R(XA, &ProcessorInterface::m_InterruptCause);
-      LDR(IndexType::Unsigned, WA, XA, 0);
+      LDR(IndexType::Unsigned, WA, XA, MOVPage2R(XA, &ProcessorInterface::m_InterruptCause));
       constexpr u32 cause_mask = ProcessorInterface::INT_CAUSE_CP |
                                  ProcessorInterface::INT_CAUSE_PE_TOKEN |
                                  ProcessorInterface::INT_CAUSE_PE_FINISH;

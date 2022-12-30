@@ -10,7 +10,8 @@
 #include "Common/CommonTypes.h"
 #include "Common/Logging/Log.h"
 
-#include "VideoBackends/Software/DebugUtil.h"
+#include "Core/System.h"
+
 #include "VideoBackends/Software/NativeVertexFormat.h"
 #include "VideoBackends/Software/Rasterizer.h"
 #include "VideoBackends/Software/SWRenderer.h"
@@ -42,8 +43,6 @@ DataReader SWVertexLoader::PrepareForAdditionalData(OpcodeDecoder::Primitive pri
 
 void SWVertexLoader::DrawCurrentBatch(u32 base_index, u32 num_indices, u32 base_vertex)
 {
-  DebugUtil::OnObjectBegin();
-
   using OpcodeDecoder::Primitive;
   Primitive primitive_type = Primitive::GX_DRAW_QUADS;
   switch (m_current_primitive_type)
@@ -67,15 +66,7 @@ void SWVertexLoader::DrawCurrentBatch(u32 base_index, u32 num_indices, u32 base_
     g_renderer->BBoxFlush();
 
   m_setup_unit.Init(primitive_type);
-
-  // set all states with are stored within video sw
-  for (int i = 0; i < 4; i++)
-  {
-    Rasterizer::SetTevReg(i, Tev::RED_C, PixelShaderManager::constants.kcolors[i][0]);
-    Rasterizer::SetTevReg(i, Tev::GRN_C, PixelShaderManager::constants.kcolors[i][1]);
-    Rasterizer::SetTevReg(i, Tev::BLU_C, PixelShaderManager::constants.kcolors[i][2]);
-    Rasterizer::SetTevReg(i, Tev::ALP_C, PixelShaderManager::constants.kcolors[i][3]);
-  }
+  Rasterizer::SetTevKonstColors();
 
   for (u32 i = 0; i < m_index_generator.GetIndexLen(); i++)
   {
@@ -98,10 +89,10 @@ void SWVertexLoader::DrawCurrentBatch(u32 base_index, u32 num_indices, u32 base_
     // assemble and rasterize the primitive
     m_setup_unit.SetupVertex();
 
-    INCSTAT(g_stats.this_frame.num_vertices_loaded)
+    INCSTAT(g_stats.this_frame.num_vertices_loaded);
   }
 
-  DebugUtil::OnObjectEnd();
+  INCSTAT(g_stats.this_frame.num_drawn_objects);
 }
 
 void SWVertexLoader::SetFormat()
@@ -216,15 +207,19 @@ void SWVertexLoader::ParseVertex(const PortableVertexDeclaration& vdec, int inde
   }
   if (!vdec.normals[1].enable)
   {
-    m_vertex.normal[1][0] = VertexShaderManager::constants.cached_tangent[0];
-    m_vertex.normal[1][1] = VertexShaderManager::constants.cached_tangent[1];
-    m_vertex.normal[1][2] = VertexShaderManager::constants.cached_tangent[2];
+    auto& system = Core::System::GetInstance();
+    auto& vertex_shader_manager = system.GetVertexShaderManager();
+    m_vertex.normal[1][0] = vertex_shader_manager.constants.cached_tangent[0];
+    m_vertex.normal[1][1] = vertex_shader_manager.constants.cached_tangent[1];
+    m_vertex.normal[1][2] = vertex_shader_manager.constants.cached_tangent[2];
   }
   if (!vdec.normals[2].enable)
   {
-    m_vertex.normal[2][0] = VertexShaderManager::constants.cached_binormal[0];
-    m_vertex.normal[2][1] = VertexShaderManager::constants.cached_binormal[1];
-    m_vertex.normal[2][2] = VertexShaderManager::constants.cached_binormal[2];
+    auto& system = Core::System::GetInstance();
+    auto& vertex_shader_manager = system.GetVertexShaderManager();
+    m_vertex.normal[2][0] = vertex_shader_manager.constants.cached_binormal[0];
+    m_vertex.normal[2][1] = vertex_shader_manager.constants.cached_binormal[1];
+    m_vertex.normal[2][2] = vertex_shader_manager.constants.cached_binormal[2];
   }
 
   ParseColorAttributes(&m_vertex, src, vdec);

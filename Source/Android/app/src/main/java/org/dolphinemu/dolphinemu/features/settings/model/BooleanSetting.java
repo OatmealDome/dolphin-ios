@@ -29,6 +29,8 @@ public enum BooleanSetting implements AbstractBooleanSetting
   MAIN_SIMULATE_KONGA_2(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE, "SimulateKonga2", false),
   MAIN_SIMULATE_KONGA_3(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE, "SimulateKonga3", false),
   MAIN_WII_SD_CARD(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE, "WiiSDCard", true),
+  MAIN_WII_SD_CARD_ENABLE_FOLDER_SYNC(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE,
+          "WiiSDCardEnableFolderSync", false),
   MAIN_WIIMOTE_CONTINUOUS_SCANNING(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE,
           "WiimoteContinuousScanning", false),
   MAIN_WIIMOTE_ENABLE_SPEAKER(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE,
@@ -77,6 +79,10 @@ public enum BooleanSetting implements AbstractBooleanSetting
   MAIN_DEBUG_JIT_REGISTER_CACHE_OFF(Settings.FILE_DOLPHIN, Settings.SECTION_DEBUG,
           "JitRegisterCacheOff", false),
 
+  MAIN_SHOW_GAME_TITLES(Settings.FILE_DOLPHIN, Settings.SECTION_INI_ANDROID,
+          "ShowGameTitles", true),
+  MAIN_USE_BLACK_BACKGROUNDS(Settings.FILE_DOLPHIN, Settings.SECTION_INI_ANDROID,
+          "UseBlackBackgrounds", false),
   MAIN_JOYSTICK_REL_CENTER(Settings.FILE_DOLPHIN, Settings.SECTION_INI_ANDROID,
           "JoystickRelCenter", true),
   MAIN_PHONE_RUMBLE(Settings.FILE_DOLPHIN, Settings.SECTION_INI_ANDROID,
@@ -169,6 +175,12 @@ public enum BooleanSetting implements AbstractBooleanSetting
   GFX_WIDESCREEN_HACK(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "wideScreenHack", false),
   GFX_CROP(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "Crop", false),
   GFX_SHOW_FPS(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "ShowFPS", false),
+  GFX_SHOW_FTIMES(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "ShowFTimes", false),
+  GFX_SHOW_VPS(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "ShowVPS", false),
+  GFX_SHOW_VTIMES(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "ShowVTimes", false),
+  GFX_SHOW_GRAPHS(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "ShowGraphs", false),
+  GFX_SHOW_SPEED(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "ShowSpeed", false),
+  GFX_SHOW_SPEED_COLORS(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "ShowSpeedColors", true),
   GFX_OVERLAY_STATS(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "OverlayStats", false),
   GFX_DUMP_TEXTURES(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "DumpTextures", false),
   GFX_DUMP_MIP_TEXTURES(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "DumpMipTextures", false),
@@ -193,11 +205,14 @@ public enum BooleanSetting implements AbstractBooleanSetting
   GFX_ENABLE_VALIDATION_LAYER(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS,
           "EnableValidationLayer", false),
   GFX_BACKEND_MULTITHREADING(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS,
-          "BackendMultithreading", false),
+          "BackendMultithreading", true),
   GFX_WAIT_FOR_SHADERS_BEFORE_STARTING(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS,
           "WaitForShadersBeforeStarting", false),
   GFX_SAVE_TEXTURE_CACHE_TO_STATE(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS,
           "SaveTextureCacheToState", true),
+  GFX_PREFER_VS_FOR_LINE_POINT_EXPANSION(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS,
+          "PreferVSForLinePointExpansion", false),
+  GFX_MODS_ENABLE(Settings.FILE_GFX, Settings.SECTION_GFX_SETTINGS, "EnableMods", false),
 
   GFX_ENHANCE_FORCE_FILTERING(Settings.FILE_GFX, Settings.SECTION_GFX_ENHANCEMENTS,
           "ForceFiltering", false),
@@ -321,6 +336,18 @@ public enum BooleanSetting implements AbstractBooleanSetting
     else
     {
       settings.getSection(mFile, mSection).setBoolean(mKey, newValue);
+    }
+  }
+
+  public void setBoolean(int layerType, boolean newValue)
+  {
+    if (NativeConfig.isSettingSaveable(mFile, mSection, mKey))
+    {
+      NativeConfig.setBoolean(layerType, mFile, mSection, mKey, newValue);
+    }
+    else
+    {
+      throw new UnsupportedOperationException("The old config system doesn't support layers");
     }
   }
 

@@ -6,45 +6,53 @@ import android.content.Context;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.dolphinemu.dolphinemu.R;
+import org.dolphinemu.dolphinemu.databinding.ListItemRiivolutionBinding;
 import org.dolphinemu.dolphinemu.features.riivolution.model.RiivolutionPatches;
 
 public class RiivolutionViewHolder extends RecyclerView.ViewHolder
-        implements AdapterView.OnItemSelectedListener
+        implements AdapterView.OnItemClickListener
 {
-  public static final int TYPE_HEADER = 0;
-  public static final int TYPE_OPTION = 1;
-
-  private final TextView mTextView;
-  private final Spinner mSpinner;
+  private final ListItemRiivolutionBinding mBinding;
 
   private RiivolutionPatches mPatches;
   private RiivolutionItem mItem;
 
-  public RiivolutionViewHolder(@NonNull View itemView)
+  public RiivolutionViewHolder(@NonNull View itemView, ListItemRiivolutionBinding binding)
   {
     super(itemView);
-
-    mTextView = itemView.findViewById(R.id.text_name);
-    mSpinner = itemView.findViewById(R.id.spinner_choice);
+    mBinding = binding;
   }
 
   public void bind(Context context, RiivolutionPatches patches, RiivolutionItem item)
   {
+    // TODO: Remove workaround for text filtering issue in material components when fixed
+    // https://github.com/material-components/material-components-android/issues/1464
+    mBinding.dropdownChoice.setSaveEnabled(false);
+
     String text;
     if (item.mOptionIndex != -1)
+    {
+      mBinding.textName.setVisibility(View.GONE);
       text = patches.getOptionName(item.mDiscIndex, item.mSectionIndex, item.mOptionIndex);
+      mBinding.layoutChoice.setHint(text);
+    }
     else if (item.mSectionIndex != -1)
+    {
+      mBinding.textName.setTextAppearance(context, R.style.TextAppearance_AppCompat_Medium);
+      mBinding.layoutChoice.setVisibility(View.GONE);
       text = patches.getSectionName(item.mDiscIndex, item.mSectionIndex);
+    }
     else
+    {
+      mBinding.layoutChoice.setVisibility(View.GONE);
       text = patches.getDiscName(item.mDiscIndex);
-    mTextView.setText(text);
+    }
+    mBinding.textName.setText(text);
 
     if (item.mOptionIndex != -1)
     {
@@ -52,10 +60,10 @@ public class RiivolutionViewHolder extends RecyclerView.ViewHolder
       mItem = item;
 
       ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
-              R.layout.list_item_riivolution_header);
+              R.layout.support_simple_spinner_dropdown_item);
 
-      int choiceCount = patches.getChoiceCount(mItem.mDiscIndex, mItem.mSectionIndex,
-              mItem.mOptionIndex);
+      int choiceCount =
+              patches.getChoiceCount(mItem.mDiscIndex, mItem.mSectionIndex, mItem.mOptionIndex);
       adapter.add(context.getString(R.string.riivolution_disabled));
       for (int i = 0; i < choiceCount; i++)
       {
@@ -63,21 +71,17 @@ public class RiivolutionViewHolder extends RecyclerView.ViewHolder
                 i));
       }
 
-      mSpinner.setAdapter(adapter);
-      mSpinner.setSelection(patches.getSelectedChoice(mItem.mDiscIndex, mItem.mSectionIndex,
-              mItem.mOptionIndex));
-      mSpinner.setOnItemSelectedListener(this);
+      mBinding.dropdownChoice.setAdapter(adapter);
+      mBinding.dropdownChoice.setText(adapter.getItem(
+                      patches.getSelectedChoice(mItem.mDiscIndex, mItem.mSectionIndex, mItem.mOptionIndex)),
+              false);
+      mBinding.dropdownChoice.setOnItemClickListener(this);
     }
   }
 
   @Override
-  public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+  public void onItemClick(AdapterView<?> parent, View view, int position, long id)
   {
     mPatches.setSelectedChoice(mItem.mDiscIndex, mItem.mSectionIndex, mItem.mOptionIndex, position);
-  }
-
-  @Override
-  public void onNothingSelected(AdapterView<?> parent)
-  {
   }
 }

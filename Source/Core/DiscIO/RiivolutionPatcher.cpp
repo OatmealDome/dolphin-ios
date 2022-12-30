@@ -18,6 +18,7 @@
 #include "Core/HW/Memmap.h"
 #include "Core/IOS/FS/FileSystem.h"
 #include "Core/PowerPC/MMU.h"
+#include "Core/System.h"
 #include "DiscIO/DirectoryBlob.h"
 #include "DiscIO/RiivolutionParser.h"
 
@@ -397,7 +398,7 @@ static void ApplyFilePatchToFST(const Patch& patch, const File& file,
     if (node)
       ApplyPatchToFile(patch, file, node);
   }
-  else if (CaseInsensitiveEquals(file.m_disc, "main.dol"))
+  else if (dol_node && CaseInsensitiveEquals(file.m_disc, "main.dol"))
   {
     // Special case: If the filename is "main.dol", we want to patch the main executable.
     ApplyPatchToFile(patch, file, dol_node);
@@ -458,15 +459,20 @@ static void ApplyFolderPatchToFST(const Patch& patch, const Folder& folder,
   ApplyFolderPatchToFST(patch, folder, fst, dol_node, folder.m_disc, folder.m_external);
 }
 
-void ApplyPatchesToFiles(const std::vector<Patch>& patches,
+void ApplyPatchesToFiles(const std::vector<Patch>& patches, PatchIndex index,
                          std::vector<DiscIO::FSTBuilderNode>* fst, DiscIO::FSTBuilderNode* dol_node)
 {
   for (const auto& patch : patches)
   {
-    for (const auto& file : patch.m_file_patches)
+    const auto& file_patches =
+        index == PatchIndex::DolphinSysFiles ? patch.m_sys_file_patches : patch.m_file_patches;
+    const auto& folder_patches =
+        index == PatchIndex::DolphinSysFiles ? patch.m_sys_folder_patches : patch.m_folder_patches;
+
+    for (const auto& file : file_patches)
       ApplyFilePatchToFST(patch, file, fst, dol_node);
 
-    for (const auto& folder : patch.m_folder_patches)
+    for (const auto& folder : folder_patches)
       ApplyFolderPatchToFST(patch, folder, fst, dol_node);
   }
 }
@@ -577,6 +583,9 @@ static void ApplyOcarinaMemoryPatch(const Patch& patch, const Memory& memory_pat
 
 void ApplyGeneralMemoryPatches(const std::vector<Patch>& patches)
 {
+  auto& system = Core::System::GetInstance();
+  auto& system_memory = system.GetMemory();
+
   for (const auto& patch : patches)
   {
     for (const auto& memory : patch.m_memory_patches)
@@ -585,7 +594,7 @@ void ApplyGeneralMemoryPatches(const std::vector<Patch>& patches)
         continue;
 
       if (memory.m_search)
-        ApplySearchMemoryPatch(patch, memory, 0x80000000, ::Memory::GetRamSize());
+        ApplySearchMemoryPatch(patch, memory, 0x80000000, system_memory.GetRamSize());
       else
         ApplyMemoryPatch(patch, memory);
     }

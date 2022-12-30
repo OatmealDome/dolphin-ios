@@ -10,20 +10,34 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsAnimationCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
+import com.google.android.material.color.MaterialColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.elevation.ElevationOverlayProvider;
+
 import org.dolphinemu.dolphinemu.R;
+import org.dolphinemu.dolphinemu.databinding.ActivityCheatsBinding;
 import org.dolphinemu.dolphinemu.features.cheats.model.Cheat;
 import org.dolphinemu.dolphinemu.features.cheats.model.CheatsViewModel;
 import org.dolphinemu.dolphinemu.features.cheats.model.GeckoCheat;
 import org.dolphinemu.dolphinemu.features.settings.model.Settings;
 import org.dolphinemu.dolphinemu.ui.TwoPaneOnBackPressedCallback;
 import org.dolphinemu.dolphinemu.ui.main.MainPresenter;
+import org.dolphinemu.dolphinemu.utils.InsetsHelper;
+import org.dolphinemu.dolphinemu.utils.ThemeHelper;
+
+import java.util.List;
 
 public class CheatsActivity extends AppCompatActivity
         implements SlidingPaneLayout.PanelSlideListener
@@ -39,12 +53,10 @@ public class CheatsActivity extends AppCompatActivity
   private boolean mIsWii;
   private CheatsViewModel mViewModel;
 
-  private SlidingPaneLayout mSlidingPaneLayout;
-  private View mCheatList;
-  private View mCheatDetails;
-
   private View mCheatListLastFocus;
   private View mCheatDetailsLastFocus;
+
+  private ActivityCheatsBinding mBinding;
 
   public static void launch(Context context, String gameId, String gameTdbId, int revision,
           boolean isWii)
@@ -60,6 +72,8 @@ public class CheatsActivity extends AppCompatActivity
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
+    ThemeHelper.setTheme(this);
+
     super.onCreate(savedInstanceState);
 
     MainPresenter.skipRescanningLibrary();
@@ -75,27 +89,35 @@ public class CheatsActivity extends AppCompatActivity
     mViewModel = new ViewModelProvider(this).get(CheatsViewModel.class);
     mViewModel.load(mGameId, mRevision);
 
-    setContentView(R.layout.activity_cheats);
+    mBinding = ActivityCheatsBinding.inflate(getLayoutInflater());
+    setContentView(mBinding.getRoot());
 
-    mSlidingPaneLayout = findViewById(R.id.sliding_pane_layout);
-    mCheatList = findViewById(R.id.cheat_list);
-    mCheatDetails = findViewById(R.id.cheat_details);
+    WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-    mCheatListLastFocus = mCheatList;
-    mCheatDetailsLastFocus = mCheatDetails;
+    mCheatListLastFocus = mBinding.cheatList;
+    mCheatDetailsLastFocus = mBinding.cheatDetails;
 
-    mSlidingPaneLayout.addPanelSlideListener(this);
+    mBinding.slidingPaneLayout.addPanelSlideListener(this);
 
     getOnBackPressedDispatcher().addCallback(this,
-            new TwoPaneOnBackPressedCallback(mSlidingPaneLayout));
+            new TwoPaneOnBackPressedCallback(mBinding.slidingPaneLayout));
 
     mViewModel.getSelectedCheat().observe(this, this::onSelectedCheatChanged);
     onSelectedCheatChanged(mViewModel.getSelectedCheat().getValue());
 
     mViewModel.getOpenDetailsViewEvent().observe(this, this::openDetailsView);
 
-    // show up button
+    setSupportActionBar(mBinding.toolbarCheats);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    setInsets();
+
+    @ColorInt int color =
+            new ElevationOverlayProvider(mBinding.toolbarCheats.getContext()).compositeOverlay(
+                    MaterialColors.getColor(mBinding.toolbarCheats, R.attr.colorSurface),
+                    getResources().getDimensionPixelSize(R.dimen.elevated_app_bar));
+    mBinding.toolbarCheats.setBackgroundColor(color);
+    ThemeHelper.setStatusBarColor(this, color);
   }
 
   @Override
@@ -138,10 +160,10 @@ public class CheatsActivity extends AppCompatActivity
   {
     boolean cheatSelected = selectedCheat != null;
 
-    if (!cheatSelected && mSlidingPaneLayout.isOpen())
-      mSlidingPaneLayout.close();
+    if (!cheatSelected && mBinding.slidingPaneLayout.isOpen())
+      mBinding.slidingPaneLayout.close();
 
-    mSlidingPaneLayout.setLockMode(cheatSelected ?
+    mBinding.slidingPaneLayout.setLockMode(cheatSelected ?
             SlidingPaneLayout.LOCK_MODE_UNLOCKED : SlidingPaneLayout.LOCK_MODE_LOCKED_CLOSED);
   }
 
@@ -149,11 +171,11 @@ public class CheatsActivity extends AppCompatActivity
   {
     if (hasFocus)
     {
-      mCheatListLastFocus = mCheatList.findFocus();
+      mCheatListLastFocus = mBinding.cheatList.findFocus();
       if (mCheatListLastFocus == null)
         throw new NullPointerException();
 
-      mSlidingPaneLayout.close();
+      mBinding.slidingPaneLayout.close();
     }
   }
 
@@ -161,11 +183,11 @@ public class CheatsActivity extends AppCompatActivity
   {
     if (hasFocus)
     {
-      mCheatDetailsLastFocus = mCheatDetails.findFocus();
+      mCheatDetailsLastFocus = mBinding.cheatDetails.findFocus();
       if (mCheatDetailsLastFocus == null)
         throw new NullPointerException();
 
-      mSlidingPaneLayout.open();
+      mBinding.slidingPaneLayout.open();
     }
   }
 
@@ -179,7 +201,7 @@ public class CheatsActivity extends AppCompatActivity
   private void openDetailsView(boolean open)
   {
     if (open)
-      mSlidingPaneLayout.open();
+      mBinding.slidingPaneLayout.open();
   }
 
   public Settings loadGameSpecificSettings()
@@ -191,10 +213,11 @@ public class CheatsActivity extends AppCompatActivity
 
   public void downloadGeckoCodes()
   {
-    AlertDialog progressDialog = new AlertDialog.Builder(this).create();
-    progressDialog.setTitle(R.string.cheats_downloading);
-    progressDialog.setCancelable(false);
-    progressDialog.show();
+    AlertDialog progressDialog = new MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.cheats_downloading)
+            .setView(R.layout.dialog_indeterminate_progress)
+            .setCancelable(false)
+            .show();
 
     new Thread(() ->
     {
@@ -206,14 +229,14 @@ public class CheatsActivity extends AppCompatActivity
 
         if (codes == null)
         {
-          new AlertDialog.Builder(this)
+          new MaterialAlertDialogBuilder(this)
                   .setMessage(getString(R.string.cheats_download_failed))
                   .setPositiveButton(R.string.ok, null)
                   .show();
         }
         else if (codes.length == 0)
         {
-          new AlertDialog.Builder(this)
+          new MaterialAlertDialogBuilder(this)
                   .setMessage(getString(R.string.cheats_download_empty))
                   .setPositiveButton(R.string.ok, null)
                   .show();
@@ -223,7 +246,7 @@ public class CheatsActivity extends AppCompatActivity
           int cheatsAdded = mViewModel.addDownloadedGeckoCodes(codes);
           String message = getString(R.string.cheats_download_succeeded, codes.length, cheatsAdded);
 
-          new AlertDialog.Builder(this)
+          new MaterialAlertDialogBuilder(this)
                   .setMessage(message)
                   .setPositiveButton(R.string.ok, null)
                   .show();
@@ -245,6 +268,75 @@ public class CheatsActivity extends AppCompatActivity
         View child = viewGroup.getChildAt(i);
         setOnFocusChangeListenerRecursively(child, listener);
       }
+    }
+  }
+
+  private void setInsets()
+  {
+    ViewCompat.setOnApplyWindowInsetsListener(mBinding.appbarCheats, (v, windowInsets) ->
+    {
+      Insets barInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+      Insets keyboardInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
+
+      InsetsHelper.insetAppBar(barInsets, mBinding.appbarCheats);
+
+      mBinding.slidingPaneLayout.setPadding(barInsets.left, 0, barInsets.right, 0);
+
+      // Set keyboard insets if the system supports smooth keyboard animations
+      ViewGroup.MarginLayoutParams mlpDetails =
+              (ViewGroup.MarginLayoutParams) mBinding.cheatDetails.getLayoutParams();
+      if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R)
+      {
+        if (keyboardInsets.bottom > 0)
+        {
+          mlpDetails.bottomMargin = keyboardInsets.bottom;
+        }
+        else
+        {
+          mlpDetails.bottomMargin = barInsets.bottom;
+        }
+      }
+      else
+      {
+        if (mlpDetails.bottomMargin == 0)
+        {
+          mlpDetails.bottomMargin = barInsets.bottom;
+        }
+      }
+      mBinding.cheatDetails.setLayoutParams(mlpDetails);
+
+      InsetsHelper.applyNavbarWorkaround(barInsets.bottom, mBinding.workaroundView);
+
+      ThemeHelper.setNavigationBarColor(this,
+              MaterialColors.getColor(mBinding.appbarCheats, R.attr.colorSurface));
+
+      return windowInsets;
+    });
+
+    // Update the layout for every frame that the keyboard animates in
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R)
+    {
+      ViewCompat.setWindowInsetsAnimationCallback(mBinding.cheatDetails,
+              new WindowInsetsAnimationCompat.Callback(
+                      WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP)
+              {
+                int keyboardInsets = 0;
+                int barInsets = 0;
+
+                @NonNull
+                @Override
+                public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets,
+                        @NonNull List<WindowInsetsAnimationCompat> runningAnimations)
+                {
+                  ViewGroup.MarginLayoutParams mlpDetails =
+                          (ViewGroup.MarginLayoutParams) mBinding.cheatDetails.getLayoutParams();
+                  keyboardInsets = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
+                  barInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
+                  mlpDetails.bottomMargin = Math.max(keyboardInsets, barInsets);
+                  mBinding.cheatDetails.setLayoutParams(mlpDetails);
+                  return insets;
+                }
+              });
     }
   }
 }

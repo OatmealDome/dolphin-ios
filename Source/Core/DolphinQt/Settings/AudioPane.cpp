@@ -23,6 +23,7 @@
 
 #include "Core/Config/MainSettings.h"
 #include "Core/Core.h"
+#include "Core/System.h"
 
 #include "DolphinQt/Config/SettingsWindow.h"
 #include "DolphinQt/Settings.h"
@@ -35,8 +36,9 @@ AudioPane::AudioPane()
   ConnectWidgets();
 
   connect(&Settings::Instance(), &Settings::VolumeChanged, this, &AudioPane::OnVolumeChanged);
-  connect(&Settings::Instance(), &Settings::EmulationStateChanged, this,
-          [=](Core::State state) { OnEmulationStateChanged(state != Core::State::Uninitialized); });
+  connect(&Settings::Instance(), &Settings::EmulationStateChanged, this, [this](Core::State state) {
+    OnEmulationStateChanged(state != Core::State::Uninitialized);
+  });
 
   OnEmulationStateChanged(Core::GetState() != Core::State::Uninitialized);
 }
@@ -327,7 +329,7 @@ void AudioPane::SaveSettings()
   Config::SetBaseOrCurrent(Config::MAIN_WASAPI_DEVICE, device);
 #endif
 
-  AudioCommon::UpdateSoundStream();
+  AudioCommon::UpdateSoundStream(Core::System::GetInstance());
 }
 
 void AudioPane::OnDspChanged()

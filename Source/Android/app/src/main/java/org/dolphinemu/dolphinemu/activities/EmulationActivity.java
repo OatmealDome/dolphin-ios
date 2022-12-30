@@ -9,32 +9,36 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.SparseIntArray;
 import android.view.InputDevice;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
 
 import org.dolphinemu.dolphinemu.NativeLibrary;
 import org.dolphinemu.dolphinemu.R;
+import org.dolphinemu.dolphinemu.databinding.ActivityEmulationBinding;
+import org.dolphinemu.dolphinemu.databinding.DialogInputAdjustBinding;
+import org.dolphinemu.dolphinemu.databinding.DialogIrSensitivityBinding;
 import org.dolphinemu.dolphinemu.features.settings.model.BooleanSetting;
 import org.dolphinemu.dolphinemu.features.settings.model.IntSetting;
 import org.dolphinemu.dolphinemu.features.settings.model.Settings;
@@ -48,12 +52,14 @@ import org.dolphinemu.dolphinemu.fragments.SaveLoadStateFragment;
 import org.dolphinemu.dolphinemu.overlay.InputOverlay;
 import org.dolphinemu.dolphinemu.overlay.InputOverlayPointer;
 import org.dolphinemu.dolphinemu.ui.main.MainPresenter;
+import org.dolphinemu.dolphinemu.ui.main.ThemeProvider;
 import org.dolphinemu.dolphinemu.utils.AfterDirectoryInitializationRunner;
 import org.dolphinemu.dolphinemu.utils.ControllerMappingHelper;
 import org.dolphinemu.dolphinemu.utils.FileBrowserHelper;
 import org.dolphinemu.dolphinemu.utils.IniFile;
 import org.dolphinemu.dolphinemu.utils.MotionListener;
 import org.dolphinemu.dolphinemu.utils.Rumble;
+import org.dolphinemu.dolphinemu.utils.ThemeHelper;
 
 import java.io.File;
 import java.lang.annotation.Retention;
@@ -61,7 +67,10 @@ import java.util.List;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-public final class EmulationActivity extends AppCompatActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.slider.Slider;
+
+public final class EmulationActivity extends AppCompatActivity implements ThemeProvider
 {
   private static final String BACKSTACK_NAME_MENU = "menu";
   private static final String BACKSTACK_NAME_SUBMENU = "submenu";
@@ -74,6 +83,8 @@ public final class EmulationActivity extends AppCompatActivity
 
   private Settings mSettings;
 
+  private int mThemeId;
+
   private boolean mMenuVisible;
 
   private static boolean sIgnoreLaunchRequests = false;
@@ -82,14 +93,12 @@ public final class EmulationActivity extends AppCompatActivity
   private String[] mPaths;
   private boolean mRiivolution;
   private boolean mLaunchSystemMenu;
-  private boolean mIgnoreWarnings;
   private static boolean sUserPausedEmulation;
   private boolean mMenuToastShown;
 
   public static final String EXTRA_SELECTED_GAMES = "SelectedGames";
   public static final String EXTRA_RIIVOLUTION = "Riivolution";
   public static final String EXTRA_SYSTEM_MENU = "SystemMenu";
-  public static final String EXTRA_IGNORE_WARNINGS = "IgnoreWarnings";
   public static final String EXTRA_USER_PAUSED_EMULATION = "sUserPausedEmulation";
   public static final String EXTRA_MENU_TOAST_SHOWN = "MenuToastShown";
 
@@ -185,30 +194,42 @@ public final class EmulationActivity extends AppCompatActivity
   private static void performLaunchChecks(FragmentActivity activity,
           Runnable continueCallback)
   {
-    new AfterDirectoryInitializationRunner().runWithLifecycle(activity, true, () ->
+    new AfterDirectoryInitializationRunner().runWithLifecycle(activity, () ->
     {
-      if (FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_DEFAULT_ISO) &&
-              FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_FS_PATH) &&
-              FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_DUMP_PATH) &&
-              FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_LOAD_PATH) &&
-              FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_RESOURCEPACK_PATH) &&
-              FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_SD_PATH))
+      if (!FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_DEFAULT_ISO) ||
+              !FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_FS_PATH) ||
+              !FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_DUMP_PATH) ||
+              !FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_LOAD_PATH) ||
+              !FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_RESOURCEPACK_PATH))
       {
-        continueCallback.run();
+        new MaterialAlertDialogBuilder(activity)
+                .setMessage(R.string.unavailable_paths)
+                .setPositiveButton(R.string.yes,
+                        (dialogInterface, i) -> SettingsActivity.launch(activity,
+                                MenuTag.CONFIG_PATHS))
+                .setNeutralButton(R.string.continue_anyway,
+                        (dialogInterface, i) -> continueCallback.run())
+                .show();
+      }
+      else if (!FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_WII_SD_CARD_IMAGE_PATH) ||
+              !FileBrowserHelper.isPathEmptyOrValid(
+                      StringSetting.MAIN_WII_SD_CARD_SYNC_FOLDER_PATH))
+      {
+        new MaterialAlertDialogBuilder(activity)
+                .setMessage(R.string.unavailable_paths)
+                .setPositiveButton(R.string.yes,
+                        (dialogInterface, i) -> SettingsActivity.launch(activity,
+                                MenuTag.CONFIG_WII))
+                .setNeutralButton(R.string.continue_anyway,
+                        (dialogInterface, i) -> continueCallback.run())
+                .show();
       }
       else
       {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage(R.string.unavailable_paths);
-        builder.setPositiveButton(R.string.yes, (dialogInterface, i) ->
-                SettingsActivity.launch(activity, MenuTag.CONFIG_PATHS));
-        builder.setNeutralButton(R.string.continue_anyway, (dialogInterface, i) ->
-                continueCallback.run());
-        builder.show();
+        continueCallback.run();
       }
     });
   }
-
 
   public static void launchSystemMenu(FragmentActivity activity)
   {
@@ -260,9 +281,7 @@ public final class EmulationActivity extends AppCompatActivity
 
   public static void updateWiimoteNewIniPreferences(Context context)
   {
-    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-    updateWiimoteNewController(preferences.getInt("wiiController", 3), context);
-
+    updateWiimoteNewController(InputOverlay.getConfiguredControllerType(context), context);
     updateWiimoteNewImuIr(IntSetting.MAIN_MOTION_CONTROLS.getIntGlobal());
   }
 
@@ -287,6 +306,8 @@ public final class EmulationActivity extends AppCompatActivity
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
+    ThemeHelper.setTheme(this);
+
     super.onCreate(savedInstanceState);
 
     MainPresenter.skipRescanningLibrary();
@@ -298,7 +319,6 @@ public final class EmulationActivity extends AppCompatActivity
       mPaths = gameToEmulate.getStringArrayExtra(EXTRA_SELECTED_GAMES);
       mRiivolution = gameToEmulate.getBooleanExtra(EXTRA_RIIVOLUTION, false);
       mLaunchSystemMenu = gameToEmulate.getBooleanExtra(EXTRA_SYSTEM_MENU, false);
-      mIgnoreWarnings = gameToEmulate.getBooleanExtra(EXTRA_IGNORE_WARNINGS, false);
       sUserPausedEmulation = gameToEmulate.getBooleanExtra(EXTRA_USER_PAUSED_EMULATION, false);
       mMenuToastShown = false;
       activityRecreated = false;
@@ -323,7 +343,10 @@ public final class EmulationActivity extends AppCompatActivity
 
     Rumble.initRumble(this);
 
-    setContentView(R.layout.activity_emulation);
+    ActivityEmulationBinding binding = ActivityEmulationBinding.inflate(getLayoutInflater());
+    setContentView(binding.getRoot());
+
+    setInsets(binding.frameMenu);
 
     // Find or create the EmulationFragment
     mEmulationFragment = (EmulationFragment) getSupportFragmentManager()
@@ -348,7 +371,6 @@ public final class EmulationActivity extends AppCompatActivity
       mEmulationFragment.saveTemporaryState();
     }
     outState.putStringArray(EXTRA_SELECTED_GAMES, mPaths);
-    outState.putBoolean(EXTRA_IGNORE_WARNINGS, mIgnoreWarnings);
     outState.putBoolean(EXTRA_USER_PAUSED_EMULATION, sUserPausedEmulation);
     outState.putBoolean(EXTRA_MENU_TOAST_SHOWN, mMenuToastShown);
     super.onSaveInstanceState(outState);
@@ -357,7 +379,6 @@ public final class EmulationActivity extends AppCompatActivity
   protected void restoreState(Bundle savedInstanceState)
   {
     mPaths = savedInstanceState.getStringArray(EXTRA_SELECTED_GAMES);
-    mIgnoreWarnings = savedInstanceState.getBoolean(EXTRA_IGNORE_WARNINGS);
     sUserPausedEmulation = savedInstanceState.getBoolean(EXTRA_USER_PAUSED_EMULATION);
     mMenuToastShown = savedInstanceState.getBoolean(EXTRA_MENU_TOAST_SHOWN);
   }
@@ -374,6 +395,8 @@ public final class EmulationActivity extends AppCompatActivity
   @Override
   protected void onResume()
   {
+    ThemeHelper.setCorrectTheme(this);
+
     super.onResume();
 
     // Only android 9+ support this feature.
@@ -521,6 +544,28 @@ public final class EmulationActivity extends AppCompatActivity
     }
   }
 
+  private void setInsets(View view)
+  {
+    ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) ->
+    {
+      Insets cutInsets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout());
+      ViewGroup.MarginLayoutParams mlpMenu =
+              (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+      int menuWidth = getResources().getDimensionPixelSize(R.dimen.menu_width);
+      if (ViewCompat.getLayoutDirection(v) == ViewCompat.LAYOUT_DIRECTION_LTR)
+      {
+        mlpMenu.width = cutInsets.left + menuWidth;
+      }
+      else
+      {
+        mlpMenu.width = cutInsets.right + menuWidth;
+      }
+      NativeLibrary.SetObscuredPixelsTop(cutInsets.top);
+      NativeLibrary.SetObscuredPixelsLeft(cutInsets.left);
+      return windowInsets;
+    });
+  }
+
   public void showOverlayControlsMenu(@NonNull View anchor)
   {
     PopupMenu popup = new PopupMenu(this, anchor);
@@ -530,7 +575,7 @@ public final class EmulationActivity extends AppCompatActivity
     int id = wii ? R.menu.menu_overlay_controls_wii : R.menu.menu_overlay_controls_gc;
     popup.getMenuInflater().inflate(id, menu);
 
-    // Populate the checkbox value for joystick center on touch
+    // Populate the switch value for joystick center on touch
     menu.findItem(R.id.menu_emulation_joystick_rel_center)
             .setChecked(BooleanSetting.MAIN_JOYSTICK_REL_CENTER.getBoolean(mSettings));
     menu.findItem(R.id.menu_emulation_rumble)
@@ -554,7 +599,7 @@ public final class EmulationActivity extends AppCompatActivity
     {
       if (item.isCheckable())
       {
-        // Need to pass a reference to the item to set the checkbox state, since it is not done automatically
+        // Need to pass a reference to the item to set the switch state, since it is not done automatically
         handleCheckableMenuAction(action, item);
       }
       else
@@ -734,16 +779,6 @@ public final class EmulationActivity extends AppCompatActivity
     }
   }
 
-  public boolean isIgnoringWarnings()
-  {
-    return mIgnoreWarnings;
-  }
-
-  public void setIgnoreWarnings(boolean value)
-  {
-    mIgnoreWarnings = value;
-  }
-
   public static boolean getHasUserPausedEmulation()
   {
     return sUserPausedEmulation;
@@ -808,9 +843,12 @@ public final class EmulationActivity extends AppCompatActivity
 
   private void toggleControls()
   {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle(R.string.emulation_toggle_controls);
-    if (!NativeLibrary.IsEmulatingWii() || mPreferences.getInt("wiiController", 3) == 0)
+    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.emulation_toggle_controls);
+
+    int currentController = InputOverlay.getConfiguredControllerType(this);
+
+    if (!NativeLibrary.IsEmulatingWii() || currentController == InputOverlay.OVERLAY_GAMECUBE)
     {
       boolean[] gcEnabledButtons = new boolean[11];
       String gcSettingBase = "MAIN_BUTTON_TOGGLE_GC_";
@@ -823,7 +861,7 @@ public final class EmulationActivity extends AppCompatActivity
               (dialog, indexSelected, isChecked) -> BooleanSetting
                       .valueOf(gcSettingBase + indexSelected).setBoolean(mSettings, isChecked));
     }
-    else if (mPreferences.getInt("wiiController", 3) == 4)
+    else if (currentController == InputOverlay.OVERLAY_WIIMOTE_CLASSIC)
     {
       boolean[] wiiClassicEnabledButtons = new boolean[14];
       String classicSettingBase = "MAIN_BUTTON_TOGGLE_CLASSIC_";
@@ -847,7 +885,7 @@ public final class EmulationActivity extends AppCompatActivity
       {
         wiiEnabledButtons[i] = BooleanSetting.valueOf(wiiSettingBase + i).getBoolean(mSettings);
       }
-      if (mPreferences.getInt("wiiController", 3) == 3)
+      if (currentController == InputOverlay.OVERLAY_WIIMOTE_NUNCHUK)
       {
         builder.setMultiChoiceItems(R.array.nunchukButtons, wiiEnabledButtons,
                 (dialog, indexSelected, isChecked) -> BooleanSetting
@@ -860,25 +898,20 @@ public final class EmulationActivity extends AppCompatActivity
                         .valueOf(wiiSettingBase + indexSelected).setBoolean(mSettings, isChecked));
       }
     }
-    builder.setNeutralButton(R.string.emulation_toggle_all,
-            (dialogInterface, i) -> mEmulationFragment.toggleInputOverlayVisibility(mSettings));
-    builder.setPositiveButton(R.string.ok, (dialogInterface, i) ->
-            mEmulationFragment.refreshInputOverlay());
 
-    builder.show();
+    builder.setNeutralButton(R.string.emulation_toggle_all,
+                    (dialogInterface, i) -> mEmulationFragment.toggleInputOverlayVisibility(mSettings))
+            .setPositiveButton(R.string.ok, (dialogInterface, i) ->
+                    mEmulationFragment.refreshInputOverlay())
+            .show();
   }
 
   public void chooseDoubleTapButton()
   {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-    int currentController =
-            mPreferences.getInt("wiiController", InputOverlay.OVERLAY_WIIMOTE_NUNCHUK);
-
     int currentValue = IntSetting.MAIN_DOUBLE_TAP_BUTTON.getInt(mSettings);
 
-    int buttonList = currentController == InputOverlay.OVERLAY_WIIMOTE_CLASSIC ?
-            R.array.doubleTapWithClassic : R.array.doubleTap;
+    int buttonList = InputOverlay.getConfiguredControllerType(this) ==
+            InputOverlay.OVERLAY_WIIMOTE_CLASSIC ? R.array.doubleTapWithClassic : R.array.doubleTap;
 
     int checkedItem = -1;
     int itemCount = getResources().getStringArray(buttonList).length;
@@ -891,145 +924,108 @@ public final class EmulationActivity extends AppCompatActivity
       }
     }
 
-    builder.setSingleChoiceItems(buttonList, checkedItem,
-            (DialogInterface dialog, int which) -> IntSetting.MAIN_DOUBLE_TAP_BUTTON
-                    .setInt(mSettings, InputOverlayPointer.DOUBLE_TAP_OPTIONS.get(which)));
-
-    builder.setPositiveButton(R.string.ok, (dialogInterface, i) ->
-            mEmulationFragment.initInputPointer());
-
-    builder.show();
+    new MaterialAlertDialogBuilder(this)
+            .setSingleChoiceItems(buttonList, checkedItem,
+                    (DialogInterface dialog, int which) -> IntSetting.MAIN_DOUBLE_TAP_BUTTON.setInt(
+                            mSettings, InputOverlayPointer.DOUBLE_TAP_OPTIONS.get(which)))
+            .setPositiveButton(R.string.ok,
+                    (dialogInterface, i) -> mEmulationFragment.initInputPointer())
+            .show();
   }
 
   private void adjustScale()
   {
-    LayoutInflater inflater = LayoutInflater.from(this);
-    View view = inflater.inflate(R.layout.dialog_input_adjust, null);
+    DialogInputAdjustBinding dialogBinding = DialogInputAdjustBinding.inflate(getLayoutInflater());
 
-    final SeekBar scaleSeekbar = view.findViewById(R.id.input_scale_seekbar);
-    final TextView scaleValue = view.findViewById(R.id.input_scale_value);
-
-    scaleSeekbar.setMax(150);
-    scaleSeekbar.setProgress(IntSetting.MAIN_CONTROL_SCALE.getInt(mSettings));
-    scaleSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-    {
-      public void onStartTrackingTouch(SeekBar seekBar)
-      {
-        // Do nothing
-      }
-
-      public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-      {
-        scaleValue.setText((progress + 50) + "%");
-      }
-
-      public void onStopTrackingTouch(SeekBar seekBar)
-      {
-        // Do nothing
-      }
-    });
-
-    scaleValue.setText((scaleSeekbar.getProgress() + 50) + "%");
+    final Slider scaleSlider = dialogBinding.inputScaleSlider;
+    final TextView scaleValue = dialogBinding.inputScaleValue;
+    scaleSlider.setValueTo(150);
+    scaleSlider.setValue(IntSetting.MAIN_CONTROL_SCALE.getInt(mSettings));
+    scaleSlider.setStepSize(1);
+    scaleSlider.addOnChangeListener(
+            (slider, progress, fromUser) -> scaleValue.setText(((int) progress + 50) + "%"));
+    scaleValue.setText(((int) scaleSlider.getValue() + 50) + "%");
 
     // alpha
-    final SeekBar seekbarOpacity = view.findViewById(R.id.input_opacity_seekbar);
-    final TextView valueOpacity = view.findViewById(R.id.input_opacity_value);
+    final Slider sliderOpacity = dialogBinding.inputOpacitySlider;
+    final TextView valueOpacity = dialogBinding.inputOpacityValue;
+    sliderOpacity.setValueTo(100);
+    sliderOpacity.setValue(IntSetting.MAIN_CONTROL_OPACITY.getInt(mSettings));
+    sliderOpacity.setStepSize(1);
+    sliderOpacity.addOnChangeListener(
+            (slider, progress, fromUser) -> valueOpacity.setText(((int) progress) + "%"));
+    valueOpacity.setText(((int) sliderOpacity.getValue()) + "%");
 
-    seekbarOpacity.setMax(100);
-    seekbarOpacity.setProgress(IntSetting.MAIN_CONTROL_OPACITY.getInt(mSettings));
-    seekbarOpacity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-    {
-      public void onStartTrackingTouch(SeekBar seekBar)
-      {
-        // Do nothing
-      }
-
-      public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-      {
-        valueOpacity.setText(progress + "%");
-      }
-
-      public void onStopTrackingTouch(SeekBar seekBar)
-      {
-        // Do nothing
-      }
-    });
-    valueOpacity.setText(seekbarOpacity.getProgress() + "%");
-
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle(R.string.emulation_control_adjustments);
-    builder.setView(view);
-    builder.setPositiveButton(R.string.ok, (dialogInterface, i) ->
-    {
-      IntSetting.MAIN_CONTROL_SCALE.setInt(mSettings, scaleSeekbar.getProgress());
-      IntSetting.MAIN_CONTROL_OPACITY.setInt(mSettings, seekbarOpacity.getProgress());
-      mEmulationFragment.refreshInputOverlay();
-    });
-    builder.setNeutralButton(R.string.default_values, (dialogInterface, i) ->
-    {
-      IntSetting.MAIN_CONTROL_SCALE.delete(mSettings);
-      IntSetting.MAIN_CONTROL_OPACITY.delete(mSettings);
-      mEmulationFragment.refreshInputOverlay();
-    });
-
-    builder.show();
+    new MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.emulation_control_adjustments)
+            .setView(dialogBinding.getRoot())
+            .setPositiveButton(R.string.ok, (dialog, which) ->
+            {
+              IntSetting.MAIN_CONTROL_SCALE.setInt(mSettings, (int) scaleSlider.getValue());
+              IntSetting.MAIN_CONTROL_OPACITY.setInt(mSettings, (int) sliderOpacity.getValue());
+              mEmulationFragment.refreshInputOverlay();
+            })
+            .setNeutralButton(R.string.default_values, (dialog, which) ->
+            {
+              IntSetting.MAIN_CONTROL_SCALE.delete(mSettings);
+              IntSetting.MAIN_CONTROL_OPACITY.delete(mSettings);
+              mEmulationFragment.refreshInputOverlay();
+            })
+            .show();
   }
 
   private void chooseController()
   {
     final SharedPreferences.Editor editor = mPreferences.edit();
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle(R.string.emulation_choose_controller);
-    builder.setSingleChoiceItems(R.array.controllersEntries,
-            mPreferences.getInt("wiiController", 3),
-            (dialog, indexSelected) ->
+    new MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.emulation_choose_controller)
+            .setSingleChoiceItems(R.array.controllersEntries,
+                    InputOverlay.getConfiguredControllerType(this),
+                    (dialog, indexSelected) ->
+                    {
+                      editor.putInt("wiiController", indexSelected);
+
+                      updateWiimoteNewController(indexSelected, this);
+                      NativeLibrary.ReloadWiimoteConfig();
+                    })
+            .setPositiveButton(R.string.ok, (dialogInterface, i) ->
             {
-              editor.putInt("wiiController", indexSelected);
-
-              updateWiimoteNewController(indexSelected, this);
-              NativeLibrary.ReloadWiimoteConfig();
-            });
-    builder.setPositiveButton(R.string.ok, (dialogInterface, i) ->
-    {
-      editor.apply();
-      mEmulationFragment.refreshInputOverlay();
-    });
-
-    builder.show();
+              editor.apply();
+              mEmulationFragment.refreshInputOverlay();
+            })
+            .show();
   }
 
   private void showMotionControlsOptions()
   {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle(R.string.emulation_motion_controls);
-    builder.setSingleChoiceItems(R.array.motionControlsEntries,
-            IntSetting.MAIN_MOTION_CONTROLS.getInt(mSettings),
-            (dialog, indexSelected) ->
-            {
-              IntSetting.MAIN_MOTION_CONTROLS.setInt(mSettings, indexSelected);
+    new MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.emulation_motion_controls)
+            .setSingleChoiceItems(R.array.motionControlsEntries,
+                    IntSetting.MAIN_MOTION_CONTROLS.getInt(mSettings),
+                    (dialog, indexSelected) ->
+                    {
+                      IntSetting.MAIN_MOTION_CONTROLS.setInt(mSettings, indexSelected);
 
-              updateMotionListener();
+                      updateMotionListener();
 
-              updateWiimoteNewImuIr(indexSelected);
-              NativeLibrary.ReloadWiimoteConfig();
-            });
-    builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss());
-
-    builder.show();
+                      updateWiimoteNewImuIr(indexSelected);
+                      NativeLibrary.ReloadWiimoteConfig();
+                    })
+            .setPositiveButton(R.string.ok, (dialogInterface, i) -> dialogInterface.dismiss())
+            .show();
   }
 
   private void setIRMode()
   {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle(R.string.emulation_ir_mode);
-    builder.setSingleChoiceItems(R.array.irModeEntries,
-            IntSetting.MAIN_IR_MODE.getInt(mSettings),
-            (dialog, indexSelected) ->
-                    IntSetting.MAIN_IR_MODE.setInt(mSettings, indexSelected));
-    builder.setPositiveButton(R.string.ok, (dialogInterface, i) ->
-            mEmulationFragment.refreshOverlayPointer(mSettings));
-
-    builder.show();
+    new MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.emulation_ir_mode)
+            .setSingleChoiceItems(R.array.irModeEntries,
+                    IntSetting.MAIN_IR_MODE.getInt(mSettings),
+                    (dialog, indexSelected) ->
+                            IntSetting.MAIN_IR_MODE.setInt(mSettings, indexSelected))
+            .setPositiveButton(R.string.ok, (dialogInterface, i) ->
+                    mEmulationFragment.refreshOverlayPointer(mSettings))
+            .show();
   }
 
   private void setIRSensitivity()
@@ -1040,136 +1036,87 @@ public final class EmulationActivity extends AppCompatActivity
 
     int ir_pitch = ini.getInt(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_PITCH, 20);
 
-    LayoutInflater inflater = LayoutInflater.from(this);
-    View view = inflater.inflate(R.layout.dialog_ir_sensitivity, null);
+    DialogIrSensitivityBinding dialogBinding =
+            DialogIrSensitivityBinding.inflate(getLayoutInflater());
 
-    TextView text_slider_value_pitch = view.findViewById(R.id.text_ir_pitch);
-    TextView units = view.findViewById(R.id.text_ir_pitch_units);
-    SeekBar seekbar_pitch = view.findViewById(R.id.seekbar_pitch);
+    TextView text_slider_value_pitch = dialogBinding.textIrPitch;
+    TextView units = dialogBinding.textIrPitchUnits;
+    Slider slider_pitch = dialogBinding.sliderPitch;
 
     text_slider_value_pitch.setText(String.valueOf(ir_pitch));
     units.setText(getString(R.string.pitch));
-    seekbar_pitch.setMax(100);
-    seekbar_pitch.setProgress(ir_pitch);
-    seekbar_pitch.setKeyProgressIncrement(5);
-    seekbar_pitch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-    {
-      @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-      {
-        text_slider_value_pitch.setText(String.valueOf(progress));
-      }
-
-      @Override public void onStartTrackingTouch(SeekBar seekBar)
-      {
-        // Do nothing
-      }
-
-      @Override public void onStopTrackingTouch(SeekBar seekBar)
-      {
-        // Do nothing
-      }
-    });
+    slider_pitch.setValueTo(100);
+    slider_pitch.setValue(ir_pitch);
+    slider_pitch.setStepSize(1);
+    slider_pitch.addOnChangeListener(
+            (slider, progress, fromUser) -> text_slider_value_pitch.setText(
+                    String.valueOf((int) progress)));
 
     int ir_yaw = ini.getInt(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_YAW, 25);
 
-    TextView text_slider_value_yaw = view.findViewById(R.id.text_ir_yaw);
-    TextView units_yaw = view.findViewById(R.id.text_ir_yaw_units);
-    SeekBar seekbar_yaw = view.findViewById(R.id.seekbar_width);
+    TextView text_slider_value_yaw = dialogBinding.textIrYaw;
+    TextView units_yaw = dialogBinding.textIrYawUnits;
+    Slider seekbar_yaw = dialogBinding.sliderYaw;
 
     text_slider_value_yaw.setText(String.valueOf(ir_yaw));
     units_yaw.setText(getString(R.string.yaw));
-    seekbar_yaw.setMax(100);
-    seekbar_yaw.setProgress(ir_yaw);
-    seekbar_yaw.setKeyProgressIncrement(5);
-    seekbar_yaw.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-    {
-      @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-      {
-        text_slider_value_yaw.setText(String.valueOf(progress));
-      }
-
-      @Override public void onStartTrackingTouch(SeekBar seekBar)
-      {
-        // Do nothing
-      }
-
-      @Override public void onStopTrackingTouch(SeekBar seekBar)
-      {
-        // Do nothing
-      }
-    });
-
+    seekbar_yaw.setValueTo(100);
+    seekbar_yaw.setValue(ir_yaw);
+    seekbar_yaw.setStepSize(1);
+    seekbar_yaw.addOnChangeListener((slider, progress, fromUser) -> text_slider_value_yaw.setText(
+            String.valueOf((int) progress)));
 
     int ir_vertical_offset =
             ini.getInt(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_VERTICAL_OFFSET, 10);
 
-    TextView text_slider_value_vertical_offset = view.findViewById(R.id.text_ir_vertical_offset);
-    TextView units_vertical_offset = view.findViewById(R.id.text_ir_vertical_offset_units);
-    SeekBar seekbar_vertical_offset = view.findViewById(R.id.seekbar_vertical_offset);
+    TextView text_slider_value_vertical_offset = dialogBinding.textIrVerticalOffset;
+    TextView units_vertical_offset = dialogBinding.textIrVerticalOffsetUnits;
+    Slider seekbar_vertical_offset = dialogBinding.sliderVerticalOffset;
 
     text_slider_value_vertical_offset.setText(String.valueOf(ir_vertical_offset));
     units_vertical_offset.setText(getString(R.string.vertical_offset));
-    seekbar_vertical_offset.setMax(100);
-    seekbar_vertical_offset.setProgress(ir_vertical_offset);
-    seekbar_vertical_offset.setKeyProgressIncrement(5);
-    seekbar_vertical_offset.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-    {
-      @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-      {
-        text_slider_value_vertical_offset.setText(String.valueOf(progress));
-      }
+    seekbar_vertical_offset.setValueTo(100);
+    seekbar_vertical_offset.setValue(ir_vertical_offset);
+    seekbar_vertical_offset.setStepSize(1);
+    seekbar_vertical_offset.addOnChangeListener(
+            (slider, progress, fromUser) -> text_slider_value_vertical_offset.setText(
+                    String.valueOf((int) progress)));
 
-      @Override public void onStartTrackingTouch(SeekBar seekBar)
-      {
-        // Do nothing
-      }
+    new MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.emulation_ir_sensitivity))
+            .setView(dialogBinding.getRoot())
+            .setPositiveButton(R.string.ok, (dialogInterface, i) ->
+            {
+              ini.setString(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_PITCH,
+                      text_slider_value_pitch.getText().toString());
+              ini.setString(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_YAW,
+                      text_slider_value_yaw.getText().toString());
+              ini.setString(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_VERTICAL_OFFSET,
+                      text_slider_value_vertical_offset.getText().toString());
+              ini.save(file);
 
-      @Override public void onStopTrackingTouch(SeekBar seekBar)
-      {
-        // Do nothing
-      }
-    });
+              NativeLibrary.ReloadWiimoteConfig();
+            })
+            .setNegativeButton(R.string.cancel, null)
+            .setNeutralButton(R.string.default_values, (dialogInterface, i) ->
+            {
+              ini.deleteKey(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_PITCH);
+              ini.deleteKey(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_YAW);
+              ini.deleteKey(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_VERTICAL_OFFSET);
+              ini.save(file);
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle(getString(R.string.emulation_ir_sensitivity));
-    builder.setView(view);
-    builder.setPositiveButton(R.string.ok, (dialogInterface, i) ->
-    {
-      ini.setString(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_PITCH,
-              text_slider_value_pitch.getText().toString());
-      ini.setString(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_YAW,
-              text_slider_value_yaw.getText().toString());
-      ini.setString(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_VERTICAL_OFFSET,
-              text_slider_value_vertical_offset.getText().toString());
-      ini.save(file);
-
-      NativeLibrary.ReloadWiimoteConfig();
-    });
-    builder.setNegativeButton(R.string.cancel, (dialogInterface, i) ->
-    {
-      // Do nothing
-    });
-    builder.setNeutralButton(R.string.default_values, (dialogInterface, i) ->
-    {
-      ini.deleteKey(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_PITCH);
-      ini.deleteKey(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_YAW);
-      ini.deleteKey(Settings.SECTION_CONTROLS, SettingsFile.KEY_WIIBIND_IR_VERTICAL_OFFSET);
-      ini.save(file);
-
-      NativeLibrary.ReloadWiimoteConfig();
-    });
-    builder.show();
+              NativeLibrary.ReloadWiimoteConfig();
+            })
+            .show();
   }
 
   private void resetOverlay()
   {
-    new AlertDialog.Builder(this)
+    new MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.emulation_touch_overlay_reset))
-            .setPositiveButton(R.string.yes, (dialogInterface, i) ->
-                    mEmulationFragment.resetInputOverlay())
-            .setNegativeButton(R.string.cancel, (dialogInterface, i) ->
-            {
-            })
+            .setPositiveButton(R.string.yes,
+                    (dialogInterface, i) -> mEmulationFragment.resetInputOverlay())
+            .setNegativeButton(R.string.cancel, null)
             .show();
   }
 
@@ -1290,5 +1237,18 @@ public final class EmulationActivity extends AppCompatActivity
   public void initInputPointer()
   {
     mEmulationFragment.initInputPointer();
+  }
+
+  @Override
+  public void setTheme(int themeId)
+  {
+    super.setTheme(themeId);
+    this.mThemeId = themeId;
+  }
+
+  @Override
+  public int getThemeId()
+  {
+    return mThemeId;
   }
 }

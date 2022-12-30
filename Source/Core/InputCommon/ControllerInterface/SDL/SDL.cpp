@@ -29,7 +29,33 @@ static std::string GetJoystickName(int index)
 #endif
 }
 
-static void OpenAndAddDevice(int index)
+class InputBackend final : public ciface::InputBackend
+{
+public:
+  InputBackend(ControllerInterface* controller_interface);
+  ~InputBackend();
+  void PopulateDevices() override;
+  void UpdateInput() override;
+
+private:
+  void OpenAndAddDevice(int index);
+
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+  bool HandleEventAndContinue(const SDL_Event& e);
+
+  Common::Event m_init_event;
+  Uint32 m_stop_event_type;
+  Uint32 m_populate_event_type;
+  std::thread m_hotplug_thread;
+#endif
+};
+
+std::unique_ptr<ciface::InputBackend> CreateInputBackend(ControllerInterface* controller_interface)
+{
+  return std::make_unique<InputBackend>(controller_interface);
+}
+
+void InputBackend::OpenAndAddDevice(int index)
 {
   SDL_Joystick* const dev = SDL_JoystickOpen(index);
   if (dev)
@@ -37,17 +63,13 @@ static void OpenAndAddDevice(int index)
     auto js = std::make_shared<Joystick>(dev, index);
     // only add if it has some inputs/outputs
     if (!js->Inputs().empty() || !js->Outputs().empty())
-      g_controller_interface.AddDevice(std::move(js));
+      GetControllerInterface().AddDevice(std::move(js));
   }
 }
 
 #if SDL_VERSION_ATLEAST(2, 0, 0)
-static Common::Event s_init_event;
-static Uint32 s_stop_event_type;
-static Uint32 s_populate_event_type;
-static std::thread s_hotplug_thread;
 
-static bool HandleEventAndContinue(const SDL_Event& e)
+bool InputBackend::HandleEventAndContinue(const SDL_Event& e)
 {
   if (e.type == SDL_JOYDEVICEADDED)
   {
@@ -55,20 +77,20 @@ static bool HandleEventAndContinue(const SDL_Event& e)
   }
   else if (e.type == SDL_JOYDEVICEREMOVED)
   {
-    g_controller_interface.RemoveDevice([&e](const auto* device) {
+    GetControllerInterface().RemoveDevice([&e](const auto* device) {
       return device->GetSource() == "SDL" &&
              SDL_JoystickInstanceID(static_cast<const Joystick*>(device)->GetSDLJoystick()) ==
                  e.jdevice.which;
     });
   }
-  else if (e.type == s_populate_event_type)
+  else if (e.type == m_populate_event_type)
   {
-    g_controller_interface.PlatformPopulateDevices([] {
+    GetControllerInterface().PlatformPopulateDevices([this] {
       for (int i = 0; i < SDL_NumJoysticks(); ++i)
         OpenAndAddDevice(i);
     });
   }
-  else if (e.type == s_stop_event_type)
+  else if (e.type == m_stop_event_type)
   {
     return false;
   }
@@ -144,7 +166,8 @@ static void EnableSDLLogging()
       nullptr);
 }
 
-void Init()
+InputBackend::InputBackend(ControllerInterface* controller_interface)
+    : ciface::InputBackend(controller_interface)
 {
 #if !SDL_VERSION_ATLEAST(2, 0, 0)
   if (SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC) != 0)
@@ -168,13 +191,13 @@ void Init()
   SDL_SetHint(SDL_HINT_JOYSTICK_HIDAPI_PS4_RUMBLE, "1");
 #endif
 
-  s_hotplug_thread = std::thread([] {
+  m_hotplug_thread = std::thread([this] {
     Common::ScopeGuard quit_guard([] {
       // TODO: there seems to be some sort of memory leak with SDL, quit isn't freeing everything up
       SDL_Quit();
     });
     {
-      Common::ScopeGuard init_guard([] { s_init_event.Set(); });
+      Common::ScopeGuard init_guard([this] { m_init_event.Set(); });
 
       if (SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER) != 0)
       {
@@ -188,8 +211,8 @@ void Init()
         ERROR_LOG_FMT(CONTROLLERINTERFACE, "SDL failed to register custom events");
         return;
       }
-      s_stop_event_type = custom_events_start;
-      s_populate_event_type = custom_events_start + 1;
+      m_stop_event_type = custom_events_start;
+      m_populate_event_type = custom_events_start + 1;
 
       // Drain all of the events and add the initial joysticks before returning. Otherwise, the
       // individual joystick events as well as the custom populate event will be handled _after_
@@ -235,26 +258,26 @@ void Init()
     }
   });
 
-  s_init_event.Wait();
+  m_init_event.Wait();
 #endif
 }
 
-void DeInit()
+InputBackend::~InputBackend()
 {
 #if !SDL_VERSION_ATLEAST(2, 0, 0)
   SDL_Quit();
 #else
-  if (!s_hotplug_thread.joinable())
+  if (!m_hotplug_thread.joinable())
     return;
 
-  SDL_Event stop_event{s_stop_event_type};
+  SDL_Event stop_event{m_stop_event_type};
   SDL_PushEvent(&stop_event);
 
-  s_hotplug_thread.join();
+  m_hotplug_thread.join();
 #endif
 }
 
-void PopulateDevices()
+void InputBackend::PopulateDevices()
 {
 #if !SDL_VERSION_ATLEAST(2, 0, 0)
   if (!SDL_WasInit(SDL_INIT_JOYSTICK))
@@ -263,16 +286,37 @@ void PopulateDevices()
   for (int i = 0; i < SDL_NumJoysticks(); ++i)
     OpenAndAddDevice(i);
 #else
-  if (!s_hotplug_thread.joinable())
+  if (!m_hotplug_thread.joinable())
     return;
 
-  SDL_Event populate_event{s_populate_event_type};
+  SDL_Event populate_event{m_populate_event_type};
   SDL_PushEvent(&populate_event);
 #endif
 }
 
+struct SDLMotionAxis
+{
+  std::string_view name;
+  int index;
+  ControlState scale;
+};
+using SDLMotionAxisList = std::array<SDLMotionAxis, 6>;
+
+// clang-format off
+static constexpr SDLMotionAxisList SDL_AXES_ACCELEROMETER = {{
+    {"Up",      1,  1}, {"Down",     1, -1},
+    {"Left",    0, -1}, {"Right",    0,  1},
+    {"Forward", 2, -1}, {"Backward", 2,  1},
+}};
+static constexpr SDLMotionAxisList SDL_AXES_GYRO = {{
+    {"Pitch Up",  0, 1}, {"Pitch Down", 0, -1},
+    {"Roll Left", 2, 1}, {"Roll Right", 2, -1},
+    {"Yaw Left",  1, 1}, {"Yaw Right",  1, -1},
+}};
+// clang-format on
+
 Joystick::Joystick(SDL_Joystick* const joystick, const int sdl_index)
-    : m_joystick(joystick), m_name(StripSpaces(GetJoystickName(sdl_index)))
+    : m_joystick(joystick), m_name(StripWhitespace(GetJoystickName(sdl_index)))
 {
   // really bad HACKS:
   // to not use SDL for an XInput device
@@ -375,29 +419,26 @@ Joystick::Joystick(SDL_Joystick* const joystick, const int sdl_index)
     m_controller = SDL_GameControllerOpen(sdl_index);
     if (m_controller)
     {
-      if (SDL_GameControllerSetSensorEnabled(m_controller, SDL_SENSOR_ACCEL, SDL_TRUE) == 0)
-      {
-        AddInput(new MotionInput("Accel Up", m_controller, SDL_SENSOR_ACCEL, 1, 1));
-        AddInput(new MotionInput("Accel Down", m_controller, SDL_SENSOR_ACCEL, 1, -1));
+      auto AddSensor = [this](SDL_SensorType type, std::string_view name,
+                              const SDLMotionAxisList& axes) {
+        if (SDL_GameControllerSetSensorEnabled(m_controller, type, SDL_TRUE) == 0)
+        {
+          for (const SDLMotionAxis& axis : axes)
+          {
+            AddInput(new MotionInput(fmt::format("{} {}", name, axis.name), m_controller, type,
+                                     axis.index, axis.scale));
+          }
+        }
+      };
 
-        AddInput(new MotionInput("Accel Left", m_controller, SDL_SENSOR_ACCEL, 0, -1));
-        AddInput(new MotionInput("Accel Right", m_controller, SDL_SENSOR_ACCEL, 0, 1));
-
-        AddInput(new MotionInput("Accel Forward", m_controller, SDL_SENSOR_ACCEL, 2, -1));
-        AddInput(new MotionInput("Accel Backward", m_controller, SDL_SENSOR_ACCEL, 2, 1));
-      }
-
-      if (SDL_GameControllerSetSensorEnabled(m_controller, SDL_SENSOR_GYRO, SDL_TRUE) == 0)
-      {
-        AddInput(new MotionInput("Gyro Pitch Up", m_controller, SDL_SENSOR_GYRO, 0, 1));
-        AddInput(new MotionInput("Gyro Pitch Down", m_controller, SDL_SENSOR_GYRO, 0, -1));
-
-        AddInput(new MotionInput("Gyro Roll Left", m_controller, SDL_SENSOR_GYRO, 2, 1));
-        AddInput(new MotionInput("Gyro Roll Right", m_controller, SDL_SENSOR_GYRO, 2, -1));
-
-        AddInput(new MotionInput("Gyro Yaw Left", m_controller, SDL_SENSOR_GYRO, 1, 1));
-        AddInput(new MotionInput("Gyro Yaw Right", m_controller, SDL_SENSOR_GYRO, 1, -1));
-      }
+      AddSensor(SDL_SENSOR_ACCEL, "Accel", SDL_AXES_ACCELEROMETER);
+      AddSensor(SDL_SENSOR_GYRO, "Gyro", SDL_AXES_GYRO);
+#if SDL_VERSION_ATLEAST(2, 26, 0)
+      AddSensor(SDL_SENSOR_ACCEL_L, "Accel L", SDL_AXES_ACCELEROMETER);
+      AddSensor(SDL_SENSOR_GYRO_L, "Gyro L", SDL_AXES_GYRO);
+      AddSensor(SDL_SENSOR_ACCEL_R, "Accel R", SDL_AXES_ACCELEROMETER);
+      AddSensor(SDL_SENSOR_GYRO_R, "Gyro R", SDL_AXES_GYRO);
+#endif
     }
   }
 #endif
@@ -617,9 +658,8 @@ void Joystick::Motor::SetState(ControlState state)
 }
 #endif
 
-void Joystick::UpdateInput()
+void InputBackend::UpdateInput()
 {
-  // TODO: Don't call this for every Joystick, only once per ControllerInterface::UpdateInput()
   SDL_JoystickUpdate();
 }
 

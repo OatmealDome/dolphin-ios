@@ -10,6 +10,7 @@
 #include "Core/CoreTiming.h"
 #include "Core/HW/DSPHLE/UCodes/UCodes.h"
 #include "Core/HW/SystemTimers.h"
+#include "Core/System.h"
 
 namespace DSP::HLE
 {
@@ -105,9 +106,9 @@ void DSPHLE::DoState(PointerWrap& p)
     return;
   }
 
-  p.DoPOD(m_dsp_control);
+  p.Do(m_dsp_control);
   p.Do(m_control_reg_init_code_clear_time);
-  p.DoPOD(m_dsp_state);
+  p.Do(m_dsp_state);
 
   int ucode_crc = UCodeInterface::GetCRC(m_ucode.get());
   int ucode_crc_before_load = ucode_crc;
@@ -234,7 +235,7 @@ u16 DSPHLE::DSP_ReadControlRegister()
     if (SystemTimers::GetFakeTimeBase() >= m_control_reg_init_code_clear_time)
       m_dsp_control.DSPInitCode = 0;
     else
-      CoreTiming::ForceExceptionCheck(50);  // Keep checking
+      Core::System::GetInstance().GetCoreTiming().ForceExceptionCheck(50);  // Keep checking
   }
   return m_dsp_control.Hex;
 }

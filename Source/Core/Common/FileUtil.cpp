@@ -33,6 +33,7 @@
 #include <Shlwapi.h>
 #include <commdlg.h>  // for GetSaveFileName
 #include <direct.h>   // getcwd
+#include <filesystem>
 #include <io.h>
 #include <objbase.h>  // guid stuff
 #include <shellapi.h>
@@ -322,65 +323,27 @@ bool DeleteDir(const std::string& filename, IfAbsentBehavior behavior)
   return false;
 }
 
-// Repeatedly invokes func until it returns true or max_attempts failures.
-// Waits after each failure, with each delay doubling in length.
-template <typename FuncType>
-static bool AttemptMaxTimesWithExponentialDelay(int max_attempts, std::chrono::milliseconds delay,
-                                                std::string_view func_name, const FuncType& func)
-{
-  for (int failed_attempts = 0; failed_attempts < max_attempts; ++failed_attempts)
-  {
-    if (func())
-    {
-      return true;
-    }
-    if (failed_attempts + 1 < max_attempts)
-    {
-      INFO_LOG_FMT(COMMON, "{} attempt failed, delaying for {} milliseconds", func_name,
-                   delay.count());
-      std::this_thread::sleep_for(delay);
-      delay *= 2;
-    }
-  }
-  return false;
-}
-
 // renames file srcFilename to destFilename, returns true on success
 bool Rename(const std::string& srcFilename, const std::string& destFilename)
 {
   DEBUG_LOG_FMT(COMMON, "Rename: {} --> {}", srcFilename, destFilename);
 #ifdef _WIN32
-  const std::wstring source_wstring = UTF8ToTStr(srcFilename);
-  const std::wstring destination_wstring = UTF8ToTStr(destFilename);
-
-  // On Windows ReplaceFile can fail spuriously due to antivirus checking or other noise.
-  // Retry the operation with increasing delays, and if none of them work there's probably a
-  // persistent problem.
-  const bool success = AttemptMaxTimesWithExponentialDelay(
-      3, std::chrono::milliseconds(5), fmt::format("Rename {} --> {}", srcFilename, destFilename),
-      [&source_wstring, &destination_wstring] {
-        if (ReplaceFile(destination_wstring.c_str(), source_wstring.c_str(), nullptr,
-                        REPLACEFILE_IGNORE_MERGE_ERRORS, nullptr, nullptr))
-        {
-          return true;
-        }
-        // Might have failed because the destination doesn't exist.
-        if (GetLastError() == ERROR_FILE_NOT_FOUND)
-        {
-          return MoveFile(source_wstring.c_str(), destination_wstring.c_str()) != 0;
-        }
-        return false;
-      });
-  constexpr auto error_string_func = GetLastErrorString;
+  std::error_code error;
+  std::filesystem::rename(UTF8ToWString(srcFilename), UTF8ToWString(destFilename), error);
+  if (error)
+  {
+    ERROR_LOG_FMT(COMMON, "Rename failed: {} --> {}: {}", srcFilename, destFilename,
+                  error.message());
+  }
+  const bool success = !error;
 #else
   const bool success = rename(srcFilename.c_str(), destFilename.c_str()) == 0;
-  constexpr auto error_string_func = LastStrerrorString;
-#endif
   if (!success)
   {
-    ERROR_LOG_FMT(COMMON, "Rename: rename failed on {} --> {}: {}", srcFilename, destFilename,
-                  error_string_func());
+    ERROR_LOG_FMT(COMMON, "Rename failed {} --> {}: {}", srcFilename, destFilename,
+                  LastStrerrorString());
   }
+#endif
   return success;
 }
 
@@ -672,15 +635,19 @@ bool DeleteDirRecursively(const std::string& directory)
   return success;
 }
 
-// Create directory and copy contents (does not overwrite existing files)
-void CopyDir(const std::string& source_path, const std::string& dest_path, bool destructive)
+// Create directory and copy contents (optionally overwrites existing files)
+bool CopyDir(const std::string& source_path, const std::string& dest_path, const bool destructive)
 {
   if (source_path == dest_path)
-    return;
+    return true;
   if (!Exists(source_path))
-    return;
+    return false;
+
+  // Shouldn't be used to short circuit operations after an earlier failure
+  bool everything_copied = true;
+
   if (!Exists(dest_path))
-    File::CreateFullPath(dest_path);
+    everything_copied = File::CreateFullPath(dest_path) && everything_copied;
 
 #ifdef _WIN32
   WIN32_FIND_DATA ffd;
@@ -689,7 +656,7 @@ void CopyDir(const std::string& source_path, const std::string& dest_path, bool 
   if (hFind == INVALID_HANDLE_VALUE)
   {
     FindClose(hFind);
-    return;
+    return false;
   }
 
   do
@@ -698,7 +665,7 @@ void CopyDir(const std::string& source_path, const std::string& dest_path, bool 
 #else
   DIR* dirp = opendir(source_path.c_str());
   if (!dirp)
-    return;
+    return false;
 
   while (dirent* result = readdir(dirp))
   {
@@ -708,21 +675,21 @@ void CopyDir(const std::string& source_path, const std::string& dest_path, bool 
     if (virtualName == "." || virtualName == "..")
       continue;
 
-    std::string source = source_path + DIR_SEP + virtualName;
-    std::string dest = dest_path + DIR_SEP + virtualName;
+    const std::string source = source_path + DIR_SEP + virtualName;
+    const std::string dest = dest_path + DIR_SEP + virtualName;
     if (IsDirectory(source))
     {
       if (!Exists(dest))
         File::CreateFullPath(dest + DIR_SEP);
-      CopyDir(source, dest, destructive);
+      everything_copied = CopyDir(source, dest, destructive) && everything_copied;
     }
     else if (!destructive && !Exists(dest))
     {
-      Copy(source, dest);
+      everything_copied = Copy(source, dest) && everything_copied;
     }
     else if (destructive)
     {
-      Rename(source, dest);
+      everything_copied = Rename(source, dest) && everything_copied;
     }
 #ifdef _WIN32
   } while (FindNextFile(hFind, &ffd) != 0);
@@ -731,6 +698,7 @@ void CopyDir(const std::string& source_path, const std::string& dest_path, bool 
   }
   closedir(dirp);
 #endif
+  return everything_copied;
 }
 
 // Returns the current directory

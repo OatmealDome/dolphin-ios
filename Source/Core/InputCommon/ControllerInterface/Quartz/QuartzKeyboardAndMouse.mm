@@ -4,11 +4,74 @@
 #include "InputCommon/ControllerInterface/Quartz/QuartzKeyboardAndMouse.h"
 
 #include <map>
+#include <mutex>
 
 #include <Carbon/Carbon.h>
 #include <Cocoa/Cocoa.h>
 
+#include "Core/Host.h"
+
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
+
+/// Helper class to get window position data from threads other than the main thread
+@interface DolWindowPositionObserver : NSObject
+
+- (instancetype)initWithView:(NSView*)view;
+@property(readonly) NSRect frame;
+
+@end
+
+@implementation DolWindowPositionObserver
+{
+  NSView* _view;
+  NSWindow* _window;
+  NSRect _frame;
+  std::mutex _mtx;
+}
+
+- (NSRect)calcFrame
+{
+  return [_window convertRectToScreen:[_view frame]];
+}
+
+- (instancetype)initWithView:(NSView*)view
+{
+  self = [super init];
+  if (self)
+  {
+    _view = view;
+    _window = [view window];
+    _frame = [self calcFrame];
+    [_window addObserver:self forKeyPath:@"frame" options:0 context:nil];
+  }
+  return self;
+}
+
+- (NSRect)frame
+{
+  std::lock_guard<std::mutex> guard(_mtx);
+  return _frame;
+}
+
+- (void)observeValueForKeyPath:(NSString*)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary<NSKeyValueChangeKey, id>*)change
+                       context:(void*)context
+{
+  if (object == _window)
+  {
+    NSRect new_frame = [self calcFrame];
+    std::lock_guard<std::mutex> guard(_mtx);
+    _frame = new_frame;
+  }
+}
+
+- (void)dealloc
+{
+  [_window removeObserver:self forKeyPath:@"frame"];
+}
+
+@end
 
 namespace ciface::Quartz
 {
@@ -147,20 +210,12 @@ KeyboardAndMouse::KeyboardAndMouse(void* view)
   AddCombinedInput("Shift", {"Left Shift", "Right Shift"});
   AddCombinedInput("Ctrl", {"Left Control", "Right Control"});
 
-  NSView* cocoa_view = reinterpret_cast<NSView*>(view);
-
   // PopulateDevices may be called on the Emuthread, so we need to ensure that
   // these UI APIs are only ever called on the main thread.
   if ([NSThread isMainThread])
-  {
-    m_windowid = [[cocoa_view window] windowNumber];
-  }
+    MainThreadInitialization(view);
   else
-  {
-    dispatch_sync(dispatch_get_main_queue(), ^{
-      m_windowid = [[cocoa_view window] windowNumber];
-    });
-  }
+    dispatch_sync(dispatch_get_main_queue(), [this, view] { MainThreadInitialization(view); });
 
   // cursor, with a hax for-loop
   for (unsigned int i = 0; i < 4; ++i)
@@ -171,37 +226,50 @@ KeyboardAndMouse::KeyboardAndMouse(void* view)
   AddInput(new Button(kCGMouseButtonCenter));
 }
 
+// Very important that this is here
+// C++ and ObjC++ have different views of the header, and only ObjC++'s will deallocate properly
+KeyboardAndMouse::~KeyboardAndMouse() = default;
+
+void KeyboardAndMouse::MainThreadInitialization(void* view)
+{
+  NSView* cocoa_view = (__bridge NSView*)view;
+  m_window_pos_observer = [[DolWindowPositionObserver alloc] initWithView:cocoa_view];
+}
+
 void KeyboardAndMouse::UpdateInput()
 {
-  CGRect bounds = CGRectZero;
-  CGWindowID windowid[1] = {m_windowid};
-  CFArrayRef windowArray = CFArrayCreate(nullptr, (const void**)windowid, 1, nullptr);
-  CFArrayRef windowDescriptions = CGWindowListCreateDescriptionFromArray(windowArray);
-  CFDictionaryRef windowDescription =
-      static_cast<CFDictionaryRef>(CFArrayGetValueAtIndex(windowDescriptions, 0));
+  NSRect bounds = [m_window_pos_observer frame];
 
-  if (CFDictionaryContainsKey(windowDescription, kCGWindowBounds))
+  const double window_width = std::max(bounds.size.width, 1.0);
+  const double window_height = std::max(bounds.size.height, 1.0);
+
+  if (g_controller_interface.IsMouseCenteringRequested() && Host_RendererHasFocus())
   {
-    CFDictionaryRef boundsDictionary =
-        static_cast<CFDictionaryRef>(CFDictionaryGetValue(windowDescription, kCGWindowBounds));
+    m_cursor.x = 0;
+    m_cursor.y = 0;
 
-    if (boundsDictionary != nullptr)
-      CGRectMakeWithDictionaryRepresentation(boundsDictionary, &bounds);
+    const CGPoint window_center_global_coordinates =
+        CGPointMake(bounds.origin.x + window_width / 2.0, bounds.origin.y + window_height / 2.0);
+    CGWarpMouseCursorPosition(window_center_global_coordinates);
+    // Without this line there is a short but obvious delay after centering the cursor before it can
+    // be moved again
+    CGAssociateMouseAndMouseCursorPosition(true);
+
+    g_controller_interface.SetMouseCenteringRequested(false);
   }
+  else
+  {
+    CGEventRef event = CGEventCreate(nil);
+    CGPoint loc = CGEventGetLocation(event);
+    CFRelease(event);
 
-  CFRelease(windowDescriptions);
-  CFRelease(windowArray);
+    const auto window_scale = g_controller_interface.GetWindowInputScale();
 
-  CGEventRef event = CGEventCreate(nil);
-  CGPoint loc = CGEventGetLocation(event);
-  CFRelease(event);
-
-  const auto window_scale = g_controller_interface.GetWindowInputScale();
-
-  loc.x -= bounds.origin.x;
-  loc.y -= bounds.origin.y;
-  m_cursor.x = (loc.x / std::max(bounds.size.width, 1.0) * 2 - 1.0) * window_scale.x;
-  m_cursor.y = (loc.y / std::max(bounds.size.height, 1.0) * 2 - 1.0) * window_scale.y;
+    loc.x -= bounds.origin.x;
+    loc.y -= bounds.origin.y;
+    m_cursor.x = (loc.x / window_width * 2 - 1.0) * window_scale.x;
+    m_cursor.y = (loc.y / window_height * 2 - 1.0) * window_scale.y;
+  }
 }
 
 std::string KeyboardAndMouse::GetName() const

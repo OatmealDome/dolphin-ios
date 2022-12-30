@@ -2,7 +2,6 @@
 
 package org.dolphinemu.dolphinemu.features.settings.ui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,13 +14,24 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.color.MaterialColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.dolphinemu.dolphinemu.NativeLibrary;
 import org.dolphinemu.dolphinemu.R;
+import org.dolphinemu.dolphinemu.databinding.ActivitySettingsBinding;
 import org.dolphinemu.dolphinemu.ui.main.MainPresenter;
 import org.dolphinemu.dolphinemu.utils.FileBrowserHelper;
+import org.dolphinemu.dolphinemu.utils.InsetsHelper;
+import org.dolphinemu.dolphinemu.utils.ThemeHelper;
 
 import java.util.Set;
 
@@ -34,7 +44,11 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
   private static final String FRAGMENT_TAG = "settings";
   private SettingsActivityPresenter mPresenter;
 
-  private ProgressDialog dialog;
+  private AlertDialog dialog;
+
+  private CollapsingToolbarLayout mToolbarLayout;
+
+  private ActivitySettingsBinding mBinding;
 
   public static void launch(Context context, MenuTag menuTag, String gameId, int revision,
           boolean isWii)
@@ -58,6 +72,8 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
+    ThemeHelper.setTheme(this);
+
     super.onCreate(savedInstanceState);
 
     // If we came here from the game list, we don't want to rescan when returning to the game list.
@@ -67,7 +83,10 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
       MainPresenter.skipRescanningLibrary();
     }
 
-    setContentView(R.layout.activity_settings);
+    mBinding = ActivitySettingsBinding.inflate(getLayoutInflater());
+    setContentView(mBinding.getRoot());
+
+    WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
     Intent launcher = getIntent();
     String gameID = launcher.getStringExtra(ARG_GAME_ID);
@@ -80,8 +99,16 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
     mPresenter = new SettingsActivityPresenter(this, getSettings());
     mPresenter.onCreate(savedInstanceState, menuTag, gameID, revision, isWii, this);
 
-    // show up button
+    mToolbarLayout = mBinding.toolbarSettingsLayout;
+    setSupportActionBar(mBinding.toolbarSettings);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    // TODO: Remove this when CollapsingToolbarLayouts are fixed by Google
+    // https://github.com/material-components/material-components-android/issues/1310
+    ViewCompat.setOnApplyWindowInsetsListener(mToolbarLayout, null);
+
+    setInsets();
+    ThemeHelper.enableScrollTint(this, mBinding.toolbarSettings, mBinding.appbarSettings);
   }
 
   @Override
@@ -140,16 +167,16 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
       if (areSystemAnimationsEnabled())
       {
         transaction.setCustomAnimations(
-                R.animator.settings_enter,
-                R.animator.settings_exit,
-                R.animator.settings_pop_enter,
-                R.animator.setttings_pop_exit);
+                R.anim.anim_settings_fragment_in,
+                R.anim.anim_settings_fragment_out,
+                0,
+                R.anim.anim_pop_settings_fragment_out);
       }
 
       transaction.addToBackStack(null);
     }
-    transaction.replace(R.id.frame_content, SettingsFragment.newInstance(menuTag, gameID, extras),
-            FRAGMENT_TAG);
+    transaction.replace(R.id.frame_content_settings,
+            SettingsFragment.newInstance(menuTag, gameID, extras), FRAGMENT_TAG);
 
     transaction.commit();
   }
@@ -211,11 +238,11 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
   {
     if (dialog == null)
     {
-      dialog = new ProgressDialog(this);
-      dialog.setMessage(getString(R.string.load_settings));
-      dialog.setIndeterminate(true);
+      dialog = new MaterialAlertDialogBuilder(this)
+              .setTitle(getString(R.string.load_settings))
+              .setView(R.layout.dialog_indeterminate_progress)
+              .create();
     }
-
     dialog.show();
   }
 
@@ -228,7 +255,7 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
   @Override
   public void showGameIniJunkDeletionQuestion()
   {
-    new AlertDialog.Builder(this)
+    new MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.game_ini_junk_title))
             .setMessage(getString(R.string.game_ini_junk_question))
             .setPositiveButton(R.string.yes, (dialogInterface, i) -> mPresenter.clearSettings())
@@ -311,5 +338,28 @@ public final class SettingsActivity extends AppCompatActivity implements Setting
   private SettingsFragment getFragment()
   {
     return (SettingsFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+  }
+
+  public void setToolbarTitle(String title)
+  {
+    mToolbarLayout.setTitle(title);
+  }
+
+  private void setInsets()
+  {
+    ViewCompat.setOnApplyWindowInsetsListener(mBinding.appbarSettings, (v, windowInsets) ->
+    {
+      Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+      InsetsHelper.insetAppBar(insets, mBinding.appbarSettings);
+
+      mBinding.frameContentSettings.setPadding(insets.left, 0, insets.right, 0);
+
+      InsetsHelper.applyNavbarWorkaround(insets.bottom, mBinding.workaroundView);
+      ThemeHelper.setNavigationBarColor(this,
+              MaterialColors.getColor(mBinding.appbarSettings, R.attr.colorSurface));
+
+      return windowInsets;
+    });
   }
 }

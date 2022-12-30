@@ -26,6 +26,7 @@
 #include "Core/HW/SI/SI_Device.h"
 #include "Core/Movie.h"
 #include "Core/NetPlayProto.h"
+#include "Core/System.h"
 #include "DolphinQt/QtUtils/DolphinFileDialog.h"
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
 #include "DolphinQt/Resources.h"
@@ -41,10 +42,12 @@ static void RestartCore(const std::weak_ptr<HW::GBA::Core>& core, std::string_vi
           auto& info = Config::MAIN_GBA_ROM_PATHS[core_ptr->GetCoreInfo().device_number];
           core_ptr->Stop();
           Config::SetCurrent(info, rom_path);
-          if (core_ptr->Start(CoreTiming::GetTicks()))
+          auto& system = Core::System::GetInstance();
+          auto& core_timing = system.GetCoreTiming();
+          if (core_ptr->Start(core_timing.GetTicks()))
             return;
           Config::SetCurrent(info, Config::GetBase(info));
-          core_ptr->Start(CoreTiming::GetTicks());
+          core_ptr->Start(core_timing.GetTicks());
         }
       },
       false);
@@ -325,7 +328,8 @@ void GBAWidget::UpdateTitle()
 void GBAWidget::UpdateVolume()
 {
   int volume = m_muted ? 0 : m_volume * 256 / 100;
-  g_sound_stream->GetMixer()->SetGBAVolume(m_core_info.device_number, volume, volume);
+  auto& system = Core::System::GetInstance();
+  system.GetSoundStream()->GetMixer()->SetGBAVolume(m_core_info.device_number, volume, volume);
   UpdateTitle();
 }
 

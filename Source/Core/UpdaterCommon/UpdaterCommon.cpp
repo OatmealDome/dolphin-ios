@@ -4,6 +4,7 @@
 #include "UpdaterCommon/UpdaterCommon.h"
 
 #include <array>
+#include <memory>
 #include <optional>
 
 #include <OptionParser.h>
@@ -12,11 +13,13 @@
 #include <mbedtls/sha256.h>
 #include <zlib.h>
 
+#include "Common/CommonFuncs.h"
 #include "Common/CommonPaths.h"
 #include "Common/FileUtil.h"
 #include "Common/HttpRequest.h"
 #include "Common/ScopeGuard.h"
 #include "Common/StringUtil.h"
+#include "UpdaterCommon/Platform.h"
 #include "UpdaterCommon/UI.h"
 
 #ifndef _WIN32
@@ -24,52 +27,20 @@
 #include <sys/types.h>
 #endif
 
+#ifdef _WIN32
+#include <Windows.h>
+#include <filesystem>
+#endif
+
 // Refer to docs/autoupdate_overview.md for a detailed overview of the autoupdate process
 
-namespace
-{
 // Where to log updater output.
-FILE* log_fp = stderr;
+static FILE* log_fp = stderr;
 
 // Public key used to verify update manifests.
 const std::array<u8, 32> UPDATE_PUB_KEY = {
     0x2a, 0xb3, 0xd1, 0xdc, 0x6e, 0xf5, 0x07, 0xf6, 0xa0, 0x6c, 0x7c, 0x54, 0xdf, 0x54, 0xf4, 0x42,
     0x80, 0xa6, 0x28, 0x8b, 0x6d, 0x70, 0x14, 0xb5, 0x4c, 0x34, 0x95, 0x20, 0x4d, 0xd4, 0xd3, 0x5d};
-
-struct Manifest
-{
-  using Filename = std::string;
-  using Hash = std::array<u8, 16>;
-  std::map<Filename, Hash> entries;
-};
-
-// Represent the operations to be performed by the updater.
-struct TodoList
-{
-  struct DownloadOp
-  {
-    Manifest::Filename filename;
-    Manifest::Hash hash{};
-  };
-  std::vector<DownloadOp> to_download;
-
-  struct UpdateOp
-  {
-    Manifest::Filename filename;
-    std::optional<Manifest::Hash> old_hash;
-    Manifest::Hash new_hash{};
-  };
-  std::vector<UpdateOp> to_update;
-
-  struct DeleteOp
-  {
-    Manifest::Filename filename;
-    Manifest::Hash old_hash{};
-  };
-  std::vector<DeleteOp> to_delete;
-
-  void Log() const;
-};
 
 bool ProgressCallback(double total, double now, double, double)
 {
@@ -132,16 +103,17 @@ std::optional<std::string> GzipInflate(const std::string& data)
   inflateInit2(&zstrm, 16 + MAX_WBITS);
 
   std::string out;
-  char buffer[4096];
+  const size_t buf_len = 20 * 1024 * 1024;
+  auto buffer = std::make_unique<char[]>(buf_len);
   int ret;
 
   do
   {
-    zstrm.avail_out = sizeof(buffer);
-    zstrm.next_out = reinterpret_cast<u8*>(buffer);
+    zstrm.avail_out = buf_len;
+    zstrm.next_out = reinterpret_cast<u8*>(buffer.get());
 
     ret = inflate(&zstrm, 0);
-    out.append(buffer, sizeof(buffer) - zstrm.avail_out);
+    out.append(buffer.get(), buf_len - zstrm.avail_out);
   } while (ret == Z_OK);
 
   inflateEnd(&zstrm);
@@ -276,6 +248,13 @@ bool DownloadContent(const std::vector<TodoList::DownloadOp>& to_download,
   return true;
 }
 
+bool PlatformVersionCheck(const std::vector<TodoList::UpdateOp>& to_update,
+                          const std::string& install_base_path, const std::string& temp_dir)
+{
+  UI::SetDescription("Checking platform...");
+  return Platform::VersionCheck(to_update, install_base_path, temp_dir, log_fp);
+}
+
 TodoList ComputeActionsToDo(Manifest this_manifest, Manifest next_manifest)
 {
   TodoList todo;
@@ -331,7 +310,7 @@ void CleanUpTempDir(const std::string& temp_dir, const TodoList& todo)
 bool BackupFile(const std::string& path)
 {
   std::string backup_path = path + ".bak";
-  fprintf(log_fp, "Backing up unknown pre-existing %s to .bak.\n", path.c_str());
+  fprintf(log_fp, "Backing up existing %s to .bak.\n", path.c_str());
   if (!File::Rename(path, backup_path))
   {
     fprintf(log_fp, "Cound not rename %s to %s for backup.\n", path.c_str(), backup_path.c_str());
@@ -376,6 +355,11 @@ bool DeleteObsoleteFiles(const std::vector<TodoList::DeleteOp>& to_delete,
 bool UpdateFiles(const std::vector<TodoList::UpdateOp>& to_update,
                  const std::string& install_base_path, const std::string& temp_path)
 {
+#ifdef _WIN32
+  const auto self_path = std::filesystem::path(GetModuleName(nullptr).value());
+  const auto self_filename = self_path.filename();
+#endif
+
   for (const auto& op : to_update)
   {
     std::string path = install_base_path + DIR_SEP + op.filename;
@@ -407,6 +391,20 @@ bool UpdateFiles(const std::vector<TodoList::UpdateOp>& to_update,
 
       permission = file_stats.st_mode;
 #endif
+
+#ifdef _WIN32
+      // If incoming file would overwrite the currently executing file, rename ourself to allow the
+      // overwrite to complete. Renaming ourself while executing is fine, but deleting ourself is
+      // rather tricky. The best way to handle that would be to execute the newly-placed Updater.exe
+      // after entire update has completed, and have it delete our relocated executable. For now we
+      // just let the relocated file hang around.
+      // It is enough to match based on filename, don't need File/VolumeId etc.
+      const bool is_self = op.filename == self_filename;
+#else
+      // On other platforms, the renaming is handled by Dolphin before running the Updater.
+      const bool is_self = false;
+#endif
+
       std::string contents;
       if (!File::ReadFileToString(path, contents))
       {
@@ -419,7 +417,7 @@ bool UpdateFiles(const std::vector<TodoList::UpdateOp>& to_update,
         fprintf(log_fp, "File %s was already up to date. Partial update?\n", op.filename.c_str());
         continue;
       }
-      else if (!op.old_hash || contents_hash != *op.old_hash)
+      else if (!op.old_hash || contents_hash != *op.old_hash || is_self)
       {
         if (!BackupFile(path))
           return false;
@@ -471,6 +469,11 @@ bool PerformUpdate(const TodoList& todo, const std::string& install_base_path,
   if (!DownloadContent(todo.to_download, content_base_url, temp_path))
     return false;
   fprintf(log_fp, "Download step completed.\n");
+
+  fprintf(log_fp, "Starting platform version check step...\n");
+  if (!PlatformVersionCheck(todo.to_update, install_base_path, temp_path))
+    return false;
+  fprintf(log_fp, "Platform version check step completed.\n");
 
   fprintf(log_fp, "Starting update step...\n");
   if (!UpdateFiles(todo.to_update, install_base_path, temp_path))
@@ -664,7 +667,6 @@ std::optional<Options> ParseCommandLine(std::vector<std::string>& args)
 
   return opts;
 }
-};  // namespace
 
 bool RunUpdater(std::vector<std::string> args)
 {

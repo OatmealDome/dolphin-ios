@@ -3,8 +3,6 @@
 
 #include "Core/HW/GBACore.h"
 
-#include <mbedtls/sha1.h>
-
 #define PYCPARSE  // Remove static functions from the header
 #include <mgba/core/interface.h>
 #undef PYCPARSE
@@ -20,6 +18,7 @@
 #include "Common/CommonPaths.h"
 #include "Common/CommonTypes.h"
 #include "Common/Config/Config.h"
+#include "Common/Crypto/SHA1.h"
 #include "Common/FileUtil.h"
 #include "Common/IOFile.h"
 #include "Common/MinizipUtil.h"
@@ -31,6 +30,7 @@
 #include "Core/HW/SystemTimers.h"
 #include "Core/Host.h"
 #include "Core/NetPlayProto.h"
+#include "Core/System.h"
 
 namespace HW::GBA
 {
@@ -143,11 +143,10 @@ static std::array<u8, 20> GetROMHash(VFile* rom)
   size_t size = rom->size(rom);
   u8* buffer = static_cast<u8*>(rom->map(rom, size, MAP_READ));
 
-  std::array<u8, 20> hash;
-  mbedtls_sha1_ret(buffer, size, hash.data());
+  const auto digest = Common::SHA1::CalculateDigest(buffer, size);
   rom->unmap(rom, buffer, size);
 
-  return hash;
+  return digest;
 }
 
 Core::Core(int device_number) : m_device_number(device_number)
@@ -405,7 +404,10 @@ void Core::SetSampleRates()
   m_core->setAudioBufferSize(m_core, SAMPLES);
   blip_set_rates(m_core->getAudioChannel(m_core, 0), m_core->frequency(m_core), SAMPLE_RATE);
   blip_set_rates(m_core->getAudioChannel(m_core, 1), m_core->frequency(m_core), SAMPLE_RATE);
-  g_sound_stream->GetMixer()->SetGBAInputSampleRateDivisors(
+
+  auto& system = ::Core::System::GetInstance();
+  SoundStream* sound_stream = system.GetSoundStream();
+  sound_stream->GetMixer()->SetGBAInputSampleRateDivisors(
       m_device_number, Mixer::FIXED_SAMPLE_RATE_DIVIDEND / SAMPLE_RATE);
 }
 
@@ -438,7 +440,10 @@ void Core::SetAVStream()
     std::vector<s16> buffer(SAMPLES * 2);
     blip_read_samples(left, &buffer[0], SAMPLES, 1);
     blip_read_samples(right, &buffer[1], SAMPLES, 1);
-    g_sound_stream->GetMixer()->PushGBASamples(core->m_device_number, &buffer[0], SAMPLES);
+
+    auto& system = ::Core::System::GetInstance();
+    SoundStream* sound_stream = system.GetSoundStream();
+    sound_stream->GetMixer()->PushGBASamples(core->m_device_number, &buffer[0], SAMPLES);
   };
   m_core->setAVStream(m_core, &m_stream);
 }

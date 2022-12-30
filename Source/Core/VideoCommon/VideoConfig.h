@@ -17,12 +17,6 @@
 #include "VideoCommon/GraphicsModSystem/Config/GraphicsModGroup.h"
 #include "VideoCommon/VideoCommon.h"
 
-// Log in two categories, and save three other options in the same byte
-#define CONF_LOG 1
-#define CONF_PRIMLOG 2
-#define CONF_SAVETARGETS 8
-#define CONF_SAVESHADERS 16
-
 constexpr int EFB_SCALE_AUTO_INTEGRAL = 0;
 
 enum class AspectMode : int
@@ -51,6 +45,20 @@ enum class ShaderCompilationMode : int
   AsynchronousSkipRendering
 };
 
+enum class TextureFilteringMode : int
+{
+  Default,
+  Nearest,
+  Linear,
+};
+
+enum class TriState : int
+{
+  Off,
+  On,
+  Auto
+};
+
 // NEVER inherit from this class.
 struct VideoConfig final
 {
@@ -71,7 +79,7 @@ struct VideoConfig final
   u32 iMultisamples = 0;
   bool bSSAA = false;
   int iEFBScale = 0;
-  bool bForceFiltering = false;
+  TextureFilteringMode texture_filtering_mode = TextureFilteringMode::Default;
   int iMaxAnisotropy = 0;
   std::string sPostProcessingShader;
   bool bForceTrueColor = false;
@@ -81,6 +89,13 @@ struct VideoConfig final
 
   // Information
   bool bShowFPS = false;
+  bool bShowFTimes = false;
+  bool bShowVPS = false;
+  bool bShowVTimes = false;
+  bool bShowGraphs = false;
+  bool bShowSpeed = false;
+  bool bShowSpeedColors = false;
+  int iPerfSampleUSec = 0;
   bool bShowNetPlayPing = false;
   bool bShowNetPlayMessages = false;
   bool bOverlayStats = false;
@@ -112,6 +127,7 @@ struct VideoConfig final
   bool bInternalResolutionFrameDumps = false;
   bool bBorderlessFullscreen = false;
   bool bEnableGPUTextureDecoding = false;
+  bool bPreferVSForLinePointExpansion = false;
   int iBitrateKbps = 0;
   bool bGraphicMods = false;
   std::optional<GraphicsModGroupConfig> graphics_mod_config;
@@ -138,10 +154,12 @@ struct VideoConfig final
   bool bFastDepthCalc = false;
   bool bVertexRounding = false;
   int iEFBAccessTileSize = 0;
-  int iLog = 0;           // CONF_ bits
   int iSaveTargetId = 0;  // TODO: Should be dropped
   u32 iMissingColorValue = 0;
   bool bFastTextureSampling = false;
+#ifdef __APPLE__
+  bool bNoMipmapping = false;  // Used by macOS fifoci to work around an M1 bug
+#endif
 
   // Stereoscopy
   StereoMode stereo_mode{};
@@ -155,22 +173,15 @@ struct VideoConfig final
   // D3D only config, mostly to be merged into the above
   int iAdapter = 0;
 
-  // VideoSW Debugging
-  int drawStart = 0;
-  int drawEnd = 0;
-  bool bDumpObjects = false;
-  bool bDumpTevStages = false;
-  bool bDumpTevTextureFetches = false;
+  // Metal only config
+  TriState iManuallyUploadBuffers = TriState::Auto;
+  bool bUsePresentDrawable = false;
 
   // Enable API validation layers, currently only supported with Vulkan.
   bool bEnableValidationLayer = false;
 
   // Multithreaded submission, currently only supported with Vulkan.
-#if defined(ANDROID)
-  bool bBackendMultithreading = false;
-#else
   bool bBackendMultithreading = true;
-#endif
 
   // Early command buffer execution interval in number of draws.
   // Currently only supported with Vulkan.
@@ -191,6 +202,7 @@ struct VideoConfig final
   struct
   {
     APIType api_type = APIType::Nothing;
+    std::string DisplayName;
 
     std::vector<std::string> Adapters;  // for D3D
     std::vector<u32> AAModes;
@@ -239,9 +251,19 @@ struct VideoConfig final
     bool bSupportsLodBiasInSampler = false;
     bool bSupportsSettingObjectNames = false;
     bool bSupportsPartialMultisampleResolve = false;
+    bool bSupportsDynamicVertexLoader = false;
+    bool bSupportsVSLinePointExpand = false;
   } backend_info;
 
   // Utility
+  bool UseVSForLinePointExpand() const
+  {
+    if (!backend_info.bSupportsVSLinePointExpand)
+      return false;
+    if (!backend_info.bSupportsGeometryShaders)
+      return true;
+    return bPreferVSForLinePointExpansion;
+  }
   bool MultisamplingEnabled() const { return iMultisamples > 1; }
   bool ExclusiveFullscreenEnabled() const
   {

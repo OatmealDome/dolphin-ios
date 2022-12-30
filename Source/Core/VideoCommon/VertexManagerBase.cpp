@@ -15,12 +15,14 @@
 
 #include "Core/ConfigManager.h"
 #include "Core/DolphinAnalytics.h"
+#include "Core/System.h"
 
 #include "VideoCommon/BPMemory.h"
 #include "VideoCommon/BoundingBox.h"
 #include "VideoCommon/DataReader.h"
 #include "VideoCommon/FramebufferManager.h"
 #include "VideoCommon/GeometryShaderManager.h"
+#include "VideoCommon/GraphicsModSystem/Runtime/GraphicsModActionData.h"
 #include "VideoCommon/IndexGenerator.h"
 #include "VideoCommon/NativeVertexFormat.h"
 #include "VideoCommon/OpcodeDecoding.h"
@@ -139,12 +141,12 @@ DataReader VertexManagerBase::PrepareForAdditionalData(OpcodeDecoder::Primitive 
 
   // Check for size in buffer, if the buffer gets full, call Flush()
   if (!m_is_flushed &&
-      (count > m_index_generator.GetRemainingIndices() || count > GetRemainingIndices(primitive) ||
-       needed_vertex_bytes > GetRemainingSize()))
+      (count > m_index_generator.GetRemainingIndices(primitive) ||
+       count > GetRemainingIndices(primitive) || needed_vertex_bytes > GetRemainingSize()))
   {
     Flush();
 
-    if (count > m_index_generator.GetRemainingIndices())
+    if (count > m_index_generator.GetRemainingIndices(primitive))
     {
       ERROR_LOG_FMT(VIDEO, "Too little remaining index values. Use 32-bit or reset them on flush.");
     }
@@ -192,7 +194,55 @@ u32 VertexManagerBase::GetRemainingIndices(OpcodeDecoder::Primitive primitive) c
 {
   const u32 index_len = MAXIBUFFERSIZE - m_index_generator.GetIndexLen();
 
-  if (g_Config.backend_info.bSupportsPrimitiveRestart)
+  if (primitive >= Primitive::GX_DRAW_LINES)
+  {
+    if (g_Config.UseVSForLinePointExpand())
+    {
+      if (g_Config.backend_info.bSupportsPrimitiveRestart)
+      {
+        switch (primitive)
+        {
+        case Primitive::GX_DRAW_LINES:
+          return index_len / 5 * 2;
+        case Primitive::GX_DRAW_LINE_STRIP:
+          return index_len / 5 + 1;
+        case Primitive::GX_DRAW_POINTS:
+          return index_len / 5;
+        default:
+          return 0;
+        }
+      }
+      else
+      {
+        switch (primitive)
+        {
+        case Primitive::GX_DRAW_LINES:
+          return index_len / 6 * 2;
+        case Primitive::GX_DRAW_LINE_STRIP:
+          return index_len / 6 + 1;
+        case Primitive::GX_DRAW_POINTS:
+          return index_len / 6;
+        default:
+          return 0;
+        }
+      }
+    }
+    else
+    {
+      switch (primitive)
+      {
+      case Primitive::GX_DRAW_LINES:
+        return index_len;
+      case Primitive::GX_DRAW_LINE_STRIP:
+        return index_len / 2 + 1;
+      case Primitive::GX_DRAW_POINTS:
+        return index_len;
+      default:
+        return 0;
+      }
+    }
+  }
+  else if (g_Config.backend_info.bSupportsPrimitiveRestart)
   {
     switch (primitive)
     {
@@ -205,15 +255,6 @@ u32 VertexManagerBase::GetRemainingIndices(OpcodeDecoder::Primitive primitive) c
       return index_len / 1 - 1;
     case Primitive::GX_DRAW_TRIANGLE_FAN:
       return index_len / 6 * 4 + 1;
-
-    case Primitive::GX_DRAW_LINES:
-      return index_len;
-    case Primitive::GX_DRAW_LINE_STRIP:
-      return index_len / 2 + 1;
-
-    case Primitive::GX_DRAW_POINTS:
-      return index_len;
-
     default:
       return 0;
     }
@@ -231,15 +272,6 @@ u32 VertexManagerBase::GetRemainingIndices(OpcodeDecoder::Primitive primitive) c
       return index_len / 3 + 2;
     case Primitive::GX_DRAW_TRIANGLE_FAN:
       return index_len / 3 + 2;
-
-    case Primitive::GX_DRAW_LINES:
-      return index_len;
-    case Primitive::GX_DRAW_LINE_STRIP:
-      return index_len / 2 + 1;
-
-    case Primitive::GX_DRAW_POINTS:
-      return index_len;
-
     default:
       return 0;
     }
@@ -286,9 +318,13 @@ void VertexManagerBase::UploadUniforms()
 
 void VertexManagerBase::InvalidateConstants()
 {
-  VertexShaderManager::dirty = true;
-  GeometryShaderManager::dirty = true;
-  PixelShaderManager::dirty = true;
+  auto& system = Core::System::GetInstance();
+  auto& vertex_shader_manager = system.GetVertexShaderManager();
+  auto& geometry_shader_manager = system.GetGeometryShaderManager();
+  auto& pixel_shader_manager = system.GetPixelShaderManager();
+  vertex_shader_manager.dirty = true;
+  geometry_shader_manager.dirty = true;
+  pixel_shader_manager.dirty = true;
 }
 
 void VertexManagerBase::UploadUtilityUniforms(const void* uniforms, u32 uniforms_size)
@@ -450,6 +486,11 @@ void VertexManagerBase::Flush()
     }
   }
 
+  auto& system = Core::System::GetInstance();
+  auto& pixel_shader_manager = system.GetPixelShaderManager();
+  auto& geometry_shader_manager = system.GetGeometryShaderManager();
+  auto& vertex_shader_manager = system.GetVertexShaderManager();
+
   CalculateBinormals(VertexLoaderManager::GetCurrentVertexFormat());
   // Calculate ZSlope for zfreeze
   const auto used_textures = UsedTextures();
@@ -475,7 +516,7 @@ void VertexManagerBase::Flush()
       }
     }
   }
-  VertexShaderManager::SetConstants(texture_names);
+  vertex_shader_manager.SetConstants(texture_names);
   if (!bpmem.genMode.zfreeze)
   {
     // Must be done after VertexShaderManager::SetConstants()
@@ -483,7 +524,7 @@ void VertexManagerBase::Flush()
   }
   else if (m_zslope.dirty && !m_cull_all)  // or apply any dirty ZSlopes
   {
-    PixelShaderManager::SetZSlope(m_zslope.dfdx, m_zslope.dfdy, m_zslope.f0);
+    pixel_shader_manager.SetZSlope(m_zslope.dfdx, m_zslope.dfdy, m_zslope.f0);
     m_zslope.dirty = false;
   }
 
@@ -492,10 +533,11 @@ void VertexManagerBase::Flush()
     for (const auto& texture_name : texture_names)
     {
       bool skip = false;
+      GraphicsModActionData::DrawStarted draw_started{&skip};
       for (const auto action :
            g_renderer->GetGraphicsModManager().GetDrawStartedActions(texture_name))
       {
-        action->OnDrawStarted(&skip);
+        action->OnDrawStarted(&draw_started);
       }
       if (skip == true)
         return;
@@ -509,14 +551,25 @@ void VertexManagerBase::Flush()
                  VertexLoaderManager::GetCurrentVertexFormat()->GetVertexStride(), num_indices,
                  &base_vertex, &base_index);
 
+    if (g_ActiveConfig.backend_info.api_type != APIType::D3D &&
+        g_ActiveConfig.UseVSForLinePointExpand() &&
+        (m_current_primitive_type == PrimitiveType::Points ||
+         m_current_primitive_type == PrimitiveType::Lines))
+    {
+      // VS point/line expansion puts the vertex id at gl_VertexID << 2
+      // That means the base vertex has to be adjusted to match
+      // (The shader adds this after shifting right on D3D, so no need to do this)
+      base_vertex <<= 2;
+    }
+
     // Texture loading can cause palettes to be applied (-> uniforms -> draws).
     // Palette application does not use vertices, only a full-screen quad, so this is okay.
     // Same with GPU texture decoding, which uses compute shaders.
     g_texture_cache->BindTextures(used_textures);
 
     // Now we can upload uniforms, as nothing else will override them.
-    GeometryShaderManager::SetConstants();
-    PixelShaderManager::SetConstants();
+    geometry_shader_manager.SetConstants(m_current_primitive_type);
+    pixel_shader_manager.SetConstants();
     UploadUniforms();
 
     // Update the pipeline, or compile one if needed.
@@ -555,13 +608,11 @@ void VertexManagerBase::DoState(PointerWrap& p)
   {
     // Flush old vertex data before loading state.
     Flush();
-
-    // Clear all caches that touch RAM
-    // (? these don't appear to touch any emulation state that gets saved. moved to on load only.)
-    VertexLoaderManager::MarkAllDirty();
   }
 
   p.Do(m_zslope);
+  p.Do(VertexLoaderManager::tangent_cache);
+  p.Do(VertexLoaderManager::binormal_cache);
 }
 
 void VertexManagerBase::CalculateZSlope(NativeVertexFormat* format)
@@ -587,6 +638,8 @@ void VertexManagerBase::CalculateZSlope(NativeVertexFormat* format)
   // Lookup vertices of the last rendered triangle and software-transform them
   // This allows us to determine the depth slope, which will be used if z-freeze
   // is enabled in the following flush.
+  auto& system = Core::System::GetInstance();
+  auto& vertex_shader_manager = system.GetVertexShaderManager();
   for (unsigned int i = 0; i < 3; ++i)
   {
     // If this vertex format has per-vertex position matrix IDs, look it up.
@@ -596,8 +649,8 @@ void VertexManagerBase::CalculateZSlope(NativeVertexFormat* format)
     if (vert_decl.position.components == 2)
       VertexLoaderManager::position_cache[2 - i][2] = 0;
 
-    VertexShaderManager::TransformToClipSpace(&VertexLoaderManager::position_cache[2 - i][0],
-                                              &out[i * 4], mtxIdx);
+    vertex_shader_manager.TransformToClipSpace(&VertexLoaderManager::position_cache[2 - i][0],
+                                               &out[i * 4], mtxIdx);
 
     // Transform to Screenspace
     float inv_w = 1.0f / out[3 + i * 4];
@@ -641,15 +694,17 @@ void VertexManagerBase::CalculateBinormals(NativeVertexFormat* format)
   VertexLoaderManager::tangent_cache[3] = 0;
   VertexLoaderManager::binormal_cache[3] = 0;
 
-  if (VertexShaderManager::constants.cached_tangent != VertexLoaderManager::tangent_cache)
+  auto& system = Core::System::GetInstance();
+  auto& vertex_shader_manager = system.GetVertexShaderManager();
+  if (vertex_shader_manager.constants.cached_tangent != VertexLoaderManager::tangent_cache)
   {
-    VertexShaderManager::constants.cached_tangent = VertexLoaderManager::tangent_cache;
-    VertexShaderManager::dirty = true;
+    vertex_shader_manager.constants.cached_tangent = VertexLoaderManager::tangent_cache;
+    vertex_shader_manager.dirty = true;
   }
-  if (VertexShaderManager::constants.cached_binormal != VertexLoaderManager::binormal_cache)
+  if (vertex_shader_manager.constants.cached_binormal != VertexLoaderManager::binormal_cache)
   {
-    VertexShaderManager::constants.cached_binormal = VertexLoaderManager::binormal_cache;
-    VertexShaderManager::dirty = true;
+    vertex_shader_manager.constants.cached_binormal = VertexLoaderManager::binormal_cache;
+    vertex_shader_manager.dirty = true;
   }
 }
 
@@ -783,6 +838,12 @@ void VertexManagerBase::UpdatePipelineObject()
   }
   break;
   }
+}
+
+void VertexManagerBase::OnConfigChange()
+{
+  // Reload index generator function tables in case VS expand config changed
+  m_index_generator.Init();
 }
 
 void VertexManagerBase::OnDraw()

@@ -10,9 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.dolphinemu.dolphinemu.R;
+import org.dolphinemu.dolphinemu.databinding.ListItemCheatBinding;
+import org.dolphinemu.dolphinemu.databinding.ListItemHeaderBinding;
+import org.dolphinemu.dolphinemu.databinding.ListItemSubmenuBinding;
 import org.dolphinemu.dolphinemu.features.cheats.model.ARCheat;
 import org.dolphinemu.dolphinemu.features.cheats.model.CheatsViewModel;
 import org.dolphinemu.dolphinemu.features.cheats.model.GeckoCheat;
+import org.dolphinemu.dolphinemu.features.cheats.model.GraphicsMod;
 import org.dolphinemu.dolphinemu.features.cheats.model.PatchCheat;
 
 import java.util.ArrayList;
@@ -65,17 +69,17 @@ public class CheatsAdapter extends RecyclerView.Adapter<CheatItemViewHolder>
     switch (viewType)
     {
       case CheatItem.TYPE_CHEAT:
-        View cheatView = inflater.inflate(R.layout.list_item_cheat, parent, false);
-        addViewListeners(cheatView);
-        return new CheatViewHolder(cheatView);
+        ListItemCheatBinding listItemCheatBinding = ListItemCheatBinding.inflate(inflater);
+        addViewListeners(listItemCheatBinding.getRoot());
+        return new CheatViewHolder(listItemCheatBinding);
       case CheatItem.TYPE_HEADER:
-        View headerView = inflater.inflate(R.layout.list_item_header, parent, false);
-        addViewListeners(headerView);
-        return new HeaderViewHolder(headerView);
+        ListItemHeaderBinding listItemHeaderBinding = ListItemHeaderBinding.inflate(inflater);
+        addViewListeners(listItemHeaderBinding.getRoot());
+        return new HeaderViewHolder(listItemHeaderBinding);
       case CheatItem.TYPE_ACTION:
-        View actionView = inflater.inflate(R.layout.list_item_submenu, parent, false);
-        addViewListeners(actionView);
-        return new ActionViewHolder(actionView);
+        ListItemSubmenuBinding listItemSubmenuBinding = ListItemSubmenuBinding.inflate(inflater);
+        addViewListeners(listItemSubmenuBinding.getRoot());
+        return new ActionViewHolder(listItemSubmenuBinding);
       default:
         throw new UnsupportedOperationException();
     }
@@ -90,8 +94,8 @@ public class CheatsAdapter extends RecyclerView.Adapter<CheatItemViewHolder>
   @Override
   public int getItemCount()
   {
-    return mViewModel.getARCheats().size() + mViewModel.getGeckoCheats().size() +
-            mViewModel.getPatchCheats().size() + 7;
+    return mViewModel.getGraphicsMods().size() + mViewModel.getPatchCheats().size() +
+            mViewModel.getARCheats().size() + mViewModel.getGeckoCheats().size() + 8;
   }
 
   @Override
@@ -108,6 +112,17 @@ public class CheatsAdapter extends RecyclerView.Adapter<CheatItemViewHolder>
 
   private CheatItem getItemAt(int position)
   {
+    // Graphics mods
+
+    if (position == 0)
+      return new CheatItem(CheatItem.TYPE_HEADER, R.string.cheats_header_graphics_mod);
+    position -= 1;
+
+    ArrayList<GraphicsMod> graphicsMods = mViewModel.getGraphicsMods();
+    if (position < graphicsMods.size())
+      return new CheatItem(graphicsMods.get(position));
+    position -= graphicsMods.size();
+
     // Patches
 
     if (position == 0)

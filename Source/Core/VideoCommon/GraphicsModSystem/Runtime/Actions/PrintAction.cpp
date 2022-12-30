@@ -5,32 +5,40 @@
 
 #include "Common/Logging/Log.h"
 
-void PrintAction::OnDrawStarted(bool*)
+void PrintAction::OnDrawStarted(GraphicsModActionData::DrawStarted*)
 {
   INFO_LOG_FMT(VIDEO, "OnDrawStarted Called");
 }
 
-void PrintAction::OnEFB(bool*, u32 texture_width, u32 texture_height, u32* scaled_width,
-                        u32* scaled_height)
+void PrintAction::OnEFB(GraphicsModActionData::EFB* efb)
 {
-  if (!scaled_width || !scaled_height)
+  if (!efb) [[unlikely]]
     return;
 
-  INFO_LOG_FMT(VIDEO, "OnEFB Called. Original [{}, {}], Scaled [{}, {}]", texture_width,
-               texture_height, *scaled_width, *scaled_height);
+  if (!efb->scaled_width) [[unlikely]]
+    return;
+
+  if (!efb->scaled_height) [[unlikely]]
+    return;
+
+  INFO_LOG_FMT(VIDEO, "OnEFB Called. Original [{}, {}], Scaled [{}, {}]", efb->texture_width,
+               efb->texture_height, *efb->scaled_width, *efb->scaled_height);
 }
 
-void PrintAction::OnProjection(Common::Matrix44*)
+void PrintAction::OnProjection(GraphicsModActionData::Projection*)
 {
   INFO_LOG_FMT(VIDEO, "OnProjection Called");
 }
 
-void PrintAction::OnProjectionAndTexture(Common::Matrix44*)
+void PrintAction::OnProjectionAndTexture(GraphicsModActionData::Projection*)
 {
   INFO_LOG_FMT(VIDEO, "OnProjectionAndTexture Called");
 }
 
-void PrintAction::OnTextureLoad()
+void PrintAction::OnTextureLoad(GraphicsModActionData::TextureLoad* texture_load)
 {
-  INFO_LOG_FMT(VIDEO, "OnTextureLoad Called");
+  if (!texture_load) [[unlikely]]
+    return;
+
+  INFO_LOG_FMT(VIDEO, "OnTextureLoad Called.  Texture: {}", texture_load->texture_name);
 }

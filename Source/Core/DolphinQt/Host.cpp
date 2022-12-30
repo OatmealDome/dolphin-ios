@@ -114,9 +114,11 @@ static void RunWithGPUThreadInactive(std::function<void()> f)
     // the CPU and GPU threads are the same thread, and we already checked for the GPU thread.)
 
     const bool was_running = Core::GetState() == Core::State::Running;
-    Fifo::PauseAndLock(true, was_running);
+    auto& system = Core::System::GetInstance();
+    auto& fifo = system.GetFifo();
+    fifo.PauseAndLock(system, true, was_running);
     f();
-    Fifo::PauseAndLock(false, was_running);
+    fifo.PauseAndLock(system, false, was_running);
   }
   else
   {
@@ -284,6 +286,30 @@ void Host_TitleChanged()
   // TODO: Not sure if the NetPlay check is needed.
   if (!NetPlay::IsNetPlayRunning())
     Discord::UpdateDiscordPresence();
+#endif
+}
+
+void Host_UpdateDiscordClientID(const std::string& client_id)
+{
+#ifdef USE_DISCORD_PRESENCE
+  Discord::UpdateClientID(client_id);
+#endif
+}
+
+bool Host_UpdateDiscordPresenceRaw(const std::string& details, const std::string& state,
+                                   const std::string& large_image_key,
+                                   const std::string& large_image_text,
+                                   const std::string& small_image_key,
+                                   const std::string& small_image_text,
+                                   const int64_t start_timestamp, const int64_t end_timestamp,
+                                   const int party_size, const int party_max)
+{
+#ifdef USE_DISCORD_PRESENCE
+  return Discord::UpdateDiscordPresenceRaw(details, state, large_image_key, large_image_text,
+                                           small_image_key, small_image_text, start_timestamp,
+                                           end_timestamp, party_size, party_max);
+#else
+  return false;
 #endif
 }
 

@@ -18,6 +18,7 @@
 #include "Core/HW/SystemTimers.h"
 #include "Core/Movie.h"
 #include "Core/NetPlayProto.h"
+#include "Core/System.h"
 #include "InputCommon/GCPadStatus.h"
 
 namespace SerialInterface
@@ -105,6 +106,14 @@ int CSIDevice_GCController::RunBuffer(u8* buffer, int request_length)
     return sizeof(SOrigin);
   }
 
+  // GameID packet, no response needed, nothing to do
+  // On real hardware, this is used to configure the BlueRetro controler
+  // adapter, while licensed accessories ignore this command.
+  case EBufferCommands::CMD_SET_GAME_ID:
+  {
+    return 0;
+  }
+
   // DEFAULT
   default:
   {
@@ -119,8 +128,6 @@ int CSIDevice_GCController::RunBuffer(u8* buffer, int request_length)
 
 void CSIDevice_GCController::HandleMoviePadStatus(int device_number, GCPadStatus* pad_status)
 {
-  Movie::CallGCInputManip(pad_status, device_number);
-
   Movie::SetPolledDevice();
   if (NetPlay_GetInput(device_number, pad_status))
   {
@@ -257,12 +264,12 @@ CSIDevice_GCController::HandleButtonCombos(const GCPadStatus& pad_status)
   {
     m_last_button_combo = temp_combo;
     if (m_last_button_combo != COMBO_NONE)
-      m_timer_button_combo_start = CoreTiming::GetTicks();
+      m_timer_button_combo_start = Core::System::GetInstance().GetCoreTiming().GetTicks();
   }
 
   if (m_last_button_combo != COMBO_NONE)
   {
-    const u64 current_time = CoreTiming::GetTicks();
+    const u64 current_time = Core::System::GetInstance().GetCoreTiming().GetTicks();
     if (u32(current_time - m_timer_button_combo_start) > SystemTimers::GetTicksPerSecond() * 3)
     {
       if (m_last_button_combo == COMBO_RESET)

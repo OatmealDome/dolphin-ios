@@ -19,6 +19,14 @@ enum ErrorCode : s32
 {
   WC24_OK = 0,
   WC24_ERR_FATAL = -1,
+  WC24_ERR_NOT_FOUND = -13,
+  WC24_ERR_BROKEN = -14,
+  WC24_ERR_FILE_OPEN = -16,
+  WC24_ERR_FILE_CLOSE = -17,
+  WC24_ERR_FILE_READ = -18,
+  WC24_ERR_FILE_WRITE = -19,
+  WC24_ERR_NETWORK = -31,
+  WC24_ERR_SERVER = -32,
   WC24_ERR_ID_NONEXISTANCE = -34,
   WC24_ERR_ID_GENERATED = -35,
   WC24_ERR_ID_REGISTERED = -36,
@@ -38,7 +46,9 @@ public:
   explicit NWC24Config(std::shared_ptr<FS::FileSystem> fs);
 
   void ReadConfig();
+  void WriteCBK() const;
   void WriteConfig() const;
+  void WriteConfigToPath(const std::string& path) const;
   void ResetConfig();
 
   u32 CalculateNwc24ConfigChecksum() const;

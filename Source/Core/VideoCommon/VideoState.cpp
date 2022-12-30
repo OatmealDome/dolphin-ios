@@ -6,6 +6,7 @@
 #include <cstring>
 
 #include "Common/ChunkFile.h"
+#include "Core/System.h"
 #include "VideoCommon/BPMemory.h"
 #include "VideoCommon/CPMemory.h"
 #include "VideoCommon/CommandProcessor.h"
@@ -18,6 +19,7 @@
 #include "VideoCommon/TMEM.h"
 #include "VideoCommon/TextureCacheBase.h"
 #include "VideoCommon/TextureDecoder.h"
+#include "VideoCommon/VertexLoaderManager.h"
 #include "VideoCommon/VertexManagerBase.h"
 #include "VideoCommon/VertexShaderManager.h"
 #include "VideoCommon/XFMemory.h"
@@ -38,7 +40,12 @@ void VideoCommon_DoState(PointerWrap& p)
   p.DoMarker("BP Memory");
 
   // CP Memory
-  DoCPState(p);
+  // We don't save g_preprocess_cp_state separately because the GPU should be
+  // synced around state save/load.
+  p.Do(g_main_cp_state);
+  p.DoMarker("CP Memory");
+  if (p.IsReadMode())
+    CopyPreprocessCPStateFromMain();
 
   // XF Memory
   p.Do(xfmem);
@@ -53,24 +60,26 @@ void VideoCommon_DoState(PointerWrap& p)
   p.DoMarker("TMEM");
 
   // FIFO
-  Fifo::DoState(p);
+  auto& system = Core::System::GetInstance();
+  system.GetFifo().DoState(p);
   p.DoMarker("Fifo");
 
-  CommandProcessor::DoState(p);
+  auto& command_processor = system.GetCommandProcessor();
+  command_processor.DoState(p);
   p.DoMarker("CommandProcessor");
 
-  PixelEngine::DoState(p);
+  system.GetPixelEngine().DoState(p);
   p.DoMarker("PixelEngine");
 
   // the old way of replaying current bpmem as writes to push side effects to pixel shader manager
   // doesn't really work.
-  PixelShaderManager::DoState(p);
+  system.GetPixelShaderManager().DoState(p);
   p.DoMarker("PixelShaderManager");
 
-  VertexShaderManager::DoState(p);
+  system.GetVertexShaderManager().DoState(p);
   p.DoMarker("VertexShaderManager");
 
-  GeometryShaderManager::DoState(p);
+  system.GetGeometryShaderManager().DoState(p);
   p.DoMarker("GeometryShaderManager");
 
   g_vertex_manager->DoState(p);
@@ -90,5 +99,6 @@ void VideoCommon_DoState(PointerWrap& p)
   {
     // Inform backend of new state from registers.
     BPReload();
+    VertexLoaderManager::MarkAllDirty();
   }
 }
