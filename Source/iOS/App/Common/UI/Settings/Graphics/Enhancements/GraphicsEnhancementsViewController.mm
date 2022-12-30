@@ -19,7 +19,7 @@
   [self.resolutionCell registerSetting:Config::GFX_EFB_SCALE];
   [self.filteringCell registerSetting:Config::GFX_ENHANCE_MAX_ANISOTROPY];
   [self.scaledEfbCell registerSetting:Config::GFX_HACK_COPY_EFB_SCALED];
-  [self.textureFilteringCell registerSetting:Config::GFX_ENHANCE_FORCE_FILTERING];
+  // [self.textureFilteringCell registerSetting:Config::GFX_ENHANCE_FORCE_FILTERING];
   [self.fogCell registerSetting:Config::GFX_DISABLE_FOG];
   [self.filterCell registerSetting:Config::GFX_ENHANCE_DISABLE_COPY_FILTER];
   [self.lightingCell registerSetting:Config::GFX_ENABLE_PIXEL_LIGHTING];
