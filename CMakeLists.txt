@@ -522,6 +522,11 @@ if(IOS)
   SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
   SET(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
+  # Set FMT_EXCEPTIONS = 0, for consistency with -fno-exceptions earlier.
+  # If we set only -fno-exceptions, fmt fails to compile when included from
+  # Objective-C++ because fmt tries try to use throw because __EXCEPTIONS is defined.
+  add_definitions(-DFMT_EXCEPTIONS=0)
+
   find_library(AUDIOTOOLBOX_LIBRARY AudioToolbox)
   find_library(COREFOUNDATION_LIBRARY CoreFoundation)
   find_library(COREHAPTICS_LIBRARY CoreHaptics)
