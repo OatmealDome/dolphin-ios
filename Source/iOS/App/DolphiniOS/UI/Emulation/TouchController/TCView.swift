@@ -40,20 +40,15 @@ import UIKit
   {
     for subview in view.subviews
     {
-      if (subview is TCButton)
+      switch subview
       {
-        (subview as! TCButton).port = port
-      }
-      else if (subview is TCJoystick)
-      {
-        (subview as! TCJoystick).port = port
-      }
-      else if (subview is TCDirectionalPad)
-      {
-        (subview as! TCDirectionalPad).port = port
-      }
-      else
-      {
+      case let button as TCButton:
+        button.port = port
+      case let joystick as TCJoystick:
+        joystick.port = port
+      case let dpad as TCDirectionalPad:
+        dpad.port = port
+      default:
         SetPort(port, view: subview)
       }
     }
