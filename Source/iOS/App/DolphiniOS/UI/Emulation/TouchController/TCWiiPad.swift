@@ -83,40 +83,37 @@ class TCWiiPad: TCView, UIGestureRecognizerDelegate
       return
     }
     
-    if let image_rect = self.current_rect
+    guard let image_rect = self.current_rect else { return }
+
+    // Convert the point to the native screen scale
+    let screen_scale = UIScreen.main.scale
+    var point = gesture.location(in: self)
+    point.x *= screen_scale
+    point.y *= screen_scale
+    var axises: (y: CGFloat, x: CGFloat) = (0, 0)
+
+    // Check if this touch is within the rendering rectangle
+    if point.y >= image_rect.origin.y && point.y <= image_rect.origin.y + image_rect.height
     {
-      // Convert the point to the native screen scale
-      let screen_scale = UIScreen.main.scale
-      var point = gesture.location(in: self)
-      point.x *= screen_scale
-      point.y *= screen_scale
-      var axises: [CGFloat] = [ 0, 0 ]
-      
-      // Check if this touch is within the rendering rectangle
-      if (point.y >= image_rect.origin.y && point.y <= image_rect.origin.y + image_rect.height)
+      // Move the point to the origin of the rectangle
+      point.x = point.x - image_rect.origin.x
+      point.y = point.y - image_rect.origin.y
+
+      if self.x_adjusted
       {
-        // Move the point to the origin of the rectangle
-        point.x = point.x - image_rect.origin.x
-        point.y = point.y - image_rect.origin.y
-        
-        if (self.x_adjusted)
-        {
-          axises[0] = (point.y - self.max_size.height) / self.max_size.height
-          axises[1] = ((point.x * self.aspect_adjusted) - self.max_size.width) / self.max_size.width
-        }
-        else
-        {
-          axises[0] = ((point.y * self.aspect_adjusted) - self.max_size.height) / self.max_size.height
-          axises[1] = (point.x - self.max_size.width) / self.max_size.width
-        }
-        
-        let send_axises: [CGFloat] = [ axises[0], axises[0], axises[1], axises[1]]
-        
-        let axisStartIdx = TCButtonType.wiiInfrared
-        for i in 0...3
-        {
-          TCManagerInterface.setAxisValueFor(axisStartIdx.rawValue + i + 1, controller: self.port, value: Float(send_axises[i]))
-        }
+        axises.y = (point.y - self.max_size.height) / self.max_size.height
+        axises.x = ((point.x * self.aspect_adjusted) - self.max_size.width) / self.max_size.width
+      }
+      else
+      {
+        axises.y = ((point.y * self.aspect_adjusted) - self.max_size.height) / self.max_size.height
+        axises.x = (point.x - self.max_size.width) / self.max_size.width
+      }
+
+      let axisStartIdx = TCButtonType.wiiInfrared
+      for (i, axis) in [axises.y, axises.y, axises.x, axises.x].enumerated()
+      {
+        TCManagerInterface.setAxisValueFor(axisStartIdx.rawValue + i + 1, controller: self.port, value: Float(axis))
       }
     }
   }
