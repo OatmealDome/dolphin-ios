@@ -60,6 +60,11 @@ struct Profile {
       continue;
     }
     
+    // Don't show the Touchscreen profile if it exists
+    if (basename == "Touchscreen" && self.filterTouchscreen) {
+      continue;
+    }
+    
     if (!basename.empty()) {
       _profiles.push_back({filename, basename, true});
     }

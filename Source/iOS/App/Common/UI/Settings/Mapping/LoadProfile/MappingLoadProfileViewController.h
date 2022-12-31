@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) InputConfig* inputConfig;
 @property (nonatomic) ControllerEmu::EmulatedController* emulatedController;
+@property (nonatomic) bool filterTouchscreen;
 
 @end
 
