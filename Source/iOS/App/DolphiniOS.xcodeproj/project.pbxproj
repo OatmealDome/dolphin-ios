@@ -84,6 +84,7 @@
 		B9749240296035F500794509 /* FastmemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923F296035F500794509 /* FastmemManager.m */; };
 		B974924429603A8A00794509 /* LegacyInputConfigMigrationService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B974924329603A8A00794509 /* LegacyInputConfigMigrationService.mm */; };
 		B97492472960CD2B00794509 /* FirstRunInitializationService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B97492462960CD2B00794509 /* FirstRunInitializationService.mm */; };
+		B97492492960F64300794509 /* DefaultPreferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = B97492482960F64300794509 /* DefaultPreferences.plist */; };
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* WiiAspectRatioViewController.mm */; };
@@ -313,6 +314,7 @@
 		B974924329603A8A00794509 /* LegacyInputConfigMigrationService.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LegacyInputConfigMigrationService.mm; sourceTree = "<group>"; };
 		B97492452960CD2B00794509 /* FirstRunInitializationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstRunInitializationService.h; sourceTree = "<group>"; };
 		B97492462960CD2B00794509 /* FirstRunInitializationService.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FirstRunInitializationService.mm; sourceTree = "<group>"; };
+		B97492482960F64300794509 /* DefaultPreferences.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultPreferences.plist; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B991377F288096A300588446 /* ConfigWiiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigWiiViewController.h; sourceTree = "<group>"; };
@@ -865,6 +867,7 @@
 		B950CA922846A10400F45219 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				B97492482960F64300794509 /* DefaultPreferences.plist */,
 				B950CA932846A13100F45219 /* Sys */,
 			);
 			path = Assets;
@@ -1296,6 +1299,7 @@
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
+				B97492492960F64300794509 /* DefaultPreferences.plist in Resources */,
 				B9B2C654288E400100CB6569 /* ExternalDisplay.storyboard in Resources */,
 				B9FCB7C828976CE60020E233 /* JitWait.xib in Resources */,
 				B9B2C621288DB62D00CB6569 /* TCClassicWiiPad.xib in Resources */,
