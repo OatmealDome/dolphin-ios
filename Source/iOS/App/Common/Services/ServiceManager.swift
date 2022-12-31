@@ -12,6 +12,7 @@ class ServiceManager {
   let services: [UIApplicationDelegate] = [
     DefaultsInitService(),
     DolphinCoreService(),
+    FirstRunInitializationService(),
     LegacyInputConfigMigrationService(),
     GameFileCacheService(),
     JitAcquisitionService()
