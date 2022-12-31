@@ -4,6 +4,7 @@
 #import "DolphinCoreService.h"
 #import "EmulationCoordinator.h"
 #import "GameFileCacheManager.h"
+#import "ImportFileManager.h"
 #import "JitManager.h"
 #import "JitManager+AltServer.h"
 #import "JitManager+JitStreamer.h"
