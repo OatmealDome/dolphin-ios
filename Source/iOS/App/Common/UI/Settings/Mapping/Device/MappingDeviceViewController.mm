@@ -46,6 +46,20 @@ struct Device {
   [_deviceNames removeAllObjects];
   
   for (const auto& name : g_controller_interface.GetAllDeviceStrings()) {
+    if (self.filterType != DOLDeviceFilterNone) {
+      ciface::Core::DeviceQualifier qualifier;
+      qualifier.FromString(name);
+      
+      if (qualifier.source == "iOS" && qualifier.name == "Touchscreen") {
+        // Don't list unnecessary Touchscreen devices depending on the filter type.
+        if ((self.filterType == DOLDeviceFilterTouchscreenExceptPad && qualifier.cid != 0)
+            || (self.filterType == DOLDeviceFilterTouchscreenExceptWii && qualifier.cid != 4)
+            || self.filterType == DOLDeviceFilterTouchscreenAll) {
+          continue;
+        }
+      }
+    }
+    
     _devices.push_back(name);
     [_deviceNames addObject:CppToFoundationString(name)];
   }
