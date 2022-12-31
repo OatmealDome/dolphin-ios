@@ -82,6 +82,7 @@
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
 		B974923C2960096C00794509 /* ImportFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923B2960096C00794509 /* ImportFileManager.m */; };
 		B9749240296035F500794509 /* FastmemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923F296035F500794509 /* FastmemManager.m */; };
+		B974924429603A8A00794509 /* LegacyInputConfigMigrationService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B974924329603A8A00794509 /* LegacyInputConfigMigrationService.mm */; };
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* WiiAspectRatioViewController.mm */; };
@@ -307,6 +308,8 @@
 		B974923B2960096C00794509 /* ImportFileManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImportFileManager.m; sourceTree = "<group>"; };
 		B974923E296035F500794509 /* FastmemManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FastmemManager.h; sourceTree = "<group>"; };
 		B974923F296035F500794509 /* FastmemManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FastmemManager.m; sourceTree = "<group>"; };
+		B974924229603A8A00794509 /* LegacyInputConfigMigrationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LegacyInputConfigMigrationService.h; sourceTree = "<group>"; };
+		B974924329603A8A00794509 /* LegacyInputConfigMigrationService.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LegacyInputConfigMigrationService.mm; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B991377F288096A300588446 /* ConfigWiiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigWiiViewController.h; sourceTree = "<group>"; };
@@ -452,6 +455,7 @@
 				B974923D296035E500794509 /* Fastmem */,
 				B900A7BB27F4CD16000361DD /* FoundationUtil */,
 				B9FCB7B6289658FC0020E233 /* Jit */,
+				B9749241296039BF00794509 /* Mapping */,
 				B900A7A827F27EB9000361DD /* Services */,
 				B933EDBB27F6A5C7004D7DD7 /* Swift */,
 				B900A7BF27F4D2E4000361DD /* UI */,
@@ -473,6 +477,8 @@
 				B900A7AD27F27F36000361DD /* DolphinCoreService.mm */,
 				B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */,
 				B9FCB7BD28967C130020E233 /* JitAcquisitionService.swift */,
+				B974924229603A8A00794509 /* LegacyInputConfigMigrationService.h */,
+				B974924329603A8A00794509 /* LegacyInputConfigMigrationService.mm */,
 				B9B2C64C288E170600CB6569 /* ServiceManager.swift */,
 			);
 			path = Services;
@@ -917,6 +923,13 @@
 				B974923F296035F500794509 /* FastmemManager.m */,
 			);
 			path = Fastmem;
+			sourceTree = "<group>";
+		};
+		B9749241296039BF00794509 /* Mapping */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Mapping;
 			sourceTree = "<group>";
 		};
 		B991377E2880969400588446 /* Wii */ = {
@@ -1420,6 +1433,7 @@
 				B9398716287FE28F008E8E47 /* FallbackRegionCell.m in Sources */,
 				B939871A287FF135008E8E47 /* ConfigInterfaceViewController.mm in Sources */,
 				B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */,
+				B974924429603A8A00794509 /* LegacyInputConfigMigrationService.mm in Sources */,
 				B9FCB7CE2897998B0020E233 /* JitWaitViewControllerDelegate.swift in Sources */,
 				B9447AFF28418EA100BC9110 /* TCDirectionalPad.swift in Sources */,
 				B9398710287FBB80008E8E47 /* SpeedLimitCell.m in Sources */,
