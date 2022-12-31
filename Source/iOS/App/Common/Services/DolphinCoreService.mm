@@ -20,6 +20,7 @@
 #import "DolphiniOS-Swift.h"
 #import "FoundationStringUtil.h"
 #import "LocalizationUtil.h"
+#import "FastmemManager.h"
 #import "MsgAlertManager.h"
 
 @implementation DolphinCoreService
@@ -37,8 +38,9 @@
   
   Config::SetBase(Config::MAIN_USE_GAME_COVERS, true);
   
+  Config::SetBase(Config::MAIN_FASTMEM, [FastmemManager shared].fastmemAvailable);
+  
   // TODO: Defaults for debugging
-  Config::SetBase(Config::MAIN_FASTMEM, false);
   Config::SetBase(Config::GFX_SHOW_FPS, true);
   Config::SetBase(Config::MAIN_CPU_THREAD, true);
   
