@@ -81,6 +81,7 @@
 		B950CA942846A13100F45219 /* Sys in Resources */ = {isa = PBXBuildFile; fileRef = B950CA932846A13100F45219 /* Sys */; };
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
 		B974923C2960096C00794509 /* ImportFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923B2960096C00794509 /* ImportFileManager.m */; };
+		B9749240296035F500794509 /* FastmemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923F296035F500794509 /* FastmemManager.m */; };
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* WiiAspectRatioViewController.mm */; };
@@ -304,6 +305,8 @@
 		B96F72DD27F199040024BA7D /* BundleIdentifier.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BundleIdentifier.xcconfig; sourceTree = "<group>"; };
 		B974923A2960096C00794509 /* ImportFileManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImportFileManager.h; sourceTree = "<group>"; };
 		B974923B2960096C00794509 /* ImportFileManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImportFileManager.m; sourceTree = "<group>"; };
+		B974923E296035F500794509 /* FastmemManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FastmemManager.h; sourceTree = "<group>"; };
+		B974923F296035F500794509 /* FastmemManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FastmemManager.m; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B991377F288096A300588446 /* ConfigWiiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigWiiViewController.h; sourceTree = "<group>"; };
@@ -447,6 +450,7 @@
 			children = (
 				B9FCB7B6289658FC0020E233 /* Jit */,
 				B9B2C65C288E481300CB6569 /* Emulation */,
+				B974923D296035E500794509 /* Fastmem */,
 				B900A7BB27F4CD16000361DD /* FoundationUtil */,
 				B900A7A827F27EB9000361DD /* Services */,
 				B933EDBB27F6A5C7004D7DD7 /* Swift */,
@@ -904,6 +908,15 @@
 				B974923B2960096C00794509 /* ImportFileManager.m */,
 			);
 			path = Import;
+			sourceTree = "<group>";
+		};
+		B974923D296035E500794509 /* Fastmem */ = {
+			isa = PBXGroup;
+			children = (
+				B974923E296035F500794509 /* FastmemManager.h */,
+				B974923F296035F500794509 /* FastmemManager.m */,
+			);
+			path = Fastmem;
 			sourceTree = "<group>";
 		};
 		B991377E2880969400588446 /* Wii */ = {
@@ -1433,6 +1446,7 @@
 				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
 				B9B2C652288E252900CB6569 /* EmulationCoordinator.mm in Sources */,
 				B904ACDD28862941008B6BE9 /* GraphicsAdvancedViewController.mm in Sources */,
+				B9749240296035F500794509 /* FastmemManager.m in Sources */,
 				B904AD3B288904AC008B6BE9 /* MappingGroupEditBoolCell.m in Sources */,
 				B9B2C64F288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift in Sources */,
 				B904AD012887B9D1008B6BE9 /* ControllersPortViewController.mm in Sources */,
