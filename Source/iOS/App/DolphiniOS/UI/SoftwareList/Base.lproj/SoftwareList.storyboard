@@ -30,7 +30,7 @@
         <!--Software-->
         <scene sceneID="J5Y-gO-CN4">
             <objects>
-                <collectionViewController id="Rbr-ly-5Pp" customClass="SoftwareListViewController" sceneMemberID="viewController">
+                <collectionViewController id="Rbr-ly-5Pp" customClass="SoftwareListiOSViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" id="q62-Te-KPi">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
