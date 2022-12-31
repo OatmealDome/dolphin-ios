@@ -377,6 +377,7 @@ struct Section {
     loadController.delegate = self;
     loadController.inputConfig = _config;
     loadController.emulatedController = _controller;
+    loadController.filterTouchscreen = (self.mappingType == DOLMappingTypePad || self.mappingType == DOLMappingTypeWiimote) && self.mappingPort != 0;
   }
 }
 
