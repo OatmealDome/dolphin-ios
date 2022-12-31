@@ -3,6 +3,7 @@
 
 #import "DolphinCoreService.h"
 #import "EmulationCoordinator.h"
+#import "FirstRunInitializationService.h"
 #import "GameFileCacheManager.h"
 #import "ImportFileManager.h"
 #import "JitManager.h"
