@@ -343,7 +343,17 @@ struct Section {
   if ([segue.identifier isEqualToString:@"toDevice"]) {
     MappingDeviceViewController* deviceController = segue.destinationViewController;
     
+    DOLDeviceFilter filterType;
+    if (self.mappingType == DOLMappingTypePad && self.mappingPort == 0) {
+      filterType = DOLDeviceFilterTouchscreenExceptPad;
+    } else if (self.mappingType == DOLMappingTypeWiimote && self.mappingPort == 0) {
+      filterType = DOLDeviceFilterTouchscreenExceptWii;
+    } else {
+      filterType = DOLDeviceFilterTouchscreenAll;
+    }
+    
     deviceController.delegate = self;
+    deviceController.filterType = filterType;
     deviceController.emulatedController = _controller;
   } else if ([segue.identifier isEqualToString:@"toExtension"]) {
     ControllerEmu::ControlGroup* extensionGroup = Wiimote::GetWiimoteGroup(self.mappingPort, WiimoteEmu::WiimoteGroup::Attachments);
