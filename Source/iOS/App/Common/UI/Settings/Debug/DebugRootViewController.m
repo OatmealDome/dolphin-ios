@@ -3,6 +3,8 @@
 
 #import "DebugRootViewController.h"
 
+#import "Swift.h"
+
 #import "VirtualMFiControllerManager.h"
 
 @interface DebugRootViewController ()
@@ -16,6 +18,8 @@
   
   self.mfiSwitch.on = [VirtualMFiControllerManager shared].shouldConnectController;
   [self.mfiSwitch addValueChangedTarget:self action:@selector(mfiChanged)];
+  
+  self.userFolderPathLabel.text = [UserFolderUtil getUserFolder];
 }
 
 - (void)mfiChanged {

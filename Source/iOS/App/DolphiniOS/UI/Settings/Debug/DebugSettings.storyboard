@@ -19,20 +19,20 @@
                             <tableViewSection headerTitle="Controllers" id="1ZP-Lv-HFk">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="Gin-cc-xgx">
-                                        <rect key="frame" x="16" y="49.5" width="343" height="43.5"/>
+                                        <rect key="frame" x="16" y="49.5" width="343" height="43"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Gin-cc-xgx" id="s5f-nY-Ats">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Attach Virtual MFi Controller" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="FQ0-QP-lba">
-                                                    <rect key="frame" x="16" y="11" width="254" height="21.5"/>
+                                                    <rect key="frame" x="16" y="11" width="254" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v1R-bY-GZa" customClass="DOLUIKitSwitch">
-                                                    <rect key="frame" x="278" y="6.5" width="51" height="31"/>
+                                                    <rect key="frame" x="278" y="6" width="51" height="31"/>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -50,14 +50,14 @@
                             <tableViewSection headerTitle="Utility" id="mI7-g0-bJu">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="cQT-w0-ZiF">
-                                        <rect key="frame" x="16" y="143" width="343" height="43.5"/>
+                                        <rect key="frame" x="16" y="142.5" width="343" height="43"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cQT-w0-ZiF" id="rkR-Xw-ZHg">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reset Launch Times" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="3PV-pn-JK8">
-                                                    <rect key="frame" x="16" y="11" width="311" height="21.5"/>
+                                                    <rect key="frame" x="16" y="11" width="311" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" systemColor="linkColor"/>
                                                     <nil key="highlightedColor"/>
@@ -73,6 +73,41 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="Environment" id="Wjd-dq-aKz">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="9RM-JY-SlH">
+                                        <rect key="frame" x="16" y="235.5" width="343" height="71.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9RM-JY-SlH" id="qwf-WF-DzB">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="71.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="User Folder" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Z7n-lr-Ihh">
+                                                    <rect key="frame" x="16" y="11" width="311" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Path" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="v9G-Mi-XiD">
+                                                    <rect key="frame" x="16" y="39.5" width="311" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="v9G-Mi-XiD" firstAttribute="top" secondItem="Z7n-lr-Ihh" secondAttribute="bottom" constant="8" id="ASW-Ch-xP5"/>
+                                                <constraint firstItem="v9G-Mi-XiD" firstAttribute="leading" secondItem="qwf-WF-DzB" secondAttribute="leadingMargin" id="QAc-mu-Ma3"/>
+                                                <constraint firstItem="Z7n-lr-Ihh" firstAttribute="trailing" secondItem="qwf-WF-DzB" secondAttribute="trailingMargin" id="RLU-Ir-REI"/>
+                                                <constraint firstItem="Z7n-lr-Ihh" firstAttribute="top" secondItem="qwf-WF-DzB" secondAttribute="topMargin" id="dsN-4W-trR"/>
+                                                <constraint firstItem="Z7n-lr-Ihh" firstAttribute="leading" secondItem="qwf-WF-DzB" secondAttribute="leadingMargin" id="mrU-Ml-YwH"/>
+                                                <constraint firstItem="v9G-Mi-XiD" firstAttribute="trailing" secondItem="qwf-WF-DzB" secondAttribute="trailingMargin" id="tkF-u7-GJa"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="v9G-Mi-XiD" secondAttribute="bottom" id="tqg-hZ-KfC"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="i7k-HP-Agh" id="EqS-A1-vVi"/>
@@ -83,6 +118,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="mfiSwitch" destination="v1R-bY-GZa" id="hj8-yD-8f9"/>
+                        <outlet property="userFolderPathLabel" destination="v9G-Mi-XiD" id="fDJ-3u-yQY"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="adV-2q-gSQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
