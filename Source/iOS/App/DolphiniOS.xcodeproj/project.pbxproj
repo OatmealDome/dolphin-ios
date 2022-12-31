@@ -80,6 +80,7 @@
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
 		B950CA942846A13100F45219 /* Sys in Resources */ = {isa = PBXBuildFile; fileRef = B950CA932846A13100F45219 /* Sys */; };
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
+		B974923C2960096C00794509 /* ImportFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923B2960096C00794509 /* ImportFileManager.m */; };
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* WiiAspectRatioViewController.mm */; };
@@ -301,6 +302,8 @@
 		B96F72D227F0FC420024BA7D /* Release (Beta, Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Beta, Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72D327F0FC520024BA7D /* Release (Beta, Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Beta, Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72DD27F199040024BA7D /* BundleIdentifier.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BundleIdentifier.xcconfig; sourceTree = "<group>"; };
+		B974923A2960096C00794509 /* ImportFileManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImportFileManager.h; sourceTree = "<group>"; };
+		B974923B2960096C00794509 /* ImportFileManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImportFileManager.m; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B991377F288096A300588446 /* ConfigWiiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigWiiViewController.h; sourceTree = "<group>"; };
@@ -513,6 +516,7 @@
 				B9D9389B283ECF0B00B290FC /* Controls */,
 				B9D93890283DE62700B290FC /* Emulation */,
 				B9B2C655288E40A400CB6569 /* ExternalDisplay */,
+				B97492392960094B00794509 /* Import */,
 				B938835B287EBA5500910606 /* Settings */,
 				B900A7C527F4D4E2000361DD /* SoftwareList */,
 			);
@@ -891,6 +895,15 @@
 				B96F72D327F0FC520024BA7D /* Release (Beta, Jailbroken).xcconfig */,
 			);
 			path = Presets;
+			sourceTree = "<group>";
+		};
+		B97492392960094B00794509 /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				B974923A2960096C00794509 /* ImportFileManager.h */,
+				B974923B2960096C00794509 /* ImportFileManager.m */,
+			);
+			path = Import;
 			sourceTree = "<group>";
 		};
 		B991377E2880969400588446 /* Wii */ = {
@@ -1470,6 +1483,7 @@
 				B9D938A728418AFE00B290FC /* TCManagerInterface.mm in Sources */,
 				B9B2C661288E569E00CB6569 /* ExternalDisplayEmulationViewController.mm in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
+				B974923C2960096C00794509 /* ImportFileManager.m in Sources */,
 				B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
