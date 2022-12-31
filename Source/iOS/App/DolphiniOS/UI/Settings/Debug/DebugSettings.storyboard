@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,23 +16,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <sections>
-                            <tableViewSection id="1ZP-Lv-HFk">
+                            <tableViewSection headerTitle="Controllers" id="1ZP-Lv-HFk">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="Gin-cc-xgx">
-                                        <rect key="frame" x="16" y="18" width="343" height="43"/>
+                                        <rect key="frame" x="16" y="49.5" width="343" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Gin-cc-xgx" id="s5f-nY-Ats">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Attach Virtual MFi Controller" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="FQ0-QP-lba">
-                                                    <rect key="frame" x="16" y="11" width="254" height="21"/>
+                                                    <rect key="frame" x="16" y="11" width="254" height="21.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v1R-bY-GZa" customClass="DOLUIKitSwitch">
-                                                    <rect key="frame" x="278" y="6" width="51" height="31"/>
+                                                    <rect key="frame" x="278" y="6.5" width="51" height="31"/>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -41,6 +42,32 @@
                                                 <constraint firstAttribute="bottomMargin" secondItem="FQ0-QP-lba" secondAttribute="bottom" id="VpN-aB-ER6"/>
                                                 <constraint firstItem="FQ0-QP-lba" firstAttribute="leading" secondItem="s5f-nY-Ats" secondAttribute="leadingMargin" id="dl3-GW-HJ9"/>
                                                 <constraint firstItem="v1R-bY-GZa" firstAttribute="centerY" secondItem="s5f-nY-Ats" secondAttribute="centerY" id="wLJ-MG-VCS"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Utility" id="mI7-g0-bJu">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="cQT-w0-ZiF">
+                                        <rect key="frame" x="16" y="143" width="343" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cQT-w0-ZiF" id="rkR-Xw-ZHg">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Reset Launch Times" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="3PV-pn-JK8">
+                                                    <rect key="frame" x="16" y="11" width="311" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" systemColor="linkColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="3PV-pn-JK8" firstAttribute="top" secondItem="rkR-Xw-ZHg" secondAttribute="topMargin" id="Sf8-dB-5bR"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="3PV-pn-JK8" secondAttribute="bottom" id="Wo7-vE-Khm"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="3PV-pn-JK8" secondAttribute="trailing" id="hyd-X1-kPB"/>
+                                                <constraint firstItem="3PV-pn-JK8" firstAttribute="leading" secondItem="rkR-Xw-ZHg" secondAttribute="leadingMargin" id="ygc-6a-UvK"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -63,4 +90,9 @@
             <point key="canvasLocation" x="1425" y="-91"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
