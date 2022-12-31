@@ -5,7 +5,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SoftwareListiOSViewController : SoftwareListViewController
+@interface SoftwareListiOSViewController : SoftwareListViewController <UIDocumentPickerDelegate>
 
 @end
 

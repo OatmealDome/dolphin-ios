@@ -84,7 +84,13 @@
                             <outlet property="delegate" destination="Rbr-ly-5Pp" id="BF1-OC-9yD"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Software" id="S5F-CY-S3A"/>
+                    <navigationItem key="navigationItem" title="Software" id="S5F-CY-S3A">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="uFF-Rz-4t7">
+                            <connections>
+                                <action selector="addButtonPressed:" destination="Rbr-ly-5Pp" id="0Am-83-157"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <segue destination="TaY-Qy-7UM" kind="presentation" identifier="emulation" id="Jyi-q2-HSg"/>
                     </connections>
