@@ -40,10 +40,6 @@
   
   Config::SetBase(Config::MAIN_FASTMEM, [FastmemManager shared].fastmemAvailable);
   
-  // TODO: Defaults for debugging
-  Config::SetBase(Config::GFX_SHOW_FPS, true);
-  Config::SetBase(Config::MAIN_CPU_THREAD, true);
-  
   WindowSystemInfo wsi;
   wsi.type = WindowSystemType::iOS;
   
