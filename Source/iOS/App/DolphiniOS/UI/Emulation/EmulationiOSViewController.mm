@@ -149,6 +149,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   if (g_renderer) {
     g_renderer->ResizeSurface();
   }
+  
+  [[TCDeviceMotion shared] statusBarOrientationChanged];
 }
 
 - (void)receiveTitleChangedNotification {
@@ -233,6 +235,15 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     return;
   }
   
+  TCDeviceMotion* motion = [TCDeviceMotion shared];
+  
+  if (touchPad == DOLEmulationVisibleTouchPadWiimote || touchPad == DOLEmulationVisibleTouchPadSidewaysWiimote || touchPad == DOLEmulationVisibleTouchPadClassic) {
+    [motion setMotionEnabled:true];
+    [motion setPort:4]; // Touchscreen device 4 is used for the Wiimote
+  } else {
+    [motion setMotionEnabled:false];
+  }
+  
   NSInteger targetIdx = touchPad - 1;
   
   for (int i = 0; i < [self.touchPads count]; i++) {
@@ -265,6 +276,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
       [[VirtualMFiControllerManager shared] disconnectController];
     });
   }
+  
+  [[TCDeviceMotion shared] setMotionEnabled:false];
 }
 
 @end
