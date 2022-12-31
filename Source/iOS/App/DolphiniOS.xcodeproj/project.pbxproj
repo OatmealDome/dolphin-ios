@@ -79,6 +79,7 @@
 		B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */; };
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
 		B950CA942846A13100F45219 /* Sys in Resources */ = {isa = PBXBuildFile; fileRef = B950CA932846A13100F45219 /* Sys */; };
+		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* WiiAspectRatioViewController.mm */; };
@@ -291,6 +292,7 @@
 		B9476B2227F235A0009C0A4B /* BuildCore.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = BuildCore.sh; sourceTree = "<group>"; };
 		B9476B2427F23FFE009C0A4B /* libdolphin.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libdolphin.dylib; path = "../../../build-$(PLATFORM_NAME)-$(DOL_CORE_BUILD_TARGET)/Source/iOS/Library/libdolphin.dylib"; sourceTree = SOURCE_ROOT; };
 		B950CA932846A13100F45219 /* Sys */ = {isa = PBXFileReference; lastKnownFileType = text; name = Sys; path = ../../../Data/Sys; sourceTree = SOURCE_ROOT; };
+		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72D027F0FC020024BA7D /* Release (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -1015,6 +1017,7 @@
 				B9D938A0283F239F00B290FC /* TCButtonType.swift */,
 				B9B2C61B288DB62D00CB6569 /* TCClassicWiiPad.swift */,
 				B9B2C61C288DB62D00CB6569 /* TCClassicWiiPad.xib */,
+				B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */,
 				B9447AFE28418EA100BC9110 /* TCDirectionalPad.swift */,
 				B9447B032841901200BC9110 /* TCGameCubePad.swift */,
 				B9447B022841901200BC9110 /* TCGameCubePad.xib */,
@@ -1403,6 +1406,7 @@
 				B9FCB7D22897B9D60020E233 /* NKitWarningViewController.mm in Sources */,
 				B904ACBE28851C5C008B6BE9 /* GraphicsBackendCell.m in Sources */,
 				B9FCB7D42897C7D80020E233 /* NKitWarningViewControllerDelegate.swift in Sources */,
+				B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */,
 				B939872E2880896D008E8E47 /* ConfigGameCubeViewController.mm in Sources */,
 				B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */,
 				B904ACD92885E7DE008B6BE9 /* GraphicsHacksViewController.mm in Sources */,
