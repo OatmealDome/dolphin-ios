@@ -8,10 +8,12 @@ class MainDisplaySceneDelegate: UIResponder, UIWindowSceneDelegate {
   
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     MsgAlertManager.shared().registerMainDisplay(scene as? UIWindowScene)
+    ImportFileManager.shared().registerMainDisplay(scene as? UIWindowScene)
   }
   
   func sceneDidDisconnect(_ scene: UIScene) {
     MsgAlertManager.shared().registerMainDisplay(nil)
+    ImportFileManager.shared().registerMainDisplay(nil)
   }
   
   func sceneDidBecomeActive(_ scene: UIScene) {
