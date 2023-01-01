@@ -3,6 +3,6 @@
 
 typedef NS_ENUM(NSUInteger, EmulationBootType) {
   EmulationBootTypeFile,
-  EmulationBootTypeNANDTitle,
+  EmulationBootTypeSystemMenu,
   EmulationBootTypeGCIPL
 };
