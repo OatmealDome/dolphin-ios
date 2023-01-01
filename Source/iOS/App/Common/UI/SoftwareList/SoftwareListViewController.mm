@@ -9,6 +9,7 @@
 #import "GameFileCacheManager.h"
 #import "GameFilePtrWrapper.h"
 #import "Swift.h"
+#import "WiiSystemUpdateViewController.h"
 
 #import "UICommon/GameFile.h"
 
@@ -16,7 +17,10 @@
 
 @end
 
-@implementation SoftwareListViewController
+@implementation SoftwareListViewController {
+  NSString* _wiiUpdateSource;
+  bool _wiiUpdateIsOnline;
+}
 
 - (void)viewDidLoad {
   [super viewDidLoad];
@@ -91,6 +95,13 @@
 
 #pragma mark Segue
 
+- (void)performSegueForWiiUpdateWithSource:(NSString*)source isOnline:(bool)online {
+  _wiiUpdateSource = source;
+  _wiiUpdateIsOnline = online;
+  
+  [self performSegueWithIdentifier:@"wiiUpdate" sender:nil];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
 {
   if ([segue.identifier isEqualToString:@"emulation"]) {
@@ -98,6 +109,11 @@
     EmulationViewController* viewController = navigationController.viewControllers[0];
     
     viewController.bootParameter = _bootParameter;
+  } else if ([segue.identifier isEqualToString:@"wiiUpdate"]) {
+    WiiSystemUpdateViewController* updateController = segue.destinationViewController;
+    
+    updateController.updateSource = _wiiUpdateSource;
+    updateController.isOnlineUpdate = _wiiUpdateIsOnline;
   }
 }
 

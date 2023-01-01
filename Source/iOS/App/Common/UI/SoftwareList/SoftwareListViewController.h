@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
   EmulationBootParameter* _bootParameter;
 }
 
+- (void)performSegueForWiiUpdateWithSource:(NSString*)source isOnline:(bool)online;
+
 @end
 
 NS_ASSUME_NONNULL_END
