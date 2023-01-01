@@ -152,13 +152,10 @@ MFiController::MFiController(GCController* controller) : m_controller(controller
   {
     GCMotion* motion = controller.motion;
 
-    if (@available(iOS 14.0, *))
+    // The DualShock 4 requires manual sensor activation
+    if (motion.sensorsRequireManualActivation)
     {
-      // The DualShock 4 requires manual sensor activation
-      if (motion.sensorsRequireManualActivation)
-      {
-        motion.sensorsActive = true;
-      }
+      motion.sensorsActive = true;
     }
     
     AddInput(new AccelerometerAxis(motion, X, -1.0, "Accel Left"));
@@ -169,15 +166,7 @@ MFiController::MFiController(GCController* controller) : m_controller(controller
     AddInput(new AccelerometerAxis(motion, Z, -1.0, "Accel Down"));
     
     m_supports_accelerometer = true;
-
-    if (@available(iOS 14.0, *))
-    {
-      m_supports_gyroscope = motion.hasRotationRate;
-    }
-    else
-    {
-      m_supports_gyroscope = motion.hasAttitudeAndRotationRate;
-    }
+    m_supports_gyroscope = motion.hasRotationRate;
 
     if (m_supports_gyroscope)
     {
@@ -292,22 +281,19 @@ std::string MFiController::AccelerometerAxis::GetName() const
 
 ControlState MFiController::AccelerometerAxis::GetState() const
 {
-  if (@available(iOS 14.0, *))
+  // The DualShock 4 only returns combined gravity + acceleration.
+  if ([m_motion hasGravityAndUserAcceleration])
   {
-    // The DualShock 4 only returns combined gravity + acceleration.
-    if ([m_motion hasGravityAndUserAcceleration])
+    GCAcceleration totalAcceleration = [m_motion acceleration];
+    
+    switch (m_plane)
     {
-      GCAcceleration totalAcceleration = [m_motion acceleration];
-      
-      switch (m_plane)
-      {
-      case X:
-        return totalAcceleration.x * m_multiplier;
-      case Y:
-        return totalAcceleration.y * m_multiplier;
-      case Z:
-        return totalAcceleration.z * m_multiplier;
-      }
+    case X:
+      return totalAcceleration.x * m_multiplier;
+    case Y:
+      return totalAcceleration.y * m_multiplier;
+    case Z:
+      return totalAcceleration.z * m_multiplier;
     }
   }
   
