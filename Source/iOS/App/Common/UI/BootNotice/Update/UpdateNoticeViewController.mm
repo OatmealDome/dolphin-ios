@@ -22,20 +22,17 @@
   [self.saveStateLabel setHidden:(NSInteger)self.updateInfo[@"state_version"] != State::GetVersion()];
 }
 
-- (IBAction)updateNowPressed:(id)sender
-{
+- (IBAction)updateNowPressed:(id)sender {
   NSURL* url = [NSURL URLWithString:self.updateInfo[@"install_url"]];
   [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
 
-- (IBAction)seeChangesPressed:(id)sender
-{
+- (IBAction)seeChangesPressed:(id)sender {
   NSURL* url = [NSURL URLWithString:self.updateInfo[@"changes_url"]];
   [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
 
-- (IBAction)notNowPressed:(id)sender
-{
+- (IBAction)notNowPressed:(id)sender {
   [self.navigationController popViewControllerAnimated:true];
 }
 
