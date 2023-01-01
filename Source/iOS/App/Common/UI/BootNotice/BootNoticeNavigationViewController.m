@@ -20,7 +20,7 @@
     [self dismissViewControllerAnimated:true completion:nil];
   }
   
-  return [self popViewControllerAnimated:animated];
+  return [super popViewControllerAnimated:animated];
 }
 
 @end
