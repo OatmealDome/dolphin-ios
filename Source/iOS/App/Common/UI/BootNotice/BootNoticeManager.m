@@ -49,7 +49,7 @@
   if (![self isBeingPresented]) {
     [_queuedControllers addObject:viewController];
   } else {
-    [_navigationController presentViewController:viewController animated:true completion:nil];
+    [_navigationController pushViewController:viewController animated:true];
   }
 }
 
