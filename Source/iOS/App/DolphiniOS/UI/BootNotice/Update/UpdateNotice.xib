@@ -12,7 +12,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UpdateNoticeViewController">
             <connections>
                 <outlet property="changesLabel" destination="cRL-yG-mYd" id="eSA-mW-Slv"/>
-                <outlet property="m_save_states_warning_label" destination="luA-1B-bZp" id="e9X-Sl-kCq"/>
                 <outlet property="saveStateLabel" destination="luA-1B-bZp" id="aFK-GC-8FM"/>
                 <outlet property="versionLabel" destination="G2L-KW-hUh" id="GQk-c6-w6C"/>
                 <outlet property="view" destination="r55-Fn-aBI" id="r9r-Zd-Dn7"/>
