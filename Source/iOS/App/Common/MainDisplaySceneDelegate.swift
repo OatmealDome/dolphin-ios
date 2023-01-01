@@ -16,6 +16,8 @@ class MainDisplaySceneDelegate: UIResponder, UIWindowSceneDelegate {
   
   func sceneDidBecomeActive(_ scene: UIScene) {
     ServiceManager.shared.applicationDidBecomeActive()
+    
+    BootNoticeManager.shared().presentToSceneIfNecessary()
   }
   
   func sceneWillResignActive(_ scene: UIScene) {
