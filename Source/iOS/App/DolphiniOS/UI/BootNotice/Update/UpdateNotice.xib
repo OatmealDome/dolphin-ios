@@ -108,14 +108,23 @@ Save data on GameCube Memory Cards or the emulated Wii's memory is not affected.
                                                     <integer key="value" value="10"/>
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="updateNowPressed:" destination="-1" eventType="touchUpInside" id="Hh1-i6-yvo"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ddp-vN-h8U">
                                             <rect key="frame" x="0.0" y="55" width="335" height="45"/>
                                             <state key="normal" title="See Changes"/>
+                                            <connections>
+                                                <action selector="seeChangesPressed:" destination="-1" eventType="touchUpInside" id="yvJ-TH-vbc"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gmF-1y-bUR">
                                             <rect key="frame" x="0.0" y="110" width="335" height="45"/>
                                             <state key="normal" title="Not Now"/>
+                                            <connections>
+                                                <action selector="notNowPressed:" destination="-1" eventType="touchUpInside" id="xoz-jV-tob"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </stackView>
