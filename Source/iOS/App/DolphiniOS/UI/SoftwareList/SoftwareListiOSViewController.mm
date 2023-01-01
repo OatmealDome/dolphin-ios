@@ -17,31 +17,6 @@
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
   
-  if (@available(iOS 14.0, *)) {
-    [self recreateMoreMenu];
-  }
-}
-
-- (IBAction)addButtonPressed:(id)sender {
-  NSArray* types = @[
-    @"me.oatmealdome.dolphinios.generic-software",
-    @"me.oatmealdome.dolphinios.gamecube-software",
-    @"me.oatmealdome.dolphinios.wii-software"
-  ];
-  
-  UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:types inMode:UIDocumentPickerModeOpen];
-  pickerController.delegate = self;
-  pickerController.modalPresentationStyle = UIModalPresentationPageSheet;
-  pickerController.allowsMultipleSelection = false;
-  
-  [self presentViewController:pickerController animated:true completion:nil];
-}
-
-- (void)documentPicker:(UIDocumentPickerViewController*)controller didPickDocumentsAtURLs:(NSArray<NSURL*>*)urls {
-  [[ImportFileManager shared] importFileAtUrl:urls[0]];
-}
-
-- (void)recreateMoreMenu API_AVAILABLE(ios(14.0)) {
   NSArray<UIMenuElement*>* wiiActions;
   
   // Get the system menu TMD
@@ -93,6 +68,25 @@
   self.navigationItem.leftBarButtonItem.menu = [UIMenu menuWithChildren:@[
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Wii") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:wiiActions]
   ]];
+}
+
+- (IBAction)addButtonPressed:(id)sender {
+  NSArray* types = @[
+    @"me.oatmealdome.dolphinios.generic-software",
+    @"me.oatmealdome.dolphinios.gamecube-software",
+    @"me.oatmealdome.dolphinios.wii-software"
+  ];
+  
+  UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:types inMode:UIDocumentPickerModeOpen];
+  pickerController.delegate = self;
+  pickerController.modalPresentationStyle = UIModalPresentationPageSheet;
+  pickerController.allowsMultipleSelection = false;
+  
+  [self presentViewController:pickerController animated:true completion:nil];
+}
+
+- (void)documentPicker:(UIDocumentPickerViewController*)controller didPickDocumentsAtURLs:(NSArray<NSURL*>*)urls {
+  [[ImportFileManager shared] importFileAtUrl:urls[0]];
 }
 
 @end
