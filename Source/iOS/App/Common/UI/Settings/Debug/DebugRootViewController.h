@@ -10,7 +10,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DebugRootViewController : UITableViewController
 
 @property (weak, nonatomic) IBOutlet DOLSwitch* mfiSwitch;
-@property (weak, nonatomic) IBOutlet UILabel *userFolderPathLabel;
+@property (weak, nonatomic) IBOutlet UILabel* userFolderPathLabel;
+@property (weak, nonatomic) IBOutlet UILabel* jitStatusLabel;
+@property (weak, nonatomic) IBOutlet UILabel* jitErrorLabel;
 
 @end
 

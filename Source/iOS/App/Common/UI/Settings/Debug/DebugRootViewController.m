@@ -5,6 +5,7 @@
 
 #import "Swift.h"
 
+#import "JitManager.h"
 #import "VirtualMFiControllerManager.h"
 
 @interface DebugRootViewController ()
@@ -20,6 +21,10 @@
   [self.mfiSwitch addValueChangedTarget:self action:@selector(mfiChanged)];
   
   self.userFolderPathLabel.text = [UserFolderUtil getUserFolder];
+  self.jitStatusLabel.text = [JitManager shared].acquiredJit ? @"Acquired" : @"Not Acquired";
+  
+  NSString* jitError = [JitManager shared].acquisitionError;
+  self.jitErrorLabel.text = jitError != nil ? jitError : @"(none)";
 }
 
 - (void)mfiChanged {
