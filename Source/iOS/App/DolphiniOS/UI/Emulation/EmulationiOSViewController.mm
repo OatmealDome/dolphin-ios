@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveEmulationEndNotificationiOS) name:DOLEmulationDidEndNotification object:nil];
 }
 
-- (void)recreateMenu API_AVAILABLE(ios(14.0)) {
+- (void)recreateMenu {
   NSMutableArray<UIAction*>* controllerActions = [[NSMutableArray alloc] init];
   
   if ([self isWiimoteTouchPadAttached] && SConfig::GetInstance().bWii) {
@@ -161,9 +161,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
       [self updateVisibleTouchPadToGameCube];
     }
     
-    if (@available(iOS 14.0, *)) {
-      [self recreateMenu];
-    }
+    [self recreateMenu];
   });
 }
 
