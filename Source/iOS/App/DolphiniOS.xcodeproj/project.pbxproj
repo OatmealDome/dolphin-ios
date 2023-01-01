@@ -139,7 +139,7 @@
 		B9DC5FB3288497B0004BD94A /* GraphicsGeneralViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB2288497B0004BD94A /* GraphicsGeneralViewController.mm */; };
 		B9DC5FB62884A563004BD94A /* GraphicsBoolCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */; };
 		B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */; };
-		B9EC1A43295FFFD30013EBE4 /* SoftwareListiOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9EC1A42295FFFD30013EBE4 /* SoftwareListiOSViewController.m */; };
+		B9EC1A43295FFFD30013EBE4 /* SoftwareListiOSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EC1A42295FFFD30013EBE4 /* SoftwareListiOSViewController.mm */; };
 		B9FCB7B9289670830020E233 /* JitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7B8289670830020E233 /* JitManager.m */; };
 		B9FCB7BC289672830020E233 /* JitManager+Debugger.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BB289672830020E233 /* JitManager+Debugger.m */; };
 		B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BD28967C130020E233 /* JitAcquisitionService.swift */; };
@@ -430,7 +430,7 @@
 		B9DC5FB72884CB7C004BD94A /* GraphicsChoiceCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsChoiceCell.h; sourceTree = "<group>"; };
 		B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsChoiceCell.mm; sourceTree = "<group>"; };
 		B9EC1A41295FFFD30013EBE4 /* SoftwareListiOSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SoftwareListiOSViewController.h; sourceTree = "<group>"; };
-		B9EC1A42295FFFD30013EBE4 /* SoftwareListiOSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoftwareListiOSViewController.m; sourceTree = "<group>"; };
+		B9EC1A42295FFFD30013EBE4 /* SoftwareListiOSViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SoftwareListiOSViewController.mm; sourceTree = "<group>"; };
 		B9FCB7B7289670830020E233 /* JitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JitManager.h; sourceTree = "<group>"; };
 		B9FCB7B8289670830020E233 /* JitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JitManager.m; sourceTree = "<group>"; };
 		B9FCB7BA289672830020E233 /* JitManager+Debugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+Debugger.h"; sourceTree = "<group>"; };
@@ -577,7 +577,7 @@
 			children = (
 				B99137B72882A58000588446 /* SoftwareList.storyboard */,
 				B9EC1A41295FFFD30013EBE4 /* SoftwareListiOSViewController.h */,
-				B9EC1A42295FFFD30013EBE4 /* SoftwareListiOSViewController.m */,
+				B9EC1A42295FFFD30013EBE4 /* SoftwareListiOSViewController.mm */,
 			);
 			path = SoftwareList;
 			sourceTree = "<group>";
@@ -1626,7 +1626,7 @@
 				B904AD1A2888AB5E008B6BE9 /* MappingDeviceCell.m in Sources */,
 				B900A7BD27F4CDD3000361DD /* SwiftStringUtil.swift in Sources */,
 				B9D9388C283DD86100B290FC /* EmulationBootParameter.mm in Sources */,
-				B9EC1A43295FFFD30013EBE4 /* SoftwareListiOSViewController.m in Sources */,
+				B9EC1A43295FFFD30013EBE4 /* SoftwareListiOSViewController.mm in Sources */,
 				B904AD1228886B0D008B6BE9 /* MappingRootExtensionCell.m in Sources */,
 				B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */,
 				B9B2C5E2288D0A9800CB6569 /* MappingLoadProfileViewController.mm in Sources */,
