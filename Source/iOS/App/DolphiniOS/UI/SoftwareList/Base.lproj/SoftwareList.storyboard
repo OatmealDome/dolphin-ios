@@ -85,6 +85,7 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="Software" id="S5F-CY-S3A">
+                        <barButtonItem key="leftBarButtonItem" image="ellipsis.circle" catalog="system" id="ezc-BN-Erz"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="uFF-Rz-4t7">
                             <connections>
                                 <action selector="addButtonPressed:" destination="Rbr-ly-5Pp" id="0Am-83-157"/>
@@ -120,6 +121,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ellipsis.circle" catalog="system" width="128" height="121"/>
         <image name="gamecontroller.fill" catalog="system" width="128" height="80"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
