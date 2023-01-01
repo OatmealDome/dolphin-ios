@@ -84,6 +84,8 @@
 		B950CFAD296170BC00197719 /* BootNoticeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFAC296170BC00197719 /* BootNoticeManager.m */; };
 		B950CFB2296179A000197719 /* UnofficialBuildNoticeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFB1296179A000197719 /* UnofficialBuildNoticeViewController.m */; };
 		B950CFB6296179E000197719 /* UnofficialBuildNotice.xib in Resources */ = {isa = PBXBuildFile; fileRef = B950CFB5296179E000197719 /* UnofficialBuildNotice.xib */; };
+		B950CFBA296208A900197719 /* UpdateNoticeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B950CFB9296208A900197719 /* UpdateNoticeViewController.mm */; };
+		B950CFBD296208D400197719 /* UpdateNotice.xib in Resources */ = {isa = PBXBuildFile; fileRef = B950CFBC296208D400197719 /* UpdateNotice.xib */; };
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
 		B974923C2960096C00794509 /* ImportFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923B2960096C00794509 /* ImportFileManager.m */; };
 		B9749240296035F500794509 /* FastmemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923F296035F500794509 /* FastmemManager.m */; };
@@ -312,6 +314,9 @@
 		B950CFB0296179A000197719 /* UnofficialBuildNoticeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnofficialBuildNoticeViewController.h; sourceTree = "<group>"; };
 		B950CFB1296179A000197719 /* UnofficialBuildNoticeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UnofficialBuildNoticeViewController.m; sourceTree = "<group>"; };
 		B950CFB5296179E000197719 /* UnofficialBuildNotice.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnofficialBuildNotice.xib; sourceTree = "<group>"; };
+		B950CFB8296208A900197719 /* UpdateNoticeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UpdateNoticeViewController.h; sourceTree = "<group>"; };
+		B950CFB9296208A900197719 /* UpdateNoticeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = UpdateNoticeViewController.mm; sourceTree = "<group>"; };
+		B950CFBC296208D400197719 /* UpdateNotice.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UpdateNotice.xib; sourceTree = "<group>"; };
 		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -894,6 +899,7 @@
 			isa = PBXGroup;
 			children = (
 				B950CFAF2961798700197719 /* UnofficialBuild */,
+				B950CFB72962089600197719 /* Update */,
 				B950CFAB296170BC00197719 /* BootNoticeManager.h */,
 				B950CFAC296170BC00197719 /* BootNoticeManager.m */,
 				B950CFA12961696100197719 /* BootNoticeNavigationViewController.h */,
@@ -924,6 +930,7 @@
 			isa = PBXGroup;
 			children = (
 				B950CFB4296179C200197719 /* UnofficialBuild */,
+				B950CFBB296208B500197719 /* Update */,
 			);
 			path = BootNotice;
 			sourceTree = "<group>";
@@ -934,6 +941,23 @@
 				B950CFB5296179E000197719 /* UnofficialBuildNotice.xib */,
 			);
 			path = UnofficialBuild;
+			sourceTree = "<group>";
+		};
+		B950CFB72962089600197719 /* Update */ = {
+			isa = PBXGroup;
+			children = (
+				B950CFB8296208A900197719 /* UpdateNoticeViewController.h */,
+				B950CFB9296208A900197719 /* UpdateNoticeViewController.mm */,
+			);
+			path = Update;
+			sourceTree = "<group>";
+		};
+		B950CFBB296208B500197719 /* Update */ = {
+			isa = PBXGroup;
+			children = (
+				B950CFBC296208D400197719 /* UpdateNotice.xib */,
+			);
+			path = Update;
 			sourceTree = "<group>";
 		};
 		B96F72CC27F0E6A00024BA7D /* Project */ = {
@@ -1360,6 +1384,7 @@
 				B904ACDE28863119008B6BE9 /* GraphicsSettings.storyboard in Resources */,
 				B99137B52882A58000588446 /* SoftwareList.storyboard in Resources */,
 				B9B2C623288DB62D00CB6569 /* TCSidewaysWiiPad.xib in Resources */,
+				B950CFBD296208D400197719 /* UpdateNotice.xib in Resources */,
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
@@ -1497,6 +1522,7 @@
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
 				B9B2C620288DB62D00CB6569 /* TCClassicWiiPad.swift in Sources */,
+				B950CFBA296208A900197719 /* UpdateNoticeViewController.mm in Sources */,
 				B904ACCB28854782008B6BE9 /* GraphicsEnhancementsViewController.mm in Sources */,
 				B9B2C61A288D3A7F00CB6569 /* EmulationiOSViewController.mm in Sources */,
 				B904AD082887DAEE008B6BE9 /* ControllersTypeCell.m in Sources */,
