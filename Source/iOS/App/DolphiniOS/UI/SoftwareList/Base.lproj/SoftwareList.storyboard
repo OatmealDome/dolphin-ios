@@ -93,6 +93,7 @@
                     </navigationItem>
                     <connections>
                         <segue destination="TaY-Qy-7UM" kind="presentation" identifier="emulation" id="Jyi-q2-HSg"/>
+                        <segue destination="H8P-fA-yeG" kind="presentation" identifier="wiiUpdate" id="8Jb-6c-aKp"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E2z-QY-NM7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -106,6 +107,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a5U-HV-bzh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1378" y="147"/>
+        </scene>
+        <!--Root-->
+        <scene sceneID="0RH-yE-n3U">
+            <objects>
+                <viewControllerPlaceholder storyboardName="WiiSystemUpdate" referencedIdentifier="Root" id="H8P-fA-yeG" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="XbE-zZ-5n1"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VdE-mL-FWD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1378" y="185"/>
         </scene>
     </scenes>
     <resources>
