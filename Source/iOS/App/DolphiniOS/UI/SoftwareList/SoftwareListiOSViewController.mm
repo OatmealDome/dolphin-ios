@@ -7,6 +7,7 @@
 #import "Core/IOS/ES/ES.h"
 #import "Core/IOS/IOS.h"
 
+#import "EmulationBootParameter.h"
 #import "FoundationStringUtil.h"
 #import "ImportFileManager.h"
 #import "LocalizationUtil.h"
@@ -60,7 +61,10 @@
     
     wiiActions = @[
       [UIAction actionWithTitle:[NSString stringWithFormat:loadFormat, CppToFoundationString(version)] image:[UIImage systemImageNamed:@"tray.and.arrow.down"] identifier:nil handler:^(UIAction*) {
-        // TODO
+        self->_bootParameter = [[EmulationBootParameter alloc] init];
+        self->_bootParameter.bootType = EmulationBootTypeSystemMenu;
+        
+        [self performSegueWithIdentifier:@"emulation" sender:nil];
       }],
       [UIAction actionWithTitle:DOLCoreLocalizedString(@"Perform Online System Update") image:[UIImage systemImageNamed:@"icloud.and.arrow.down"] identifier:nil handler:^(UIAction*) {
         [self performSegueForWiiUpdateWithSource:@"" isOnline:true];
