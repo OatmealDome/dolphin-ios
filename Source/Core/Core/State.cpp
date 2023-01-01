@@ -826,4 +826,9 @@ void UndoSaveState()
   LoadAs(File::GetUserPath(D_STATESAVES_IDX) + "lastState.sav");
 }
 
+u32 GetVersion()
+{
+  return STATE_VERSION;
+}
+
 }  // namespace State
