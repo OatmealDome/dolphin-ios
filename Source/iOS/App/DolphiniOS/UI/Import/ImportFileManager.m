@@ -6,9 +6,9 @@
 #import "Swift.h"
 
 #import "LocalizationUtil.h"
+#import "MainSceneCoordinator.h"
 
 @implementation ImportFileManager {
-  __weak UIWindowScene* _mainScene;
   UIWindow* _window;
 }
 
@@ -23,17 +23,13 @@
   return sharedInstance;
 }
 
-- (void)registerMainDisplayScene:(nullable UIWindowScene*)scene {
-  _mainScene = scene;
-}
-
-- (void)showWindow {
-  self->_window = [[UIWindow alloc] initWithWindowScene:self->_mainScene];
+- (void)showWindowOnScene:(UIWindowScene*)scene {
+  self->_window = [[UIWindow alloc] initWithWindowScene:scene];
   self->_window.frame = [UIScreen mainScreen].bounds;
   self->_window.rootViewController = [[UIViewController alloc] init];
   self->_window.windowLevel = UIWindowLevelAlert;
   
-  UIWindow* topWindow = self->_mainScene.windows.lastObject;
+  UIWindow* topWindow = scene.windows.lastObject;
   self->_window.windowLevel = topWindow.windowLevel + 1;
   
   [self->_window makeKeyAndVisible];
@@ -50,11 +46,13 @@
 }
 
 - (void)importFileAtUrl:(NSURL*)url {
-  if (_mainScene == nil) {
+  UIWindowScene* mainScene = [MainSceneCoordinator shared].mainScene;
+  
+  if (mainScene == nil) {
     return;
   }
   
-  [self showWindow];
+  [self showWindowOnScene:mainScene];
   
   if (![url startAccessingSecurityScopedResource]) {
     UIAlertController* errorAlert = [UIAlertController alertControllerWithTitle:DOLCoreLocalizedString(@"Error") message:@"Failed to start accessing security scoped resource." preferredStyle:UIAlertControllerStyleAlert];

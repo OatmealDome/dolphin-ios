@@ -80,6 +80,7 @@
 		B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; };
 		B950CA942846A13100F45219 /* Sys in Resources */ = {isa = PBXBuildFile; fileRef = B950CA932846A13100F45219 /* Sys */; };
 		B950CFA32961696100197719 /* BootNoticeNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFA22961696100197719 /* BootNoticeNavigationViewController.m */; };
+		B950CFAA29616B4F00197719 /* MainSceneCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFA929616B4F00197719 /* MainSceneCoordinator.m */; };
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
 		B974923C2960096C00794509 /* ImportFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923B2960096C00794509 /* ImportFileManager.m */; };
 		B9749240296035F500794509 /* FastmemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923F296035F500794509 /* FastmemManager.m */; };
@@ -301,6 +302,8 @@
 		B950CA932846A13100F45219 /* Sys */ = {isa = PBXFileReference; lastKnownFileType = text; name = Sys; path = ../../../Data/Sys; sourceTree = SOURCE_ROOT; };
 		B950CFA12961696100197719 /* BootNoticeNavigationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BootNoticeNavigationViewController.h; sourceTree = "<group>"; };
 		B950CFA22961696100197719 /* BootNoticeNavigationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BootNoticeNavigationViewController.m; sourceTree = "<group>"; };
+		B950CFA829616B4F00197719 /* MainSceneCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainSceneCoordinator.h; sourceTree = "<group>"; };
+		B950CFA929616B4F00197719 /* MainSceneCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainSceneCoordinator.m; sourceTree = "<group>"; };
 		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -511,6 +514,7 @@
 				B9D93893283ECD6F00B290FC /* Controls */,
 				B933EDC527F8E8D6004D7DD7 /* Emulation */,
 				B99137C62883290000588446 /* Localization */,
+				B950CFA729616B3300197719 /* Scene */,
 				B93986F9287F4592008E8E47 /* Settings */,
 				B900A7C327F4D44D000361DD /* SoftwareList */,
 			);
@@ -884,6 +888,15 @@
 				B950CFA22961696100197719 /* BootNoticeNavigationViewController.m */,
 			);
 			path = BootNotice;
+			sourceTree = "<group>";
+		};
+		B950CFA729616B3300197719 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				B950CFA829616B4F00197719 /* MainSceneCoordinator.h */,
+				B950CFA929616B4F00197719 /* MainSceneCoordinator.m */,
+			);
+			path = Scene;
 			sourceTree = "<group>";
 		};
 		B96F72CC27F0E6A00024BA7D /* Project */ = {
@@ -1430,6 +1443,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B950CFAA29616B4F00197719 /* MainSceneCoordinator.m in Sources */,
 				B904AD092887DAF1008B6BE9 /* ControllersTypeViewController.mm in Sources */,
 				B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */,
 				B9B2C64D288E170600CB6569 /* ServiceManager.swift in Sources */,

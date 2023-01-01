@@ -5,12 +5,11 @@
 #import "EmulationCoordinator.h"
 #import "FirstRunInitializationService.h"
 #import "GameFileCacheManager.h"
-#import "ImportFileManager.h"
 #import "JitManager.h"
 #import "JitManager+AltServer.h"
 #import "JitManager+JitStreamer.h"
 #import "LegacyInputConfigMigrationService.h"
-#import "MsgAlertManager.h"
+#import "MainSceneCoordinator.h"
 
 #if TARGET_OS_IOS
 #import "TCManagerInterface.h"

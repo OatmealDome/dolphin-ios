@@ -12,7 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (MsgAlertManager*)shared;
 
 - (void)registerHandler;
-- (void)registerMainDisplayScene:(nullable UIWindowScene*)scene;
 
 @end
 

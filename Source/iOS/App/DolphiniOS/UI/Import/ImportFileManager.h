@@ -11,7 +11,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (ImportFileManager*)shared;
 
-- (void)registerMainDisplayScene:(nullable UIWindowScene*)scene;
 - (void)importFileAtUrl:(NSURL*)url;
 
 @end

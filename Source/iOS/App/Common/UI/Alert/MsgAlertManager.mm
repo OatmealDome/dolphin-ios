@@ -11,6 +11,7 @@
 
 #import "FoundationStringUtil.h"
 #import "LocalizationUtil.h"
+#import "MainSceneCoordinator.h"
 
 @interface MsgAlertManager ()
 
@@ -24,7 +25,6 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
 }
 
 @implementation MsgAlertManager {
-  __weak UIWindowScene* _mainScene;
   std::mutex _alertLock;
   Common::Event _waitEvent;
 }
@@ -44,10 +44,6 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
   Common::RegisterMsgAlertHandler(MsgAlert);
 }
 
-- (void)registerMainDisplayScene:(nullable UIWindowScene*)scene {
-  _mainScene = scene;
-}
-
 - (bool)handleAlertWithCaption:(const char*)caption text:(const char*)text question:(bool)question style:(Common::MsgType)style {
   std::lock_guard<std::mutex> guard(_alertLock);
   
@@ -56,8 +52,10 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
   
   // Log to console as a backup
   NSLog(@"MsgAlert - %@: %@ (question: %d)", foundationCaption, foundationText, question ? 1 : 0);
+  
+  UIWindowScene* mainScene = [MainSceneCoordinator shared].mainScene;
 
-  if (_mainScene == nil) {
+  if (mainScene == nil) {
     // Dunno what we can do here - the main scene is somehow disconnected?
     return false;
   }
@@ -65,12 +63,12 @@ static bool MsgAlert(const char* caption, const char* text, bool question, Commo
   __block bool confirmed = false;
   
   dispatch_async(dispatch_get_main_queue(), ^{
-    UIWindow* window = [[UIWindow alloc] initWithWindowScene:self->_mainScene];
+    UIWindow* window = [[UIWindow alloc] initWithWindowScene:mainScene];
     window.frame = [UIScreen mainScreen].bounds;
     window.rootViewController = [[UIViewController alloc] init];
     window.windowLevel = UIWindowLevelAlert;
     
-    UIWindow* topWindow = self->_mainScene.windows.lastObject;
+    UIWindow* topWindow = mainScene.windows.lastObject;
     window.windowLevel = topWindow.windowLevel + 1;
     
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:foundationCaption message:foundationText preferredStyle:UIAlertControllerStyleAlert];
