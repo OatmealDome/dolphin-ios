@@ -81,6 +81,7 @@
 		B950CA942846A13100F45219 /* Sys in Resources */ = {isa = PBXBuildFile; fileRef = B950CA932846A13100F45219 /* Sys */; };
 		B950CFA32961696100197719 /* BootNoticeNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFA22961696100197719 /* BootNoticeNavigationViewController.m */; };
 		B950CFAA29616B4F00197719 /* MainSceneCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFA929616B4F00197719 /* MainSceneCoordinator.m */; };
+		B950CFAD296170BC00197719 /* BootNoticeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFAC296170BC00197719 /* BootNoticeManager.m */; };
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
 		B974923C2960096C00794509 /* ImportFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923B2960096C00794509 /* ImportFileManager.m */; };
 		B9749240296035F500794509 /* FastmemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923F296035F500794509 /* FastmemManager.m */; };
@@ -304,6 +305,8 @@
 		B950CFA22961696100197719 /* BootNoticeNavigationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BootNoticeNavigationViewController.m; sourceTree = "<group>"; };
 		B950CFA829616B4F00197719 /* MainSceneCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainSceneCoordinator.h; sourceTree = "<group>"; };
 		B950CFA929616B4F00197719 /* MainSceneCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainSceneCoordinator.m; sourceTree = "<group>"; };
+		B950CFAB296170BC00197719 /* BootNoticeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BootNoticeManager.h; sourceTree = "<group>"; };
+		B950CFAC296170BC00197719 /* BootNoticeManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BootNoticeManager.m; sourceTree = "<group>"; };
 		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -884,6 +887,8 @@
 		B950CF9D2961690A00197719 /* BootNotice */ = {
 			isa = PBXGroup;
 			children = (
+				B950CFAB296170BC00197719 /* BootNoticeManager.h */,
+				B950CFAC296170BC00197719 /* BootNoticeManager.m */,
 				B950CFA12961696100197719 /* BootNoticeNavigationViewController.h */,
 				B950CFA22961696100197719 /* BootNoticeNavigationViewController.m */,
 			);
@@ -1491,6 +1496,7 @@
 				B939872E2880896D008E8E47 /* ConfigGameCubeViewController.mm in Sources */,
 				B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */,
 				B904ACD92885E7DE008B6BE9 /* GraphicsHacksViewController.mm in Sources */,
+				B950CFAD296170BC00197719 /* BootNoticeManager.m in Sources */,
 				B900A7CA27F4DA97000361DD /* SoftwareListViewController.mm in Sources */,
 				B9DC5FB3288497B0004BD94A /* GraphicsGeneralViewController.mm in Sources */,
 				B939870A287FBB08008E8E47 /* SpeedLimitViewController.mm in Sources */,
