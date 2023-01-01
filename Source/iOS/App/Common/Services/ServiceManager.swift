@@ -15,7 +15,8 @@ class ServiceManager {
     FirstRunInitializationService(),
     LegacyInputConfigMigrationService(),
     GameFileCacheService(),
-    JitAcquisitionService()
+    JitAcquisitionService(),
+    UpdateCheckService()
   ]
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
