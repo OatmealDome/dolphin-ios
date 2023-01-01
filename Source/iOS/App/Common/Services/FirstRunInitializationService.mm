@@ -12,6 +12,9 @@
 #import "InputCommon/ControllerEmu/ControllerEmu.h"
 #import "InputCommon/InputConfig.h"
 
+#import "BootNoticeManager.h"
+#import "UnofficialBuildNoticeViewController.h"
+
 @implementation FirstRunInitializationService
 
 - (void)importDefaultProfileForInputConfig:(InputConfig*)config {
@@ -42,6 +45,8 @@
   if (launchTimes == 0) {
     [self importDefaultProfileForInputConfig:Pad::GetConfig()];
     [self importDefaultProfileForInputConfig:Wiimote::GetConfig()];
+    
+    [[BootNoticeManager shared] enqueueViewController:[[UnofficialBuildNoticeViewController alloc] initWithNibName:@"UnofficialBuildNotice" bundle:nil]];
   }
   
   return true;
