@@ -87,6 +87,8 @@
 		B950CFBA296208A900197719 /* UpdateNoticeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B950CFB9296208A900197719 /* UpdateNoticeViewController.mm */; };
 		B950CFBD296208D400197719 /* UpdateNotice.xib in Resources */ = {isa = PBXBuildFile; fileRef = B950CFBC296208D400197719 /* UpdateNotice.xib */; };
 		B950CFBF29620C8900197719 /* UpdateCheckService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950CFBE29620C8900197719 /* UpdateCheckService.swift */; };
+		B950CFC3296219C800197719 /* WiiSystemUpdateViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B950CFC2296219C800197719 /* WiiSystemUpdateViewController.mm */; };
+		B950CFC629621AFC00197719 /* WiiSystemUpdate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B950CFC529621AFC00197719 /* WiiSystemUpdate.storyboard */; };
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
 		B974923C2960096C00794509 /* ImportFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923B2960096C00794509 /* ImportFileManager.m */; };
 		B9749240296035F500794509 /* FastmemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923F296035F500794509 /* FastmemManager.m */; };
@@ -319,6 +321,9 @@
 		B950CFB9296208A900197719 /* UpdateNoticeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = UpdateNoticeViewController.mm; sourceTree = "<group>"; };
 		B950CFBC296208D400197719 /* UpdateNotice.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UpdateNotice.xib; sourceTree = "<group>"; };
 		B950CFBE29620C8900197719 /* UpdateCheckService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCheckService.swift; sourceTree = "<group>"; };
+		B950CFC1296219C800197719 /* WiiSystemUpdateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WiiSystemUpdateViewController.h; sourceTree = "<group>"; };
+		B950CFC2296219C800197719 /* WiiSystemUpdateViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WiiSystemUpdateViewController.mm; sourceTree = "<group>"; };
+		B950CFC529621AFC00197719 /* WiiSystemUpdate.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = WiiSystemUpdate.storyboard; sourceTree = "<group>"; };
 		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -533,6 +538,7 @@
 				B950CFA729616B3300197719 /* Scene */,
 				B93986F9287F4592008E8E47 /* Settings */,
 				B900A7C327F4D44D000361DD /* SoftwareList */,
+				B950CFC0296219B000197719 /* WiiSystemUpdate */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -561,6 +567,7 @@
 				B97492392960094B00794509 /* Import */,
 				B938835B287EBA5500910606 /* Settings */,
 				B900A7C527F4D4E2000361DD /* SoftwareList */,
+				B950CFC429621ADA00197719 /* WiiSystemUpdate */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -961,6 +968,23 @@
 				B950CFBC296208D400197719 /* UpdateNotice.xib */,
 			);
 			path = Update;
+			sourceTree = "<group>";
+		};
+		B950CFC0296219B000197719 /* WiiSystemUpdate */ = {
+			isa = PBXGroup;
+			children = (
+				B950CFC1296219C800197719 /* WiiSystemUpdateViewController.h */,
+				B950CFC2296219C800197719 /* WiiSystemUpdateViewController.mm */,
+			);
+			path = WiiSystemUpdate;
+			sourceTree = "<group>";
+		};
+		B950CFC429621ADA00197719 /* WiiSystemUpdate */ = {
+			isa = PBXGroup;
+			children = (
+				B950CFC529621AFC00197719 /* WiiSystemUpdate.storyboard */,
+			);
+			path = WiiSystemUpdate;
 			sourceTree = "<group>";
 		};
 		B96F72CC27F0E6A00024BA7D /* Project */ = {
@@ -1390,6 +1414,7 @@
 				B950CFBD296208D400197719 /* UpdateNotice.xib in Resources */,
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
+				B950CFC629621AFC00197719 /* WiiSystemUpdate.storyboard in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
 				B97492492960F64300794509 /* DefaultPreferences.plist in Resources */,
 				B9B2C654288E400100CB6569 /* ExternalDisplay.storyboard in Resources */,
@@ -1587,6 +1612,7 @@
 				B9DC5FAB28849535004BD94A /* GraphicsRootViewController.mm in Sources */,
 				B9447B0128418F2600BC9110 /* TCJoystick.swift in Sources */,
 				B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */,
+				B950CFC3296219C800197719 /* WiiSystemUpdateViewController.mm in Sources */,
 				B9DC5FAF28849640004BD94A /* GraphicsTabViewController.m in Sources */,
 				B904ACD52885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm in Sources */,
 				B9B2C65B288E454700CB6569 /* ExternalDisplaySceneDelegate.swift in Sources */,
