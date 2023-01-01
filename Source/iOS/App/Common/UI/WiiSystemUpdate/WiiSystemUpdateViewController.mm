@@ -24,9 +24,11 @@
   // Do any additional setup after loading the view.
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated {
   // Auto-sleep off
   [[UIApplication sharedApplication] setIdleTimerDisabled:true];
+  
+  [super viewDidAppear:animated];
   
   if (_hasStarted) {
     return;
