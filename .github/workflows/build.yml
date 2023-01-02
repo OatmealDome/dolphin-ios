@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: macos-12
+
+    env:
+      XCODE_COMMON_BUILD_ARGS: -project Source/iOS/App/DolphiniOS.xcodeproj -derivedDataPath "${{ github.workspace }}/build-Xcode" DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
     
     steps:
       - uses: actions/checkout@v2
@@ -25,5 +28,5 @@ jobs:
       
       - name: Build Application
         run: |
-          xcodebuild -project Source/iOS/App/DolphiniOS.xcodeproj -configuration "Release (Non-Jailbroken)" -scheme "DiOS (NJB)" -derivedDataPath "${{ github.workspace }}/build-Xcode" DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
+          xcodebuild -configuration "Release (Non-Jailbroken)" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
 
