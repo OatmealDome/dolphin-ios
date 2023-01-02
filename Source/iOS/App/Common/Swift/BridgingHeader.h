@@ -9,6 +9,7 @@
 #import "JitManager.h"
 #import "JitManager+AltServer.h"
 #import "JitManager+JitStreamer.h"
+#import "JitManager+PTrace.h"
 #import "LegacyInputConfigMigrationService.h"
 #import "MainSceneCoordinator.h"
 #import "UpdateNoticeViewController.h"
