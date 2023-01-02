@@ -39,4 +39,13 @@ jobs:
       - name: Build Application
         run: |
           xcodebuild -configuration "Release (Non-Jailbroken)" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
-
+      
+      - name: Build IPA File
+        run: |
+          mkdir "${{ github.workspace }}/products"
+          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/Release (Non-Jailbroken)-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Public.entitlements" "${{ github.workspace }}/products/DolphiniOS (NJB).ipa"
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: NJB
+          path: ${{ github.workspace }}/products/DolphiniOS (NJB).ipa
