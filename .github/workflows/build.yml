@@ -26,6 +26,16 @@ jobs:
           brew install cmake ninja bartycrouch
           /usr/bin/python3 -m pip install polib
       
+      - name: Import Signing Certificate
+        run: |
+          echo ${{ secrets.DIOS_SIGNING_CERTIFICATE }} | base64 -d > "SigningCertificate.p12"
+          security create-keychain -p alpine build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p alpine build.keychain
+          security set-keychain-settings -t 36000 build.keychain
+          security import "SigningCertificate.p12" -k build.keychain -P ${{ secrets.DIOS_SIGNING_CERTIFICATE_PASSWORD }} -A
+          security set-key-partition-list -S apple-tool:,apple: -s -k alpine build.keychain
+      
       - name: Build Application
         run: |
           xcodebuild -configuration "Release (Non-Jailbroken)" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
