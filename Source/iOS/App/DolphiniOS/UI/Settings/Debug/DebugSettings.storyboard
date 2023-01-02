@@ -199,6 +199,37 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="K74-AX-BV0">
+                                        <rect key="frame" x="16" y="464.5" width="343" height="43"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="K74-AX-BV0" id="FX7-Md-SwB">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Launch Times" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Mmx-9m-f0E">
+                                                    <rect key="frame" x="16" y="11" width="241.5" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Counter" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kC2-2W-9iQ">
+                                                    <rect key="frame" x="265.5" y="11" width="61.5" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Mmx-9m-f0E" secondAttribute="bottom" id="4Qb-5U-ef3"/>
+                                                <constraint firstItem="Mmx-9m-f0E" firstAttribute="top" secondItem="FX7-Md-SwB" secondAttribute="topMargin" id="5Fc-bk-TtU"/>
+                                                <constraint firstItem="Mmx-9m-f0E" firstAttribute="leading" secondItem="FX7-Md-SwB" secondAttribute="leadingMargin" id="7Cc-wJ-z3h"/>
+                                                <constraint firstItem="kC2-2W-9iQ" firstAttribute="top" secondItem="FX7-Md-SwB" secondAttribute="topMargin" id="7L4-E9-uJU"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="kC2-2W-9iQ" secondAttribute="trailing" id="G4H-V9-8gH"/>
+                                                <constraint firstItem="kC2-2W-9iQ" firstAttribute="leading" secondItem="Mmx-9m-f0E" secondAttribute="trailing" constant="8" id="W5D-TA-gUR"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="kC2-2W-9iQ" secondAttribute="bottom" id="gFI-wR-hTd"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -213,6 +244,7 @@
                         <outlet property="fastmemStatusLabel" destination="uj0-ML-CPe" id="cBc-GF-oIY"/>
                         <outlet property="jitErrorLabel" destination="Kz5-Rc-gFe" id="0S1-3O-eGj"/>
                         <outlet property="jitStatusLabel" destination="LCT-Ag-ZWC" id="Pqv-JY-p7G"/>
+                        <outlet property="launchTimesLabel" destination="kC2-2W-9iQ" id="cwN-xD-gEQ"/>
                         <outlet property="mfiSwitch" destination="v1R-bY-GZa" id="hj8-yD-8f9"/>
                         <outlet property="userFolderPathLabel" destination="v9G-Mi-XiD" id="fDJ-3u-yQY"/>
                     </connections>

@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel* jitStatusLabel;
 @property (weak, nonatomic) IBOutlet UILabel* jitErrorLabel;
 @property (weak, nonatomic) IBOutlet UILabel* fastmemStatusLabel;
+@property (weak, nonatomic) IBOutlet UILabel* launchTimesLabel;
 
 @end
 

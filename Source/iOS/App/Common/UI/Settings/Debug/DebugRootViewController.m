@@ -28,6 +28,9 @@
   self.jitErrorLabel.text = jitError != nil ? jitError : @"(none)";
   
   self.fastmemStatusLabel.text = [FastmemManager shared].fastmemAvailable ? @"Available" : @"Not Available";
+  
+  NSInteger launchTimes = [[NSUserDefaults standardUserDefaults] integerForKey:@"launch_times"];
+  self.launchTimesLabel.text = [NSString stringWithFormat:@"%tu", launchTimes];
 }
 
 - (void)mfiChanged {
