@@ -168,6 +168,37 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="CoY-ea-Rfl">
+                                        <rect key="frame" x="16" y="421.5" width="343" height="43"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CoY-ea-Rfl" id="j6g-4P-n5X">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Fastmem" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ONW-vp-oHG">
+                                                    <rect key="frame" x="16" y="11" width="254" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uj0-ML-CPe">
+                                                    <rect key="frame" x="278" y="11" width="49" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="ONW-vp-oHG" secondAttribute="bottom" id="7Vh-rT-eLS"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="uj0-ML-CPe" secondAttribute="bottom" id="JZV-8z-WTu"/>
+                                                <constraint firstItem="uj0-ML-CPe" firstAttribute="leading" secondItem="ONW-vp-oHG" secondAttribute="trailing" constant="8" id="fp4-Y7-Gf2"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="uj0-ML-CPe" secondAttribute="trailing" id="jiK-yw-l0u"/>
+                                                <constraint firstItem="ONW-vp-oHG" firstAttribute="leading" secondItem="j6g-4P-n5X" secondAttribute="leadingMargin" id="mN2-hE-wLm"/>
+                                                <constraint firstItem="ONW-vp-oHG" firstAttribute="top" secondItem="j6g-4P-n5X" secondAttribute="topMargin" id="nuw-Xl-1jI"/>
+                                                <constraint firstItem="uj0-ML-CPe" firstAttribute="top" secondItem="j6g-4P-n5X" secondAttribute="topMargin" id="qsT-gQ-ICP"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -179,6 +210,7 @@
                     <navigationItem key="navigationItem" title="Debug" largeTitleDisplayMode="never" id="mqY-o6-IVF"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="fastmemStatusLabel" destination="uj0-ML-CPe" id="cBc-GF-oIY"/>
                         <outlet property="jitErrorLabel" destination="Kz5-Rc-gFe" id="0S1-3O-eGj"/>
                         <outlet property="jitStatusLabel" destination="LCT-Ag-ZWC" id="Pqv-JY-p7G"/>
                         <outlet property="mfiSwitch" destination="v1R-bY-GZa" id="hj8-yD-8f9"/>

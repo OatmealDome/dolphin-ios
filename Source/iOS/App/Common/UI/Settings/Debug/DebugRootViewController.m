@@ -5,6 +5,7 @@
 
 #import "Swift.h"
 
+#import "FastmemManager.h"
 #import "JitManager.h"
 #import "VirtualMFiControllerManager.h"
 
@@ -25,6 +26,8 @@
   
   NSString* jitError = [JitManager shared].acquisitionError;
   self.jitErrorLabel.text = jitError != nil ? jitError : @"(none)";
+  
+  self.fastmemStatusLabel.text = [FastmemManager shared].fastmemAvailable ? @"Available" : @"Not Available";
 }
 
 - (void)mfiChanged {
