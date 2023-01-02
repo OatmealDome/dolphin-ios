@@ -1527,7 +1527,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "python3 \"$PROJECT_DIR/Project/Scripts/UpdateCoreStrings.py\" \"$PROJECT_DIR/../../../Languages/po/\" \"$PROJECT_DIR/Common/UI/Localization\"\n";
+			shellScript = "/usr/bin/python3 \"$PROJECT_DIR/Project/Scripts/UpdateCoreStrings.py\" \"$PROJECT_DIR/../../../Languages/po/\" \"$PROJECT_DIR/Common/UI/Localization\"\n";
 		};
 		B99137B428829F1400588446 /* Transfer Core Strings to Storyboard Strings */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1545,7 +1545,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "python3 \"$PROJECT_DIR/Project/Scripts/TransferCoreStringsToStoryboard.py\" \"$PROJECT_DIR/DolphiniOS\" \"$PROJECT_DIR/Common/UI/Localization/\"\n";
+			shellScript = "/usr/bin/python3 \"$PROJECT_DIR/Project/Scripts/TransferCoreStringsToStoryboard.py\" \"$PROJECT_DIR/DolphiniOS\" \"$PROJECT_DIR/Common/UI/Localization/\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
