@@ -89,6 +89,7 @@
 		B950CFBF29620C8900197719 /* UpdateCheckService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B950CFBE29620C8900197719 /* UpdateCheckService.swift */; };
 		B950CFC3296219C800197719 /* WiiSystemUpdateViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B950CFC2296219C800197719 /* WiiSystemUpdateViewController.mm */; };
 		B950CFC629621AFC00197719 /* WiiSystemUpdate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B950CFC529621AFC00197719 /* WiiSystemUpdate.storyboard */; };
+		B950CFC92962562200197719 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFC82962562200197719 /* main.m */; };
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
 		B974923C2960096C00794509 /* ImportFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923B2960096C00794509 /* ImportFileManager.m */; };
 		B9749240296035F500794509 /* FastmemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923F296035F500794509 /* FastmemManager.m */; };
@@ -324,6 +325,7 @@
 		B950CFC1296219C800197719 /* WiiSystemUpdateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WiiSystemUpdateViewController.h; sourceTree = "<group>"; };
 		B950CFC2296219C800197719 /* WiiSystemUpdateViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WiiSystemUpdateViewController.mm; sourceTree = "<group>"; };
 		B950CFC529621AFC00197719 /* WiiSystemUpdate.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = WiiSystemUpdate.storyboard; sourceTree = "<group>"; };
+		B950CFC82962562200197719 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -494,6 +496,7 @@
 				B933EDC227F8E215004D7DD7 /* Assets.xcassets */,
 				B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */,
 				B9B2C65A288E454700CB6569 /* ExternalDisplaySceneDelegate.swift */,
+				B950CFC82962562200197719 /* main.m */,
 				B9B2C64E288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift */,
 				B900A7AF27F2866D000361DD /* UserFolderUtil.swift */,
 			);
@@ -1580,6 +1583,7 @@
 				B904AD0F28886AF8008B6BE9 /* MappingRootGroupCell.m in Sources */,
 				B9FCB7D22897B9D60020E233 /* NKitWarningViewController.mm in Sources */,
 				B904ACBE28851C5C008B6BE9 /* GraphicsBackendCell.m in Sources */,
+				B950CFC92962562200197719 /* main.m in Sources */,
 				B9FCB7D42897C7D80020E233 /* NKitWarningViewControllerDelegate.swift in Sources */,
 				B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */,
 				B939872E2880896D008E8E47 /* ConfigGameCubeViewController.mm in Sources */,
