@@ -25,6 +25,5 @@ jobs:
       
       - name: Build Application
         run: |
-          mkdir "${{ github.workspace }}/build-Xcode"
-          xcodebuild -project Source/iOS/App/DolphiniOS.xcodeproj -configuration "Release (Non-Jailbroken)" DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" BUILD_DIR="${{ github.workspace }}/build-Xcode" CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
+          xcodebuild -project Source/iOS/App/DolphiniOS.xcodeproj -configuration "Release (Non-Jailbroken)" -derivedDataPath "${{ github.workspace }}/build-Xcode" DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
 
