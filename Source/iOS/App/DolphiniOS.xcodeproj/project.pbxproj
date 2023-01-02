@@ -329,6 +329,7 @@
 		B950CFC82962562200197719 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B950CFCA2962590600197719 /* JitManager+PTrace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+PTrace.h"; sourceTree = "<group>"; };
 		B950CFCB2962590600197719 /* JitManager+PTrace.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+PTrace.m"; sourceTree = "<group>"; };
+		B950CFCE2962D08100197719 /* Private.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Private.entitlements; sourceTree = "<group>"; };
 		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -993,11 +994,20 @@
 			path = WiiSystemUpdate;
 			sourceTree = "<group>";
 		};
+		B950CFCD2962D05500197719 /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				B950CFCE2962D08100197719 /* Private.entitlements */,
+			);
+			path = Entitlements;
+			sourceTree = "<group>";
+		};
 		B96F72CC27F0E6A00024BA7D /* Project */ = {
 			isa = PBXGroup;
 			children = (
 				B950CA922846A10400F45219 /* Assets */,
 				B96F72CD27F0E8A70024BA7D /* Config */,
+				B950CFCD2962D05500197719 /* Entitlements */,
 				B9447B0B2841937100BC9110 /* Templates */,
 				B99137A128825A8400588446 /* Tools */,
 				B9476B2127F2357B009C0A4B /* Scripts */,
@@ -1802,7 +1812,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -1892,7 +1902,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -1981,7 +1991,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -2070,7 +2080,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -2217,7 +2227,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
@@ -2250,7 +2260,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DolphiniOS/Info.plist;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
