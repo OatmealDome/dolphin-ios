@@ -387,6 +387,7 @@
 		B99137C5288327BB00588446 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/ConfigSettings.strings; sourceTree = "<group>"; };
 		B99137C728832A0800588446 /* LocalizationUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalizationUtil.h; sourceTree = "<group>"; };
 		B99137C828832A0800588446 /* LocalizationUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalizationUtil.m; sourceTree = "<group>"; };
+		B9B1483429636565002C4BE7 /* CreateIpa.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CreateIpa.sh; sourceTree = "<group>"; };
 		B9B2C5E0288D0A9800CB6569 /* MappingLoadProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingLoadProfileViewController.h; sourceTree = "<group>"; };
 		B9B2C5E1288D0A9800CB6569 /* MappingLoadProfileViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingLoadProfileViewController.mm; sourceTree = "<group>"; };
 		B9B2C5E3288D0C5500CB6569 /* MappingLoadProfileIniCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingLoadProfileIniCell.h; sourceTree = "<group>"; };
@@ -897,6 +898,7 @@
 			children = (
 				B9476B2227F235A0009C0A4B /* BuildCore.sh */,
 				B9447B0A2841931E00BC9110 /* CopyAssets.sh */,
+				B9B1483429636565002C4BE7 /* CreateIpa.sh */,
 				B99137B328827BF300588446 /* TransferCoreStringsToStoryboard.py */,
 				B991379A2881DC2200588446 /* UpdateStoryboardStrings.sh */,
 				B99137A228825AA600588446 /* UpdateCoreStrings.py */,
