@@ -330,6 +330,7 @@
 		B950CFCA2962590600197719 /* JitManager+PTrace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+PTrace.h"; sourceTree = "<group>"; };
 		B950CFCB2962590600197719 /* JitManager+PTrace.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+PTrace.m"; sourceTree = "<group>"; };
 		B950CFCE2962D08100197719 /* Private.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Private.entitlements; sourceTree = "<group>"; };
+		B950CFCF2962D1A500197719 /* Public.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Public.entitlements; sourceTree = "<group>"; };
 		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -997,6 +998,7 @@
 		B950CFCD2962D05500197719 /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
+				B950CFCF2962D1A500197719 /* Public.entitlements */,
 				B950CFCE2962D08100197719 /* Private.entitlements */,
 			);
 			path = Entitlements;
