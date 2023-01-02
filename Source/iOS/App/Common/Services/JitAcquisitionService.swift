@@ -10,6 +10,8 @@ class JitAcquisitionService : UIResponder, UIApplicationDelegate {
     manager.recheckIfJitIsAcquired()
     
     if (!manager.acquiredJit) {
+      manager.acquireJitByPTrace()
+      
 #if NONJAILBROKEN
       manager.acquireJitByAltServer()
 #endif
