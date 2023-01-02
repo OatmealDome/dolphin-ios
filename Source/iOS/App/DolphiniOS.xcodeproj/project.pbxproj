@@ -90,6 +90,7 @@
 		B950CFC3296219C800197719 /* WiiSystemUpdateViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B950CFC2296219C800197719 /* WiiSystemUpdateViewController.mm */; };
 		B950CFC629621AFC00197719 /* WiiSystemUpdate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B950CFC529621AFC00197719 /* WiiSystemUpdate.storyboard */; };
 		B950CFC92962562200197719 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFC82962562200197719 /* main.m */; };
+		B950CFCC2962590600197719 /* JitManager+PTrace.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFCB2962590600197719 /* JitManager+PTrace.m */; };
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
 		B974923C2960096C00794509 /* ImportFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923B2960096C00794509 /* ImportFileManager.m */; };
 		B9749240296035F500794509 /* FastmemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923F296035F500794509 /* FastmemManager.m */; };
@@ -326,6 +327,8 @@
 		B950CFC2296219C800197719 /* WiiSystemUpdateViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WiiSystemUpdateViewController.mm; sourceTree = "<group>"; };
 		B950CFC529621AFC00197719 /* WiiSystemUpdate.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = WiiSystemUpdate.storyboard; sourceTree = "<group>"; };
 		B950CFC82962562200197719 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B950CFCA2962590600197719 /* JitManager+PTrace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+PTrace.h"; sourceTree = "<group>"; };
+		B950CFCB2962590600197719 /* JitManager+PTrace.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+PTrace.m"; sourceTree = "<group>"; };
 		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
 		B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Non-Jailbroken).xcconfig"; sourceTree = "<group>"; };
 		B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug (Jailbroken).xcconfig"; sourceTree = "<group>"; };
@@ -1290,6 +1293,8 @@
 				B9FCB7BB289672830020E233 /* JitManager+Debugger.m */,
 				B9FCB7E22898F4D60020E233 /* JitManager+JitStreamer.h */,
 				B9FCB7E32898F4D60020E233 /* JitManager+JitStreamer.m */,
+				B950CFCA2962590600197719 /* JitManager+PTrace.h */,
+				B950CFCB2962590600197719 /* JitManager+PTrace.m */,
 			);
 			path = Jit;
 			sourceTree = "<group>";
@@ -1569,6 +1574,7 @@
 				B974924429603A8A00794509 /* LegacyInputConfigMigrationService.mm in Sources */,
 				B9FCB7CE2897998B0020E233 /* JitWaitViewControllerDelegate.swift in Sources */,
 				B9447AFF28418EA100BC9110 /* TCDirectionalPad.swift in Sources */,
+				B950CFCC2962590600197719 /* JitManager+PTrace.m in Sources */,
 				B9398710287FBB80008E8E47 /* SpeedLimitCell.m in Sources */,
 				B9B2C622288DB62D00CB6569 /* TCSidewaysWiiPad.swift in Sources */,
 				B933EDC127F77D1E004D7DD7 /* GameFilePtrWrapper.mm in Sources */,
