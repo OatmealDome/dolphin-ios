@@ -111,6 +111,8 @@
 		B99137B52882A58000588446 /* SoftwareList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B99137B72882A58000588446 /* SoftwareList.storyboard */; };
 		B99137BF288327AC00588446 /* ConfigSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B99137C1288327AC00588446 /* ConfigSettings.storyboard */; };
 		B99137C928832A0800588446 /* LocalizationUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B99137C828832A0800588446 /* LocalizationUtil.m */; };
+		B9B1483829642C75002C4BE7 /* UpdateRequiredNotice.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9B1483729642C75002C4BE7 /* UpdateRequiredNotice.xib */; };
+		B9B1483C29642CB8002C4BE7 /* UpdateRequiredNoticeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9B1483A29642CB8002C4BE7 /* UpdateRequiredNoticeViewController.m */; };
 		B9B2C5E2288D0A9800CB6569 /* MappingLoadProfileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C5E1288D0A9800CB6569 /* MappingLoadProfileViewController.mm */; };
 		B9B2C5E5288D0C5500CB6569 /* MappingLoadProfileIniCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C5E4288D0C5500CB6569 /* MappingLoadProfileIniCell.m */; };
 		B9B2C61A288D3A7F00CB6569 /* EmulationiOSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B2C619288D3A7F00CB6569 /* EmulationiOSViewController.mm */; };
@@ -388,6 +390,9 @@
 		B99137C728832A0800588446 /* LocalizationUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalizationUtil.h; sourceTree = "<group>"; };
 		B99137C828832A0800588446 /* LocalizationUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalizationUtil.m; sourceTree = "<group>"; };
 		B9B1483429636565002C4BE7 /* CreateIpa.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CreateIpa.sh; sourceTree = "<group>"; };
+		B9B1483729642C75002C4BE7 /* UpdateRequiredNotice.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UpdateRequiredNotice.xib; sourceTree = "<group>"; };
+		B9B1483A29642CB8002C4BE7 /* UpdateRequiredNoticeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateRequiredNoticeViewController.m; sourceTree = "<group>"; };
+		B9B1483B29642CB8002C4BE7 /* UpdateRequiredNoticeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateRequiredNoticeViewController.h; sourceTree = "<group>"; };
 		B9B2C5E0288D0A9800CB6569 /* MappingLoadProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingLoadProfileViewController.h; sourceTree = "<group>"; };
 		B9B2C5E1288D0A9800CB6569 /* MappingLoadProfileViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingLoadProfileViewController.mm; sourceTree = "<group>"; };
 		B9B2C5E3288D0C5500CB6569 /* MappingLoadProfileIniCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingLoadProfileIniCell.h; sourceTree = "<group>"; };
@@ -920,6 +925,7 @@
 			children = (
 				B950CFAF2961798700197719 /* UnofficialBuild */,
 				B950CFB72962089600197719 /* Update */,
+				B9B1483929642C90002C4BE7 /* UpdateRequired */,
 				B950CFAB296170BC00197719 /* BootNoticeManager.h */,
 				B950CFAC296170BC00197719 /* BootNoticeManager.m */,
 				B950CFA12961696100197719 /* BootNoticeNavigationViewController.h */,
@@ -951,6 +957,7 @@
 			children = (
 				B950CFB4296179C200197719 /* UnofficialBuild */,
 				B950CFBB296208B500197719 /* Update */,
+				B9B1483629642C5B002C4BE7 /* UpdateRequired */,
 			);
 			path = BootNotice;
 			sourceTree = "<group>";
@@ -1120,6 +1127,23 @@
 				B9FCB7E02898D1E80020E233 /* SwiftLocalizationUtil.swift */,
 			);
 			path = Localization;
+			sourceTree = "<group>";
+		};
+		B9B1483629642C5B002C4BE7 /* UpdateRequired */ = {
+			isa = PBXGroup;
+			children = (
+				B9B1483729642C75002C4BE7 /* UpdateRequiredNotice.xib */,
+			);
+			path = UpdateRequired;
+			sourceTree = "<group>";
+		};
+		B9B1483929642C90002C4BE7 /* UpdateRequired */ = {
+			isa = PBXGroup;
+			children = (
+				B9B1483B29642CB8002C4BE7 /* UpdateRequiredNoticeViewController.h */,
+				B9B1483A29642CB8002C4BE7 /* UpdateRequiredNoticeViewController.m */,
+			);
+			path = UpdateRequired;
 			sourceTree = "<group>";
 		};
 		B9B2C5DF288D0A7900CB6569 /* LoadProfile */ = {
@@ -1433,6 +1457,7 @@
 				B904ACDE28863119008B6BE9 /* GraphicsSettings.storyboard in Resources */,
 				B99137B52882A58000588446 /* SoftwareList.storyboard in Resources */,
 				B9B2C623288DB62D00CB6569 /* TCSidewaysWiiPad.xib in Resources */,
+				B9B1483829642C75002C4BE7 /* UpdateRequiredNotice.xib in Resources */,
 				B950CFBD296208D400197719 /* UpdateNotice.xib in Resources */,
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
@@ -1668,6 +1693,7 @@
 				B9D938A728418AFE00B290FC /* TCManagerInterface.mm in Sources */,
 				B9B2C661288E569E00CB6569 /* ExternalDisplayEmulationViewController.mm in Sources */,
 				B950CFA32961696100197719 /* BootNoticeNavigationViewController.m in Sources */,
+				B9B1483C29642CB8002C4BE7 /* UpdateRequiredNoticeViewController.m in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
 				B974923C2960096C00794509 /* ImportFileManager.m in Sources */,
 				B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */,
