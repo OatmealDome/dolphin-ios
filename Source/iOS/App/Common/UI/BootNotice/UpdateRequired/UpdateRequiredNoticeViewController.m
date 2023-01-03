@@ -15,7 +15,12 @@
 }
 
 - (IBAction)updateNowPressed:(id)sender {
+#ifndef BETA
   NSString* url = @"https://dolphinios.oatmealdome.me/update";
+#else
+  NSString* url = @"https://dolphinios.oatmealdome.me/beta";
+#endif
+
   [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url] options:@{} completionHandler:nil];
 }
 
