@@ -13,6 +13,7 @@
 #import "LegacyInputConfigMigrationService.h"
 #import "MainSceneCoordinator.h"
 #import "UpdateNoticeViewController.h"
+#import "UpdateRequiredNoticeViewController.h"
 
 #if TARGET_OS_IOS
 #import "TCManagerInterface.h"
