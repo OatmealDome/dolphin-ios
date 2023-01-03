@@ -97,6 +97,8 @@
 		B974924429603A8A00794509 /* LegacyInputConfigMigrationService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B974924329603A8A00794509 /* LegacyInputConfigMigrationService.mm */; };
 		B97492472960CD2B00794509 /* FirstRunInitializationService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B97492462960CD2B00794509 /* FirstRunInitializationService.mm */; };
 		B97492492960F64300794509 /* DefaultPreferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = B97492482960F64300794509 /* DefaultPreferences.plist */; };
+		B97E4B492964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B97E4B482964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		B97E4B4B2964CBA100B3EE9C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = B97E4B4A2964CBA100B3EE9C /* FirebaseCrashlytics */; };
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* WiiAspectRatioViewController.mm */; };
@@ -475,6 +477,8 @@
 				B9D9389E283EF7AD00B290FC /* MetalKit.framework in Frameworks */,
 				B9FCB7E62898FAC10020E233 /* GameController.framework in Frameworks */,
 				B9476B2527F23FFE009C0A4B /* libdolphin.dylib in Frameworks */,
+				B97E4B492964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				B97E4B4B2964CBA100B3EE9C /* FirebaseCrashlytics in Frameworks */,
 				B900A7B527F2D3C0000361DD /* MoltenVK.xcframework in Frameworks */,
 				B900A7D227F5228B000361DD /* UICollectionViewLeftAlignedLayout in Frameworks */,
 			);
@@ -1398,6 +1402,8 @@
 			packageProductDependencies = (
 				B900A7D127F5228B000361DD /* UICollectionViewLeftAlignedLayout */,
 				B9FCB7DD28988E7E0020E233 /* AltKit */,
+				B97E4B482964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport */,
+				B97E4B4A2964CBA100B3EE9C /* FirebaseCrashlytics */,
 			);
 			productName = DolphiniOS;
 			productReference = B9DC3DF627EFBD2C0084DAA4 /* DolphiniOS.app */;
@@ -1431,6 +1437,7 @@
 			packageReferences = (
 				B900A7D027F5228B000361DD /* XCRemoteSwiftPackageReference "UICollectionViewLeftAlignedLayout" */,
 				B9FCB7DC28988E7E0020E233 /* XCRemoteSwiftPackageReference "AltKit" */,
+				B97E4B472964CBA100B3EE9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = B9DC3DF727EFBD2C0084DAA4 /* Products */;
 			projectDirPath = "";
@@ -2353,6 +2360,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		B97E4B472964CBA100B3EE9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 		B9FCB7DC28988E7E0020E233 /* XCRemoteSwiftPackageReference "AltKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rileytestut/AltKit.git";
@@ -2368,6 +2383,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B900A7D027F5228B000361DD /* XCRemoteSwiftPackageReference "UICollectionViewLeftAlignedLayout" */;
 			productName = UICollectionViewLeftAlignedLayout;
+		};
+		B97E4B482964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B97E4B472964CBA100B3EE9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		B97E4B4A2964CBA100B3EE9C /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B97E4B472964CBA100B3EE9C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 		B9FCB7DD28988E7E0020E233 /* AltKit */ = {
 			isa = XCSwiftPackageProductDependency;
