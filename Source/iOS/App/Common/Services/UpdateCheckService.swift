@@ -4,7 +4,20 @@
 import UIKit
 
 class UpdateCheckService : UIResponder, UIApplicationDelegate {
+  func createUpdateRequiredViewController() -> UIViewController {
+    return UpdateRequiredNoticeViewController(nibName: "UpdateRequiredNotice", bundle: nil)
+  }
+  
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    let noticeManager = BootNoticeManager.shared()
+    
+    let updateRequired = UserDefaults.standard.bool(forKey: "update_required")
+    if (updateRequired) {
+      noticeManager.enqueueNoExitViewController(createUpdateRequiredViewController())
+      
+      return true
+    }
+    
 #if !DEBUG
     let info = Bundle.main.infoDictionary!
     let currentVersion = String(format: "%@ (%@)", info["CFBundleShortVersionString"] as! String, info["CFBundleVersion"] as! String)
@@ -20,6 +33,19 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
       let possibleJson = try? JSONSerialization.jsonObject(with: unwrappedData)
       
       guard let json = possibleJson as? NSDictionary else {
+        return
+      }
+      
+      let updateRequiredBuilds = json["kbs"] as! Array<String>
+      
+      if (updateRequiredBuilds.contains(currentVersion)) {
+        UserDefaults.standard.set(true, forKey: "update_required")
+        
+        DispatchQueue.main.async {
+          noticeManager.enqueueNoExitViewController(self.createUpdateRequiredViewController())
+          noticeManager.presentToSceneIfNecessary()
+        }
+        
         return
       }
       
