@@ -8,7 +8,8 @@ on:
 
 jobs:
   build:
-    runs-on: macos-12
+    # runs-on: macos-12
+    runs-on: [self-hosted, macOS]
 
     env:
       XCODE_COMMON_BUILD_ARGS: -project Source/iOS/App/DolphiniOS.xcodeproj -derivedDataPath "${{ github.workspace }}/build-Xcode" DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
@@ -18,23 +19,23 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Set Xcode Version
-        run: sudo xcode-select -s /Applications/Xcode_14.2.app
+      # - name: Set Xcode Version
+      #   run: sudo xcode-select -s /Applications/Xcode_14.2.app
 
-      - name: Install Build Utilities
-        run: |
-          brew install cmake ninja bartycrouch
-          /usr/bin/python3 -m pip install polib
+      # - name: Install Build Utilities
+      #   run: |
+      #     brew install cmake ninja bartycrouch
+      #     /usr/bin/python3 -m pip install polib
       
-      - name: Import Signing Certificate
-        run: |
-          echo ${{ secrets.DIOS_SIGNING_CERTIFICATE }} | base64 -d > "SigningCertificate.p12"
-          security create-keychain -p alpine build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p alpine build.keychain
-          security set-keychain-settings -t 36000 build.keychain
-          security import "SigningCertificate.p12" -k build.keychain -P ${{ secrets.DIOS_SIGNING_CERTIFICATE_PASSWORD }} -A
-          security set-key-partition-list -S apple-tool:,apple: -s -k alpine build.keychain
+      # - name: Import Signing Certificate
+      #   run: |
+      #     echo ${{ secrets.DIOS_SIGNING_CERTIFICATE }} | base64 -d > "SigningCertificate.p12"
+      #     security create-keychain -p alpine build.keychain
+      #     security default-keychain -s build.keychain
+      #     security unlock-keychain -p alpine build.keychain
+      #     security set-keychain-settings -t 36000 build.keychain
+      #     security import "SigningCertificate.p12" -k build.keychain -P ${{ secrets.DIOS_SIGNING_CERTIFICATE_PASSWORD }} -A
+      #     security set-key-partition-list -S apple-tool:,apple: -s -k alpine build.keychain
       
       - name: Build Application
         run: |
