@@ -4,5 +4,7 @@
 <dict>
 	<key>launch_times</key>
 	<integer>0</integer>
+	<key>update_required</key>
+	<false/>
 </dict>
 </plist>
