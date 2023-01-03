@@ -9,6 +9,7 @@
 @implementation BootNoticeManager {
   NSMutableArray<UIViewController*>* _queuedControllers;
   BootNoticeNavigationViewController* _navigationController;
+  bool _hasQueuedNoExitController;
 }
 
 + (BootNoticeManager*)shared {
@@ -30,6 +31,8 @@
     _navigationController.navigationBarHidden = true;
     _navigationController.modalInPresentation = true;
     _navigationController.modalPresentationStyle = UIModalPresentationFormSheet;
+    
+    _hasQueuedNoExitController = false;
   }
   
   return self;
@@ -46,11 +49,30 @@
 }
 
 - (void)enqueueViewController:(UIViewController*)viewController {
+  if (_hasQueuedNoExitController) {
+    return;
+  }
+  
   if (![self isBeingPresented]) {
     [_queuedControllers addObject:viewController];
   } else {
     [_navigationController pushViewController:viewController animated:true];
   }
+}
+
+- (void)enqueueNoExitViewController:(UIViewController*)viewController {
+  if (_hasQueuedNoExitController) {
+    return;
+  }
+  
+  if (![self isBeingPresented]) {
+    [_queuedControllers removeAllObjects];
+    [_queuedControllers addObject:viewController];
+  } else {
+    [_navigationController pushViewController:viewController animated:true];
+  }
+  
+  _hasQueuedNoExitController = true;
 }
 
 - (void)presentToSceneIfNecessary {

@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (BootNoticeManager*)shared;
 
 - (void)enqueueViewController:(UIViewController*)viewController;
+- (void)enqueueNoExitViewController:(UIViewController*)viewController;
 - (void)presentToSceneIfNecessary;
 
 @end
