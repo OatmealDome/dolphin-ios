@@ -23,13 +23,6 @@ import Foundation
   private override init() {
     let info = Bundle.main.infoDictionary!
     
-    version = info["CFBundleShortVersionString"] as! String
-    build = Int(info["CFBundleVersion"] as! String)!
-    
-    userFacingVersion = String(format: "%@ (%d)", version, build)
-    
-    coreVersion = info["DOLCoreVersion"] as! String
-    
     switch (info["DOLBuildSource"] as! String) {
     case "development":
       buildSource = .development
@@ -40,5 +33,25 @@ import Foundation
     default:
       buildSource = .development
     }
+    
+    version = info["CFBundleShortVersionString"] as! String
+    build = Int(info["CFBundleVersion"] as! String)!
+    
+    let buildForUserFacing: String
+    
+    switch (buildSource) {
+    case .development:
+      buildForUserFacing = "D"
+    case .unofficial:
+      buildForUserFacing = "U"
+    case .official:
+      buildForUserFacing = String(build)
+    default:
+      buildForUserFacing = "?"
+    }
+    
+    userFacingVersion = String(format: "%@ (%@)", version, buildForUserFacing)
+    
+    coreVersion = info["DOLCoreVersion"] as! String
   }
 }
