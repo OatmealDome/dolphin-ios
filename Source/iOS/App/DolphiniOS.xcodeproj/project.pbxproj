@@ -1919,7 +1919,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B96F72CF27F0FBE90024BA7D /* Debug (Jailbroken).xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DOL_APP_ICON_ASSET_NAME)";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
@@ -2009,7 +2009,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B96F72D127F0FC1A0024BA7D /* Release (Jailbroken).xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DOL_APP_ICON_ASSET_NAME)";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
@@ -2098,7 +2098,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B96F72D227F0FC420024BA7D /* Release (Beta, Non-Jailbroken).xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DOL_APP_ICON_ASSET_NAME)";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
@@ -2187,7 +2187,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B96F72D327F0FC520024BA7D /* Release (Beta, Jailbroken).xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DOL_APP_ICON_ASSET_NAME)";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
@@ -2334,7 +2334,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B96F72CE27F0E8BD0024BA7D /* Debug (Non-Jailbroken).xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DOL_APP_ICON_ASSET_NAME)";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
@@ -2367,7 +2367,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B96F72D027F0FC020024BA7D /* Release (Non-Jailbroken).xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(DOL_APP_ICON_ASSET_NAME)";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DolphiniOS/DolphiniOS.entitlements;
