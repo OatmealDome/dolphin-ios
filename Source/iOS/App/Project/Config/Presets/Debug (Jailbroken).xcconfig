@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "Project/Config/BundleIdentifier.xcconfig"
+#include "Project/Config/Normal.xcconfig"
 #include "Project/Config/Debug.xcconfig"
 #include "Project/Config/DevelopmentTeam.xcconfig"
 #include "Project/Config/Common.xcconfig"

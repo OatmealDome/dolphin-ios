@@ -366,6 +366,7 @@
 		B97E4B5C2965F9BE00B3EE9C /* AnalyticsNotice.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnalyticsNotice.xib; sourceTree = "<group>"; };
 		B97E4B5F2965FA1B00B3EE9C /* AnalyticsNoticeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnalyticsNoticeViewController.h; sourceTree = "<group>"; };
 		B97E4B602965FA1B00B3EE9C /* AnalyticsNoticeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AnalyticsNoticeViewController.mm; sourceTree = "<group>"; };
+		B97E4B63296635AC00B3EE9C /* Normal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Normal.xcconfig; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B991377F288096A300588446 /* ConfigWiiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigWiiViewController.h; sourceTree = "<group>"; };
@@ -1061,6 +1062,7 @@
 				B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */,
 				B99137822880ABDA00588446 /* DevelopmentTeam.xcconfig */,
 				B9476B1E27F1B17F009C0A4B /* NonJailbroken.xcconfig */,
+				B97E4B63296635AC00B3EE9C /* Normal.xcconfig */,
 				B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */,
 				B9476B2027F22416009C0A4B /* Release.xcconfig */,
 			);
