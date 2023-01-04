@@ -5,6 +5,7 @@
 
 #import <FirebaseAnalytics/FirebaseAnalytics.h>
 #import <FirebaseCore/FirebaseCore.h>
+#import <FirebaseCrashlytics/FirebaseCrashlytics.h>
 
 #import "Core/Config/MainSettings.h"
 
@@ -34,6 +35,7 @@
   }
   
   [FIRAnalytics setAnalyticsCollectionEnabled:analyticsEnabled];
+  [[FIRCrashlytics crashlytics] setCrashlyticsCollectionEnabled:analyticsEnabled];
   
   return true;
 }
