@@ -99,6 +99,7 @@
 		B97492492960F64300794509 /* DefaultPreferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = B97492482960F64300794509 /* DefaultPreferences.plist */; };
 		B97E4B492964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B97E4B482964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		B97E4B4B2964CBA100B3EE9C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = B97E4B4A2964CBA100B3EE9C /* FirebaseCrashlytics */; };
+		B97E4B532965011C00B3EE9C /* FirebaseService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B97E4B522965011C00B3EE9C /* FirebaseService.mm */; };
 		B97E4B5629656EC300B3EE9C /* VersionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97E4B5529656EC300B3EE9C /* VersionManager.swift */; };
 		B97E4B58296573E200B3EE9C /* DOLBuildSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97E4B57296573E200B3EE9C /* DOLBuildSource.swift */; };
 		B97E4B5A29657BCB00B3EE9C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B97E4B5929657BCB00B3EE9C /* GoogleService-Info.plist */; };
@@ -355,6 +356,8 @@
 		B97492452960CD2B00794509 /* FirstRunInitializationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstRunInitializationService.h; sourceTree = "<group>"; };
 		B97492462960CD2B00794509 /* FirstRunInitializationService.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FirstRunInitializationService.mm; sourceTree = "<group>"; };
 		B97492482960F64300794509 /* DefaultPreferences.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultPreferences.plist; sourceTree = "<group>"; };
+		B97E4B512965011C00B3EE9C /* FirebaseService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirebaseService.h; sourceTree = "<group>"; };
+		B97E4B522965011C00B3EE9C /* FirebaseService.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseService.mm; sourceTree = "<group>"; };
 		B97E4B5529656EC300B3EE9C /* VersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionManager.swift; sourceTree = "<group>"; };
 		B97E4B57296573E200B3EE9C /* DOLBuildSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOLBuildSource.swift; sourceTree = "<group>"; };
 		B97E4B5929657BCB00B3EE9C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -531,6 +534,8 @@
 				B900A7B927F4CB80000361DD /* DefaultsInitService.swift */,
 				B900A7AC27F27F36000361DD /* DolphinCoreService.h */,
 				B900A7AD27F27F36000361DD /* DolphinCoreService.mm */,
+				B97E4B512965011C00B3EE9C /* FirebaseService.h */,
+				B97E4B522965011C00B3EE9C /* FirebaseService.mm */,
 				B97492452960CD2B00794509 /* FirstRunInitializationService.h */,
 				B97492462960CD2B00794509 /* FirstRunInitializationService.mm */,
 				B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */,
@@ -1723,6 +1728,7 @@
 				B9B1483C29642CB8002C4BE7 /* UpdateRequiredNoticeViewController.m in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
 				B974923C2960096C00794509 /* ImportFileManager.m in Sources */,
+				B97E4B532965011C00B3EE9C /* FirebaseService.mm in Sources */,
 				B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
