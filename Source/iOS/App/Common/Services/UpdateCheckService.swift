@@ -9,9 +9,18 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
   }
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    let userDefaults = UserDefaults.standard
     let noticeManager = BootNoticeManager.shared()
     
-    let updateRequired = UserDefaults.standard.bool(forKey: "update_required")
+    let currentVersion = VersionManager.shared().userFacingVersion
+    
+    let lastVersion = userDefaults.string(forKey: "last_version")
+    if (lastVersion != currentVersion) {
+      userDefaults.set(currentVersion, forKey: "last_version")
+      userDefaults.set(false, forKey: "update_required")
+    }
+    
+    let updateRequired = userDefaults.bool(forKey: "update_required")
     if (updateRequired) {
       noticeManager.enqueueNoExitViewController(createUpdateRequiredViewController())
       
@@ -19,8 +28,6 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
     }
     
 #if !DEBUG
-    let currentVersion = VersionManager.shared().userFacingVersion
-    
     let session = URLSession(configuration: URLSessionConfiguration.ephemeral)
     let updateUrl = URL(string: "https://dolphinios.oatmealdome.me/api/v2/update.json")!
     
@@ -38,7 +45,7 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
       let updateRequiredBuilds = json["kbs"] as! Array<String>
       
       if (updateRequiredBuilds.contains(currentVersion)) {
-        UserDefaults.standard.set(true, forKey: "update_required")
+        userDefaults.set(true, forKey: "update_required")
         
         DispatchQueue.main.async {
           noticeManager.enqueueNoExitViewController(self.createUpdateRequiredViewController())
