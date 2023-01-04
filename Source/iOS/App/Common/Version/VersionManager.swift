@@ -18,6 +18,8 @@ import Foundation
   
   private(set) var coreVersion: String // "5.0-12345"
   
+  private (set) var buildSource: DOLBuildSource
+  
   private override init() {
     let info = Bundle.main.infoDictionary!
     
@@ -27,5 +29,16 @@ import Foundation
     userFacingVersion = String(format: "%@ (%d)", version, build)
     
     coreVersion = info["DOLCoreVersion"] as! String
+    
+    switch (info["DOLBuildSource"] as! String) {
+    case "development":
+      buildSource = .development
+    case "unofficial":
+      buildSource = .unofficial
+    case "official":
+      buildSource = .official
+    default:
+      buildSource = .development
+    }
   }
 }
