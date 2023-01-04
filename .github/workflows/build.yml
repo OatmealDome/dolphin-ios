@@ -53,5 +53,5 @@ jobs:
       
       - uses: actions/upload-artifact@v3
         with:
-          name: NJB
-          path: ${{ github.workspace }}/products/DolphiniOS (NJB).ipa
+          name: Build Artifacts
+          path: ${{ github.workspace }}/products/*
