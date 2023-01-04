@@ -6,5 +6,7 @@
 	<integer>0</integer>
 	<key>update_required</key>
 	<false/>
+	<key>last_version</key>
+	<string>0.0.0 (0)</string>
 </dict>
 </plist>
