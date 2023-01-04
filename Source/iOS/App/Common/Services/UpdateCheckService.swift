@@ -11,8 +11,9 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     let userDefaults = UserDefaults.standard
     let noticeManager = BootNoticeManager.shared()
+    let versionManager = VersionManager.shared()
     
-    let currentVersion = VersionManager.shared().userFacingVersion
+    let currentVersion = versionManager.userFacingVersion
     
     let lastVersion = userDefaults.string(forKey: "last_version")
     if (lastVersion != currentVersion) {
@@ -27,7 +28,10 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
       return true
     }
     
-#if !DEBUG
+    if (versionManager.buildSource != .official) {
+      return true
+    }
+    
     let session = URLSession(configuration: URLSessionConfiguration.ephemeral)
     let updateUrl = URL(string: "https://dolphinios.oatmealdome.me/api/v2/update.json")!
     
@@ -84,7 +88,6 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
         }
       }
     }.resume()
-#endif
     
     return true
   }
