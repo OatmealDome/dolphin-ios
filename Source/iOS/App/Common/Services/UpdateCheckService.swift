@@ -19,8 +19,7 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
     }
     
 #if !DEBUG
-    let info = Bundle.main.infoDictionary!
-    let currentVersion = String(format: "%@ (%@)", info["CFBundleShortVersionString"] as! String, info["CFBundleVersion"] as! String)
+    let currentVersion = VersionManager.shared().userFacingVersion
     
     let session = URLSession(configuration: URLSessionConfiguration.ephemeral)
     let updateUrl = URL(string: "https://dolphinios.oatmealdome.me/api/v2/update.json")!
