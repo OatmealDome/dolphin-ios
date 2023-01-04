@@ -18,7 +18,7 @@ import Foundation
   
   private(set) var coreVersion: String // "5.0-12345"
   
-  private (set) var buildSource: DOLBuildSource
+  private(set) var buildSource: DOLBuildSource
   
   private override init() {
     let info = Bundle.main.infoDictionary!
