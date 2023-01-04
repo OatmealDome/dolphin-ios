@@ -3,7 +3,7 @@
 
 import Foundation
 
-@objc class VersionManager: NSObject {
+@objcMembers class VersionManager: NSObject {
   
   private static let sharedInstance = VersionManager()
   
