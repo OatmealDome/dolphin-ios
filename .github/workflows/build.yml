@@ -36,7 +36,11 @@ jobs:
       #     security set-keychain-settings -t 36000 build.keychain
       #     security import "SigningCertificate.p12" -k build.keychain -P ${{ secrets.DIOS_SIGNING_CERTIFICATE_PASSWORD }} -A
       #     security set-key-partition-list -S apple-tool:,apple: -s -k alpine build.keychain
-      
+
+      - name: Write GoogleServices-Info.plist
+        run: |
+          echo ${{ secrets.DIOS_GOOGLE_PLIST }} | base64 -d > "Source/iOS/App/Project/GoogleServices-Info.plist"
+
       - name: Build Application
         run: |
           xcodebuild -configuration "Release (Non-Jailbroken)" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
