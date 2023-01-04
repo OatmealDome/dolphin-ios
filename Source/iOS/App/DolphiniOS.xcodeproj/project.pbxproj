@@ -1439,6 +1439,7 @@
 				B99137B428829F1400588446 /* Transfer Core Strings to Storyboard Strings */,
 				B9DC3DF427EFBD2C0084DAA4 /* Resources */,
 				B900A7A027F255E0000361DD /* CopyFiles */,
+				B97E4B622966227B00B3EE9C /* Upload dSYM */,
 			);
 			buildRules = (
 			);
@@ -1572,6 +1573,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"$PROJECT_DIR/Project/Scripts/BuildCore.sh\"\n";
+		};
+		B97E4B622966227B00B3EE9C /* Upload dSYM */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Upload dSYM";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "if [ \"$DOL_BUILD_SOURCE\" != \"official\" ]; then\n    echo \"Skipping dSYM upload, not official build\"\n    exit\nfi\n\necho \"Proceeding with dSYM upload\"\n\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
 		};
 		B991379B2881DCAC00588446 /* Update Storyboard Strings */ = {
 			isa = PBXShellScriptBuildPhase;
