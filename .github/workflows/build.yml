@@ -12,7 +12,7 @@ jobs:
     runs-on: [self-hosted, macOS]
 
     env:
-      XCODE_COMMON_BUILD_ARGS: -project Source/iOS/App/DolphiniOS.xcodeproj -derivedDataPath "${{ github.workspace }}/build-Xcode" DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" DOL_BUILD_SOURCE="official" CURRENT_PROJECT_VERSION=${{ github.run_number }} CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
+      XCODE_COMMON_BUILD_ARGS: -project Source/iOS/App/DolphiniOS.xcodeproj -derivedDataPath "${{ github.workspace }}/build-Xcode" DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" DOL_BUILD_SOURCE="development" CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
     
     steps:
       - uses: actions/checkout@v2
@@ -26,32 +26,7 @@ jobs:
       #   run: |
       #     brew install cmake ninja bartycrouch
       #     /usr/bin/python3 -m pip install polib
-      
-      # - name: Import Signing Certificate
-      #   run: |
-      #     echo ${{ secrets.DIOS_SIGNING_CERTIFICATE }} | base64 -d > "SigningCertificate.p12"
-      #     security create-keychain -p alpine build.keychain
-      #     security default-keychain -s build.keychain
-      #     security unlock-keychain -p alpine build.keychain
-      #     security set-keychain-settings -t 36000 build.keychain
-      #     security import "SigningCertificate.p12" -k build.keychain -P ${{ secrets.DIOS_SIGNING_CERTIFICATE_PASSWORD }} -A
-      #     security set-key-partition-list -S apple-tool:,apple: -s -k alpine build.keychain
-
-      - name: Write GoogleServices-Info.plist
-        run: |
-          echo ${{ secrets.DIOS_GOOGLE_PLIST }} | base64 -d > "Source/iOS/App/Project/Assets/GoogleService-Info.plist"
 
       - name: Build Application
         run: |
           xcodebuild -configuration "Release (Non-Jailbroken)" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
-      
-      - name: Build IPA File
-        run: |
-          mkdir "${{ github.workspace }}/products"
-          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/Release (Non-Jailbroken)-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Public.entitlements" "${{ github.workspace }}/products/DolphiniOS NJB.ipa"
-          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/Release (Non-Jailbroken)-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Private.entitlements" "${{ github.workspace }}/products/DolphiniOS TrollStore.ipa"
-      
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Build Artifacts
-          path: ${{ github.workspace }}/products/*
