@@ -16,6 +16,7 @@ class ServiceManager {
     LegacyInputConfigMigrationService(),
     GameFileCacheService(),
     JitAcquisitionService(),
+    FirebaseService(),
     UpdateCheckService()
   ]
   
