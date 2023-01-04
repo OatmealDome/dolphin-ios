@@ -4,6 +4,7 @@
 #import "AnalyticsNoticeViewController.h"
 
 #import <FirebaseAnalytics/FirebaseAnalytics.h>
+#import <FirebaseCrashlytics/FirebaseCrashlytics.h>
 
 #import "Core/Config/MainSettings.h"
 
@@ -22,6 +23,7 @@
   Config::SetBaseOrCurrent(Config::MAIN_ANALYTICS_ENABLED, response);
   
   [FIRAnalytics setAnalyticsCollectionEnabled:response];
+  [[FIRCrashlytics crashlytics] setCrashlyticsCollectionEnabled:response];
   
   [self.navigationController popViewControllerAnimated:true];
 }
