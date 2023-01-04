@@ -103,6 +103,8 @@
 		B97E4B5629656EC300B3EE9C /* VersionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97E4B5529656EC300B3EE9C /* VersionManager.swift */; };
 		B97E4B58296573E200B3EE9C /* DOLBuildSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97E4B57296573E200B3EE9C /* DOLBuildSource.swift */; };
 		B97E4B5A29657BCB00B3EE9C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B97E4B5929657BCB00B3EE9C /* GoogleService-Info.plist */; };
+		B97E4B5D2965F9BE00B3EE9C /* AnalyticsNotice.xib in Resources */ = {isa = PBXBuildFile; fileRef = B97E4B5C2965F9BE00B3EE9C /* AnalyticsNotice.xib */; };
+		B97E4B612965FA1B00B3EE9C /* AnalyticsNoticeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B97E4B602965FA1B00B3EE9C /* AnalyticsNoticeViewController.mm */; };
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* WiiAspectRatioViewController.mm */; };
@@ -361,6 +363,9 @@
 		B97E4B5529656EC300B3EE9C /* VersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionManager.swift; sourceTree = "<group>"; };
 		B97E4B57296573E200B3EE9C /* DOLBuildSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOLBuildSource.swift; sourceTree = "<group>"; };
 		B97E4B5929657BCB00B3EE9C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B97E4B5C2965F9BE00B3EE9C /* AnalyticsNotice.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnalyticsNotice.xib; sourceTree = "<group>"; };
+		B97E4B5F2965FA1B00B3EE9C /* AnalyticsNoticeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnalyticsNoticeViewController.h; sourceTree = "<group>"; };
+		B97E4B602965FA1B00B3EE9C /* AnalyticsNoticeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AnalyticsNoticeViewController.mm; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B991377F288096A300588446 /* ConfigWiiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigWiiViewController.h; sourceTree = "<group>"; };
@@ -940,6 +945,7 @@
 		B950CF9D2961690A00197719 /* BootNotice */ = {
 			isa = PBXGroup;
 			children = (
+				B97E4B5E2965FA0B00B3EE9C /* Analytics */,
 				B950CFAF2961798700197719 /* UnofficialBuild */,
 				B950CFB72962089600197719 /* Update */,
 				B9B1483929642C90002C4BE7 /* UpdateRequired */,
@@ -972,6 +978,7 @@
 		B950CFB3296179BD00197719 /* BootNotice */ = {
 			isa = PBXGroup;
 			children = (
+				B97E4B5B2965F9AD00B3EE9C /* Analytics */,
 				B950CFB4296179C200197719 /* UnofficialBuild */,
 				B950CFBB296208B500197719 /* Update */,
 				B9B1483629642C5B002C4BE7 /* UpdateRequired */,
@@ -1105,6 +1112,23 @@
 				B97E4B5529656EC300B3EE9C /* VersionManager.swift */,
 			);
 			path = Version;
+			sourceTree = "<group>";
+		};
+		B97E4B5B2965F9AD00B3EE9C /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				B97E4B5C2965F9BE00B3EE9C /* AnalyticsNotice.xib */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
+		B97E4B5E2965FA0B00B3EE9C /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				B97E4B5F2965FA1B00B3EE9C /* AnalyticsNoticeViewController.h */,
+				B97E4B602965FA1B00B3EE9C /* AnalyticsNoticeViewController.mm */,
+			);
+			path = Analytics;
 			sourceTree = "<group>";
 		};
 		B991377E2880969400588446 /* Wii */ = {
@@ -1484,6 +1508,7 @@
 				B99137BF288327AC00588446 /* ConfigSettings.storyboard in Resources */,
 				B9DC3E0927EFBD2F0084DAA4 /* LaunchScreen.storyboard in Resources */,
 				B904ACDE28863119008B6BE9 /* GraphicsSettings.storyboard in Resources */,
+				B97E4B5D2965F9BE00B3EE9C /* AnalyticsNotice.xib in Resources */,
 				B99137B52882A58000588446 /* SoftwareList.storyboard in Resources */,
 				B9B2C623288DB62D00CB6569 /* TCSidewaysWiiPad.xib in Resources */,
 				B9B1483829642C75002C4BE7 /* UpdateRequiredNotice.xib in Resources */,
@@ -1654,6 +1679,7 @@
 				B93986FB287F45A3008E8E47 /* SettingsRootViewController.swift in Sources */,
 				B9114FA02893C71E00B9C57A /* VirtualMFiControllerManager.m in Sources */,
 				B904ACEE2886701C008B6BE9 /* ControllersRootPortCell.m in Sources */,
+				B97E4B612965FA1B00B3EE9C /* AnalyticsNoticeViewController.mm in Sources */,
 				B904AD3528890477008B6BE9 /* MappingGroupEditEnabledCell.m in Sources */,
 				B9913792288153D000588446 /* ConfigAdvancedViewController.mm in Sources */,
 				B904AD0F28886AF8008B6BE9 /* MappingRootGroupCell.m in Sources */,
