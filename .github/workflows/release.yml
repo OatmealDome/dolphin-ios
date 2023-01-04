@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    # runs-on: macos-12
+    runs-on: [self-hosted, macOS]
+    
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      # - name: Set Xcode Version
+      #   run: sudo xcode-select -s /Applications/Xcode_14.2.app
+
+      # - name: Install Build Utilities
+      #   run: |
+      #     brew install cmake ninja bartycrouch
+      #     /usr/bin/python3 -m pip install polib
+      
+      # - name: Import Signing Certificate
+      #   run: |
+      #     echo ${{ secrets.DIOS_SIGNING_CERTIFICATE }} | base64 -d > "SigningCertificate.p12"
+      #     security create-keychain -p alpine build.keychain
+      #     security default-keychain -s build.keychain
+      #     security unlock-keychain -p alpine build.keychain
+      #     security set-keychain-settings -t 36000 build.keychain
+      #     security import "SigningCertificate.p12" -k build.keychain -P ${{ secrets.DIOS_SIGNING_CERTIFICATE_PASSWORD }} -A
+      #     security set-key-partition-list -S apple-tool:,apple: -s -k alpine build.keychain
+
+      - name: Write GoogleServices-Info.plist
+        run: |
+          echo ${{ secrets.DIOS_GOOGLE_PLIST }} | base64 -d > "Source/iOS/App/Project/Assets/GoogleService-Info.plist"
+      
+      - name: Set Schema for Normal
+        if: "!github.event.release.prerelease"
+        run: |
+          echo "XCODE_CONFIGURATION_NJB=\"Release (Non-Jailbroken)\"" >> $GITHUB_ENV
+          echo "XCODE_CONFIGURATION_JB=\"Release (Jailbroken)\"" >> $GITHUB_ENV
+      
+      - name: Set Schema for Beta
+        if: "github.event.release.prerelease"
+        run: |
+          echo "XCODE_CONFIGURATION_NJB=\"Release (Beta, Non-Jailbroken)\"" >> $GITHUB_ENV
+          echo "XCODE_CONFIGURATION_JB=\"Release (Beta, Jailbroken)\"" >> $GITHUB_ENV
+
+      - name: Build Application
+        env:
+          XCODE_COMMON_BUILD_ARGS: -project Source/iOS/App/DolphiniOS.xcodeproj -derivedDataPath "${{ github.workspace }}/build-Xcode" DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" DOL_BUILD_SOURCE="official" CURRENT_PROJECT_VERSION=${{ github.run_number }} CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
+        run: |
+          xcodebuild -configuration "Release (Non-Jailbroken)" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
+      
+      - name: Build IPA File
+        run: |
+          mkdir "${{ github.workspace }}/products"
+          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/Release (Non-Jailbroken)-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Public.entitlements" "${{ github.workspace }}/products/Non-Jailbroken.ipa"
+          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/Release (Non-Jailbroken)-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Private.entitlements" "${{ github.workspace }}/products/TrollStore.ipa"
+      
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            products/Non-Jailbroken.ipa
+            products/TrollStore.ipa
