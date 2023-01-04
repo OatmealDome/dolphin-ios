@@ -51,10 +51,10 @@
 			</array>
 		</dict>
 	</array>
-	<key>DOLCoreVersion</key>
-	<string>$(DOL_CORE_VERSION)</string>
 	<key>DOLBuildSource</key>
 	<string>$(DOL_BUILD_SOURCE)</string>
+	<key>DOLCoreVersion</key>
+	<string>$(DOL_CORE_VERSION)</string>
 	<key>GCSupportedGameControllers</key>
 	<array>
 		<dict>
