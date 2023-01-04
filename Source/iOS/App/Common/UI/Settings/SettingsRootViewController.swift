@@ -9,16 +9,10 @@ class SettingsRootViewController : UITableViewController {
   @IBOutlet weak var coreVersionLabel: UILabel!
   
   override func viewDidLoad() {
-    let infoDict = Bundle.main.infoDictionary!
+    let versionManager = VersionManager.shared()
     
-    let version: String = infoDict["CFBundleShortVersionString"] as! String
-    let revision: String = infoDict["CFBundleVersion"] as! String
-    
-    versionLabel.text = String(format: "%@ (%@)", version, revision)
-    
-    let coreVersion: String = infoDict["DOLCoreVersion"] as! String
-    
-    coreVersionLabel.text = coreVersion
+    versionLabel.text = versionManager.userFacingVersion
+    coreVersionLabel.text = versionManager.coreVersion
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
