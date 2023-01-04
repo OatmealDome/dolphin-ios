@@ -1592,7 +1592,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "if [ \"$DOL_BUILD_SOURCE\" != \"official\" ]; then\n    echo \"Skipping dSYM upload, not official build\"\n    exit\nfi\n\necho \"Proceeding with dSYM upload\"\n\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+			shellScript = "if [ \"$DOL_BUILD_SOURCE\" != \"official\" ]; then\n    echo \"Skipping dSYM upload, not official build\"\n    exit\nfi\n\necho \"Proceeding with dSYM upload\"\n\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\" --build-phase\n";
 		};
 		B991379B2881DCAC00588446 /* Update Storyboard Strings */ = {
 			isa = PBXShellScriptBuildPhase;
