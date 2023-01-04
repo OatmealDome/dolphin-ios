@@ -4,6 +4,7 @@
 #import "BootNoticeManager.h"
 #import "DolphinCoreService.h"
 #import "EmulationCoordinator.h"
+#import "FirebaseService.h"
 #import "FirstRunInitializationService.h"
 #import "GameFileCacheManager.h"
 #import "JitManager.h"
