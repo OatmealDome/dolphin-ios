@@ -367,6 +367,11 @@
 		B97E4B5F2965FA1B00B3EE9C /* AnalyticsNoticeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnalyticsNoticeViewController.h; sourceTree = "<group>"; };
 		B97E4B602965FA1B00B3EE9C /* AnalyticsNoticeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AnalyticsNoticeViewController.mm; sourceTree = "<group>"; };
 		B97E4B63296635AC00B3EE9C /* Normal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Normal.xcconfig; sourceTree = "<group>"; };
+		B97E4B642966480300B3EE9C /* CreateDeb.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CreateDeb.sh; sourceTree = "<group>"; };
+		B97E4B6729664E1500B3EE9C /* control-beta.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "control-beta.in"; sourceTree = "<group>"; };
+		B97E4B6829664E1500B3EE9C /* postinst.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = postinst.sh; sourceTree = "<group>"; };
+		B97E4B6929664E1500B3EE9C /* control-normal.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "control-normal.in"; sourceTree = "<group>"; };
+		B97E4B6A29664E1600B3EE9C /* postrm.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = postrm.sh; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B991377F288096A300588446 /* ConfigWiiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigWiiViewController.h; sourceTree = "<group>"; };
@@ -925,6 +930,7 @@
 			children = (
 				B9476B2227F235A0009C0A4B /* BuildCore.sh */,
 				B9447B0A2841931E00BC9110 /* CopyAssets.sh */,
+				B97E4B642966480300B3EE9C /* CreateDeb.sh */,
 				B9B1483429636565002C4BE7 /* CreateIpa.sh */,
 				B99137B328827BF300588446 /* TransferCoreStringsToStoryboard.py */,
 				B991379A2881DC2200588446 /* UpdateStoryboardStrings.sh */,
@@ -1044,6 +1050,7 @@
 				B950CA922846A10400F45219 /* Assets */,
 				B96F72CD27F0E8A70024BA7D /* Config */,
 				B950CFCD2962D05500197719 /* Entitlements */,
+				B97E4B6529664B3300B3EE9C /* Package */,
 				B9447B0B2841937100BC9110 /* Templates */,
 				B99137A128825A8400588446 /* Tools */,
 				B9476B2127F2357B009C0A4B /* Scripts */,
@@ -1131,6 +1138,25 @@
 				B97E4B602965FA1B00B3EE9C /* AnalyticsNoticeViewController.mm */,
 			);
 			path = Analytics;
+			sourceTree = "<group>";
+		};
+		B97E4B6529664B3300B3EE9C /* Package */ = {
+			isa = PBXGroup;
+			children = (
+				B97E4B6629664E0000B3EE9C /* Deb */,
+			);
+			path = Package;
+			sourceTree = "<group>";
+		};
+		B97E4B6629664E0000B3EE9C /* Deb */ = {
+			isa = PBXGroup;
+			children = (
+				B97E4B6729664E1500B3EE9C /* control-beta.in */,
+				B97E4B6929664E1500B3EE9C /* control-normal.in */,
+				B97E4B6829664E1500B3EE9C /* postinst.sh */,
+				B97E4B6A29664E1600B3EE9C /* postrm.sh */,
+			);
+			path = Deb;
 			sourceTree = "<group>";
 		};
 		B991377E2880969400588446 /* Wii */ = {
