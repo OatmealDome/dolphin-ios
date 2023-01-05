@@ -42,14 +42,14 @@ jobs:
         run: |
           echo "XCODE_CONFIGURATION_NJB=\"Release (Non-Jailbroken)\"" >> $GITHUB_ENV
           echo "XCODE_CONFIGURATION_JB=\"Release (Jailbroken)\"" >> $GITHUB_ENV
-          echo "DEB_CONTROL_NAME=\"control-normal\"" >> $GITHUB_ENV
+          echo "DEB_CONTROL_NAME=control-normal" >> $GITHUB_ENV
       
       - name: Set Schema for Beta
         if: "github.event.release.prerelease"
         run: |
           echo "XCODE_CONFIGURATION_NJB=\"Release (Beta, Non-Jailbroken)\"" >> $GITHUB_ENV
           echo "XCODE_CONFIGURATION_JB=\"Release (Beta, Jailbroken)\"" >> $GITHUB_ENV
-          echo "DEB_CONTROL_NAME=\"control-beta\"" >> $GITHUB_ENV
+          echo "DEB_CONTROL_NAME=control-beta" >> $GITHUB_ENV
 
       - name: Build Application
         env:
