@@ -14,6 +14,3 @@ mkdir -p /private/var/mobile/Documents/DolphiniOS || true
 
 echo "Setting user directory permissions"
 chown -R mobile:mobile /private/var/mobile/Documents/DolphiniOS
-
-echo "Running uicache"
-uicache
