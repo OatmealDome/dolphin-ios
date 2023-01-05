@@ -42,27 +42,35 @@ jobs:
         run: |
           echo "XCODE_CONFIGURATION_NJB=\"Release (Non-Jailbroken)\"" >> $GITHUB_ENV
           echo "XCODE_CONFIGURATION_JB=\"Release (Jailbroken)\"" >> $GITHUB_ENV
+          echo "DEB_CONTROL_NAME=\"control-normal\"" >> $GITHUB_ENV
       
       - name: Set Schema for Beta
         if: "github.event.release.prerelease"
         run: |
           echo "XCODE_CONFIGURATION_NJB=\"Release (Beta, Non-Jailbroken)\"" >> $GITHUB_ENV
           echo "XCODE_CONFIGURATION_JB=\"Release (Beta, Jailbroken)\"" >> $GITHUB_ENV
+          echo "DEB_CONTROL_NAME=\"control-beta\"" >> $GITHUB_ENV
 
       - name: Build Application
         env:
           XCODE_COMMON_BUILD_ARGS: -project Source/iOS/App/DolphiniOS.xcodeproj -derivedDataPath "${{ github.workspace }}/build-Xcode" DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" DOL_BUILD_SOURCE="official" CURRENT_PROJECT_VERSION=${{ github.run_number }} CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
         run: |
           xcodebuild -configuration "${{ env.XCODE_CONFIGURATION_NJB }}" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
+          xcodebuild -configuration "${{ env.XCODE_CONFIGURATION_JB }}" -scheme "DiOS (JB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
       
-      - name: Build IPA File
+      - name: Build IPA Files
         run: |
           mkdir "${{ github.workspace }}/products"
           "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_NJB }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Public.entitlements" "${{ github.workspace }}/products/Non-Jailbroken.ipa"
           "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_NJB }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Private.entitlements" "${{ github.workspace }}/products/TrollStore.ipa"
+      
+      - name: Build DEB File
+        run: |
+          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateDeb.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_JB }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Private.entitlements" "${{ github.workspace }}/Source/iOS/App/Project/Package/Deb/${{ env.DEB_CONTROL_NAME }}" "${{ github.workspace }}/Source/iOS/App/Project/Package/Deb/postinst.sh" "${{ github.workspace }}/Source/iOS/App/Project/Package/Deb/postrm.sh" "${{ github.workspace }}/products/Jailbroken.deb"
       
       - uses: softprops/action-gh-release@v1
         with:
           files: |
             products/Non-Jailbroken.ipa
             products/TrollStore.ipa
+            products/Jailbroken.deb
