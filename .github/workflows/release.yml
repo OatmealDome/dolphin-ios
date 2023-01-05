@@ -55,8 +55,8 @@ jobs:
         env:
           XCODE_COMMON_BUILD_ARGS: -project Source/iOS/App/DolphiniOS.xcodeproj -derivedDataPath "${{ github.workspace }}/build-Xcode" DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" DOL_BUILD_SOURCE="official" CURRENT_PROJECT_VERSION=${{ github.run_number }} CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
         run: |
-          xcodebuild -configuration "${{ env.XCODE_CONFIGURATION_NJB }}" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
-          xcodebuild -configuration "${{ env.XCODE_CONFIGURATION_JB }}" -scheme "DiOS (JB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
+          xcodebuild -configuration ${{ env.XCODE_CONFIGURATION_NJB }} -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
+          xcodebuild -configuration ${{ env.XCODE_CONFIGURATION_JB }} -scheme "DiOS (JB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
       
       - name: Build IPA Files
         run: |
