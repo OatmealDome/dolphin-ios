@@ -20,7 +20,7 @@ jobs:
 
       # - name: Install Build Utilities
       #   run: |
-      #     brew install cmake ninja bartycrouch
+      #     brew install cmake ninja bartycrouch dpkg
       #     /usr/bin/python3 -m pip install polib
       
       # - name: Import Signing Certificate
