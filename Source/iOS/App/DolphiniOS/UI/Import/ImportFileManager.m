@@ -5,6 +5,7 @@
 
 #import "Swift.h"
 
+#import "GameFileCacheManager.h"
 #import "LocalizationUtil.h"
 #import "MainSceneCoordinator.h"
 
@@ -69,6 +70,8 @@
   
   void (^finish)(void) = ^void() {
     [url stopAccessingSecurityScopedResource];
+    
+    [[GameFileCacheManager sharedManager] rescanAndFetchMetadataWithCompletionHandler:nil];
     
     [self hideWindow];
   };
