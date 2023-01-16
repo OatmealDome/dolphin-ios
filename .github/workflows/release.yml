@@ -62,7 +62,7 @@ jobs:
         run: |
           mkdir "${{ github.workspace }}/products"
           "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_NJB }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Public.entitlements" "${{ github.workspace }}/products/Non-Jailbroken.ipa"
-          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_NJB }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Private.entitlements" "${{ github.workspace }}/products/TrollStore.ipa"
+          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_NJB }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Private.entitlements" "${{ github.workspace }}/products/TrollStore.tipa"
       
       - name: Build DEB File
         run: |
@@ -72,5 +72,5 @@ jobs:
         with:
           files: |
             products/Non-Jailbroken.ipa
-            products/TrollStore.ipa
+            products/TrollStore.tipa
             products/Jailbroken.deb
