@@ -57,6 +57,12 @@ void JITMemoryTracker::JITRegionWriteEnableExecuteDisable(void* ptr)
   std::scoped_lock lk(m_mutex);
 
   JITRegionInfo* info = FindRegion(ptr);
+
+  if (!info)
+  {
+    return;
+  }
+
   if (info->nest_counter == 0)
   {
     UnWriteProtectMemory(info->start_ptr, info->size, false);
@@ -70,6 +76,12 @@ void JITMemoryTracker::JITRegionWriteDisableExecuteEnable(void* ptr)
   std::scoped_lock lk(m_mutex);
 
   JITRegionInfo* info = FindRegion(ptr);
+
+  if (!info)
+  {
+    return;
+  }
+
   info->nest_counter--;
 
   if (info->nest_counter < 0)
