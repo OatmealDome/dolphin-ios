@@ -2,24 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- This unsandboxes the application, but leaves it containerized -->
-    <key>com.apple.private.security.no-sandbox</key>
-    <true/>
-    <key>com.apple.developer.kernel.extended-virtual-addressing</key>
-    <true/>
-    <key>com.apple.developer.kernel.increased-memory-limit</key>
-    <true/>
-    <key>get-task-allow</key>
-    <true/>
-    <key>com.apple.security.iokit-user-client-class</key>
-    <array>
-        <string>IOSurfaceRootUserClient</string>
-        <string>AGXDeviceUserClient</string>
-        <string>AGXSharedUserClient</string>
-        <string>AGXCommandQueue</string>
-        <string>AGXDevice</string>
-    </array>
-    <key>platform-application</key>
-    <true/>
+	<key>com.apple.private.security.storage.AppDataContainers</key>
+	<true/>
+	<key>com.apple.private.security.no-sandbox</key>
+	<true/>
+	<key>com.apple.developer.kernel.extended-virtual-addressing</key>
+	<true/>
+	<key>com.apple.developer.kernel.increased-memory-limit</key>
+	<true/>
+	<key>get-task-allow</key>
+	<true/>
+	<key>com.apple.security.iokit-user-client-class</key>
+	<array>
+		<string>IOSurfaceRootUserClient</string>
+		<string>AGXDeviceUserClient</string>
+		<string>AGXSharedUserClient</string>
+		<string>AGXCommandQueue</string>
+		<string>AGXDevice</string>
+	</array>
+	<key>platform-application</key>
+	<true/>
 </dict>
 </plist>
