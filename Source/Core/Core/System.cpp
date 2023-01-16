@@ -13,8 +13,10 @@
 #include "Core/HW/DVD/DVDInterface.h"
 #include "Core/HW/DVD/DVDThread.h"
 #include "Core/HW/EXI/EXI.h"
+#include "Core/HW/GPFifo.h"
 #include "Core/HW/Memmap.h"
 #include "Core/HW/MemoryInterface.h"
+#include "Core/HW/ProcessorInterface.h"
 #include "Core/HW/SI/SI.h"
 #include "Core/HW/Sram.h"
 #include "Core/HW/VideoInterface.h"
@@ -29,6 +31,8 @@ namespace Core
 {
 struct System::Impl
 {
+  explicit Impl(System& system) : m_gp_fifo(system) {}
+
   std::unique_ptr<SoundStream> m_sound_stream;
   bool m_sound_stream_running = false;
   bool m_audio_dump_started = false;
@@ -42,17 +46,19 @@ struct System::Impl
   ExpansionInterface::ExpansionInterfaceState m_expansion_interface_state;
   Fifo::FifoManager m_fifo;
   GeometryShaderManager m_geometry_shader_manager;
+  GPFifo::GPFifoManager m_gp_fifo;
   Memory::MemoryManager m_memory;
   MemoryInterface::MemoryInterfaceState m_memory_interface_state;
   PixelEngine::PixelEngineManager m_pixel_engine;
   PixelShaderManager m_pixel_shader_manager;
+  ProcessorInterface::ProcessorInterfaceManager m_processor_interface;
   SerialInterface::SerialInterfaceState m_serial_interface_state;
   Sram m_sram;
   VertexShaderManager m_vertex_shader_manager;
   VideoInterface::VideoInterfaceState m_video_interface_state;
 };
 
-System::System() : m_impl{std::make_unique<Impl>()}
+System::System() : m_impl{std::make_unique<Impl>(*this)}
 {
 }
 
@@ -140,6 +146,11 @@ GeometryShaderManager& System::GetGeometryShaderManager() const
   return m_impl->m_geometry_shader_manager;
 }
 
+GPFifo::GPFifoManager& System::GetGPFifo() const
+{
+  return m_impl->m_gp_fifo;
+}
+
 Memory::MemoryManager& System::GetMemory() const
 {
   return m_impl->m_memory;
@@ -158,6 +169,11 @@ PixelEngine::PixelEngineManager& System::GetPixelEngine() const
 PixelShaderManager& System::GetPixelShaderManager() const
 {
   return m_impl->m_pixel_shader_manager;
+}
+
+ProcessorInterface::ProcessorInterfaceManager& System::GetProcessorInterface() const
+{
+  return m_impl->m_processor_interface;
 }
 
 SerialInterface::SerialInterfaceState& System::GetSerialInterfaceState() const
