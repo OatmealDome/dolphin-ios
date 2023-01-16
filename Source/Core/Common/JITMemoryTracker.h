@@ -5,6 +5,7 @@
 
 #include <cstddef>
 #include <map>
+#include <mutex>
 
 namespace Common
 {
@@ -30,5 +31,6 @@ private:
   JITRegionInfo* FindRegion(void* ptr);
 
   std::map<void*, JITRegionInfo> m_jit_regions;
+  std::mutex m_mutex;
 };
 }

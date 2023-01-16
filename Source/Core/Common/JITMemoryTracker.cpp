@@ -13,6 +13,8 @@ JITMemoryTracker::JITMemoryTracker() = default;
 
 void JITMemoryTracker::RegisterJITRegion(void* ptr, size_t size)
 {
+  std::scoped_lock lk(m_mutex);
+
   if (m_jit_regions.find(ptr) != m_jit_regions.end())
   {
     PanicAlertFmt("JITMemoryTracker: region {} already registered", ptr);
@@ -24,11 +26,15 @@ void JITMemoryTracker::RegisterJITRegion(void* ptr, size_t size)
 
 void JITMemoryTracker::UnregisterJITRegion(void* ptr)
 {
+  std::scoped_lock lk(m_mutex);
+
   m_jit_regions.erase(ptr);
 }
 
 JITMemoryTracker::JITRegionInfo* JITMemoryTracker::FindRegion(void* ptr)
 {
+  std::scoped_lock lk(m_mutex);
+
   if (m_jit_regions.find(ptr) != m_jit_regions.end())
   {
     return &m_jit_regions[ptr];
@@ -48,6 +54,8 @@ JITMemoryTracker::JITRegionInfo* JITMemoryTracker::FindRegion(void* ptr)
 
 void JITMemoryTracker::JITRegionWriteEnableExecuteDisable(void* ptr)
 {
+  std::scoped_lock lk(m_mutex);
+
   JITRegionInfo* info = FindRegion(ptr);
   if (info->nest_counter == 0)
   {
@@ -59,6 +67,8 @@ void JITMemoryTracker::JITRegionWriteEnableExecuteDisable(void* ptr)
 
 void JITMemoryTracker::JITRegionWriteDisableExecuteEnable(void* ptr)
 {
+  std::scoped_lock lk(m_mutex);
+
   JITRegionInfo* info = FindRegion(ptr);
   info->nest_counter--;
 
