@@ -33,8 +33,6 @@ void JITMemoryTracker::UnregisterJITRegion(void* ptr)
 
 JITMemoryTracker::JITRegionInfo* JITMemoryTracker::FindRegion(void* ptr)
 {
-  std::scoped_lock lk(m_mutex);
-
   if (m_jit_regions.find(ptr) != m_jit_regions.end())
   {
     return &m_jit_regions[ptr];
