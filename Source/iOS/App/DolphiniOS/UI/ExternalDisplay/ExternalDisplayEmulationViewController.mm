@@ -22,9 +22,20 @@
     self.rendererView.alpha = 1.0f;
     self.waitView.alpha = 0.0f;
   }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveEmulationStartNotification) name:DOLEmulationDidStartNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveEmulationEndNotification) name:DOLEmulationDidEndNotification object:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+  [super viewDidDisappear:animated];
+  
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLEmulationDidStartNotification object:nil];
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLEmulationDidEndNotification object:nil];
 }
 
 - (void)receiveEmulationStartNotification {
