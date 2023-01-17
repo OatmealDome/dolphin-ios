@@ -108,7 +108,7 @@
 
 - (void)setCpuClockLabel {
   int core_clock = SystemTimers::GetTicksPerSecond() / std::pow(10, 6);
-  int overclock = Config::Get(Config::MAIN_OVERCLOCK);
+  const float overclock = Config::Get(Config::MAIN_OVERCLOCK);
   int percent = static_cast<int>(std::round(overclock * 100.f));
   int clock = static_cast<int>(std::round(overclock * core_clock));
   
