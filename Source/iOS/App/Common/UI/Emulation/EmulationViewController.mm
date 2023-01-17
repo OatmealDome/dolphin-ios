@@ -28,6 +28,8 @@
   
   [[EmulationCoordinator shared] registerMainDisplayView:self.rendererView];
   
+  self.rendererView.alpha = 1.0f;
+  
   // Create right bar button items
   self.stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(stopPressed)];
   self.pauseButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pausePressed)];
@@ -175,10 +177,14 @@
 
 - (void)receiveEmulationEndNotification {
   dispatch_async(dispatch_get_main_queue(), ^{
-    [self.navigationController dismissViewControllerAnimated:true completion:^{
+    [UIView animateWithDuration:0.25f animations:^{
+      self.rendererView.alpha = 0.0f;
+    } completion:^(bool) {
       if (![EmulationCoordinator shared].isExternalDisplayConnected) {
         [[EmulationCoordinator shared] clearMetalLayer];
       }
+      
+      [self.navigationController dismissViewControllerAnimated:true completion:nil];
     }];
   });
 }
