@@ -39,6 +39,10 @@
   ];
   
   [self.navigationController setNavigationBarHidden:true animated:true];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveEmulationEndNotification) name:DOLEmulationDidEndNotification object:nil];
 }
@@ -61,6 +65,12 @@
     
     _didStartEmulation = true;
   }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+  [super viewDidDisappear:animated];
+  
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLEmulationDidEndNotification object:nil];
 }
 
 - (void)didFinishJitScreenWithResult:(BOOL)result sender:(id)sender {
