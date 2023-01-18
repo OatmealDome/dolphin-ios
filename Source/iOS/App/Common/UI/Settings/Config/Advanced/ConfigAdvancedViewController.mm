@@ -50,12 +50,6 @@
   self.rtcPicker.date = [NSDate dateWithTimeIntervalSince1970:Config::Get(Config::MAIN_CUSTOM_RTC_VALUE)];
   self.rtcPicker.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
   self.rtcPicker.enabled = self.rtcSwitch.on;
-  
-  // We use the compact style in the storyboard to maintain compatibilty with iOS 13.
-  // If iOS 14 APIs are available, we can make the UI look fancier with the inline style.
-  if (@available(iOS 14, *)) {
-    self.rtcPicker.preferredDatePickerStyle = UIDatePickerStyleInline;
-  }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
