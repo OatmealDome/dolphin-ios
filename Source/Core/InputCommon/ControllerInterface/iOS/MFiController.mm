@@ -57,61 +57,52 @@ MFiController::MFiController(GCController* controller) : m_controller(controller
       }
     }
 
-    if (@available(iOS 14, *))
+    if (gamepad.buttonHome != nil)
     {
-      if (gamepad.buttonHome != nil)
-      {
-        AddInput(new Button(gamepad.buttonHome, "Home"));
-      }
+      AddInput(new Button(gamepad.buttonHome, "Home"));
+    }
+    
+    if ([gamepad isKindOfClass:[GCDualShockGamepad class]])
+    {
+      GCDualShockGamepad* ds_gamepad = (GCDualShockGamepad*)gamepad;
+      AddInput(new Button(ds_gamepad.touchpadButton, "Touchpad"));
       
-      if ([gamepad isKindOfClass:[GCDualShockGamepad class]])
-      {
-        GCDualShockGamepad* ds_gamepad = (GCDualShockGamepad*)gamepad;
-        AddInput(new Button(ds_gamepad.touchpadButton, "Touchpad"));
-        
-        // The user's first finger on the touchpad.
-        AddInput(new Axis(ds_gamepad.touchpadPrimary.xAxis, 1.0f, "Touchpad X+"));
-        AddInput(new Axis(ds_gamepad.touchpadPrimary.xAxis, -1.0f, "Touchpad X-"));
-        AddInput(new Axis(ds_gamepad.touchpadPrimary.yAxis, 1.0f, "Touchpad Y+"));
-        AddInput(new Axis(ds_gamepad.touchpadPrimary.yAxis, -1.0f, "Touchpad Y-"));
+      // The user's first finger on the touchpad.
+      AddInput(new Axis(ds_gamepad.touchpadPrimary.xAxis, 1.0f, "Touchpad X+"));
+      AddInput(new Axis(ds_gamepad.touchpadPrimary.xAxis, -1.0f, "Touchpad X-"));
+      AddInput(new Axis(ds_gamepad.touchpadPrimary.yAxis, 1.0f, "Touchpad Y+"));
+      AddInput(new Axis(ds_gamepad.touchpadPrimary.yAxis, -1.0f, "Touchpad Y-"));
 
-        // The user's second finger on the touchpad.
-        AddInput(new Axis(ds_gamepad.touchpadSecondary.xAxis, 1.0f, "Touchpad Secondary X+"));
-        AddInput(new Axis(ds_gamepad.touchpadSecondary.xAxis, -1.0f, "Touchpad Secondary X-"));
-        AddInput(new Axis(ds_gamepad.touchpadSecondary.yAxis, 1.0f, "Touchpad Secondary Y+"));
-        AddInput(new Axis(ds_gamepad.touchpadSecondary.yAxis, -1.0f, "Touchpad Secondary Y-"));
-      }
-      else if ([gamepad isKindOfClass:[GCXboxGamepad class]])
-      {
-        GCXboxGamepad* xbox_gamepad = (GCXboxGamepad*)gamepad;
-        AddInput(new Button(xbox_gamepad.paddleButton1, "Paddle 1"));
-        AddInput(new Button(xbox_gamepad.paddleButton2, "Paddle 2"));
-        AddInput(new Button(xbox_gamepad.paddleButton3, "Paddle 3"));
-        AddInput(new Button(xbox_gamepad.paddleButton4, "Paddle 4"));
-      }
+      // The user's second finger on the touchpad.
+      AddInput(new Axis(ds_gamepad.touchpadSecondary.xAxis, 1.0f, "Touchpad Secondary X+"));
+      AddInput(new Axis(ds_gamepad.touchpadSecondary.xAxis, -1.0f, "Touchpad Secondary X-"));
+      AddInput(new Axis(ds_gamepad.touchpadSecondary.yAxis, 1.0f, "Touchpad Secondary Y+"));
+      AddInput(new Axis(ds_gamepad.touchpadSecondary.yAxis, -1.0f, "Touchpad Secondary Y-"));
+    }
+    else if ([gamepad isKindOfClass:[GCXboxGamepad class]])
+    {
+      GCXboxGamepad* xbox_gamepad = (GCXboxGamepad*)gamepad;
+      AddInput(new Button(xbox_gamepad.paddleButton1, "Paddle 1"));
+      AddInput(new Button(xbox_gamepad.paddleButton2, "Paddle 2"));
+      AddInput(new Button(xbox_gamepad.paddleButton3, "Paddle 3"));
+      AddInput(new Button(xbox_gamepad.paddleButton4, "Paddle 4"));
     }
 
-    if (@available(iOS 13, *))
-    {
-      AddInput(new Button(gamepad.buttonMenu, "Menu"));
+    AddInput(new Button(gamepad.buttonMenu, "Menu"));
 
-      if (gamepad.buttonOptions != nil)
-      {
-        AddInput(new Button(gamepad.buttonOptions, "Options"));
-      }
+    if (gamepad.buttonOptions != nil)
+    {
+      AddInput(new Button(gamepad.buttonOptions, "Options"));
     }
 
-    if (@available(iOS 12.1, *))
+    if (gamepad.leftThumbstickButton != nil)
     {
-      if (gamepad.leftThumbstickButton != nil)
-      {
-        AddInput(new Button(gamepad.leftThumbstickButton, "L Stick"));
-      }
+      AddInput(new Button(gamepad.leftThumbstickButton, "L Stick"));
+    }
 
-      if (gamepad.rightThumbstickButton != nil)
-      {
-        AddInput(new Button(gamepad.rightThumbstickButton, "R Stick"));
-      }
+    if (gamepad.rightThumbstickButton != nil)
+    {
+      AddInput(new Button(gamepad.rightThumbstickButton, "R Stick"));
     }
   }
 #pragma clang diagnostic push
@@ -141,11 +132,7 @@ MFiController::MFiController(GCController* controller) : m_controller(controller
     AddInput(new Button(gamepad.dpad.right, "D-Pad Right"));
     AddInput(new Button(gamepad.buttonA, "Button A"));
     AddInput(new Button(gamepad.buttonX, "Button X"));
-
-    if (@available(iOS 13, *))
-    {
-      AddInput(new Button(gamepad.buttonMenu, "Menu"));
-    }
+    AddInput(new Button(gamepad.buttonMenu, "Menu"));
   }
 
   if (controller.motion != nil)
@@ -183,15 +170,12 @@ MFiController::MFiController(GCController* controller) : m_controller(controller
     m_supports_accelerometer = false;
   }
 
-  if (@available(iOS 14.0, *))
+  GCDeviceHaptics* haptics = controller.haptics;
+  if (haptics != nil)
   {
-    GCDeviceHaptics* haptics = controller.haptics;
-    if (haptics != nil)
-    {
-      CHHapticEngine* engine = [haptics createEngineWithLocality:GCHapticsLocalityDefault];
-      
-      AddOutput(new Motor(engine, "Rumble"));
-    }
+    CHHapticEngine* engine = [haptics createEngineWithLocality:GCHapticsLocalityDefault];
+    
+    AddOutput(new Motor(engine, "Rumble"));
   }
 }
 
