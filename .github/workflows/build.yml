@@ -30,4 +30,5 @@ jobs:
       - name: Build Application
         run: |
           xcodebuild -configuration "Release (Non-Jailbroken)" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
+          xcodebuild -configuration "Release (TrollStore)" -scheme "DiOS (JB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
           xcodebuild -configuration "Release (Jailbroken)" -scheme "DiOS (JB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}

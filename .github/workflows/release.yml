@@ -42,6 +42,7 @@ jobs:
         run: |
           echo "XCODE_CONFIGURATION_NJB=Release (Non-Jailbroken)" >> $GITHUB_ENV
           echo "XCODE_CONFIGURATION_JB=Release (Jailbroken)" >> $GITHUB_ENV
+          echo "XCODE_CONFIGURATION_TS=Release (TrollStore)" >> $GITHUB_ENV
           echo "DEB_CONTROL_NAME=control-normal" >> $GITHUB_ENV
       
       - name: Set Schema for Beta
@@ -49,6 +50,7 @@ jobs:
         run: |
           echo "XCODE_CONFIGURATION_NJB=Release (Beta, Non-Jailbroken)" >> $GITHUB_ENV
           echo "XCODE_CONFIGURATION_JB=Release (Beta, Jailbroken)" >> $GITHUB_ENV
+          echo "XCODE_CONFIGURATION_TS=Release (Beta, TrollStore)" >> $GITHUB_ENV
           echo "DEB_CONTROL_NAME=control-beta" >> $GITHUB_ENV
 
       - name: Build Application
@@ -57,12 +59,13 @@ jobs:
         run: |
           xcodebuild -configuration "${{ env.XCODE_CONFIGURATION_NJB }}" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
           xcodebuild -configuration "${{ env.XCODE_CONFIGURATION_JB }}" -scheme "DiOS (JB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
+          xcodebuild -configuration "${{ env.XCODE_CONFIGURATION_TS }}" -scheme "DiOS (JB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
       
       - name: Build IPA Files
         run: |
           mkdir "${{ github.workspace }}/products"
           "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_NJB }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Public.entitlements" "${{ github.workspace }}/products/Non-Jailbroken.ipa"
-          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_NJB }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Private.entitlements" "${{ github.workspace }}/products/TrollStore.tipa"
+          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_TS }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Private.entitlements" "${{ github.workspace }}/products/TrollStore.tipa"
       
       - name: Build DEB File
         run: |
