@@ -6,6 +6,7 @@
 #import "Common/FileUtil.h"
 #import "Common/IniFile.h"
 
+#import "Core/Config/MainSettings.h"
 #import "Core/HW/GCPad.h"
 #import "Core/HW/Wiimote.h"
 
@@ -45,6 +46,8 @@
   if (launchTimes == 0) {
     [self importDefaultProfileForInputConfig:Pad::GetConfig()];
     [self importDefaultProfileForInputConfig:Wiimote::GetConfig()];
+    
+    Config::SetBase(Config::MAIN_GFX_BACKEND, "Metal");
     
     [[BootNoticeManager shared] enqueueViewController:[[UnofficialBuildNoticeViewController alloc] initWithNibName:@"UnofficialBuildNotice" bundle:nil]];
   }
