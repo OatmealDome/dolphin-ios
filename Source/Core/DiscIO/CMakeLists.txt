@@ -64,13 +64,6 @@ add_library(discio
   WiiSaveBanner.h
 )
 
-if (NOT IOS)
-  target_sources(dolphin-emu PRIVATE_HEADER
-    DriveBlob.cpp
-    DriveBlob.h
-  )
-endif()
-
 target_link_libraries(discio
 PUBLIC
   core
