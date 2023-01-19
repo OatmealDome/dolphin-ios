@@ -26,6 +26,7 @@
   [self.vertexRoundingCell registerSetting:Config::GFX_HACK_VERTEX_ROUNDING];
   [self.boundingBoxCell registerSetting:Config::GFX_HACK_BBOX_ENABLE shouldReverse:true];
   [self.textureCacheCell registerSetting:Config::GFX_SAVE_TEXTURE_CACHE_TO_STATE];
+  [self.viSkipCell registerSetting:Config::GFX_HACK_VI_SKIP];
   
   [self.efbToTextureCell.boolSwitch addValueChangedTarget:self action:@selector(updateDeferEnabled)];
   [self.xfbToTextureCell.boolSwitch addValueChangedTarget:self action:@selector(updateDeferEnabled)];
@@ -33,6 +34,7 @@
   [self updateDeferEnabled];
   
   [self.presentXfbCell.boolSwitch addValueChangedTarget:self action:@selector(updateDuplicateFramesEnabled)];
+  [self.viSkipCell.boolSwitch addValueChangedTarget:self action:@selector(updateDuplicateFramesEnabled)];
   
   [self updateDuplicateFramesEnabled];
   
@@ -68,7 +70,9 @@
 }
 
 - (void)updateDuplicateFramesEnabled {
-  self.duplicateFramesCell.boolSwitch.enabled = !self.presentXfbCell.boolSwitch.on;
+  const bool disabled = self.presentXfbCell.boolSwitch.on || self.viSkipCell.boolSwitch.on;
+  
+  self.duplicateFramesCell.boolSwitch.enabled = !disabled;
 }
 
 - (IBAction)accuracyUpdated:(id)sender {
@@ -197,6 +201,13 @@
                     "in save states. Fixes missing and/or non-upscaled textures/objects when loading "
                     "states at the cost of additional save/load time.<br><br><dolphin_emphasis>If "
                     "unsure, leave this checked.</dolphin_emphasis>";
+          break;
+        case 4:
+          message = @"Skips VI interrupts when lag is detected, allowing for "
+                    "smooth audio playback when emulation speed is not 100%. <br><br>"
+                    "<dolphin_emphasis>WARNING: Can cause freezes and compatibility "
+                    "issues.</dolphin_emphasis> <br><br>"
+                    "<dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
           break;
       }
       break;

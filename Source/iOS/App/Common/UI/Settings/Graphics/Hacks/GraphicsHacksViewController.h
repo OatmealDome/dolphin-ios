@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet GraphicsBoolCell* vertexRoundingCell;
 @property (weak, nonatomic) IBOutlet GraphicsBoolCell* boundingBoxCell;
 @property (weak, nonatomic) IBOutlet GraphicsBoolCell* textureCacheCell;
+@property (weak, nonatomic) IBOutlet GraphicsBoolCell* viSkipCell;
 
 @end
 

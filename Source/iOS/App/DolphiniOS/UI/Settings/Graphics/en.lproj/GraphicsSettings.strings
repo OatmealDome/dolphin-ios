@@ -261,3 +261,6 @@
 
 /* Class = "UILabel"; text = "Type"; ObjectID = "zwr-G9-cCf"; */
 "zwr-G9-cCf.text" = "Type";
+
+/* Class = "UILabel"; text = "VI Skip"; ObjectID = "hup-by-p7x"; */
+"hup-by-p7x.text" = "VI Skip";
