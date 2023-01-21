@@ -45,6 +45,8 @@ struct Device {
   _devices.clear();
   [_deviceNames removeAllObjects];
   
+  g_controller_interface.RefreshDevices();
+  
   for (const auto& name : g_controller_interface.GetAllDeviceStrings()) {
     if (self.filterType != DOLDeviceFilterNone) {
       ciface::Core::DeviceQualifier qualifier;
