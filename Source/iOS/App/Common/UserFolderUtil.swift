@@ -5,7 +5,7 @@ import Foundation
 
 @objc class UserFolderUtil: NSObject {
   @objc static func getUserFolder() -> String {
-#if NONJAILBROKEN
+#if NONJAILBROKEN || TROLLSTORE
     return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
 #else
     return "/private/var/mobile/Documents/DolphiniOS"
