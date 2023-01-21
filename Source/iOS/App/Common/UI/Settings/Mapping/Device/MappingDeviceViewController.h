@@ -7,6 +7,8 @@ namespace ControllerEmu {
 class EmulatedController;
 }
 
+class InputConfig;
+
 @protocol MappingDeviceViewControllerDelegate;
 
 typedef NS_ENUM(NSUInteger, DOLDeviceFilter) {
@@ -23,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic, nullable) id<MappingDeviceViewControllerDelegate> delegate;
 
 @property (nonatomic) DOLDeviceFilter filterType;
+@property (nonatomic) InputConfig* inputConfig;
 @property (nonatomic) ControllerEmu::EmulatedController* emulatedController;
 
 @end

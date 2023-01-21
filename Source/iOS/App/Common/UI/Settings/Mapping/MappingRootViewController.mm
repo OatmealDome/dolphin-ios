@@ -354,6 +354,7 @@ struct Section {
     
     deviceController.delegate = self;
     deviceController.filterType = filterType;
+    deviceController.inputConfig = _config;
     deviceController.emulatedController = _controller;
   } else if ([segue.identifier isEqualToString:@"toExtension"]) {
     ControllerEmu::ControlGroup* extensionGroup = Wiimote::GetWiimoteGroup(self.mappingPort, WiimoteEmu::WiimoteGroup::Attachments);
