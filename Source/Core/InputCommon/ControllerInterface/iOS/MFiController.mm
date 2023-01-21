@@ -145,10 +145,10 @@ MFiController::MFiController(GCController* controller) : m_controller(controller
       motion.sensorsActive = true;
     }
     
-    AddInput(new AccelerometerAxis(motion, X, -1.0, "Accel Left"));
-    AddInput(new AccelerometerAxis(motion, X, 1.0, "Accel Right"));
-    AddInput(new AccelerometerAxis(motion, Y, 1.0, "Accel Forward"));
-    AddInput(new AccelerometerAxis(motion, Y, -1.0, "Accel Back"));
+    AddInput(new AccelerometerAxis(motion, X, 1.0, "Accel Left"));
+    AddInput(new AccelerometerAxis(motion, X, -1.0, "Accel Right"));
+    AddInput(new AccelerometerAxis(motion, Y, -1.0, "Accel Forward"));
+    AddInput(new AccelerometerAxis(motion, Y, 1.0, "Accel Back"));
     AddInput(new AccelerometerAxis(motion, Z, 1.0, "Accel Up"));
     AddInput(new AccelerometerAxis(motion, Z, -1.0, "Accel Down"));
     
@@ -157,12 +157,12 @@ MFiController::MFiController(GCController* controller) : m_controller(controller
 
     if (m_supports_gyroscope)
     {
-      AddInput(new GyroscopeAxis(motion, X, 1.0, "Gyro Pitch Up"));
-      AddInput(new GyroscopeAxis(motion, X, -1.0, "Gyro Pitch Down"));
-      AddInput(new GyroscopeAxis(motion, Y, -1.0, "Gyro Roll Left"));
-      AddInput(new GyroscopeAxis(motion, Y, 1.0, "Gyro Roll Right"));
-      AddInput(new GyroscopeAxis(motion, Z, -1.0, "Gyro Yaw Left"));
-      AddInput(new GyroscopeAxis(motion, Z, 1.0, "Gyro Yaw Right"));
+      AddInput(new GyroscopeAxis(motion, X, -1.0, "Gyro Pitch Up"));
+      AddInput(new GyroscopeAxis(motion, X, 1.0, "Gyro Pitch Down"));
+      AddInput(new GyroscopeAxis(motion, Y, 1.0, "Gyro Roll Left"));
+      AddInput(new GyroscopeAxis(motion, Y, -1.0, "Gyro Roll Right"));
+      AddInput(new GyroscopeAxis(motion, Z, 1.0, "Gyro Yaw Left"));
+      AddInput(new GyroscopeAxis(motion, Z, -1.0, "Gyro Yaw Right"));
     }
   }
   else
