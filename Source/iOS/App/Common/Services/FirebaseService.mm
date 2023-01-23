@@ -9,9 +9,13 @@
 
 #import "Core/Config/MainSettings.h"
 
+#import "AnalyticsNoticeViewController.h"
 #import "BootNoticeManager.h"
 #import "Swift.h"
-#import "AnalyticsNoticeViewController.h"
+
+@interface FirebaseService () <AnalyticsNoticeViewControllerDelegate>
+
+@end
 
 @implementation FirebaseService
 
@@ -29,6 +33,8 @@
     analyticsEnabled = false;
     
     AnalyticsNoticeViewController* controller = [[AnalyticsNoticeViewController alloc] initWithNibName:@"AnalyticsNotice" bundle:nil];
+    controller.delegate = self;
+    
     [[BootNoticeManager shared] enqueueViewController:controller];
   } else {
     analyticsEnabled = Config::GetBase(Config::MAIN_ANALYTICS_ENABLED);
@@ -37,7 +43,40 @@
   [FIRAnalytics setAnalyticsCollectionEnabled:analyticsEnabled];
   [[FIRCrashlytics crashlytics] setCrashlyticsCollectionEnabled:analyticsEnabled];
   
+  if (analyticsEnabled) {
+    [self sendInitialAnalyticsEvents];
+  }
+  
   return true;
+}
+
+- (void)didFinishAnalyticsNoticeWithResult:(BOOL)result sender:(id)sender {
+  if (result) {
+    [self sendInitialAnalyticsEvents];
+  }
+}
+
+- (void)sendInitialAnalyticsEvents {
+  NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+  
+  NSString* lastVersion = [defaults stringForKey:@"last_version"];
+  NSString* currentVersion = [VersionManager shared].userFacingVersion;
+  
+  if (![lastVersion isEqualToString:currentVersion]) {
+    NSString* appType;
+#ifdef NONJAILBROKEN
+    appType = @"non-jailbroken";
+#elif defined(TROLLSTORE)
+    appType = @"trollstore";
+#else
+    appType = @"jailbroken";
+#endif
+    
+    [FIRAnalytics logEventWithName:@"version_start" parameters:@{
+      @"type" : appType,
+      @"version" : currentVersion
+    }];
+  }
 }
 
 @end
