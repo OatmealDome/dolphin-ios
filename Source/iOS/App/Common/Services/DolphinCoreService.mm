@@ -73,4 +73,22 @@
   Config::Save();
 }
 
+- (void)applicationWillTerminate:(UIApplication*)application {
+  if (Core::IsRunning()) {
+    Core::Stop();
+    
+    // Spin while Core stops
+    while (Core::GetState() != Core::State::Uninitialized) {}
+  }
+  
+  Pad::Shutdown();
+  Wiimote::Shutdown();
+  g_controller_interface.Shutdown();
+  
+  Config::Save();
+  
+  Core::Shutdown();
+  UICommon::Shutdown();
+}
+
 @end
