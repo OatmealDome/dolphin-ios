@@ -10,6 +10,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GraphicsAdvancedViewController : GraphicsTabViewController
 
+@property (weak, nonatomic) IBOutlet GraphicsBoolCell* fpsCell;
+@property (weak, nonatomic) IBOutlet GraphicsBoolCell* vpsCell;
+@property (weak, nonatomic) IBOutlet GraphicsBoolCell* speedCell;
+@property (weak, nonatomic) IBOutlet GraphicsBoolCell* frameTimesCell;
+@property (weak, nonatomic) IBOutlet GraphicsBoolCell* vblankTimesCell;
+@property (weak, nonatomic) IBOutlet GraphicsBoolCell* graphsCell;
+@property (weak, nonatomic) IBOutlet GraphicsBoolCell* renderTimeCell;
+@property (weak, nonatomic) IBOutlet GraphicsBoolCell* colorsCell;
 @property (weak, nonatomic) IBOutlet GraphicsBoolCell* statisticsCell;
 @property (weak, nonatomic) IBOutlet GraphicsBoolCell* apiValidationCell;
 @property (weak, nonatomic) IBOutlet GraphicsBoolCell* loadTexturesCell;

@@ -15,6 +15,14 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   
+  [self.fpsCell registerSetting:Config::GFX_SHOW_FPS];
+  [self.vpsCell registerSetting:Config::GFX_SHOW_VPS];
+  [self.speedCell registerSetting:Config::GFX_SHOW_SPEED];
+  [self.frameTimesCell registerSetting:Config::GFX_SHOW_FTIMES];
+  [self.vblankTimesCell registerSetting:Config::GFX_SHOW_VTIMES];
+  [self.graphsCell registerSetting:Config::GFX_SHOW_GRAPHS];
+  [self.renderTimeCell registerSetting:Config::GFX_LOG_RENDER_TIME_TO_FILE];
+  [self.colorsCell registerSetting:Config::GFX_SHOW_SPEED_COLORS];
   [self.statisticsCell registerSetting:Config::GFX_OVERLAY_STATS];
   [self.apiValidationCell registerSetting:Config::GFX_ENABLE_VALIDATION_LAYER];
   [self.loadTexturesCell registerSetting:Config::GFX_HIRES_TEXTURES];
@@ -55,6 +63,50 @@
     case 0:
       switch (indexPath.row) {
         case 0:
+          message = @"Shows the number of distinct frames rendered per second as a measure of "
+                    "visual smoothness.<br><br><dolphin_emphasis>If unsure, leave this "
+                    "unchecked.</dolphin_emphasis>";
+          break;
+        case 1:
+          message = @"Shows the number of frames rendered per second as a measure of "
+                    "emulation speed.<br><br><dolphin_emphasis>If unsure, leave this "
+                    "unchecked.</dolphin_emphasis>";
+          break;
+        case 2:
+          message = @"Shows the % speed of emulation compared to full speed."
+                    "<br><br><dolphin_emphasis>If unsure, leave this "
+                    "unchecked.</dolphin_emphasis>";
+          break;
+        case 3:
+          message = @"Shows the average time in ms between each distinct rendered frame alongside "
+                    "the standard deviation.<br><br><dolphin_emphasis>If unsure, leave this "
+                    "unchecked.</dolphin_emphasis>";
+          break;
+        case 4:
+          message = @"Shows the average time in ms between each rendered frame alongside "
+                    "the standard deviation.<br><br><dolphin_emphasis>If unsure, leave this "
+                    "unchecked.</dolphin_emphasis>";
+          break;
+        case 5:
+          message = @"Shows frametime graph along with statistics as a representation of "
+                    "emulation performance.<br><br><dolphin_emphasis>If unsure, leave this "
+                    "unchecked.</dolphin_emphasis>";
+          break;
+        case 6:
+          message = @"Logs the render time of every frame to User/Logs/render_time.txt.<br><br>Use this "
+                    "feature to measure Dolphin's performance.<br><br><dolphin_emphasis>If "
+                    "unsure, leave this unchecked.</dolphin_emphasis>";
+          break;
+        case 7:
+          message = @"Changes the color of the FPS counter depending on emulation speed."
+                    "<br><br><dolphin_emphasis>If unsure, leave this "
+                    "checked.</dolphin_emphasis>";
+          break;
+      }
+      break;
+    case 1:
+      switch (indexPath.row) {
+        case 0:
           message = @"Shows various rendering statistics.<br><br><dolphin_emphasis>If unsure, "
                     "leave this unchecked.</dolphin_emphasis>";
           break;
@@ -66,7 +118,7 @@
           break;
       }
       break;
-    case 1:
+    case 2:
       switch (indexPath.row) {
         case 0:
           message = @"Loads custom textures from User/Load/Textures/&lt;game_id&gt;/ and "
@@ -89,7 +141,7 @@
           break;
       }
       break;
-    case 2:
+    case 3:
       switch (indexPath.row) {
         case 0:
           message = @"Crops the picture from its native aspect ratio to 4:3 or "
@@ -108,7 +160,7 @@
           break;
       }
       break;
-    case 3:
+    case 4:
       switch (indexPath.row) {
         case 0:
           message = @"Defers invalidation of the EFB access cache until a GPU synchronization command "

@@ -270,3 +270,30 @@
 
 /* Class = "UILabel"; text = "Force Nearest"; ObjectID = "xxt-8W-yZ6"; */
 "xxt-8W-yZ6.text" = "Force Nearest";
+
+/* Class = "UILabel"; text = "Show VBlank Times"; ObjectID = "0dw-zM-nws"; */
+"0dw-zM-nws.text" = "Show VBlank Times";
+
+/* Class = "UILabel"; text = "Show Frame Times"; ObjectID = "2KQ-5k-eDW"; */
+"2KQ-5k-eDW.text" = "Show Frame Times";
+
+/* Class = "UILabel"; text = "Show % Speed"; ObjectID = "9eD-LY-67y"; */
+"9eD-LY-67y.text" = "Show % Speed";
+
+/* Class = "UILabel"; text = "Show Speed Colors"; ObjectID = "A7d-yz-eTv"; */
+"A7d-yz-eTv.text" = "Show Speed Colors";
+
+/* Class = "UILabel"; text = "Show VPS"; ObjectID = "HSb-pQ-ECU"; */
+"HSb-pQ-ECU.text" = "Show VPS";
+
+/* Class = "UILabel"; text = "Show FPS"; ObjectID = "NSE-NW-z5m"; */
+"NSE-NW-z5m.text" = "Show FPS";
+
+/* Class = "UILabel"; text = "Show Performance Graphs"; ObjectID = "Voc-TK-o7H"; */
+"Voc-TK-o7H.text" = "Show Performance Graphs";
+
+/* Class = "UITableViewSection"; headerTitle = "Performance Statistics"; ObjectID = "arp-cF-X8b"; */
+"arp-cF-X8b.headerTitle" = "Performance Statistics";
+
+/* Class = "UILabel"; text = "Log Render Time to File"; ObjectID = "iod-j5-y6w"; */
+"iod-j5-y6w.text" = "Log Render Time to File";
