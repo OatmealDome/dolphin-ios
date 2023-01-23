@@ -31,6 +31,12 @@
   for (size_t i = 0; i < backends.size(); i++) {
     const auto& backend = backends[i];
     
+    // The OpenGL ES backend does not work on iOS.
+    // (Well, we could make it work, but is it really worth it?)
+    if (backend->GetName() == "OGL") {
+      continue;
+    }
+    
     if (backend->GetName() == currentBackend) {
       _lastSelected = i;
     }
