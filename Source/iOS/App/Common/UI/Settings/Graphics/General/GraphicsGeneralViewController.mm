@@ -23,8 +23,6 @@
   
   [self.aspectRatioCell registerSetting:Config::GFX_ASPECT_RATIO];
   [self.vsyncCell registerSetting:Config::GFX_VSYNC];
-  [self.fpsCell registerSetting:Config::GFX_SHOW_FPS];
-  [self.renderTimeCell registerSetting:Config::GFX_LOG_RENDER_TIME_TO_FILE];
   [self.shaderModeCell registerSetting:Config::GFX_SHADER_COMPILATION_MODE];
   [self.shaderCompileCell registerSetting:Config::GFX_WAIT_FOR_SHADERS_BEFORE_STARTING];
 }
@@ -128,20 +126,6 @@
       }
       break;
     case 1:
-      switch (indexPath.row) {
-        case 0:
-          message = @"Shows the number of frames rendered per second as a measure of "
-                    "emulation speed.<br><br><dolphin_emphasis>If unsure, leave this "
-                    "unchecked.</dolphin_emphasis>";
-          break;
-        case 1:
-          message = @"Logs the render time of every frame to User/Logs/render_time.txt.<br><br>Use this "
-                    "feature to measure Dolphin's performance.<br><br><dolphin_emphasis>If "
-                    "unsure, leave this unchecked.</dolphin_emphasis>";
-          break;
-      }
-      break;
-    case 2:
       switch (indexPath.row) {
         case 0:
           return;

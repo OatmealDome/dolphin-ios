@@ -7,9 +7,6 @@
 /* Class = "UINavigationItem"; title = "Enhancements"; ObjectID = "2MC-w7-N8M"; */
 "2MC-w7-N8M.title" = "画質向上の設定";
 
-/* Class = "UILabel"; text = "Log Render Time to File"; ObjectID = "37p-hM-Ift"; */
-"37p-hM-Ift.text" = "レンダリング時間を記録";
-
 /* Class = "UITableViewController"; title = "Graphics"; ObjectID = "3ou-aq-3cy"; */
 "3ou-aq-3cy.title" = "ビデオ";
 
@@ -150,12 +147,6 @@
 
 /* Class = "UILabel"; text = "Skip EFB Access from CPU"; ObjectID = "cxc-YQ-Nff"; */
 "cxc-YQ-Nff.text" = "Skip EFB Access from CPU";
-
-/* Class = "UITableViewSection"; headerTitle = "Other"; ObjectID = "d2R-Y7-pN6"; */
-"d2R-Y7-pN6.headerTitle" = "その他";
-
-/* Class = "UILabel"; text = "Show FPS"; ObjectID = "dIM-ex-MYi"; */
-"dIM-ex-MYi.text" = "FPSを表示";
 
 /* Class = "UILabel"; text = "Ignore Format Changes"; ObjectID = "dM0-J0-hd7"; */
 "dM0-J0-hd7.text" = "Ignore Format Changes";
