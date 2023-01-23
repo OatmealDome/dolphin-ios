@@ -18,6 +18,7 @@
 #import "UICommon/UICommon.h"
 
 #import "DolphiniOS-Swift.h"
+#import "EmulationCoordinator.h"
 #import "FoundationStringUtil.h"
 #import "LocalizationUtil.h"
 #import "FastmemManager.h"
@@ -58,13 +59,13 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication*)application {
-  if (Core::IsRunning()) {
+  if (Core::IsRunning() && ![EmulationCoordinator shared].userRequestedPause) {
     Core::SetState(Core::State::Running);
   }
 }
 
 - (void)applicationWillResignActive:(UIApplication*)application {
-  if (Core::IsRunning()) {
+  if (Core::IsRunning() && ![EmulationCoordinator shared].userRequestedPause) {
     Core::SetState(Core::State::Paused);
   }
   
