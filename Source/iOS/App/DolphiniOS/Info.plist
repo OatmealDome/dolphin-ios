@@ -148,7 +148,7 @@
 			<key>UTTypeIconFiles</key>
 			<array/>
 			<key>UTTypeIdentifier</key>
-			<string>me.oatmealdome.dolphinios.gamcube-software</string>
+			<string>me.oatmealdome.dolphinios.gamecube-software</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
