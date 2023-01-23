@@ -17,7 +17,9 @@
 
 @end
 
-@implementation FirebaseService
+@implementation FirebaseService {
+  BOOL _shouldSendInitialEvent;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id>*)launchOptions {
   if ([VersionManager shared].buildSource != DOLBuildSourceOfficial) {
@@ -44,7 +46,14 @@
   [[FIRCrashlytics crashlytics] setCrashlyticsCollectionEnabled:analyticsEnabled];
   
   if (analyticsEnabled) {
-    [self sendInitialAnalyticsEvents];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString* lastVersion = [defaults stringForKey:@"last_version"];
+    NSString* currentVersion = [VersionManager shared].userFacingVersion;
+    
+    _shouldSendInitialEvent = ![lastVersion isEqualToString:currentVersion];
+  } else {
+    _shouldSendInitialEvent = false;
   }
   
   return true;
@@ -57,12 +66,7 @@
 }
 
 - (void)sendInitialAnalyticsEvents {
-  NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-  
-  NSString* lastVersion = [defaults stringForKey:@"last_version"];
-  NSString* currentVersion = [VersionManager shared].userFacingVersion;
-  
-  if (![lastVersion isEqualToString:currentVersion]) {
+  if (_shouldSendInitialEvent) {
     NSString* appType;
 #ifdef NONJAILBROKEN
     appType = @"non-jailbroken";
@@ -74,7 +78,7 @@
     
     [FIRAnalytics logEventWithName:@"version_start" parameters:@{
       @"type" : appType,
-      @"version" : currentVersion
+      @"version" : [VersionManager shared].userFacingVersion
     }];
   }
 }
