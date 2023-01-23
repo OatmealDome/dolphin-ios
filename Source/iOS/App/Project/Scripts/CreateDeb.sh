@@ -25,6 +25,8 @@ export COPY_EXTENDED_ATTRIBUTES_DISABLE
 
 cp -R "$APP_BUNDLE_PATH" "$BASE_DIR/Applications"
 
+# Sign in two steps: frameworks, and then the main executable
+codesign -f -s "$SIGNING_CERTIFICATE" "$BASE_DIR/Applications/DolphiniOS.app/Frameworks/"*
 codesign -f -s "$SIGNING_CERTIFICATE" --entitlements "$ENTITLEMENTS_PATH" "$BASE_DIR/Applications/DolphiniOS.app"
 
 mkdir "$BASE_DIR/DEBIAN"
