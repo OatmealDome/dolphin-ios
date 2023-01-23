@@ -23,6 +23,8 @@
   UIView* _mainDisplayView;
 }
 
+@synthesize userRequestedPause = _userRequestedPause;
+
 + (EmulationCoordinator*)shared {
   static EmulationCoordinator* sharedInstance = nil;
   static dispatch_once_t onceToken;
@@ -119,6 +121,20 @@
   [[NSNotificationCenter defaultCenter] postNotificationName:DOLEmulationDidEndNotification object:self userInfo:nil];
   
   _mainDisplayView = nil;
+}
+
+- (bool)userRequestedPause {
+  return _userRequestedPause;
+}
+
+- (void)setUserRequestedPause:(bool)userRequestedPause {
+  if (userRequestedPause == _userRequestedPause) {
+    return;
+  }
+  
+  Core::SetState(userRequestedPause ? Core::State::Paused : Core::State::Running);
+  
+  _userRequestedPause = userRequestedPause;
 }
 
 - (void)receiveDispatchJobNotification {

@@ -158,7 +158,7 @@
 }
 
 - (void)pausePressed {
-  Core::SetState(Core::State::Paused);
+  [EmulationCoordinator shared].userRequestedPause = true;
   
   self.navigationItem.rightBarButtonItems = @[
     self.stopButton,
@@ -167,7 +167,7 @@
 }
 
 - (void)playPressed {
-  Core::SetState(Core::State::Running);
+  [EmulationCoordinator shared].userRequestedPause = false;
   
   self.navigationItem.rightBarButtonItems = @[
     self.stopButton,
