@@ -3,12 +3,19 @@
 
 #import "EmulationViewController.h"
 
+#import <FirebaseAnalytics/FirebaseAnalytics.h>
+
+#import <GameController/GameController.h>
+
+#import "Core/ConfigManager.h"
 #import "Core/Config/MainSettings.h"
 #import "Core/Core.h"
 #import "Core/Host.h"
 
 #import "EmulationBootParameter.h"
 #import "EmulationCoordinator.h"
+#import "FoundationStringUtil.h"
+#import "HostNotifications.h"
 #import "LocalizationUtil.h"
 #import "JitManager.h"
 #import "NKitWarningViewController.h"
@@ -46,6 +53,7 @@
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
   
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTitleChangedNotification) name:DOLHostTitleChangedNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveEmulationEndNotification) name:DOLEmulationDidEndNotification object:nil];
 }
 
@@ -72,6 +80,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
   [super viewDidDisappear:animated];
   
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLHostTitleChangedNotification object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLEmulationDidEndNotification object:nil];
 }
 
@@ -173,6 +182,43 @@
     self.stopButton,
     self.pauseButton
   ];
+}
+
+- (void)receiveTitleChangedNotification {
+  if (Config::Get(Config::MAIN_ANALYTICS_ENABLED)) {
+    NSMutableArray<NSString*>* controllerList = [[NSMutableArray alloc] init];
+    
+    for (GCController* controller in [GCController controllers]) {
+      NSString* controllerType = @"Unknown";
+      
+      if (controller.extendedGamepad != nil) {
+        controllerType = @"Extended";
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+      } else if (controller.gamepad != nil) {
+#pragma clang diagnostic pop
+        controllerType = @"Normal";
+      } else if (controller.microGamepad != nil) {
+        controllerType = @"Micro";
+      } else {
+        controllerType = @"Unknown";
+      }
+      
+      [controllerList addObject:[NSString stringWithFormat:@"%@ (%@)", [controller vendorName], controllerType]];
+    }
+    
+    NSString* title = CppToFoundationString(SConfig::GetInstance().GetTitleDescription());
+    
+    if ([title isEqualToString:@""]) {
+      title = @"Unknown";
+    }
+    
+    [FIRAnalytics logEventWithName:@"game_start" parameters:@{
+      @"game_uid" : title,
+      @"is_returning" : @"false", // TODO
+      @"connected_controllers" : [controllerList count] != 0 ? [controllerList componentsJoinedByString:@", "] : @"none"
+    }];
+  }
 }
 
 - (void)receiveEmulationEndNotification {
