@@ -40,6 +40,7 @@
 struct Group {
   std::string name;
   ControllerEmu::ControlGroup* controlGroup;
+  bool isExtensionsGroup = false;
 };
 
 struct Section {
@@ -106,7 +107,7 @@ struct Section {
         {"Buttons", Wiimote::GetWiimoteGroup(self.mappingPort, WiimoteEmu::WiimoteGroup::Buttons)},
         {"D-Pad", Wiimote::GetWiimoteGroup(self.mappingPort, WiimoteEmu::WiimoteGroup::DPad)},
         {"Hotkeys", Wiimote::GetWiimoteGroup(self.mappingPort, WiimoteEmu::WiimoteGroup::Hotkeys)},
-        {"Extension", extension_group},
+        {"Extension", extension_group, true},
         {"Rumble", Wiimote::GetWiimoteGroup(self.mappingPort, WiimoteEmu::WiimoteGroup::Rumble)},
         {"Options", Wiimote::GetWiimoteGroup(self.mappingPort, WiimoteEmu::WiimoteGroup::Options)}
       }});
@@ -286,8 +287,9 @@ struct Section {
   
   const auto& group = _sections[actualSection].groups[indexPath.row];
   
-  auto attachments = dynamic_cast<ControllerEmu::Attachments*>(group.controlGroup);
-  if (attachments) {
+  if (group.isExtensionsGroup) {
+    auto attachments = static_cast<ControllerEmu::Attachments*>(group.controlGroup);
+    
     MappingRootExtensionCell* extensionCell = [tableView dequeueReusableCellWithIdentifier:@"ExtensionSelectCell" forIndexPath:indexPath];
     extensionCell.extensionLabel.text = [MappingUtil getLocalizedStringForWiimoteExtension:static_cast<WiimoteEmu::ExtensionNumber>(attachments->GetSelectedAttachment())];
     
