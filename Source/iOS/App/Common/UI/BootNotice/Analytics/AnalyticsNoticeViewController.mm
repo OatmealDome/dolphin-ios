@@ -26,6 +26,8 @@
   [[FIRCrashlytics crashlytics] setCrashlyticsCollectionEnabled:response];
   
   [self.navigationController popViewControllerAnimated:true];
+  
+  [self.delegate didFinishAnalyticsNoticeWithResult:response sender:self];
 }
 
 - (IBAction)optInPressed:(id)sender {

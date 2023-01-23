@@ -99,6 +99,7 @@
 		B97492492960F64300794509 /* DefaultPreferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = B97492482960F64300794509 /* DefaultPreferences.plist */; };
 		B97C49AF297E6CFF00E30877 /* AboutSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B97C49AE297E6CFF00E30877 /* AboutSettings.storyboard */; };
 		B97C49B2297E717D00E30877 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B97C49B1297E717C00E30877 /* AboutViewController.m */; };
+		B97C49B4297E7DB600E30877 /* AnalyticsNoticeViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97C49B3297E7DB600E30877 /* AnalyticsNoticeViewControllerDelegate.swift */; };
 		B97E4B492964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B97E4B482964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		B97E4B4B2964CBA100B3EE9C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = B97E4B4A2964CBA100B3EE9C /* FirebaseCrashlytics */; };
 		B97E4B532965011C00B3EE9C /* FirebaseService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B97E4B522965011C00B3EE9C /* FirebaseService.mm */; };
@@ -363,6 +364,7 @@
 		B97C49AE297E6CFF00E30877 /* AboutSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AboutSettings.storyboard; sourceTree = "<group>"; };
 		B97C49B0297E717C00E30877 /* AboutViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		B97C49B1297E717C00E30877 /* AboutViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
+		B97C49B3297E7DB600E30877 /* AnalyticsNoticeViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsNoticeViewControllerDelegate.swift; sourceTree = "<group>"; };
 		B97E4B512965011C00B3EE9C /* FirebaseService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirebaseService.h; sourceTree = "<group>"; };
 		B97E4B522965011C00B3EE9C /* FirebaseService.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseService.mm; sourceTree = "<group>"; };
 		B97E4B5529656EC300B3EE9C /* VersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionManager.swift; sourceTree = "<group>"; };
@@ -1166,6 +1168,7 @@
 			children = (
 				B97E4B5F2965FA1B00B3EE9C /* AnalyticsNoticeViewController.h */,
 				B97E4B602965FA1B00B3EE9C /* AnalyticsNoticeViewController.mm */,
+				B97C49B3297E7DB600E30877 /* AnalyticsNoticeViewControllerDelegate.swift */,
 			);
 			path = Analytics;
 			sourceTree = "<group>";
@@ -1736,6 +1739,7 @@
 				B904ACCB28854782008B6BE9 /* GraphicsEnhancementsViewController.mm in Sources */,
 				B9B2C61A288D3A7F00CB6569 /* EmulationiOSViewController.mm in Sources */,
 				B904AD082887DAEE008B6BE9 /* ControllersTypeCell.m in Sources */,
+				B97C49B4297E7DB600E30877 /* AnalyticsNoticeViewControllerDelegate.swift in Sources */,
 				B991378B288149F100588446 /* WiiSoundViewController.mm in Sources */,
 				B950CFBF29620C8900197719 /* UpdateCheckService.swift in Sources */,
 				B904AD322888FF17008B6BE9 /* MappingGroupEditViewController.mm in Sources */,

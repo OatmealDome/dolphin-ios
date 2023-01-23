@@ -3,9 +3,13 @@
 
 #import <UIKit/UIKit.h>
 
+#import "Swift.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AnalyticsNoticeViewController : UIViewController
+
+@property (weak, nonatomic, nullable) id<AnalyticsNoticeViewControllerDelegate> delegate;
 
 @end
 
