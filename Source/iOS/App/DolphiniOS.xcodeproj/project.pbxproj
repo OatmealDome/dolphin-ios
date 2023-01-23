@@ -53,7 +53,7 @@
 		B904AD3B288904AC008B6BE9 /* MappingGroupEditBoolCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3A288904AC008B6BE9 /* MappingGroupEditBoolCell.m */; };
 		B904AD3E288904D9008B6BE9 /* MappingGroupEditDoubleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B904AD3D288904D9008B6BE9 /* MappingGroupEditDoubleCell.m */; };
 		B9114F972893C5E600B9C57A /* DebugSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9114F962893C5E600B9C57A /* DebugSettings.storyboard */; };
-		B9114F9C2893C6CA00B9C57A /* DebugRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9114F9B2893C6CA00B9C57A /* DebugRootViewController.m */; };
+		B9114F9C2893C6CA00B9C57A /* DebugRootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9114F9B2893C6CA00B9C57A /* DebugRootViewController.mm */; };
 		B9114FA02893C71E00B9C57A /* VirtualMFiControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9114F9F2893C71E00B9C57A /* VirtualMFiControllerManager.m */; };
 		B9114FA52894E0C800B9C57A /* NKitWarning.xib in Resources */ = {isa = PBXBuildFile; fileRef = B9114FA42894E0C700B9C57A /* NKitWarning.xib */; };
 		B933EDBE27F6A7BF004D7DD7 /* GameFileCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B933EDBD27F6A7BF004D7DD7 /* GameFileCacheService.swift */; };
@@ -273,7 +273,7 @@
 		B904AD43288B5426008B6BE9 /* MappingExtensionViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingExtensionViewControllerDelegate.h; sourceTree = "<group>"; };
 		B9114F962893C5E600B9C57A /* DebugSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DebugSettings.storyboard; sourceTree = "<group>"; };
 		B9114F9A2893C6CA00B9C57A /* DebugRootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DebugRootViewController.h; sourceTree = "<group>"; };
-		B9114F9B2893C6CA00B9C57A /* DebugRootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DebugRootViewController.m; sourceTree = "<group>"; };
+		B9114F9B2893C6CA00B9C57A /* DebugRootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DebugRootViewController.mm; sourceTree = "<group>"; };
 		B9114F9E2893C71E00B9C57A /* VirtualMFiControllerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VirtualMFiControllerManager.h; sourceTree = "<group>"; };
 		B9114F9F2893C71E00B9C57A /* VirtualMFiControllerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VirtualMFiControllerManager.m; sourceTree = "<group>"; };
 		B9114FA12893D10B00B9C57A /* MappingDeviceViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingDeviceViewControllerDelegate.h; sourceTree = "<group>"; };
@@ -786,7 +786,7 @@
 			isa = PBXGroup;
 			children = (
 				B9114F9A2893C6CA00B9C57A /* DebugRootViewController.h */,
-				B9114F9B2893C6CA00B9C57A /* DebugRootViewController.m */,
+				B9114F9B2893C6CA00B9C57A /* DebugRootViewController.mm */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -1725,7 +1725,7 @@
 				B9FCB7D8289841730020E233 /* MsgAlertManager.mm in Sources */,
 				B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */,
 				B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */,
-				B9114F9C2893C6CA00B9C57A /* DebugRootViewController.m in Sources */,
+				B9114F9C2893C6CA00B9C57A /* DebugRootViewController.mm in Sources */,
 				B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */,
 				B9FCB7B9289670830020E233 /* JitManager.m in Sources */,
 				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
