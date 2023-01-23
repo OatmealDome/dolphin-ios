@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
   
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTitleChangedNotification) name:DOLHostTitleChangedNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTitleChangedNotificationiOS) name:DOLHostTitleChangedNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveEmulationEndNotificationiOS) name:DOLEmulationDidEndNotification object:nil];
 }
 
@@ -168,7 +168,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   return true;
 }
 
-- (void)receiveTitleChangedNotification {
+- (void)receiveTitleChangedNotificationiOS {
   dispatch_async(dispatch_get_main_queue(), ^{
     if (SConfig::GetInstance().bWii) {
       [self updateVisibleTouchPadToWii];
