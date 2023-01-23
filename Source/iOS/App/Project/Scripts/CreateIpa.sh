@@ -16,6 +16,8 @@ mkdir "$BASE_DIR/Payload"
 
 cp -R "$APP_BUNDLE_PATH" "$BASE_DIR/Payload/"
 
+# Sign in two steps: frameworks, and then the main executable
+codesign -f -s "$SIGNING_CERTIFICATE" "$BASE_DIR/Payload/DolphiniOS.app/Frameworks/"*
 codesign -f -s "$SIGNING_CERTIFICATE" --entitlements "$ENTITLEMENTS_PATH" "$BASE_DIR/Payload/DolphiniOS.app"
 
 cd "$BASE_DIR"
