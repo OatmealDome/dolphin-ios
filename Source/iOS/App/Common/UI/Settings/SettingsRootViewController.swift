@@ -22,4 +22,6 @@ class SettingsRootViewController : UITableViewController {
       UIApplication.shared.open(URL(string: "https://oatmealdome.me/dolphinios/")!)
     }
   }
+  
+  @IBAction func unwindToSettings( _ seg: UIStoryboardSegue) {}
 }

@@ -97,6 +97,8 @@
 		B974924429603A8A00794509 /* LegacyInputConfigMigrationService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B974924329603A8A00794509 /* LegacyInputConfigMigrationService.mm */; };
 		B97492472960CD2B00794509 /* FirstRunInitializationService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B97492462960CD2B00794509 /* FirstRunInitializationService.mm */; };
 		B97492492960F64300794509 /* DefaultPreferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = B97492482960F64300794509 /* DefaultPreferences.plist */; };
+		B97C49AF297E6CFF00E30877 /* AboutSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B97C49AE297E6CFF00E30877 /* AboutSettings.storyboard */; };
+		B97C49B2297E717D00E30877 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B97C49B1297E717C00E30877 /* AboutViewController.m */; };
 		B97E4B492964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B97E4B482964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		B97E4B4B2964CBA100B3EE9C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = B97E4B4A2964CBA100B3EE9C /* FirebaseCrashlytics */; };
 		B97E4B532965011C00B3EE9C /* FirebaseService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B97E4B522965011C00B3EE9C /* FirebaseService.mm */; };
@@ -358,6 +360,9 @@
 		B97492452960CD2B00794509 /* FirstRunInitializationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstRunInitializationService.h; sourceTree = "<group>"; };
 		B97492462960CD2B00794509 /* FirstRunInitializationService.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FirstRunInitializationService.mm; sourceTree = "<group>"; };
 		B97492482960F64300794509 /* DefaultPreferences.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultPreferences.plist; sourceTree = "<group>"; };
+		B97C49AE297E6CFF00E30877 /* AboutSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AboutSettings.storyboard; sourceTree = "<group>"; };
+		B97C49B0297E717C00E30877 /* AboutViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		B97C49B1297E717C00E30877 /* AboutViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		B97E4B512965011C00B3EE9C /* FirebaseService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirebaseService.h; sourceTree = "<group>"; };
 		B97E4B522965011C00B3EE9C /* FirebaseService.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseService.mm; sourceTree = "<group>"; };
 		B97E4B5529656EC300B3EE9C /* VersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionManager.swift; sourceTree = "<group>"; };
@@ -826,6 +831,7 @@
 		B938835B287EBA5500910606 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				B97C49AD297E6CED00E30877 /* About */,
 				B93986FD287F8F0F008E8E47 /* Config */,
 				B904ACE5288666D3008B6BE9 /* Controllers */,
 				B9114F952893C5D600B9C57A /* Debug */,
@@ -839,6 +845,7 @@
 		B93986F9287F4592008E8E47 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				B97C49AC297E6CE400E30877 /* About */,
 				B9398700287F98E7008E8E47 /* Config */,
 				B904ACE628866E12008B6BE9 /* Controllers */,
 				B9114F982893C69E00B9C57A /* Debug */,
@@ -1118,6 +1125,23 @@
 			children = (
 			);
 			path = Mapping;
+			sourceTree = "<group>";
+		};
+		B97C49AC297E6CE400E30877 /* About */ = {
+			isa = PBXGroup;
+			children = (
+				B97C49B0297E717C00E30877 /* AboutViewController.h */,
+				B97C49B1297E717C00E30877 /* AboutViewController.m */,
+			);
+			path = About;
+			sourceTree = "<group>";
+		};
+		B97C49AD297E6CED00E30877 /* About */ = {
+			isa = PBXGroup;
+			children = (
+				B97C49AE297E6CFF00E30877 /* AboutSettings.storyboard */,
+			);
+			path = About;
 			sourceTree = "<group>";
 		};
 		B97E4B5429656E8600B3EE9C /* Version */ = {
@@ -1551,6 +1575,7 @@
 				B97E4B5A29657BCB00B3EE9C /* GoogleService-Info.plist in Resources */,
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
+				B97C49AF297E6CFF00E30877 /* AboutSettings.storyboard in Resources */,
 				B950CFC629621AFC00197719 /* WiiSystemUpdate.storyboard in Resources */,
 				B9DC3E0627EFBD2F0084DAA4 /* Assets.xcassets in Resources */,
 				B97492492960F64300794509 /* DefaultPreferences.plist in Resources */,
@@ -1743,6 +1768,7 @@
 				B950CFC92962562200197719 /* main.m in Sources */,
 				B9FCB7D42897C7D80020E233 /* NKitWarningViewControllerDelegate.swift in Sources */,
 				B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */,
+				B97C49B2297E717D00E30877 /* AboutViewController.m in Sources */,
 				B939872E2880896D008E8E47 /* ConfigGameCubeViewController.mm in Sources */,
 				B9D93897283ECE1100B290FC /* DOLUIKitSwitch.m in Sources */,
 				B904ACD92885E7DE008B6BE9 /* GraphicsHacksViewController.mm in Sources */,

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Xvi-QC-HZ6">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--About Dolphin-->
+        <scene sceneID="eJk-aO-Mcv">
+            <objects>
+                <viewController title="About Dolphin" modalPresentationStyle="formSheet" id="jWY-Tc-15b" customClass="AboutViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FfF-Vm-sL4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4YA-k4-zMM">
+                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="8bV-Pm-SfV">
+                                        <rect key="frame" x="20" y="0.0" width="335" height="538"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LmY-Kn-4LZ">
+                                                <rect key="frame" x="0.0" y="0.0" width="335" height="0.0"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" id="Ie1-rX-mGK"/>
+                                                </constraints>
+                                            </view>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" image="DolphinLogo" translatesAutoresizingMaskIntoConstraints="NO" id="BZx-el-fSq" userLabel="Logo">
+                                                <rect key="frame" x="0.0" y="25.5" width="335" height="48"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="128" id="d8R-IJ-300"/>
+                                                </constraints>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DolphiniOS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tic-qF-vKG">
+                                                <rect key="frame" x="0.0" y="98.5" width="335" height="33.5"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
+                                                <color key="textColor" systemColor="systemBlueColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dxR-ZO-FZU" userLabel="Copyright One">
+                                                <rect key="frame" x="0.0" y="157.5" width="335" height="41"/>
+                                                <string key="text">© 2003-2015+ Dolphin Team. 
+© 2019-2023+ DolphiniOS Project.</string>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JaN-3a-Tvq" userLabel="Copyright Three">
+                                                <rect key="frame" x="0.0" y="223.5" width="335" height="81.5"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <string key="text">DolphiniOS is an unofficial and separately maintained port of Dolphin to iOS. The DolphiniOS Project has no relation to Dolphin Team.</string>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="“GameCube” and “Wii” are trademarks of Nintendo. DolphiniOS is not affiliated with Nintendo in any way." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8w5-VR-H8a" userLabel="Piracy Notice">
+                                                <rect key="frame" x="0.0" y="330.5" width="335" height="61"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This software should not be used to play games you do not legally own." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UOw-we-WEE" userLabel="Piracy Notice">
+                                                <rect key="frame" x="0.0" y="416.5" width="335" height="41"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FwA-Fg-pzu">
+                                                <rect key="frame" x="0.0" y="483" width="335" height="30"/>
+                                                <state key="normal" title="Source Code"/>
+                                                <connections>
+                                                    <action selector="sourceCodePressed:" destination="jWY-Tc-15b" eventType="touchUpInside" id="Usw-dr-pgF"/>
+                                                </connections>
+                                            </button>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zla-wR-sFe">
+                                                <rect key="frame" x="0.0" y="538" width="335" height="0.0"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" id="uv2-CA-OJB"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="8bV-Pm-SfV" firstAttribute="width" secondItem="4YA-k4-zMM" secondAttribute="width" constant="-40" id="0Xm-rI-0Ae"/>
+                                    <constraint firstItem="8bV-Pm-SfV" firstAttribute="top" secondItem="JJg-Ib-pCu" secondAttribute="top" id="7Wp-Ue-IJC"/>
+                                    <constraint firstItem="8bV-Pm-SfV" firstAttribute="leading" secondItem="JJg-Ib-pCu" secondAttribute="leading" constant="20" id="UPk-9e-D2e"/>
+                                    <constraint firstItem="8bV-Pm-SfV" firstAttribute="bottom" secondItem="JJg-Ib-pCu" secondAttribute="bottom" id="VbJ-gv-o9Y"/>
+                                    <constraint firstItem="8bV-Pm-SfV" firstAttribute="trailing" secondItem="JJg-Ib-pCu" secondAttribute="trailing" constant="20" id="XyU-Xb-D3D"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="JJg-Ib-pCu"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="MNU-kC-A1V"/>
+                            </scrollView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="1NQ-EU-bMe"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="1NQ-EU-bMe" firstAttribute="trailing" secondItem="4YA-k4-zMM" secondAttribute="trailing" id="6qZ-YN-gzf"/>
+                            <constraint firstItem="4YA-k4-zMM" firstAttribute="leading" secondItem="1NQ-EU-bMe" secondAttribute="leading" id="B6E-fA-vX4"/>
+                            <constraint firstItem="4YA-k4-zMM" firstAttribute="bottom" secondItem="1NQ-EU-bMe" secondAttribute="bottom" id="MDC-IJ-oVv"/>
+                            <constraint firstItem="4YA-k4-zMM" firstAttribute="top" secondItem="1NQ-EU-bMe" secondAttribute="top" id="bLl-TP-l1Q"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="About Dolphin" id="L8Z-ZE-fDO">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="Kh6-kL-ZYJ">
+                            <connections>
+                                <segue destination="nq2-RG-WiU" kind="unwind" unwindAction="unwindToSettings:" id="o3y-Xa-Bat"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="scrollView" destination="4YA-k4-zMM" id="Hwl-OV-yWe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9aL-km-c80" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="nq2-RG-WiU" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="4398" y="417"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="lkW-4Z-uLK">
+            <objects>
+                <navigationController modalPresentationStyle="formSheet" id="Xvi-QC-HZ6" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ZIg-C7-Ky9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="jWY-Tc-15b" kind="relationship" relationship="rootViewController" id="GgJ-eu-P4K"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8ex-6z-LC3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3423" y="417"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="DolphinLogo" width="48" height="48"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
