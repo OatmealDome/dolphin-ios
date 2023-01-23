@@ -164,6 +164,10 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   [[TCDeviceMotion shared] statusBarOrientationChanged];
 }
 
+- (BOOL)prefersHomeIndicatorAutoHidden {
+  return true;
+}
+
 - (void)receiveTitleChangedNotification {
   dispatch_async(dispatch_get_main_queue(), ^{
     if (SConfig::GetInstance().bWii) {
