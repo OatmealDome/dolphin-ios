@@ -43,8 +43,8 @@
 /* Class = "UILabel"; text = "Force 4:3"; ObjectID = "Ap2-15-1wO"; */
 "Ap2-15-1wO.text" = "Force 4:3";
 
-/* Class = "UILabel"; text = "1x"; ObjectID = "Bgx-Al-0ab"; */
-"Bgx-Al-0ab.text" = "1x";
+/* Class = "UILabel"; text = "Default"; ObjectID = "Bgx-Al-0ab"; */
+"Bgx-Al-0ab.text" = "Default";
 
 /* Class = "UINavigationItem"; title = "Advanced"; ObjectID = "Cki-dS-34J"; */
 "Cki-dS-34J.title" = "Advanced";
@@ -88,8 +88,8 @@
 /* Class = "UILabel"; text = "Skip Drawing"; ObjectID = "KKg-DO-e4A"; */
 "KKg-DO-e4A.text" = "Skip Drawing";
 
-/* Class = "UINavigationItem"; title = "Anisotropic Filtering"; ObjectID = "Lbv-ea-nxa"; */
-"Lbv-ea-nxa.title" = "Anisotropic Filtering";
+/* Class = "UINavigationItem"; title = "Texture Filtering"; ObjectID = "Lbv-ea-nxa"; */
+"Lbv-ea-nxa.title" = "Texture Filtering";
 
 /* Class = "UILabel"; text = "Backend"; ObjectID = "MER-bC-y11"; */
 "MER-bC-y11.text" = "Backend";
@@ -124,11 +124,11 @@
 /* Class = "UINavigationItem"; title = "General"; ObjectID = "VoE-VE-9iq"; */
 "VoE-VE-9iq.title" = "General";
 
-/* Class = "UILabel"; text = "Anisotropic Filtering"; ObjectID = "WGd-4C-CHI"; */
-"WGd-4C-CHI.text" = "Anisotropic Filtering";
+/* Class = "UILabel"; text = "Texture Filtering"; ObjectID = "WGd-4C-CHI"; */
+"WGd-4C-CHI.text" = "Texture Filtering";
 
-/* Class = "UILabel"; text = "4x"; ObjectID = "WQo-G8-DJS"; */
-"WQo-G8-DJS.text" = "4x";
+/* Class = "UILabel"; text = "4x Anisotropic"; ObjectID = "WQo-G8-DJS"; */
+"WQo-G8-DJS.text" = "4x Anisotropic";
 
 /* Class = "UITableViewSection"; headerTitle = "Basic"; ObjectID = "Xcx-Mj-LD4"; */
 "Xcx-Mj-LD4.headerTitle" = "Basic";
@@ -138,9 +138,6 @@
 
 /* Class = "UILabel"; text = "Disable EFB VRAM Copies"; ObjectID = "YsL-hE-fLj"; */
 "YsL-hE-fLj.text" = "Disable EFB VRAM Copies";
-
-/* Class = "UILabel"; text = "Force Texture Filtering"; ObjectID = "b7H-No-W1u"; */
-"b7H-No-W1u.text" = "Force Texture Filtering";
 
 /* Class = "UILabel"; text = "Prefetch Custom Textures"; ObjectID = "c56-Cq-b6x"; */
 "c56-Cq-b6x.text" = "Prefetch Custom Textures";
@@ -175,8 +172,8 @@
 /* Class = "UILabel"; text = "Disable Fog"; ObjectID = "ftR-u6-tGZ"; */
 "ftR-u6-tGZ.text" = "Disable Fog";
 
-/* Class = "UILabel"; text = "16x"; ObjectID = "g26-bM-bcr"; */
-"g26-bM-bcr.text" = "16x";
+/* Class = "UILabel"; text = "16x Anisotropic"; ObjectID = "g26-bM-bcr"; */
+"g26-bM-bcr.text" = "16x Anisotropic";
 
 /* Class = "UILabel"; text = "Backend Multithreading"; ObjectID = "gP6-K5-P4M"; */
 "gP6-K5-P4M.text" = "Backend Multithreading";
@@ -205,8 +202,8 @@
 /* Class = "UINavigationItem"; title = "Aspect Ratio"; ObjectID = "l4u-GK-Pma"; */
 "l4u-GK-Pma.title" = "Aspect Ratio";
 
-/* Class = "UILabel"; text = "8x"; ObjectID = "njX-sh-ZHU"; */
-"njX-sh-ZHU.text" = "8x";
+/* Class = "UILabel"; text = "8x Anisotropic"; ObjectID = "njX-sh-ZHU"; */
+"njX-sh-ZHU.text" = "8x Anisotropic";
 
 /* Class = "UILabel"; text = "Vertex Rounding"; ObjectID = "oGF-Ui-ZvM"; */
 "oGF-Ui-ZvM.text" = "Vertex Rounding";
@@ -241,8 +238,8 @@
 /* Class = "UILabel"; text = "Manual Texture Sampling"; ObjectID = "ulu-2y-LaL"; */
 "ulu-2y-LaL.text" = "Manual Texture Sampling";
 
-/* Class = "UILabel"; text = "2x"; ObjectID = "une-Zp-EzM"; */
-"une-Zp-EzM.text" = "2x";
+/* Class = "UILabel"; text = "2x Anisotropic"; ObjectID = "une-Zp-EzM"; */
+"une-Zp-EzM.text" = "2x Anisotropic";
 
 /* Class = "UILabel"; text = "Aspect Ratio"; ObjectID = "vdK-23-Asj"; */
 "vdK-23-Asj.text" = "Aspect Ratio";
@@ -264,3 +261,21 @@
 
 /* Class = "UILabel"; text = "VI Skip"; ObjectID = "hup-by-p7x"; */
 "hup-by-p7x.text" = "VI Skip";
+
+/* Class = "UILabel"; text = "Force Linear and 8x Anisotropic"; ObjectID = "2G3-K2-Hl0"; */
+"2G3-K2-Hl0.text" = "Force Linear and 8x Anisotropic";
+
+/* Class = "UILabel"; text = "Force Linear"; ObjectID = "FlS-dn-3Ph"; */
+"FlS-dn-3Ph.text" = "Force Linear";
+
+/* Class = "UILabel"; text = "Force Linear and 16x Anisotropic"; ObjectID = "a2q-0S-sXo"; */
+"a2q-0S-sXo.text" = "Force Linear and 16x Anisotropic";
+
+/* Class = "UILabel"; text = "Force Linear and 4x Anisotropic"; ObjectID = "c0d-qJ-j7B"; */
+"c0d-qJ-j7B.text" = "Force Linear and 4x Anisotropic";
+
+/* Class = "UILabel"; text = "Force Linear and 2x Anisotropic"; ObjectID = "rfI-Ge-etd"; */
+"rfI-Ge-etd.text" = "Force Linear and 2x Anisotropic";
+
+/* Class = "UILabel"; text = "Force Nearest"; ObjectID = "xxt-8W-yZ6"; */
+"xxt-8W-yZ6.text" = "Force Nearest";

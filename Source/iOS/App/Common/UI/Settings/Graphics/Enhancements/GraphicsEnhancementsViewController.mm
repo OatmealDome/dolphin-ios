@@ -5,6 +5,8 @@
 
 #import "Core/Config/GraphicsSettings.h"
 
+#import "VideoCommon/VideoConfig.h"
+
 #import "LocalizationUtil.h"
 
 @interface GraphicsEnhancementsViewController ()
@@ -19,7 +21,6 @@
   [self.resolutionCell registerSetting:Config::GFX_EFB_SCALE];
   [self.filteringCell registerSetting:Config::GFX_ENHANCE_MAX_ANISOTROPY];
   [self.scaledEfbCell registerSetting:Config::GFX_HACK_COPY_EFB_SCALED];
-  // [self.textureFilteringCell registerSetting:Config::GFX_ENHANCE_FORCE_FILTERING];
   [self.fogCell registerSetting:Config::GFX_DISABLE_FOG];
   [self.filterCell registerSetting:Config::GFX_ENHANCE_DISABLE_COPY_FILTER];
   [self.lightingCell registerSetting:Config::GFX_ENABLE_PIXEL_LIGHTING];
@@ -39,26 +40,44 @@
     self.resolutionCell.choiceSettingLabel.text = DOLCoreLocalizedString(@"Auto");
   }
   
-  NSString* filtering;
-  switch (Config::Get(Config::GFX_ENHANCE_MAX_ANISOTROPY)) {
+  const int maxAnisotropy = Config::Get(Config::GFX_ENHANCE_MAX_ANISOTROPY);
+  const TextureFilteringMode filteringMode = Config::Get(Config::GFX_ENHANCE_FORCE_TEXTURE_FILTERING);
+  
+  NSString* filteringAnisotropy;
+  
+  switch (maxAnisotropy) {
     case 0:
-      filtering = @"1x";
+      filteringAnisotropy = @"Default";
       break;
     case 1:
-      filtering = @"2x";
+      filteringAnisotropy = @"2x Anisotropic";
       break;
     case 2:
-      filtering = @"4x";
+      filteringAnisotropy = @"4x Anisotropic";
       break;
     case 3:
-      filtering = @"8x";
-      break;;
+      filteringAnisotropy = @"8x Anisotropic";
+      break;
     case 4:
-      filtering = @"16x";
+      filteringAnisotropy = @"16x Anisotropic";
       break;
     default:
-      filtering = @"Error";
+      filteringAnisotropy = @"Error";
       break;
+  }
+  
+  NSString* filtering;
+  
+  if (filteringMode == TextureFilteringMode::Default) {
+    filtering = filteringAnisotropy;
+  } else if (filteringMode == TextureFilteringMode::Nearest) {
+    filtering = @"Force Nearest";
+  } else if (filteringMode == TextureFilteringMode::Linear) {
+    if (maxAnisotropy == 0) {
+      filtering = @"Force Linear";
+    } else {
+      filtering = [NSString stringWithFormat:@"Force Linear and %@", filteringAnisotropy];
+    }
   }
   
   self.filteringCell.choiceSettingLabel.text = DOLCoreLocalizedString(filtering);
