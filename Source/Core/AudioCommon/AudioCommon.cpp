@@ -121,7 +121,8 @@ std::vector<std::string> GetSoundBackends()
   std::vector<std::string> backends;
 
   backends.emplace_back(BACKEND_NULLSOUND);
-  backends.emplace_back(BACKEND_CUBEB);
+  if (CubebStream::IsValid())
+    backends.emplace_back(BACKEND_CUBEB);
   if (AlsaSound::IsValid())
     backends.emplace_back(BACKEND_ALSA);
   if (PulseAudio::IsValid())
