@@ -3,6 +3,8 @@
 
 #import "SoftwareListiOSViewController.h"
 
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+
 #import "Core/CommonTitles.h"
 #import "Core/IOS/ES/ES.h"
 #import "Core/IOS/IOS.h"
@@ -71,13 +73,13 @@
 }
 
 - (IBAction)addButtonPressed:(id)sender {
-  NSArray* types = @[
-    @"me.oatmealdome.dolphinios.generic-software",
-    @"me.oatmealdome.dolphinios.gamecube-software",
-    @"me.oatmealdome.dolphinios.wii-software"
+  NSArray<UTType*>* types = @[
+    [UTType exportedTypeWithIdentifier:@"me.oatmealdome.dolphinios.generic-software"],
+    [UTType exportedTypeWithIdentifier:@"me.oatmealdome.dolphinios.gamecube-software"],
+    [UTType exportedTypeWithIdentifier:@"me.oatmealdome.dolphinios.wii-software"]
   ];
   
-  UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:types inMode:UIDocumentPickerModeOpen];
+  UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:types];
   pickerController.delegate = self;
   pickerController.modalPresentationStyle = UIModalPresentationPageSheet;
   pickerController.allowsMultipleSelection = false;
