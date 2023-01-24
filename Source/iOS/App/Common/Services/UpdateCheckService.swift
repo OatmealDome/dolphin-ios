@@ -28,14 +28,14 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
       return true
     }
     
-    if (versionManager.buildSource != .official) {
-      return true
-    }
-    
     let session = URLSession(configuration: URLSessionConfiguration.ephemeral)
     let updateUrl = URL(string: "https://dolphinios.oatmealdome.me/api/v2/update.json")!
     
     session.dataTask(with: updateUrl) { (data, response, error) in
+      if (versionManager.buildSource != .official) {
+        return
+      }
+      
       guard let unwrappedData = data else {
         return
       }
