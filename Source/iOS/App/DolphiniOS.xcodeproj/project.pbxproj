@@ -100,6 +100,7 @@
 		B97C49AF297E6CFF00E30877 /* AboutSettings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B97C49AE297E6CFF00E30877 /* AboutSettings.storyboard */; };
 		B97C49B2297E717D00E30877 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B97C49B1297E717C00E30877 /* AboutViewController.m */; };
 		B97C49B4297E7DB600E30877 /* AnalyticsNoticeViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97C49B3297E7DB600E30877 /* AnalyticsNoticeViewControllerDelegate.swift */; };
+		B97C49B6297F8B0D00E30877 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B97C49B5297F8B0D00E30877 /* UniformTypeIdentifiers.framework */; };
 		B97E4B492964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = B97E4B482964CBA100B3EE9C /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		B97E4B4B2964CBA100B3EE9C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = B97E4B4A2964CBA100B3EE9C /* FirebaseCrashlytics */; };
 		B97E4B532965011C00B3EE9C /* FirebaseService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B97E4B522965011C00B3EE9C /* FirebaseService.mm */; };
@@ -365,6 +366,7 @@
 		B97C49B0297E717C00E30877 /* AboutViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		B97C49B1297E717C00E30877 /* AboutViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		B97C49B3297E7DB600E30877 /* AnalyticsNoticeViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsNoticeViewControllerDelegate.swift; sourceTree = "<group>"; };
+		B97C49B5297F8B0D00E30877 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
 		B97E4B512965011C00B3EE9C /* FirebaseService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirebaseService.h; sourceTree = "<group>"; };
 		B97E4B522965011C00B3EE9C /* FirebaseService.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FirebaseService.mm; sourceTree = "<group>"; };
 		B97E4B5529656EC300B3EE9C /* VersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionManager.swift; sourceTree = "<group>"; };
@@ -503,6 +505,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B97C49B6297F8B0D00E30877 /* UniformTypeIdentifiers.framework in Frameworks */,
 				B9FCB7DE28988E7E0020E233 /* AltKit in Frameworks */,
 				B9D9389E283EF7AD00B290FC /* MetalKit.framework in Frameworks */,
 				B9FCB7E62898FAC10020E233 /* GameController.framework in Frameworks */,
@@ -1325,6 +1328,7 @@
 		B9D9389C283EF7AD00B290FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B97C49B5297F8B0D00E30877 /* UniformTypeIdentifiers.framework */,
 				B9FCB7E52898FAC10020E233 /* GameController.framework */,
 				B9D9389D283EF7AD00B290FC /* MetalKit.framework */,
 			);
