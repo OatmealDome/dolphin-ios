@@ -146,6 +146,10 @@
 - (void)clearMetalLayer {
   id<CAMetalDrawable> drawable = [_metalLayer nextDrawable];
   
+  if (drawable == nil) {
+    return;
+  }
+  
   MTLRenderPassDescriptor* renderPass = [MTLRenderPassDescriptor renderPassDescriptor];
   renderPass.colorAttachments[0].texture = drawable.texture;
   renderPass.colorAttachments[0].loadAction = MTLLoadActionClear;
