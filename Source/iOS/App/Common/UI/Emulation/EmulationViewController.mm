@@ -146,6 +146,10 @@
   self.additionalSafeAreaInsets = insets;
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
 - (void)stopPressed {
   void (^stop)() = ^{
     Host_Message(HostMessageID::WMUserStop);
