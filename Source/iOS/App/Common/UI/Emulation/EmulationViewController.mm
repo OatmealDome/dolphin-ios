@@ -151,6 +151,16 @@
 }
 
 - (void)stopPressed {
+  if (!Core::IsRunningAndStarted()) {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Emulation Starting" message:@"Emulation is still starting. Please wait for emulation to start before requesting for it to stop." preferredStyle:UIAlertControllerStyleAlert];
+  
+    [alert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"OK") style:UIAlertActionStyleDefault handler:nil]];
+    
+    [self presentViewController:alert animated:true completion:nil];
+    
+    return;
+  }
+  
   void (^stop)() = ^{
     Host_Message(HostMessageID::WMUserStop);
   };
