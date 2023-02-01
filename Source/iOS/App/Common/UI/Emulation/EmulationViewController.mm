@@ -181,6 +181,10 @@
 }
 
 - (void)pausePressed {
+  if (!Core::IsRunningAndStarted()) {
+    return;
+  }
+  
   [EmulationCoordinator shared].userRequestedPause = true;
   
   self.navigationItem.rightBarButtonItems = @[
@@ -190,6 +194,10 @@
 }
 
 - (void)playPressed {
+  if (!Core::IsRunningAndStarted()) {
+    return;
+  }
+  
   [EmulationCoordinator shared].userRequestedPause = false;
   
   self.navigationItem.rightBarButtonItems = @[
