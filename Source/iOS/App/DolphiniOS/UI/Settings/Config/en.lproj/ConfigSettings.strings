@@ -360,3 +360,6 @@
 
 /* Class = "UITableViewSection"; headerTitle = "Wii Remote Settings"; ObjectID = "zwp-Y9-R4u"; */
 "zwp-Y9-R4u.headerTitle" = "Wii Remote Settings";
+
+/* Class = "UILabel"; text = "Emulate Skylander Portal"; ObjectID = "gVD-S1-don"; */
+"gVD-S1-don.text" = "Emulate Skylander Portal";

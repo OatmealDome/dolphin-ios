@@ -2,6 +2,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #import "EmulationiOSViewController.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+
+#include "Common/IOFile.h"
 
 #import "Core/ConfigManager.h"
 #import "Core/Config/MainSettings.h"
@@ -10,7 +13,9 @@
 #import "Core/HW/SI/SI_Device.h"
 #import "Core/HW/Wiimote.h"
 #import "Core/HW/WiimoteEmu/WiimoteEmu.h"
+#import "Core/IOS/USB/Emulated/Skylander.h"
 #import "Core/State.h"
+#import "Core/System.h"
 
 #import "InputCommon/InputConfig.h"
 
@@ -154,6 +159,47 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
       
         [self.navigationController setNavigationBarHidden:true animated:true];
       }]
+    ]],
+    [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Tools") image:nil identifier:nil options:UIMenuOptionsDisplayInline
+                 children:@[
+        [UIAction actionWithTitle:DOLCoreLocalizedString(@"Skylanders Portal") image:[UIImage systemImageNamed:@"externalDrive"] identifier:nil handler:^(UIAction*) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Skylanders Manager"
+                                       message:nil
+                                       preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* loadAction = [UIAlertAction actionWithTitle:@"Load" style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction * action) {
+            NSArray<UTType*>* types = @[
+                [UTType exportedTypeWithIdentifier:@"me.oatmealdome.dolphinios.skylander-dumps"]
+              ];
+            UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:types];
+            pickerController.delegate = self;
+            pickerController.modalPresentationStyle = UIModalPresentationPageSheet;
+            pickerController.allowsMultipleSelection = false;
+            
+            [self presentViewController:pickerController animated:true completion:nil];
+            
+        }];
+        UIAlertAction* clearAction = [UIAlertAction actionWithTitle:@"Clear" style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction * action) {
+            auto& system = Core::System::GetInstance();
+            bool removed = system.GetSkylanderPortal().RemoveSkylanderiOS(self.skylanderSlot);
+            if (removed && self.skylanderSlot != 0) {
+                self.skylanderSlot--;
+            }
+        }];
+        UIAlertAction* clearAllAction = [UIAlertAction actionWithTitle:@"Clear All" style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction * action) {
+            auto& system = Core::System::GetInstance();
+            for (int i = 0; i < 16; i++) {
+                system.GetSkylanderPortal().RemoveSkylanderiOS(i);
+            }
+            self.skylanderSlot = 0;
+        }];
+        [alert addAction:loadAction];
+        [alert addAction:clearAction];
+        [alert addAction:clearAllAction];
+        [self presentViewController:alert animated:YES completion:nil];
+    }]
     ]]
   ]];
 }
@@ -196,6 +242,10 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   }
   
   return true;
+}
+
+- (bool)emulateSkylanderPortal {
+  return Config::Get(Config::MAIN_EMULATE_SKYLANDER_PORTAL);
 }
 
 - (bool)isGameCubeTouchPadAttached {
@@ -293,6 +343,44 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   }
   
   [[TCDeviceMotion shared] setMotionEnabled:false];
+}
+
+- (void)documentPicker:(UIDocumentPickerViewController*)controller didPickDocumentsAtURLs:(NSArray<NSURL*>*)urls {
+    NSString* sourcePath = [urls[0] path];
+    std::string path = std::string([sourcePath UTF8String]);
+    File::IOFile sky_file(path, "r+b");
+    if (!sky_file)
+    {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Failed to Open Skylander File!"
+                                       message:nil
+                                       preferredStyle:UIAlertControllerStyleAlert];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    NSLog(@"Opened");
+    std::array<u8, 0x40 * 0x10> file_data;
+    if (!sky_file.ReadBytes(file_data.data(), file_data.size()))
+    {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Failed to Read Skylander File!"
+                                       message:nil
+                                       preferredStyle:UIAlertControllerStyleAlert];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    NSLog(@"Read");
+    auto& system = Core::System::GetInstance();
+    std::pair<u16, u16> id_var = system.GetSkylanderPortal().CalculateIDs(file_data);
+    u8 portal_slot = system.GetSkylanderPortal().LoadSkylanderiOS(file_data.data(), std::move(sky_file));
+    if (portal_slot == 0xFF)
+    {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Failed to Load Skylander File!"
+                                       message:nil
+                                       preferredStyle:UIAlertControllerStyleAlert];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    NSLog(@"Loaded");
+    self.skylanderSlot = portal_slot;
 }
 
 @end

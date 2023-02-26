@@ -26,6 +26,9 @@
   self.usbKeyboardSwitch.on = Config::Get(Config::MAIN_WII_KEYBOARD);
   [self.usbKeyboardSwitch addValueChangedTarget:self action:@selector(usbKeyboardChanged)];
   
+  self.skylanderPortalSwitch.on = Config::Get(Config::MAIN_EMULATE_SKYLANDER_PORTAL);
+  [self.skylanderPortalSwitch addValueChangedTarget:self action:@selector(skylanderPortalChanged)];
+  
   self.sdInsertedSwitch.on = Config::Get(Config::MAIN_WII_SD_CARD);
   [self.sdInsertedSwitch addValueChangedTarget:self action:@selector(sdInsertedChanged)];
   
@@ -132,6 +135,10 @@
 
 - (void)usbKeyboardChanged {
   Config::SetBaseOrCurrent(Config::MAIN_WII_KEYBOARD, self.usbKeyboardSwitch.on);
+}
+
+- (void)skylanderPortalChanged {
+  Config::SetBaseOrCurrent(Config::MAIN_EMULATE_SKYLANDER_PORTAL, self.skylanderPortalSwitch.on);
 }
 
 - (void)sdInsertedChanged {
