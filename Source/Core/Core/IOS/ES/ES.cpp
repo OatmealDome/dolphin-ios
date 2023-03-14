@@ -120,13 +120,13 @@ void ESDevice::InitializeEmulationState()
   auto& system = Core::System::GetInstance();
   auto& core_timing = system.GetCoreTiming();
   s_finish_init_event = core_timing.RegisterEvent(
-      "IOS-ESFinishInit", [](Core::System& system, u64, s64) { GetIOS()->GetES()->FinishInit(); });
+      "IOS-ESFinishInit", [](Core::System& system_, u64, s64) { GetIOS()->GetES()->FinishInit(); });
   s_reload_ios_for_ppc_launch_event = core_timing.RegisterEvent(
-      "IOS-ESReloadIOSForPPCLaunch", [](Core::System& system, u64 ios_id, s64) {
+      "IOS-ESReloadIOSForPPCLaunch", [](Core::System& system_, u64 ios_id, s64) {
         GetIOS()->GetES()->LaunchTitle(ios_id, HangPPC::Yes);
       });
   s_bootstrap_ppc_for_launch_event =
-      core_timing.RegisterEvent("IOS-ESBootstrapPPCForLaunch", [](Core::System& system, u64, s64) {
+      core_timing.RegisterEvent("IOS-ESBootstrapPPCForLaunch", [](Core::System& system_, u64, s64) {
         GetIOS()->GetES()->BootstrapPPC();
       });
 }
@@ -362,7 +362,8 @@ bool ESDevice::LaunchIOS(u64 ios_title_id, HangPPC hang_ppc)
     const ES::TicketReader ticket = FindSignedTicket(ios_title_id);
     ES::Content content;
     if (!tmd.IsValid() || !ticket.IsValid() || !tmd.GetContent(tmd.GetBootIndex(), &content) ||
-        !m_ios.BootIOS(ios_title_id, hang_ppc, GetContentPath(ios_title_id, content)))
+        !m_ios.BootIOS(Core::System::GetInstance(), ios_title_id, hang_ppc,
+                       GetContentPath(ios_title_id, content)))
     {
       PanicAlertFmtT("Could not launch IOS {0:016x} because it is missing from the NAND.\n"
                      "The emulated software will likely hang now.",
@@ -372,7 +373,7 @@ bool ESDevice::LaunchIOS(u64 ios_title_id, HangPPC hang_ppc)
     return true;
   }
 
-  return m_ios.BootIOS(ios_title_id, hang_ppc);
+  return m_ios.BootIOS(Core::System::GetInstance(), ios_title_id, hang_ppc);
 }
 
 s32 ESDevice::WriteLaunchFile(const ES::TMDReader& tmd, Ticks ticks)
@@ -471,7 +472,8 @@ bool ESDevice::LaunchPPCTitle(u64 title_id)
 
 bool ESDevice::BootstrapPPC()
 {
-  const bool result = m_ios.BootstrapPPC(m_pending_ppc_boot_content_path);
+  const bool result =
+      m_ios.BootstrapPPC(Core::System::GetInstance(), m_pending_ppc_boot_content_path);
   m_pending_ppc_boot_content_path = {};
   return result;
 }

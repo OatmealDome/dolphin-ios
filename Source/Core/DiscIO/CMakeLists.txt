@@ -36,6 +36,8 @@ add_library(discio
   RiivolutionPatcher.h
   ScrubbedBlob.cpp
   ScrubbedBlob.h
+  SplitFileBlob.cpp
+  SplitFileBlob.h
   TGCBlob.cpp
   TGCBlob.h
   Volume.cpp
@@ -68,8 +70,8 @@ target_link_libraries(discio
 PUBLIC
   core
   BZip2::BZip2
-  lzma
-  zstd
+  LibLZMA::LibLZMA
+  zstd::zstd
 
 PRIVATE
   fmt::fmt

@@ -24,6 +24,7 @@
 #include "Core/PowerPC/MMU.h"
 #include "Core/PowerPC/PPCSymbolDB.h"
 #include "Core/PowerPC/PowerPC.h"
+#include "Core/System.h"
 #include "DolphinQt/Host.h"
 #include "DolphinQt/Settings.h"
 
@@ -109,14 +110,14 @@ void CodeWidget::CreateWidgets()
 
   auto add_search_line_edit = [this](const QString& name, QListWidget* list_widget) {
     auto* widget = new QWidget;
-    auto* layout = new QGridLayout;
+    auto* line_layout = new QGridLayout;
     auto* label = new QLabel(name);
     auto* search_line_edit = new QLineEdit;
 
-    widget->setLayout(layout);
-    layout->addWidget(label, 0, 0);
-    layout->addWidget(search_line_edit, 0, 1);
-    layout->addWidget(list_widget, 1, 0, -1, -1);
+    widget->setLayout(line_layout);
+    line_layout->addWidget(label, 0, 0);
+    line_layout->addWidget(search_line_edit, 0, 1);
+    line_layout->addWidget(list_widget, 1, 0, -1, -1);
     m_box_splitter->addWidget(widget);
     return search_line_edit;
   };
@@ -321,14 +322,17 @@ void CodeWidget::Update()
 
 void CodeWidget::UpdateCallstack()
 {
-  if (Core::GetState() == Core::State::Starting)
-    return;
-
   m_callstack_list->clear();
+
+  if (Core::GetState() != Core::State::Paused)
+    return;
 
   std::vector<Dolphin_Debugger::CallstackEntry> stack;
 
-  bool success = Dolphin_Debugger::GetCallstack(stack);
+  const bool success = [&stack] {
+    Core::CPUThreadGuard guard(Core::System::GetInstance());
+    return Dolphin_Debugger::GetCallstack(Core::System::GetInstance(), guard, stack);
+  }();
 
   if (!success)
   {
@@ -431,7 +435,10 @@ void CodeWidget::UpdateFunctionCallers(const Common::Symbol* symbol)
 
 void CodeWidget::Step()
 {
-  if (!CPU::IsStepping())
+  auto& system = Core::System::GetInstance();
+  auto& cpu = system.GetCPU();
+
+  if (!cpu.IsStepping())
     return;
 
   Common::Event sync_event;
@@ -439,7 +446,7 @@ void CodeWidget::Step()
   PowerPC::CoreMode old_mode = PowerPC::GetMode();
   PowerPC::SetMode(PowerPC::CoreMode::Interpreter);
   PowerPC::breakpoints.ClearAllTemporary();
-  CPU::StepOpcode(&sync_event);
+  cpu.StepOpcode(&sync_event);
   sync_event.WaitFor(std::chrono::milliseconds(20));
   PowerPC::SetMode(old_mode);
   Core::DisplayMessage(tr("Step successful!").toStdString(), 2000);
@@ -448,15 +455,22 @@ void CodeWidget::Step()
 
 void CodeWidget::StepOver()
 {
-  if (!CPU::IsStepping())
+  auto& system = Core::System::GetInstance();
+  auto& cpu = system.GetCPU();
+
+  if (!cpu.IsStepping())
     return;
 
-  UGeckoInstruction inst = PowerPC::HostRead_Instruction(PC);
+  const UGeckoInstruction inst = [&] {
+    Core::CPUThreadGuard guard(system);
+    return PowerPC::HostRead_Instruction(guard, PowerPC::ppcState.pc);
+  }();
+
   if (inst.LK)
   {
     PowerPC::breakpoints.ClearAllTemporary();
-    PowerPC::breakpoints.Add(PC + 4, true);
-    CPU::EnableStepping(false);
+    PowerPC::breakpoints.Add(PowerPC::ppcState.pc + 4, true);
+    cpu.EnableStepping(false);
     Core::DisplayMessage(tr("Step over in progress...").toStdString(), 2000);
   }
   else
@@ -471,7 +485,8 @@ static bool WillInstructionReturn(UGeckoInstruction inst)
   // Is a rfi instruction
   if (inst.hex == 0x4C000064u)
     return true;
-  bool counter = (inst.BO_2 >> 2 & 1) != 0 || (CTR != 0) != ((inst.BO_2 >> 1 & 1) != 0);
+  bool counter =
+      (inst.BO_2 >> 2 & 1) != 0 || (CTR(PowerPC::ppcState) != 0) != ((inst.BO_2 >> 1 & 1) != 0);
   bool condition =
       inst.BO_2 >> 4 != 0 || PowerPC::ppcState.cr.GetBit(inst.BI_2) == (inst.BO_2 >> 3 & 1);
   bool isBclr = inst.OPCD_7 == 0b010011 && (inst.hex >> 1 & 0b10000) != 0;
@@ -480,54 +495,61 @@ static bool WillInstructionReturn(UGeckoInstruction inst)
 
 void CodeWidget::StepOut()
 {
-  if (!CPU::IsStepping())
-    return;
+  auto& system = Core::System::GetInstance();
+  auto& cpu = system.GetCPU();
 
-  CPU::PauseAndLock(true, false);
-  PowerPC::breakpoints.ClearAllTemporary();
+  if (!cpu.IsStepping())
+    return;
 
   // Keep stepping until the next return instruction or timeout after five seconds
   using clock = std::chrono::steady_clock;
   clock::time_point timeout = clock::now() + std::chrono::seconds(5);
-  PowerPC::CoreMode old_mode = PowerPC::GetMode();
-  PowerPC::SetMode(PowerPC::CoreMode::Interpreter);
 
-  // Loop until either the current instruction is a return instruction with no Link flag
-  // or a breakpoint is detected so it can step at the breakpoint. If the PC is currently
-  // on a breakpoint, skip it.
-  UGeckoInstruction inst = PowerPC::HostRead_Instruction(PC);
-  do
   {
-    if (WillInstructionReturn(inst))
-    {
-      PowerPC::SingleStep();
-      break;
-    }
+    Core::CPUThreadGuard guard(system);
 
-    if (inst.LK)
+    PowerPC::breakpoints.ClearAllTemporary();
+
+    PowerPC::CoreMode old_mode = PowerPC::GetMode();
+    PowerPC::SetMode(PowerPC::CoreMode::Interpreter);
+
+    // Loop until either the current instruction is a return instruction with no Link flag
+    // or a breakpoint is detected so it can step at the breakpoint. If the PC is currently
+    // on a breakpoint, skip it.
+    UGeckoInstruction inst = PowerPC::HostRead_Instruction(guard, PowerPC::ppcState.pc);
+    do
     {
-      // Step over branches
-      u32 next_pc = PC + 4;
-      do
+      if (WillInstructionReturn(inst))
       {
         PowerPC::SingleStep();
-      } while (PC != next_pc && clock::now() < timeout &&
-               !PowerPC::breakpoints.IsAddressBreakPoint(PC));
-    }
-    else
-    {
-      PowerPC::SingleStep();
-    }
+        break;
+      }
 
-    inst = PowerPC::HostRead_Instruction(PC);
-  } while (clock::now() < timeout && !PowerPC::breakpoints.IsAddressBreakPoint(PC));
+      if (inst.LK)
+      {
+        // Step over branches
+        u32 next_pc = PowerPC::ppcState.pc + 4;
+        do
+        {
+          PowerPC::SingleStep();
+        } while (PowerPC::ppcState.pc != next_pc && clock::now() < timeout &&
+                 !PowerPC::breakpoints.IsAddressBreakPoint(PowerPC::ppcState.pc));
+      }
+      else
+      {
+        PowerPC::SingleStep();
+      }
 
-  PowerPC::SetMode(old_mode);
-  CPU::PauseAndLock(false, false);
+      inst = PowerPC::HostRead_Instruction(guard, PowerPC::ppcState.pc);
+    } while (clock::now() < timeout &&
+             !PowerPC::breakpoints.IsAddressBreakPoint(PowerPC::ppcState.pc));
+
+    PowerPC::SetMode(old_mode);
+  }
 
   emit Host::GetInstance()->UpdateDisasmDialog();
 
-  if (PowerPC::breakpoints.IsAddressBreakPoint(PC))
+  if (PowerPC::breakpoints.IsAddressBreakPoint(PowerPC::ppcState.pc))
     Core::DisplayMessage(tr("Breakpoint encountered! Step out aborted.").toStdString(), 2000);
   else if (clock::now() >= timeout)
     Core::DisplayMessage(tr("Step out timed out!").toStdString(), 2000);
@@ -537,19 +559,19 @@ void CodeWidget::StepOut()
 
 void CodeWidget::Skip()
 {
-  PC += 4;
+  PowerPC::ppcState.pc += 4;
   ShowPC();
 }
 
 void CodeWidget::ShowPC()
 {
-  m_code_view->SetAddress(PC, CodeViewWidget::SetAddressUpdate::WithUpdate);
+  m_code_view->SetAddress(PowerPC::ppcState.pc, CodeViewWidget::SetAddressUpdate::WithUpdate);
   Update();
 }
 
 void CodeWidget::SetPC()
 {
-  PC = m_code_view->GetAddress();
+  PowerPC::ppcState.pc = m_code_view->GetAddress();
   Update();
 }
 

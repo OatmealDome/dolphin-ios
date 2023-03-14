@@ -24,6 +24,8 @@
 
 namespace Discord
 {
+static bool s_using_custom_client = false;
+
 #ifdef USE_DISCORD_PRESENCE
 namespace
 {
@@ -258,6 +260,8 @@ bool UpdateDiscordPresenceRaw(const std::string& details, const std::string& sta
   Discord_UpdatePresence(&discord_presence);
 
   return true;
+#else
+  return false;
 #endif
 }
 

@@ -22,7 +22,8 @@
 #include "Core/ConfigManager.h"
 #include "Core/System.h"
 
-#include "VideoBackends/OGL/OGLRender.h"
+#include "VideoBackends/OGL/OGLConfig.h"
+#include "VideoBackends/OGL/OGLGfx.h"
 #include "VideoBackends/OGL/OGLShader.h"
 #include "VideoBackends/OGL/OGLStreamBuffer.h"
 #include "VideoBackends/OGL/OGLVertexManager.h"
@@ -77,6 +78,8 @@ static std::string GetGLSLVersionString()
     return "#version 400";
   case Glsl430:
     return "#version 430";
+  case Glsl450:
+    return "#version 450";
   default:
     // Shouldn't ever hit this
     return "#version ERROR";
@@ -719,25 +722,18 @@ void ProgramShaderCache::CreateHeader()
   }
 
   std::string shader_shuffle_string;
-  if (g_ogl_config.bSupportsShaderThreadShuffleNV)
+  if (g_ogl_config.bSupportsKHRShaderSubgroup)
   {
     shader_shuffle_string = R"(
-#extension GL_NV_shader_thread_group : enable
-#extension GL_NV_shader_thread_shuffle : enable
+#extension GL_KHR_shader_subgroup_basic : enable
+#extension GL_KHR_shader_subgroup_arithmetic : enable
+#extension GL_KHR_shader_subgroup_ballot : enable
+
 #define SUPPORTS_SUBGROUP_REDUCTION 1
-
-// The xor shuffle below produces incorrect results if all threads in a warp are not active.
-#define CAN_USE_SUBGROUP_REDUCTION (ballotThreadNV(true) == 0xFFFFFFFFu)
-
-#define IS_HELPER_INVOCATION gl_HelperThreadNV
-#define IS_FIRST_ACTIVE_INVOCATION (gl_ThreadInWarpNV == findLSB(ballotThreadNV(!gl_HelperThreadNV)))
-#define SUBGROUP_REDUCTION(func, value) value = func(value, shuffleXorNV(value, 16, 32)); \
-                                        value = func(value, shuffleXorNV(value, 8, 32)); \
-                                        value = func(value, shuffleXorNV(value, 4, 32)); \
-                                        value = func(value, shuffleXorNV(value, 2, 32)); \
-                                        value = func(value, shuffleXorNV(value, 1, 32));
-#define SUBGROUP_MIN(value) SUBGROUP_REDUCTION(min, value)
-#define SUBGROUP_MAX(value) SUBGROUP_REDUCTION(max, value)
+#define IS_HELPER_INVOCATION gl_HelperInvocation
+#define IS_FIRST_ACTIVE_INVOCATION (subgroupElect())
+#define SUBGROUP_MIN(value) value = subgroupMin(value)
+#define SUBGROUP_MAX(value) value = subgroupMax(value)
 )";
   }
 
@@ -863,8 +859,7 @@ u64 ProgramShaderCache::GenerateShaderID()
 
 bool SharedContextAsyncShaderCompiler::WorkerThreadInitMainThread(void** param)
 {
-  std::unique_ptr<GLContext> context =
-      static_cast<Renderer*>(g_renderer.get())->GetMainGLContext()->CreateSharedContext();
+  std::unique_ptr<GLContext> context = GetOGLGfx()->GetMainGLContext()->CreateSharedContext();
   if (!context)
   {
     PanicAlertFmt("Failed to create shared context for shader compiling.");

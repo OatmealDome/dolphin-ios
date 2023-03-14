@@ -9,17 +9,21 @@
 #include "Core/Config/MainSettings.h"
 #include "Core/CoreTiming.h"
 #include "Core/HW/AudioInterface.h"
+#include "Core/HW/CPU.h"
 #include "Core/HW/DSP.h"
 #include "Core/HW/DVD/DVDInterface.h"
 #include "Core/HW/DVD/DVDThread.h"
 #include "Core/HW/EXI/EXI.h"
 #include "Core/HW/GPFifo.h"
+#include "Core/HW/HSP/HSP.h"
 #include "Core/HW/Memmap.h"
 #include "Core/HW/MemoryInterface.h"
 #include "Core/HW/ProcessorInterface.h"
 #include "Core/HW/SI/SI.h"
 #include "Core/HW/Sram.h"
 #include "Core/HW/VideoInterface.h"
+#include "Core/PowerPC/PowerPC.h"
+#include "IOS/USB/Emulated/Skylander.h"
 #include "VideoCommon/CommandProcessor.h"
 #include "VideoCommon/Fifo.h"
 #include "VideoCommon/GeometryShaderManager.h"
@@ -31,31 +35,41 @@ namespace Core
 {
 struct System::Impl
 {
-  explicit Impl(System& system) : m_gp_fifo(system) {}
+  explicit Impl(System& system)
+      : m_audio_interface(system), m_core_timing(system), m_dsp(system), m_dvd_interface(system),
+        m_dvd_thread(system), m_expansion_interface(system), m_gp_fifo(system), m_memory(system),
+        m_ppc_state(PowerPC::ppcState), m_processor_interface(system), m_serial_interface(system),
+        m_video_interface(system)
+  {
+  }
 
   std::unique_ptr<SoundStream> m_sound_stream;
   bool m_sound_stream_running = false;
   bool m_audio_dump_started = false;
 
-  AudioInterface::AudioInterfaceState m_audio_interface_state;
+  AudioInterface::AudioInterfaceManager m_audio_interface;
   CoreTiming::CoreTimingManager m_core_timing;
   CommandProcessor::CommandProcessorManager m_command_processor;
-  DSP::DSPState m_dsp_state;
-  DVDInterface::DVDInterfaceState m_dvd_interface_state;
-  DVDThread::DVDThreadState m_dvd_thread_state;
-  ExpansionInterface::ExpansionInterfaceState m_expansion_interface_state;
+  CPU::CPUManager m_cpu;
+  DSP::DSPManager m_dsp;
+  DVD::DVDInterface m_dvd_interface;
+  DVD::DVDThread m_dvd_thread;
+  ExpansionInterface::ExpansionInterfaceManager m_expansion_interface;
   Fifo::FifoManager m_fifo;
   GeometryShaderManager m_geometry_shader_manager;
   GPFifo::GPFifoManager m_gp_fifo;
+  HSP::HSPManager m_hsp;
+  IOS::HLE::USB::SkylanderPortal m_skylander_portal;
   Memory::MemoryManager m_memory;
-  MemoryInterface::MemoryInterfaceState m_memory_interface_state;
+  MemoryInterface::MemoryInterfaceManager m_memory_interface;
   PixelEngine::PixelEngineManager m_pixel_engine;
   PixelShaderManager m_pixel_shader_manager;
+  PowerPC::PowerPCState& m_ppc_state;
   ProcessorInterface::ProcessorInterfaceManager m_processor_interface;
-  SerialInterface::SerialInterfaceState m_serial_interface_state;
+  SerialInterface::SerialInterfaceManager m_serial_interface;
   Sram m_sram;
   VertexShaderManager m_vertex_shader_manager;
-  VideoInterface::VideoInterfaceState m_video_interface_state;
+  VideoInterface::VideoInterfaceManager m_video_interface;
 };
 
 System::System() : m_impl{std::make_unique<Impl>(*this)}
@@ -101,9 +115,14 @@ void System::SetAudioDumpStarted(bool started)
   m_impl->m_audio_dump_started = started;
 }
 
-AudioInterface::AudioInterfaceState& System::GetAudioInterfaceState() const
+AudioInterface::AudioInterfaceManager& System::GetAudioInterface() const
 {
-  return m_impl->m_audio_interface_state;
+  return m_impl->m_audio_interface;
+}
+
+CPU::CPUManager& System::GetCPU() const
+{
+  return m_impl->m_cpu;
 }
 
 CoreTiming::CoreTimingManager& System::GetCoreTiming() const
@@ -116,24 +135,24 @@ CommandProcessor::CommandProcessorManager& System::GetCommandProcessor() const
   return m_impl->m_command_processor;
 }
 
-DSP::DSPState& System::GetDSPState() const
+DSP::DSPManager& System::GetDSP() const
 {
-  return m_impl->m_dsp_state;
+  return m_impl->m_dsp;
 }
 
-DVDInterface::DVDInterfaceState& System::GetDVDInterfaceState() const
+DVD::DVDInterface& System::GetDVDInterface() const
 {
-  return m_impl->m_dvd_interface_state;
+  return m_impl->m_dvd_interface;
 }
 
-DVDThread::DVDThreadState& System::GetDVDThreadState() const
+DVD::DVDThread& System::GetDVDThread() const
 {
-  return m_impl->m_dvd_thread_state;
+  return m_impl->m_dvd_thread;
 }
 
-ExpansionInterface::ExpansionInterfaceState& System::GetExpansionInterfaceState() const
+ExpansionInterface::ExpansionInterfaceManager& System::GetExpansionInterface() const
 {
-  return m_impl->m_expansion_interface_state;
+  return m_impl->m_expansion_interface;
 }
 
 Fifo::FifoManager& System::GetFifo() const
@@ -151,14 +170,24 @@ GPFifo::GPFifoManager& System::GetGPFifo() const
   return m_impl->m_gp_fifo;
 }
 
+HSP::HSPManager& System::GetHSP() const
+{
+  return m_impl->m_hsp;
+}
+
+IOS::HLE::USB::SkylanderPortal& System::GetSkylanderPortal() const
+{
+  return m_impl->m_skylander_portal;
+}
+
 Memory::MemoryManager& System::GetMemory() const
 {
   return m_impl->m_memory;
 }
 
-MemoryInterface::MemoryInterfaceState& System::GetMemoryInterfaceState() const
+MemoryInterface::MemoryInterfaceManager& System::GetMemoryInterface() const
 {
-  return m_impl->m_memory_interface_state;
+  return m_impl->m_memory_interface;
 }
 
 PixelEngine::PixelEngineManager& System::GetPixelEngine() const
@@ -171,14 +200,19 @@ PixelShaderManager& System::GetPixelShaderManager() const
   return m_impl->m_pixel_shader_manager;
 }
 
+PowerPC::PowerPCState& System::GetPPCState() const
+{
+  return m_impl->m_ppc_state;
+}
+
 ProcessorInterface::ProcessorInterfaceManager& System::GetProcessorInterface() const
 {
   return m_impl->m_processor_interface;
 }
 
-SerialInterface::SerialInterfaceState& System::GetSerialInterfaceState() const
+SerialInterface::SerialInterfaceManager& System::GetSerialInterface() const
 {
-  return m_impl->m_serial_interface_state;
+  return m_impl->m_serial_interface;
 }
 
 Sram& System::GetSRAM() const
@@ -191,8 +225,8 @@ VertexShaderManager& System::GetVertexShaderManager() const
   return m_impl->m_vertex_shader_manager;
 }
 
-VideoInterface::VideoInterfaceState& System::GetVideoInterfaceState() const
+VideoInterface::VideoInterfaceManager& System::GetVideoInterface() const
 {
-  return m_impl->m_video_interface_state;
+  return m_impl->m_video_interface;
 }
 }  // namespace Core

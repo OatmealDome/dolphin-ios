@@ -386,7 +386,6 @@ const Info<ShowCursor> MAIN_SHOW_CURSOR{{System::Main, "Interface", "CursorVisib
                                         ShowCursor::OnMovement};
 const Info<bool> MAIN_LOCK_CURSOR{{System::Main, "Interface", "LockCursor"}, false};
 const Info<std::string> MAIN_INTERFACE_LANGUAGE{{System::Main, "Interface", "LanguageCode"}, ""};
-const Info<bool> MAIN_EXTENDED_FPS_INFO{{System::Main, "Interface", "ExtendedFPSInfo"}, false};
 const Info<bool> MAIN_SHOW_ACTIVE_TITLE{{System::Main, "Interface", "ShowActiveTitle"}, true};
 const Info<bool> MAIN_USE_BUILT_IN_TITLE_DATABASE{
     {System::Main, "Interface", "UseBuiltinTitleDatabase"}, true};
@@ -551,6 +550,11 @@ void SetUSBDeviceWhitelist(const std::set<std::pair<u16, u16>>& devices)
   Config::SetBase(Config::MAIN_USB_PASSTHROUGH_DEVICES, SaveUSBWhitelistToString(devices));
 }
 
+// Main.EmulatedUSBDevices
+
+const Info<bool> MAIN_EMULATE_SKYLANDER_PORTAL{
+    {System::Main, "EmulatedUSBDevices", "EmulateSkylanderPortal"}, false};
+
 // The reason we need this function is because some memory card code
 // expects to get a non-NTSC-K region even if we're emulating an NTSC-K Wii.
 DiscIO::Region ToGameCubeRegion(DiscIO::Region region)
@@ -638,17 +642,17 @@ std::string GetMemcardPath(std::string configured_filename, ExpansionInterface::
   constexpr std::string_view jp_region = "." JAP_DIR;
   constexpr std::string_view eu_region = "." EUR_DIR;
   std::optional<DiscIO::Region> path_region = std::nullopt;
-  if (StringEndsWith(name, us_region))
+  if (name.ends_with(us_region))
   {
     name = name.substr(0, name.size() - us_region.size());
     path_region = DiscIO::Region::NTSC_U;
   }
-  else if (StringEndsWith(name, jp_region))
+  else if (name.ends_with(jp_region))
   {
     name = name.substr(0, name.size() - jp_region.size());
     path_region = DiscIO::Region::NTSC_J;
   }
-  else if (StringEndsWith(name, eu_region))
+  else if (name.ends_with(eu_region))
   {
     name = name.substr(0, name.size() - eu_region.size());
     path_region = DiscIO::Region::PAL;
@@ -690,7 +694,7 @@ std::string GetGCIFolderPath(std::string configured_folder, ExpansionInterface::
   // If there's no region code just insert one at the end.
 
   UnifyPathSeparators(configured_folder);
-  while (StringEndsWith(configured_folder, "/"))
+  while (configured_folder.ends_with('/'))
     configured_folder.pop_back();
 
   constexpr std::string_view us_region = "/" USA_DIR;
@@ -698,17 +702,17 @@ std::string GetGCIFolderPath(std::string configured_folder, ExpansionInterface::
   constexpr std::string_view eu_region = "/" EUR_DIR;
   std::string_view base_path = configured_folder;
   std::optional<DiscIO::Region> path_region = std::nullopt;
-  if (StringEndsWith(base_path, us_region))
+  if (base_path.ends_with(us_region))
   {
     base_path = base_path.substr(0, base_path.size() - us_region.size());
     path_region = DiscIO::Region::NTSC_U;
   }
-  else if (StringEndsWith(base_path, jp_region))
+  else if (base_path.ends_with(jp_region))
   {
     base_path = base_path.substr(0, base_path.size() - jp_region.size());
     path_region = DiscIO::Region::NTSC_J;
   }
-  else if (StringEndsWith(base_path, eu_region))
+  else if (base_path.ends_with(eu_region))
   {
     base_path = base_path.substr(0, base_path.size() - eu_region.size());
     path_region = DiscIO::Region::PAL;

@@ -12,12 +12,13 @@
 #include <string_view>
 #include <variant>
 
+#include <Core/Core.h>
+
 #include <fmt/format.h>
 
 #include "AudioCommon/AudioCommon.h"
 
 #include "Common/Assert.h"
-#include "Common/CDUtils.h"
 #include "Common/CommonPaths.h"
 #include "Common/CommonTypes.h"
 #include "Common/Config/Config.h"
@@ -49,6 +50,7 @@
 #include "Core/PatchEngine.h"
 #include "Core/PowerPC/PPCSymbolDB.h"
 #include "Core/PowerPC/PowerPC.h"
+#include "Core/System.h"
 #include "Core/TitleDatabase.h"
 #include "VideoCommon/HiresTextures.h"
 
@@ -124,7 +126,7 @@ void SConfig::SetRunningGameMetadata(const IOS::ES::TMDReader& tmd, DiscIO::Plat
   // (IOS HLE ES calls us with a TMDReader rather than a volume when launching
   // a disc game, because ES has no reason to be accessing the disc directly.)
   if (platform == DiscIO::Platform::WiiWAD ||
-      !DVDInterface::UpdateRunningGameMetadata(tmd_title_id))
+      !Core::System::GetInstance().GetDVDInterface().UpdateRunningGameMetadata(tmd_title_id))
   {
     // If not launching a disc game, just read everything from the TMD.
     SetRunningGameMetadata(tmd.GetGameID(), tmd.GetGameTDBID(), tmd_title_id, tmd.GetTitleVersion(),
@@ -177,6 +179,10 @@ void SConfig::SetRunningGameMetadata(const std::string& game_id, const std::stri
   m_title_description = title_database.Describe(m_gametdb_id, language);
   NOTICE_LOG_FMT(CORE, "Active title: {}", m_title_description);
   Host_TitleChanged();
+  if (Core::IsRunning())
+  {
+    Core::UpdateTitle();
+  }
 
   Config::AddLayer(ConfigLoaders::GenerateGlobalGameConfigLoader(game_id, revision));
   Config::AddLayer(ConfigLoaders::GenerateLocalGameConfigLoader(game_id, revision));
@@ -185,7 +191,7 @@ void SConfig::SetRunningGameMetadata(const std::string& game_id, const std::stri
     DolphinAnalytics::Instance().ReportGameStart();
 }
 
-void SConfig::OnNewTitleLoad()
+void SConfig::OnNewTitleLoad(const Core::CPUThreadGuard& guard)
 {
   if (!Core::IsRunning())
     return;
@@ -195,8 +201,9 @@ void SConfig::OnNewTitleLoad()
     g_symbolDB.Clear();
     Host_NotifyMapLoaded();
   }
-  CBoot::LoadMapFromFilename();
-  HLE::Reload();
+  CBoot::LoadMapFromFilename(guard);
+  auto& system = Core::System::GetInstance();
+  HLE::Reload(system);
   PatchEngine::Reload();
   HiresTexture::Update();
 }

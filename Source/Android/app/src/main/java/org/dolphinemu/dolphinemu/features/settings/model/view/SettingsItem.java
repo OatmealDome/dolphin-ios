@@ -21,14 +21,14 @@ public abstract class SettingsItem
   public static final int TYPE_SINGLE_CHOICE = 2;
   public static final int TYPE_SLIDER = 3;
   public static final int TYPE_SUBMENU = 4;
-  public static final int TYPE_INPUT_BINDING = 5;
+  public static final int TYPE_INPUT_MAPPING_CONTROL = 5;
   public static final int TYPE_STRING_SINGLE_CHOICE = 6;
-  public static final int TYPE_RUMBLE_BINDING = 7;
   public static final int TYPE_SINGLE_CHOICE_DYNAMIC_DESCRIPTIONS = 8;
   public static final int TYPE_FILE_PICKER = 9;
   public static final int TYPE_RUN_RUNNABLE = 10;
   public static final int TYPE_STRING = 11;
   public static final int TYPE_HYPERLINK_HEADER = 12;
+  public static final int TYPE_DATETIME_CHOICE = 13;
 
   private final CharSequence mName;
   private final CharSequence mDescription;
@@ -93,6 +93,11 @@ public abstract class SettingsItem
   public boolean hasSetting()
   {
     return getSetting() != null;
+  }
+
+  public boolean canClear()
+  {
+    return hasSetting();
   }
 
   public void clear(Settings settings)

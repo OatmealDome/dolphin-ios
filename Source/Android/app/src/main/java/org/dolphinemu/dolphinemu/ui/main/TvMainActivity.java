@@ -349,7 +349,7 @@ public final class TvMainActivity extends FragmentActivity
     }
 
     // Create an adapter for this row.
-    ArrayObjectAdapter row = new ArrayObjectAdapter(new GameRowPresenter());
+    ArrayObjectAdapter row = new ArrayObjectAdapter(new GameRowPresenter(this));
     row.addAll(0, gameFiles);
 
     // Keep a reference to the row in case we need to refresh it.
@@ -405,6 +405,10 @@ public final class TvMainActivity extends FragmentActivity
     rowItems.add(new TvSettingsItem(R.id.menu_online_system_update,
             R.drawable.ic_folder_tv,
             R.string.grid_menu_online_system_update));
+
+    rowItems.add(new TvSettingsItem(R.id.menu_about,
+            R.drawable.ic_info_tv,
+            R.string.grid_menu_about));
 
     // Create a header for this row.
     HeaderItem header = new HeaderItem(R.string.settings, getString(R.string.settings));

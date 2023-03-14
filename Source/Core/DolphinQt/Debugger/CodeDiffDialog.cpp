@@ -23,6 +23,7 @@
 #include "Core/PowerPC/PPCSymbolDB.h"
 #include "Core/PowerPC/PowerPC.h"
 #include "Core/PowerPC/Profiler.h"
+#include "Core/System.h"
 
 #include "DolphinQt/Debugger/CodeWidget.h"
 #include "DolphinQt/Host.h"
@@ -483,7 +484,11 @@ void CodeDiffDialog::OnSetBLR()
   Common::Symbol* symbol = g_symbolDB.GetSymbolFromAddr(item->data(Qt::UserRole).toUInt());
   if (!symbol)
     return;
-  PowerPC::debug_interface.SetPatch(symbol->address, 0x4E800020);
+
+  {
+    Core::CPUThreadGuard guard(Core::System::GetInstance());
+    PowerPC::debug_interface.SetPatch(guard, symbol->address, 0x4E800020);
+  }
 
   int row = item->row();
   m_matching_results_table->item(row, 0)->setForeground(QBrush(Qt::red));

@@ -27,7 +27,7 @@ namespace ExpansionInterface
 // Multiple parts of this implementation depend on Dolphin
 // being compiled for a little endian host.
 
-CEXIETHERNET::CEXIETHERNET(BBADeviceType type)
+CEXIETHERNET::CEXIETHERNET(Core::System& system, BBADeviceType type) : IEXIDevice(system)
 {
   // Parse MAC address from config, and generate a new one if it doesn't
   // exist or can't be parsed.
@@ -67,8 +67,7 @@ CEXIETHERNET::CEXIETHERNET(BBADeviceType type)
     // Perform sanity check on BBA MAC address, XLink requires the vendor OUI to be Nintendo's and
     // to be one of the two used for the GameCube.
     // Don't actually stop the BBA from initializing though
-    if (!StringBeginsWith(mac_addr_setting, "00:09:bf") &&
-        !StringBeginsWith(mac_addr_setting, "00:17:ab"))
+    if (!mac_addr_setting.starts_with("00:09:bf") && !mac_addr_setting.starts_with("00:17:ab"))
     {
       PanicAlertFmtT(
           "BBA MAC address {0} invalid for XLink Kai. A valid Nintendo GameCube MAC address "
@@ -179,7 +178,7 @@ void CEXIETHERNET::ImmWrite(u32 data, u32 size)
       exi_status.interrupt_mask = data;
       break;
     }
-    ExpansionInterface::UpdateInterrupts();
+    m_system.GetExpansionInterface().UpdateInterrupts();
   }
   else
   {
@@ -234,8 +233,7 @@ void CEXIETHERNET::DMAWrite(u32 addr, u32 size)
   if (transfer.region == transfer.MX && transfer.direction == transfer.WRITE &&
       transfer.address == BBA_WRTXFIFOD)
   {
-    auto& system = Core::System::GetInstance();
-    auto& memory = system.GetMemory();
+    auto& memory = m_system.GetMemory();
     DirectFIFOWrite(memory.GetPointer(addr), size);
   }
   else
@@ -249,8 +247,7 @@ void CEXIETHERNET::DMAWrite(u32 addr, u32 size)
 void CEXIETHERNET::DMARead(u32 addr, u32 size)
 {
   DEBUG_LOG_FMT(SP1, "DMA read: {:08x} {:x}", addr, size);
-  auto& system = Core::System::GetInstance();
-  auto& memory = system.GetMemory();
+  auto& memory = m_system.GetMemory();
   memory.CopyToEmu(addr, &mBbaMem[transfer.address], size);
   transfer.address += size;
 }
@@ -469,7 +466,7 @@ void CEXIETHERNET::SendComplete()
     mBbaMem[BBA_IR] |= INT_T;
 
     exi_status.interrupt |= exi_status.TRANSFER;
-    ExpansionInterface::ScheduleUpdateInterrupts(CoreTiming::FromThread::CPU, 0);
+    m_system.GetExpansionInterface().ScheduleUpdateInterrupts(CoreTiming::FromThread::CPU, 0);
   }
 
   mBbaMem[BBA_LTPS] = 0;
@@ -579,7 +576,7 @@ bool CEXIETHERNET::RecvHandlePacket()
       off = 0;
       // avoid increasing the BBA register while copying
       // sometime the OS can try to process when it's not completed
-      current_rwp = current_rwp == page_ptr(BBA_RHBP) ? page_ptr(BBA_BP) : ++current_rwp;
+      current_rwp = current_rwp == page_ptr(BBA_RHBP) ? page_ptr(BBA_BP) : current_rwp + 1;
 
       write_ptr = &mBbaMem[current_rwp << 8];
 
@@ -605,7 +602,7 @@ bool CEXIETHERNET::RecvHandlePacket()
 
   // Align up to next page
   if ((mRecvBufferLength + 4) % 256)
-    current_rwp = current_rwp == page_ptr(BBA_RHBP) ? page_ptr(BBA_BP) : ++current_rwp;
+    current_rwp = current_rwp == page_ptr(BBA_RHBP) ? page_ptr(BBA_BP) : current_rwp + 1;
 
 #ifdef BBA_TRACK_PAGE_PTRS
   INFO_LOG_FMT(SP1, "{:x} {:x} {:x} {:x}", page_ptr(BBA_BP), page_ptr(BBA_RRP), page_ptr(BBA_RWP),
@@ -640,7 +637,7 @@ bool CEXIETHERNET::RecvHandlePacket()
     mBbaMem[BBA_IR] |= INT_R;
 
     exi_status.interrupt |= exi_status.TRANSFER;
-    ExpansionInterface::ScheduleUpdateInterrupts(CoreTiming::FromThread::NON_CPU, 0);
+    m_system.GetExpansionInterface().ScheduleUpdateInterrupts(CoreTiming::FromThread::NON_CPU, 0);
   }
   else
   {

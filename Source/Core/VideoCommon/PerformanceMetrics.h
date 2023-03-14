@@ -47,16 +47,16 @@ public:
 private:
   PerformanceTracker m_fps_counter{"render_times.txt"};
   PerformanceTracker m_vps_counter{"vblank_times.txt"};
-  PerformanceTracker m_speed_counter{std::nullopt, 500000};
+  PerformanceTracker m_speed_counter{std::nullopt, 1000000};
 
   double m_graph_max_time = 0.0;
 
   mutable std::shared_mutex m_time_lock;
 
   u8 m_time_index = 0;
-  std::array<TimePoint, 256> m_real_times;
-  std::array<TimePoint, 256> m_cpu_times;
-  DT m_time_sleeping;
+  std::array<TimePoint, 256> m_real_times{};
+  std::array<TimePoint, 256> m_cpu_times{};
+  DT m_time_sleeping{};
 };
 
 extern PerformanceMetrics g_perf_metrics;

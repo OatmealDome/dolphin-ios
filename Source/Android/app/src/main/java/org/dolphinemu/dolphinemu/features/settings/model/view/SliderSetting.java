@@ -11,11 +11,21 @@ public abstract class SliderSetting extends SettingsItem
   private int mMin;
   private int mMax;
   private String mUnits;
+  private int mStepSize;
 
   public SliderSetting(Context context, int nameId, int descriptionId, int min, int max,
-          String units)
+          String units, int stepSize)
   {
     super(context, nameId, descriptionId);
+    mMin = min;
+    mMax = max;
+    mUnits = units;
+    mStepSize = stepSize;
+  }
+
+  public SliderSetting(CharSequence name, CharSequence description, int min, int max, String units)
+  {
+    super(name, description);
     mMin = min;
     mMax = max;
     mUnits = units;
@@ -36,6 +46,11 @@ public abstract class SliderSetting extends SettingsItem
   public String getUnits()
   {
     return mUnits;
+  }
+
+  public int getStepSize()
+  {
+    return mStepSize;
   }
 
   @Override

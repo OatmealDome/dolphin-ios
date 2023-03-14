@@ -59,6 +59,21 @@ enum class TriState : int
   Auto
 };
 
+// Bitmask containing information about which configuration has changed for the backend.
+enum ConfigChangeBits : u32
+{
+  CONFIG_CHANGE_BIT_HOST_CONFIG = (1 << 0),
+  CONFIG_CHANGE_BIT_MULTISAMPLES = (1 << 1),
+  CONFIG_CHANGE_BIT_STEREO_MODE = (1 << 2),
+  CONFIG_CHANGE_BIT_TARGET_SIZE = (1 << 3),
+  CONFIG_CHANGE_BIT_ANISOTROPY = (1 << 4),
+  CONFIG_CHANGE_BIT_FORCE_TEXTURE_FILTERING = (1 << 5),
+  CONFIG_CHANGE_BIT_VSYNC = (1 << 6),
+  CONFIG_CHANGE_BIT_BBOX = (1 << 7),
+  CONFIG_CHANGE_BIT_ASPECT_RATIO = (1 << 8),
+  CONFIG_CHANGE_BIT_POST_PROCESSING_SHADER = (1 << 9),
+};
+
 // NEVER inherit from this class.
 struct VideoConfig final
 {
@@ -138,6 +153,7 @@ struct VideoConfig final
   bool bPerfQueriesEnable = false;
   bool bBBoxEnable = false;
   bool bForceProgressive = false;
+  bool bCPUCull = false;
 
   bool bEFBEmulateFormatChanges = false;
   bool bSkipEFBCopyToRam = false;
@@ -176,7 +192,7 @@ struct VideoConfig final
 
   // Metal only config
   TriState iManuallyUploadBuffers = TriState::Auto;
-  bool bUsePresentDrawable = false;
+  TriState iUsePresentDrawable = TriState::Auto;
 
   // Enable API validation layers, currently only supported with Vulkan.
   bool bEnableValidationLayer = false;
@@ -213,6 +229,7 @@ struct VideoConfig final
 
     u32 MaxTextureSize = 16384;
     bool bUsesLowerLeftOrigin = false;
+    bool bUsesExplictQuadBuffering = false;
 
     bool bSupportsExclusiveFullscreen = false;
     bool bSupportsDualSourceBlend = false;
@@ -254,6 +271,7 @@ struct VideoConfig final
     bool bSupportsPartialMultisampleResolve = false;
     bool bSupportsDynamicVertexLoader = false;
     bool bSupportsVSLinePointExpand = false;
+    bool bSupportsGLLayerInFS = true;
   } backend_info;
 
   // Utility
@@ -305,3 +323,4 @@ extern VideoConfig g_ActiveConfig;
 
 // Called every frame.
 void UpdateActiveConfig();
+void CheckForConfigChanges();

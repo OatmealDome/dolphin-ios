@@ -12,6 +12,7 @@
 
 #include "Core/Config/MainSettings.h"
 #include "Core/ConfigManager.h"
+#include "Core/Core.h"
 #include "Core/GeckoCode.h"
 #include "Core/HLE/HLE_Misc.h"
 #include "Core/HLE/HLE_OS.h"
@@ -63,20 +64,21 @@ constexpr std::array<Hook, 23> os_patches{{
 }};
 // clang-format on
 
-void Patch(u32 addr, std::string_view func_name)
+void Patch(Core::System& system, u32 addr, std::string_view func_name)
 {
+  auto& ppc_state = system.GetPPCState();
   for (u32 i = 1; i < os_patches.size(); ++i)
   {
     if (os_patches[i].name == func_name)
     {
       s_hooked_addresses[addr] = i;
-      PowerPC::ppcState.iCache.Invalidate(addr);
+      ppc_state.iCache.Invalidate(addr);
       return;
     }
   }
 }
 
-void PatchFixedFunctions()
+void PatchFixedFunctions(Core::System& system)
 {
   // MIOS puts patch data in low MEM1 (0x1800-0x3000) for its own use.
   // Overwriting data in this range can cause the IPL to crash when launching games
@@ -90,28 +92,29 @@ void PatchFixedFunctions()
   // handler
   if (!Config::Get(Config::MAIN_ENABLE_CHEATS))
   {
-    Patch(0x80001800, "HBReload");
-    auto& system = Core::System::GetInstance();
+    Patch(system, 0x80001800, "HBReload");
     auto& memory = system.GetMemory();
     memory.CopyToEmu(0x00001804, "STUBHAXX", 8);
   }
 
   // Not part of the binary itself, but either we or Gecko OS might insert
   // this, and it doesn't clear the icache properly.
-  Patch(Gecko::ENTRY_POINT, "GeckoCodehandler");
+  Patch(system, Gecko::ENTRY_POINT, "GeckoCodehandler");
   // This has to always be installed even if cheats are not enabled because of the possiblity of
   // loading a savestate where PC is inside the code handler while cheats are disabled.
-  Patch(Gecko::HLE_TRAMPOLINE_ADDRESS, "GeckoHandlerReturnTrampoline");
+  Patch(system, Gecko::HLE_TRAMPOLINE_ADDRESS, "GeckoHandlerReturnTrampoline");
 }
 
-void PatchFunctions()
+void PatchFunctions(Core::System& system)
 {
+  auto& ppc_state = system.GetPPCState();
+
   // Remove all hooks that aren't fixed address hooks
   for (auto i = s_hooked_addresses.begin(); i != s_hooked_addresses.end();)
   {
     if (os_patches[i->second].flags != HookFlag::Fixed)
     {
-      PowerPC::ppcState.iCache.Invalidate(i->first);
+      ppc_state.iCache.Invalidate(i->first);
       i = s_hooked_addresses.erase(i);
     }
     else
@@ -131,7 +134,7 @@ void PatchFunctions()
       for (u32 addr = symbol->address; addr < symbol->address + symbol->size; addr += 4)
       {
         s_hooked_addresses[addr] = i;
-        PowerPC::ppcState.iCache.Invalidate(addr);
+        ppc_state.iCache.Invalidate(addr);
       }
       INFO_LOG_FMT(OSHLE, "Patching {} {:08x}", os_patches[i].name, symbol->address);
     }
@@ -143,24 +146,31 @@ void Clear()
   s_hooked_addresses.clear();
 }
 
-void Reload()
+void Reload(Core::System& system)
 {
   Clear();
-  PatchFixedFunctions();
-  PatchFunctions();
+  PatchFixedFunctions(system);
+  PatchFunctions(system);
 }
 
-void Execute(u32 current_pc, u32 hook_index)
+void Execute(const Core::CPUThreadGuard& guard, u32 current_pc, u32 hook_index)
 {
   hook_index &= 0xFFFFF;
   if (hook_index > 0 && hook_index < os_patches.size())
   {
-    os_patches[hook_index].function();
+    os_patches[hook_index].function(guard);
   }
   else
   {
     PanicAlertFmt("HLE system tried to call an undefined HLE function {}.", hook_index);
   }
+}
+
+void ExecuteFromJIT(u32 current_pc, u32 hook_index)
+{
+  ASSERT(Core::IsCPUThread());
+  Core::CPUThreadGuard guard(Core::System::GetInstance());
+  Execute(guard, current_pc, hook_index);
 }
 
 u32 GetHookByAddress(u32 address)
@@ -196,12 +206,14 @@ bool IsEnabled(HookFlag flag)
          PowerPC::GetMode() == PowerPC::CoreMode::Interpreter;
 }
 
-u32 UnPatch(std::string_view patch_name)
+u32 UnPatch(Core::System& system, std::string_view patch_name)
 {
   const auto patch = std::find_if(std::begin(os_patches), std::end(os_patches),
                                   [&](const Hook& p) { return patch_name == p.name; });
   if (patch == std::end(os_patches))
     return 0;
+
+  auto& ppc_state = system.GetPPCState();
 
   if (patch->flags == HookFlag::Fixed)
   {
@@ -213,7 +225,7 @@ u32 UnPatch(std::string_view patch_name)
       if (i->second == patch_idx)
       {
         addr = i->first;
-        PowerPC::ppcState.iCache.Invalidate(i->first);
+        ppc_state.iCache.Invalidate(i->first);
         i = s_hooked_addresses.erase(i);
       }
       else
@@ -231,7 +243,7 @@ u32 UnPatch(std::string_view patch_name)
     for (u32 addr = symbol->address; addr < symbol->address + symbol->size; addr += 4)
     {
       s_hooked_addresses.erase(addr);
-      PowerPC::ppcState.iCache.Invalidate(addr);
+      ppc_state.iCache.Invalidate(addr);
     }
     return symbol->address;
   }
@@ -239,8 +251,10 @@ u32 UnPatch(std::string_view patch_name)
   return 0;
 }
 
-u32 UnpatchRange(u32 start_addr, u32 end_addr)
+u32 UnpatchRange(Core::System& system, u32 start_addr, u32 end_addr)
 {
+  auto& ppc_state = system.GetPPCState();
+
   u32 count = 0;
 
   auto i = s_hooked_addresses.lower_bound(start_addr);
@@ -248,7 +262,7 @@ u32 UnpatchRange(u32 start_addr, u32 end_addr)
   {
     INFO_LOG_FMT(OSHLE, "Unpatch HLE hooks [{:08x};{:08x}): {} at {:08x}", start_addr, end_addr,
                  os_patches[i->second].name, i->first);
-    PowerPC::ppcState.iCache.Invalidate(i->first);
+    ppc_state.iCache.Invalidate(i->first);
     i = s_hooked_addresses.erase(i);
     count += 1;
   }

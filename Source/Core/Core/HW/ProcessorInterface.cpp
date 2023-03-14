@@ -18,6 +18,7 @@
 #include "Core/IOS/IOS.h"
 #include "Core/IOS/STM/STM.h"
 #include "Core/PowerPC/PowerPC.h"
+#include "Core/System.h"
 #include "VideoCommon/AsyncRequests.h"
 #include "VideoCommon/Fifo.h"
 
@@ -26,6 +27,12 @@ namespace ProcessorInterface
 constexpr u32 FLIPPER_REV_A = 0x046500B0;
 constexpr u32 FLIPPER_REV_B = 0x146500B1;
 constexpr u32 FLIPPER_REV_C = 0x246500B1;
+
+ProcessorInterfaceManager::ProcessorInterfaceManager(Core::System& system) : m_system(system)
+{
+}
+
+ProcessorInterfaceManager::~ProcessorInterfaceManager() = default;
 
 void ProcessorInterfaceManager::DoState(PointerWrap& p)
 {
@@ -49,8 +56,7 @@ void ProcessorInterfaceManager::Init()
   m_reset_code = 0;  // Cold reset
   m_interrupt_cause = INT_CAUSE_RST_BUTTON | INT_CAUSE_VI;
 
-  auto& system = Core::System::GetInstance();
-  auto& core_timing = system.GetCoreTiming();
+  auto& core_timing = m_system.GetCoreTiming();
   m_event_type_toggle_reset_button =
       core_timing.RegisterEvent("ToggleResetButton", ToggleResetButtonCallback);
   m_event_type_ios_notify_reset_button =
@@ -120,7 +126,7 @@ void ProcessorInterfaceManager::RegisterMMIO(MMIO::Mapping* mmio, u32 base)
                                 processor_interface.m_reset_code);
                    if (!SConfig::GetInstance().bWii && ~processor_interface.m_reset_code & 0x4)
                    {
-                     DVDInterface::ResetDrive(true);
+                     system.GetDVDInterface().ResetDrive(true);
                    }
                  }));
 
@@ -139,10 +145,11 @@ void ProcessorInterfaceManager::RegisterMMIO(MMIO::Mapping* mmio, u32 base)
 
 void ProcessorInterfaceManager::UpdateException()
 {
+  auto& ppc_state = m_system.GetPPCState();
   if ((m_interrupt_cause & m_interrupt_mask) != 0)
-    PowerPC::ppcState.Exceptions |= EXCEPTION_EXTERNAL_INT;
+    ppc_state.Exceptions |= EXCEPTION_EXTERNAL_INT;
   else
-    PowerPC::ppcState.Exceptions &= ~EXCEPTION_EXTERNAL_INT;
+    ppc_state.Exceptions &= ~EXCEPTION_EXTERNAL_INT;
 }
 
 static const char* Debug_GetInterruptName(u32 cause_mask)
@@ -251,8 +258,7 @@ void ProcessorInterfaceManager::ResetButton_Tap()
   if (!Core::IsRunning())
     return;
 
-  auto& system = Core::System::GetInstance();
-  auto& core_timing = system.GetCoreTiming();
+  auto& core_timing = m_system.GetCoreTiming();
   core_timing.ScheduleEvent(0, m_event_type_toggle_reset_button, true, CoreTiming::FromThread::ANY);
   core_timing.ScheduleEvent(0, m_event_type_ios_notify_reset_button, 0,
                             CoreTiming::FromThread::ANY);
@@ -265,8 +271,7 @@ void ProcessorInterfaceManager::PowerButton_Tap()
   if (!Core::IsRunning())
     return;
 
-  auto& system = Core::System::GetInstance();
-  auto& core_timing = system.GetCoreTiming();
+  auto& core_timing = m_system.GetCoreTiming();
   core_timing.ScheduleEvent(0, m_event_type_ios_notify_power_button, 0,
                             CoreTiming::FromThread::ANY);
 }

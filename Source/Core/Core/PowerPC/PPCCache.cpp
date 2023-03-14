@@ -269,11 +269,11 @@ std::pair<u32, u32> Cache::GetCache(u32 addr, bool locked)
     addrs[set][way] = addr;
     valid[set] |= (1 << way);
     modified[set] &= ~(1 << way);
-
-    // update plru
-    if (way != 0xff)
-      plru[set] = (plru[set] & ~s_plru_mask[way]) | s_plru_value[way];
   }
+
+  // update plru
+  if (way != 0xff)
+    plru[set] = (plru[set] & ~s_plru_mask[way]) | s_plru_value[way];
 
   return {set, way};
 }
@@ -394,17 +394,17 @@ u32 InstructionCache::ReadInstruction(u32 addr)
   auto& system = Core::System::GetInstance();
   auto& memory = system.GetMemory();
 
-  if (!HID0.ICE || m_disable_icache)  // instruction cache is disabled
+  if (!HID0(PowerPC::ppcState).ICE || m_disable_icache)  // instruction cache is disabled
     return memory.Read_U32(addr);
 
   u32 value;
-  Read(addr, &value, sizeof(value), HID0.ILOCK);
+  Read(addr, &value, sizeof(value), HID0(PowerPC::ppcState).ILOCK);
   return Common::swap32(value);
 }
 
 void InstructionCache::Invalidate(u32 addr)
 {
-  if (!HID0.ICE || m_disable_icache)
+  if (!HID0(PowerPC::ppcState).ICE || m_disable_icache)
     return;
 
   // Invalidates the whole set

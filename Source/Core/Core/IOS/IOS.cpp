@@ -17,6 +17,7 @@
 #include "Common/CommonTypes.h"
 #include "Common/Logging/Log.h"
 #include "Common/Timer.h"
+
 #include "Core/Boot/AncastTypes.h"
 #include "Core/Boot/DolReader.h"
 #include "Core/Boot/ElfReader.h"
@@ -200,7 +201,7 @@ static void ResetAndPausePPC()
   auto& memory = system.GetMemory();
   memory.Write_U32(0x48000000, 0x00000000);  // b 0x0
   PowerPC::Reset();
-  PC = 0;
+  system.GetPPCState().pc = 0;
 }
 
 static void ReleasePPC()
@@ -212,7 +213,7 @@ static void ReleasePPC()
   // NAND titles start with address translation off at 0x3400 (via the PPC bootstub)
   // The state of other CPU registers (like the BAT registers) doesn't matter much
   // because the realmode code at 0x3400 initializes everything itself anyway.
-  PC = 0x3400;
+  system.GetPPCState().pc = 0x3400;
 }
 
 static void ReleasePPCAncast()
@@ -223,7 +224,7 @@ static void ReleasePPCAncast()
   // On a real console the Espresso verifies and decrypts the Ancast image,
   // then jumps to the decrypted ancast body.
   // The Ancast loader already did this, so just jump to the decrypted body.
-  PC = ESPRESSO_ANCAST_LOCATION_VIRT + sizeof(EspressoAncastHeader);
+  system.GetPPCState().pc = ESPRESSO_ANCAST_LOCATION_VIRT + sizeof(EspressoAncastHeader);
 }
 
 void RAMOverrideForIOSMemoryValues(MemorySetupType setup_type)
@@ -402,7 +403,7 @@ static std::vector<u8> ReadBootContent(FSDevice* fs, const std::string& path, si
 
 // This corresponds to syscall 0x41, which loads a binary from the NAND and bootstraps the PPC.
 // Unlike 0x42, IOS will set up some constants in memory before booting the PPC.
-bool Kernel::BootstrapPPC(const std::string& boot_content_path)
+bool Kernel::BootstrapPPC(Core::System& system, const std::string& boot_content_path)
 {
   // Seeking and processing overhead is ignored as most time is spent reading from the NAND.
   u64 ticks = 0;
@@ -421,12 +422,11 @@ bool Kernel::BootstrapPPC(const std::string& boot_content_path)
   if (dol.IsAncast())
     INFO_LOG_FMT(IOS, "BootstrapPPC: Loading ancast image");
 
-  if (!dol.LoadIntoMemory())
+  if (!dol.LoadIntoMemory(system))
     return false;
 
   INFO_LOG_FMT(IOS, "BootstrapPPC: {}", boot_content_path);
-  Core::System::GetInstance().GetCoreTiming().ScheduleEvent(ticks, s_event_finish_ppc_bootstrap,
-                                                            dol.IsAncast());
+  system.GetCoreTiming().ScheduleEvent(ticks, s_event_finish_ppc_bootstrap, dol.IsAncast());
   return true;
 }
 
@@ -477,7 +477,8 @@ static constexpr SystemTimers::TimeBaseTick GetIOSBootTicks(u32 version)
 // Passing a boot content path is optional because we do not require IOSes
 // to be installed at the moment. If one is passed, the boot binary must exist
 // on the NAND, or the call will fail like on a Wii.
-bool Kernel::BootIOS(const u64 ios_title_id, HangPPC hang_ppc, const std::string& boot_content_path)
+bool Kernel::BootIOS(Core::System& system, const u64 ios_title_id, HangPPC hang_ppc,
+                     const std::string& boot_content_path)
 {
   // IOS suspends regular PPC<->ARM IPC before loading a new IOS.
   // IPC is not resumed if the boot fails for any reason.
@@ -493,7 +494,7 @@ bool Kernel::BootIOS(const u64 ios_title_id, HangPPC hang_ppc, const std::string
       return false;
 
     ElfReader elf{binary.GetElf()};
-    if (!elf.LoadIntoMemory(true))
+    if (!elf.LoadIntoMemory(system, true))
       return false;
   }
 
@@ -502,8 +503,8 @@ bool Kernel::BootIOS(const u64 ios_title_id, HangPPC hang_ppc, const std::string
 
   if (Core::IsRunningAndStarted())
   {
-    Core::System::GetInstance().GetCoreTiming().ScheduleEvent(
-        GetIOSBootTicks(GetVersion()), s_event_finish_ios_boot, ios_title_id);
+    system.GetCoreTiming().ScheduleEvent(GetIOSBootTicks(GetVersion()), s_event_finish_ios_boot,
+                                         ios_title_id);
   }
   else
   {
@@ -912,7 +913,10 @@ static void FinishPPCBootstrap(Core::System& system, u64 userdata, s64 cycles_la
   else
     ReleasePPC();
 
-  SConfig::OnNewTitleLoad();
+  ASSERT(Core::IsCPUThread());
+  Core::CPUThreadGuard guard(system);
+  SConfig::OnNewTitleLoad(guard);
+
   INFO_LOG_FMT(IOS, "Bootstrapping done.");
 }
 
@@ -922,7 +926,7 @@ void Init()
   auto& core_timing = system.GetCoreTiming();
 
   s_event_enqueue =
-      core_timing.RegisterEvent("IPCEvent", [](Core::System& system, u64 userdata, s64) {
+      core_timing.RegisterEvent("IPCEvent", [](Core::System& system_, u64 userdata, s64) {
         if (s_ios)
           s_ios->HandleIPCEvent(userdata);
       });
@@ -933,7 +937,7 @@ void Init()
       core_timing.RegisterEvent("IOSFinishPPCBootstrap", FinishPPCBootstrap);
 
   s_event_finish_ios_boot =
-      core_timing.RegisterEvent("IOSFinishIOSBoot", [](Core::System& system, u64 ios_title_id,
+      core_timing.RegisterEvent("IOSFinishIOSBoot", [](Core::System& system_, u64 ios_title_id,
                                                        s64) { FinishIOSBoot(ios_title_id); });
 
   DIDevice::s_finish_executing_di_command =

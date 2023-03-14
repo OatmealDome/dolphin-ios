@@ -8,12 +8,18 @@
 #include <variant>
 
 #include "Common/Logging/Log.h"
+#include "Common/StringUtil.h"
 #include "Common/VariantUtil.h"
+
+#include "Core/ConfigManager.h"
 
 #include "VideoCommon/GraphicsModSystem/Config/GraphicsMod.h"
 #include "VideoCommon/GraphicsModSystem/Config/GraphicsModGroup.h"
 #include "VideoCommon/GraphicsModSystem/Runtime/GraphicsModActionFactory.h"
 #include "VideoCommon/TextureInfo.h"
+#include "VideoCommon/VideoConfig.h"
+
+std::unique_ptr<GraphicsModManager> g_graphics_mod_manager;
 
 class GraphicsModManager::DecoratedAction final : public GraphicsModAction
 {
@@ -63,6 +69,29 @@ private:
   std::unique_ptr<GraphicsModAction> m_action_impl;
   GraphicsModConfig m_mod;
 };
+
+bool GraphicsModManager::Initialize()
+{
+  if (g_ActiveConfig.bGraphicMods)
+  {
+    // If a config change occurred in a previous session,
+    // remember the old change count value.  By setting
+    // our current change count to the old value, we
+    // avoid loading the stale data when we
+    // check for config changes.
+    const u32 old_game_mod_changes = g_ActiveConfig.graphics_mod_config ?
+                                         g_ActiveConfig.graphics_mod_config->GetChangeCount() :
+                                         0;
+    g_ActiveConfig.graphics_mod_config = GraphicsModGroupConfig(SConfig::GetInstance().GetGameID());
+    g_ActiveConfig.graphics_mod_config->Load();
+    g_ActiveConfig.graphics_mod_config->SetChangeCount(old_game_mod_changes);
+    g_graphics_mod_manager->Load(*g_ActiveConfig.graphics_mod_config);
+
+    m_end_of_frame_event = AfterFrameEvent::Register([this] { EndOfFrame(); }, "ModManager");
+  }
+
+  return true;
+}
 
 const std::vector<GraphicsModAction*>&
 GraphicsModManager::GetProjectionActions(ProjectionType projection_type) const
@@ -167,21 +196,25 @@ void GraphicsModManager::Load(const GraphicsModGroupConfig& config)
   {
     for (const GraphicsModFeatureConfig& feature : mod.m_features)
     {
-      const auto create_action = [](const std::string_view& action_name,
-                                    const picojson::value& json_data,
-                                    GraphicsModConfig mod) -> std::unique_ptr<GraphicsModAction> {
-        auto action = GraphicsModActionFactory::Create(action_name, json_data);
+      const auto create_action =
+          [](const std::string_view& action_name, const picojson::value& json_data,
+             GraphicsModConfig mod_config) -> std::unique_ptr<GraphicsModAction> {
+        std::string base_path;
+        SplitPath(mod_config.GetAbsolutePath(), &base_path, nullptr, nullptr);
+
+        auto action = GraphicsModActionFactory::Create(action_name, json_data, base_path);
         if (action == nullptr)
         {
           return nullptr;
         }
-        return std::make_unique<DecoratedAction>(std::move(action), std::move(mod));
+        return std::make_unique<DecoratedAction>(std::move(action), std::move(mod_config));
       };
 
       const auto internal_group = fmt::format("{}.{}", mod.m_title, feature.m_group);
 
-      const auto add_target = [&](const GraphicsTargetConfig& target, GraphicsModConfig mod) {
-        auto action = create_action(feature.m_action, feature.m_action_data, std::move(mod));
+      const auto add_target = [&](const GraphicsTargetConfig& target,
+                                  GraphicsModConfig mod_config) {
+        auto action = create_action(feature.m_action, feature.m_action_data, std::move(mod_config));
         if (action == nullptr)
         {
           WARN_LOG_FMT(VIDEO, "Failed to create action '{}' for group '{}'.", feature.m_action,

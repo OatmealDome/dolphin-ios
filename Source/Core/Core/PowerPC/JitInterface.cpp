@@ -16,6 +16,7 @@
 
 #include <fmt/format.h>
 
+#include "Common/Assert.h"
 #include "Common/ChunkFile.h"
 #include "Common/CommonTypes.h"
 #include "Common/IOFile.h"
@@ -29,6 +30,7 @@
 #include "Core/PowerPC/PPCSymbolDB.h"
 #include "Core/PowerPC/PowerPC.h"
 #include "Core/PowerPC/Profiler.h"
+#include "Core/System.h"
 
 #if _M_X86
 #include "Core/PowerPC/Jit64/Jit.h"
@@ -153,12 +155,14 @@ std::variant<GetHostCodeError, GetHostCodeResult> GetHostCode(u32 address)
     return GetHostCodeError::NoJitActive;
   }
 
-  JitBlock* block = g_jit->GetBlockCache()->GetBlockFromStartAddress(address, MSR.Hex);
+  JitBlock* block =
+      g_jit->GetBlockCache()->GetBlockFromStartAddress(address, PowerPC::ppcState.msr.Hex);
   if (!block)
   {
     for (int i = 0; i < 500; i++)
     {
-      block = g_jit->GetBlockCache()->GetBlockFromStartAddress(address - 4 * i, MSR.Hex);
+      block = g_jit->GetBlockCache()->GetBlockFromStartAddress(address - 4 * i,
+                                                               PowerPC::ppcState.msr.Hex);
       if (block)
         break;
     }
@@ -264,20 +268,25 @@ void CompileExceptionCheck(ExceptionType type)
     break;
   }
 
-  if (PC != 0 && (exception_addresses->find(PC)) == (exception_addresses->end()))
+  if (PowerPC::ppcState.pc != 0 &&
+      (exception_addresses->find(PowerPC::ppcState.pc)) == (exception_addresses->end()))
   {
     if (type == ExceptionType::FIFOWrite)
     {
+      ASSERT(Core::IsCPUThread());
+      Core::CPUThreadGuard guard(Core::System::GetInstance());
+
       // Check in case the code has been replaced since: do we need to do this?
-      const OpType optype = PPCTables::GetOpInfo(PowerPC::HostRead_U32(PC))->type;
+      const OpType optype =
+          PPCTables::GetOpInfo(PowerPC::HostRead_U32(guard, PowerPC::ppcState.pc))->type;
       if (optype != OpType::Store && optype != OpType::StoreFP && optype != OpType::StorePS)
         return;
     }
-    exception_addresses->insert(PC);
+    exception_addresses->insert(PowerPC::ppcState.pc);
 
     // Invalidate the JIT block so that it gets recompiled with the external exception check
     // included.
-    g_jit->GetBlockCache()->InvalidateICache(PC, 4, true);
+    g_jit->GetBlockCache()->InvalidateICache(PowerPC::ppcState.pc, 4, true);
   }
 }
 

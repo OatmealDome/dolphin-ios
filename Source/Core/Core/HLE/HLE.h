@@ -7,9 +7,15 @@
 
 #include "Common/CommonTypes.h"
 
+namespace Core
+{
+class CPUThreadGuard;
+class System;
+}  // namespace Core
+
 namespace HLE
 {
-using HookFunction = void (*)();
+using HookFunction = void (*)(const Core::CPUThreadGuard&);
 
 enum class HookType
 {
@@ -33,15 +39,16 @@ struct Hook
   HookFlag flags;
 };
 
-void PatchFixedFunctions();
-void PatchFunctions();
+void PatchFixedFunctions(Core::System& system);
+void PatchFunctions(Core::System& system);
 void Clear();
-void Reload();
+void Reload(Core::System& system);
 
-void Patch(u32 pc, std::string_view func_name);
-u32 UnPatch(std::string_view patch_name);
-u32 UnpatchRange(u32 start_addr, u32 end_addr);
-void Execute(u32 current_pc, u32 hook_index);
+void Patch(Core::System& system, u32 pc, std::string_view func_name);
+u32 UnPatch(Core::System& system, std::string_view patch_name);
+u32 UnpatchRange(Core::System& system, u32 start_addr, u32 end_addr);
+void Execute(const Core::CPUThreadGuard& guard, u32 current_pc, u32 hook_index);
+void ExecuteFromJIT(u32 current_pc, u32 hook_index);
 
 // Returns the HLE hook index of the address
 u32 GetHookByAddress(u32 address);

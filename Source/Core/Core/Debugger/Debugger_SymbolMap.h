@@ -10,6 +10,12 @@
 #include "Common/CommonTypes.h"
 #include "Common/Logging/Log.h"
 
+namespace Core
+{
+class CPUThreadGuard;
+class System;
+}  // namespace Core
+
 namespace Dolphin_Debugger
 {
 struct CallstackEntry
@@ -18,8 +24,10 @@ struct CallstackEntry
   u32 vAddress = 0;
 };
 
-bool GetCallstack(std::vector<CallstackEntry>& output);
-void PrintCallstack(Common::Log::LogType type, Common::Log::LogLevel level);
+bool GetCallstack(Core::System& system, const Core::CPUThreadGuard& guard,
+                  std::vector<CallstackEntry>& output);
+void PrintCallstack(Core::System& system, const Core::CPUThreadGuard& guard,
+                    Common::Log::LogType type, Common::Log::LogLevel level);
 void PrintDataBuffer(Common::Log::LogType type, const u8* data, size_t size,
                      std::string_view title);
 void AddAutoBreakpoints();

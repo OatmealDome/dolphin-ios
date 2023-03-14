@@ -19,6 +19,11 @@ namespace Common
 struct Symbol;
 }
 
+namespace Core
+{
+class CPUThreadGuard;
+}
+
 namespace PPCAnalyst
 {
 struct CodeOp  // 16B
@@ -34,13 +39,11 @@ struct CodeOp  // 16B
   bool isBranchTarget = false;
   bool branchUsesCtr = false;
   bool branchIsIdleLoop = false;
-  bool wantsCR0 = false;
-  bool wantsCR1 = false;
+  BitSet8 wantsCR;
   bool wantsFPRF = false;
   bool wantsCA = false;
   bool wantsCAInFlags = false;
-  bool outputCR0 = false;
-  bool outputCR1 = false;
+  BitSet8 outputCR;
   bool outputFPRF = false;
   bool outputCA = false;
   bool canEndBlock = false;
@@ -201,8 +204,11 @@ private:
   bool m_enable_div_by_zero_exceptions = false;
 };
 
-void FindFunctions(u32 startAddr, u32 endAddr, PPCSymbolDB* func_db);
-bool AnalyzeFunction(u32 startAddr, Common::Symbol& func, u32 max_size = 0);
-bool ReanalyzeFunction(u32 start_addr, Common::Symbol& func, u32 max_size = 0);
+void FindFunctions(const Core::CPUThreadGuard& guard, u32 startAddr, u32 endAddr,
+                   PPCSymbolDB* func_db);
+bool AnalyzeFunction(const Core::CPUThreadGuard& guard, u32 startAddr, Common::Symbol& func,
+                     u32 max_size = 0);
+bool ReanalyzeFunction(const Core::CPUThreadGuard& guard, u32 start_addr, Common::Symbol& func,
+                       u32 max_size = 0);
 
 }  // namespace PPCAnalyst

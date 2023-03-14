@@ -135,6 +135,8 @@ ShaderCode GenPixelShader(APIType api_type, const ShaderHostConfig& host_config,
                             GetInterpolationQualifier(msaa, ssaa, true, true), ShaderStage::Pixel);
 
     out.Write("}};\n\n");
+    if (stereo && !host_config.backend_gl_layer_in_fs)
+      out.Write("flat in int layer;");
   }
   else
   {
@@ -532,7 +534,8 @@ ShaderCode GenPixelShader(APIType api_type, const ShaderHostConfig& host_config,
 
   if (host_config.backend_geometry_shaders && stereo)
   {
-    out.Write("\tint layer = gl_Layer;\n");
+    if (host_config.backend_gl_layer_in_fs)
+      out.Write("\tint layer = gl_Layer;\n");
   }
   else
   {
@@ -1090,6 +1093,26 @@ ShaderCode GenPixelShader(APIType api_type, const ShaderHostConfig& host_config,
 
     out.Write("    }}\n"
               "    TevResult &= 0xff;\n"
+              "  }}\n");
+  }
+  else if (!host_config.backend_logic_op)
+  {
+    out.Write("  // Helpers for logic op blending approximations\n"
+              "  if (logic_op_enable) {{\n"
+              "    switch (logic_op_mode) {{\n");
+    out.Write("      case {}: // Clear\n", static_cast<u32>(LogicOp::Clear));
+    out.Write("        TevResult = int4(0, 0, 0, 0);\n"
+              "        break;\n");
+    out.Write("      case {}: // Copy Inverted\n", static_cast<u32>(LogicOp::CopyInverted));
+    out.Write("        TevResult ^= 0xff;\n"
+              "        break;\n");
+    out.Write("      case {}: // Set\n", static_cast<u32>(LogicOp::Set));
+    out.Write("      case {}: // Invert\n", static_cast<u32>(LogicOp::Invert));
+    out.Write("        TevResult = int4(255, 255, 255, 255);\n"
+              "        break;\n");
+    out.Write("      default:\n"
+              "        break;\n"
+              "    }}\n"
               "  }}\n");
   }
 

@@ -54,6 +54,12 @@ public abstract class SettingViewHolder extends RecyclerView.ViewHolder
             Toast.LENGTH_SHORT).show();
   }
 
+  protected static void showIplNotAvailableError()
+  {
+    Toast.makeText(DolphinApplication.getAppContext(), R.string.ipl_not_found, Toast.LENGTH_SHORT)
+            .show();
+  }
+
   /**
    * Called by the adapter to set this ViewHolder's child views to display the list item
    * it must now represent.
@@ -77,7 +83,7 @@ public abstract class SettingViewHolder extends RecyclerView.ViewHolder
   {
     SettingsItem item = getItem();
 
-    if (item == null || !item.hasSetting())
+    if (item == null || !item.canClear())
       return false;
 
     if (!item.isEditable())

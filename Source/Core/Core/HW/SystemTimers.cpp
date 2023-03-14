@@ -97,21 +97,22 @@ void DSPCallback(Core::System& system, u64 userdata, s64 cyclesLate)
 {
   // splits up the cycle budget in case lle is used
   // for hle, just gives all of the slice to hle
-  DSP::UpdateDSPSlice(static_cast<int>(DSP::GetDSPEmulator()->DSP_UpdateRate() - cyclesLate));
-  system.GetCoreTiming().ScheduleEvent(DSP::GetDSPEmulator()->DSP_UpdateRate() - cyclesLate,
-                                       et_DSP);
+  auto& dsp = system.GetDSP();
+  dsp.UpdateDSPSlice(static_cast<int>(dsp.GetDSPEmulator()->DSP_UpdateRate() - cyclesLate));
+  system.GetCoreTiming().ScheduleEvent(dsp.GetDSPEmulator()->DSP_UpdateRate() - cyclesLate, et_DSP);
 }
 
 int GetAudioDMACallbackPeriod()
 {
   // System internal sample rate is fixed at 32KHz * 4 (16bit Stereo) / 32 bytes DMA
-  return static_cast<u64>(s_cpu_core_clock) * AudioInterface::GetAIDSampleRateDivisor() /
+  auto& system = Core::System::GetInstance();
+  return static_cast<u64>(s_cpu_core_clock) * system.GetAudioInterface().GetAIDSampleRateDivisor() /
          (Mixer::FIXED_SAMPLE_RATE_DIVIDEND * 4 / 32);
 }
 
 void AudioDMACallback(Core::System& system, u64 userdata, s64 cyclesLate)
 {
-  DSP::UpdateAudioDMA();  // Push audio to speakers.
+  system.GetDSP().UpdateAudioDMA();  // Push audio to speakers.
   system.GetCoreTiming().ScheduleEvent(GetAudioDMACallbackPeriod() - cyclesLate, et_AudioDMA);
 }
 
@@ -139,29 +140,32 @@ void PerfTrackerCallback(Core::System& system, u64 userdata, s64 cyclesLate)
   auto& core_timing = system.GetCoreTiming();
   g_perf_metrics.CountPerformanceMarker(system, cyclesLate);
 
-  // Call this performance tracker again in 1/64th of a second.
-  // The tracker stores 256 values so this will let us summarize the last 4 seconds.
-  core_timing.ScheduleEvent(GetTicksPerSecond() / 64 - cyclesLate, et_perf_tracker);
+  // Call this performance tracker again in 1/100th of a second.
+  // The tracker stores 256 values so this will let us summarize the last 2.56 seconds.
+  // The performance metrics require this to be called at 100hz for the speed% is correct.
+  core_timing.ScheduleEvent(GetTicksPerSecond() / 100 - cyclesLate, et_perf_tracker);
 }
 
 void VICallback(Core::System& system, u64 userdata, s64 cyclesLate)
 {
   auto& core_timing = system.GetCoreTiming();
-  VideoInterface::Update(core_timing.GetTicks() - cyclesLate);
-  core_timing.ScheduleEvent(VideoInterface::GetTicksPerHalfLine() - cyclesLate, et_VI);
+  auto& vi = system.GetVideoInterface();
+  vi.Update(core_timing.GetTicks() - cyclesLate);
+  core_timing.ScheduleEvent(vi.GetTicksPerHalfLine() - cyclesLate, et_VI);
 }
 
 void DecrementerCallback(Core::System& system, u64 userdata, s64 cyclesLate)
 {
-  PowerPC::ppcState.spr[SPR_DEC] = 0xFFFFFFFF;
-  PowerPC::ppcState.Exceptions |= EXCEPTION_DECREMENTER;
+  auto& ppc_state = system.GetPPCState();
+  ppc_state.spr[SPR_DEC] = 0xFFFFFFFF;
+  ppc_state.Exceptions |= EXCEPTION_DECREMENTER;
 }
 
 void PatchEngineCallback(Core::System& system, u64 userdata, s64 cycles_late)
 {
   // We have 2 periods, a 1000 cycle error period and the VI period.
   // We have to carefully combine these together so that we stay on the VI period without drifting.
-  u32 vi_interval = VideoInterface::GetTicksPerField();
+  u32 vi_interval = system.GetVideoInterface().GetTicksPerField();
   s64 cycles_pruned = (userdata + cycles_late) % vi_interval;
   s64 next_schedule = 0;
 
@@ -192,8 +196,9 @@ void DecrementerSet()
 {
   auto& system = Core::System::GetInstance();
   auto& core_timing = system.GetCoreTiming();
+  auto& ppc_state = system.GetPPCState();
 
-  u32 decValue = PowerPC::ppcState.spr[SPR_DEC];
+  u32 decValue = ppc_state.spr[SPR_DEC];
 
   core_timing.RemoveEvent(et_Dec);
   if ((decValue & 0x80000000) == 0)
@@ -278,10 +283,11 @@ void Init()
 
   auto& system = Core::System::GetInstance();
   auto& core_timing = system.GetCoreTiming();
+  auto& vi = system.GetVideoInterface();
 
   core_timing.SetFakeTBStartValue(static_cast<u64>(s_cpu_core_clock / TIMER_RATIO) *
                                   static_cast<u64>(ExpansionInterface::CEXIIPL::GetEmulatedTime(
-                                      ExpansionInterface::CEXIIPL::GC_EPOCH)));
+                                      system, ExpansionInterface::CEXIIPL::GC_EPOCH)));
 
   core_timing.SetFakeTBStartTicks(core_timing.GetTicks());
 
@@ -299,11 +305,11 @@ void Init()
 
   core_timing.ScheduleEvent(0, et_perf_tracker);
   core_timing.ScheduleEvent(0, et_GPU_sleeper);
-  core_timing.ScheduleEvent(VideoInterface::GetTicksPerHalfLine(), et_VI);
+  core_timing.ScheduleEvent(vi.GetTicksPerHalfLine(), et_VI);
   core_timing.ScheduleEvent(0, et_DSP);
   core_timing.ScheduleEvent(GetAudioDMACallbackPeriod(), et_AudioDMA);
 
-  core_timing.ScheduleEvent(VideoInterface::GetTicksPerField(), et_PatchEngine);
+  core_timing.ScheduleEvent(vi.GetTicksPerField(), et_PatchEngine);
 
   if (SConfig::GetInstance().bWii)
     core_timing.ScheduleEvent(s_ipc_hle_period, et_IPC_HLE);

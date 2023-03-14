@@ -13,9 +13,16 @@ public class FloatSliderSetting extends SliderSetting
   protected AbstractFloatSetting mSetting;
 
   public FloatSliderSetting(Context context, AbstractFloatSetting setting, int titleId,
-          int descriptionId, int min, int max, String units)
+          int descriptionId, int min, int max, String units, int stepSize)
   {
-    super(context, titleId, descriptionId, min, max, units);
+    super(context, titleId, descriptionId, min, max, units, stepSize);
+    mSetting = setting;
+  }
+
+  public FloatSliderSetting(AbstractFloatSetting setting, CharSequence name,
+          CharSequence description, int min, int max, String units)
+  {
+    super(name, description, min, max, units);
     mSetting = setting;
   }
 
