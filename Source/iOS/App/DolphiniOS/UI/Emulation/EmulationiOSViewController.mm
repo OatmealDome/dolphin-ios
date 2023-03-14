@@ -15,6 +15,7 @@
 #import "InputCommon/InputConfig.h"
 
 #import "VideoCommon/RenderBase.h"
+#import "VideoCommon/Present.h"
 
 #import "EmulationCoordinator.h"
 #import "HostNotifications.h"
@@ -157,8 +158,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 }
 
 - (void)viewDidLayoutSubviews {
-  if (g_renderer) {
-    g_renderer->ResizeSurface();
+  if (g_presenter) {
+    g_presenter->ResizeSurface();
   }
   
   [[TCDeviceMotion shared] statusBarOrientationChanged];
