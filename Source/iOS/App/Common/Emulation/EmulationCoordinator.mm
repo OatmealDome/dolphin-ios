@@ -12,6 +12,7 @@
 #import "Core/Core.h"
 
 #import "VideoCommon/RenderBase.h"
+#import "VideoCommon/Present.h"
 
 #import "EmulationBootParameter.h"
 #import "HostNotifications.h"
@@ -79,8 +80,8 @@
   [superview addSubview:_mtkView];
   [_mtkView setFrame:superview.bounds];
   
-  if (g_renderer) {
-    g_renderer->ResizeSurface();
+  if (g_presenter) {
+    g_presenter->ResizeSurface();
   }
 }
 
