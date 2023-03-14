@@ -23,9 +23,11 @@ private:
     void PopulateAxis(ButtonType axis);
   };
 
+  StateManager();
+
   static StateManager s_instance;
 
-  std::vector<ControllerState*> m_controllers;
+  std::vector<ControllerState> m_controllers;
 public:
   static StateManager* GetInstance() { return &s_instance; }
 
