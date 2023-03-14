@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #import "EmulationiOSViewController.h"
+
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
-#include "Common/IOFile.h"
+#import "Common/IOFile.h"
 
 #import "Core/ConfigManager.h"
 #import "Core/Config/MainSettings.h"
@@ -167,7 +168,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
                                        message:nil
                                        preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction* loadAction = [UIAlertAction actionWithTitle:@"Load" style:UIAlertActionStyleDefault
-                                                       handler:^(UIAlertAction * action) {
+                                                       handler:^(UIAlertAction* action) {
             NSArray<UTType*>* types = @[
                 [UTType exportedTypeWithIdentifier:@"me.oatmealdome.dolphinios.skylander-dumps"]
               ];
@@ -180,7 +181,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
             
         }];
         UIAlertAction* clearAction = [UIAlertAction actionWithTitle:@"Clear" style:UIAlertActionStyleDefault
-                                                       handler:^(UIAlertAction * action) {
+                                                       handler:^(UIAlertAction* action) {
             auto& system = Core::System::GetInstance();
             bool removed = system.GetSkylanderPortal().RemoveSkylanderiOS(self.skylanderSlot);
             if (removed && self.skylanderSlot != 0) {
@@ -188,7 +189,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
             }
         }];
         UIAlertAction* clearAllAction = [UIAlertAction actionWithTitle:@"Clear All" style:UIAlertActionStyleDefault
-                                                       handler:^(UIAlertAction * action) {
+                                                       handler:^(UIAlertAction* action) {
             auto& system = Core::System::GetInstance();
             for (int i = 0; i < 16; i++) {
                 system.GetSkylanderPortal().RemoveSkylanderiOS(i);
@@ -357,7 +358,6 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    NSLog(@"Opened");
     std::array<u8, 0x40 * 0x10> file_data;
     if (!sky_file.ReadBytes(file_data.data(), file_data.size()))
     {
@@ -367,7 +367,6 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    NSLog(@"Read");
     auto& system = Core::System::GetInstance();
     std::pair<u16, u16> id_var = system.GetSkylanderPortal().CalculateIDs(file_data);
     u8 portal_slot = system.GetSkylanderPortal().LoadSkylanderiOS(file_data.data(), std::move(sky_file));
@@ -379,7 +378,6 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    NSLog(@"Loaded");
     self.skylanderSlot = portal_slot;
 }
 
