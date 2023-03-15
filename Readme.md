@@ -25,6 +25,12 @@ Finally, use the following command to install `polib` using the Xcode-provided `
 ```
 /path/to/Xcode.app/Contents/Developer/usr/bin/python3 -m pip install polib
 ```
+To install DolphiniOS, you must first clone the repo:
+```
+git clone https://github.com/OatmealDome/dolphin-ios.git
+cd dolphin-ios
+git submodule update --init
+```
 
 Once all of the prerequisites are installed, you can open the Xcode project at `Source/iOS/App/DolphiniOS.xcodeproj`.
 
