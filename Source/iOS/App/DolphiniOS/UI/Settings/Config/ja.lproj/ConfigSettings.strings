@@ -361,5 +361,5 @@
 /* Class = "UITableViewSection"; headerTitle = "Wii Remote Settings"; ObjectID = "zwp-Y9-R4u"; */
 "zwp-Y9-R4u.headerTitle" = "Wiiリモコンの設定";
 
-/* Class = "UILabel"; text = "Emulate Skylander Portal"; ObjectID = "gVD-S1-don"; */
-"gVD-S1-don.text" = "Emulate Skylander Portal";
+/* Class = "UILabel"; text = "Emulate Skylander Portal"; ObjectID = "Htj-RR-420"; */
+"Htj-RR-420.text" = "Emulate Skylander Portal";
