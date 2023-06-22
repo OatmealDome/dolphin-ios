@@ -7,13 +7,20 @@ PATH="$PATH:/opt/homebrew/bin:/usr/local/bin"
 REPO_ROOT_DIR="$PROJECT_DIR/../../.."
 CMAKE_BUILD_DIR="$REPO_ROOT_DIR/build-$PLATFORM_NAME-$DOL_CORE_BUILD_TARGET"
 
+MACHINE_ARCH="$(arch)"
+
 case $PLATFORM_NAME in
     iphoneos)
         PLATFORM=OS64
         PLATFORM_DEPLOYMENT_TARGET=$IPHONEOS_DEPLOYMENT_TARGET
         ;;
     iphonesimulator)
-        PLATFORM=SIMULATOR64
+        if [ "$MACHINE_ARCH" = "arm64" ]; then
+            PLATFORM=SIMULATORARM64
+        else
+            PLATFORM=SIMULATOR64
+        fi
+
         PLATFORM_DEPLOYMENT_TARGET=$IPHONEOS_DEPLOYMENT_TARGET
         ;;
     appletvos)
