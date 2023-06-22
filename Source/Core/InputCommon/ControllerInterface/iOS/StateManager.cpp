@@ -77,6 +77,8 @@ StateManager::StateManager()
     state.PopulateAxis(ButtonType::WIIMOTE_SWING_DOWN);
     state.PopulateAxis(ButtonType::WIIMOTE_SWING_LEFT);
     state.PopulateAxis(ButtonType::WIIMOTE_SWING_RIGHT);
+    state.PopulateAxis(ButtonType::WIIMOTE_SWING_FORWARD);
+    state.PopulateAxis(ButtonType::WIIMOTE_SWING_BACKWARD);
     state.PopulateAxis(ButtonType::WIIMOTE_TILT_FORWARD);
     state.PopulateAxis(ButtonType::WIIMOTE_TILT_BACKWARD);
     state.PopulateAxis(ButtonType::WIIMOTE_TILT_LEFT);
