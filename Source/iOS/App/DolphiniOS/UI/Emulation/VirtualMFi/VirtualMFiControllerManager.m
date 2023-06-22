@@ -34,7 +34,6 @@
         GCInputButtonB,
         GCInputButtonX,
         GCInputButtonY,
-        GCInputDirectionPad,
         GCInputLeftThumbstick,
         GCInputRightThumbstick,
         GCInputLeftShoulder,
