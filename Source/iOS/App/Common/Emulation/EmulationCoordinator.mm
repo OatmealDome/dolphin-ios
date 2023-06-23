@@ -18,7 +18,6 @@
 #import "HostNotifications.h"
 
 @implementation EmulationCoordinator {
-  NSCondition* _hostJobCondition;
   MTKView* _mtkView;
   CAMetalLayer* _metalLayer;
   UIView* _mainDisplayView;
@@ -39,16 +38,12 @@
 
 - (id)init {
   if (self = [super init]) {
-    _hostJobCondition = [[NSCondition alloc] init];
-    
     _mtkView = [[MTKView alloc] init];
     _mtkView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     _metalLayer = (CAMetalLayer*)_mtkView.layer;
     
     self.isExternalDisplayConnected = false;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveDispatchJobNotification) name:DOLHostDidReceiveDispatchJobNotification object:nil];
   }
   
   return self;
@@ -111,14 +106,7 @@
   [[NSNotificationCenter defaultCenter] postNotificationName:DOLEmulationDidStartNotification object:self userInfo:nil];
   
   while (Core::IsRunning()) {
-    [_hostJobCondition lock];
-    [_hostJobCondition wait];
-    
-    dispatch_sync(dispatch_get_main_queue(), ^{
-      Core::HostDispatchJobs();
-    });
-    
-    [_hostJobCondition unlock];
+    [NSThread sleepForTimeInterval:0.025];
   }
   
   [[NSNotificationCenter defaultCenter] postNotificationName:DOLEmulationDidEndNotification object:self userInfo:nil];
@@ -138,12 +126,6 @@
   Core::SetState(userRequestedPause ? Core::State::Paused : Core::State::Running);
   
   _userRequestedPause = userRequestedPause;
-}
-
-- (void)receiveDispatchJobNotification {
-  [_hostJobCondition lock];
-  [_hostJobCondition signal];
-  [_hostJobCondition unlock];
 }
 
 - (void)clearMetalLayer {

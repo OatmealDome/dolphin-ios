@@ -28,7 +28,9 @@ void Host_Message(HostMessageID message)
 {
   if (message == HostMessageID::WMUserJobDispatch)
   {
-    [[NSNotificationCenter defaultCenter] postNotificationName:DOLHostDidReceiveDispatchJobNotification object:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      Core::HostDispatchJobs();
+    });
   }
   else if (message == HostMessageID::WMUserStop)
   {
