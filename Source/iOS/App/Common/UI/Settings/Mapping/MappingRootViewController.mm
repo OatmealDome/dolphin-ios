@@ -329,7 +329,7 @@ struct Section {
 
       File::CreateFullPath(profilePath);
 
-      IniFile ini;
+      Common::IniFile ini;
 
       self->_controller->SaveConfig(ini.GetOrCreateSection("Profile"));
       ini.Save(profilePath);
