@@ -23,7 +23,7 @@
   
   const std::string builtInPath = File::GetSysDirectory() + "Profiles/" + config->GetProfileName() + "/Touchscreen.ini";
   
-  IniFile iniFile;
+  Common::IniFile iniFile;
   iniFile.Load(builtInPath);
   
   controller->LoadConfig(iniFile.GetOrCreateSection("Profile"));
