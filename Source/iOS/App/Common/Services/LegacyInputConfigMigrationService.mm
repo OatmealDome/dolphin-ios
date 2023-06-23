@@ -24,7 +24,7 @@
       continue;
     }
     
-    IniFile iniFile;
+    Common::IniFile iniFile;
     
     // We no longer support Touchscreen devices on ports other than the first one.
     // If this is not the first device, we will skip loading the INI file, which will cause
