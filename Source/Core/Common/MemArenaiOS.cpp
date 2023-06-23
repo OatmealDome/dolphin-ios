@@ -15,6 +15,7 @@ void MemArena::GrabSHMSegment(size_t size, std::string_view base_name)
   kern_return_t retval = vm_allocate(mach_task_self(), &m_shm_address, size, VM_FLAGS_ANYWHERE);
   if (retval != KERN_SUCCESS)
   {
+    m_shm_address = 0;
     ERROR_LOG_FMT(MEMMAP, "Failed to allocate low memory space: {0:#x}", retval);
   }
 
@@ -23,13 +24,23 @@ void MemArena::GrabSHMSegment(size_t size, std::string_view base_name)
 
 void MemArena::ReleaseSHMSegment()
 {
-  vm_deallocate(mach_task_self(), m_shm_address, m_shm_size);
+  if (m_shm_address != 0)
+  {
+    vm_deallocate(mach_task_self(), m_shm_address, m_shm_size);
+  }
+
   m_shm_address = 0;
   m_shm_size = 0;
 }
 
 void* MemArena::CreateView(s64 offset, size_t size)
 {
+  if (m_shm_address == 0)
+  {
+    ERROR_LOG_FMT(MEMMAP, "CreateView failed: no shared memory segment allocated");
+    return nullptr;
+  }
+
   vm_address_t target = 0;
   uint64_t mask = 0;
   vm_address_t source = m_shm_address + offset;
@@ -50,6 +61,12 @@ void* MemArena::CreateView(s64 offset, size_t size)
 
 void MemArena::ReleaseView(void* view, size_t size)
 {
+  if (m_shm_address == 0)
+  {
+    ERROR_LOG_FMT(MEMMAP, "ReleaseView failed: no shared memory segment allocated");
+    return;
+  }
+
   vm_deallocate(mach_task_self(), reinterpret_cast<vm_address_t>(view), size);
 }
 
@@ -74,6 +91,12 @@ void MemArena::ReleaseMemoryRegion()
 
 void* MemArena::MapInMemoryRegion(s64 offset, size_t size, void* base)
 {
+  if (m_shm_address == 0)
+  {
+    ERROR_LOG_FMT(MEMMAP, "MapInMemoryRegion failed: no shared memory segment allocated");
+    return nullptr;
+  }
+
   vm_address_t target = reinterpret_cast<vm_address_t>(base);
   uint64_t mask = 0;
   vm_address_t source = m_shm_address + offset;
@@ -94,6 +117,12 @@ void* MemArena::MapInMemoryRegion(s64 offset, size_t size, void* base)
 
 void MemArena::UnmapFromMemoryRegion(void* view, size_t size)
 {
+  if (m_shm_address == 0)
+  {
+    ERROR_LOG_FMT(MEMMAP, "UnmapFromMemoryRegion failed: no shared memory segment allocated");
+    return;
+  }
+
   vm_deallocate(mach_task_self(), reinterpret_cast<vm_address_t>(view), size);
 }
 }  // namespace Common
