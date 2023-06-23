@@ -102,7 +102,7 @@ struct Profile {
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
   const auto& profile = _profiles[indexPath.row];
   
-  IniFile ini;
+  Common::IniFile ini;
   ini.Load(profile.path);
 
   _emulatedController->LoadConfig(ini.GetOrCreateSection("Profile"));
