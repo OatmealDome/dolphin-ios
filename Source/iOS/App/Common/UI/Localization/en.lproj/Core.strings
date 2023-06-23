@@ -78,7 +78,6 @@ Current Frame: %3";
 "Audio Settings" = "Audio Settings";
 "Auto Update" = "Auto Update";
 "Automatic Start" = "Automatic Start";
-"Boot from DVD Backup" = "Boot from DVD Backup";
 "Borderless Window" = "Borderless Window";
 "Breakpoints" = "Breakpoints";
 "Bug Tracker" = "Bug Tracker";
@@ -94,6 +93,7 @@ Current Frame: %3";
 "Create..." = "Create...";
 "Delete" = "Delete";
 "Delete Watch" = "Delete Watch";
+"Delete Watches" = "Delete Watches";
 "Edit Code..." = "Edit Code...";
 "Edit..." = "Edit...";
 "Eject Disc" = "Eject Disc";
@@ -116,6 +116,7 @@ Current Frame: %3";
 "Import Save Game..." = "Import Save Game...";
 "Import State..." = "Import State...";
 "Import..." = "Import...";
+"Infinity Base" = "Infinity Base";
 "Insert blr" = "Insert blr";
 "Interframe Blending" = "Interframe Blending";
 "JIT" = "JIT";
@@ -123,6 +124,7 @@ Current Frame: %3";
 "Load State" = "Load State";
 "Load Symbol Map" = "Load Symbol Map";
 "Load file to current address" = "Load file to current address";
+"Lock Watches" = "Lock Watches";
 "Lock Widgets In Place" = "Lock Widgets In Place";
 "Memory" = "Memory";
 "Movie" = "Movie";
@@ -145,12 +147,14 @@ Current Frame: %3";
 "Resource Pack Manager" = "Resource Pack Manager";
 "Save Symbol Map" = "Save Symbol Map";
 "Scan e-Reader Card(s)..." = "Scan e-Reader Card(s)...";
+"Skylanders Portal" = "Skylanders Portal";
 "Speed Limit" = "Speed Limit";
 "Stop" = "Stop";
 "Theme" = "Theme";
 "Threads" = "Threads";
 "Tools" = "Tools";
 "Unload ROM" = "Unload ROM";
+"Unlock Watches" = "Unlock Watches";
 "View" = "View";
 "Watch" = "Watch";
 "Website" = "Website";
@@ -167,8 +171,10 @@ Current Frame: %3";
 ", Comma" = ", Comma";
 "- Subtract" = "- Subtract";
 "--> %1" = "--> %1";
+"--Unknown--" = "--Unknown--";
 "..." = "...";
 "/ Divide" = "/ Divide";
+"0" = "0";
 "128 Mbit (2043 blocks)" = "128 Mbit (2043 blocks)";
 "16 Bytes" = "16 Bytes";
 "16 Mbit (251 blocks)" = "16 Mbit (251 blocks)";
@@ -228,6 +234,9 @@ Installing this WAD will replace it irreversibly. Continue?";
 "A disc is already about to be inserted." = "A disc is already about to be inserted.";
 "A save state cannot be loaded without specifying a game to launch." = "A save state cannot be loaded without specifying a game to launch.";
 "A shutdown is already in progress. Unsaved data may be lost if you stop the current emulation before it completes. Force stop?" = "A shutdown is already in progress. Unsaved data may be lost if you stop the current emulation before it completes. Force stop?";
+"A supported Bluetooth device could not be found.
+You must manually connect your Wii Remote." = "A supported Bluetooth device could not be found.
+You must manually connect your Wii Remote.";
 "A sync can only be triggered when a Wii game is running." = "A sync can only be triggered when a Wii game is running.";
 "AD16" = "AD16";
 "ALERT:
@@ -284,6 +293,8 @@ Master codes are not needed. Do not use master codes.";
 "Action Replay: Normal Code {0}: Invalid subtype {1:08x} ({2})" = "Action Replay: Normal Code {0}: Invalid subtype {1:08x} ({2})";
 "Activate NetPlay Chat" = "Activate NetPlay Chat";
 "Active" = "Active";
+"Active Infinity Figures" = "Active Infinity Figures";
+"Active Portal Skylanders" = "Active Portal Skylanders";
 "Active thread queue" = "Active thread queue";
 "Active threads" = "Active threads";
 "Adapter" = "Adapter";
@@ -418,6 +429,9 @@ Please select a specific internal resolution.";
 "Binary SSL (read)" = "Binary SSL (read)";
 "Binary SSL (write)" = "Binary SSL (write)";
 "Bitrate (kbps)" = "Bitrate (kbps)";
+"Blank figure creation failed at:
+%1, try again with a different character" = "Blank figure creation failed at:
+%1, try again with a different character";
 "Block Size" = "Block Size";
 "Blocking" = "Blocking";
 "Blocks" = "Blocks";
@@ -496,6 +510,7 @@ Please either install the closed-source GPU driver or update your Mesa 3D versio
 "Changes the in-game camera type during Free Look.<br><br>Six Axis: Offers full camera control on all axes, akin to moving a spacecraft in zero gravity. This is the most powerful Free Look option but is the most challenging to use.<br> <br>First Person: Controls the free camera similarly to a first person video game. The camera can rotate and travel, but roll is impossible. Easy to use, but limiting.<br><br>Orbital: Rotates the free camera around the original camera. Has no lateral movement, only rotation and you may zoom up to the camera's origin point." = "Changes the in-game camera type during Free Look.<br><br>Six Axis: Offers full camera control on all axes, akin to moving a spacecraft in zero gravity. This is the most powerful Free Look option but is the most challenging to use.<br> <br>First Person: Controls the free camera similarly to a first person video game. The camera can rotate and travel, but roll is impossible. Easy to use, but limiting.<br><br>Orbital: Rotates the free camera around the original camera. Has no lateral movement, only rotation and you may zoom up to the camera's origin point.";
 "Changing cheats will only take effect when the game is restarted." = "Changing cheats will only take effect when the game is restarted.";
 "Channel Partition (%1)" = "Channel Partition (%1)";
+"Character entered is invalid!" = "Character entered is invalid!";
 "Chat" = "Chat";
 "Cheat Code Editor" = "Cheat Code Editor";
 "Cheat Search" = "Cheat Search";
@@ -631,7 +646,6 @@ The emulated software will likely hang now.";
 "Could not launch title {0:016x} because it is missing from the NAND.
 The emulated software will likely hang now." = "Could not launch title {0:016x} because it is missing from the NAND.
 The emulated software will likely hang now.";
-"Could not read \"{0}\". There is no disc in the drive or it is not a GameCube/Wii backup. Please note that Dolphin cannot play games directly from the original GameCube and Wii discs." = "Could not read \"{0}\". There is no disc in the drive or it is not a GameCube/Wii backup. Please note that Dolphin cannot play games directly from the original GameCube and Wii discs.";
 "Could not recognize file {0}" = "Could not recognize file {0}";
 "Could not start updater process: {0}" = "Could not start updater process: {0}";
 "Could not write memory card file {0}.
@@ -649,7 +663,10 @@ If so, then you may need to re-specify your memory card location in the options.
 "Couldn't open file." = "Couldn't open file.";
 "Couldn't read file." = "Couldn't read file.";
 "Country" = "Country";
+"Create" = "Create";
+"Create Infinity File" = "Create Infinity File";
 "Create New Memory Card" = "Create New Memory Card";
+"Create Skylander File" = "Create Skylander File";
 "Create mappings for other devices" = "Create mappings for other devices";
 "Creates frame dumps and screenshots at the internal resolution of the renderer, rather than the size of the window it is displayed within.<br><br>If the aspect ratio is widescreen, the output image will be scaled horizontally to preserve the vertical resolution.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Creates frame dumps and screenshots at the internal resolution of the renderer, rather than the size of the window it is displayed within.<br><br>If the aspect ratio is widescreen, the output image will be scaled horizontally to preserve the vertical resolution.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Creator" = "Creator";
@@ -657,6 +674,8 @@ If so, then you may need to re-specify your memory card location in the options.
 "Crop" = "Crop";
 "Crops the picture from its native aspect ratio to 4:3 or 16:9.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Crops the picture from its native aspect ratio to 4:3 or 16:9.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Crossfade" = "Crossfade";
+"Cull Vertices on the CPU" = "Cull Vertices on the CPU";
+"Cull vertices on the CPU to reduce the number of draw calls required.  May affect performance and draw statistics.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Cull vertices on the CPU to reduce the number of draw calls required.  May affect performance and draw statistics.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Current Region" = "Current Region";
 "Current Value" = "Current Value";
 "Current context" = "Current context";
@@ -844,7 +863,12 @@ Suitable for competitive games where fairness and minimal latency are most impor
 "Embedded Frame Buffer (EFB)" = "Embedded Frame Buffer (EFB)";
 "Empty" = "Empty";
 "Emu Thread already running" = "Emu Thread already running";
+"Emulate Disc Speed" = "Emulate Disc Speed";
+"Emulate Infinity Base" = "Emulate Infinity Base";
+"Emulate Skylander Portal" = "Emulate Skylander Portal";
 "Emulate the Wii's Bluetooth adapter" = "Emulate the Wii's Bluetooth adapter";
+"Emulate the disc speed of real hardware. Disabling can cause instability. Defaults to <b>True</b>" = "Emulate the disc speed of real hardware. Disabling can cause instability. Defaults to <b>True</b>";
+"Emulated USB Devices" = "Emulated USB Devices";
 "Emulated Wii Remote" = "Emulated Wii Remote";
 "Emulated memory size mismatch!
 Current: MEM1 {0:08X} ({1} MiB), MEM2 {2:08X} ({3} MiB)
@@ -871,10 +895,16 @@ DFF: MEM1 {4:08X} ({5} MiB), MEM2 {6:08X} ({7} MiB)";
 "Enable Speaker Data" = "Enable Speaker Data";
 "Enable Usage Statistics Reporting" = "Enable Usage Statistics Reporting";
 "Enable Wireframe" = "Enable Wireframe";
-"Enable fast disc access. This can cause crashes and other problems in some games. (ON = Fast, OFF = Compatible)" = "Enable fast disc access. This can cause crashes and other problems in some games. (ON = Fast, OFF = Compatible)";
+"Enable Write-Back Cache (slow)" = "Enable Write-Back Cache (slow)";
+"Enable emulated disc speed. Disabling this can cause crashes and other problems in some games. (ON = Compatible, OFF = Unlocked)" = "Enable emulated disc speed. Disabling this can cause crashes and other problems in some games. (ON = Compatible, OFF = Unlocked)";
 "Enables Dolby Pro Logic II emulation using 5.1 surround. Certain backends only." = "Enables Dolby Pro Logic II emulation using 5.1 surround. Certain backends only.";
 "Enables Floating Point Result Flag calculation, needed for a few games. (ON = Compatible, OFF = Fast)" = "Enables Floating Point Result Flag calculation, needed for a few games. (ON = Compatible, OFF = Fast)";
 "Enables detection of arbitrary mipmaps, which some games use for special distance-based effects.<br><br>May have false positives that result in blurry textures at increased internal resolution, such as in games that use very low resolution mipmaps. Disabling this can also reduce stutter in games that frequently load new textures. This feature is not compatible with GPU Texture Decoding.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Enables detection of arbitrary mipmaps, which some games use for special distance-based effects.<br><br>May have false positives that result in blurry textures at increased internal resolution, such as in games that use very low resolution mipmaps. Disabling this can also reduce stutter in games that frequently load new textures. This feature is not compatible with GPU Texture Decoding.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
+"Enables emulation of the CPU write-back cache.
+Enabling will have a significant impact on performance.
+This should be left disabled unless absolutely needed." = "Enables emulation of the CPU write-back cache.
+Enabling will have a significant impact on performance.
+This should be left disabled unless absolutely needed.";
 "Enables multithreaded command submission in backends where supported. Enabling this option may result in a performance improvement on systems with more than two CPU cores. Currently, this is limited to the Vulkan backend.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Enables multithreaded command submission in backends where supported. Enabling this option may result in a performance improvement on systems with more than two CPU cores. Currently, this is limited to the Vulkan backend.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
 "Enables progressive scan if supported by the emulated software. Most games don't have any issue with this.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Enables progressive scan if supported by the emulated software. Most games don't have any issue with this.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Enables stretching of the audio to match emulation speed." = "Enables stretching of the audio to match emulation speed.";
@@ -903,6 +933,7 @@ Aborting import.";
 "Error" = "Error";
 "Error Opening Adapter: %1" = "Error Opening Adapter: %1";
 "Error collecting save data!" = "Error collecting save data!";
+"Error converting value" = "Error converting value";
 "Error loading selected language. Falling back to system default." = "Error loading selected language. Falling back to system default.";
 "Error obtaining session list: %1" = "Error obtaining session list: %1";
 "Error occurred while loading some texture packs" = "Error occurred while loading some texture packs";
@@ -994,12 +1025,21 @@ Right click -> 'Set blr' will place a blr at the top of the symbol.
 "Failed to add this session to the NetPlay index: %1" = "Failed to add this session to the NetPlay index: %1";
 "Failed to append to signature file '%1'" = "Failed to append to signature file '%1'";
 "Failed to claim interface for BT passthrough: {0}" = "Failed to claim interface for BT passthrough: {0}";
+"Failed to clear Skylander!" = "Failed to clear Skylander!";
+"Failed to clear the Skylander from slot(%1)!
+" = "Failed to clear the Skylander from slot(%1)!
+";
 "Failed to connect to Redump.org" = "Failed to connect to Redump.org";
 "Failed to connect to server: %1" = "Failed to connect to server: %1";
 "Failed to create D3D swap chain" = "Failed to create D3D swap chain";
 "Failed to create D3D12 context" = "Failed to create D3D12 context";
 "Failed to create D3D12 global resources" = "Failed to create D3D12 global resources";
 "Failed to create DXGI factory" = "Failed to create DXGI factory";
+"Failed to create Infinity file" = "Failed to create Infinity file";
+"Failed to create Skylander file!" = "Failed to create Skylander file!";
+"Failed to create Skylander file:
+%1" = "Failed to create Skylander file:
+%1";
 "Failed to delete NetPlay GBA{0} save file. Verify your write permissions." = "Failed to delete NetPlay GBA{0} save file. Verify your write permissions.";
 "Failed to delete NetPlay memory card. Verify your write permissions." = "Failed to delete NetPlay memory card. Verify your write permissions.";
 "Failed to delete the selected file." = "Failed to delete the selected file.";
@@ -1036,6 +1076,10 @@ Make sure your video card supports at least D3D 10.0
 "Failed to load d3d11.dll" = "Failed to load d3d11.dll";
 "Failed to load dxgi.dll" = "Failed to load dxgi.dll";
 "Failed to load map file '%1'" = "Failed to load map file '%1'";
+"Failed to load the Skylander file!" = "Failed to load the Skylander file!";
+"Failed to load the Skylander file(%1)!
+" = "Failed to load the Skylander file(%1)!
+";
 "Failed to load the executable to memory." = "Failed to load the executable to memory.";
 "Failed to load {0}. If you are using Windows 7, try installing the KB4019990 update package." = "Failed to load {0}. If you are using Windows 7, try installing the KB4019990 update package.";
 "Failed to open '%1'" = "Failed to open '%1'";
@@ -1048,6 +1092,14 @@ Make sure there's an application assigned to open INI files." = "Failed to open 
 Make sure there's an application assigned to open INI files.";
 "Failed to open file." = "Failed to open file.";
 "Failed to open server" = "Failed to open server";
+"Failed to open the Infinity file!" = "Failed to open the Infinity file!";
+"Failed to open the Infinity file(%1)!
+File may already be in use on the base." = "Failed to open the Infinity file(%1)!
+File may already be in use on the base.";
+"Failed to open the Skylander file!" = "Failed to open the Skylander file!";
+"Failed to open the Skylander file(%1)!
+File may already be in use on the portal." = "Failed to open the Skylander file(%1)!
+File may already be in use on the portal.";
 "Failed to open the input file \"%1\"." = "Failed to open the input file \"%1\".";
 "Failed to open the output file \"{0}\".
 Check that you have permissions to write the target folder and that the media can be written." = "Failed to open the output file \"{0}\".
@@ -1058,6 +1110,14 @@ Check that you have permissions to write the target folder and that the media ca
 "Failed to read from file." = "Failed to read from file.";
 "Failed to read from the input file \"{0}\"." = "Failed to read from the input file \"{0}\".";
 "Failed to read selected savefile(s) from memory card." = "Failed to read selected savefile(s) from memory card.";
+"Failed to read the Infinity file!" = "Failed to read the Infinity file!";
+"Failed to read the Infinity file(%1)!
+File was too small." = "Failed to read the Infinity file(%1)!
+File was too small.";
+"Failed to read the Skylander file!" = "Failed to read the Skylander file!";
+"Failed to read the Skylander file(%1)!
+File was too small." = "Failed to read the Skylander file(%1)!
+File was too small.";
 "Failed to read {0}" = "Failed to read {0}";
 "Failed to remove file." = "Failed to remove file.";
 "Failed to remove junk data from file \"%1\".
@@ -1092,6 +1152,7 @@ Check that you have enough space available on the target drive.";
 "Fast Depth Calculation" = "Fast Depth Calculation";
 "Fatal desync. Aborting playback. (Error in PlayWiimote: {0} != {1}, byte {2}.){3}" = "Fatal desync. Aborting playback. (Error in PlayWiimote: {0} != {1}, byte {2}.){3}";
 "Field of View" = "Field of View";
+"Figure Number" = "Figure Number";
 "File Details" = "File Details";
 "File Format" = "File Format";
 "File Info" = "File Info";
@@ -1321,6 +1382,7 @@ Suitable for casual games with 3+ players, possibly on unstable or high latency 
 "Hz" = "Hz";
 "I am aware of the risks and want to continue" = "I am aware of the risks and want to continue";
 "ID" = "ID";
+"ID entered is invalid!" = "ID entered is invalid!";
 "IOS Version" = "IOS Version";
 "IOS: A file required for SSL services ({0}) is invalid. Please refer to https://dolphin-emu.org/docs/guides/wii-network-guide/ for instructions on setting up Wii networking." = "IOS: A file required for SSL services ({0}) is invalid. Please refer to https://dolphin-emu.org/docs/guides/wii-network-guide/ for instructions on setting up Wii networking.";
 "IOS: Could not read a file required for SSL services ({0}). Please refer to https://dolphin-emu.org/docs/guides/wii-network-guide/ for instructions on setting up Wii networking." = "IOS: Could not read a file required for SSL services ({0}). Please refer to https://dolphin-emu.org/docs/guides/wii-network-guide/ for instructions on setting up Wii networking.";
@@ -1390,6 +1452,9 @@ to the connection state of the real default device (if there is one).";
 "Increase Y" = "Increase Y";
 "Incremental Rotation" = "Incremental Rotation";
 "Incremental Rotation (rad/sec)" = "Incremental Rotation (rad/sec)";
+"Infinity Figure Creator" = "Infinity Figure Creator";
+"Infinity Manager" = "Infinity Manager";
+"Infinity Object (*.bin);;" = "Infinity Object (*.bin);;";
 "Influence of accelerometer data on pitch and roll. Higher values will reduce drift at the cost of noise. Consider values between 1% and 3%." = "Influence of accelerometer data on pitch and roll. Higher values will reduce drift at the cost of noise. Consider values between 1% and 3%.";
 "Info" = "Info";
 "Information" = "Information";
@@ -1513,6 +1578,7 @@ Middle-click to clear." = "Left/Right-click to configure output.
 Middle-click to clear.";
 "Levers" = "Levers";
 "License" = "License";
+"Lift" = "Lift";
 "Light" = "Light";
 "Limit Chunked Upload Speed" = "Limit Chunked Upload Speed";
 "List Columns" = "List Columns";
@@ -1562,6 +1628,7 @@ Middle-click to clear.";
 "Loads graphics mods from User/Load/GraphicsMods/.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Loads graphics mods from User/Load/GraphicsMods/.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Local" = "Local";
 "Lock Mouse Cursor" = "Lock Mouse Cursor";
+"Locked" = "Locked";
 "Log" = "Log";
 "Log Configuration" = "Log Configuration";
 "Log JIT Instruction Coverage" = "Log JIT Instruction Coverage";
@@ -1706,8 +1773,8 @@ Expected:
 "NumExec" = "NumExec";
 "Number of shakes per second." = "Number of shakes per second.";
 "Nunchuk" = "Nunchuk";
+"Nunchuk Accelerometer" = "Nunchuk Accelerometer";
 "Nunchuk Buttons" = "Nunchuk Buttons";
-"Nunchuk Orientation" = "Nunchuk Orientation";
 "Nunchuk Stick" = "Nunchuk Stick";
 "OK" = "OK";
 "Object %1" = "Object %1";
@@ -1727,6 +1794,7 @@ Expected:
 (Blank for all symbols)";
 "Open" = "Open";
 "Open Containing Folder" = "Open Containing Folder";
+"Open User Folder" = "Open User Folder";
 "Open Directory..." = "Open Directory...";
 "Open FIFO log" = "Open FIFO log";
 "Open GameCube Save Folder" = "Open GameCube Save Folder";
@@ -1796,8 +1864,15 @@ The performance impact is the same as having Enable MMU on.";
 "Platform" = "Platform";
 "Play / Record" = "Play / Record";
 "Play Recording" = "Play Recording";
+"Play Set/Power Disc" = "Play Set/Power Disc";
 "Playback Options" = "Playback Options";
 "Player" = "Player";
+"Player One" = "Player One";
+"Player One Ability One" = "Player One Ability One";
+"Player One Ability Two" = "Player One Ability Two";
+"Player Two" = "Player Two";
+"Player Two Ability One" = "Player Two Ability One";
+"Player Two Ability Two" = "Player Two Ability Two";
 "Players" = "Players";
 "Please start a game before starting a search with standard memory regions." = "Please start a game before starting a search with standard memory regions.";
 "Point" = "Point";
@@ -2005,6 +2080,7 @@ Overwrite now?";
 "Select" = "Select";
 "Select Dump Path" = "Select Dump Path";
 "Select Export Directory" = "Select Export Directory";
+"Select Figure File" = "Select Figure File";
 "Select GBA BIOS" = "Select GBA BIOS";
 "Select GBA ROM" = "Select GBA ROM";
 "Select GBA Saves Path" = "Select GBA Saves Path";
@@ -2012,6 +2088,7 @@ Overwrite now?";
 "Select Load Path" = "Select Load Path";
 "Select Resource Pack Path" = "Select Resource Pack Path";
 "Select Riivolution XML file" = "Select Riivolution XML file";
+"Select Skylander File" = "Select Skylander File";
 "Select Slot %1 - %2" = "Select Slot %1 - %2";
 "Select State" = "Select State";
 "Select State Slot" = "Select State Slot";
@@ -2085,7 +2162,6 @@ May not work for all games.";
 "Shake" = "Shake";
 "Shinkansen" = "Shinkansen";
 "Shinkansen Controller" = "Shinkansen Controller";
-"Shortens loading times but may break some games. Can have negative effects on performance. Defaults to <b>False</b>" = "Shortens loading times but may break some games. Can have negative effects on performance. Defaults to <b>False</b>";
 "Show % Speed" = "Show % Speed";
 "Show Log" = "Show Log";
 "Show Toolbar" = "Show Toolbar";
@@ -2094,7 +2170,9 @@ May not work for all games.";
 "Show Australia" = "Show Australia";
 "Show Current Game on Discord" = "Show Current Game on Discord";
 "Show Debugging UI" = "Show Debugging UI";
+"Show Disabled Codes First" = "Show Disabled Codes First";
 "Show ELF/DOL" = "Show ELF/DOL";
+"Show Enabled Codes First" = "Show Enabled Codes First";
 "Show FPS" = "Show FPS";
 "Show Frame Counter" = "Show Frame Counter";
 "Show Frame Times" = "Show Frame Times";
@@ -2166,7 +2244,12 @@ May not work for all games.";
 "Skip EFB Access from CPU" = "Skip EFB Access from CPU";
 "Skip Main Menu" = "Skip Main Menu";
 "Skip Presenting Duplicate Frames" = "Skip Presenting Duplicate Frames";
+"Skips Vertical Blank Interrupts when lag is detected, allowing for smooth audio playback when emulation speed is not 100%. <br><br><dolphin_emphasis>WARNING: Can cause freezes and compatibility issues.</dolphin_emphasis> <br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Skips Vertical Blank Interrupts when lag is detected, allowing for smooth audio playback when emulation speed is not 100%. <br><br><dolphin_emphasis>WARNING: Can cause freezes and compatibility issues.</dolphin_emphasis> <br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Skips presentation of duplicate frames (XFB copies) in 25fps/30fps games. This may improve performance on low-end devices, while making frame pacing less consistent.<br><br />Disable this option as well as enabling V-Sync for optimal frame pacing.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Skips presentation of duplicate frames (XFB copies) in 25fps/30fps games. This may improve performance on low-end devices, while making frame pacing less consistent.<br><br />Disable this option as well as enabling V-Sync for optimal frame pacing.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
+"Skylander %1" = "Skylander %1";
+"Skylander Creator" = "Skylander Creator";
+"Skylander Object (*.sky);;" = "Skylander Object (*.sky);;";
+"Skylanders Manager" = "Skylanders Manager";
 "Slider Bar" = "Slider Bar";
 "Slot A" = "Slot A";
 "Slot B" = "Slot B";
@@ -2189,8 +2272,6 @@ Please check the highlighted values.";
 "Specific" = "Specific";
 "Specifies the zlib compression level to use when saving PNG images (both for screenshots and framedumping).<br><br>Since PNG uses lossless compression, this does not affect the image quality; instead, it is a trade-off between file size and compression time.<br><br>A value of 0 uses no compression at all.  A value of 1 uses very little compression, while the maximum value of 9 applies a lot of compression.  However, for PNG files, levels between 3 and 6 are generally about as good as level 9 but finish in significantly less time.<br><br><dolphin_emphasis>If unsure, leave this at 6.</dolphin_emphasis>" = "Specifies the zlib compression level to use when saving PNG images (both for screenshots and framedumping).<br><br>Since PNG uses lossless compression, this does not affect the image quality; instead, it is a trade-off between file size and compression time.<br><br>A value of 0 uses no compression at all.  A value of 1 uses very little compression, while the maximum value of 9 applies a lot of compression.  However, for PNG files, levels between 3 and 6 are generally about as good as level 9 but finish in significantly less time.<br><br><dolphin_emphasis>If unsure, leave this at 6.</dolphin_emphasis>";
 "Speed" = "Speed";
-"Speed up Disc Transfer Rate" = "Speed up Disc Transfer Rate";
-"Stable (once a year)" = "Stable (once a year)";
 "Stack end" = "Stack end";
 "Stack start" = "Stack start";
 "Standard Controller" = "Standard Controller";
@@ -2299,12 +2380,17 @@ Instructions executed:   %1";
 "The NAND could not be repaired. It is recommended to back up your current data and start over with a fresh NAND." = "The NAND could not be repaired. It is recommended to back up your current data and start over with a fresh NAND.";
 "The NAND has been repaired." = "The NAND has been repaired.";
 "The TMD is not correctly signed. If you move or copy this title to the SD Card, the Wii System Menu will not launch it anymore and will also refuse to copy or move it back to the NAND." = "The TMD is not correctly signed. If you move or copy this title to the SD Card, the Wii System Menu will not launch it anymore and will also refuse to copy or move it back to the NAND.";
-"The amount of time the FPS and VPS counters will sample over.<br><br>The higher the value, the more stable the FPS/VPS counter will be, but the slower it will be slower to update.<br><br><dolphin_emphasis>If unsure, leave this at 1000ms.</dolphin_emphasis>" = "The amount of time the FPS and VPS counters will sample over.<br><br>The higher the value, the more stable the FPS/VPS counter will be, but the slower it will be slower to update.<br><br><dolphin_emphasis>If unsure, leave this at 1000ms.</dolphin_emphasis>";
+"The amount of time the FPS and VPS counters will sample over.<br><br>The higher the value, the more stable the FPS/VPS counter will be, but the slower it will be to update.<br><br><dolphin_emphasis>If unsure, leave this at 1000ms.</dolphin_emphasis>" = "The amount of time the FPS and VPS counters will sample over.<br><br>The higher the value, the more stable the FPS/VPS counter will be, but the slower it will be to update.<br><br><dolphin_emphasis>If unsure, leave this at 1000ms.</dolphin_emphasis>";
 "The channel partition is missing." = "The channel partition is missing.";
 "The data partition is missing." = "The data partition is missing.";
 "The data partition is not at its normal position. This will affect the emulated loading times. You will be unable to share input recordings and use NetPlay with anyone who is using a good dump." = "The data partition is not at its normal position. This will affect the emulated loading times. You will be unable to share input recordings and use NetPlay with anyone who is using a good dump.";
 "The data size for the {0} partition is not evenly divisible by the block size." = "The data size for the {0} partition is not evenly divisible by the block size.";
 "The decryption keys need to be appended to the NAND backup file." = "The decryption keys need to be appended to the NAND backup file.";
+"The destination file cannot be the same as the source file
+
+Please select another destination path for \"%1\"" = "The destination file cannot be the same as the source file
+
+Please select another destination path for \"%1\"";
 "The disc change to \"{0}\" could not be saved in the .dtm file.
 The filename of the disc image must not be longer than 40 characters." = "The disc change to \"{0}\" could not be saved in the .dtm file.
 The filename of the disc image must not be longer than 40 characters.";
@@ -2520,6 +2606,7 @@ Would you like to ignore this line and continue parsing?";
 "Uninstalling the WAD will remove the currently installed version of this title from the NAND without deleting its save data. Continue?" = "Uninstalling the WAD will remove the currently installed version of this title from the NAND without deleting its save data. Continue?";
 "United States" = "United States";
 "Unknown" = "Unknown";
+"Unknown (Id:%1 Var:%2)" = "Unknown (Id:%1 Var:%2)";
 "Unknown DVD command {0:08x} - fatal error" = "Unknown DVD command {0:08x} - fatal error";
 "Unknown SYNC_CODES message received with id: {0}" = "Unknown SYNC_CODES message received with id: {0}";
 "Unknown SYNC_GECKO_CODES message with id:{0} received from player:{1} Kicking player!" = "Unknown SYNC_GECKO_CODES message with id:{0} received from player:{1} Kicking player!";
@@ -2534,6 +2621,8 @@ Would you like to ignore this line and continue parsing?";
 "Unknown error." = "Unknown error.";
 "Unknown message received with id : {0}" = "Unknown message received with id : {0}";
 "Unknown message with id:{0} received from player:{1} Kicking player!" = "Unknown message with id:{0} received from player:{1} Kicking player!";
+"Unknown(%1 %2).sky" = "Unknown(%1 %2).sky";
+"Unknown(%1).bin" = "Unknown(%1).bin";
 "Unlimited" = "Unlimited";
 "Unlock Cursor" = "Unlock Cursor";
 "Unpacking" = "Unpacking";
@@ -2613,8 +2702,11 @@ inputs and outputs of the same parent controller.";
 "Usually used for tex coord matrices" = "Usually used for tex coord matrices";
 "Utility" = "Utility";
 "V-Sync" = "V-Sync";
+"VBI Skip" = "VBI Skip";
 "Value" = "Value";
 "Value tracked to current instruction." = "Value tracked to current instruction.";
+"Variant entered is invalid!" = "Variant entered is invalid!";
+"Variant" = "Variant";
 "Velocity" = "Velocity";
 "Verbosity" = "Verbosity";
 "Verify" = "Verify";
@@ -2687,8 +2779,9 @@ Start={24}, A={25}, B={26}, X={27}, Y={28}, Z={29}, DUp={30}, DDown={31}, DLeft=
 "Wii NAND Root" = "Wii NAND Root";
 "Wii Remote" = "Wii Remote";
 "Wii Remote %1" = "Wii Remote %1";
+"Wii Remote Accelerometer" = "Wii Remote Accelerometer";
 "Wii Remote Buttons" = "Wii Remote Buttons";
-"Wii Remote Orientation" = "Wii Remote Orientation";
+"Wii Remote Gyroscope" = "Wii Remote Gyroscope";
 "Wii Remote Settings" = "Wii Remote Settings";
 "Wii Remotes" = "Wii Remotes";
 "Wii TAS Input %1 - Classic Controller" = "Wii TAS Input %1 - Classic Controller";
