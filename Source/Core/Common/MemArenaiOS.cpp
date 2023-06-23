@@ -10,7 +10,7 @@ namespace Common
 MemArena::MemArena() = default;
 MemArena::~MemArena() = default;
 
-void MemArena::GrabSHMSegment(size_t size)
+void MemArena::GrabSHMSegment(size_t size, std::string_view base_name)
 {
   kern_return_t retval = vm_allocate(mach_task_self(), &m_shm_address, size, VM_FLAGS_ANYWHERE);
   if (retval != KERN_SUCCESS)
