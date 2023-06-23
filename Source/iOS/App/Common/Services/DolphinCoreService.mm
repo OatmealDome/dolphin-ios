@@ -27,6 +27,8 @@
 @implementation DolphinCoreService
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id>*)launchOptions {
+  Core::DeclareAsHostThread();
+  
   UICommon::SetUserDirectory(FoundationToCppString([UserFolderUtil getUserFolder]));
   UICommon::CreateDirectories();
   UICommon::Init();
