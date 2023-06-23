@@ -156,7 +156,7 @@ struct Device {
         
         const std::string profilePath = File::GetSysDirectory() + "Profiles/" + self.inputConfig->GetProfileName() + "/" + iniName + ".ini";
         
-        IniFile iniFile;
+        Common::IniFile iniFile;
         iniFile.Load(profilePath);
         
         self.emulatedController->LoadConfig(iniFile.GetOrCreateSection("Profile"));
