@@ -203,7 +203,7 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
       MappingGroupEditControlCell* controlCell = [tableView dequeueReusableCellWithIdentifier:@"ControlCell" forIndexPath:indexPath];
       
       NSString* name = CppToFoundationString(control->ui_name);
-      if (control->translate == ControllerEmu::Translate) {
+      if (control->translate == ControllerEmu::Translatability::Translate) {
         name = DOLCoreLocalizedString(name);
       }
       
