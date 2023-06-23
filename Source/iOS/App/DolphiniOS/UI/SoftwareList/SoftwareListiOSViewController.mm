@@ -23,7 +23,7 @@
   
   // Get the system menu TMD
   IOS::HLE::Kernel ios;
-  const auto tmd = ios.GetES()->FindInstalledTMD(Titles::SYSTEM_MENU);
+  const auto tmd = ios.GetESCore().FindInstalledTMD(Titles::SYSTEM_MENU);
   
   if (tmd.IsValid()) {
     NSString* loadFormat;
