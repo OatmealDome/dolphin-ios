@@ -92,7 +92,7 @@
 "HKr-LO-ZJY.text" = "Wiiリモコンの感度";
 
 /* Class = "UITableViewSection"; headerTitle = "SD Card Settings"; ObjectID = "HbC-2c-92H"; */
-"HbC-2c-92H.headerTitle" = "SD Card Settings";
+"HbC-2c-92H.headerTitle" = "SDカードの設定";
 
 /* Class = "UILabel"; text = "German"; ObjectID = "HmT-kY-6wi"; */
 "HmT-kY-6wi.text" = "ドイツ語";
@@ -269,7 +269,7 @@
 "kzL-o9-q6A.text" = "Download Game Covers from GameTDB.com";
 
 /* Class = "UILabel"; text = "Automatically Sync with Folder"; ObjectID = "lLr-en-yJx"; */
-"lLr-en-yJx.text" = "Automatically Sync with Folder";
+"lLr-en-yJx.text" = "次のフォルダと自動同期";
 
 /* Class = "UILabel"; text = "Sensor Bar Position"; ObjectID = "lVg-Mq-csQ"; */
 "lVg-Mq-csQ.text" = "センサーバーの位置";
@@ -329,7 +329,7 @@
 "vr5-sd-t4l.text" = "4:3";
 
 /* Class = "UITableViewSection"; footerTitle = "Dolphin will use this for titles whose region cannot be determined automatically."; ObjectID = "w9f-Gt-sOg"; */
-"w9f-Gt-sOg.footerTitle" = "Dolphin will use this for titles whose region cannot be determined automatically.";
+"w9f-Gt-sOg.footerTitle" = "リージョンが自動設定されないタイトルに対し、Dolphinはここで設定したリージョンを使用します。";
 
 /* Class = "UITableViewSection"; headerTitle = "Fallback Region"; ObjectID = "w9f-Gt-sOg"; */
 "w9f-Gt-sOg.headerTitle" = "Fallback Region";
