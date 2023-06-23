@@ -30,11 +30,12 @@ public:
   void SetCookies(const std::string& cookies);
   void UseIPv4();
   void FollowRedirects(long max);
+  s32 GetLastResponseCode();
   Response Fetch(const std::string& url, Method method, const Headers& headers, const u8* payload,
                  size_t size, AllowedReturnCodes codes = AllowedReturnCodes::Ok_Only);
 
-  static int CurlProgressCallback(Impl* impl, double dlnow, double dltotal, double ulnow,
-                                  double ultotal);
+  static int CurlProgressCallback(Impl* impl, curl_off_t dltotal, curl_off_t dlnow,
+                                  curl_off_t ultotal, curl_off_t ulnow);
   std::string EscapeComponent(const std::string& string);
 
 private:
@@ -76,6 +77,11 @@ std::string HttpRequest::EscapeComponent(const std::string& string)
   return m_impl->EscapeComponent(string);
 }
 
+s32 HttpRequest::GetLastResponseCode() const
+{
+  return m_impl->GetLastResponseCode();
+}
+
 HttpRequest::Response HttpRequest::Get(const std::string& url, const Headers& headers,
                                        AllowedReturnCodes codes)
 {
@@ -95,11 +101,12 @@ HttpRequest::Response HttpRequest::Post(const std::string& url, const std::strin
                        reinterpret_cast<const u8*>(payload.data()), payload.size(), codes);
 }
 
-int HttpRequest::Impl::CurlProgressCallback(Impl* impl, double dlnow, double dltotal, double ulnow,
-                                            double ultotal)
+int HttpRequest::Impl::CurlProgressCallback(Impl* impl, curl_off_t dltotal, curl_off_t dlnow,
+                                            curl_off_t ultotal, curl_off_t ulnow)
 {
   // Abort if callback isn't true
-  return !impl->m_callback(dlnow, dltotal, ulnow, ultotal);
+  return !impl->m_callback(static_cast<s64>(dltotal), static_cast<s64>(dlnow),
+                           static_cast<s64>(ultotal), static_cast<s64>(ulnow));
 }
 
 HttpRequest::Impl::Impl(std::chrono::milliseconds timeout_ms, ProgressCallback callback)
@@ -116,7 +123,7 @@ HttpRequest::Impl::Impl(std::chrono::milliseconds timeout_ms, ProgressCallback c
   if (m_callback)
   {
     curl_easy_setopt(m_curl.get(), CURLOPT_PROGRESSDATA, this);
-    curl_easy_setopt(m_curl.get(), CURLOPT_PROGRESSFUNCTION, CurlProgressCallback);
+    curl_easy_setopt(m_curl.get(), CURLOPT_XFERINFOFUNCTION, CurlProgressCallback);
   }
 
   // Set up error buffer
@@ -141,6 +148,13 @@ HttpRequest::Impl::Impl(std::chrono::milliseconds timeout_ms, ProgressCallback c
 bool HttpRequest::Impl::IsValid() const
 {
   return m_curl != nullptr;
+}
+
+s32 HttpRequest::Impl::GetLastResponseCode()
+{
+  s32 response_code{};
+  curl_easy_getinfo(m_curl.get(), CURLINFO_RESPONSE_CODE, &response_code);
+  return response_code;
 }
 
 void HttpRequest::Impl::SetCookies(const std::string& cookies)

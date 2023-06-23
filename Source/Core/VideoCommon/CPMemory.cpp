@@ -4,8 +4,10 @@
 #include "VideoCommon/CPMemory.h"
 
 #include <cstring>
+#include <type_traits>
 
 #include "Common/ChunkFile.h"
+#include "Common/EnumUtils.h"
 #include "Common/Logging/Log.h"
 #include "Core/DolphinAnalytics.h"
 #include "VideoCommon/CommandProcessor.h"
@@ -17,14 +19,9 @@ CPState g_preprocess_cp_state;
 
 void CopyPreprocessCPStateFromMain()
 {
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wclass-memaccess"
-#endif
-  std::memcpy(&g_preprocess_cp_state, &g_main_cp_state, sizeof(CPState));
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
+  static_assert(std::is_trivially_copyable_v<CPState>);
+  std::memcpy(static_cast<void*>(&g_preprocess_cp_state),
+              static_cast<const void*>(&g_main_cp_state), sizeof(CPState));
 }
 
 std::pair<std::string, std::string> GetCPRegInfo(u8 cmd, u32 value)
@@ -114,7 +111,7 @@ void CPState::LoadCPReg(u8 sub_cmd, u32 value)
       WARN_LOG_FMT(VIDEO,
                    "CP MATINDEX_A: an exact value of {:02x} was expected "
                    "but instead a value of {:02x} was seen",
-                   static_cast<u16>(MATINDEX_A), sub_cmd);
+                   Common::ToUnderlying(MATINDEX_A), sub_cmd);
     }
 
     matrix_index_a.Hex = value;
@@ -127,7 +124,7 @@ void CPState::LoadCPReg(u8 sub_cmd, u32 value)
       WARN_LOG_FMT(VIDEO,
                    "CP MATINDEX_B: an exact value of {:02x} was expected "
                    "but instead a value of {:02x} was seen",
-                   static_cast<u16>(MATINDEX_B), sub_cmd);
+                   Common::ToUnderlying(MATINDEX_B), sub_cmd);
     }
 
     matrix_index_b.Hex = value;
@@ -140,7 +137,7 @@ void CPState::LoadCPReg(u8 sub_cmd, u32 value)
       WARN_LOG_FMT(VIDEO,
                    "CP VCD_LO: an exact value of {:02x} was expected "
                    "but instead a value of {:02x} was seen",
-                   static_cast<u16>(VCD_LO), sub_cmd);
+                   Common::ToUnderlying(VCD_LO), sub_cmd);
     }
 
     vtx_desc.low.Hex = value;
@@ -153,7 +150,7 @@ void CPState::LoadCPReg(u8 sub_cmd, u32 value)
       WARN_LOG_FMT(VIDEO,
                    "CP VCD_HI: an exact value of {:02x} was expected "
                    "but instead a value of {:02x} was seen",
-                   static_cast<u16>(VCD_HI), sub_cmd);
+                   Common::ToUnderlying(VCD_HI), sub_cmd);
     }
 
     vtx_desc.high.Hex = value;

@@ -6,6 +6,8 @@
 #include <memory>
 
 class GeometryShaderManager;
+class Interpreter;
+class JitInterface;
 class PixelShaderManager;
 class SoundStream;
 struct Sram;
@@ -55,7 +57,8 @@ class HSPManager;
 namespace IOS::HLE::USB
 {
 class SkylanderPortal;
-};
+class InfinityBase;
+};  // namespace IOS::HLE::USB
 namespace Memory
 {
 class MemoryManager;
@@ -70,8 +73,10 @@ class PixelEngineManager;
 };
 namespace PowerPC
 {
+class MMU;
+class PowerPCManager;
 struct PowerPCState;
-}
+}  // namespace PowerPC
 namespace ProcessorInterface
 {
 class ProcessorInterfaceManager;
@@ -80,6 +85,10 @@ namespace SerialInterface
 {
 class SerialInterfaceManager;
 };
+namespace VideoCommon
+{
+class CustomAssetLoader;
+}
 namespace VideoInterface
 {
 class VideoInterfaceManager;
@@ -131,17 +140,23 @@ public:
   GeometryShaderManager& GetGeometryShaderManager() const;
   GPFifo::GPFifoManager& GetGPFifo() const;
   HSP::HSPManager& GetHSP() const;
+  Interpreter& GetInterpreter() const;
+  JitInterface& GetJitInterface() const;
   IOS::HLE::USB::SkylanderPortal& GetSkylanderPortal() const;
+  IOS::HLE::USB::InfinityBase& GetInfinityBase() const;
   Memory::MemoryManager& GetMemory() const;
   MemoryInterface::MemoryInterfaceManager& GetMemoryInterface() const;
+  PowerPC::MMU& GetMMU() const;
   PixelEngine::PixelEngineManager& GetPixelEngine() const;
   PixelShaderManager& GetPixelShaderManager() const;
+  PowerPC::PowerPCManager& GetPowerPC() const;
   PowerPC::PowerPCState& GetPPCState() const;
   ProcessorInterface::ProcessorInterfaceManager& GetProcessorInterface() const;
   SerialInterface::SerialInterfaceManager& GetSerialInterface() const;
   Sram& GetSRAM() const;
   VertexShaderManager& GetVertexShaderManager() const;
   VideoInterface::VideoInterfaceManager& GetVideoInterface() const;
+  VideoCommon::CustomAssetLoader& GetCustomAssetLoader() const;
 
 private:
   System();

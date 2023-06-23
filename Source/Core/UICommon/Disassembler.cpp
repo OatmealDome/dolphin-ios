@@ -16,6 +16,7 @@
 #include "Common/Assert.h"
 #include "Common/VariantUtil.h"
 #include "Core/PowerPC/JitInterface.h"
+#include "Core/System.h"
 
 #if defined(HAVE_LLVM)
 class HostDisassemblerLLVM : public HostDisassembler
@@ -46,7 +47,8 @@ HostDisassemblerLLVM::HostDisassemblerLLVM(const std::string& host_disasm, int i
   LLVMInitializeAllTargetMCs();
   LLVMInitializeAllDisassemblers();
 
-  m_llvm_context = LLVMCreateDisasmCPU(host_disasm.c_str(), cpu.c_str(), nullptr, 0, 0, nullptr);
+  m_llvm_context =
+      LLVMCreateDisasmCPU(host_disasm.c_str(), cpu.c_str(), nullptr, 0, nullptr, nullptr);
 
   // Couldn't create llvm context
   if (!m_llvm_context)
@@ -170,7 +172,7 @@ std::unique_ptr<HostDisassembler> GetNewDisassembler(const std::string& arch)
 
 DisassembleResult DisassembleBlock(HostDisassembler* disasm, u32 address)
 {
-  auto res = JitInterface::GetHostCode(address);
+  auto res = Core::System::GetInstance().GetJitInterface().GetHostCode(address);
 
   return std::visit(overloaded{[&](JitInterface::GetHostCodeError error) {
                                  DisassembleResult result;

@@ -437,6 +437,10 @@ bool RenderWidget::event(QEvent* event)
   case QEvent::Move:
     SetCursorLocked(m_cursor_locked);
     break;
+
+  // According to https://bugreports.qt.io/browse/QTBUG-95925 the recommended practice for
+  // handling DPI change is responding to paint events
+  case QEvent::Paint:
   case QEvent::Resize:
   {
     SetCursorLocked(m_cursor_locked);
@@ -446,9 +450,18 @@ bool RenderWidget::event(QEvent* event)
 
     QScreen* screen = window()->windowHandle()->screen();
 
-    const auto dpr = screen->devicePixelRatio();
+    const float dpr = screen->devicePixelRatio();
+    const int width = new_size.width() * dpr;
+    const int height = new_size.height() * dpr;
 
-    emit SizeChanged(new_size.width() * dpr, new_size.height() * dpr);
+    if (m_last_window_width != width || m_last_window_height != height ||
+        m_last_window_scale != dpr)
+    {
+      m_last_window_width = width;
+      m_last_window_height = height;
+      m_last_window_scale = dpr;
+      emit SizeChanged(width, height);
+    }
     break;
   }
   // Happens when we add/remove the widget from the main window instead of the dedicated one
@@ -488,10 +501,11 @@ void RenderWidget::PassEventToPresenter(const QEvent* event)
     const u32 key = static_cast<u32>(key_event->key() & 0x1FF);
 
     const char* chars = nullptr;
+    QByteArray utf8;
 
     if (is_down)
     {
-      auto utf8 = key_event->text().toUtf8();
+      utf8 = key_event->text().toUtf8();
 
       if (utf8.size())
         chars = utf8.constData();

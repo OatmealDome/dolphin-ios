@@ -17,12 +17,14 @@
 #include "Common/StringUtil.h"
 #include "Core/Config/MainSettings.h"
 #include "Core/ConfigManager.h"
+#include "Core/Core.h"
 #include "Core/PowerPC/JitCommon/JitBase.h"
 #include "Core/PowerPC/MMU.h"
 #include "Core/PowerPC/PPCSymbolDB.h"
 #include "Core/PowerPC/PPCTables.h"
 #include "Core/PowerPC/PowerPC.h"
 #include "Core/PowerPC/SignatureDB/SignatureDB.h"
+#include "Core/System.h"
 
 // Analyzes PowerPC code in memory to find functions
 // After running, for each function we will know what functions it calls
@@ -82,6 +84,8 @@ bool AnalyzeFunction(const Core::CPUThreadGuard& guard, u32 startAddr, Common::S
   if (func.analyzed)
     return true;  // No error, just already did it.
 
+  auto& mmu = guard.GetSystem().GetMMU();
+
   func.calls.clear();
   func.callers.clear();
   func.size = 0;
@@ -93,7 +97,7 @@ bool AnalyzeFunction(const Core::CPUThreadGuard& guard, u32 startAddr, Common::S
   {
     func.size += 4;
     if (func.size >= JitBase::code_buffer_size * 4 ||
-        !PowerPC::HostIsInstructionRAMAddress(guard, addr))
+        !PowerPC::MMU::HostIsInstructionRAMAddress(guard, addr))
     {
       return false;
     }
@@ -108,9 +112,9 @@ bool AnalyzeFunction(const Core::CPUThreadGuard& guard, u32 startAddr, Common::S
         func.flags |= Common::FFLAG_STRAIGHT;
       return true;
     }
-    const PowerPC::TryReadInstResult read_result = PowerPC::TryReadInstruction(addr);
+    const PowerPC::TryReadInstResult read_result = mmu.TryReadInstruction(addr);
     const UGeckoInstruction instr = read_result.hex;
-    if (read_result.valid && PPCTables::IsValidInstruction(instr))
+    if (read_result.valid && PPCTables::IsValidInstruction(instr, addr))
     {
       // BLR or RFI
       // 4e800021 is blrl, not the end of a function
@@ -205,10 +209,11 @@ bool PPCAnalyzer::CanSwapAdjacentOps(const CodeOp& a, const CodeOp& b) const
   u64 b_flags = b_info->flags;
 
   // can't reorder around breakpoints
-  if (m_is_debugging_enabled && (PowerPC::breakpoints.IsAddressBreakPoint(a.address) ||
-                                 PowerPC::breakpoints.IsAddressBreakPoint(b.address)))
+  if (m_is_debugging_enabled)
   {
-    return false;
+    auto& breakpoints = Core::System::GetInstance().GetPowerPC().GetBreakPoints();
+    if (breakpoints.IsAddressBreakPoint(a.address) || breakpoints.IsAddressBreakPoint(b.address))
+      return false;
   }
   // Any instruction which can raise an interrupt is *not* a possible swap candidate:
   // see [1] for an example of a crash caused by this error.
@@ -264,12 +269,13 @@ bool PPCAnalyzer::CanSwapAdjacentOps(const CodeOp& a, const CodeOp& b) const
 static void FindFunctionsFromBranches(const Core::CPUThreadGuard& guard, u32 startAddr, u32 endAddr,
                                       Common::SymbolDB* func_db)
 {
+  auto& mmu = guard.GetSystem().GetMMU();
   for (u32 addr = startAddr; addr < endAddr; addr += 4)
   {
-    const PowerPC::TryReadInstResult read_result = PowerPC::TryReadInstruction(addr);
+    const PowerPC::TryReadInstResult read_result = mmu.TryReadInstruction(addr);
     const UGeckoInstruction instr = read_result.hex;
 
-    if (read_result.valid && PPCTables::IsValidInstruction(instr))
+    if (read_result.valid && PPCTables::IsValidInstruction(instr, addr))
     {
       switch (instr.OPCD)
       {
@@ -280,7 +286,7 @@ static void FindFunctionsFromBranches(const Core::CPUThreadGuard& guard, u32 sta
           u32 target = SignExt26(instr.LI << 2);
           if (!instr.AA)
             target += addr;
-          if (PowerPC::HostIsRAMAddress(guard, target))
+          if (PowerPC::MMU::HostIsRAMAddress(guard, target))
           {
             func_db->AddFunction(guard, target);
           }
@@ -314,10 +320,11 @@ static void FindFunctionsFromHandlers(const Core::CPUThreadGuard& guard, PPCSymb
       {0x80001400, "system_management_interrupt_handler"},
       {0x80001700, "thermal_management_interrupt_exception_handler"}};
 
+  auto& mmu = guard.GetSystem().GetMMU();
   for (const auto& entry : handlers)
   {
-    const PowerPC::TryReadInstResult read_result = PowerPC::TryReadInstruction(entry.first);
-    if (read_result.valid && PPCTables::IsValidInstruction(read_result.hex))
+    const PowerPC::TryReadInstResult read_result = mmu.TryReadInstruction(entry.first);
+    if (read_result.valid && PPCTables::IsValidInstruction(read_result.hex, entry.first))
     {
       // Check if this function is already mapped
       Common::Symbol* f = func_db->AddFunction(guard, entry.first);
@@ -336,21 +343,22 @@ static void FindFunctionsAfterReturnInstruction(const Core::CPUThreadGuard& guar
   for (const auto& func : func_db->Symbols())
     funcAddrs.push_back(func.second.address + func.second.size);
 
+  auto& mmu = guard.GetSystem().GetMMU();
   for (u32& location : funcAddrs)
   {
     while (true)
     {
       // Skip zeroes (e.g. Donkey Kong Country Returns) and nop (e.g. libogc)
       // that sometimes pad function to 16 byte boundary.
-      PowerPC::TryReadInstResult read_result = PowerPC::TryReadInstruction(location);
+      PowerPC::TryReadInstResult read_result = mmu.TryReadInstruction(location);
       while (read_result.valid && (location & 0xf) != 0)
       {
         if (read_result.hex != 0 && read_result.hex != 0x60000000)
           break;
         location += 4;
-        read_result = PowerPC::TryReadInstruction(location);
+        read_result = mmu.TryReadInstruction(location);
       }
-      if (read_result.valid && PPCTables::IsValidInstruction(read_result.hex))
+      if (read_result.valid && PPCTables::IsValidInstruction(read_result.hex, location))
       {
         // check if this function is already mapped
         Common::Symbol* f = func_db->AddFunction(guard, location);
@@ -757,9 +765,10 @@ u32 PPCAnalyzer::Analyze(u32 address, CodeBlock* block, CodeBuffer* buffer,
 
   const bool enable_follow = m_enable_branch_following;
 
+  auto& mmu = Core::System::GetInstance().GetMMU();
   for (std::size_t i = 0; i < block_size; ++i)
   {
-    auto result = PowerPC::TryReadInstruction(address);
+    auto result = mmu.TryReadInstruction(address);
     if (!result.valid)
     {
       if (i == 0)
@@ -770,13 +779,13 @@ u32 PPCAnalyzer::Analyze(u32 address, CodeBlock* block, CodeBuffer* buffer,
     num_inst++;
 
     const UGeckoInstruction inst = result.hex;
-    GekkoOPInfo* opinfo = PPCTables::GetOpInfo(inst);
+    const GekkoOPInfo* opinfo = PPCTables::GetOpInfo(inst, address);
     code[i] = {};
     code[i].opinfo = opinfo;
     code[i].address = address;
     code[i].inst = inst;
     code[i].skip = false;
-    block->m_stats->numCycles += opinfo->numCycles;
+    block->m_stats->numCycles += opinfo->num_cycles;
     block->m_physical_addresses.insert(result.physical_address);
 
     SetInstructionStats(block, &code[i], opinfo);

@@ -6,6 +6,10 @@ cmake_minimum_required(VERSION 3.13)
 cmake_policy(SET CMP0079 NEW) # let target_link_libraries() link to a target defined in a different directory
 cmake_policy(SET CMP0080 OLD) # allow using BundleUtilities at configure time
 
+if (POLICY CMP0099)
+  cmake_policy(SET CMP0099 NEW) # Propagate INTERFACE_LINK_OPTIONS from private dependencies, used by MacOS framework builds of SDL
+endif()
+
 # Weird chicken-and-egg problem: We can't check the compiler before the project() call, but we have to set the policies before it.
 # So we do this in two steps: Set the policies if they exist, then error out afterwards if we end up being MSVC and they don't exist.
 if (POLICY CMP0117)
@@ -36,6 +40,31 @@ if (MSVC)
   set(CMAKE_C_STANDARD 99)
   set(CMAKE_CXX_STANDARD 23)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif()
+
+set(COMPILER ${CMAKE_CXX_COMPILER_ID})
+if (COMPILER STREQUAL "GNU")
+  set(COMPILER "GCC") # perfer printing GCC instead of GNU
+endif()
+
+# Enforce minimium compiler versions that support the c++20 features we use
+set (GCC_min_version 10)
+set (Clang_min_version 12)
+set (AppleClang_min_version 13.0.0)
+set (min_xcode_version "13.0") # corrosponding xcode version for AppleClang_min_version
+set (MSVC_min_version 14.32)
+set (min_vs_version "2022 17.2.3") # corrosponding Visual Studio version for MSVC_min_version
+
+message(STATUS "Using ${COMPILER} ${CMAKE_CXX_COMPILER_VERSION}")
+
+if ("-" STREQUAL "${${COMPILER}_min_version}-")
+  message(WARNING "Unknown compiler ${COMPILER}, assuming it is new enough")
+else()
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS  ${${COMPILER}_min_version})
+    message(FATAL_ERROR "Requires GCC ${GCC_min_version}, Clang ${Clang_min_version},"
+    " AppleClang ${AppleClang_min_version} (Xcode ${min_xcode_version}),"
+    " or MSVC ${MSVC_min_version} (Visual Studio ${min_vs_version}) or higher")
+  endif()
 endif()
 
 # Name of the Dolphin distributor. If you redistribute Dolphin builds (forks,
@@ -72,6 +101,7 @@ option(USE_DISCORD_PRESENCE "Enables Discord Rich Presence, show the current gam
 option(USE_MGBA "Enables GBA controllers emulation using libmgba" ON)
 option(ENABLE_AUTOUPDATE "Enables support for automatic updates" ON)
 option(STEAM "Creates a build for Steam" OFF)
+option(USE_RETRO_ACHIEVEMENTS "Enables integration with retroachievements.org" ON)
 option(ENABLE_CUBEB "Enables Cubeb sound backend" ON)
 
 # Maintainers: if you consider blanket disabling this for your users, please
@@ -256,12 +286,6 @@ else()
       " Enable generic build if you really want a JIT-less binary.")
 endif()
 
-
-# Enforce minimum GCC version
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
-  message(FATAL_ERROR "Dolphin requires at least GCC 7.0 (found ${CMAKE_CXX_COMPILER_VERSION})")
-endif()
-
 if(CMAKE_GENERATOR MATCHES "Ninja")
   check_and_add_flag(DIAGNOSTICS_COLOR -fdiagnostics-color)
 elseif(CMAKE_GENERATOR MATCHES "Visual Studio")
@@ -351,7 +375,7 @@ else()
     check_and_add_flag(VISIBILITY_HIDDEN -fvisibility=hidden)
   endif()
 
-  check_and_add_flag(FOMIT_FRAME_POINTER -fomit-frame-pointer RELEASE_ONLY)
+  check_and_add_flag(FOMIT_FRAME_POINTER -fomit-frame-pointer NO_DEBINFO_ONLY)
 
   dolphin_compile_definitions(_DEBUG DEBUG_ONLY)
   check_and_add_flag(GGDB -ggdb DEBUG_ONLY)
@@ -726,13 +750,22 @@ endif()
 add_subdirectory(Externals/imgui)
 add_subdirectory(Externals/implot)
 add_subdirectory(Externals/glslang)
-add_subdirectory(Externals/spirv_cross)
+# SPIRV-Cross is used on Windows for GLSL to HLSL conversion for the Direct3D 11 and Direct3D 12
+# video backends, and on Apple devices for the Metal video backend.
+if(WIN32 OR APPLE)
+  add_subdirectory(Externals/spirv_cross)
+endif()
 
 if(ENABLE_VULKAN)
   add_definitions(-DHAS_VULKAN)
 
   if(APPLE AND NOT IOS AND USE_BUNDLED_MOLTENVK)
     add_subdirectory(Externals/MoltenVK)
+  endif()
+
+
+  if (ANDROID AND _M_ARM_64)
+    add_subdirectory(Externals/libadrenotools)
   endif()
 endif()
 
@@ -946,19 +979,16 @@ else()
   include_directories(BEFORE Externals/curl/include)
 endif()
 
-if (NOT ANDROID)
-  find_library(ICONV_LIBRARIES NAMES iconv libiconv libiconv-2 c)
-  find_path(ICONV_INCLUDE_DIR NAMES iconv.h)
+if(NOT ANDROID)
+  find_package(Iconv)
 endif()
 
-if (NOT ANDROID AND ICONV_LIBRARIES AND ICONV_INCLUDE_DIR)
-  mark_as_advanced(ICONV_INCLUDE_DIR ICONV_LIBRARIES)
+if(TARGET Iconv::Iconv)
+  message(STATUS "Using shared iconv")
 else()
   check_vendoring_approved(iconv)
   message(STATUS "Using static iconv from Externals")
-  include_directories(Externals/libiconv-1.14/include)
   add_subdirectory(Externals/libiconv-1.14)
-  set(ICONV_LIBRARIES iconv)
 endif()
 
 if(NOT ANDROID AND NOT IOS)
@@ -1012,6 +1042,10 @@ add_subdirectory(Externals/rangeset)
 
 add_subdirectory(Externals/FatFs)
 
+if (USE_RETRO_ACHIEVEMENTS)
+	add_subdirectory(Externals/rcheevos)
+endif()
+
 ########################################
 # Pre-build events: Define configuration variables and write SCM info header
 #
@@ -1035,10 +1069,16 @@ include_directories("${PROJECT_BINARY_DIR}/Source/Core")
 # Unit testing.
 #
 if(ENABLE_TESTS)
-  message(STATUS "Using static gtest from Externals")
+  find_package(GTest)
+  if (GTEST_FOUND)
+    message(STATUS "Using the system gtest")
+    include_directories(${GTEST_INCLUDE_DIRS})
+  else()
+    message(STATUS "Using static gtest from Externals")
+    add_subdirectory(Externals/gtest EXCLUDE_FROM_ALL)
+  endif()
   # Force gtest to link the C runtime dynamically on Windows in order to avoid runtime mismatches.
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-  add_subdirectory(Externals/gtest EXCLUDE_FROM_ALL)
 else()
   message(STATUS "Unit tests are disabled")
 endif()

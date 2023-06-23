@@ -16,6 +16,8 @@
 #include <wil/resource.h>
 #endif
 
+#include <fmt/format.h>
+
 #include "Common/Common.h"
 #include "Common/CommonPaths.h"
 #include "Common/Config/Config.h"
@@ -547,14 +549,12 @@ std::string FormatSize(u64 bytes, int decimals)
   // div 10 to get largest named unit less than size
   // 10 == log2(1024) (number of B in a KiB, KiB in a MiB, etc)
   // Max value is 63 / 10 = 6
-  const int unit = IntLog2(std::max<u64>(bytes, 1)) / 10;
+  const int unit = MathUtil::IntLog2(std::max<u64>(bytes, 1)) / 10;
 
   // Don't need exact values, only 5 most significant digits
   const double unit_size = std::pow(2, unit * 10);
-  std::ostringstream ss;
-  ss << std::fixed << std::setprecision(decimals);
-  ss << bytes / unit_size << ' ' << Common::GetStringT(unit_symbols[unit]);
-  return ss.str();
+  return fmt::format("{:.{}Lf} {}", bytes / unit_size, decimals,
+                     Common::GetStringT(unit_symbols[unit]));
 }
 
 }  // namespace UICommon

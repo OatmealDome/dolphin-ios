@@ -31,20 +31,18 @@ add_library(common
   Crypto/ec.h
   Crypto/SHA1.cpp
   Crypto/SHA1.h
-  Debug/CodeTrace.cpp
-  Debug/CodeTrace.h
   Debug/MemoryPatches.cpp
   Debug/MemoryPatches.h
   Debug/Threads.h
   Debug/Watches.cpp
   Debug/Watches.h
-  DebugInterface.h
   DynamicLibrary.cpp
   DynamicLibrary.h
-  ENetUtil.cpp
-  ENetUtil.h
+  ENet.cpp
+  ENet.h
   EnumFormatter.h
   EnumMap.h
+  EnumUtils.h
   Event.h
   FatFsUtil.cpp
   FatFsUtil.h
@@ -80,7 +78,6 @@ add_library(common
   Logging/Log.h
   Logging/LogManager.cpp
   Logging/LogManager.h
-  MathUtil.cpp
   MathUtil.h
   Matrix.cpp
   Matrix.h
@@ -156,7 +153,7 @@ PUBLIC
 PRIVATE
   ${CURL_LIBRARIES}
   FatFs
-  ${ICONV_LIBRARIES}
+  Iconv::Iconv
   ${spng_target}
   ${VTUNE_LIBRARIES}
 )
@@ -306,7 +303,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   target_link_libraries(common PUBLIC dl rt)
 endif()
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+if(WIN32)
   target_sources(common PRIVATE HRWrap.h HRWrap.cpp)
 endif()
 

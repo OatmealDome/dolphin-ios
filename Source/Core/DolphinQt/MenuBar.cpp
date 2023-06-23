@@ -21,6 +21,7 @@
 
 #include "Core/Boot/Boot.h"
 #include "Core/CommonTitles.h"
+#include "Core/Config/AchievementSettings.h"
 #include "Core/Config/MainSettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
@@ -191,7 +192,11 @@ void MenuBar::OnDebugModeToggled(bool enabled)
 void MenuBar::AddFileMenu()
 {
   QMenu* file_menu = addMenu(tr("&File"));
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+  m_open_action = file_menu->addAction(tr("&Open..."), QKeySequence::Open, this, &MenuBar::Open);
+#else
   m_open_action = file_menu->addAction(tr("&Open..."), this, &MenuBar::Open, QKeySequence::Open);
+#endif
 
   file_menu->addSeparator();
 
@@ -220,7 +225,10 @@ void MenuBar::AddToolsMenu()
 
   tools_menu->addAction(tr("FIFO Player"), this, &MenuBar::ShowFIFOPlayer);
 
-  tools_menu->addAction(tr("&Skylanders Portal"), this, &MenuBar::ShowSkylanderPortal);
+  auto* usb_device_menu = new QMenu(tr("Emulated USB Devices"), tools_menu);
+  usb_device_menu->addAction(tr("&Skylanders Portal"), this, &MenuBar::ShowSkylanderPortal);
+  usb_device_menu->addAction(tr("&Infinity Base"), this, &MenuBar::ShowInfinityBase);
+  tools_menu->addMenu(usb_device_menu);
 
   tools_menu->addSeparator();
 
@@ -228,6 +236,15 @@ void MenuBar::AddToolsMenu()
   tools_menu->addAction(tr("Browse &NetPlay Sessions...."), this, &MenuBar::BrowseNetPlay);
 
   tools_menu->addSeparator();
+
+#ifdef USE_RETRO_ACHIEVEMENTS
+  if (Config::Get(Config::RA_ENABLED))
+  {
+    tools_menu->addAction(tr("Achievements"), this, [this] { emit ShowAchievementsWindow(); });
+
+    tools_menu->addSeparator();
+  }
+#endif  // USE_RETRO_ACHIEVEMENTS
 
   QMenu* gc_ipl = tools_menu->addMenu(tr("Load GameCube Main Menu"));
 
@@ -501,14 +518,23 @@ void MenuBar::AddViewMenu()
   connect(&Settings::Instance(), &Settings::GameListRefreshStarted, purge_action,
           [purge_action] { purge_action->setEnabled(true); });
   view_menu->addSeparator();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+  view_menu->addAction(tr("Search"), QKeySequence::Find, this, &MenuBar::ShowSearch);
+#else
   view_menu->addAction(tr("Search"), this, &MenuBar::ShowSearch, QKeySequence::Find);
+#endif
 }
 
 void MenuBar::AddOptionsMenu()
 {
   QMenu* options_menu = addMenu(tr("&Options"));
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+  options_menu->addAction(tr("Co&nfiguration"), QKeySequence::Preferences, this,
+                          &MenuBar::Configure);
+#else
   options_menu->addAction(tr("Co&nfiguration"), this, &MenuBar::Configure,
                           QKeySequence::Preferences);
+#endif
   options_menu->addSeparator();
   options_menu->addAction(tr("&Graphics Settings"), this, &MenuBar::ConfigureGraphics);
   options_menu->addAction(tr("&Audio Settings"), this, &MenuBar::ConfigureAudio);
@@ -800,7 +826,8 @@ void MenuBar::AddJITMenu()
                                      PowerPC::CPUCore::Interpreter);
 
   connect(m_jit_interpreter_core, &QAction::toggled, [](bool enabled) {
-    PowerPC::SetMode(enabled ? PowerPC::CoreMode::Interpreter : PowerPC::CoreMode::JIT);
+    Core::System::GetInstance().GetPowerPC().SetMode(enabled ? PowerPC::CoreMode::Interpreter :
+                                                               PowerPC::CoreMode::JIT);
   });
 
   m_jit->addSeparator();
@@ -994,7 +1021,7 @@ void MenuBar::UpdateToolsMenu(bool emulation_started)
   if (!emulation_started)
   {
     IOS::HLE::Kernel ios;
-    const auto tmd = ios.GetES()->FindInstalledTMD(Titles::SYSTEM_MENU);
+    const auto tmd = ios.GetESCore().FindInstalledTMD(Titles::SYSTEM_MENU);
 
     const QString sysmenu_version =
         tmd.IsValid() ? QString::fromStdString(
@@ -1351,7 +1378,7 @@ RSOVector MenuBar::DetectRSOModules(ParallelProgressDialog& progress)
 
         for (; len < MODULE_NAME_MAX_LENGTH; ++len)
         {
-          const auto res = PowerPC::HostRead_U8(guard, *found_addr - (len + 1));
+          const auto res = PowerPC::MMU::HostRead_U8(guard, *found_addr - (len + 1));
           if (!std::isprint(res))
           {
             break;
@@ -1406,8 +1433,8 @@ RSOVector MenuBar::DetectRSOModules(ParallelProgressDialog& progress)
       const auto module_name_offset = accessors->ReadU32(guard, *found_addr);
 
       // Go to the beginning of the RSO header
-      matches.emplace_back(*found_addr - 16,
-                           PowerPC::HostGetString(guard, module_name_offset, module_name_length));
+      matches.emplace_back(*found_addr - 16, PowerPC::MMU::HostGetString(guard, module_name_offset,
+                                                                         module_name_length));
 
       progress.SetLabelText(tr("Modules found: %1").arg(matches.size()));
     }
@@ -1671,7 +1698,7 @@ void MenuBar::PatchHLEFunctions()
 
 void MenuBar::ClearCache()
 {
-  Core::RunAsCPUThread(JitInterface::ClearCache);
+  Core::RunAsCPUThread([] { Core::System::GetInstance().GetJitInterface().ClearCache(); });
 }
 
 void MenuBar::LogInstructions()
@@ -1698,8 +1725,8 @@ void MenuBar::SearchInstruction()
   for (u32 addr = Memory::MEM1_BASE_ADDR; addr < Memory::MEM1_BASE_ADDR + memory.GetRamSizeReal();
        addr += 4)
   {
-    const auto ins_name =
-        QString::fromStdString(PPCTables::GetInstructionName(PowerPC::HostRead_U32(guard, addr)));
+    const auto ins_name = QString::fromStdString(
+        PPCTables::GetInstructionName(PowerPC::MMU::HostRead_U32(guard, addr), addr));
     if (op == ins_name)
     {
       NOTICE_LOG_FMT(POWERPC, "Found {} at {:08x}", op.toStdString(), addr);

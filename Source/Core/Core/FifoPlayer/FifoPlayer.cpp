@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cstring>
 #include <mutex>
+#include <type_traits>
 
 #include "Common/Assert.h"
 #include "Common/CommonTypes.h"
@@ -101,14 +102,9 @@ void FifoPlaybackAnalyzer::AnalyzeFrames(FifoDataFile* file,
         part_start = offset;
         // Copy cpmem now, because end_of_primitives isn't triggered until the first opcode after
         // primitive data, and the first opcode might update cpmem
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wclass-memaccess"
-#endif
-        std::memcpy(&cpmem, &analyzer.m_cpmem, sizeof(CPState));
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
+        static_assert(std::is_trivially_copyable_v<CPState>);
+        std::memcpy(static_cast<void*>(&cpmem), static_cast<const void*>(&analyzer.m_cpmem),
+                    sizeof(CPState));
       }
       if (analyzer.m_end_of_primitives)
       {
@@ -654,8 +650,10 @@ void FifoPlayer::LoadMemory()
   ppc_state.spr[SPR_DBAT0L] = 0x00000002;
   ppc_state.spr[SPR_DBAT1U] = 0xc0001fff;
   ppc_state.spr[SPR_DBAT1L] = 0x0000002a;
-  PowerPC::DBATUpdated();
-  PowerPC::IBATUpdated();
+
+  auto& mmu = system.GetMMU();
+  mmu.DBATUpdated();
+  mmu.IBATUpdated();
 
   SetupFifo();
   LoadRegisters();
@@ -713,12 +711,12 @@ void FifoPlayer::LoadTextureMemory()
 
 void FifoPlayer::WriteCP(u32 address, u16 value)
 {
-  PowerPC::Write_U16(value, 0xCC000000 | address);
+  Core::System::GetInstance().GetMMU().Write_U16(value, 0xCC000000 | address);
 }
 
 void FifoPlayer::WritePI(u32 address, u32 value)
 {
-  PowerPC::Write_U32(value, 0xCC003000 | address);
+  Core::System::GetInstance().GetMMU().Write_U32(value, 0xCC003000 | address);
 }
 
 void FifoPlayer::FlushWGP()
@@ -823,13 +821,13 @@ bool FifoPlayer::ShouldLoadXF(u8 reg)
 bool FifoPlayer::IsIdleSet()
 {
   CommandProcessor::UCPStatusReg status =
-      PowerPC::Read_U16(0xCC000000 | CommandProcessor::STATUS_REGISTER);
+      Core::System::GetInstance().GetMMU().Read_U16(0xCC000000 | CommandProcessor::STATUS_REGISTER);
   return status.CommandIdle;
 }
 
 bool FifoPlayer::IsHighWatermarkSet()
 {
   CommandProcessor::UCPStatusReg status =
-      PowerPC::Read_U16(0xCC000000 | CommandProcessor::STATUS_REGISTER);
+      Core::System::GetInstance().GetMMU().Read_U16(0xCC000000 | CommandProcessor::STATUS_REGISTER);
   return status.OverflowHiWatermark;
 }

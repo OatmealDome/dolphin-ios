@@ -38,7 +38,7 @@ Once this is complete, you are now able to build and run DolphiniOS.
 
 # Dolphin - A GameCube and Wii Emulator
 
-[Homepage](https://dolphin-emu.org/) | [Project Site](https://github.com/dolphin-emu/dolphin) | [Buildbot](https://dolphin.ci/) | [Forums](https://forums.dolphin-emu.org/) | [Wiki](https://wiki.dolphin-emu.org/) | [GitHub Wiki](https://github.com/dolphin-emu/dolphin/wiki) | [Issue Tracker](https://bugs.dolphin-emu.org/projects/emulator/issues) | [Coding Style](https://github.com/dolphin-emu/dolphin/blob/master/Contributing.md) | [Transifex Page](https://explore.transifex.com/delroth/dolphin-emu/)
+[Homepage](https://dolphin-emu.org/) | [Project Site](https://github.com/dolphin-emu/dolphin) | [Buildbot](https://dolphin.ci/) | [Forums](https://forums.dolphin-emu.org/) | [Wiki](https://wiki.dolphin-emu.org/) | [GitHub Wiki](https://github.com/dolphin-emu/dolphin/wiki) | [Issue Tracker](https://bugs.dolphin-emu.org/projects/emulator/issues) | [Coding Style](https://github.com/dolphin-emu/dolphin/blob/master/Contributing.md) | [Transifex Page](https://app.transifex.com/delroth/dolphin-emu/dashboard/)
 
 Dolphin is an emulator for running GameCube and Wii games on Windows,
 Linux, macOS, and recent Android devices. It's licensed under the terms
@@ -77,9 +77,10 @@ Dolphin can only be installed on devices that satisfy the above requirements. At
 ## Building for Windows
 
 Use the solution file `Source/dolphin-emu.sln` to build Dolphin on Windows.
-Visual Studio 2022 17.2.3 or later is a hard requirement. Other compilers might be
-able to build Dolphin on Windows but have not been tested and are not
-recommended to be used. Git and Windows 11 SDK must be installed when building.
+Dolphin targets the latest MSVC shipped with Visual Studio or Build Tools.
+Other compilers might be able to build Dolphin on Windows but have not been
+tested and are not recommended to be used. Git and latest Windows SDK must be
+installed when building.
 
 Make sure to pull submodules before building:
 ```sh
@@ -91,10 +92,12 @@ The "Debug" solution configuration is significantly slower, more verbose and les
 
 ## Building for Linux and macOS
 
-Dolphin requires [CMake](https://cmake.org/) for systems other than Windows. Many libraries are
-bundled with Dolphin and used if they're not installed on your system. CMake
-will inform you if a bundled library is used or if you need to install any
-missing packages yourself. You may refer to the [wiki](https://github.com/dolphin-emu/dolphin/wiki/Building-for-Linux) for more information.
+Dolphin requires [CMake](https://cmake.org/) for systems other than Windows. 
+You need a recent version of GCC or Clang with decent c++20 support. CMake will
+inform you if your compiler is too old.
+Many libraries are bundled with Dolphin and used if they're not installed on 
+your system. CMake will inform you if a bundled library is used or if you need
+to install any missing packages yourself. You may refer to the [wiki](https://github.com/dolphin-emu/dolphin/wiki/Building-for-Linux) for more information.
 
 Make sure to pull submodules before building:
 ```sh

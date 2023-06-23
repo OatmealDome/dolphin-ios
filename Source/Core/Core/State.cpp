@@ -96,7 +96,7 @@ static size_t s_state_writes_in_queue;
 static std::condition_variable s_state_write_queue_is_empty;
 
 // Don't forget to increase this after doing changes on the savestate system
-constexpr u32 STATE_VERSION = 160;  // Last changed in PR 11644
+constexpr u32 STATE_VERSION = 162;  // Last changed in PR 11767
 
 // Maps savestate versions to Dolphin versions.
 // Versions after 42 don't need to be added to this list,
@@ -233,7 +233,7 @@ static void DoState(PointerWrap& p)
   HW::DoState(system, p);
   p.DoMarker("HW");
 
-  PowerPC::DoState(p);
+  system.GetPowerPC().DoState(p);
   p.DoMarker("PowerPC");
 
   if (SConfig::GetInstance().bWii)

@@ -1,4 +1,6 @@
 add_library(core
+  AchievementManager.cpp
+  AchievementManager.h
   ActionReplay.cpp
   ActionReplay.h
   ARDecrypt.cpp
@@ -21,6 +23,8 @@ add_library(core
   CheatSearch.cpp
   CheatSearch.h
   CommonTitles.h
+  Config/AchievementSettings.cpp
+  Config/AchievementSettings.h
   Config/DefaultLocale.cpp
   Config/DefaultLocale.h
   Config/FreeLookSettings.cpp
@@ -57,6 +61,9 @@ add_library(core
   Core.h
   CoreTiming.cpp
   CoreTiming.h
+  Debugger/CodeTrace.cpp
+  Debugger/CodeTrace.h
+  Debugger/DebugInterface.h
   Debugger/Debugger_SymbolMap.cpp
   Debugger/Debugger_SymbolMap.h
   Debugger/Dump.cpp
@@ -399,6 +406,8 @@ add_library(core
   IOS/USB/Bluetooth/WiimoteHIDAttr.h
   IOS/USB/Common.cpp
   IOS/USB/Common.h
+  IOS/USB/Emulated/Infinity.cpp
+  IOS/USB/Emulated/Infinity.h
   IOS/USB/Emulated/Skylander.cpp
   IOS/USB/Emulated/Skylander.h
   IOS/USB/Host.cpp
@@ -753,4 +762,9 @@ endif()
 if(MSVC)
   # Add precompiled header
   target_link_libraries(core PRIVATE use_pch)
+endif()
+
+if(USE_RETRO_ACHIEVEMENTS)
+  target_link_libraries(core PRIVATE rcheevos)
+  target_compile_definitions(core PRIVATE -DUSE_RETRO_ACHIEVEMENTS)
 endif()

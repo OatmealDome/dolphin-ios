@@ -37,6 +37,9 @@
 #if defined(HAVE_SDL2)
 #define CIFACE_USE_SDL
 #endif
+#if defined(HAVE_HIDAPI)
+#define CIFACE_USE_STEAMDECK
+#endif
 
 namespace ciface
 {

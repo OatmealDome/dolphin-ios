@@ -39,6 +39,7 @@
 #include "DolphinQt/Config/Mapping/HotkeyStates.h"
 #include "DolphinQt/Config/Mapping/HotkeyStatesOther.h"
 #include "DolphinQt/Config/Mapping/HotkeyTAS.h"
+#include "DolphinQt/Config/Mapping/HotkeyUSBEmu.h"
 #include "DolphinQt/Config/Mapping/HotkeyWii.h"
 #include "DolphinQt/Config/Mapping/WiimoteEmuExtension.h"
 #include "DolphinQt/Config/Mapping/WiimoteEmuExtensionMotionInput.h"
@@ -299,7 +300,7 @@ void MappingWindow::OnLoadProfilePressed()
 
   const QString profile_path = m_profiles_combo->currentData().toString();
 
-  IniFile ini;
+  Common::IniFile ini;
   ini.Load(profile_path.toStdString());
 
   m_controller->LoadConfig(ini.GetOrCreateSection("Profile"));
@@ -322,7 +323,7 @@ void MappingWindow::OnSaveProfilePressed()
 
   File::CreateFullPath(profile_path);
 
-  IniFile ini;
+  Common::IniFile ini;
 
   m_controller->SaveConfig(ini.GetOrCreateSection("Profile"));
   ini.Save(profile_path);
@@ -450,6 +451,7 @@ void MappingWindow::SetMappingType(MappingWindow::Type type)
     AddWidget(tr("Wii and Wii Remote"), new HotkeyWii(this));
     AddWidget(tr("Controller Profile"), new HotkeyControllerProfile(this));
     AddWidget(tr("Graphics"), new HotkeyGraphics(this));
+    AddWidget(tr("USB Emulation"), new HotkeyUSBEmu(this));
     // i18n: Stereoscopic 3D
     AddWidget(tr("3D"), new Hotkey3D(this));
     AddWidget(tr("Save and Load State"), new HotkeyStates(this));
@@ -542,7 +544,7 @@ void MappingWindow::OnDefaultFieldsPressed()
 void MappingWindow::OnClearFieldsPressed()
 {
   // Loading an empty inifile section clears everything.
-  IniFile::Section sec;
+  Common::IniFile::Section sec;
 
   // Keep the currently selected device.
   const auto default_device = m_controller->GetDefaultDevice();

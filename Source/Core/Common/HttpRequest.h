@@ -25,8 +25,7 @@ public:
   };
 
   // Return false to abort the request
-  using ProgressCallback =
-      std::function<bool(double dlnow, double dltotal, double ulnow, double ultotal)>;
+  using ProgressCallback = std::function<bool(s64 dltotal, s64 dlnow, s64 ultotal, s64 ulnow)>;
 
   explicit HttpRequest(std::chrono::milliseconds timeout_ms = std::chrono::milliseconds{3000},
                        ProgressCallback callback = nullptr);
@@ -39,6 +38,7 @@ public:
   void SetCookies(const std::string& cookies);
   void UseIPv4();
   void FollowRedirects(long max = 1);
+  s32 GetLastResponseCode() const;
   std::string EscapeComponent(const std::string& string);
   Response Get(const std::string& url, const Headers& headers = {},
                AllowedReturnCodes codes = AllowedReturnCodes::Ok_Only);

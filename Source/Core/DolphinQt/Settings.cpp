@@ -71,7 +71,7 @@ Settings::Settings()
   });
 
   m_hotplug_callback_handle = g_controller_interface.RegisterDevicesChangedCallback([this] {
-    if (Host::GetInstance()->IsHostThread())
+    if (Core::IsHostThread())
     {
       emit DevicesChanged();
     }
@@ -465,9 +465,9 @@ void Settings::SetDebugModeEnabled(bool enabled)
   {
     Config::SetBaseOrCurrent(Config::MAIN_ENABLE_DEBUGGING, enabled);
     emit DebugModeToggled(enabled);
+    if (enabled)
+      SetCodeVisible(true);
   }
-  if (enabled)
-    SetCodeVisible(true);
 }
 
 bool Settings::IsDebugModeEnabled() const

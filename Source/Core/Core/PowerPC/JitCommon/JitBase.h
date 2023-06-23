@@ -17,13 +17,23 @@
 #include "Core/PowerPC/JitCommon/JitCache.h"
 #include "Core/PowerPC/PPCAnalyst.h"
 
+namespace Core
+{
+class System;
+}
+namespace PowerPC
+{
+class MMU;
+struct PowerPCState;
+}  // namespace PowerPC
+
 //#define JIT_LOG_GENERATED_CODE  // Enables logging of generated code
 //#define JIT_LOG_GPR             // Enables logging of the PPC general purpose regs
 //#define JIT_LOG_FPR             // Enables logging of the PPC floating point regs
 
 // Use these to control the instruction selection
 // #define INSTRUCTION_START FallBackToInterpreter(inst); return;
-// #define INSTRUCTION_START PPCTables::CountInstruction(inst);
+// #define INSTRUCTION_START PPCTables::CountInstruction(inst, m_ppc_state.pc);
 #define INSTRUCTION_START
 
 #define FALLBACK_IF(cond)                                                                          \
@@ -162,7 +172,11 @@ protected:
   bool ShouldHandleFPExceptionForInstruction(const PPCAnalyst::CodeOp* op);
 
 public:
-  JitBase();
+  explicit JitBase(Core::System& system);
+  JitBase(const JitBase&) = delete;
+  JitBase(JitBase&&) = delete;
+  JitBase& operator=(const JitBase&) = delete;
+  JitBase& operator=(JitBase&&) = delete;
   ~JitBase() override;
 
   bool IsDebuggingEnabled() const { return m_enable_debugging; }
@@ -182,6 +196,10 @@ public:
   // This should probably be removed from public:
   JitOptions jo{};
   JitState js{};
+
+  Core::System& m_system;
+  PowerPC::PowerPCState& m_ppc_state;
+  PowerPC::MMU& m_mmu;
 };
 
 void JitTrampoline(JitBase& jit, u32 em_address);

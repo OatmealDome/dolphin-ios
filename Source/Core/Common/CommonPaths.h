@@ -112,6 +112,7 @@
 #define LOGGER_CONFIG "Logger.ini"
 #define DUALSHOCKUDPCLIENT_CONFIG "DSUClient.ini"
 #define FREELOOK_CONFIG "FreeLook.ini"
+#define RETROACHIEVEMENTS_CONFIG "RetroAchievements.ini"
 
 // Files in the directory returned by GetUserPath(D_LOGS_IDX)
 #define MAIN_LOG "dolphin.log"
@@ -162,3 +163,10 @@
 
 // Subdirs in Config
 #define GRAPHICSMOD_CONFIG_DIR "GraphicMods"
+
+// GPU drivers
+#define GPU_DRIVERS "GpuDrivers"
+#define GPU_DRIVERS_EXTRACTED "Extracted"
+#define GPU_DRIVERS_TMP "Tmp"
+#define GPU_DRIVERS_HOOK "Hook"
+#define GPU_DRIVERS_FILE_REDIRECT "FileRedirect"

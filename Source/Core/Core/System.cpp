@@ -22,8 +22,12 @@
 #include "Core/HW/SI/SI.h"
 #include "Core/HW/Sram.h"
 #include "Core/HW/VideoInterface.h"
+#include "Core/PowerPC/Interpreter/Interpreter.h"
+#include "Core/PowerPC/JitInterface.h"
 #include "Core/PowerPC/PowerPC.h"
+#include "IOS/USB/Emulated/Infinity.h"
 #include "IOS/USB/Emulated/Skylander.h"
+#include "VideoCommon/Assets/CustomAssetLoader.h"
 #include "VideoCommon/CommandProcessor.h"
 #include "VideoCommon/Fifo.h"
 #include "VideoCommon/GeometryShaderManager.h"
@@ -36,10 +40,12 @@ namespace Core
 struct System::Impl
 {
   explicit Impl(System& system)
-      : m_audio_interface(system), m_core_timing(system), m_dsp(system), m_dvd_interface(system),
-        m_dvd_thread(system), m_expansion_interface(system), m_gp_fifo(system), m_memory(system),
-        m_ppc_state(PowerPC::ppcState), m_processor_interface(system), m_serial_interface(system),
-        m_video_interface(system)
+      : m_audio_interface(system), m_core_timing(system), m_cpu(system), m_dsp(system),
+        m_dvd_interface(system), m_dvd_thread(system), m_expansion_interface(system),
+        m_gp_fifo(system), m_memory(system), m_power_pc(system),
+        m_mmu(system, m_memory, m_power_pc), m_processor_interface(system),
+        m_serial_interface(system), m_video_interface(system),
+        m_interpreter(system, m_power_pc.GetPPCState(), m_mmu), m_jit_interface(system)
   {
   }
 
@@ -59,17 +65,22 @@ struct System::Impl
   GeometryShaderManager m_geometry_shader_manager;
   GPFifo::GPFifoManager m_gp_fifo;
   HSP::HSPManager m_hsp;
+  IOS::HLE::USB::InfinityBase m_infinity_base;
   IOS::HLE::USB::SkylanderPortal m_skylander_portal;
   Memory::MemoryManager m_memory;
   MemoryInterface::MemoryInterfaceManager m_memory_interface;
   PixelEngine::PixelEngineManager m_pixel_engine;
   PixelShaderManager m_pixel_shader_manager;
-  PowerPC::PowerPCState& m_ppc_state;
+  PowerPC::PowerPCManager m_power_pc;
+  PowerPC::MMU m_mmu;
   ProcessorInterface::ProcessorInterfaceManager m_processor_interface;
   SerialInterface::SerialInterfaceManager m_serial_interface;
   Sram m_sram;
   VertexShaderManager m_vertex_shader_manager;
   VideoInterface::VideoInterfaceManager m_video_interface;
+  Interpreter m_interpreter;
+  JitInterface m_jit_interface;
+  VideoCommon::CustomAssetLoader m_custom_asset_loader;
 };
 
 System::System() : m_impl{std::make_unique<Impl>(*this)}
@@ -175,9 +186,24 @@ HSP::HSPManager& System::GetHSP() const
   return m_impl->m_hsp;
 }
 
+Interpreter& System::GetInterpreter() const
+{
+  return m_impl->m_interpreter;
+}
+
+JitInterface& System::GetJitInterface() const
+{
+  return m_impl->m_jit_interface;
+}
+
 IOS::HLE::USB::SkylanderPortal& System::GetSkylanderPortal() const
 {
   return m_impl->m_skylander_portal;
+}
+
+IOS::HLE::USB::InfinityBase& System::GetInfinityBase() const
+{
+  return m_impl->m_infinity_base;
 }
 
 Memory::MemoryManager& System::GetMemory() const
@@ -190,6 +216,11 @@ MemoryInterface::MemoryInterfaceManager& System::GetMemoryInterface() const
   return m_impl->m_memory_interface;
 }
 
+PowerPC::MMU& System::GetMMU() const
+{
+  return m_impl->m_mmu;
+}
+
 PixelEngine::PixelEngineManager& System::GetPixelEngine() const
 {
   return m_impl->m_pixel_engine;
@@ -200,9 +231,14 @@ PixelShaderManager& System::GetPixelShaderManager() const
   return m_impl->m_pixel_shader_manager;
 }
 
+PowerPC::PowerPCManager& System::GetPowerPC() const
+{
+  return m_impl->m_power_pc;
+}
+
 PowerPC::PowerPCState& System::GetPPCState() const
 {
-  return m_impl->m_ppc_state;
+  return m_impl->m_power_pc.GetPPCState();
 }
 
 ProcessorInterface::ProcessorInterfaceManager& System::GetProcessorInterface() const
@@ -228,5 +264,10 @@ VertexShaderManager& System::GetVertexShaderManager() const
 VideoInterface::VideoInterfaceManager& System::GetVideoInterface() const
 {
   return m_impl->m_video_interface;
+}
+
+VideoCommon::CustomAssetLoader& System::GetCustomAssetLoader() const
+{
+  return m_impl->m_custom_asset_loader;
 }
 }  // namespace Core

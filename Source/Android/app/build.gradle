@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.serialization' version "1.7.20"
 }
 
 task copyProfile (type: Copy) {
@@ -13,7 +14,7 @@ task copyProfile (type: Copy) {
 
 android {
     compileSdkVersion 33
-    ndkVersion "25.1.8937393"
+    ndkVersion "25.2.9519653"
 
     viewBinding.enabled = true
 
@@ -40,7 +41,6 @@ android {
     }
 
     defaultConfig {
-        // TODO If this is ever modified, change application_id in strings.xml
         applicationId "org.dolphinemu.dolphinemu"
         minSdkVersion 21
         targetSdkVersion 33
@@ -74,6 +74,7 @@ android {
                 signingConfig signingConfigs.release
             }
 
+            resValue 'string', 'app_name_suffixed', 'Dolphin Emulator'
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile(
@@ -86,13 +87,14 @@ android {
         // Signed by debug key disallowing distribution on Play Store.
         // Attaches 'debug' suffix to version and package name, allowing installation alongside the release build.
         debug {
-            // TODO If this is ever modified, change application_id in debug/strings.xml
+            resValue 'string', 'app_name_suffixed', 'Dolphin Debug'
             applicationIdSuffix ".debug"
             versionNameSuffix '-debug'
             jniDebuggable true
         }
 
         benchmark {
+            resValue 'string', 'app_name_suffixed', 'Dolphin Benchmark'
             signingConfig signingConfigs.debug
             matchingFallbacks = ['release']
             debuggable false
@@ -109,6 +111,7 @@ android {
     externalNativeBuild {
         cmake {
             path "../../../CMakeLists.txt"
+            version "3.22.1+"
         }
     }
     namespace 'org.dolphinemu.dolphinemu'
@@ -121,33 +124,37 @@ android {
                 abiFilters "arm64-v8a", "x86_64" //, "armeabi-v7a", "x86"
 
                 // Remove the line below if you want to build the C++ unit tests
-                targets "main"
+                //targets "main", "hook_impl", "main_hook", "gsl_alloc_hook", "file_redirect_hook"
             }
         }
+    }
+
+    packagingOptions {
+        jniLibs.useLegacyPackaging = true
     }
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
     implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.6.0'
-    implementation 'androidx.exifinterface:exifinterface:1.3.5'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.exifinterface:exifinterface:1.3.6'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.6.0'
     implementation 'androidx.fragment:fragment:1.5.5'
     implementation 'androidx.slidingpanelayout:slidingpanelayout:1.2.0'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.core:core-splashscreen:1.0.0'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.profileinstaller:profileinstaller:1.2.2'
 
     // Kotlin extensions for lifecycle components
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.0'
 
     // Android TV UI libraries.
     implementation 'androidx.leanback:leanback:1.0.0'
@@ -158,6 +165,9 @@ dependencies {
 
     // For loading game covers from disk and GameTDB
     implementation 'io.coil-kt:coil:2.2.2'
+
+    // For loading custom GPU drivers
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3"
 
     implementation 'com.nononsenseapps:filepicker:4.2.1'
 }

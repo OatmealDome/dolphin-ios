@@ -17,6 +17,7 @@ import org.dolphinemu.dolphinemu.activities.EmulationActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.dolphinemu.dolphinemu.databinding.CardGameBinding
 import org.dolphinemu.dolphinemu.dialogs.GamePropertiesDialog
@@ -59,7 +60,7 @@ class GameAdapter(private val mActivity: FragmentActivity) : RecyclerView.Adapte
         val gameFile = mGameFiles[position]
 
         holder.apply {
-            if (BooleanSetting.MAIN_SHOW_GAME_TITLES.booleanGlobal) {
+            if (BooleanSetting.MAIN_SHOW_GAME_TITLES.boolean) {
                 binding.textGameTitle.text = gameFile.title
                 binding.textGameTitle.visibility = View.VISIBLE
                 binding.textGameTitleInner.visibility = View.GONE
@@ -72,7 +73,7 @@ class GameAdapter(private val mActivity: FragmentActivity) : RecyclerView.Adapte
             }
         }
 
-        mActivity.lifecycleScope.launchWhenStarted {
+        mActivity.lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 val customCoverUri = CoilUtils.findCustomCover(gameFile)
                 withContext(Dispatchers.Main) {

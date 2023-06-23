@@ -40,14 +40,23 @@ JitBaseBlockCache::~JitBaseBlockCache() = default;
 
 void JitBaseBlockCache::Init()
 {
-  JitRegister::Init(Config::Get(Config::MAIN_PERF_MAP_DIR));
+  Common::JitRegister::Init(Config::Get(Config::MAIN_PERF_MAP_DIR));
+
+  m_block_map_arena.GrabSHMSegment(FAST_BLOCK_MAP_SIZE, "dolphin-emu-jitblock");
 
   Clear();
 }
 
 void JitBaseBlockCache::Shutdown()
 {
-  JitRegister::Shutdown();
+  Common::JitRegister::Shutdown();
+
+  if (m_fast_block_map)
+  {
+    m_block_map_arena.ReleaseView(m_fast_block_map, FAST_BLOCK_MAP_SIZE);
+  }
+
+  m_block_map_arena.ReleaseSHMSegment();
 }
 
 // This clears the JIT cache. It's called from JitCache.cpp when the JIT cache
@@ -70,7 +79,24 @@ void JitBaseBlockCache::Clear()
 
   valid_block.ClearAll();
 
-  fast_block_map.fill(nullptr);
+  if (m_fast_block_map)
+  {
+    m_block_map_arena.ReleaseView(m_fast_block_map, FAST_BLOCK_MAP_SIZE);
+    m_block_map_arena.ReleaseSHMSegment();
+    m_block_map_arena.GrabSHMSegment(FAST_BLOCK_MAP_SIZE, "dolphin-emu-jitblock");
+  }
+
+  m_fast_block_map =
+      reinterpret_cast<JitBlock**>(m_block_map_arena.CreateView(0, FAST_BLOCK_MAP_SIZE));
+
+  if (m_fast_block_map)
+  {
+    m_fast_block_map_ptr = m_fast_block_map;
+  }
+  else
+  {
+    m_fast_block_map_ptr = m_fast_block_map_fallback.data();
+  }
 }
 
 void JitBaseBlockCache::Reset()
@@ -81,7 +107,12 @@ void JitBaseBlockCache::Reset()
 
 JitBlock** JitBaseBlockCache::GetFastBlockMap()
 {
-  return fast_block_map.data();
+  return m_fast_block_map;
+}
+
+JitBlock** JitBaseBlockCache::GetFastBlockMapFallback()
+{
+  return m_fast_block_map_fallback.data();
 }
 
 void JitBaseBlockCache::RunOnBlocks(std::function<void(const JitBlock&)> f)
@@ -92,11 +123,11 @@ void JitBaseBlockCache::RunOnBlocks(std::function<void(const JitBlock&)> f)
 
 JitBlock* JitBaseBlockCache::AllocateBlock(u32 em_address)
 {
-  const u32 physical_address = PowerPC::JitCache_TranslateAddress(em_address).address;
+  const u32 physical_address = m_jit.m_mmu.JitCache_TranslateAddress(em_address).address;
   JitBlock& b = block_map.emplace(physical_address, JitBlock())->second;
   b.effectiveAddress = em_address;
   b.physicalAddress = physical_address;
-  b.msrBits = PowerPC::ppcState.msr.Hex & JIT_CACHE_MSR_MASK;
+  b.msrBits = m_jit.m_ppc_state.msr.Hex & JIT_CACHE_MSR_MASK;
   b.linkData.clear();
   b.fast_block_map_index = 0;
   return &b;
@@ -106,7 +137,7 @@ void JitBaseBlockCache::FinalizeBlock(JitBlock& block, bool block_link,
                                       const std::set<u32>& physical_addresses)
 {
   size_t index = FastLookupIndexForAddress(block.effectiveAddress);
-  fast_block_map[index] = &block;
+  m_fast_block_map_ptr[index] = &block;
   block.fast_block_map_index = index;
 
   block.physical_addresses = physical_addresses;
@@ -129,16 +160,16 @@ void JitBaseBlockCache::FinalizeBlock(JitBlock& block, bool block_link,
   }
 
   Common::Symbol* symbol = nullptr;
-  if (JitRegister::IsEnabled() &&
+  if (Common::JitRegister::IsEnabled() &&
       (symbol = g_symbolDB.GetSymbolFromAddr(block.effectiveAddress)) != nullptr)
   {
-    JitRegister::Register(block.checkedEntry, block.codeSize, "JIT_PPC_{}_{:08x}",
-                          symbol->function_name.c_str(), block.physicalAddress);
+    Common::JitRegister::Register(block.checkedEntry, block.codeSize, "JIT_PPC_{}_{:08x}",
+                                  symbol->function_name.c_str(), block.physicalAddress);
   }
   else
   {
-    JitRegister::Register(block.checkedEntry, block.codeSize, "JIT_PPC_{:08x}",
-                          block.physicalAddress);
+    Common::JitRegister::Register(block.checkedEntry, block.codeSize, "JIT_PPC_{:08x}",
+                                  block.physicalAddress);
   }
 }
 
@@ -147,7 +178,7 @@ JitBlock* JitBaseBlockCache::GetBlockFromStartAddress(u32 addr, u32 msr)
   u32 translated_addr = addr;
   if (UReg_MSR(msr).IR)
   {
-    auto translated = PowerPC::JitCache_TranslateAddress(addr);
+    auto translated = m_jit.m_mmu.JitCache_TranslateAddress(addr);
     if (!translated.valid)
     {
       return nullptr;
@@ -168,13 +199,13 @@ JitBlock* JitBaseBlockCache::GetBlockFromStartAddress(u32 addr, u32 msr)
 
 const u8* JitBaseBlockCache::Dispatch()
 {
-  JitBlock* block = fast_block_map[FastLookupIndexForAddress(PowerPC::ppcState.pc)];
+  const auto& ppc_state = m_jit.m_ppc_state;
+  JitBlock* block = m_fast_block_map_ptr[FastLookupIndexForAddress(ppc_state.pc)];
 
-  if (!block || block->effectiveAddress != PowerPC::ppcState.pc ||
-      block->msrBits != (PowerPC::ppcState.msr.Hex & JIT_CACHE_MSR_MASK))
+  if (!block || block->effectiveAddress != ppc_state.pc ||
+      block->msrBits != (ppc_state.msr.Hex & JIT_CACHE_MSR_MASK))
   {
-    block = MoveBlockIntoFastCache(PowerPC::ppcState.pc,
-                                   PowerPC::ppcState.msr.Hex & JIT_CACHE_MSR_MASK);
+    block = MoveBlockIntoFastCache(ppc_state.pc, ppc_state.msr.Hex & JIT_CACHE_MSR_MASK);
   }
 
   if (!block)
@@ -186,7 +217,7 @@ const u8* JitBaseBlockCache::Dispatch()
 void JitBaseBlockCache::InvalidateICacheLine(u32 address)
 {
   const u32 cache_line_address = address & ~0x1f;
-  const auto translated = PowerPC::JitCache_TranslateAddress(cache_line_address);
+  const auto translated = m_jit.m_mmu.JitCache_TranslateAddress(cache_line_address);
   if (translated.valid)
     InvalidateICacheInternal(translated.address, cache_line_address, 32, false);
 }
@@ -197,7 +228,7 @@ void JitBaseBlockCache::InvalidateICache(u32 initial_address, u32 initial_length
   u32 length = initial_length;
   while (length > 0)
   {
-    const auto translated = PowerPC::JitCache_TranslateAddress(address);
+    const auto translated = m_jit.m_mmu.JitCache_TranslateAddress(address);
 
     const bool address_from_bat = translated.valid && translated.translated && translated.from_bat;
     const int shift = address_from_bat ? PowerPC::BAT_INDEX_SHIFT : PowerPC::HW_PAGE_INDEX_SHIFT;
@@ -390,8 +421,8 @@ void JitBaseBlockCache::UnlinkBlock(const JitBlock& block)
 
 void JitBaseBlockCache::DestroyBlock(JitBlock& block)
 {
-  if (fast_block_map[block.fast_block_map_index] == &block)
-    fast_block_map[block.fast_block_map_index] = nullptr;
+  if (m_fast_block_map_ptr[block.fast_block_map_index] == &block)
+    m_fast_block_map_ptr[block.fast_block_map_index] = nullptr;
 
   UnlinkBlock(block);
 
@@ -418,12 +449,12 @@ JitBlock* JitBaseBlockCache::MoveBlockIntoFastCache(u32 addr, u32 msr)
     return nullptr;
 
   // Drop old fast block map entry
-  if (fast_block_map[block->fast_block_map_index] == block)
-    fast_block_map[block->fast_block_map_index] = nullptr;
+  if (m_fast_block_map_ptr[block->fast_block_map_index] == block)
+    m_fast_block_map_ptr[block->fast_block_map_index] = nullptr;
 
   // And create a new one
   size_t index = FastLookupIndexForAddress(addr);
-  fast_block_map[index] = block;
+  m_fast_block_map_ptr[index] = block;
   block->fast_block_map_index = index;
 
   return block;
@@ -431,5 +462,12 @@ JitBlock* JitBaseBlockCache::MoveBlockIntoFastCache(u32 addr, u32 msr)
 
 size_t JitBaseBlockCache::FastLookupIndexForAddress(u32 address)
 {
-  return (address >> 2) & FAST_BLOCK_MAP_MASK;
+  if (m_fast_block_map)
+  {
+    return address >> 2;
+  }
+  else
+  {
+    return (address >> 2) & FAST_BLOCK_MAP_FALLBACK_MASK;
+  }
 }

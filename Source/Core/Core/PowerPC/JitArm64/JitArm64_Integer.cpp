@@ -13,6 +13,7 @@
 
 #include "Core/Core.h"
 #include "Core/CoreTiming.h"
+#include "Core/PowerPC/Interpreter/Interpreter.h"
 #include "Core/PowerPC/JitArm64/JitArm64_RegCache.h"
 #include "Core/PowerPC/JitCommon/DivUtils.h"
 #include "Core/PowerPC/PPCTables.h"
@@ -325,7 +326,17 @@ void JitArm64::boolX(UGeckoInstruction inst)
   else if ((gpr.IsImm(s) && (gpr.GetImm(s) == 0 || gpr.GetImm(s) == 0xFFFFFFFF)) ||
            (gpr.IsImm(b) && (gpr.GetImm(b) == 0 || gpr.GetImm(b) == 0xFFFFFFFF)))
   {
-    const auto [i, j] = gpr.IsImm(s) ? std::pair(s, b) : std::pair(b, s);
+    int i, j;
+    if (gpr.IsImm(s))
+    {
+      i = s;
+      j = b;
+    }
+    else
+    {
+      i = b;
+      j = s;
+    }
     bool is_zero = gpr.GetImm(i) == 0;
 
     bool complement_b = (inst.SUBOP10 == 60 /* andcx */) || (inst.SUBOP10 == 412 /* orcx */);
@@ -909,7 +920,7 @@ bool JitArm64::MultiplyImmediate(u32 imm, int a, int d, bool rc)
   else if (MathUtil::IsPow2(imm))
   {
     // Multiplication by a power of two (2^n).
-    const int shift = IntLog2(imm);
+    const int shift = MathUtil::IntLog2(imm);
 
     gpr.BindToRegister(d, d == a);
     LSL(gpr.R(d), gpr.R(a), shift);
@@ -919,7 +930,7 @@ bool JitArm64::MultiplyImmediate(u32 imm, int a, int d, bool rc)
   else if (MathUtil::IsPow2(imm - 1))
   {
     // Multiplication by a power of two plus one (2^n + 1).
-    const int shift = IntLog2(imm - 1);
+    const int shift = MathUtil::IntLog2(imm - 1);
 
     gpr.BindToRegister(d, d == a);
     ADD(gpr.R(d), gpr.R(a), gpr.R(a), ArithOption(gpr.R(a), ShiftType::LSL, shift));
@@ -929,7 +940,7 @@ bool JitArm64::MultiplyImmediate(u32 imm, int a, int d, bool rc)
   else if (MathUtil::IsPow2(~imm + 1))
   {
     // Multiplication by a negative power of two (-(2^n)).
-    const int shift = IntLog2(~imm + 1);
+    const int shift = MathUtil::IntLog2(~imm + 1);
 
     gpr.BindToRegister(d, d == a);
     NEG(gpr.R(d), gpr.R(a), ArithOption(gpr.R(a), ShiftType::LSL, shift));
@@ -939,7 +950,7 @@ bool JitArm64::MultiplyImmediate(u32 imm, int a, int d, bool rc)
   else if (MathUtil::IsPow2(~imm + 2))
   {
     // Multiplication by a negative power of two plus one (-(2^n) + 1).
-    const int shift = IntLog2(~imm + 2);
+    const int shift = MathUtil::IntLog2(~imm + 2);
 
     gpr.BindToRegister(d, d == a);
     SUB(gpr.R(d), gpr.R(a), gpr.R(a), ArithOption(gpr.R(a), ShiftType::LSL, shift));
@@ -1603,9 +1614,9 @@ void JitArm64::divwx(UGeckoInstruction inst)
       CSEL(WA, RA, WA, CCFlags::CC_PL);
 
       if (divisor < 0)
-        NEG(RD, WA, ArithOption(WA, ShiftType::ASR, IntLog2(abs_val)));
+        NEG(RD, WA, ArithOption(WA, ShiftType::ASR, MathUtil::IntLog2(abs_val)));
       else
-        ASR(RD, WA, IntLog2(abs_val));
+        ASR(RD, WA, MathUtil::IntLog2(abs_val));
 
       if (allocate_reg)
         gpr.Unlock(WA);
