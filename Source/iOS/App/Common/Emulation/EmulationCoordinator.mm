@@ -86,12 +86,6 @@
 }
 
 - (void)runEmulationWithBootParameter:(EmulationBootParameter*)bootParameter {
-  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    [self emulationLoopWithBootParameter:bootParameter];
-  });
-}
-
-- (void)emulationLoopWithBootParameter:(EmulationBootParameter*)bootParameter {
   __block WindowSystemInfo wsi;
   wsi.type = WindowSystemType::iOS;
   wsi.render_surface = (__bridge void*)_metalLayer;
@@ -104,6 +98,12 @@
     return;
   }
   
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [self emulationLoop];
+  });
+}
+
+- (void)emulationLoop {
   while (Core::GetState() == Core::State::Starting) {
     [NSThread sleepForTimeInterval:0.025];
   }
@@ -114,7 +114,9 @@
     [_hostJobCondition lock];
     [_hostJobCondition wait];
     
-    Core::HostDispatchJobs();
+    dispatch_sync(dispatch_get_main_queue(), ^{
+      Core::HostDispatchJobs();
+    });
     
     [_hostJobCondition unlock];
   }
