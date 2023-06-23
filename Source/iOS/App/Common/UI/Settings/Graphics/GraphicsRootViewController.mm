@@ -12,7 +12,10 @@
 @implementation GraphicsRootViewController
 
 - (void)viewDidLoad {
-  VideoBackendBase::PopulateBackendInfoFromUI();
+  WindowSystemInfo wsi;
+  wsi.type = WindowSystemType::iOS;
+  
+  VideoBackendBase::PopulateBackendInfoFromUI(wsi);
 }
 
 @end
