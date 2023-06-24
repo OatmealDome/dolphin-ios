@@ -88,7 +88,11 @@ class DOLAppVersionTests: XCTestCase {
   }
   
   func testNotLessThanSameVersion() throws {
-    XCTAssertGreaterThan(DOLAppVersion(jsonVersion: "11.22.33 (55)"), DOLAppVersion(jsonVersion: "11.22.33 (55)"))
+    XCTAssertFalse(DOLAppVersion(jsonVersion: "11.22.33 (55)") < DOLAppVersion(jsonVersion: "11.22.33 (55)"))
+  }
+  
+  func testNotGreaterThanSameVersion() throws {
+    XCTAssertFalse(DOLAppVersion(jsonVersion: "11.22.33 (55)") > DOLAppVersion(jsonVersion: "11.22.33 (55)"))
   }
 }
 
