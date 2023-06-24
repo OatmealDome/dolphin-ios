@@ -90,4 +90,14 @@ import Foundation
     
     self.init(shortVersion: shortVersion, version: version, buildSource: buildSource)
   }
+  
+  override public func isEqual(_ object: Any?) -> Bool {
+    let lhs = self
+    
+    guard let rhs = object as? DOLAppVersion else {
+      return false
+    }
+    
+    return lhs.major == rhs.major && lhs.minor == rhs.minor && lhs.patch == rhs.patch && lhs.betaNumber == rhs.betaNumber && lhs.build == rhs.build && lhs.source == rhs.source
+  }
 }
