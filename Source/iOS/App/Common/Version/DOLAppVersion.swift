@@ -115,6 +115,10 @@ import Foundation
       return false
     }
     
+    if (lhs == rhs) {
+      return false
+    }
+    
     return true
   }
   
