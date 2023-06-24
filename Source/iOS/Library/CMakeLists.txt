@@ -1,5 +1,7 @@
 add_library(dolphin SHARED
   Host.mm
+  HostQueue.h
+  HostQueue.mm
 )
 
 set_target_properties(dolphin PROPERTIES
