@@ -125,6 +125,6 @@ import Foundation
       return false
     }
     
-    return lhs.major == rhs.major && lhs.minor == rhs.minor && lhs.patch == rhs.patch && lhs.betaNumber == rhs.betaNumber && lhs.build == rhs.build && lhs.source == rhs.source
+    return lhs.major == rhs.major && lhs.minor == rhs.minor && lhs.patch == rhs.patch && lhs.betaNumber == rhs.betaNumber && lhs.build == rhs.build
   }
 }
