@@ -10,6 +10,7 @@
 #include "Core/Host.h"
 
 #include "HostNotifications.h"
+#include "HostQueue.h"
 
 std::vector<std::string> Host_GetPreferredLocales()
 {
@@ -28,7 +29,7 @@ void Host_Message(HostMessageID message)
 {
   if (message == HostMessageID::WMUserJobDispatch)
   {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    DOLHostQueueRunAsync(^{
       Core::HostDispatchJobs();
     });
   }
