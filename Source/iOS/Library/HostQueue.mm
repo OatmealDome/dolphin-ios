@@ -4,6 +4,10 @@
 #include "HostQueue.h"
 
 #include <dispatch/dispatch.h>
+#include <Foundation/Foundation.h>
+
+#include "Common/Assert.h"
+#include "Common/Event.h"
 
 #include "Core/Core.h"
 
@@ -21,6 +25,8 @@ dispatch_queue_t DOLHostQueueGetUnderlyingQueue()
 
 void DOLHostQueueExecuteBlock(void (^block)(void))
 {
+  ASSERT(![NSThread isMainThread]);
+
   Core::DeclareAsHostThread();
 
   block();
@@ -30,9 +36,16 @@ void DOLHostQueueExecuteBlock(void (^block)(void))
 
 void DOLHostQueueRunSync(void (^block)(void))
 {
-  dispatch_sync(DOLHostQueueGetUnderlyingQueue(), ^{
+  Common::Event sync_event;
+  Common::Event* sync_event_ptr = &sync_event;
+
+  dispatch_async(DOLHostQueueGetUnderlyingQueue(), ^{
     DOLHostQueueExecuteBlock(block);
+
+    sync_event_ptr->Set();
   });
+
+  sync_event.Wait();
 }
 
 void DOLHostQueueRunAsync(void (^block)(void))
