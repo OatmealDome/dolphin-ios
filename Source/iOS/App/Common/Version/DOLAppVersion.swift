@@ -91,6 +91,33 @@ import Foundation
     self.init(shortVersion: shortVersion, version: version, buildSource: buildSource)
   }
   
+  public static func < (lhs: DOLAppVersion, rhs: DOLAppVersion) -> Bool {
+    let lhsBetaNumber = lhs.betaNumber ?? Int.max
+    let rhsBetaNumber = rhs.betaNumber ?? Int.max
+    
+    if (lhs.major > rhs.major) {
+      return false
+    }
+    
+    if (lhs.minor > rhs.minor) {
+      return false
+    }
+    
+    if (lhs.patch > rhs.patch) {
+      return false
+    }
+    
+    if (lhsBetaNumber > rhsBetaNumber) {
+      return false
+    }
+    
+    if (lhs.build > rhs.build) {
+      return false
+    }
+    
+    return true
+  }
+  
   override public func isEqual(_ object: Any?) -> Bool {
     let lhs = self
     
