@@ -79,7 +79,7 @@ import Foundation
     
     switch (info["DOLBuildSource"] as! String) {
     case "development":
-      buildSource = .official
+      buildSource = .development
     case "unofficial":
       buildSource = .unofficial
     case "official":
