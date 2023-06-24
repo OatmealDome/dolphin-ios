@@ -13,11 +13,11 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
     let noticeManager = BootNoticeManager.shared()
     let versionManager = VersionManager.shared()
     
-    let currentVersion = versionManager.userFacingVersion
+    let currentVersion = versionManager.appVersion
     
     let lastVersion = userDefaults.string(forKey: "last_version")
-    if (lastVersion != currentVersion) {
-      userDefaults.set(currentVersion, forKey: "last_version")
+    if (lastVersion != currentVersion.userFacing) {
+      userDefaults.set(currentVersion.userFacing, forKey: "last_version")
       userDefaults.set(false, forKey: "update_required")
     }
     
@@ -32,7 +32,7 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
     let updateUrl = URL(string: "https://dolphinios.oatmealdome.me/api/v2/update.json")!
     
     session.dataTask(with: updateUrl) { (data, response, error) in
-      if (versionManager.buildSource != .official) {
+      if (versionManager.appVersion.source != .official) {
         return
       }
       
@@ -48,7 +48,7 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
       
       let updateRequiredBuilds = json["kbs"] as! Array<String>
       
-      if (updateRequiredBuilds.contains(currentVersion)) {
+      if (updateRequiredBuilds.contains(currentVersion.userFacing)) {
         userDefaults.set(true, forKey: "update_required")
         
         DispatchQueue.main.async {
@@ -77,7 +77,7 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
       let versionInfo = json[key] as! Dictionary<AnyHashable, Any>
       let newVersion = versionInfo["version"] as! String
       
-      if (newVersion != currentVersion) {
+      if (newVersion != currentVersion.userFacing) {
         DispatchQueue.main.async {
           let updateController = UpdateNoticeViewController(nibName: "UpdateNotice", bundle: nil)
           updateController.updateInfo = versionInfo

@@ -22,7 +22,7 @@
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id>*)launchOptions {
-  if ([VersionManager shared].buildSource != DOLBuildSourceOfficial) {
+  if ([VersionManager shared].appVersion.source != DOLBuildSourceOfficial) {
     return true;
   }
   
@@ -49,7 +49,7 @@
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     
     NSString* lastVersion = [defaults stringForKey:@"last_version"];
-    NSString* currentVersion = [VersionManager shared].userFacingVersion;
+    NSString* currentVersion = [VersionManager shared].appVersion.userFacing;
     
     _shouldSendInitialEvent = ![lastVersion isEqualToString:currentVersion];
   } else {
@@ -78,7 +78,7 @@
     
     [FIRAnalytics logEventWithName:@"version_start" parameters:@{
       @"type" : appType,
-      @"version" : [VersionManager shared].userFacingVersion
+      @"version" : [VersionManager shared].appVersion.userFacing
     }];
   }
 }

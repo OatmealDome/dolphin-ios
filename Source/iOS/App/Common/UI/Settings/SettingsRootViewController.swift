@@ -11,7 +11,7 @@ class SettingsRootViewController : UITableViewController {
   override func viewDidLoad() {
     let versionManager = VersionManager.shared()
     
-    versionLabel.text = versionManager.userFacingVersion
+    versionLabel.text = versionManager.appVersion.userFacing
     coreVersionLabel.text = versionManager.coreVersion
   }
   
