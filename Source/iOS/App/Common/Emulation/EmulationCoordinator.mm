@@ -16,6 +16,7 @@
 
 #import "EmulationBootParameter.h"
 #import "HostNotifications.h"
+#import "HostQueue.h"
 
 @implementation EmulationCoordinator {
   MTKView* _mtkView;
@@ -81,24 +82,25 @@
 }
 
 - (void)runEmulationWithBootParameter:(EmulationBootParameter*)bootParameter {
-  __block WindowSystemInfo wsi;
-  wsi.type = WindowSystemType::iOS;
-  wsi.render_surface = (__bridge void*)_metalLayer;
-  wsi.render_surface_scale = UIScreen.mainScreen.scale;
-  
-  std::unique_ptr<BootParameters> boot = [bootParameter generateDolphinBootParameter];
-  
-  if (!BootManager::BootCore(std::move(boot), wsi)) {
-    PanicAlertFmt("Failed to init core!");
-    return;
-  }
-  
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    [self emulationLoop];
+    [self emulationLoopWithBootParameter:bootParameter];
   });
 }
 
-- (void)emulationLoop {
+- (void)emulationLoopWithBootParameter:(EmulationBootParameter*)bootParameter {
+  DOLHostQueueRunSync(^{
+    __block WindowSystemInfo wsi;
+    wsi.type = WindowSystemType::iOS;
+    wsi.render_surface = (__bridge void*)self->_metalLayer;
+    wsi.render_surface_scale = UIScreen.mainScreen.scale;
+    
+    std::unique_ptr<BootParameters> boot = [bootParameter generateDolphinBootParameter];
+    
+    if (!BootManager::BootCore(std::move(boot), wsi)) {
+      PanicAlertFmt("Failed to init core!");
+    }
+  });
+  
   while (Core::GetState() == Core::State::Starting) {
     [NSThread sleepForTimeInterval:0.025];
   }
