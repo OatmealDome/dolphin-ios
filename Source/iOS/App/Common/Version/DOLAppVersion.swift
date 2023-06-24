@@ -3,7 +3,7 @@
 
 import Foundation
 
-@objc class DOLAppVersion: NSObject {
+@objc public class DOLAppVersion: NSObject, Comparable {
   private let major: Int;
   private let minor: Int;
   private let patch: Int;
@@ -13,7 +13,7 @@ import Foundation
   @objc let source: DOLBuildSource
   @objc let userFacing: String
   
-  init(shortVersion: String, version: String, buildSource: DOLBuildSource) {
+  public init(shortVersion: String, version: String, buildSource: DOLBuildSource) {
     let splitShort = shortVersion.split(separator: ".")
     
     major = Int(splitShort[0])!
@@ -59,7 +59,7 @@ import Foundation
     userFacing = String(format: "%d.%d.%d%@ (%@)", major, minor, patch, betaComponent, overrideBuild)
   }
   
-  convenience init(jsonVersion: String) {
+  public convenience init(jsonVersion: String) {
     let splitVersion = jsonVersion.split(separator: " ")
     
     let sanitizedBuild = splitVersion[1]
@@ -69,7 +69,7 @@ import Foundation
     self.init(shortVersion: String(splitVersion[0]), version: sanitizedBuild, buildSource: .official)
   }
   
-  convenience override init() {
+  public convenience override init() {
     let info = Bundle.main.infoDictionary!
     
     let shortVersion = info["CFBundleShortVersionString"] as! String
