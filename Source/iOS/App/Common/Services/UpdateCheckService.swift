@@ -75,9 +75,11 @@ class UpdateCheckService : UIResponder, UIApplicationDelegate {
 #endif
       
       let versionInfo = json[key] as! Dictionary<AnyHashable, Any>
-      let newVersion = versionInfo["version"] as! String
+      let newVersionStr = versionInfo["version"] as! String
       
-      if (newVersion != currentVersion.userFacing) {
+      let newVersion = DOLAppVersion(jsonVersion: newVersionStr)
+      
+      if (newVersion > currentVersion) {
         DispatchQueue.main.async {
           let updateController = UpdateNoticeViewController(nibName: "UpdateNotice", bundle: nil)
           updateController.updateInfo = versionInfo
