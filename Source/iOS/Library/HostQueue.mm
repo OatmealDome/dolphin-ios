@@ -6,7 +6,6 @@
 #include <dispatch/dispatch.h>
 #include <Foundation/Foundation.h>
 
-#include "Common/Assert.h"
 #include "Common/Event.h"
 
 #include "Core/Core.h"
@@ -25,8 +24,6 @@ dispatch_queue_t DOLHostQueueGetUnderlyingQueue()
 
 void DOLHostQueueExecuteBlock(void (^block)(void))
 {
-  ASSERT(![NSThread isMainThread]);
-
   Core::DeclareAsHostThread();
 
   block();
