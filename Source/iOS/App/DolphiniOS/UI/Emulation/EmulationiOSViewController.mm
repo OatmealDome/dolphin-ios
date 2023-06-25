@@ -19,6 +19,7 @@
 
 #import "EmulationCoordinator.h"
 #import "HostNotifications.h"
+#import "HostQueue.h"
 #import "LocalizationUtil.h"
 #import "VirtualMFiControllerManager.h"
 
@@ -140,14 +141,14 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Controllers") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:controllerActions],
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Save State") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[
       [UIAction actionWithTitle:DOLCoreLocalizedString(@"Load State") image:[UIImage systemImageNamed:@"tray.and.arrow.down"] identifier:nil handler:^(UIAction*) {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        DOLHostQueueRunAsync(^{
           State::Load(self->_stateSlot);
         });
       
         [self.navigationController setNavigationBarHidden:true animated:true];
       }],
       [UIAction actionWithTitle:DOLCoreLocalizedString(@"Save State") image:[UIImage systemImageNamed:@"tray.and.arrow.up"] identifier:nil handler:^(UIAction*) {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        DOLHostQueueRunAsync(^{
           State::Save(self->_stateSlot);
         });
       
