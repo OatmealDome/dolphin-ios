@@ -113,6 +113,7 @@
 		B97E4B612965FA1B00B3EE9C /* AnalyticsNoticeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B97E4B602965FA1B00B3EE9C /* AnalyticsNoticeViewController.mm */; };
 		B9809C592A4811B000877579 /* SoftwareProperties.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9809C582A4811B000877579 /* SoftwareProperties.storyboard */; };
 		B9809C5C2A48149B00877579 /* SoftwarePropertiesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9809C5B2A48149B00877579 /* SoftwarePropertiesViewController.mm */; };
+		B9809C602A48236900877579 /* SoftwarePropertiesInfoViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9809C5F2A48236900877579 /* SoftwarePropertiesInfoViewController.mm */; };
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* WiiAspectRatioViewController.mm */; };
@@ -402,6 +403,8 @@
 		B9809C582A4811B000877579 /* SoftwareProperties.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SoftwareProperties.storyboard; sourceTree = "<group>"; };
 		B9809C5A2A48149B00877579 /* SoftwarePropertiesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SoftwarePropertiesViewController.h; sourceTree = "<group>"; };
 		B9809C5B2A48149B00877579 /* SoftwarePropertiesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SoftwarePropertiesViewController.mm; sourceTree = "<group>"; };
+		B9809C5E2A48236900877579 /* SoftwarePropertiesInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SoftwarePropertiesInfoViewController.h; sourceTree = "<group>"; };
+		B9809C5F2A48236900877579 /* SoftwarePropertiesInfoViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SoftwarePropertiesInfoViewController.mm; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B991377F288096A300588446 /* ConfigWiiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigWiiViewController.h; sourceTree = "<group>"; };
@@ -1246,6 +1249,7 @@
 		B9809C562A48106300877579 /* Properties */ = {
 			isa = PBXGroup;
 			children = (
+				B9809C5D2A48234700877579 /* Info */,
 				B9809C5A2A48149B00877579 /* SoftwarePropertiesViewController.h */,
 				B9809C5B2A48149B00877579 /* SoftwarePropertiesViewController.mm */,
 			);
@@ -1258,6 +1262,15 @@
 				B9809C582A4811B000877579 /* SoftwareProperties.storyboard */,
 			);
 			path = Properties;
+			sourceTree = "<group>";
+		};
+		B9809C5D2A48234700877579 /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				B9809C5E2A48236900877579 /* SoftwarePropertiesInfoViewController.h */,
+				B9809C5F2A48236900877579 /* SoftwarePropertiesInfoViewController.mm */,
+			);
+			path = Info;
 			sourceTree = "<group>";
 		};
 		B991377E2880969400588446 /* Wii */ = {
@@ -1895,6 +1908,7 @@
 				B904ACDD28862941008B6BE9 /* GraphicsAdvancedViewController.mm in Sources */,
 				B9749240296035F500794509 /* FastmemManager.m in Sources */,
 				B904AD3B288904AC008B6BE9 /* MappingGroupEditBoolCell.m in Sources */,
+				B9809C602A48236900877579 /* SoftwarePropertiesInfoViewController.mm in Sources */,
 				B9B2C64F288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift in Sources */,
 				B904AD012887B9D1008B6BE9 /* ControllersPortViewController.mm in Sources */,
 				B904AD272888D346008B6BE9 /* MappingUtil.mm in Sources */,

@@ -7,6 +7,7 @@
 
 #import "FoundationStringUtil.h"
 #import "GameFilePtrWrapper.h"
+#import "SoftwarePropertiesInfoViewController.h"
 
 @interface SoftwarePropertiesViewController ()
 
@@ -22,6 +23,13 @@
 
 - (IBAction)donePressed:(id)sender {
   [self.navigationController dismissViewControllerAnimated:true completion:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
+  if ([segue.identifier isEqualToString:@"info"]) {
+    SoftwarePropertiesInfoViewController* infoController = segue.destinationViewController;
+    infoController.gameFileWrapper = self.gameFileWrapper;
+  }
 }
 
 @end
