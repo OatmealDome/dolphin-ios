@@ -125,7 +125,9 @@
     return;
   }
   
-  Core::SetState(userRequestedPause ? Core::State::Paused : Core::State::Running);
+  DOLHostQueueRunSync(^{
+    Core::SetState(userRequestedPause ? Core::State::Paused : Core::State::Running);
+  });
   
   _userRequestedPause = userRequestedPause;
 }
