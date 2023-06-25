@@ -9,8 +9,11 @@
 #import "Core/IOS/ES/ES.h"
 #import "Core/IOS/IOS.h"
 
+#import "UICommon/GameFile.h"
+
 #import "EmulationBootParameter.h"
 #import "FoundationStringUtil.h"
+#import "GameFilePtrWrapper.h"
 #import "ImportFileManager.h"
 #import "LocalizationUtil.h"
 
@@ -89,6 +92,24 @@
 
 - (void)documentPicker:(UIDocumentPickerViewController*)controller didPickDocumentsAtURLs:(NSArray<NSURL*>*)urls {
   [[ImportFileManager shared] importFileAtUrl:urls[0]];
+}
+
+- (UIContextMenuConfiguration*)collectionView:(UICollectionView*)collectionView contextMenuConfigurationForItemAtIndexPath:(NSIndexPath*)indexPath point:(CGPoint)point {
+  return [UIContextMenuConfiguration configurationWithIdentifier:nil previewProvider:nil actionProvider:^(NSArray<UIMenuElement*>*) {
+    GameFilePtrWrapper* gameFileWrapper = [self->_gameFiles objectAtIndex:indexPath.row];
+    
+    NSMutableArray<UIAction*>* actions = [[NSMutableArray alloc] init];
+    
+    [actions addObject:[UIAction actionWithTitle:DOLCoreLocalizedString(@"Properties") image:[UIImage systemImageNamed:@"square.and.pencil"] identifier:nil handler:^(UIAction*) {
+      self->_selectedFile = gameFileWrapper;
+      
+      [self performSegueWithIdentifier:@"properties" sender:nil];
+    }]];
+    
+    NSString* gameName = CppToFoundationString(gameFileWrapper.gameFile->GetName(UICommon::GameFile::Variant::LongAndPossiblyCustom));
+    
+    return [UIMenu menuWithTitle:gameName children:[actions copy]];
+  }];
 }
 
 @end

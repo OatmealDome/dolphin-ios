@@ -95,6 +95,7 @@
                     <connections>
                         <segue destination="TaY-Qy-7UM" kind="presentation" identifier="emulation" id="Jyi-q2-HSg"/>
                         <segue destination="H8P-fA-yeG" kind="presentation" identifier="wiiUpdate" id="8Jb-6c-aKp"/>
+                        <segue destination="Yzx-Mm-1Jt" kind="show" identifier="properties" id="KWm-BO-nX5"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E2z-QY-NM7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -118,6 +119,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VdE-mL-FWD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1378" y="185"/>
+        </scene>
+        <!--SoftwareProperties-->
+        <scene sceneID="ds2-j4-yWt">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SoftwareProperties" id="Yzx-Mm-1Jt" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="ZLM-wt-s4z"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nDs-hC-oBc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1378" y="224"/>
         </scene>
     </scenes>
     <resources>

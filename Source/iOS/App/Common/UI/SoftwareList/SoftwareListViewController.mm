@@ -8,6 +8,7 @@
 #import "FoundationStringUtil.h"
 #import "GameFileCacheManager.h"
 #import "GameFilePtrWrapper.h"
+#import "SoftwarePropertiesViewController.h"
 #import "Swift.h"
 #import "WiiSystemUpdateViewController.h"
 
@@ -114,6 +115,11 @@
     
     updateController.updateSource = _wiiUpdateSource;
     updateController.isOnlineUpdate = _wiiUpdateIsOnline;
+  } else if ([segue.identifier isEqualToString:@"properties"]) {
+    UINavigationController* navigationController = segue.destinationViewController;
+    SoftwarePropertiesViewController* propertiesController = navigationController.viewControllers[0];
+    
+    propertiesController.gameFileWrapper = _selectedFile;
   }
 }
 

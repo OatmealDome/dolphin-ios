@@ -10,6 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SoftwareListViewController : UICollectionViewController<UICollectionViewDelegateFlowLayout> {
   NSArray<GameFilePtrWrapper*>* _gameFiles;
+  GameFilePtrWrapper* _selectedFile;
   EmulationBootParameter* _bootParameter;
 }
 
