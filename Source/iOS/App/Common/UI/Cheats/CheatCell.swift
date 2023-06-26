@@ -5,7 +5,7 @@ import UIKit
 
 class CheatCell: UITableViewCell {
   @IBOutlet weak var nameLabel: UILabel!
-  @IBOutlet weak var enabledSwitch: UISwitch!
+  @IBOutlet weak var enabledSwitch: DOLSwitch!
   
   override func awakeFromNib() {
     super.awakeFromNib()
