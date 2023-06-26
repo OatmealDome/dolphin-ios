@@ -9,11 +9,13 @@
 #import "Core/ActionReplay.h"
 #import "Core/ConfigManager.h"
 
+#import "ActionReplayCodeEditViewController.h"
+#import "ActionReplayCodeEditViewControllerDelegate.h"
 #import "DOLSwitch.h"
 #import "FoundationStringUtil.h"
 #import "Swift.h"
 
-@interface ActionReplayCodeViewController ()
+@interface ActionReplayCodeViewController () <ActionReplayCodeEditViewControllerDelegate>
 
 @end
 
@@ -117,5 +119,22 @@
   [self saveCodes];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
+  if ([segue.identifier isEqualToString:@"edit"]) {
+    ActionReplayCodeEditViewController* editController = segue.destinationViewController;
+    editController.delegate = self;
+    editController.code = self->_editTargetCode;
+  }
+}
+
+- (void)userDidSaveCode:(ActionReplayCodeEditViewController*)viewController {
+  if (self->_editTargetIsNew) {
+    self->_codes.push_back(std::move(self->_newCode));
+  }
+  
+  [self saveCodes];
+  
+  [self.tableView reloadData];
+}
 
 @end

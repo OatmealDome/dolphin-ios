@@ -11,7 +11,7 @@
         <!--Action Replay Edit-->
         <scene sceneID="6dW-87-BL1">
             <objects>
-                <tableViewController id="w0g-qD-Me6" userLabel="Action Replay Edit" sceneMemberID="viewController">
+                <tableViewController id="w0g-qD-Me6" userLabel="Action Replay Edit" customClass="ActionReplayCodeEditViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="eaz-Gk-hbz">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -88,8 +88,16 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Edit" id="0c0-eg-hy8">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="gAl-Rc-a3k"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="gAl-Rc-a3k">
+                            <connections>
+                                <action selector="savePressed:" destination="w0g-qD-Me6" id="Ff8-0C-XOV"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="codeView" destination="jo0-lN-bfP" id="Eks-7H-O4i"/>
+                        <outlet property="nameField" destination="pGc-Oj-2xC" id="mxh-CA-zwF"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ym0-Da-92i" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="qbc-I3-DKe" userLabel="Exit" sceneMemberID="exit"/>

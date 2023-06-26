@@ -121,6 +121,7 @@
 		B9809C792A4A166D00877579 /* DOLSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9809C782A4A166C00877579 /* DOLSwitch.swift */; };
 		B9809C7C2A4A180700877579 /* ActionReplay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9809C7B2A4A180700877579 /* ActionReplay.storyboard */; };
 		B9809C802A4A190C00877579 /* ActionReplayCodeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9809C7F2A4A190C00877579 /* ActionReplayCodeViewController.mm */; };
+		B9809C832A4A22EB00877579 /* ActionReplayCodeEditViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9809C822A4A22EB00877579 /* ActionReplayCodeEditViewController.mm */; };
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* WiiAspectRatioViewController.mm */; };
@@ -423,6 +424,9 @@
 		B9809C7B2A4A180700877579 /* ActionReplay.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ActionReplay.storyboard; sourceTree = "<group>"; };
 		B9809C7E2A4A190C00877579 /* ActionReplayCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionReplayCodeViewController.h; sourceTree = "<group>"; };
 		B9809C7F2A4A190C00877579 /* ActionReplayCodeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ActionReplayCodeViewController.mm; sourceTree = "<group>"; };
+		B9809C812A4A22EB00877579 /* ActionReplayCodeEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionReplayCodeEditViewController.h; sourceTree = "<group>"; };
+		B9809C822A4A22EB00877579 /* ActionReplayCodeEditViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ActionReplayCodeEditViewController.mm; sourceTree = "<group>"; };
+		B9809C842A4A2A4700877579 /* ActionReplayCodeEditViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionReplayCodeEditViewControllerDelegate.h; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B991377F288096A300588446 /* ConfigWiiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigWiiViewController.h; sourceTree = "<group>"; };
@@ -1345,6 +1349,9 @@
 			children = (
 				B9809C7E2A4A190C00877579 /* ActionReplayCodeViewController.h */,
 				B9809C7F2A4A190C00877579 /* ActionReplayCodeViewController.mm */,
+				B9809C812A4A22EB00877579 /* ActionReplayCodeEditViewController.h */,
+				B9809C822A4A22EB00877579 /* ActionReplayCodeEditViewController.mm */,
+				B9809C842A4A2A4700877579 /* ActionReplayCodeEditViewControllerDelegate.h */,
 			);
 			path = ActionReplay;
 			sourceTree = "<group>";
@@ -1991,6 +1998,7 @@
 				B9749240296035F500794509 /* FastmemManager.m in Sources */,
 				B904AD3B288904AC008B6BE9 /* MappingGroupEditBoolCell.m in Sources */,
 				B9809C602A48236900877579 /* SoftwarePropertiesInfoViewController.mm in Sources */,
+				B9809C832A4A22EB00877579 /* ActionReplayCodeEditViewController.mm in Sources */,
 				B9B2C64F288E1C4F00CB6569 /* MainDisplaySceneDelegate.swift in Sources */,
 				B904AD012887B9D1008B6BE9 /* ControllersPortViewController.mm in Sources */,
 				B904AD272888D346008B6BE9 /* MappingUtil.mm in Sources */,
