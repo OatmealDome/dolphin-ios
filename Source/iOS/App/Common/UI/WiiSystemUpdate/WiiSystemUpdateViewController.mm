@@ -119,6 +119,8 @@
 - (void)viewWillDisappear:(BOOL)animated {
   // Auto-sleep on
   [[UIApplication sharedApplication] setIdleTimerDisabled:false];
+  
+  [super viewWillDisappear:animated];
 }
 
 - (IBAction)cancelPressed:(id)sender {
