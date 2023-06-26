@@ -118,6 +118,7 @@
 		B9809C6F2A49707900877579 /* CheatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9809C6E2A49707900877579 /* CheatCell.swift */; };
 		B9809C722A4970A700877579 /* Gecko.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9809C712A4970A700877579 /* Gecko.storyboard */; };
 		B9809C762A49F78700877579 /* GeckoCodeEditViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9809C752A49F78700877579 /* GeckoCodeEditViewController.mm */; };
+		B9809C792A4A166D00877579 /* DOLSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9809C782A4A166C00877579 /* DOLSwitch.swift */; };
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* WiiAspectRatioViewController.mm */; };
@@ -416,6 +417,7 @@
 		B9809C742A49F78700877579 /* GeckoCodeEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeckoCodeEditViewController.h; sourceTree = "<group>"; };
 		B9809C752A49F78700877579 /* GeckoCodeEditViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GeckoCodeEditViewController.mm; sourceTree = "<group>"; };
 		B9809C772A49F7D600877579 /* GeckoCodeEditViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeckoCodeEditViewControllerDelegate.h; sourceTree = "<group>"; };
+		B9809C782A4A166C00877579 /* DOLSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOLSwitch.swift; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B991377F288096A300588446 /* ConfigWiiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigWiiViewController.h; sourceTree = "<group>"; };
@@ -1440,6 +1442,7 @@
 			isa = PBXGroup;
 			children = (
 				B9D93894283ECD9500B290FC /* DOLSwitch.h */,
+				B9809C782A4A166C00877579 /* DOLSwitch.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -1918,6 +1921,7 @@
 				B9809C6F2A49707900877579 /* CheatCell.swift in Sources */,
 				B991378B288149F100588446 /* WiiSoundViewController.mm in Sources */,
 				B950CFBF29620C8900197719 /* UpdateCheckService.swift in Sources */,
+				B9809C792A4A166D00877579 /* DOLSwitch.swift in Sources */,
 				B904AD322888FF17008B6BE9 /* MappingGroupEditViewController.mm in Sources */,
 				B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */,
 				B9FCB7CC2897700C0020E233 /* JitWaitViewController.swift in Sources */,
