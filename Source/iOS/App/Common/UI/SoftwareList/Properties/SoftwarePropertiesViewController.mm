@@ -5,6 +5,7 @@
 
 #import "UICommon/GameFile.h"
 
+#import "ActionReplayCodeViewController.h"
 #import "FoundationStringUtil.h"
 #import "GameFilePtrWrapper.h"
 #import "GeckoCodeViewController.h"
@@ -35,6 +36,10 @@
     geckoController.gameId = self.gameFileWrapper.gameFile->GetGameID();
     geckoController.gametdbId = self.gameFileWrapper.gameFile->GetGameTDBID();
     geckoController.revision = self.gameFileWrapper.gameFile->GetRevision();
+  } else if ([segue.identifier isEqualToString:@"ar"]) {
+    ActionReplayCodeViewController* arController = segue.destinationViewController;
+    arController.gameId = self.gameFileWrapper.gameFile->GetGameID();
+    arController.revision = self.gameFileWrapper.gameFile->GetRevision();
   }
 }
 

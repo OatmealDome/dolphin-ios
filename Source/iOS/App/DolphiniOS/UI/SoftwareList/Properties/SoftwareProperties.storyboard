@@ -89,6 +89,9 @@
                                                 <constraint firstItem="x4n-OF-ose" firstAttribute="leading" secondItem="oCa-0x-myG" secondAttribute="leadingMargin" id="wBq-Cu-d1X"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="scG-DL-IhH" kind="show" identifier="ar" id="6F6-or-TWe"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="Hqy-TN-3ZC">
                                         <rect key="frame" x="20" y="150" width="374" height="44"/>
@@ -163,6 +166,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uiQ-Vc-Vz9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1409" y="88"/>
+        </scene>
+        <!--ActionReplay-->
+        <scene sceneID="Zod-zV-810">
+            <objects>
+                <viewControllerPlaceholder storyboardName="ActionReplay" id="scG-DL-IhH" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="y4V-eH-BP1"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8b2-zO-zEt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1409" y="139"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="v4q-O2-iUh">
