@@ -136,7 +136,9 @@
       dispatch_async(dispatch_get_main_queue(), ^{
         UIAlertController* emptyAlert = [UIAlertController alertControllerWithTitle:DOLCoreLocalizedString(@"Error") message:DOLCoreLocalizedString(@"This Gecko code doesn't contain any lines.") preferredStyle:UIAlertControllerStyleAlert];
         
-        [emptyAlert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"OK") style:UIAlertActionStyleDefault handler:nil]];
+        [emptyAlert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction*) {
+          [self enableViews];
+        }]];
         
         [self presentViewController:emptyAlert animated:true completion:nil];
       });
