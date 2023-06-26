@@ -7,6 +7,7 @@
 
 #import "FoundationStringUtil.h"
 #import "GameFilePtrWrapper.h"
+#import "GeckoCodeViewController.h"
 #import "SoftwarePropertiesInfoViewController.h"
 
 @interface SoftwarePropertiesViewController ()
@@ -29,6 +30,11 @@
   if ([segue.identifier isEqualToString:@"info"]) {
     SoftwarePropertiesInfoViewController* infoController = segue.destinationViewController;
     infoController.gameFileWrapper = self.gameFileWrapper;
+  } else if ([segue.identifier isEqualToString:@"gecko"]) {
+    GeckoCodeViewController* geckoController = segue.destinationViewController;
+    geckoController.gameId = self.gameFileWrapper.gameFile->GetGameID();
+    geckoController.gametdbId = self.gameFileWrapper.gameFile->GetGameTDBID();
+    geckoController.revision = self.gameFileWrapper.gameFile->GetRevision();
   }
 }
 

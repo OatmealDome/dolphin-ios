@@ -64,6 +64,9 @@
                                                 <constraint firstAttribute="bottom" secondItem="GTb-ce-7dJ" secondAttribute="bottom" id="v0Q-AT-WOU"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="7fg-QD-TOP" kind="show" identifier="gecko" id="sWh-U8-z0k"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="dgz-yT-ILb">
                                         <rect key="frame" x="20" y="106" width="374" height="44"/>
@@ -150,6 +153,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lYR-7o-tEg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="477" y="88"/>
+        </scene>
+        <!--Gecko-->
+        <scene sceneID="Xof-zj-WkF">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Gecko" id="7fg-QD-TOP" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="unX-yq-VpM"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uiQ-Vc-Vz9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1409" y="88"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="v4q-O2-iUh">
