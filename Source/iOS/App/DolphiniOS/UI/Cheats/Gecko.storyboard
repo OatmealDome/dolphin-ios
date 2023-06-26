@@ -69,7 +69,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gOd-LS-cdl">
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gOd-LS-cdl" customClass="DOLUIKitSwitch">
                                             <rect key="frame" x="305" y="6.5" width="51" height="31"/>
                                             <connections>
                                                 <action selector="codeEnabledChanged:" destination="97N-j7-VW7" eventType="valueChanged" id="7Or-f8-fRz"/>
@@ -212,14 +212,14 @@
                             <tableViewSection headerTitle="Notes:" id="OQZ-AS-mJj">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="gfx-5P-hO8">
-                                        <rect key="frame" x="20" y="263.5" width="374" height="59"/>
+                                        <rect key="frame" x="20" y="263.5" width="374" height="59.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gfx-5P-hO8" id="ub6-wc-x9d">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="59"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="Code..." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="e3W-eX-hFY">
-                                                    <rect key="frame" x="20" y="11" width="334" height="37"/>
+                                                    <rect key="frame" x="20" y="11" width="334" height="37.5"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <color key="textColor" systemColor="labelColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
