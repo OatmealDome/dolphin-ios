@@ -14,15 +14,20 @@
 
 #import "DOLSwitch.h"
 #import "FoundationStringUtil.h"
+#import "GeckoCodeEditViewController.h"
+#import "GeckoCodeEditViewControllerDelegate.h"
 #import "LocalizationUtil.h"
 #import "Swift.h"
 
-@interface GeckoCodeViewController ()
+@interface GeckoCodeViewController () <GeckoCodeEditViewControllerDelegate>
 
 @end
 
 @implementation GeckoCodeViewController {
   std::vector<Gecko::GeckoCode> _codes;
+  Gecko::GeckoCode _newCode;
+  Gecko::GeckoCode* _editTargetCode;
+  bool _editTargetIsNew;
 }
 
 - (void)viewDidLoad {
@@ -81,7 +86,11 @@
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
   if (indexPath.section == 0) {
     if (indexPath.row == 0) {
-      // TODO: Segue to add
+      self->_newCode = Gecko::GeckoCode();
+      self->_editTargetCode = &self->_newCode;
+      self->_editTargetIsNew = true;
+      
+      [self performSegueWithIdentifier:@"edit" sender:nil];
     } else {
       // TODO: Localization
       UIAlertController* downloadAlert = [UIAlertController alertControllerWithTitle:@"Downloading..." message:nil preferredStyle:UIAlertControllerStyleAlert];
@@ -135,7 +144,10 @@
       }];
     }
   } else {
-    // TODO: Segue to edit
+    self->_editTargetCode = &self->_codes[indexPath.row];
+    self->_editTargetIsNew = false;
+    
+    [self performSegueWithIdentifier:@"edit" sender:nil];
   }
 }
 
@@ -157,6 +169,24 @@
   self->_codes[sender.tag].enabled = sender.on;
   
   [self saveCodes];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
+  if ([segue.identifier isEqualToString:@"edit"]) {
+    GeckoCodeEditViewController* editController = segue.destinationViewController;
+    editController.delegate = self;
+    editController.code = self->_editTargetCode;
+  }
+}
+
+- (void)userDidSaveCode:(GeckoCodeEditViewController*)viewController {
+  if (self->_editTargetIsNew) {
+    self->_codes.push_back(std::move(self->_newCode));
+  }
+  
+  [self saveCodes];
+  
+  [self.tableView reloadData];
 }
 
 @end
