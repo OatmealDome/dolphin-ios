@@ -38,10 +38,6 @@
   _codes = Gecko::LoadCodes(gameIniDefault, gameIniLocal);
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-  [super viewWillDisappear:animated];
-}
-
 - (void)saveCodes {
   const auto iniPath = std::string(File::GetUserPath(D_GAMESETTINGS_IDX)).append(self.gameId).append(".ini");
 
