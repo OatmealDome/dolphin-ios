@@ -149,6 +149,8 @@
     
     [self performSegueWithIdentifier:@"edit" sender:nil];
   }
+  
+  [self.tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 - (BOOL)tableView:(UITableView*)tableView canEditRowAtIndexPath:(NSIndexPath*)indexPath {
