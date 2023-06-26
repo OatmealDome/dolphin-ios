@@ -114,6 +114,9 @@
 		B9809C592A4811B000877579 /* SoftwareProperties.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9809C582A4811B000877579 /* SoftwareProperties.storyboard */; };
 		B9809C5C2A48149B00877579 /* SoftwarePropertiesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9809C5B2A48149B00877579 /* SoftwarePropertiesViewController.mm */; };
 		B9809C602A48236900877579 /* SoftwarePropertiesInfoViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9809C5F2A48236900877579 /* SoftwarePropertiesInfoViewController.mm */; };
+		B9809C6C2A49705500877579 /* GeckoCodeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9809C6B2A49705500877579 /* GeckoCodeViewController.mm */; };
+		B9809C6F2A49707900877579 /* CheatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9809C6E2A49707900877579 /* CheatCell.swift */; };
+		B9809C722A4970A700877579 /* Gecko.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B9809C712A4970A700877579 /* Gecko.storyboard */; };
 		B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */; };
 		B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913780288096A300588446 /* ConfigWiiViewController.mm */; };
 		B9913785288146D700588446 /* WiiAspectRatioViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9913784288146D700588446 /* WiiAspectRatioViewController.mm */; };
@@ -405,6 +408,10 @@
 		B9809C5B2A48149B00877579 /* SoftwarePropertiesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SoftwarePropertiesViewController.mm; sourceTree = "<group>"; };
 		B9809C5E2A48236900877579 /* SoftwarePropertiesInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SoftwarePropertiesInfoViewController.h; sourceTree = "<group>"; };
 		B9809C5F2A48236900877579 /* SoftwarePropertiesInfoViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SoftwarePropertiesInfoViewController.mm; sourceTree = "<group>"; };
+		B9809C6A2A49705500877579 /* GeckoCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeckoCodeViewController.h; sourceTree = "<group>"; };
+		B9809C6B2A49705500877579 /* GeckoCodeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GeckoCodeViewController.mm; sourceTree = "<group>"; };
+		B9809C6E2A49707900877579 /* CheatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatCell.swift; sourceTree = "<group>"; };
+		B9809C712A4970A700877579 /* Gecko.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Gecko.storyboard; sourceTree = "<group>"; };
 		B991377A28808D8F00588446 /* GameCubeSystemLanguageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameCubeSystemLanguageViewController.h; sourceTree = "<group>"; };
 		B991377B28808D8F00588446 /* GameCubeSystemLanguageViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameCubeSystemLanguageViewController.mm; sourceTree = "<group>"; };
 		B991377F288096A300588446 /* ConfigWiiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigWiiViewController.h; sourceTree = "<group>"; };
@@ -617,6 +624,7 @@
 			children = (
 				B9FCB7D5289841600020E233 /* Alert */,
 				B950CF9D2961690A00197719 /* BootNotice */,
+				B9809C692A496F2600877579 /* Cheats */,
 				B9D93893283ECD6F00B290FC /* Controls */,
 				B933EDC527F8E8D6004D7DD7 /* Emulation */,
 				B99137C62883290000588446 /* Localization */,
@@ -647,6 +655,7 @@
 			isa = PBXGroup;
 			children = (
 				B950CFB3296179BD00197719 /* BootNotice */,
+				B9809C702A49709400877579 /* Cheats */,
 				B9D9389B283ECF0B00B290FC /* Controls */,
 				B9D93890283DE62700B290FC /* Emulation */,
 				B9B2C655288E40A400CB6569 /* ExternalDisplay */,
@@ -1273,6 +1282,40 @@
 			path = Info;
 			sourceTree = "<group>";
 		};
+		B9809C692A496F2600877579 /* Cheats */ = {
+			isa = PBXGroup;
+			children = (
+				B9809C6D2A49705B00877579 /* Gecko */,
+				B9809C6E2A49707900877579 /* CheatCell.swift */,
+			);
+			path = Cheats;
+			sourceTree = "<group>";
+		};
+		B9809C6D2A49705B00877579 /* Gecko */ = {
+			isa = PBXGroup;
+			children = (
+				B9809C6A2A49705500877579 /* GeckoCodeViewController.h */,
+				B9809C6B2A49705500877579 /* GeckoCodeViewController.mm */,
+			);
+			path = Gecko;
+			sourceTree = "<group>";
+		};
+		B9809C702A49709400877579 /* Cheats */ = {
+			isa = PBXGroup;
+			children = (
+				B9809C732A4970BF00877579 /* Gecko */,
+			);
+			path = Cheats;
+			sourceTree = "<group>";
+		};
+		B9809C732A4970BF00877579 /* Gecko */ = {
+			isa = PBXGroup;
+			children = (
+				B9809C712A4970A700877579 /* Gecko.storyboard */,
+			);
+			name = Gecko;
+			sourceTree = "<group>";
+		};
 		B991377E2880969400588446 /* Wii */ = {
 			isa = PBXGroup;
 			children = (
@@ -1676,6 +1719,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9809C722A4970A700877579 /* Gecko.storyboard in Resources */,
 				B99137AC28827AD200588446 /* SettingsRoot.storyboard in Resources */,
 				B991379E2881F23A00588446 /* Core.strings in Resources */,
 				B9B2C624288DB62D00CB6569 /* TCWiiPad.xib in Resources */,
@@ -1864,6 +1908,7 @@
 				B9B2C61A288D3A7F00CB6569 /* EmulationiOSViewController.mm in Sources */,
 				B904AD082887DAEE008B6BE9 /* ControllersTypeCell.m in Sources */,
 				B97C49B4297E7DB600E30877 /* AnalyticsNoticeViewControllerDelegate.swift in Sources */,
+				B9809C6F2A49707900877579 /* CheatCell.swift in Sources */,
 				B991378B288149F100588446 /* WiiSoundViewController.mm in Sources */,
 				B950CFBF29620C8900197719 /* UpdateCheckService.swift in Sources */,
 				B904AD322888FF17008B6BE9 /* MappingGroupEditViewController.mm in Sources */,
@@ -1929,6 +1974,7 @@
 				B9447B0128418F2600BC9110 /* TCJoystick.swift in Sources */,
 				B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */,
 				B950CFC3296219C800197719 /* WiiSystemUpdateViewController.mm in Sources */,
+				B9809C6C2A49705500877579 /* GeckoCodeViewController.mm in Sources */,
 				B9DC5FAF28849640004BD94A /* GraphicsTabViewController.m in Sources */,
 				B904ACD52885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm in Sources */,
 				B9B2C65B288E454700CB6569 /* ExternalDisplaySceneDelegate.swift in Sources */,
