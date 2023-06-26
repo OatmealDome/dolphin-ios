@@ -108,26 +108,22 @@
           bool success;
           std::vector<Gecko::GeckoCode> downloadedCodes = Gecko::DownloadCodes(self.gametdbId, &success, false);
 
-          if (!success)
-          {
+          if (!success) {
             showResult(DOLCoreLocalizedString(@"Error"), DOLCoreLocalizedString(@"Failed to download codes."));
             return;
           }
 
-          if (downloadedCodes.empty())
-          {
+          if (downloadedCodes.empty()) {
             showResult(DOLCoreLocalizedString(@"Error"), DOLCoreLocalizedString(@"File contained no codes."));
             return;
           }
 
           size_t addedCount = 0;
 
-          for (const auto& code : downloadedCodes)
-          {
+          for (const auto& code : downloadedCodes) {
             auto it = std::find(self->_codes.begin(), self->_codes.end(), code);
 
-            if (it == self->_codes.end())
-            {
+            if (it == self->_codes.end()) {
               self->_codes.push_back(code);
               addedCount++;
             }
