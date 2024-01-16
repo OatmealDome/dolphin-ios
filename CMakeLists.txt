@@ -836,7 +836,7 @@ else()
 endif()
 
 pkg_check_modules(ZSTD QUIET libzstd>=1.4.0 IMPORTED_TARGET)
-if(ZSTD_FOUND)
+if(ZSTD_FOUND AND NOT IOS)
   message(STATUS "Using shared zstd version: " ${ZSTD_VERSION})
   dolphin_alias_library(zstd::zstd PkgConfig::ZSTD)
 else()
