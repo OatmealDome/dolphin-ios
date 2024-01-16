@@ -86,8 +86,12 @@ void JitBaseBlockCache::Clear()
     m_block_map_arena.GrabSHMSegment(FAST_BLOCK_MAP_SIZE, "dolphin-emu-jitblock");
   }
 
+#ifndef IPHONEOS
   m_fast_block_map =
       reinterpret_cast<JitBlock**>(m_block_map_arena.CreateView(0, FAST_BLOCK_MAP_SIZE));
+#else
+  m_fast_block_map = nullptr;
+#endif
 
   if (m_fast_block_map)
   {
