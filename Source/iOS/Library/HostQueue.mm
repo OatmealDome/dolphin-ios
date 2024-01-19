@@ -33,16 +33,23 @@ void DOLHostQueueExecuteBlock(void (^block)(void))
 
 void DOLHostQueueRunSync(void (^block)(void))
 {
-  Common::Event sync_event;
-  Common::Event* sync_event_ptr = &sync_event;
+  if (!Core::IsHostThread())
+  {
+    Common::Event sync_event;
+    Common::Event* sync_event_ptr = &sync_event;
 
-  dispatch_async(DOLHostQueueGetUnderlyingQueue(), ^{
-    DOLHostQueueExecuteBlock(block);
+    dispatch_async(DOLHostQueueGetUnderlyingQueue(), ^{
+      DOLHostQueueExecuteBlock(block);
 
-    sync_event_ptr->Set();
-  });
+      sync_event_ptr->Set();
+    });
 
-  sync_event.Wait();
+    sync_event.Wait();
+  }
+  else
+  {
+    block();
+  }
 }
 
 void DOLHostQueueRunAsync(void (^block)(void))
