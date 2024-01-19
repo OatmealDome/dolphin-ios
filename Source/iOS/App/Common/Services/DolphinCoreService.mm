@@ -28,35 +28,35 @@
 @implementation DolphinCoreService
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id>*)launchOptions {
-  DOLHostQueueRunSync(^{
-    UICommon::SetUserDirectory(FoundationToCppString([UserFolderUtil getUserFolder]));
-    UICommon::CreateDirectories();
-    UICommon::Init();
-    
-    [[MsgAlertManager shared] registerHandler];
-    
-    Common::RegisterStringTranslator([](const char* text) {
-      return FoundationToCppString(DOLCoreLocalizedString(CToFoundationString(text)));
-    });
-    
-    Config::SetBase(Config::MAIN_USE_GAME_COVERS, true);
-    
-    Config::SetBase(Config::MAIN_FASTMEM, [FastmemManager shared].fastmemAvailable);
-    
-    WindowSystemInfo wsi;
-    wsi.type = WindowSystemType::iOS;
-    
-    g_controller_interface.Initialize(wsi);
-    
-    Pad::Initialize();
-    Wiimote::Initialize(Wiimote::InitializeMode::DO_NOT_WAIT_FOR_WIIMOTES);
-    
-    Wiimote::LoadConfig();
-    Wiimote::GetConfig()->SaveConfig();
-
-    Pad::LoadConfig();
-    Pad::GetConfig()->SaveConfig();
+  Core::DeclareAsHostThread();
+  
+  UICommon::SetUserDirectory(FoundationToCppString([UserFolderUtil getUserFolder]));
+  UICommon::CreateDirectories();
+  UICommon::Init();
+  
+  [[MsgAlertManager shared] registerHandler];
+  
+  Common::RegisterStringTranslator([](const char* text) {
+    return FoundationToCppString(DOLCoreLocalizedString(CToFoundationString(text)));
   });
+  
+  Config::SetBase(Config::MAIN_USE_GAME_COVERS, true);
+  
+  Config::SetBase(Config::MAIN_FASTMEM, [FastmemManager shared].fastmemAvailable);
+  
+  WindowSystemInfo wsi;
+  wsi.type = WindowSystemType::iOS;
+  
+  g_controller_interface.Initialize(wsi);
+  
+  Pad::Initialize();
+  Wiimote::Initialize(Wiimote::InitializeMode::DO_NOT_WAIT_FOR_WIIMOTES);
+  
+  Wiimote::LoadConfig();
+  Wiimote::GetConfig()->SaveConfig();
+
+  Pad::LoadConfig();
+  Pad::GetConfig()->SaveConfig();
 
   return YES;
 }
