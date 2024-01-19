@@ -6,6 +6,7 @@
 #include <dispatch/dispatch.h>
 #include <Foundation/Foundation.h>
 
+#include "Common/Assert.h"
 #include "Common/Event.h"
 
 #include "Core/Core.h"
@@ -54,6 +55,8 @@ void DOLHostQueueRunSync(void (^block)(void))
 
 void DOLHostQueueRunAsync(void (^block)(void))
 {
+  ASSERT(!Core::IsHostThread());
+
   dispatch_async(DOLHostQueueGetUnderlyingQueue(), ^{
     DOLHostQueueExecuteBlock(block);
   });
