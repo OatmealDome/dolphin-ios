@@ -88,6 +88,10 @@
 }
 
 - (void)emulationLoopWithBootParameter:(EmulationBootParameter*)bootParameter {
+  dispatch_sync(dispatch_get_main_queue(), ^{
+    Core::UndeclareAsHostThread();
+  });
+
   DOLHostQueueRunSync(^{
     __block WindowSystemInfo wsi;
     wsi.type = WindowSystemType::iOS;
@@ -110,6 +114,10 @@
   while (Core::IsRunning()) {
     [NSThread sleepForTimeInterval:0.025];
   }
+  
+  dispatch_sync(dispatch_get_main_queue(), ^{
+    Core::DeclareAsHostThread();
+  });
   
   [[NSNotificationCenter defaultCenter] postNotificationName:DOLEmulationDidEndNotification object:self userInfo:nil];
   
