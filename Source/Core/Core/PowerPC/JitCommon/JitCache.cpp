@@ -42,7 +42,9 @@ void JitBaseBlockCache::Init()
 {
   Common::JitRegister::Init(Config::Get(Config::MAIN_PERF_MAP_DIR));
 
+#ifndef IPHONEOS
   m_block_map_arena.GrabSHMSegment(FAST_BLOCK_MAP_SIZE, "dolphin-emu-jitblock");
+#endif
 
   Clear();
 }
@@ -51,12 +53,14 @@ void JitBaseBlockCache::Shutdown()
 {
   Common::JitRegister::Shutdown();
 
+#ifndef IPHONEOS
   if (m_fast_block_map)
   {
     m_block_map_arena.ReleaseView(m_fast_block_map, FAST_BLOCK_MAP_SIZE);
   }
 
   m_block_map_arena.ReleaseSHMSegment();
+#endif
 }
 
 // This clears the JIT cache. It's called from JitCache.cpp when the JIT cache
@@ -79,6 +83,7 @@ void JitBaseBlockCache::Clear()
 
   valid_block.ClearAll();
 
+#ifndef IPHONEOS
   if (m_fast_block_map)
   {
     m_block_map_arena.ReleaseView(m_fast_block_map, FAST_BLOCK_MAP_SIZE);
@@ -86,7 +91,6 @@ void JitBaseBlockCache::Clear()
     m_block_map_arena.GrabSHMSegment(FAST_BLOCK_MAP_SIZE, "dolphin-emu-jitblock");
   }
 
-#ifndef IPHONEOS
   m_fast_block_map =
       reinterpret_cast<JitBlock**>(m_block_map_arena.CreateView(0, FAST_BLOCK_MAP_SIZE));
 #else
