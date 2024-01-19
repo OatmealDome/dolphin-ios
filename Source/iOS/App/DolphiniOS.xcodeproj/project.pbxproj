@@ -1531,6 +1531,7 @@
 				B9DC3DF727EFBD2C0084DAA4 /* Products */,
 				B9D9389C283EF7AD00B290FC /* Frameworks */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
 		};
 		B9DC3DF727EFBD2C0084DAA4 /* Products */ = {
