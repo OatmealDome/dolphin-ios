@@ -45,7 +45,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dxR-ZO-FZU" userLabel="Copyright One">
                                                 <rect key="frame" x="0.0" y="157.5" width="335" height="41"/>
                                                 <string key="text">© 2003-2015+ Dolphin Team. 
-© 2019-2023+ DolphiniOS Project.</string>
+© 2019-2024+ DolphiniOS Project.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
