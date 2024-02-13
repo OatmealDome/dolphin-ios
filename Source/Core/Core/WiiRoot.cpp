@@ -28,6 +28,7 @@
 #include "Core/Movie.h"
 #include "Core/NetPlayClient.h"
 #include "Core/SysConf.h"
+#include "Core/System.h"
 
 namespace Core
 {
@@ -127,24 +128,25 @@ static bool CopyNandFile(FS::FileSystem* source_fs, const std::string& source_fi
 static void InitializeDeterministicWiiSaves(FS::FileSystem* session_fs,
                                             const BootSessionData& boot_session_data)
 {
+  auto& movie = Core::System::GetInstance().GetMovie();
   const u64 title_id = SConfig::GetInstance().GetTitleID();
   const auto configured_fs = FS::MakeFileSystem(FS::Location::Configured);
-  if (Movie::IsRecordingInput())
+  if (movie.IsRecordingInput())
   {
     if (NetPlay::IsNetPlayRunning() && !SConfig::GetInstance().bCopyWiiSaveNetplay)
     {
-      Movie::SetClearSave(true);
+      movie.SetClearSave(true);
     }
     else
     {
       // TODO: Check for the actual save data
       const std::string path = Common::GetTitleDataPath(title_id) + "/banner.bin";
-      Movie::SetClearSave(!configured_fs->GetMetadata(IOS::PID_KERNEL, IOS::PID_KERNEL, path));
+      movie.SetClearSave(!configured_fs->GetMetadata(IOS::PID_KERNEL, IOS::PID_KERNEL, path));
     }
   }
 
   if ((NetPlay::IsNetPlayRunning() && SConfig::GetInstance().bCopyWiiSaveNetplay) ||
-      (Movie::IsMovieActive() && !Movie::IsStartingFromClearSave()))
+      (movie.IsMovieActive() && !movie.IsStartingFromClearSave()))
   {
     auto* sync_fs = boot_session_data.GetWiiSyncFS();
     auto& sync_titles = boot_session_data.GetWiiSyncTitles();
@@ -154,7 +156,7 @@ static void InitializeDeterministicWiiSaves(FS::FileSystem* session_fs,
                  sync_fs ? "sync_fs" : "configured_fs");
 
     // Copy the current user's save to the Blank NAND
-    if (Movie::IsMovieActive() && !NetPlay::IsNetPlayRunning())
+    if (movie.IsMovieActive() && !NetPlay::IsNetPlayRunning())
     {
       INFO_LOG_FMT(CORE, "Wii Save Init: Copying {0:016x}.", title_id);
       CopySave(source_fs, session_fs, title_id);
@@ -319,7 +321,7 @@ void InitializeWiiFileSystemContents(
     std::optional<DiscIO::Riivolution::SavegameRedirect> save_redirect,
     const BootSessionData& boot_session_data)
 {
-  const auto fs = IOS::HLE::GetIOS()->GetFS();
+  const auto fs = Core::System::GetInstance().GetIOS()->GetFS();
 
   // Some games (such as Mario Kart Wii) assume that NWC24 files will always be present
   // even upon the first launch as they are normally created by the system menu.
@@ -395,7 +397,7 @@ void CleanUpWiiFileSystemContents(const BootSessionData& boot_session_data)
     File::MoveWithOverwrite(redirect.temp_path, redirect.real_path);
   }
 
-  IOS::HLE::EmulationKernel* ios = IOS::HLE::GetIOS();
+  IOS::HLE::EmulationKernel* ios = Core::System::GetInstance().GetIOS();
 
   // clear the redirects in the session FS, otherwise the back-copy might grab redirected files
   s_nand_redirects.clear();

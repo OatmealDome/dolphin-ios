@@ -70,7 +70,9 @@ std::unique_ptr<VKTexture> VKTexture::Create(const TextureConfig& tex_config, st
 
   VkImageCreateInfo image_info = {VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
                                   nullptr,
-                                  0,
+                                  tex_config.type == AbstractTextureType::Texture_CubeMap ?
+                                      VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT :
+                                      static_cast<VkImageCreateFlags>(0),
                                   VK_IMAGE_TYPE_2D,
                                   GetVkFormatForHostTextureFormat(tex_config.format),
                                   {tex_config.width, tex_config.height, 1},
@@ -106,7 +108,26 @@ std::unique_ptr<VKTexture> VKTexture::Create(const TextureConfig& tex_config, st
 
   std::unique_ptr<VKTexture> texture = std::make_unique<VKTexture>(
       tex_config, alloc, image, name, VK_IMAGE_LAYOUT_UNDEFINED, ComputeImageLayout::Undefined);
-  if (!texture->CreateView(VK_IMAGE_VIEW_TYPE_2D_ARRAY))
+
+  VkImageViewType image_view_type = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+  if (tex_config.type == AbstractTextureType::Texture_CubeMap)
+  {
+    image_view_type = VK_IMAGE_VIEW_TYPE_CUBE;
+  }
+  else if (tex_config.type == AbstractTextureType::Texture_2D)
+  {
+    image_view_type = VK_IMAGE_VIEW_TYPE_2D;
+  }
+  else if (tex_config.type == AbstractTextureType::Texture_2DArray)
+  {
+    image_view_type = VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+  }
+  else
+  {
+    PanicAlertFmt("Unhandled texture type.");
+    return nullptr;
+  }
+  if (!texture->CreateView(image_view_type))
     return nullptr;
 
   return texture;
@@ -190,7 +211,7 @@ VkFormat VKTexture::GetVkFormatForHostTextureFormat(AbstractTextureFormat format
     return VK_FORMAT_B8G8R8A8_UNORM;
 
   case AbstractTextureFormat::RGB10_A2:
-    return VK_FORMAT_A2R10G10B10_UNORM_PACK32;
+    return VK_FORMAT_A2B10G10R10_UNORM_PACK32;
 
   case AbstractTextureFormat::RGBA16F:
     return VK_FORMAT_R16G16B16A16_SFLOAT;

@@ -6,8 +6,13 @@
 #ifdef USE_RETRO_ACHIEVEMENTS
 #include <QDialog>
 
-class QTabWidget;
+class AchievementHeaderWidget;
+class AchievementLeaderboardWidget;
+class AchievementSettingsWidget;
+class AchievementProgressWidget;
 class QDialogButtonBox;
+class QTabWidget;
+class UpdateCallback;
 
 class AchievementsWindow : public QDialog
 {
@@ -15,13 +20,18 @@ class AchievementsWindow : public QDialog
 public:
   explicit AchievementsWindow(QWidget* parent);
   void UpdateData();
+  void ForceSettingsTab();
 
 private:
   void CreateMainLayout();
-  void showEvent(QShowEvent* event);
+  void showEvent(QShowEvent* event) override;
   void ConnectWidgets();
 
+  AchievementHeaderWidget* m_header_widget;
   QTabWidget* m_tab_widget;
+  AchievementSettingsWidget* m_settings_widget;
+  AchievementProgressWidget* m_progress_widget;
+  AchievementLeaderboardWidget* m_leaderboard_widget;
   QDialogButtonBox* m_button_box;
 };
 

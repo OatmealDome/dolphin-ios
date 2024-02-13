@@ -30,12 +30,11 @@
 
 namespace IOS::HLE::MIOS
 {
-static void ReinitHardware()
+static void ReinitHardware(Core::System& system)
 {
-  SConfig::GetInstance().bWii = false;
+  system.SetIsWii(false);
 
   // IOS clears mem2 and overwrites it with pseudo-random data (for security).
-  auto& system = Core::System::GetInstance();
   auto& memory = system.GetMemory();
   std::memset(memory.GetEXRAM(), 0, memory.GetExRamSizeReal());
   // MIOS appears to only reset the DI and the PPC.
@@ -48,17 +47,15 @@ static void ReinitHardware()
   // Note: this is specific to Dolphin and is required because we initialised it in Wii mode.
   auto& dsp = system.GetDSP();
   dsp.Reinit(Config::Get(Config::MAIN_DSP_HLE));
-  dsp.GetDSPEmulator()->Initialize(SConfig::GetInstance().bWii,
-                                   Config::Get(Config::MAIN_DSP_THREAD));
+  dsp.GetDSPEmulator()->Initialize(system.IsWii(), Config::Get(Config::MAIN_DSP_THREAD));
 
-  SystemTimers::ChangePPCClock(SystemTimers::Mode::GC);
+  system.GetSystemTimers().ChangePPCClock(SystemTimers::Mode::GC);
 }
 
 constexpr u32 ADDRESS_INIT_SEMAPHORE = 0x30f8;
 
-bool Load()
+bool Load(Core::System& system)
 {
-  auto& system = Core::System::GetInstance();
   auto& memory = system.GetMemory();
 
   ASSERT(Core::IsCPUThread());
@@ -67,7 +64,7 @@ bool Load()
   memory.Write_U32(0x00000000, ADDRESS_INIT_SEMAPHORE);
   memory.Write_U32(0x09142001, 0x3180);
 
-  ReinitHardware();
+  ReinitHardware(system);
   NOTICE_LOG_FMT(IOS, "Reinitialised hardware.");
 
   // Load symbols for the IPL if they exist.
@@ -84,10 +81,15 @@ bool Load()
   }
 
   auto& power_pc = system.GetPowerPC();
+
   const PowerPC::CoreMode core_mode = power_pc.GetMode();
   power_pc.SetMode(PowerPC::CoreMode::Interpreter);
-  power_pc.GetPPCState().msr.Hex = 0;
-  power_pc.GetPPCState().pc = 0x3400;
+
+  PowerPC::PowerPCState& ppc_state = power_pc.GetPPCState();
+  ppc_state.msr.Hex = 0;
+  ppc_state.pc = 0x3400;
+  PowerPC::MSRUpdated(ppc_state);
+
   NOTICE_LOG_FMT(IOS, "Loaded MIOS and bootstrapped PPC.");
 
   // IOS writes 0 to 0x30f8 before bootstrapping the PPC. Once started, the IPL eventually writes
@@ -98,7 +100,7 @@ bool Load()
 
   memory.Write_U32(0x00000000, ADDRESS_INIT_SEMAPHORE);
   NOTICE_LOG_FMT(IOS, "IPL ready.");
-  SConfig::GetInstance().m_is_mios = true;
+  system.SetIsMIOS(true);
   system.GetDVDInterface().UpdateRunningGameMetadata();
   SConfig::OnNewTitleLoad(guard);
   return true;

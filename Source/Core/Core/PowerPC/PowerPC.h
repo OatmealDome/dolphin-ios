@@ -6,12 +6,14 @@
 #include <array>
 #include <cstddef>
 #include <iosfwd>
+#include <span>
 #include <tuple>
 #include <type_traits>
 #include <vector>
 
 #include "Common/CommonTypes.h"
 
+#include "Core/CPUThreadConfigCallback.h"
 #include "Core/Debugger/PPCDebugInterface.h"
 #include "Core/PowerPC/BreakPoints.h"
 #include "Core/PowerPC/ConditionRegister.h"
@@ -51,6 +53,8 @@ enum class CoreMode
 constexpr size_t TLB_SIZE = 128;
 constexpr size_t NUM_TLBS = 2;
 constexpr size_t TLB_WAYS = 2;
+constexpr size_t DATA_TLB_INDEX = 0;
+constexpr size_t INST_TLB_INDEX = 1;
 
 struct TLBEntry
 {
@@ -60,6 +64,7 @@ struct TLBEntry
 
   WayArray tag{INVALID_TAG, INVALID_TAG};
   WayArray paddr{};
+  WayArray vsid{};
   WayArray pte{};
   u32 recent = 0;
 
@@ -138,6 +143,8 @@ struct PowerPCState
   UReg_MSR msr;      // machine state register
   UReg_FPSCR fpscr;  // floating point flags/status bits
 
+  CPUEmuFeatureFlags feature_flags;
+
   // Exception management.
   u32 Exceptions = 0;
 
@@ -153,7 +160,7 @@ struct PowerPCState
   // lscbx
   u16 xer_stringctrl = 0;
 
-#if _M_X86_64
+#ifdef _M_X86_64
   // This member exists only for the purpose of an assertion that its offset <= 0x100.
   std::tuple<> above_fits_in_first_0x100;
 
@@ -169,6 +176,7 @@ struct PowerPCState
 
   // Storage for the stack pointer of the BLR optimization.
   u8* stored_stack_pointer = nullptr;
+  u8* mem_ptr = nullptr;
 
   std::array<std::array<TLBEntry, TLB_SIZE / TLB_WAYS>, NUM_TLBS> tlb;
 
@@ -226,7 +234,7 @@ struct PowerPCState
   void UpdateFPRFSingle(float fvalue);
 };
 
-#if _M_X86_64
+#ifdef _M_X86_64
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Winvalid-offsetof"
@@ -238,7 +246,7 @@ static_assert(offsetof(PowerPC::PowerPCState, above_fits_in_first_0x100) <= 0x10
 #endif
 #endif
 
-const std::vector<CPUCore>& AvailableCPUCores();
+std::span<const CPUCore> AvailableCPUCores();
 CPUCore DefaultCPUCore();
 
 class PowerPCManager
@@ -295,6 +303,7 @@ private:
   void InitializeCPUCore(CPUCore cpu_core);
   void ApplyMode();
   void ResetRegisters();
+  void RefreshConfig();
 
   PowerPCState m_ppc_state;
 
@@ -305,6 +314,8 @@ private:
   BreakPoints m_breakpoints;
   MemChecks m_memchecks;
   PPCDebugInterface m_debug_interface;
+
+  CPUThreadConfigCallback::ConfigChangedCallbackID m_registered_config_callback_id;
 
   CoreTiming::EventType* m_invalidate_cache_thread_safe = nullptr;
 
@@ -339,5 +350,8 @@ void CheckBreakPointsFromJIT(PowerPCManager& power_pc);
 #define TU(ppc_state) (ppc_state).spr[SPR_TU]
 
 void RoundingModeUpdated(PowerPCState& ppc_state);
+void MSRUpdated(PowerPCState& ppc_state);
+void MMCRUpdated(PowerPCState& ppc_state);
+void RecalculateAllFeatureFlags(PowerPCState& ppc_state);
 
 }  // namespace PowerPC

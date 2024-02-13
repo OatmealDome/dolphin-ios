@@ -85,25 +85,6 @@ std::string HexDump(const u8* data, size_t size)
   return out;
 }
 
-// faster than sscanf
-bool AsciiToHex(const std::string& _szValue, u32& result)
-{
-  // Set errno to a good state.
-  errno = 0;
-
-  char* endptr = nullptr;
-  const u32 value = strtoul(_szValue.c_str(), &endptr, 16);
-
-  if (!endptr || *endptr)
-    return false;
-
-  if (errno == ERANGE)
-    return false;
-
-  result = value;
-  return true;
-}
-
 bool CharArrayFromFormatV(char* out, int outsize, const char* format, va_list args)
 {
   int writtenCount;
@@ -445,7 +426,7 @@ size_t StringUTF8CodePointCount(std::string_view str)
 
 #ifdef _WIN32
 
-std::wstring CPToUTF16(u32 code_page, std::string_view input)
+static std::wstring CPToUTF16(u32 code_page, std::string_view input)
 {
   auto const size =
       MultiByteToWideChar(code_page, 0, input.data(), static_cast<int>(input.size()), nullptr, 0);
@@ -463,7 +444,7 @@ std::wstring CPToUTF16(u32 code_page, std::string_view input)
   return output;
 }
 
-std::string UTF16ToCP(u32 code_page, std::wstring_view input)
+static std::string UTF16ToCP(u32 code_page, std::wstring_view input)
 {
   if (input.empty())
     return {};
@@ -711,5 +692,10 @@ bool CaseInsensitiveEquals(std::string_view a, std::string_view b)
     return false;
   return std::equal(a.begin(), a.end(), b.begin(),
                     [](char ca, char cb) { return Common::ToLower(ca) == Common::ToLower(cb); });
+}
+
+std::string BytesToHexString(std::span<const u8> bytes)
+{
+  return fmt::format("{:02x}", fmt::join(bytes, ""));
 }
 }  // namespace Common

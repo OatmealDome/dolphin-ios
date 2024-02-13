@@ -12,6 +12,8 @@
 #include "Common/Flag.h"
 #include "Common/WorkQueueThread.h"
 #include "VideoCommon/Assets/CustomAsset.h"
+#include "VideoCommon/Assets/MaterialAsset.h"
+#include "VideoCommon/Assets/ShaderAsset.h"
 #include "VideoCommon/Assets/TextureAsset.h"
 
 namespace VideoCommon
@@ -36,11 +38,14 @@ public:
   // Loads happen asynchronously where the data will be set now or in the future
   // Callees are expected to query the underlying data with 'GetData()'
   // from the 'CustomLoadableAsset' class to determine if the data is ready for use
-  std::shared_ptr<RawTextureAsset> LoadTexture(const CustomAssetLibrary::AssetID& asset_id,
-                                               std::shared_ptr<CustomAssetLibrary> library);
-
   std::shared_ptr<GameTextureAsset> LoadGameTexture(const CustomAssetLibrary::AssetID& asset_id,
                                                     std::shared_ptr<CustomAssetLibrary> library);
+
+  std::shared_ptr<PixelShaderAsset> LoadPixelShader(const CustomAssetLibrary::AssetID& asset_id,
+                                                    std::shared_ptr<CustomAssetLibrary> library);
+
+  std::shared_ptr<MaterialAsset> LoadMaterial(const CustomAssetLibrary::AssetID& asset_id,
+                                              std::shared_ptr<CustomAssetLibrary> library);
 
 private:
   // TODO C++20: use a 'derived_from' concept against 'CustomAsset' when available
@@ -72,8 +77,9 @@ private:
 
   static constexpr auto TIME_BETWEEN_ASSET_MONITOR_CHECKS = std::chrono::milliseconds{500};
 
-  std::map<CustomAssetLibrary::AssetID, std::weak_ptr<RawTextureAsset>> m_textures;
   std::map<CustomAssetLibrary::AssetID, std::weak_ptr<GameTextureAsset>> m_game_textures;
+  std::map<CustomAssetLibrary::AssetID, std::weak_ptr<PixelShaderAsset>> m_pixel_shaders;
+  std::map<CustomAssetLibrary::AssetID, std::weak_ptr<MaterialAsset>> m_materials;
   std::thread m_asset_monitor_thread;
   Common::Flag m_asset_monitor_thread_shutdown;
 

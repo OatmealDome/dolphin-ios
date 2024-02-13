@@ -57,6 +57,8 @@ extern const Info<bool> MAIN_SKIP_IPL;
 extern const Info<PowerPC::CPUCore> MAIN_CPU_CORE;
 extern const Info<bool> MAIN_JIT_FOLLOW_BRANCH;
 extern const Info<bool> MAIN_FASTMEM;
+extern const Info<bool> MAIN_FASTMEM_ARENA;
+extern const Info<bool> MAIN_LARGE_ENTRY_POINTS_MAP;
 extern const Info<bool> MAIN_ACCURATE_CPU_CACHE;
 // Should really be in the DSP section, but we're kind of stuck with bad decisions made in the past.
 extern const Info<bool> MAIN_DSP_HLE;
@@ -151,6 +153,7 @@ extern const Info<DiscIO::Region> MAIN_FALLBACK_REGION;
 extern const Info<bool> MAIN_REAL_WII_REMOTE_REPEAT_REPORTS;
 extern const Info<s32> MAIN_OVERRIDE_BOOT_IOS;
 extern const Info<std::string> MAIN_WII_NUS_SHOP_URL;
+extern const Info<bool> MAIN_WII_WIILINK_ENABLE;
 
 // Main.DSP
 
@@ -377,4 +380,6 @@ std::string GetGCIFolderPath(ExpansionInterface::Slot slot, std::optional<DiscIO
 std::string GetGCIFolderPath(std::string configured_folder, ExpansionInterface::Slot slot,
                              std::optional<DiscIO::Region> region);
 bool IsDefaultGCIFolderPathConfigured(ExpansionInterface::Slot slot);
+bool AreCheatsEnabled();
+bool IsDebuggingEnabled();
 }  // namespace Config

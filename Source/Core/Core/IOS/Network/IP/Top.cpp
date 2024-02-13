@@ -32,6 +32,7 @@
 #include "Core/IOS/Network/MACUtils.h"
 #include "Core/IOS/Network/Socket.h"
 #include "Core/System.h"
+#include "Core/WC24PatchEngine.h"
 
 #ifdef _WIN32
 #include <iphlpapi.h>
@@ -666,10 +667,11 @@ IPCReply NetIPTopDevice::HandleInetNToPRequest(const IOCtlRequest& request)
   // u32 validAddress = memory.Read_U32(request.buffer_in + 4);
   // u32 src = memory.Read_U32(request.buffer_in + 8);
 
-  char ip_s[16];
-  sprintf(ip_s, "%i.%i.%i.%i", memory.Read_U8(request.buffer_in + 8),
-          memory.Read_U8(request.buffer_in + 8 + 1), memory.Read_U8(request.buffer_in + 8 + 2),
-          memory.Read_U8(request.buffer_in + 8 + 3));
+  char ip_s[16]{};
+  fmt::format_to_n(ip_s, sizeof(ip_s) - 1, "{}.{}.{}.{}", memory.Read_U8(request.buffer_in + 8),
+                   memory.Read_U8(request.buffer_in + 8 + 1),
+                   memory.Read_U8(request.buffer_in + 8 + 2),
+                   memory.Read_U8(request.buffer_in + 8 + 3));
 
   INFO_LOG_FMT(IOS_NET, "IOCTL_SO_INETNTOP {}", ip_s);
   memory.CopyToEmu(request.buffer_out, reinterpret_cast<u8*>(ip_s), std::strlen(ip_s));
@@ -1056,6 +1058,11 @@ IPCReply NetIPTopDevice::HandleGetAddressInfoRequest(const IOCtlVRequest& reques
   if (!request.in_vectors.empty() && request.in_vectors[0].size > 0)
   {
     nodeNameStr = memory.GetString(request.in_vectors[0].address, request.in_vectors[0].size);
+    if (std::optional<std::string> patch =
+            WC24PatchEngine::GetNetworkPatch(nodeNameStr, WC24PatchEngine::IsKD{false}))
+    {
+      nodeNameStr = patch.value();
+    }
     pNodeName = nodeNameStr.c_str();
   }
 
