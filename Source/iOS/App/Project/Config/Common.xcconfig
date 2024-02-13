@@ -2,6 +2,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 LIBRARY_SEARCH_PATHS = $(inherited) "$(SRCROOT)/../../../build-$(PLATFORM_NAME)-$(DOL_CORE_BUILD_TARGET)/Source/iOS/Library"
-HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../Externals/mbedtls/include" "$(SRCROOT)/../../../Externals/fmt/include" "$(SRCROOT)/../../../Externals/soundtouch/" "$(SRCROOT)/../../../Externals/picojson/"
+HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../Externals/mbedtls/include" "$(SRCROOT)/../../../Externals/fmt/fmt/include" "$(SRCROOT)/../../../Externals/soundtouch/" "$(SRCROOT)/../../../Externals/picojson/"
 USER_HEADER_SEARCH_PATHS = $(inherited) "$(SRCROOT)/../../Core/**" "$(SRCROOT)/../Library/"
 SWIFT_OBJC_BRIDGING_HEADER = Common/Swift/BridgingHeader.h

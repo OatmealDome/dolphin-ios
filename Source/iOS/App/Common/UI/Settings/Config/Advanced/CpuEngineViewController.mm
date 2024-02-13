@@ -15,7 +15,7 @@
 
 @implementation CpuEngineViewController {
   NSInteger _lastSelected;
-  std::vector<PowerPC::CPUCore> _cores;
+  std::span<const PowerPC::CPUCore> _cores;
 }
 
 #pragma mark - Table view data source

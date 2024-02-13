@@ -11,6 +11,7 @@
 #import "Core/HW/Wiimote.h"
 #import "Core/HW/WiimoteEmu/WiimoteEmu.h"
 #import "Core/State.h"
+#import "Core/System.h"
 
 #import "InputCommon/InputConfig.h"
 
@@ -83,8 +84,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 
 - (void)recreateMenu {
   NSMutableArray<UIAction*>* controllerActions = [[NSMutableArray alloc] init];
-  
-  if ([self isWiimoteTouchPadAttached] && SConfig::GetInstance().bWii) {
+  //NEED TO FIX
+  if ([self isWiimoteTouchPadAttached]) {
     UIAction* wiimoteAction = [UIAction actionWithTitle:DOLCoreLocalizedString(@"Wii Remote") image:[UIImage systemImageNamed:@"gamecontroller"] identifier:nil handler:^(UIAction*) {
       [self updateVisibleTouchPadToWii];
       [self recreateMenu];
@@ -172,7 +173,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 
 - (void)receiveTitleChangedNotificationiOS {
   dispatch_async(dispatch_get_main_queue(), ^{
-    if (SConfig::GetInstance().bWii) {
+    //NEED TO FIX IN PROGRESS!!!
+    if (Core::System::GetInstance().IsWii()) {
       [self updateVisibleTouchPadToWii];
     } else {
       [self updateVisibleTouchPadToGameCube];

@@ -41,7 +41,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug (Non-Jailbroken)"
+      buildConfiguration = "Release (Non-Jailbroken)"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       language = "en"

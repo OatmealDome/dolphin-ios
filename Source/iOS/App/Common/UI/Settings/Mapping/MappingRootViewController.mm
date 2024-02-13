@@ -325,7 +325,7 @@ struct Section {
         return;
       }
       
-      const std::string profilePath = File::GetUserPath(D_CONFIG_IDX) + "Profiles/" + self->_config->GetProfileName() + "/" + profileName + ".ini";
+      const std::string profilePath = File::GetUserPath(D_CONFIG_IDX) + "Profiles/" + self->_config->GetProfileKey() + "/" + profileName + ".ini";
 
       File::CreateFullPath(profilePath);
 
