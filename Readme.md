@@ -8,9 +8,10 @@ This is the repository for the new DolphiniOS codebase.
 
 You will need the following:
 
-* A Mac capable of running macOS Big Sur 11.3 or later
-* Xcode 13 or later
+* A Mac capable of running MacOS Sonoma 14 or later
+* Xcode 15 or later
 * Homebrew (or your favourite package manager)
+* iOS 14 or later
 
 First, install the necessary tools using Homebrew:
 
@@ -20,11 +21,24 @@ brew install cmake ninja bartycrouch
 
 If you are using a different package manager, refer to its documentation.
 
+Get the repo
+
+```
+git clone Name-Of-URL.git
+```
+
 Finally, use the following command to install `polib` using the Xcode-provided `python3`:
 
 ```
-/path/to/Xcode.app/Contents/Developer/usr/bin/python3 -m pip install polib
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3 -m pip install polib
 ```
+If Xcode isn't installed via Appstore. Find the install location, select Get Info and copy the path, replace Applications/
+
+Make sure to pull submodules before building:
+```sh
+git submodule update --init --recursive
+```
+
 
 Once all of the prerequisites are installed, you can open the Xcode project at `Source/iOS/App/DolphiniOS.xcodeproj`.
 
@@ -33,6 +47,8 @@ You must change the organization identifier and team ID before you can build!
 To change the organization identifier, go to `Project` -> `Config` -> `BundleIdentifier.xcconfig`, and change `use.your.own.organization.identifier` to something unique.
 
 To change the team ID, go to `Project` -> `Config` -> `DevelopmentTeam.xcconfig`, and replace `your-team-id` with your developer account's team ID.
+
+Make sure to select NJB option in Xcode top header
 
 Once this is complete, you are now able to build and run DolphiniOS.
 
