@@ -24,7 +24,7 @@ If you are using a different package manager, refer to its documentation.
 Get the repo
 
 ```
-git clone Name-Of-URL.git
+git clone https://github.com/brand175/dolphin-ios.git
 ```
 
 Finally, use the following command to install `polib` using the Xcode-provided `python3`:
