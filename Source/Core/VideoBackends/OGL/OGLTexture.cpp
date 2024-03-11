@@ -140,25 +140,61 @@ OGLTexture::OGLTexture(const TextureConfig& tex_config, std::string_view name)
   glTexParameteri(target, GL_TEXTURE_MAX_LEVEL, m_config.levels - 1);
 
   GLenum gl_internal_format = GetGLInternalFormatForTextureFormat(m_config.format, true);
-  if (tex_config.IsMultisampled())
+  if (g_ogl_config.bSupportsTextureStorage && m_config.type == AbstractTextureType::Texture_CubeMap)
+  {
+    glTexStorage2D(target, m_config.levels, gl_internal_format, m_config.width, m_config.height);
+  }
+  else if (tex_config.IsMultisampled())
   {
     ASSERT(g_ogl_config.bSupportsMSAA);
-    if (g_ogl_config.SupportedMultisampleTexStorage != MultisampleTexStorageType::TexStorageNone)
+    if (m_config.type == AbstractTextureType::Texture_2DArray)
     {
-      glTexStorage3DMultisample(target, tex_config.samples, gl_internal_format, m_config.width,
+      if (g_ogl_config.SupportedMultisampleTexStorage != MultisampleTexStorageType::TexStorageNone)
+      {
+        glTexStorage3DMultisample(target, tex_config.samples, gl_internal_format, m_config.width,
+                                  m_config.height, m_config.layers, GL_FALSE);
+      }
+      else
+      {
+        ASSERT(!g_ogl_config.bIsES);
+        glTexImage3DMultisample(target, tex_config.samples, gl_internal_format, m_config.width,
                                 m_config.height, m_config.layers, GL_FALSE);
+      }
+    }
+    else if (m_config.type == AbstractTextureType::Texture_2D)
+    {
+      if (g_ogl_config.SupportedMultisampleTexStorage != MultisampleTexStorageType::TexStorageNone)
+      {
+        glTexStorage2DMultisample(target, tex_config.samples, gl_internal_format, m_config.width,
+                                  m_config.height, GL_FALSE);
+      }
+      else
+      {
+        ASSERT(!g_ogl_config.bIsES);
+        glTexImage2DMultisample(target, tex_config.samples, gl_internal_format, m_config.width,
+                                m_config.height, GL_FALSE);
+      }
     }
     else
     {
-      ASSERT(!g_ogl_config.bIsES);
-      glTexImage3DMultisample(target, tex_config.samples, gl_internal_format, m_config.width,
-                              m_config.height, m_config.layers, GL_FALSE);
+      ASSERT(false);
     }
   }
   else if (g_ogl_config.bSupportsTextureStorage)
   {
-    glTexStorage3D(target, m_config.levels, gl_internal_format, m_config.width, m_config.height,
-                   m_config.layers);
+    if (m_config.type == AbstractTextureType::Texture_2DArray)
+    {
+      glTexStorage3D(target, m_config.levels, gl_internal_format, m_config.width, m_config.height,
+                     m_config.layers);
+    }
+    else if (m_config.type == AbstractTextureType::Texture_2D)
+    {
+      glTexStorage2D(target, m_config.levels, gl_internal_format, m_config.width, m_config.height);
+    }
+    else
+    {
+      ASSERT(false);
+    }
   }
 
   if (m_config.IsRenderTarget())
@@ -267,29 +303,95 @@ void OGLTexture::Load(u32 level, u32 width, u32 height, u32 row_length, const u8
   GLenum gl_internal_format = GetGLInternalFormatForTextureFormat(m_config.format, false);
   if (IsCompressedFormat(m_config.format))
   {
-    if (g_ogl_config.bSupportsTextureStorage)
+    if (m_config.type == AbstractTextureType::Texture_CubeMap)
     {
-      glCompressedTexSubImage3D(target, level, 0, 0, layer, width, height, 1, gl_internal_format,
-                                static_cast<GLsizei>(buffer_size), buffer);
+      if (g_ogl_config.bSupportsTextureStorage)
+      {
+        glCompressedTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + layer, level, 0, 0, width,
+                                  height, gl_internal_format, static_cast<GLsizei>(buffer_size),
+                                  buffer);
+      }
+      else
+      {
+        glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + layer, level, gl_internal_format,
+                               width, height, 0, static_cast<GLsizei>(buffer_size), buffer);
+      }
+    }
+    else if (m_config.type == AbstractTextureType::Texture_2D)
+    {
+      if (g_ogl_config.bSupportsTextureStorage)
+      {
+        glCompressedTexSubImage2D(target, level, 0, 0, width, height, gl_internal_format,
+                                  static_cast<GLsizei>(buffer_size), buffer);
+      }
+      else
+      {
+        glCompressedTexImage2D(target, level, gl_internal_format, width, height, 0,
+                               static_cast<GLsizei>(buffer_size), buffer);
+      }
+    }
+    else if (m_config.type == AbstractTextureType::Texture_2DArray)
+    {
+      if (g_ogl_config.bSupportsTextureStorage)
+      {
+        glCompressedTexSubImage3D(target, level, 0, 0, layer, width, height, 1, gl_internal_format,
+                                  static_cast<GLsizei>(buffer_size), buffer);
+      }
+      else
+      {
+        glCompressedTexImage3D(target, level, gl_internal_format, width, height, 1, 0,
+                               static_cast<GLsizei>(buffer_size), buffer);
+      }
     }
     else
     {
-      glCompressedTexImage3D(target, level, gl_internal_format, width, height, 1, 0,
-                             static_cast<GLsizei>(buffer_size), buffer);
+      PanicAlertFmt("Failed to handle compressed texture load - unhandled type");
     }
   }
   else
   {
     GLenum gl_format = GetGLFormatForTextureFormat(m_config.format);
     GLenum gl_type = GetGLTypeForTextureFormat(m_config.format);
-    if (g_ogl_config.bSupportsTextureStorage)
+    if (m_config.type == AbstractTextureType::Texture_CubeMap)
     {
-      glTexSubImage3D(target, level, 0, 0, layer, width, height, 1, gl_format, gl_type, buffer);
+      if (g_ogl_config.bSupportsTextureStorage)
+      {
+        glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + layer, level, 0, 0, width, height,
+                        gl_format, gl_type, buffer);
+      }
+      else
+      {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + layer, level, gl_internal_format, width,
+                     height, 0, gl_format, gl_type, buffer);
+      }
+    }
+    else if (m_config.type == AbstractTextureType::Texture_2D)
+    {
+      if (g_ogl_config.bSupportsTextureStorage)
+      {
+        glTexSubImage2D(target, level, 0, 0, width, height, gl_format, gl_type, buffer);
+      }
+      else
+      {
+        glTexImage2D(target, level, gl_internal_format, width, height, 0, gl_format, gl_type,
+                     buffer);
+      }
+    }
+    else if (m_config.type == AbstractTextureType::Texture_2DArray)
+    {
+      if (g_ogl_config.bSupportsTextureStorage)
+      {
+        glTexSubImage3D(target, level, 0, 0, layer, width, height, 1, gl_format, gl_type, buffer);
+      }
+      else
+      {
+        glTexImage3D(target, level, gl_internal_format, width, height, 1, 0, gl_format, gl_type,
+                     buffer);
+      }
     }
     else
     {
-      glTexImage3D(target, level, gl_internal_format, width, height, 1, 0, gl_format, gl_type,
-                   buffer);
+      PanicAlertFmt("Failed to handle texture load - unhandled type");
     }
   }
 

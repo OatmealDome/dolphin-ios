@@ -132,6 +132,8 @@ public:
   static double HostRead_F64(const Core::CPUThreadGuard& guard, u32 address);
   static u32 HostRead_Instruction(const Core::CPUThreadGuard& guard, u32 address);
   static std::string HostGetString(const Core::CPUThreadGuard& guard, u32 address, size_t size = 0);
+  static std::u16string HostGetU16String(const Core::CPUThreadGuard& guard, u32 address,
+                                         size_t size = 0);
 
   // Try to read a value from emulated memory at the given address in the given memory space.
   // If the read succeeds, the returned value will be present and the ReadResult contains the read
@@ -243,7 +245,7 @@ public:
   // Result changes based on the BAT registers and MSR.DR.  Returns whether
   // it's safe to optimize a read or write to this address to an unguarded
   // memory access.  Does not consider page tables.
-  bool IsOptimizableRAMAddress(u32 address) const;
+  bool IsOptimizableRAMAddress(u32 address, u32 access_size) const;
   u32 IsOptimizableMMIOAccess(u32 address, u32 access_size) const;
   bool IsOptimizableGatherPipeWrite(u32 address) const;
 
@@ -292,8 +294,8 @@ private:
   template <const XCheckTLBFlag flag>
   TranslateAddressResult TranslateAddress(u32 address);
 
-  TranslateAddressResult TranslatePageAddress(const EffectiveAddress address,
-                                              const XCheckTLBFlag flag, bool* wi);
+  template <const XCheckTLBFlag flag>
+  TranslateAddressResult TranslatePageAddress(const EffectiveAddress address, bool* wi);
 
   void GenerateDSIException(u32 effective_address, bool write);
   void GenerateISIException(u32 effective_address);
@@ -326,32 +328,16 @@ private:
   BatTable m_dbat_table;
 };
 
-void ClearDCacheLineFromJit64(MMU& mmu, u32 address);
-u32 ReadU8ZXFromJit64(MMU& mmu, u32 address);   // Returns zero-extended 32bit value
-u32 ReadU16ZXFromJit64(MMU& mmu, u32 address);  // Returns zero-extended 32bit value
-u32 ReadU32FromJit64(MMU& mmu, u32 address);
-u64 ReadU64FromJit64(MMU& mmu, u32 address);
-void WriteU8FromJit64(MMU& mmu, u32 var, u32 address);
-void WriteU16FromJit64(MMU& mmu, u32 var, u32 address);
-void WriteU32FromJit64(MMU& mmu, u32 var, u32 address);
-void WriteU64FromJit64(MMU& mmu, u64 var, u32 address);
-void WriteU16SwapFromJit64(MMU& mmu, u32 var, u32 address);
-void WriteU32SwapFromJit64(MMU& mmu, u32 var, u32 address);
-void WriteU64SwapFromJit64(MMU& mmu, u64 var, u32 address);
-
-// The JitArm64 function that calls these has very specific register allocation that's difficult to
-// change, so we have a separate set of functions here for it. This can probably be refactored in
-// the future.
-void ClearDCacheLineFromJitArm64(u32 address, MMU& mmu);
-u8 ReadU8FromJitArm64(u32 address, MMU& mmu);
-u16 ReadU16FromJitArm64(u32 address, MMU& mmu);
-u32 ReadU32FromJitArm64(u32 address, MMU& mmu);
-u64 ReadU64FromJitArm64(u32 address, MMU& mmu);
-void WriteU8FromJitArm64(u32 var, u32 address, MMU& mmu);
-void WriteU16FromJitArm64(u32 var, u32 address, MMU& mmu);
-void WriteU32FromJitArm64(u32 var, u32 address, MMU& mmu);
-void WriteU64FromJitArm64(u64 var, u32 address, MMU& mmu);
-void WriteU16SwapFromJitArm64(u32 var, u32 address, MMU& mmu);
-void WriteU32SwapFromJitArm64(u32 var, u32 address, MMU& mmu);
-void WriteU64SwapFromJitArm64(u64 var, u32 address, MMU& mmu);
+void ClearDCacheLineFromJit(MMU& mmu, u32 address);
+u32 ReadU8FromJit(MMU& mmu, u32 address);   // Returns zero-extended 32bit value
+u32 ReadU16FromJit(MMU& mmu, u32 address);  // Returns zero-extended 32bit value
+u32 ReadU32FromJit(MMU& mmu, u32 address);
+u64 ReadU64FromJit(MMU& mmu, u32 address);
+void WriteU8FromJit(MMU& mmu, u32 var, u32 address);
+void WriteU16FromJit(MMU& mmu, u32 var, u32 address);
+void WriteU32FromJit(MMU& mmu, u32 var, u32 address);
+void WriteU64FromJit(MMU& mmu, u64 var, u32 address);
+void WriteU16SwapFromJit(MMU& mmu, u32 var, u32 address);
+void WriteU32SwapFromJit(MMU& mmu, u32 var, u32 address);
+void WriteU64SwapFromJit(MMU& mmu, u64 var, u32 address);
 }  // namespace PowerPC

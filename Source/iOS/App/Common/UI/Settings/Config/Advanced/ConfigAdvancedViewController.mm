@@ -7,6 +7,7 @@
 
 #import "Core/Config/MainSettings.h"
 #import "Core/HW/SystemTimers.h"
+#import "Core/System.h"
 #import "Core/PowerPC/PowerPC.h"
 
 #import "LocalizationUtil.h"
@@ -101,7 +102,7 @@
 }
 
 - (void)setCpuClockLabel {
-  int core_clock = SystemTimers::GetTicksPerSecond() / std::pow(10, 6);
+  int core_clock = Core::System::GetInstance().GetSystemTimers().GetTicksPerSecond() / std::pow(10, 6);
   const float overclock = Config::Get(Config::MAIN_OVERCLOCK);
   int percent = static_cast<int>(std::round(overclock * 100.f));
   int clock = static_cast<int>(std::round(overclock * core_clock));

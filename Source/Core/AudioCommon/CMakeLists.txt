@@ -14,7 +14,7 @@ add_library(audiocommon
   WaveFile.h
 )
 
-if(ENABLE_CUBEB)
+if(NOT IOS AND NOT APPLE)
   message(STATUS "Cubeb found, enabling Cubeb sound backend")
   target_sources(audiocommon PRIVATE
     CubebStream.cpp
@@ -22,7 +22,7 @@ if(ENABLE_CUBEB)
     CubebUtils.cpp
     CubebUtils.h
   )
-  target_link_libraries(audiocommon PRIVATE cubeb)
+  target_link_libraries(audiocommon PRIVATE cubeb::cubeb)
 endif()
 
 if(ANDROID)

@@ -77,17 +77,24 @@ void CustomAssetLoader ::Shutdown()
   m_total_bytes_loaded = 0;
 }
 
-std::shared_ptr<RawTextureAsset>
-CustomAssetLoader::LoadTexture(const CustomAssetLibrary::AssetID& asset_id,
-                               std::shared_ptr<CustomAssetLibrary> library)
-{
-  return LoadOrCreateAsset<RawTextureAsset>(asset_id, m_textures, std::move(library));
-}
-
 std::shared_ptr<GameTextureAsset>
 CustomAssetLoader::LoadGameTexture(const CustomAssetLibrary::AssetID& asset_id,
                                    std::shared_ptr<CustomAssetLibrary> library)
 {
   return LoadOrCreateAsset<GameTextureAsset>(asset_id, m_game_textures, std::move(library));
+}
+
+std::shared_ptr<PixelShaderAsset>
+CustomAssetLoader::LoadPixelShader(const CustomAssetLibrary::AssetID& asset_id,
+                                   std::shared_ptr<CustomAssetLibrary> library)
+{
+  return LoadOrCreateAsset<PixelShaderAsset>(asset_id, m_pixel_shaders, std::move(library));
+}
+
+std::shared_ptr<MaterialAsset>
+CustomAssetLoader::LoadMaterial(const CustomAssetLibrary::AssetID& asset_id,
+                                std::shared_ptr<CustomAssetLibrary> library)
+{
+  return LoadOrCreateAsset<MaterialAsset>(asset_id, m_materials, std::move(library));
 }
 }  // namespace VideoCommon

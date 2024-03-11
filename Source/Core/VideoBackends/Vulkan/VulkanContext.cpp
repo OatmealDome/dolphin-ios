@@ -383,6 +383,7 @@ void VulkanContext::PopulateBackendInfo(VideoConfig* config)
   config->backend_info.bSupportsPartialMultisampleResolve = true;  // Assumed support.
   config->backend_info.bSupportsDynamicVertexLoader = true;        // Assumed support.
   config->backend_info.bSupportsVSLinePointExpand = true;          // Assumed support.
+  config->backend_info.bSupportsHDROutput = true;                  // Assumed support.
 }
 
 void VulkanContext::PopulateBackendInfoAdapters(VideoConfig* config, const GPUList& gpu_list)

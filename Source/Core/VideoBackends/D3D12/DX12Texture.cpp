@@ -140,7 +140,8 @@ std::unique_ptr<DXTexture> DXTexture::CreateAdopted(ID3D12Resource* resource)
   }
 
   TextureConfig config(static_cast<u32>(desc.Width), desc.Height, desc.MipLevels,
-                       desc.DepthOrArraySize, desc.SampleDesc.Count, format, 0);
+                       desc.DepthOrArraySize, desc.SampleDesc.Count, format, 0,
+                       AbstractTextureType::Texture_2DArray);
   if (desc.Flags &
       (D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET | D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL))
   {
@@ -165,19 +166,50 @@ bool DXTexture::CreateSRVDescriptor()
     return false;
   }
 
-  D3D12_SHADER_RESOURCE_VIEW_DESC desc = {D3DCommon::GetSRVFormatForAbstractFormat(m_config.format),
-                                          m_config.IsMultisampled() ?
-                                              D3D12_SRV_DIMENSION_TEXTURE2DMSARRAY :
-                                              D3D12_SRV_DIMENSION_TEXTURE2DARRAY,
-                                          D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING};
-  if (m_config.IsMultisampled())
+  D3D12_SRV_DIMENSION dimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
+  if (m_config.type == AbstractTextureType::Texture_2DArray)
   {
-    desc.Texture2DMSArray.ArraySize = m_config.layers;
+    if (m_config.IsMultisampled())
+      dimension = D3D12_SRV_DIMENSION_TEXTURE2DMSARRAY;
+    else
+      dimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
+  }
+  else if (m_config.type == AbstractTextureType::Texture_2D)
+  {
+    if (m_config.IsMultisampled())
+      dimension = D3D12_SRV_DIMENSION_TEXTURE2DMS;
+    else
+      dimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+  }
+  else if (m_config.type == AbstractTextureType::Texture_CubeMap)
+  {
+    dimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
   }
   else
   {
-    desc.Texture2DArray.MipLevels = m_config.levels;
-    desc.Texture2DArray.ArraySize = m_config.layers;
+    PanicAlertFmt("Failed to allocate SRV - unhandled type");
+    return false;
+  }
+  D3D12_SHADER_RESOURCE_VIEW_DESC desc = {D3DCommon::GetSRVFormatForAbstractFormat(m_config.format),
+                                          dimension, D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING};
+
+  if (m_config.type == AbstractTextureType::Texture_CubeMap)
+  {
+    desc.TextureCube.MostDetailedMip = 0;
+    desc.TextureCube.MipLevels = m_config.levels;
+    desc.TextureCube.ResourceMinLODClamp = 0.0f;
+  }
+  else
+  {
+    if (m_config.IsMultisampled())
+    {
+      desc.Texture2DMSArray.ArraySize = m_config.layers;
+    }
+    else
+    {
+      desc.Texture2DArray.MipLevels = m_config.levels;
+      desc.Texture2DArray.ArraySize = m_config.layers;
+    }
   }
   g_dx_context->GetDevice()->CreateShaderResourceView(m_resource.Get(), &desc,
                                                       m_srv_descriptor.cpu_handle);
@@ -422,6 +454,23 @@ DXFramebuffer::~DXFramebuffer()
   }
 }
 
+const D3D12_CPU_DESCRIPTOR_HANDLE* DXFramebuffer::GetIntRTVDescriptorArray() const
+{
+  if (m_color_attachment == nullptr)
+    return nullptr;
+
+  const auto& handle = m_int_rtv_descriptor.cpu_handle;
+
+  // To save space in the descriptor heap, m_int_rtv_descriptor.cpu_handle.ptr is only allocated
+  // when the integer RTV format corresponding to the current abstract format differs from the
+  // non-integer RTV format. Only use the integer handle if it has been allocated.
+  if (handle.ptr != 0)
+    return &handle;
+
+  // The integer and non-integer RTV formats are the same, so use the non-integer descriptor.
+  return GetRTVDescriptorArray();
+}
+
 void DXFramebuffer::Unbind()
 {
   static const D3D12_DISCARD_REGION dr = {0, nullptr, 0, 1};
@@ -556,6 +605,10 @@ bool DXFramebuffer::CreateIRTVDescriptor()
   const bool multisampled = m_samples > 1;
   DXGI_FORMAT non_int_format = D3DCommon::GetRTVFormatForAbstractFormat(m_color_format, false);
   DXGI_FORMAT int_format = D3DCommon::GetRTVFormatForAbstractFormat(m_color_format, true);
+
+  // If the integer and non-integer RTV formats are the same for a given abstract format we can save
+  // space in the descriptor heap by only allocating the non-integer descriptor and using it for
+  // the integer RTV too.
   if (int_format != non_int_format)
   {
     if (!g_dx_context->GetRTVHeapManager().Allocate(&m_int_rtv_descriptor))

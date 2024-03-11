@@ -32,27 +32,6 @@ Motor::Motor(CHHapticEngine* engine, const std::string name) : m_haptic_engine(e
 
     StartEngine();
   };
-
-  m_haptic_engine.stoppedHandler = ^(CHHapticEngineStoppedReason reason) {
-    std::lock_guard<std::mutex> stopped_guard(m_lock);
-
-    switch (reason)
-    {
-    case CHHapticEngineStoppedReasonAudioSessionInterrupt:
-    case CHHapticEngineStoppedReasonApplicationSuspended:
-    case CHHapticEngineStoppedReasonSystemError:
-      m_player_needs_restart = true;
-
-      break;
-    default:
-      ERROR_LOG_FMT(CONTROLLERINTERFACE, "Motor received unexpected stopped reason: {}", reason);
-
-      // This error is probably unrecoverable.
-      m_player_created = false;
-
-      break;
-    }
-  };
 }
 
 Motor::~Motor()

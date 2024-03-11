@@ -257,7 +257,7 @@ bool NetPlayClient::Connect()
   ENetEvent netEvent;
   int net;
   while ((net = enet_host_service(m_client, &netEvent, 5000)) > 0 &&
-         netEvent.type == ENetEventType(42))  // See PR #11381 and ENetUtil::InterceptCallback
+         static_cast<int>(netEvent.type) == Common::ENet::SKIPPABLE_EVENT)
   {
     // ignore packets from traversal server
   }
@@ -1644,7 +1644,11 @@ void NetPlayClient::ThreadFunc()
 
         break;
       default:
-        ERROR_LOG_FMT(NETPLAY, "enet_host_service: unknown event type: {}", int(netEvent.type));
+        // not a valid switch case due to not technically being part of the enum
+        if (static_cast<int>(netEvent.type) == Common::ENet::SKIPPABLE_EVENT)
+          INFO_LOG_FMT(NETPLAY, "enet_host_service: skippable packet event");
+        else
+          ERROR_LOG_FMT(NETPLAY, "enet_host_service: unknown event type: {}", int(netEvent.type));
         break;
       }
     }
@@ -1759,8 +1763,9 @@ bool NetPlayClient::StartGame(const std::string& path)
 
   if (m_dialog->IsRecording())
   {
-    if (Movie::IsReadOnly())
-      Movie::SetReadOnly(false);
+    auto& movie = Core::System::GetInstance().GetMovie();
+    if (movie.IsReadOnly())
+      movie.SetReadOnly(false);
 
     Movie::ControllerTypeArray controllers{};
     Movie::WiimoteEnabledArray wiimotes{};
@@ -1774,7 +1779,7 @@ bool NetPlayClient::StartGame(const std::string& path)
         controllers[i] = Movie::ControllerType::None;
       wiimotes[i] = m_wiimote_map[i] > 0;
     }
-    Movie::BeginRecordingInput(controllers, wiimotes);
+    movie.BeginRecordingInput(controllers, wiimotes);
   }
 
   for (unsigned int i = 0; i < 4; ++i)
@@ -2110,14 +2115,15 @@ bool NetPlayClient::GetNetPads(const int pad_nb, const bool batching, GCPadStatu
 
   m_pad_buffer[pad_nb].Pop(*pad_status);
 
-  if (Movie::IsRecordingInput())
+  auto& movie = Core::System::GetInstance().GetMovie();
+  if (movie.IsRecordingInput())
   {
-    Movie::RecordInput(pad_status, pad_nb);
-    Movie::InputUpdate();
+    movie.RecordInput(pad_status, pad_nb);
+    movie.InputUpdate();
   }
   else
   {
-    Movie::CheckPadStatus(pad_status, pad_nb);
+    movie.CheckPadStatus(pad_status, pad_nb);
   }
 
   return true;
@@ -2518,7 +2524,7 @@ void NetPlayClient::SendTimeBase()
 
   if (netplay_client->m_timebase_frame % 60 == 0)
   {
-    const sf::Uint64 timebase = SystemTimers::GetFakeTimeBase();
+    const sf::Uint64 timebase = Core::System::GetInstance().GetSystemTimers().GetFakeTimeBase();
 
     sf::Packet packet;
     packet << MessageID::TimeBase;

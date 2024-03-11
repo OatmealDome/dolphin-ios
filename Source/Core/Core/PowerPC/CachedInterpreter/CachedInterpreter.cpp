@@ -82,12 +82,13 @@ CachedInterpreter::~CachedInterpreter() = default;
 
 void CachedInterpreter::Init()
 {
+  RefreshConfig();
+
   m_code.reserve(CODE_SIZE / sizeof(Instruction));
 
   jo.enableBlocklink = false;
 
   m_block_cache.Init();
-  UpdateMemoryAndExceptionOptions();
 
   code_block.m_stats = &js.st;
   code_block.m_gpa = &js.gpa;
@@ -268,17 +269,21 @@ bool CachedInterpreter::CheckIdle(CachedInterpreter& cached_interpreter, u32 idl
 
 bool CachedInterpreter::HandleFunctionHooking(u32 address)
 {
-  return HLE::ReplaceFunctionIfPossible(address, [&](u32 hook_index, HLE::HookType type) {
-    m_code.emplace_back(WritePC, address);
-    m_code.emplace_back(Interpreter::HLEFunction, hook_index);
+  // CachedInterpreter inherits from JitBase and is considered a JIT by relevant code.
+  // (see JitInterface and how m_mode is set within PowerPC.cpp)
+  const auto result = HLE::TryReplaceFunction(address, PowerPC::CoreMode::JIT);
+  if (!result)
+    return false;
 
-    if (type != HLE::HookType::Replace)
-      return false;
+  m_code.emplace_back(WritePC, address);
+  m_code.emplace_back(Interpreter::HLEFunction, result.hook_index);
 
-    m_code.emplace_back(EndBlock, js.downcountAmount);
-    m_code.emplace_back();
-    return true;
-  });
+  if (result.type != HLE::HookType::Replace)
+    return false;
+
+  m_code.emplace_back(EndBlock, js.downcountAmount);
+  m_code.emplace_back();
+  return true;
 }
 
 void CachedInterpreter::Jit(u32 address)
@@ -311,7 +316,6 @@ void CachedInterpreter::Jit(u32 address)
   js.numFloatingPointInst = 0;
   js.curBlock = b;
 
-  b->checkedEntry = GetCodePtr();
   b->normalEntry = GetCodePtr();
 
   for (u32 i = 0; i < code_block.m_num_instructions; i++)
@@ -374,7 +378,7 @@ void CachedInterpreter::Jit(u32 address)
   }
   m_code.emplace_back();
 
-  b->codeSize = (u32)(GetCodePtr() - b->checkedEntry);
+  b->codeSize = static_cast<u32>(GetCodePtr() - b->normalEntry);
   b->originalSize = code_block.m_num_instructions;
 
   m_block_cache.FinalizeBlock(*b, jo.enableBlocklink, code_block.m_physical_addresses);
@@ -384,5 +388,5 @@ void CachedInterpreter::ClearCache()
 {
   m_code.clear();
   m_block_cache.Clear();
-  UpdateMemoryAndExceptionOptions();
+  RefreshConfig();
 }

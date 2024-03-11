@@ -7,6 +7,8 @@
 #include "Common/Arm64Emitter.h"
 #include "Common/BitUtils.h"
 #include "Common/CommonTypes.h"
+#include "Common/ScopeGuard.h"
+#include "Core/Core.h"
 #include "Core/PowerPC/Interpreter/Interpreter_FPUtils.h"
 #include "Core/PowerPC/JitArm64/Jit.h"
 #include "Core/PowerPC/PowerPC.h"
@@ -70,6 +72,9 @@ static u32 RunUpdateFPRF(PowerPC::PowerPCState& ppc_state, const std::function<v
 
 TEST(JitArm64, FPRF)
 {
+  Core::DeclareAsCPUThread();
+  Common::ScopeGuard cpu_thread_guard([] { Core::UndeclareAsCPUThread(); });
+
   auto& system = Core::System::GetInstance();
   auto& ppc_state = system.GetPPCState();
   TestFPRF test(system);
@@ -79,6 +84,8 @@ TEST(JitArm64, FPRF)
     const u32 expected_double = RunUpdateFPRF(
         ppc_state, [&] { ppc_state.UpdateFPRFDouble(Common::BitCast<double>(double_input)); });
     const u32 actual_double = RunUpdateFPRF(ppc_state, [&] { test.fprf_double(double_input); });
+    if (expected_double != actual_double)
+      fmt::print("{:016x} -> {:08x} == {:08x}\n", double_input, actual_double, expected_double);
     EXPECT_EQ(expected_double, actual_double);
 
     const u32 single_input = ConvertToSingle(double_input);
@@ -86,6 +93,8 @@ TEST(JitArm64, FPRF)
     const u32 expected_single = RunUpdateFPRF(
         ppc_state, [&] { ppc_state.UpdateFPRFSingle(Common::BitCast<float>(single_input)); });
     const u32 actual_single = RunUpdateFPRF(ppc_state, [&] { test.fprf_single(single_input); });
+    if (expected_single != actual_single)
+      fmt::print("{:08x} -> {:08x} == {:08x}\n", single_input, actual_single, expected_single);
     EXPECT_EQ(expected_single, actual_single);
   }
 }

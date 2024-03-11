@@ -11,7 +11,7 @@
 "3rl-o2-iN6.title" = "アスペクト比";
 
 /* Class = "UILabel"; text = "Enable MMU"; ObjectID = "44a-xv-dfS"; */
-"44a-xv-dfS.text" = "Enable MMU";
+"44a-xv-dfS.text" = "MMU (メモリ管理ユニット) を有効にする";
 
 /* Class = "UILabel"; text = "Enable Custom RTC"; ObjectID = "46G-Mb-1hy"; */
 "46G-Mb-1hy.text" = "Custom RTC を使用する";
@@ -137,7 +137,7 @@
 "Q01-LG-j5M.footerTitle" = "Adjusts the amount of RAM in the emulated console.\n\nWARNING: Enabling this will completely break many games. Only a small number of games can benefit from this.";
 
 /* Class = "UITableViewSection"; headerTitle = "Memory Override"; ObjectID = "Q01-LG-j5M"; */
-"Q01-LG-j5M.headerTitle" = "Memory Override";
+"Q01-LG-j5M.headerTitle" = "メモリ容量の変更";
 
 /* Class = "UILabel"; text = "Ratio"; ObjectID = "QAt-qC-pEy"; */
 "QAt-qC-pEy.text" = "Ratio";
@@ -200,7 +200,7 @@
 "at6-At-g74.headerTitle" = "IPL設定";
 
 /* Class = "UINavigationItem"; title = "Fallback Region"; ObjectID = "bMi-pD-kB9"; */
-"bMi-pD-kB9.title" = "Fallback Region";
+"bMi-pD-kB9.title" = "既定の地域";
 
 /* Class = "UINavigationItem"; title = "Sound"; ObjectID = "buI-Do-OuI"; */
 "buI-Do-OuI.title" = "サウンドの設定";
@@ -245,7 +245,7 @@
 "fDr-Gl-zZI.footerTitle" = "Adjusts the emulated CPU's clock rate.\n\nHigher values may make variable-framerate games run at a higher framerate, at the expense of performance. Lower values may activate a game's internal frameskip, potentially improving performance.\n\nWARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default clock.";
 
 /* Class = "UITableViewSection"; headerTitle = "Clock Override"; ObjectID = "fDr-Gl-zZI"; */
-"fDr-Gl-zZI.headerTitle" = "Clock Override";
+"fDr-Gl-zZI.headerTitle" = "クロック周波数の変更";
 
 /* Class = "UILabel"; text = "Dutch"; ObjectID = "fTA-hM-qWa"; */
 "fTA-hM-qWa.text" = "オランダ語";
@@ -257,7 +257,7 @@
 "gmP-nZ-ptN.text" = "チートコードを有効化";
 
 /* Class = "UILabel"; text = "Convert Folder to File Now"; ObjectID = "hJv-Z3-sDT"; */
-"hJv-Z3-sDT.text" = "Convert Folder to File Now";
+"hJv-Z3-sDT.text" = "フォルダーをファイルに変換する";
 
 /* Class = "UILabel"; text = "Use Panic Handlers"; ObjectID = "ipP-Fv-k8r"; */
 "ipP-Fv-k8r.text" = "パニックハンドラを使用";
@@ -281,7 +281,7 @@
 "mOy-fU-QWw.text" = "リモコンスピーカー音量";
 
 /* Class = "UILabel"; text = "Convert File to Folder Now"; ObjectID = "nCM-18-d00"; */
-"nCM-18-d00.text" = "Convert File to Folder Now";
+"nCM-18-d00.text" = "ファイルをフォルダーに変換する";
 
 /* Class = "UITableViewSection"; headerTitle = "Audio Stretching Settings"; ObjectID = "owp-az-Oz8"; */
 "owp-az-Oz8.headerTitle" = "タイムストレッチの設定";
@@ -308,7 +308,7 @@
 "roE-vP-a3S.text" = "出力API (Audio Backend)";
 
 /* Class = "UILabel"; text = "Fallback Region"; ObjectID = "sCB-dz-YQe"; */
-"sCB-dz-YQe.text" = "Fallback Region";
+"sCB-dz-YQe.text" = "既定の地域";
 
 /* Class = "UINavigationItem"; title = "GameCube"; ObjectID = "sM7-RR-8uE"; */
 "sM7-RR-8uE.title" = "ゲームキューブ";
@@ -332,7 +332,7 @@
 "w9f-Gt-sOg.footerTitle" = "リージョンが自動設定されないタイトルに対し、Dolphinはここで設定したリージョンを使用します。";
 
 /* Class = "UITableViewSection"; headerTitle = "Fallback Region"; ObjectID = "w9f-Gt-sOg"; */
-"w9f-Gt-sOg.headerTitle" = "Fallback Region";
+"w9f-Gt-sOg.headerTitle" = "既定の地域";
 
 /* Class = "UITableViewSection"; footerTitle = "This setting allows you to set a custom real time clock (RTC) separate from your current system time.\n\nIf unsure, leave this unchecked."; ObjectID = "wxJ-yD-fCS"; */
 "wxJ-yD-fCS.footerTitle" = "This setting allows you to set a custom real time clock (RTC) separate from your current system time.\n\nIf unsure, leave this unchecked.";

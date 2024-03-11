@@ -35,8 +35,10 @@
 #include "Core/PowerPC/PPCSymbolDB.h"
 #include "Core/PowerPC/PowerPC.h"
 #include "Core/System.h"
+#include "DolphinQt/Debugger/AssembleInstructionDialog.h"
 #include "DolphinQt/Debugger/PatchInstructionDialog.h"
 #include "DolphinQt/Host.h"
+#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/Resources.h"
 #include "DolphinQt/Settings.h"
 
@@ -306,7 +308,7 @@ void CodeViewWidget::Update(const Core::CPUThreadGuard* guard)
   const std::optional<u32> pc =
       guard ? std::make_optional(power_pc.GetPPCState().pc) : std::nullopt;
 
-  const bool dark_theme = qApp->palette().color(QPalette::Base).valueF() < 0.5;
+  const bool dark_theme = Settings::Instance().IsThemeDark();
 
   m_branches.clear();
 
@@ -349,7 +351,7 @@ void CodeViewWidget::Update(const Core::CPUThreadGuard* guard)
       }
       else if (color != 0xFFFFFF)
       {
-        item->setBackground(dark_theme ? QColor(color).darker(240) : QColor(color));
+        item->setBackground(dark_theme ? QColor(color).darker(400) : QColor(color));
       }
     }
 
@@ -371,7 +373,7 @@ void CodeViewWidget::Update(const Core::CPUThreadGuard* guard)
 
       description_item->setText(
           tr("--> %1").arg(QString::fromStdString(debug_interface.GetDescription(branch_addr))));
-      param_item->setForeground(Qt::magenta);
+      param_item->setForeground(dark_theme ? QColor(255, 135, 255) : Qt::magenta);
     }
 
     if (ins == "blr")
@@ -596,6 +598,8 @@ void CodeViewWidget::OnContextMenu()
   auto* insert_nop_action = menu->addAction(tr("Insert &nop"), this, &CodeViewWidget::OnInsertNOP);
   auto* replace_action =
       menu->addAction(tr("Re&place instruction"), this, &CodeViewWidget::OnReplaceInstruction);
+  auto* assemble_action =
+      menu->addAction(tr("Assemble instruction"), this, &CodeViewWidget::OnAssembleInstruction);
   auto* restore_action =
       menu->addAction(tr("Restore instruction"), this, &CodeViewWidget::OnRestoreInstruction);
 
@@ -636,8 +640,9 @@ void CodeViewWidget::OnContextMenu()
   run_until_menu->setEnabled(!target.isEmpty());
   follow_branch_action->setEnabled(follow_branch_enabled);
 
-  for (auto* action : {copy_address_action, copy_line_action, copy_hex_action, function_action,
-                       ppc_action, insert_blr_action, insert_nop_action, replace_action})
+  for (auto* action :
+       {copy_address_action, copy_line_action, copy_hex_action, function_action, ppc_action,
+        insert_blr_action, insert_nop_action, replace_action, assemble_action})
   {
     action->setEnabled(running);
   }
@@ -733,6 +738,7 @@ void CodeViewWidget::AutoStep(CodeTrace::AutoStop option)
             .arg(QString::fromStdString(fmt::format("{:#x}", fmt::join(mem_out, ", "))));
 
     msgbox.setInformativeText(msgtext);
+    SetQWidgetWindowDecorations(&msgbox);
     msgbox.exec();
 
   } while (msgbox.clickedButton() == (QAbstractButton*)run_button);
@@ -995,8 +1001,17 @@ void CodeViewWidget::OnSetSymbolEndAddress()
 
 void CodeViewWidget::OnReplaceInstruction()
 {
-  Core::CPUThreadGuard guard(m_system);
+  DoPatchInstruction(false);
+}
 
+void CodeViewWidget::OnAssembleInstruction()
+{
+  DoPatchInstruction(true);
+}
+
+void CodeViewWidget::DoPatchInstruction(bool assemble)
+{
+  Core::CPUThreadGuard guard(m_system);
   const u32 addr = GetContextAddress();
 
   if (!PowerPC::MMU::HostIsInstructionRAMAddress(guard, addr))
@@ -1008,12 +1023,26 @@ void CodeViewWidget::OnReplaceInstruction()
     return;
 
   auto& debug_interface = m_system.GetPowerPC().GetDebugInterface();
-  PatchInstructionDialog dialog(this, addr, debug_interface.ReadInstruction(guard, addr));
 
-  if (dialog.exec() == QDialog::Accepted)
+  if (assemble)
   {
-    debug_interface.SetPatch(guard, addr, dialog.GetCode());
-    Update(&guard);
+    AssembleInstructionDialog dialog(this, addr, debug_interface.ReadInstruction(guard, addr));
+    SetQWidgetWindowDecorations(&dialog);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+      debug_interface.SetPatch(guard, addr, dialog.GetCode());
+      Update(&guard);
+    }
+  }
+  else
+  {
+    PatchInstructionDialog dialog(this, addr, debug_interface.ReadInstruction(guard, addr));
+    SetQWidgetWindowDecorations(&dialog);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+      debug_interface.SetPatch(guard, addr, dialog.GetCode());
+      Update(&guard);
+    }
   }
 }
 
