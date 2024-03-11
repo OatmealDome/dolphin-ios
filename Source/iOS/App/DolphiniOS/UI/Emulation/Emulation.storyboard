@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="rIj-jh-dgA">
-    <device id="retina6_72" orientation="landscape" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="rIj-jh-dgA">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,30 +13,27 @@
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="Y6W-OH-hqX" customClass="EmulationiOSViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
-                        <rect key="frame" x="0.0" y="0.0" width="932" height="430"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jUv-WO-T8S" userLabel="Renderer Container View">
-                                <rect key="frame" x="59" y="44" width="814" height="386"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="387"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <mtkView userInteractionEnabled="NO" contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" preferredFramesPerSecond="9999" translatesAutoresizingMaskIntoConstraints="NO" id="5U7-vu-XBY" userLabel="Metal View">
-                                <rect key="frame" x="59" y="44" width="814" height="386"/>
-                            </mtkView>
                             <view opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lCX-ua-MqQ" userLabel="GameCube Controller" customClass="TCGameCubePad" customModule="DolphiniOS" customModuleProvider="target">
-                                <rect key="frame" x="59" y="44" width="814" height="365"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                             </view>
                             <view opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xut-b8-xfZ" userLabel="Wii Remote" customClass="TCWiiPad" customModule="DolphiniOS" customModuleProvider="target">
-                                <rect key="frame" x="59" y="44" width="814" height="365"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                             </view>
                             <view opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vI4-cN-k3w" userLabel="Sideways Wii Remote" customClass="TCSidewaysWiiPad" customModule="DolphiniOS" customModuleProvider="target">
-                                <rect key="frame" x="59" y="44" width="814" height="365"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                             </view>
                             <view opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VU3-Iy-TyQ" userLabel="Classic Controller" customClass="TCClassicWiiPad" customModule="DolphiniOS" customModuleProvider="target">
-                                <rect key="frame" x="59" y="44" width="814" height="365"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="agl-Jo-GPL">
-                                <rect key="frame" x="67" y="56" width="32" height="32"/>
+                                <rect key="frame" x="8" y="100" width="32" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="32" id="6Lq-kF-8lD"/>
                                     <constraint firstAttribute="height" constant="32" id="xSW-kQ-TrR"/>
@@ -57,7 +55,6 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="Xut-b8-xfZ" secondAttribute="bottom" id="1nu-Tb-Si6"/>
                             <constraint firstItem="jUv-WO-T8S" firstAttribute="trailing" secondItem="vDu-zF-Fre" secondAttribute="trailing" id="21u-m5-3Pf"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="Xut-b8-xfZ" secondAttribute="leading" id="3U0-0U-Zd0"/>
-                            <constraint firstItem="5U7-vu-XBY" firstAttribute="leading" secondItem="jUv-WO-T8S" secondAttribute="leading" id="5Is-AW-wzn"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="VU3-Iy-TyQ" secondAttribute="trailing" id="6GX-VT-A2R"/>
                             <constraint firstItem="agl-Jo-GPL" firstAttribute="top" secondItem="jUv-WO-T8S" secondAttribute="top" constant="12" id="GBP-J7-UC5"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="vI4-cN-k3w" secondAttribute="bottom" id="Kjg-ek-dms"/>
@@ -71,11 +68,8 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Xut-b8-xfZ" secondAttribute="trailing" id="ULw-cT-v4X"/>
                             <constraint firstItem="agl-Jo-GPL" firstAttribute="leading" secondItem="jUv-WO-T8S" secondAttribute="leading" constant="8" id="YEt-i2-3vu"/>
                             <constraint firstItem="jUv-WO-T8S" firstAttribute="bottom" secondItem="vDu-zF-Fre" secondAttribute="centerY" id="brs-ud-Uxx"/>
-                            <constraint firstItem="5U7-vu-XBY" firstAttribute="bottom" secondItem="jUv-WO-T8S" secondAttribute="bottom" id="deW-ke-SeH"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="lCX-ua-MqQ" secondAttribute="bottom" id="gMq-Nn-1QC"/>
-                            <constraint firstItem="5U7-vu-XBY" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="jAa-Ia-AiM"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="vI4-cN-k3w" secondAttribute="trailing" id="jDV-xd-eq4"/>
-                            <constraint firstItem="5U7-vu-XBY" firstAttribute="trailing" secondItem="jUv-WO-T8S" secondAttribute="trailing" id="kFX-oD-hho"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="VU3-Iy-TyQ" secondAttribute="leading" id="pwS-m7-5oo"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="leading" secondItem="lCX-ua-MqQ" secondAttribute="leading" id="pza-JV-H8e"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="top" secondItem="lCX-ua-MqQ" secondAttribute="top" id="rUK-cL-Frz"/>
@@ -110,7 +104,7 @@
                         <outlet property="metalBottomConstraint" destination="TK6-ZL-CFi" id="X2K-tT-8F0"/>
                         <outlet property="metalHalfConstraint" destination="brs-ud-Uxx" id="zPc-8h-qjX"/>
                         <outlet property="pullDownButton" destination="agl-Jo-GPL" id="ceZ-5L-VJ1"/>
-                        <outlet property="rendererView" destination="5U7-vu-XBY" id="Uh8-R0-fh2"/>
+                        <outlet property="rendererView" destination="jUv-WO-T8S" id="wJC-vL-Nz0"/>
                         <outletCollection property="touchPads" destination="lCX-ua-MqQ" id="Grw-rU-jt4"/>
                         <outletCollection property="touchPads" destination="Xut-b8-xfZ" id="sHj-sW-Nw0"/>
                         <outletCollection property="touchPads" destination="vI4-cN-k3w" id="IOe-gH-eol"/>
@@ -126,7 +120,7 @@
             <objects>
                 <navigationController modalPresentationStyle="fullScreen" id="rIj-jh-dgA" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Rso-gV-gKu">
-                        <rect key="frame" x="0.0" y="0.0" width="932" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -139,7 +133,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow.down.circle" catalog="system" width="128" height="123"/>
-        <image name="gearshape" catalog="system" width="128" height="123"/>
+        <image name="arrow.down.circle" catalog="system" width="128" height="121"/>
+        <image name="gearshape" catalog="system" width="128" height="121"/>
     </resources>
 </document>
