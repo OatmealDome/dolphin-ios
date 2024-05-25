@@ -18,6 +18,7 @@
 #import "HostNotifications.h"
 #import "LocalizationUtil.h"
 #import "JitManager.h"
+#import "LowPowerModeManager.h"
 #import "NKitWarningViewController.h"
 
 @interface EmulationViewController ()
@@ -65,10 +66,12 @@
       JitWaitViewController* jitController = [[JitWaitViewController alloc] initWithNibName:@"JitWait" bundle:nil];
       jitController.delegate = self;
       jitController.modalInPresentation = true;
-      
+
       [self presentViewController:jitController animated:true completion:nil];
     } else if ([self checkIfNeedToShowNKitWarning]) {
       [self showNKitWarning];
+    } else if ([[LowPowerModeManager shared] isLowPowerModeEnabled]) {
+      [self showLowPowerModeWarning];
     } else {
       [self startEmulation];
     }
@@ -122,6 +125,18 @@
       [self.navigationController dismissViewControllerAnimated:true completion:nil];
     }
   }];
+}
+
+- (void)showLowPowerModeWarning {
+  LowPowerModeWarningViewController* viewController = [[LowPowerModeWarningViewController alloc] initWithNibName:@"LowPowerModeWarning" bundle:nil];
+  viewController.emulationShouldStartHandler = ^{
+    [self dismissViewControllerAnimated:true completion:^{
+      [self startEmulation];
+    }];
+  };
+  viewController.modalInPresentation = true;
+
+  [self presentViewController:viewController animated:true completion:nil];
 }
 
 - (void)startEmulation {

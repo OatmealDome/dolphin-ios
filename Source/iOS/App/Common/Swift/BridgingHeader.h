@@ -18,5 +18,6 @@
 
 #if TARGET_OS_IOS
 #import "DOLUIKitSwitch.h"
+#import "LowPowerModeManager.h"
 #import "TCManagerInterface.h"
 #endif
