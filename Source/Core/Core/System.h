@@ -92,6 +92,7 @@ class MMU;
 class PowerPCManager;
 struct PowerPCState;
 }  // namespace PowerPC
+class PPCSymbolDB;
 namespace ProcessorInterface
 {
 class ProcessorInterfaceManager;
@@ -141,9 +142,11 @@ public:
   bool IsPauseOnPanicMode() const { return m_pause_on_panic_enabled; }
   bool IsMIOS() const { return m_is_mios; }
   bool IsWii() const { return m_is_wii; }
+  bool IsBranchWatchIgnoreApploader() { return m_branch_watch_ignore_apploader; }
 
   void SetIsMIOS(bool is_mios) { m_is_mios = is_mios; }
   void SetIsWii(bool is_wii) { m_is_wii = is_wii; }
+  void SetIsBranchWatchIgnoreApploader(bool enable) { m_branch_watch_ignore_apploader = enable; }
 
   SoundStream* GetSoundStream() const;
   void SetSoundStream(std::unique_ptr<SoundStream> sound_stream);
@@ -182,6 +185,7 @@ public:
   PixelShaderManager& GetPixelShaderManager() const;
   PowerPC::PowerPCManager& GetPowerPC() const;
   PowerPC::PowerPCState& GetPPCState() const;
+  PPCSymbolDB& GetPPCSymbolDB() const;
   ProcessorInterface::ProcessorInterfaceManager& GetProcessorInterface() const;
   SerialInterface::SerialInterfaceManager& GetSerialInterface() const;
   Sram& GetSRAM() const;
@@ -202,5 +206,6 @@ private:
   bool m_pause_on_panic_enabled = false;
   bool m_is_mios = false;
   bool m_is_wii = false;
+  bool m_branch_watch_ignore_apploader = false;
 };
 }  // namespace Core

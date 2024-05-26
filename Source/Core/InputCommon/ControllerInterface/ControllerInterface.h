@@ -125,6 +125,8 @@ public:
   static void SetCurrentInputChannel(ciface::InputChannel);
   static ciface::InputChannel GetCurrentInputChannel();
 
+  WindowSystemInfo GetWindowSystemInfo() const;
+
 private:
   void ClearDevices();
 
