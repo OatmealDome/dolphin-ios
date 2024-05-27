@@ -19,7 +19,6 @@
 #include "Core/Config/MainSettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
-#include "Core/Debugger/BranchWatch.h"
 #include "Core/HLE/HLE.h"
 #include "Core/HW/DVD/DVDInterface.h"
 #include "Core/HW/EXI/EXI_DeviceIPL.h"
@@ -159,11 +158,6 @@ bool CBoot::RunApploader(Core::System& system, const Core::CPUThreadGuard& guard
 
   auto& ppc_state = system.GetPPCState();
   auto& mmu = system.GetMMU();
-  auto& branch_watch = system.GetPowerPC().GetBranchWatch();
-
-  const bool resume_branch_watch = branch_watch.GetRecordingActive();
-  if (system.IsBranchWatchIgnoreApploader())
-    branch_watch.Pause();
 
   // Call iAppLoaderEntry.
   DEBUG_LOG_FMT(BOOT, "Call iAppLoaderEntry");
@@ -225,8 +219,6 @@ bool CBoot::RunApploader(Core::System& system, const Core::CPUThreadGuard& guard
 
   // return
   ppc_state.pc = ppc_state.gpr[3];
-
-  branch_watch.SetRecordingActive(resume_branch_watch);
 
   return true;
 }
@@ -363,6 +355,7 @@ bool CBoot::SetupWiiMemory(Core::System& system, IOS::HLE::IOSC::ConsoleType con
   auto entryPos = region_settings.find(SConfig::GetInstance().m_region);
   RegionSetting region_setting = entryPos->second;
 
+  Common::SettingsHandler gen;
   std::string serno;
   std::string model = "RVL-001(" + region_setting.area + ")";
   CreateSystemMenuTitleDirs();
@@ -376,9 +369,9 @@ bool CBoot::SetupWiiMemory(Core::System& system, IOS::HLE::IOSC::ConsoleType con
                                    IOS::HLE::FS::Mode::Read);
     if (file && file->Read(data.data(), data.size()))
     {
-      Common::SettingsHandler settings_reader(data);
-      serno = settings_reader.GetValue("SERNO");
-      model = settings_reader.GetValue("MODEL");
+      gen.SetBytes(std::move(data));
+      serno = gen.GetValue("SERNO");
+      model = gen.GetValue("MODEL");
 
       bool region_matches = false;
       if (Config::Get(Config::MAIN_OVERRIDE_REGION_SETTINGS))
@@ -387,16 +380,15 @@ bool CBoot::SetupWiiMemory(Core::System& system, IOS::HLE::IOSC::ConsoleType con
       }
       else
       {
-        const std::string code = settings_reader.GetValue("CODE");
+        const std::string code = gen.GetValue("CODE");
         if (code.size() >= 2 && CodeRegion(code[1]) == SConfig::GetInstance().m_region)
           region_matches = true;
       }
 
       if (region_matches)
       {
-        region_setting =
-            RegionSetting{settings_reader.GetValue("AREA"), settings_reader.GetValue("VIDEO"),
-                          settings_reader.GetValue("GAME"), settings_reader.GetValue("CODE")};
+        region_setting = RegionSetting{gen.GetValue("AREA"), gen.GetValue("VIDEO"),
+                                       gen.GetValue("GAME"), gen.GetValue("CODE")};
       }
       else
       {
@@ -404,6 +396,8 @@ bool CBoot::SetupWiiMemory(Core::System& system, IOS::HLE::IOSC::ConsoleType con
         if (parenthesis_pos != std::string::npos)
           model = model.substr(0, parenthesis_pos) + '(' + region_setting.area + ')';
       }
+
+      gen.Reset();
     }
   }
   fs->Delete(IOS::SYSMENU_UID, IOS::SYSMENU_GID, settings_file_path);
@@ -421,7 +415,6 @@ bool CBoot::SetupWiiMemory(Core::System& system, IOS::HLE::IOSC::ConsoleType con
     INFO_LOG_FMT(BOOT, "Using serial number: {}", serno);
   }
 
-  Common::SettingsHandler gen;
   gen.AddSetting("AREA", region_setting.area);
   gen.AddSetting("MODEL", model);
   gen.AddSetting("DVD", "0");

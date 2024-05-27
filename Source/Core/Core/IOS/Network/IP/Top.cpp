@@ -4,7 +4,6 @@
 #include "Core/IOS/Network/IP/Top.h"
 
 #include <algorithm>
-#include <array>
 #include <cstddef>
 #include <cstring>
 #include <memory>
@@ -21,7 +20,6 @@
 #include <fmt/format.h>
 
 #include "Common/Assert.h"
-#include "Common/BitUtils.h"
 #include "Common/CommonTypes.h"
 #include "Common/Logging/Log.h"
 #include "Common/Network.h"
@@ -82,12 +80,12 @@ void NetIPTopDevice::DoState(PointerWrap& p)
   Device::DoState(p);
 }
 
-static std::optional<u32> inet_pton(const char* src)
+static int inet_pton(const char* src, unsigned char* dst)
 {
   int saw_digit = 0;
   int octets = 0;
-  std::array<unsigned char, 4> tmp{};
-  unsigned char* tp = tmp.data();
+  unsigned char tmp[4]{};
+  unsigned char* tp = tmp;
   char ch;
 
   while ((ch = *src++) != '\0')
@@ -97,30 +95,31 @@ static std::optional<u32> inet_pton(const char* src)
       unsigned int newt = (*tp * 10) + (ch - '0');
 
       if (newt > 255)
-        return std::nullopt;
+        return 0;
       *tp = newt;
       if (!saw_digit)
       {
         if (++octets > 4)
-          return std::nullopt;
+          return 0;
         saw_digit = 1;
       }
     }
     else if (ch == '.' && saw_digit)
     {
       if (octets == 4)
-        return std::nullopt;
+        return 0;
       *++tp = 0;
       saw_digit = 0;
     }
     else
     {
-      return std::nullopt;
+      return 0;
     }
   }
   if (octets < 4)
-    return std::nullopt;
-  return std::bit_cast<u32>(tmp);
+    return 0;
+  memcpy(dst, tmp, 4);
+  return 1;
 }
 
 // Maps SOCKOPT level from Wii to native
@@ -656,13 +655,7 @@ IPCReply NetIPTopDevice::HandleInetPToNRequest(const IOCtlRequest& request)
 
   const std::string address = memory.GetString(request.buffer_in);
   INFO_LOG_FMT(IOS_NET, "IOCTL_SO_INETPTON (Translating: {})", address);
-
-  const std::optional<u32> result = inet_pton(address.c_str());
-  if (!result)
-    return IPCReply(0);
-
-  memory.CopyToEmu(request.buffer_out + 4, &*result, sizeof(u32));
-  return IPCReply(1);
+  return IPCReply(inet_pton(address.c_str(), memory.GetPointer(request.buffer_out + 4)));
 }
 
 IPCReply NetIPTopDevice::HandleInetNToPRequest(const IOCtlRequest& request)

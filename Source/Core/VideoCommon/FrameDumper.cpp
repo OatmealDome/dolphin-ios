@@ -18,9 +18,6 @@
 #include "VideoCommon/Present.h"
 #include "VideoCommon/VideoConfig.h"
 
-// The video encoder needs the image to be a multiple of x samples.
-static constexpr int VIDEO_ENCODER_LCM = 4;
-
 static bool DumpFrameToPNG(const FrameData& frame, const std::string& file_name)
 {
   return Common::ConvertRGBAToRGBAndSavePNG(file_name, frame.data, frame.width, frame.height,
@@ -355,13 +352,6 @@ bool FrameDumper::IsFrameDumping() const
     return true;
 
   return false;
-}
-
-int FrameDumper::GetRequiredResolutionLeastCommonMultiple() const
-{
-  if (Config::Get(Config::MAIN_MOVIE_DUMP_FRAMES))
-    return VIDEO_ENCODER_LCM;
-  return 1;
 }
 
 void FrameDumper::DoState(PointerWrap& p)

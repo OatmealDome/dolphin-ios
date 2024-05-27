@@ -14,23 +14,23 @@ namespace GraphicsModActionFactory
 std::unique_ptr<GraphicsModAction> Create(std::string_view name, const picojson::value& json_data,
                                           std::shared_ptr<VideoCommon::CustomAssetLibrary> library)
 {
-  if (name == PrintAction::factory_name)
+  if (name == "print")
   {
     return std::make_unique<PrintAction>();
   }
-  else if (name == SkipAction::factory_name)
+  else if (name == "skip")
   {
     return std::make_unique<SkipAction>();
   }
-  else if (name == MoveAction::factory_name)
+  else if (name == "move")
   {
     return MoveAction::Create(json_data);
   }
-  else if (name == ScaleAction::factory_name)
+  else if (name == "scale")
   {
     return ScaleAction::Create(json_data);
   }
-  else if (name == CustomPipelineAction::factory_name)
+  else if (name == "custom_pipeline")
   {
     return CustomPipelineAction::Create(json_data, std::move(library));
   }

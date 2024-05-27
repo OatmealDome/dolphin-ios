@@ -26,7 +26,7 @@ endif()
 # This is inserted into the Info.plist as well.
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15.0" CACHE STRING "")
 
-set(CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_SOURCE_DIR}/CMake/FlagsOverride.cmake")
+set(CMAKE_USER_MAKE_RULES_OVERRIDE "CMake/FlagsOverride.cmake")
 
 project(dolphin-emu)
 
@@ -47,13 +47,13 @@ if (COMPILER STREQUAL "GNU")
   set(COMPILER "GCC") # perfer printing GCC instead of GNU
 endif()
 
-# Enforce minimum compiler versions that support the c++20 features we use
-set (GCC_min_version 11)
-set (Clang_min_version 14)
-set (AppleClang_min_version 14.0.3)
-set (min_xcode_version "14.0") # corresponding xcode version for AppleClang_min_version
+# Enforce minimium compiler versions that support the c++20 features we use
+set (GCC_min_version 10)
+set (Clang_min_version 12)
+set (AppleClang_min_version 13.0.0)
+set (min_xcode_version "13.0") # corrosponding xcode version for AppleClang_min_version
 set (MSVC_min_version 14.32)
-set (min_vs_version "2022 17.2.3") # corresponding Visual Studio version for MSVC_min_version
+set (min_vs_version "2022 17.2.3") # corrosponding Visual Studio version for MSVC_min_version
 
 message(STATUS "Using ${COMPILER} ${CMAKE_CXX_COMPILER_VERSION}")
 
@@ -157,7 +157,7 @@ if(UNIX)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH
-  ${CMAKE_CURRENT_SOURCE_DIR}/CMake
+  ${CMAKE_SOURCE_DIR}/CMake
 )
 
 # Support functions
@@ -405,7 +405,7 @@ endif()
 # All commands and submodule commands also need to see these
 # changes, so just setting them in the project scope via
 # include_directories and link_directories is not sufficient
-if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD|NetBSD")
   set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};/usr/local")
   set(CMAKE_REQUIRED_INCLUDES "/usr/local/include")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/lib")
@@ -538,14 +538,14 @@ if (OPENGL_GL)
 endif()
 
 if(ENABLE_X11)
-  pkg_check_modules(X11 x11 IMPORTED_TARGET)
+  find_package(X11)
   if(X11_FOUND)
     add_definitions(-DHAVE_X11=1)
-    pkg_check_modules(XRANDR xrandr IMPORTED_TARGET)
+    check_lib(XRANDR xrandr Xrandr)
     if(XRANDR_FOUND)
       add_definitions(-DHAVE_XRANDR=1)
     endif()
-    pkg_check_modules(X11_INPUT REQUIRED xi>=1.5.0 IMPORTED_TARGET)
+    pkg_check_modules(X11_INPUT REQUIRED xi>=1.5.0)
     message(STATUS "X11 support enabled")
   else()
     message(WARNING "X11 support enabled but not found. This build will not support X11.")
@@ -662,9 +662,7 @@ if (_M_X86_64)
 endif()
 add_subdirectory(Externals/cpp-optparse)
 
-dolphin_find_optional_system_library_pkgconfig(FMT
-  fmt>=10.1 fmt::fmt Externals/fmt
-)
+dolphin_find_optional_system_library(fmt Externals/fmt 10.1)
 
 add_subdirectory(Externals/imgui)
 add_subdirectory(Externals/implot)
@@ -711,9 +709,7 @@ dolphin_find_optional_system_library_pkgconfig(ZSTD libzstd>=1.4.0 zstd::zstd Ex
 
 dolphin_find_optional_system_library_pkgconfig(ZLIB zlib-ng ZLIB::ZLIB Externals/zlib-ng)
 
-dolphin_find_optional_system_library_pkgconfig(MINIZIP
-  "minizip-ng>=4.0.4;minizip>=4.0.4" minizip::minizip Externals/minizip-ng
-)
+dolphin_find_optional_system_library_pkgconfig(MINIZIP minizip>=3.0.0 minizip::minizip Externals/minizip)
 
 dolphin_find_optional_system_library(LZO Externals/LZO)
 
@@ -737,13 +733,13 @@ endif()
 add_subdirectory(Externals/soundtouch)
 include_directories(Externals/soundtouch)
 
+
 if(NOT ANDROID AND NOT IOS)
 dolphin_find_optional_system_library(CUBEB Externals/cubeb)
 endif()
+
 if(NOT ANDROID AND NOT IOS)
-  dolphin_find_optional_system_library_pkgconfig(
-    LibUSB libusb-1.0 LibUSB::LibUSB Externals/libusb
-  )
+  dolphin_find_optional_system_library(LibUSB Externals/libusb)
   add_definitions(-D__LIBUSB__)
 endif()
 
@@ -830,7 +826,7 @@ if(NOT GIT_FOUND)
 endif()
 add_custom_target(
 	dolphin_scmrev
-	${CMAKE_COMMAND} -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR} -DPROJECT_BINARY_DIR=${PROJECT_BINARY_DIR} -DDISTRIBUTOR=${DISTRIBUTOR} -DDOLPHIN_DEFAULT_UPDATE_TRACK=${DOLPHIN_DEFAULT_UPDATE_TRACK} -DGIT_FOUND=${GIT_FOUND} -DGIT_EXECUTABLE=${GIT_EXECUTABLE} -DDOLPHIN_WC_REVISION=${DOLPHIN_WC_REVISION} -DDOLPHIN_WC_DESCRIBE=${DOLPHIN_WC_DESCRIBE} -DDOLPHIN_WC_BRANCH=${DOLPHIN_WC_BRANCH} -P ${CMAKE_CURRENT_SOURCE_DIR}/CMake/ScmRevGen.cmake
+	${CMAKE_COMMAND} -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR} -DPROJECT_BINARY_DIR=${PROJECT_BINARY_DIR} -DDISTRIBUTOR=${DISTRIBUTOR} -DDOLPHIN_DEFAULT_UPDATE_TRACK=${DOLPHIN_DEFAULT_UPDATE_TRACK} -DGIT_FOUND=${GIT_FOUND} -DGIT_EXECUTABLE=${GIT_EXECUTABLE} -DDOLPHIN_WC_REVISION=${DOLPHIN_WC_REVISION} -DDOLPHIN_WC_DESCRIBE=${DOLPHIN_WC_DESCRIBE} -DDOLPHIN_WC_BRANCH=${DOLPHIN_WC_BRANCH} -P ${CMAKE_SOURCE_DIR}/CMake/ScmRevGen.cmake
 	BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/Source/Core/Common/scmrev.h
 	VERBATIM
 )
@@ -842,16 +838,15 @@ include_directories("${PROJECT_BINARY_DIR}/Source/Core")
 # Unit testing.
 #
 if(ENABLE_TESTS)
-  dolphin_find_optional_system_library_pkgconfig(GTEST
-    gtest gtest::gtest Externals/gtest
-  )
-  # dolphin_find_optional_system_library_pkgconfig() doesn't add an alias if it
-  # uses the bundled libraries, so we add one ourselves.
-  if (NOT TARGET gtest::gtest)
-    add_library(gtest::gtest ALIAS gtest)
+  find_package(GTest)
+  if (GTEST_FOUND)
+    message(STATUS "Using the system gtest")
+    include_directories(${GTEST_INCLUDE_DIRS})
+  else()
+    message(STATUS "Using static gtest from Externals")
+    add_subdirectory(Externals/gtest EXCLUDE_FROM_ALL)
   endif()
-  # Force gtest to link the C runtime dynamically on Windows in order to avoid
-  # runtime mismatches.
+  # Force gtest to link the C runtime dynamically on Windows in order to avoid runtime mismatches.
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 else()
   message(STATUS "Unit tests are disabled")

@@ -3,10 +3,11 @@
 
 #pragma once
 
-#include "InputCommon/ControllerInterface/InputBackend.h"
-
 namespace ciface::Android
 {
-std::unique_ptr<ciface::InputBackend> CreateInputBackend(ControllerInterface* controller_interface);
+void Init();
+void Shutdown();
+
+void PopulateDevices();
 
 }  // namespace ciface::Android

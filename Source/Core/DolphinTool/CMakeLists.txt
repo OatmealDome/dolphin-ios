@@ -1,7 +1,5 @@
 add_executable(dolphin-tool
   ToolHeadlessPlatform.cpp
-  ExtractCommand.cpp
-  ExtractCommand.h
   ConvertCommand.cpp
   ConvertCommand.h
   VerifyCommand.cpp

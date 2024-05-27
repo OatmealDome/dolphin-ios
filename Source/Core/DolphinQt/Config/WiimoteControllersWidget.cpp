@@ -46,10 +46,10 @@ WiimoteControllersWidget::WiimoteControllersWidget(QWidget* parent) : QWidget(pa
   ConnectWidgets();
 
   connect(&Settings::Instance(), &Settings::ConfigChanged, this,
-          [this] { LoadSettings(Core::GetState(Core::System::GetInstance())); });
+          [this] { LoadSettings(Core::GetState()); });
   connect(&Settings::Instance(), &Settings::EmulationStateChanged, this,
           [this](Core::State state) { LoadSettings(state); });
-  LoadSettings(Core::GetState(Core::System::GetInstance()));
+  LoadSettings(Core::GetState());
 }
 
 void WiimoteControllersWidget::UpdateBluetoothAvailableStatus()
@@ -173,16 +173,16 @@ void WiimoteControllersWidget::ConnectWidgets()
 {
   connect(m_wiimote_passthrough, &QRadioButton::toggled, this, [this] {
     SaveSettings();
-    LoadSettings(Core::GetState(Core::System::GetInstance()));
+    LoadSettings(Core::GetState());
   });
   connect(m_wiimote_ciface, &QCheckBox::toggled, this, [this] {
     SaveSettings();
-    LoadSettings(Core::GetState(Core::System::GetInstance()));
+    LoadSettings(Core::GetState());
     WiimoteReal::HandleWiimotesInControllerInterfaceSettingChange();
   });
   connect(m_wiimote_continuous_scanning, &QCheckBox::toggled, this, [this] {
     SaveSettings();
-    LoadSettings(Core::GetState(Core::System::GetInstance()));
+    LoadSettings(Core::GetState());
   });
 
   connect(m_wiimote_real_balance_board, &QCheckBox::toggled, this,
@@ -200,7 +200,7 @@ void WiimoteControllersWidget::ConnectWidgets()
   {
     connect(m_wiimote_boxes[i], &QComboBox::currentIndexChanged, this, [this] {
       SaveSettings();
-      LoadSettings(Core::GetState(Core::System::GetInstance()));
+      LoadSettings(Core::GetState());
     });
     connect(m_wiimote_buttons[i], &QPushButton::clicked, this,
             [this, i] { OnWiimoteConfigure(i); });

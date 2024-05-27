@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "DolphinQt/CheatSearchFactoryWidget.h"
-#include "DolphinQt/QtUtils/WrapInScrollArea.h"
 
 #include <string>
 #include <vector>
@@ -125,7 +124,7 @@ void CheatSearchFactoryWidget::CreateWidgets()
 
   layout->addStretch();
 
-  WrapInScrollArea(this, layout);
+  setLayout(layout);
 }
 
 void CheatSearchFactoryWidget::ConnectWidgets()
@@ -158,8 +157,7 @@ void CheatSearchFactoryWidget::OnNewSearchClicked()
   PowerPC::RequestedAddressSpace address_space;
   if (m_standard_address_space->isChecked())
   {
-    auto& system = Core::System::GetInstance();
-    const Core::State core_state = Core::GetState(system);
+    const Core::State core_state = Core::GetState();
     if (core_state != Core::State::Running && core_state != Core::State::Paused)
     {
       ModalMessageBox::warning(
@@ -168,6 +166,7 @@ void CheatSearchFactoryWidget::OnNewSearchClicked()
       return;
     }
 
+    auto& system = Core::System::GetInstance();
     auto& memory = system.GetMemory();
     memory_ranges.emplace_back(0x80000000, memory.GetRamSizeReal());
     if (system.IsWii())

@@ -39,8 +39,7 @@ bool UpdateDiscordPresenceRaw(const std::string& details = {}, const std::string
                               const int64_t start_timestamp = 0, const int64_t end_timestamp = 0,
                               const int party_size = 0, const int party_max = 0);
 void UpdateDiscordPresence(int party_size = 0, SecretType type = SecretType::Empty,
-                           const std::string& secret = {}, const std::string& current_game = {},
-                           const bool reset_timer = false);
+                           const std::string& secret = {}, const std::string& current_game = {});
 std::string CreateSecretFromIPAddress(const std::string& ip_address, int port);
 void Shutdown();
 void SetDiscordPresenceEnabled(bool enabled);

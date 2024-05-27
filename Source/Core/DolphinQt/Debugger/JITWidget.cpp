@@ -14,7 +14,6 @@
 #include "Common/GekkoDisassembler.h"
 #include "Core/Core.h"
 #include "Core/PowerPC/PPCAnalyst.h"
-#include "Core/System.h"
 #include "UICommon/Disassembler.h"
 
 #include "DolphinQt/Host.h"
@@ -137,7 +136,7 @@ void JITWidget::Update()
   if (!isVisible())
     return;
 
-  if (!m_address || (Core::GetState(Core::System::GetInstance()) != Core::State::Paused))
+  if (!m_address || (Core::GetState() != Core::State::Paused))
   {
     m_ppc_asm_widget->setHtml(QStringLiteral("<i>%1</i>").arg(tr("(ppc)")));
     m_host_asm_widget->setHtml(QStringLiteral("<i>%1</i>").arg(tr("(host)")));

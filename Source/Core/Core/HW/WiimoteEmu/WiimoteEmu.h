@@ -34,7 +34,6 @@ class Force;
 class IMUAccelerometer;
 class IMUGyroscope;
 class IMUCursor;
-class IRPassthrough;
 class ModifySettingsButton;
 class Output;
 class Tilt;
@@ -60,7 +59,6 @@ enum class WiimoteGroup
   IMUAccelerometer,
   IMUGyroscope,
   IMUPoint,
-  IRPassthrough,
 };
 
 enum class NunchukGroup;
@@ -123,7 +121,6 @@ public:
   static constexpr const char* ACCELEROMETER_GROUP = "IMUAccelerometer";
   static constexpr const char* GYROSCOPE_GROUP = "IMUGyroscope";
   static constexpr const char* IR_GROUP = "IR";
-  static constexpr const char* IR_PASSTHROUGH_GROUP = "IRPassthrough";
 
   static constexpr const char* A_BUTTON = "A";
   static constexpr const char* B_BUTTON = "B";
@@ -304,7 +301,6 @@ private:
   ControllerEmu::IMUAccelerometer* m_imu_accelerometer;
   ControllerEmu::IMUGyroscope* m_imu_gyroscope;
   ControllerEmu::IMUCursor* m_imu_ir;
-  ControllerEmu::IRPassthrough* m_ir_passthrough;
 
   ControllerEmu::SettingValue<bool> m_sideways_setting;
   ControllerEmu::SettingValue<bool> m_upright_setting;

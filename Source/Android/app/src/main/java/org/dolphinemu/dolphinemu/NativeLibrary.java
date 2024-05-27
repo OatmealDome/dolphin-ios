@@ -21,7 +21,6 @@ import org.dolphinemu.dolphinemu.utils.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedHashMap;
-import java.util.concurrent.Semaphore;
 
 /**
  * Class which contains methods that interact
@@ -29,7 +28,7 @@ import java.util.concurrent.Semaphore;
  */
 public final class NativeLibrary
 {
-  private static final Semaphore sAlertMessageSemaphore = new Semaphore(0);
+  private static final Object sAlertMessageLock = new Object();
   private static boolean sIsShowingAlertMessage = false;
 
   private static WeakReference<EmulationActivity> sEmulationActivity = new WeakReference<>(null);
@@ -386,9 +385,16 @@ public final class NativeLibrary
   public static native boolean IsRunningAndUnpaused();
 
   /**
-   * Writes out the JitBlock Cache log dump
+   * Enables or disables CPU block profiling
+   *
+   * @param enable
    */
-  public static native void WriteJitBlockLogDump();
+  public static native void SetProfiling(boolean enable);
+
+  /**
+   * Writes out the block profile results
+   */
+  public static native void WriteProfileResults();
 
   /**
    * Native EGL functions not exposed by Java bindings
@@ -449,14 +455,6 @@ public final class NativeLibrary
   private static native String GetCurrentTitleDescriptionUnchecked();
 
   @Keep
-  public static void displayToastMsg(final String text, final boolean long_length)
-  {
-    final int length = long_length ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT;
-    new Handler(Looper.getMainLooper())
-            .post(() -> Toast.makeText(DolphinApplication.getAppContext(), text, length).show());
-  }
-
-  @Keep
   public static boolean displayAlertMsg(final String caption, final String text,
           final boolean yesNo, final boolean isWarning, final boolean nonBlocking)
   {
@@ -468,7 +466,9 @@ public final class NativeLibrary
     // and are allowed to block. As a fallback, we can use toasts.
     if (emulationActivity == null || nonBlocking)
     {
-      displayToastMsg(text, true);
+      new Handler(Looper.getMainLooper()).post(
+              () -> Toast.makeText(DolphinApplication.getAppContext(), text, Toast.LENGTH_LONG)
+                      .show());
     }
     else
     {
@@ -492,12 +492,15 @@ public final class NativeLibrary
       });
 
       // Wait for the lock to notify that it is complete.
-      try
+      synchronized (sAlertMessageLock)
       {
-        sAlertMessageSemaphore.acquire();
-      }
-      catch (InterruptedException ignored)
-      {
+        try
+        {
+          sAlertMessageLock.wait();
+        }
+        catch (Exception ignored)
+        {
+        }
       }
 
       if (yesNo)
@@ -517,7 +520,10 @@ public final class NativeLibrary
 
   public static void NotifyAlertMessageLock()
   {
-    sAlertMessageSemaphore.release();
+    synchronized (sAlertMessageLock)
+    {
+      sAlertMessageLock.notify();
+    }
   }
 
   public static void setEmulationActivity(EmulationActivity emulationActivity)

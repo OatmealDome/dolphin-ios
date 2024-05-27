@@ -17,7 +17,6 @@ namespace Core
 class CPUThreadGuard;
 class System;
 }  // namespace Core
-class PPCSymbolDB;
 
 void ApplyMemoryPatch(const Core::CPUThreadGuard&, Common::Debug::MemoryPatch& patch,
                       bool store_existing_value = true);
@@ -37,7 +36,7 @@ private:
 class PPCDebugInterface final : public Core::DebugInterface
 {
 public:
-  explicit PPCDebugInterface(Core::System& system, PPCSymbolDB& ppc_symbol_db);
+  explicit PPCDebugInterface(Core::System& system);
   ~PPCDebugInterface() override;
 
   // Watches
@@ -102,7 +101,7 @@ public:
   void Step() override {}
   void RunToBreakpoint() override;
   u32 GetColor(const Core::CPUThreadGuard* guard, u32 address) const override;
-  std::string_view GetDescription(u32 address) const override;
+  std::string GetDescription(u32 address) const override;
 
   std::shared_ptr<Core::NetworkCaptureLogger> NetworkLogger();
 
@@ -113,5 +112,4 @@ private:
   PPCPatches m_patches;
   std::shared_ptr<Core::NetworkCaptureLogger> m_network_logger;
   Core::System& m_system;
-  PPCSymbolDB& m_ppc_symbol_db;
 };

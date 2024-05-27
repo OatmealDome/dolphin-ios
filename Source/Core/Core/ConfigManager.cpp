@@ -170,8 +170,7 @@ void SConfig::SetRunningGameMetadata(const std::string& game_id, const std::stri
     return;
 
 #ifdef USE_RETRO_ACHIEVEMENTS
-  if (game_id != "00000000")
-    AchievementManager::GetInstance().CloseGame();
+  AchievementManager::GetInstance().SetDisabled(true);
 #endif  // USE_RETRO_ACHIEVEMENTS
 
   if (game_id == "00000000")
@@ -188,31 +187,30 @@ void SConfig::SetRunningGameMetadata(const std::string& game_id, const std::stri
   m_title_description = title_database.Describe(m_gametdb_id, language);
   NOTICE_LOG_FMT(CORE, "Active title: {}", m_title_description);
   Host_TitleChanged();
-  if (Core::IsRunning(system))
+  if (Core::IsRunning())
   {
-    Core::UpdateTitle(system);
+    Core::UpdateTitle();
   }
 
   Config::AddLayer(ConfigLoaders::GenerateGlobalGameConfigLoader(game_id, revision));
   Config::AddLayer(ConfigLoaders::GenerateLocalGameConfigLoader(game_id, revision));
 
-  if (Core::IsRunning(system))
+  if (Core::IsRunning())
     DolphinAnalytics::Instance().ReportGameStart();
 }
 
 void SConfig::OnNewTitleLoad(const Core::CPUThreadGuard& guard)
 {
-  auto& system = guard.GetSystem();
-  if (!Core::IsRunning(system))
+  if (!Core::IsRunning())
     return;
 
-  auto& ppc_symbol_db = system.GetPPCSymbolDB();
-  if (!ppc_symbol_db.IsEmpty())
+  if (!g_symbolDB.IsEmpty())
   {
-    ppc_symbol_db.Clear();
-    Host_PPCSymbolsChanged();
+    g_symbolDB.Clear();
+    Host_NotifyMapLoaded();
   }
-  CBoot::LoadMapFromFilename(guard, ppc_symbol_db);
+  CBoot::LoadMapFromFilename(guard);
+  auto& system = Core::System::GetInstance();
   HLE::Reload(system);
   PatchEngine::Reload();
   HiresTexture::Update();

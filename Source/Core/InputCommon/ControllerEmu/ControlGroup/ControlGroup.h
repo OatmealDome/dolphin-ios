@@ -49,8 +49,7 @@ enum class GroupType
   Shake,
   IMUAccelerometer,
   IMUGyroscope,
-  IMUCursor,
-  IRPassthrough,
+  IMUCursor
 };
 
 class ControlGroup

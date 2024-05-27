@@ -27,7 +27,6 @@
 #include "Core/PowerPC/PPCSymbolDB.h"
 #include "Core/PowerPC/PowerPC.h"
 #include "Core/System.h"
-#include "DolphinQt/Debugger/BranchWatchDialog.h"
 #include "DolphinQt/Host.h"
 #include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/Settings.h"
@@ -36,9 +35,7 @@ static const QString BOX_SPLITTER_STYLESHEET = QStringLiteral(
     "QSplitter::handle { border-top: 1px dashed black; width: 1px; margin-left: 10px; "
     "margin-right: 10px; }");
 
-CodeWidget::CodeWidget(QWidget* parent)
-    : QDockWidget(parent), m_system(Core::System::GetInstance()),
-      m_ppc_symbol_db(m_system.GetPPCSymbolDB())
+CodeWidget::CodeWidget(QWidget* parent) : QDockWidget(parent), m_system(Core::System::GetInstance())
 {
   setWindowTitle(tr("Code"));
   setObjectName(QStringLiteral("code"));
@@ -60,10 +57,12 @@ CodeWidget::CodeWidget(QWidget* parent)
           [this](bool visible) { setHidden(!visible); });
 
   connect(Host::GetInstance(), &Host::UpdateDisasmDialog, this, [this] {
-    if (Core::GetState(m_system) == Core::State::Paused)
+    if (Core::GetState() == Core::State::Paused)
       SetAddress(m_system.GetPPCState().pc, CodeViewWidget::SetAddressUpdate::WithoutUpdate);
     Update();
   });
+
+  connect(Host::GetInstance(), &Host::NotifyMapLoaded, this, &CodeWidget::UpdateSymbols);
 
   connect(&Settings::Instance(), &Settings::DebugModeToggled, this,
           [this](bool enabled) { setHidden(!enabled || !Settings::Instance().IsCodeVisible()); });
@@ -106,7 +105,7 @@ void CodeWidget::CreateWidgets()
   layout->setSpacing(0);
 
   m_search_address = new QLineEdit;
-  m_branch_watch = new QPushButton(tr("Branch Watch"));
+  m_code_diff = new QPushButton(tr("Diff"));
   m_code_view = new CodeViewWidget;
 
   m_search_address->setPlaceholderText(tr("Search Address"));
@@ -150,7 +149,7 @@ void CodeWidget::CreateWidgets()
   m_code_splitter->addWidget(m_code_view);
 
   layout->addWidget(m_search_address, 0, 0);
-  layout->addWidget(m_branch_watch, 0, 2);
+  layout->addWidget(m_code_diff, 0, 2);
   layout->addWidget(m_code_splitter, 1, 0, -1, -1);
 
   QWidget* widget = new QWidget(this);
@@ -171,16 +170,18 @@ void CodeWidget::ConnectWidgets()
   connect(m_search_address, &QLineEdit::returnPressed, this, &CodeWidget::OnSearchAddress);
   connect(m_search_symbols, &QLineEdit::textChanged, this, &CodeWidget::OnSearchSymbols);
   connect(m_search_calls, &QLineEdit::textChanged, this, [this]() {
-    if (const Common::Symbol* symbol = m_ppc_symbol_db.GetSymbolFromAddr(m_code_view->GetAddress()))
+    const Common::Symbol* symbol = g_symbolDB.GetSymbolFromAddr(m_code_view->GetAddress());
+    if (symbol)
       UpdateFunctionCalls(symbol);
   });
   connect(m_search_callers, &QLineEdit::textChanged, this, [this]() {
-    if (const Common::Symbol* symbol = m_ppc_symbol_db.GetSymbolFromAddr(m_code_view->GetAddress()))
+    const Common::Symbol* symbol = g_symbolDB.GetSymbolFromAddr(m_code_view->GetAddress());
+    if (symbol)
       UpdateFunctionCallers(symbol);
   });
   connect(m_search_callstack, &QLineEdit::textChanged, this, &CodeWidget::UpdateCallstack);
 
-  connect(m_branch_watch, &QPushButton::pressed, this, &CodeWidget::OnBranchWatchDialog);
+  connect(m_code_diff, &QPushButton::pressed, this, &CodeWidget::OnDiff);
 
   connect(m_symbols_list, &QListWidget::itemPressed, this, &CodeWidget::OnSelectSymbol);
   connect(m_callstack_list, &QListWidget::itemPressed, this, &CodeWidget::OnSelectCallstack);
@@ -189,7 +190,16 @@ void CodeWidget::ConnectWidgets()
   connect(m_function_callers_list, &QListWidget::itemPressed, this,
           &CodeWidget::OnSelectFunctionCallers);
 
-  connect(Host::GetInstance(), &Host::PPCSymbolsChanged, this, &CodeWidget::OnPPCSymbolsChanged);
+  connect(m_code_view, &CodeViewWidget::SymbolsChanged, this, [this]() {
+    UpdateCallstack();
+    UpdateSymbols();
+    const Common::Symbol* symbol = g_symbolDB.GetSymbolFromAddr(m_code_view->GetAddress());
+    if (symbol)
+    {
+      UpdateFunctionCalls(symbol);
+      UpdateFunctionCallers(symbol);
+    }
+  });
   connect(m_code_view, &CodeViewWidget::BreakpointsChanged, this,
           [this] { emit BreakpointsChanged(); });
   connect(m_code_view, &CodeViewWidget::UpdateCodeWidget, this, &CodeWidget::Update);
@@ -199,27 +209,15 @@ void CodeWidget::ConnectWidgets()
   connect(m_code_view, &CodeViewWidget::ShowMemory, this, &CodeWidget::ShowMemory);
 }
 
-void CodeWidget::OnBranchWatchDialog()
+void CodeWidget::OnDiff()
 {
-  if (m_branch_watch_dialog == nullptr)
-  {
-    m_branch_watch_dialog = new BranchWatchDialog(m_system, m_system.GetPowerPC().GetBranchWatch(),
-                                                  m_ppc_symbol_db, this, this);
-  }
-  m_branch_watch_dialog->show();
-  m_branch_watch_dialog->raise();
-  m_branch_watch_dialog->activateWindow();
-}
-
-void CodeWidget::OnPPCSymbolsChanged()
-{
-  UpdateSymbols();
-  UpdateCallstack();
-  if (const Common::Symbol* symbol = m_ppc_symbol_db.GetSymbolFromAddr(m_code_view->GetAddress()))
-  {
-    UpdateFunctionCalls(symbol);
-    UpdateFunctionCallers(symbol);
-  }
+  if (!m_diff_dialog)
+    m_diff_dialog = new CodeDiffDialog(this);
+  m_diff_dialog->setWindowFlag(Qt::WindowMinimizeButtonHint);
+  SetQWidgetWindowDecorations(m_diff_dialog);
+  m_diff_dialog->show();
+  m_diff_dialog->raise();
+  m_diff_dialog->activateWindow();
 }
 
 void CodeWidget::OnSearchAddress()
@@ -260,7 +258,7 @@ void CodeWidget::OnSelectSymbol()
     return;
 
   const u32 address = items[0]->data(Qt::UserRole).toUInt();
-  const Common::Symbol* const symbol = m_ppc_symbol_db.GetSymbolFromAddr(address);
+  const Common::Symbol* symbol = g_symbolDB.GetSymbolFromAddr(address);
 
   m_code_view->SetAddress(address, CodeViewWidget::SetAddressUpdate::WithUpdate);
   UpdateCallstack();
@@ -321,7 +319,7 @@ void CodeWidget::Update()
   if (!isVisible())
     return;
 
-  const Common::Symbol* const symbol = m_ppc_symbol_db.GetSymbolFromAddr(m_code_view->GetAddress());
+  const Common::Symbol* symbol = g_symbolDB.GetSymbolFromAddr(m_code_view->GetAddress());
 
   UpdateCallstack();
 
@@ -339,11 +337,17 @@ void CodeWidget::UpdateCallstack()
 {
   m_callstack_list->clear();
 
-  if (Core::GetState(m_system) != Core::State::Paused)
+  if (Core::GetState() != Core::State::Paused)
     return;
 
   std::vector<Dolphin_Debugger::CallstackEntry> stack;
-  if (!Dolphin_Debugger::GetCallstack(Core::CPUThreadGuard{m_system}, stack))
+
+  const bool success = [this, &stack] {
+    Core::CPUThreadGuard guard(m_system);
+    return Dolphin_Debugger::GetCallstack(guard, stack);
+  }();
+
+  if (!success)
   {
     m_callstack_list->addItem(tr("Invalid callstack"));
     return;
@@ -355,7 +359,7 @@ void CodeWidget::UpdateCallstack()
   {
     const QString name = QString::fromStdString(frame.Name.substr(0, frame.Name.length() - 1));
 
-    if (!name.contains(filter, Qt::CaseInsensitive))
+    if (name.toUpper().indexOf(filter.toUpper()) == -1)
       continue;
 
     auto* item = new QListWidgetItem(name);
@@ -371,7 +375,7 @@ void CodeWidget::UpdateSymbols()
                                 m_symbols_list->selectedItems()[0]->text();
   m_symbols_list->clear();
 
-  for (const auto& symbol : m_ppc_symbol_db.Symbols())
+  for (const auto& symbol : g_symbolDB.Symbols())
   {
     QString name = QString::fromStdString(symbol.second.name);
 
@@ -385,7 +389,7 @@ void CodeWidget::UpdateSymbols()
 
     item->setData(Qt::UserRole, symbol.second.address);
 
-    if (name.contains(m_symbol_filter, Qt::CaseInsensitive))
+    if (name.toUpper().indexOf(m_symbol_filter.toUpper()) != -1)
       m_symbols_list->addItem(item);
   }
 
@@ -400,14 +404,14 @@ void CodeWidget::UpdateFunctionCalls(const Common::Symbol* symbol)
   for (const auto& call : symbol->calls)
   {
     const u32 addr = call.function;
-    const Common::Symbol* const call_symbol = m_ppc_symbol_db.GetSymbolFromAddr(addr);
+    const Common::Symbol* call_symbol = g_symbolDB.GetSymbolFromAddr(addr);
 
     if (call_symbol)
     {
       const QString name =
           QString::fromStdString(fmt::format("> {} ({:08x})", call_symbol->name, addr));
 
-      if (!name.contains(filter, Qt::CaseInsensitive))
+      if (name.toUpper().indexOf(filter.toUpper()) == -1)
         continue;
 
       auto* item = new QListWidgetItem(name);
@@ -425,14 +429,14 @@ void CodeWidget::UpdateFunctionCallers(const Common::Symbol* symbol)
   for (const auto& caller : symbol->callers)
   {
     const u32 addr = caller.call_address;
-    const Common::Symbol* const caller_symbol = m_ppc_symbol_db.GetSymbolFromAddr(addr);
+    const Common::Symbol* caller_symbol = g_symbolDB.GetSymbolFromAddr(addr);
 
     if (caller_symbol)
     {
       const QString name =
           QString::fromStdString(fmt::format("< {} ({:08x})", caller_symbol->name, addr));
 
-      if (!name.contains(filter, Qt::CaseInsensitive))
+      if (name.toUpper().indexOf(filter.toUpper()) == -1)
         continue;
 
       auto* item = new QListWidgetItem(name);
@@ -460,10 +464,6 @@ void CodeWidget::Step()
   power_pc.SetMode(old_mode);
   Core::DisplayMessage(tr("Step successful!").toStdString(), 2000);
   // Will get a UpdateDisasmDialog(), don't update the GUI here.
-
-  // TODO: Step doesn't cause EmulationStateChanged to be emitted, so it has to call this manually.
-  if (m_branch_watch_dialog != nullptr)
-    m_branch_watch_dialog->Update();
 }
 
 void CodeWidget::StepOver()

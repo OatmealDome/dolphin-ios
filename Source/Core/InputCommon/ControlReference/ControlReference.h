@@ -9,12 +9,6 @@
 #include "InputCommon/ControlReference/ExpressionParser.h"
 #include "InputCommon/ControllerInterface/CoreDevice.h"
 
-namespace ControllerEmu
-{
-template <typename T>
-T ControlStateCast(ControlState value);
-}
-
 // ControlReference
 //
 // These are what you create to actually use the inputs, InputReference or OutputReference.
@@ -37,10 +31,7 @@ public:
   virtual bool IsInput() const = 0;
 
   template <typename T>
-  T GetState()
-  {
-    return ControllerEmu::ControlStateCast<T>(State());
-  }
+  T GetState();
 
   int BoundCount() const;
   ciface::ExpressionParser::ParseStatus GetParseStatus() const;
@@ -60,27 +51,24 @@ protected:
       ciface::ExpressionParser::ParseStatus::EmptyExpression;
 };
 
-namespace ControllerEmu
-{
 template <>
-inline bool ControlStateCast<bool>(ControlState value)
+inline bool ControlReference::GetState<bool>()
 {
   // Round to nearest of 0 or 1.
-  return std::lround(value) > 0;
+  return std::lround(State()) > 0;
 }
 
 template <>
-inline int ControlStateCast<int>(ControlState value)
+inline int ControlReference::GetState<int>()
 {
-  return std::lround(value);
+  return std::lround(State());
 }
 
 template <>
-inline ControlState ControlStateCast<ControlState>(ControlState value)
+inline ControlState ControlReference::GetState<ControlState>()
 {
-  return value;
+  return State();
 }
-}  // namespace ControllerEmu
 
 //
 // InputReference

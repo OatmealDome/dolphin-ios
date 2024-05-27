@@ -24,7 +24,6 @@
 #include "Core/Core.h"
 #include "Core/DolphinAnalytics.h"
 #include "Core/Host.h"
-#include "Core/System.h"
 
 #include "UICommon/CommandLineParse.h"
 #ifdef USE_DISCORD_PRESENCE
@@ -57,7 +56,7 @@ std::vector<std::string> Host_GetPreferredLocales()
   return {};
 }
 
-void Host_PPCSymbolsChanged()
+void Host_NotifyMapLoaded()
 {
 }
 
@@ -305,7 +304,7 @@ int main(int argc, char* argv[])
 
   DolphinAnalytics::Instance().ReportDolphinStart("nogui");
 
-  if (!BootManager::BootCore(Core::System::GetInstance(), std::move(boot), wsi))
+  if (!BootManager::BootCore(std::move(boot), wsi))
   {
     fprintf(stderr, "Could not boot the specified file\n");
     return 1;
@@ -316,9 +315,9 @@ int main(int argc, char* argv[])
 #endif
 
   s_platform->MainLoop();
-  Core::Stop(Core::System::GetInstance());
+  Core::Stop();
 
-  Core::Shutdown(Core::System::GetInstance());
+  Core::Shutdown();
   s_platform.reset();
 
   return 0;

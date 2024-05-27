@@ -24,8 +24,7 @@
 
 #include "VideoCommon/VideoEvents.h"
 
-CheatsManager::CheatsManager(Core::System& system, QWidget* parent)
-    : QDialog(parent), m_system(system)
+CheatsManager::CheatsManager(QWidget* parent) : QDialog(parent)
 {
   setWindowTitle(tr("Cheats Manager"));
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -36,7 +35,7 @@ CheatsManager::CheatsManager(Core::System& system, QWidget* parent)
   CreateWidgets();
   ConnectWidgets();
 
-  RefreshCodeTabs(Core::GetState(m_system), true);
+  RefreshCodeTabs(Core::GetState(), true);
 
   auto& settings = Settings::GetQSettings();
   restoreGeometry(settings.value(QStringLiteral("cheatsmanager/geometry")).toByteArray());
@@ -170,7 +169,7 @@ void CheatsManager::CreateWidgets()
 
 void CheatsManager::OnNewSessionCreated(const Cheats::CheatSearchSessionBase& session)
 {
-  auto* w = new CheatSearchWidget(m_system, session.Clone());
+  auto* w = new CheatSearchWidget(session.Clone());
   const int tab_index = m_tab_widget->addTab(w, tr("Cheat Search"));
   w->connect(w, &CheatSearchWidget::ActionReplayCodeGenerated, this,
              [this](const ActionReplay::ARCode& ar_code) {

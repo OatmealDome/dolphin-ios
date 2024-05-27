@@ -23,7 +23,6 @@
 #include "Core/AchievementManager.h"
 #include "Core/Config/MainSettings.h"
 #include "Core/Config/SessionSettings.h"
-#include "Core/Core.h"
 #include "Core/CoreTiming.h"
 #include "Core/DolphinAnalytics.h"
 #include "Core/HW/AudioInterface.h"
@@ -399,7 +398,8 @@ void DVDInterface::SetDisc(std::unique_ptr<DiscIO::VolumeDisc> disc,
   }
 
 #ifdef USE_RETRO_ACHIEVEMENTS
-  AchievementManager::GetInstance().LoadGame("", disc.get());
+  AchievementManager::GetInstance().HashGame(disc.get(),
+                                             [](AchievementManager::ResponseType r_type) {});
 #endif  // USE_RETRO_ACHIEVEMENTS
 
   // Assume that inserting a disc requires having an empty disc before
@@ -419,7 +419,7 @@ bool DVDInterface::IsDiscInside() const
 
 void DVDInterface::AutoChangeDiscCallback(Core::System& system, u64 userdata, s64 cyclesLate)
 {
-  system.GetDVDInterface().AutoChangeDisc(Core::CPUThreadGuard{system});
+  system.GetDVDInterface().AutoChangeDisc();
 }
 
 void DVDInterface::EjectDiscCallback(Core::System& system, u64 userdata, s64 cyclesLate)
@@ -441,7 +441,7 @@ void DVDInterface::InsertDiscCallback(Core::System& system, u64 userdata, s64 cy
 }
 
 // Must only be called on the CPU thread
-void DVDInterface::EjectDisc(const Core::CPUThreadGuard& guard, EjectCause cause)
+void DVDInterface::EjectDisc(EjectCause cause)
 {
   m_system.GetCoreTiming().ScheduleEvent(0, m_eject_disc);
   if (cause == EjectCause::User)
@@ -449,8 +449,7 @@ void DVDInterface::EjectDisc(const Core::CPUThreadGuard& guard, EjectCause cause
 }
 
 // Must only be called on the CPU thread
-void DVDInterface::ChangeDisc(const Core::CPUThreadGuard& guard,
-                              const std::vector<std::string>& paths)
+void DVDInterface::ChangeDisc(const std::vector<std::string>& paths)
 {
   ASSERT_MSG(DISCIO, !paths.empty(), "Trying to insert an empty list of discs");
 
@@ -460,11 +459,11 @@ void DVDInterface::ChangeDisc(const Core::CPUThreadGuard& guard,
     m_auto_disc_change_index = 0;
   }
 
-  ChangeDisc(guard, paths[0]);
+  ChangeDisc(paths[0]);
 }
 
 // Must only be called on the CPU thread
-void DVDInterface::ChangeDisc(const Core::CPUThreadGuard& guard, const std::string& new_path)
+void DVDInterface::ChangeDisc(const std::string& new_path)
 {
   if (!m_disc_path_to_insert.empty())
   {
@@ -472,7 +471,7 @@ void DVDInterface::ChangeDisc(const Core::CPUThreadGuard& guard, const std::stri
     return;
   }
 
-  EjectDisc(guard, EjectCause::User);
+  EjectDisc(EjectCause::User);
 
   m_disc_path_to_insert = new_path;
   m_system.GetCoreTiming().ScheduleEvent(m_system.GetSystemTimers().GetTicksPerSecond(),
@@ -492,13 +491,13 @@ void DVDInterface::ChangeDisc(const Core::CPUThreadGuard& guard, const std::stri
 }
 
 // Must only be called on the CPU thread
-bool DVDInterface::AutoChangeDisc(const Core::CPUThreadGuard& guard)
+bool DVDInterface::AutoChangeDisc()
 {
   if (m_auto_disc_change_paths.empty())
     return false;
 
   m_auto_disc_change_index = (m_auto_disc_change_index + 1) % m_auto_disc_change_paths.size();
-  ChangeDisc(guard, m_auto_disc_change_paths[m_auto_disc_change_index]);
+  ChangeDisc(m_auto_disc_change_paths[m_auto_disc_change_index]);
   return true;
 }
 
@@ -1097,7 +1096,7 @@ void DVDInterface::ExecuteCommand(ReplyType reply_type)
     }
     else if (force_eject)
     {
-      EjectDisc(Core::CPUThreadGuard{m_system}, EjectCause::Software);
+      EjectDisc(EjectCause::Software);
     }
     break;
   }

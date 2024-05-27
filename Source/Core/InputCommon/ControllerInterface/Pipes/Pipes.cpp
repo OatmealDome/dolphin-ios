@@ -39,19 +39,7 @@ static double StringToDouble(const std::string& text)
   return result;
 }
 
-class InputBackend final : public ciface::InputBackend
-{
-public:
-  using ciface::InputBackend::InputBackend;
-  void PopulateDevices() override;
-};
-
-std::unique_ptr<ciface::InputBackend> CreateInputBackend(ControllerInterface* controller_interface)
-{
-  return std::make_unique<InputBackend>(controller_interface);
-}
-
-void InputBackend::PopulateDevices()
+void PopulateDevices()
 {
   // Search the Pipes directory for files that we can open in read-only,
   // non-blocking mode. The device name is the virtual name of the file.

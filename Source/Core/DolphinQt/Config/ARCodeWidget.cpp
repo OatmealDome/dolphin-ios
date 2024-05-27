@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "DolphinQt/Config/ARCodeWidget.h"
-#include "DolphinQt/QtUtils/WrapInScrollArea.h"
 
 #include <algorithm>
 #include <utility>
@@ -87,7 +86,7 @@ void ARCodeWidget::CreateWidgets()
   layout->addWidget(m_code_list);
   layout->addLayout(button_layout);
 
-  WrapInScrollArea(this, layout);
+  setLayout(layout);
 }
 
 void ARCodeWidget::ConnectWidgets()

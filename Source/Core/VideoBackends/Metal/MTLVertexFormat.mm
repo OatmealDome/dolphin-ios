@@ -49,9 +49,6 @@ static MTLVertexFormat ConvertFormat(ComponentFormat format, int count, bool int
       default: return MTLVertexFormatInvalid;
       }
     case ComponentFormat::Float:
-    case ComponentFormat::InvalidFloat5:
-    case ComponentFormat::InvalidFloat6:
-    case ComponentFormat::InvalidFloat7:
       switch (count)
       {
       case 1: return MTLVertexFormatFloat;
@@ -103,9 +100,6 @@ static MTLVertexFormat ConvertFormat(ComponentFormat format, int count, bool int
       default: return MTLVertexFormatInvalid;
       }
     case ComponentFormat::Float:
-    case ComponentFormat::InvalidFloat5:
-    case ComponentFormat::InvalidFloat6:
-    case ComponentFormat::InvalidFloat7:
       switch (count)
       {
       case 1: return MTLVertexFormatFloat;

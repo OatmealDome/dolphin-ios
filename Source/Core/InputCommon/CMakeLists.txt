@@ -37,8 +37,6 @@ add_library(inputcommon
   ControllerEmu/ControlGroup/IMUCursor.h
   ControllerEmu/ControlGroup/IMUGyroscope.cpp
   ControllerEmu/ControlGroup/IMUGyroscope.h
-  ControllerEmu/ControlGroup/IRPassthrough.cpp
-  ControllerEmu/ControlGroup/IRPassthrough.h
   ControllerEmu/ControlGroup/MixedTriggers.cpp
   ControllerEmu/ControlGroup/MixedTriggers.h
   ControllerEmu/ControlGroup/ModifySettingsButton.cpp
@@ -114,6 +112,8 @@ elseif(APPLE AND NOT IOS)
     ControllerInterface/Quartz/Quartz.mm
     ControllerInterface/Quartz/QuartzKeyboardAndMouse.h
     ControllerInterface/Quartz/QuartzKeyboardAndMouse.mm
+    ControllerInterface/ForceFeedback/ForceFeedbackDevice.cpp
+    ControllerInterface/ForceFeedback/ForceFeedbackDevice.h
   )
   target_link_libraries(inputcommon PRIVATE
     ${COREFOUNDATION_LIBRARY}
@@ -147,12 +147,14 @@ elseif(IOS)
     ${GAMECONTROLLER_LIBRARY}
   )
 elseif(X11_FOUND)
-  target_include_directories(inputcommon PUBLIC ${X11_INPUT_INCLUDE_DIRS})
   target_sources(inputcommon PRIVATE
     ControllerInterface/Xlib/XInput2.cpp
     ControllerInterface/Xlib/XInput2.h
   )
-  target_link_libraries(inputcommon PRIVATE PkgConfig::X11_INPUT)
+  target_link_libraries(inputcommon PUBLIC
+    ${X11_LIBRARIES}
+    ${X11_INPUT_LIBRARIES}
+  )
 elseif(ANDROID)
   target_compile_definitions(inputcommon PRIVATE -DCIFACE_USE_ANDROID)
   target_sources(inputcommon PRIVATE

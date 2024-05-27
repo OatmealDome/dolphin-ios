@@ -351,6 +351,11 @@ bool CBoot::DVDReadDiscID(Core::System& system, const DiscIO::VolumeDisc& disc, 
   return true;
 }
 
+void CBoot::UpdateDebugger_MapLoaded()
+{
+  Host_NotifyMapLoaded();
+}
+
 // Get map file paths for the active title.
 bool CBoot::FindMapFile(std::string* existing_map_file, std::string* writable_map_file)
 {
@@ -371,13 +376,13 @@ bool CBoot::FindMapFile(std::string* existing_map_file, std::string* writable_ma
   return false;
 }
 
-bool CBoot::LoadMapFromFilename(const Core::CPUThreadGuard& guard, PPCSymbolDB& ppc_symbol_db)
+bool CBoot::LoadMapFromFilename(const Core::CPUThreadGuard& guard)
 {
   std::string strMapFilename;
   bool found = FindMapFile(&strMapFilename, nullptr);
-  if (found && ppc_symbol_db.LoadMap(guard, strMapFilename))
+  if (found && g_symbolDB.LoadMap(guard, strMapFilename))
   {
-    Host_PPCSymbolsChanged();
+    UpdateDebugger_MapLoaded();
     return true;
   }
 
@@ -509,10 +514,10 @@ bool CBoot::BootUp(Core::System& system, const Core::CPUThreadGuard& guard,
 {
   SConfig& config = SConfig::GetInstance();
 
-  if (auto& ppc_symbol_db = system.GetPPCSymbolDB(); !ppc_symbol_db.IsEmpty())
+  if (!g_symbolDB.IsEmpty())
   {
-    ppc_symbol_db.Clear();
-    Host_PPCSymbolsChanged();
+    g_symbolDB.Clear();
+    UpdateDebugger_MapLoaded();
   }
 
   // PAL Wii uses NTSC framerate and linecount in 60Hz modes
@@ -576,7 +581,8 @@ bool CBoot::BootUp(Core::System& system, const Core::CPUThreadGuard& guard,
       }
 
 #ifdef USE_RETRO_ACHIEVEMENTS
-      AchievementManager::GetInstance().LoadGame(executable.path, nullptr);
+      AchievementManager::GetInstance().HashGame(executable.path,
+                                                 [](AchievementManager::ResponseType r_type) {});
 #endif  // USE_RETRO_ACHIEVEMENTS
 
       if (!executable.reader->LoadIntoMemory(system))
@@ -589,9 +595,9 @@ bool CBoot::BootUp(Core::System& system, const Core::CPUThreadGuard& guard,
 
       ppc_state.pc = executable.reader->GetEntryPoint();
 
-      if (executable.reader->LoadSymbols(guard, system.GetPPCSymbolDB()))
+      if (executable.reader->LoadSymbols(guard))
       {
-        Host_PPCSymbolsChanged();
+        UpdateDebugger_MapLoaded();
         HLE::PatchFunctions(system);
       }
       return true;

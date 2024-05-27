@@ -66,10 +66,10 @@ GamecubeControllersWidget::GamecubeControllersWidget(QWidget* parent) : QWidget(
   ConnectWidgets();
 
   connect(&Settings::Instance(), &Settings::ConfigChanged, this,
-          [this] { LoadSettings(Core::GetState(Core::System::GetInstance())); });
+          [this] { LoadSettings(Core::GetState()); });
   connect(&Settings::Instance(), &Settings::EmulationStateChanged, this,
           [this](Core::State state) { LoadSettings(state); });
-  LoadSettings(Core::GetState(Core::System::GetInstance()));
+  LoadSettings(Core::GetState());
 }
 
 void GamecubeControllersWidget::CreateLayout()
@@ -191,16 +191,16 @@ void GamecubeControllersWidget::SaveSettings()
   {
     Config::ConfigChangeCallbackGuard config_guard;
 
-    auto& system = Core::System::GetInstance();
     for (size_t i = 0; i < m_gc_groups.size(); ++i)
     {
       const SerialInterface::SIDevices si_device =
           FromGCMenuIndex(m_gc_controller_boxes[i]->currentIndex());
       Config::SetBaseOrCurrent(Config::GetInfoForSIDevice(static_cast<int>(i)), si_device);
 
-      if (Core::IsRunning(system))
+      if (Core::IsRunning())
       {
-        system.GetSerialInterface().ChangeDevice(si_device, static_cast<s32>(i));
+        Core::System::GetInstance().GetSerialInterface().ChangeDevice(si_device,
+                                                                      static_cast<s32>(i));
       }
     }
   }

@@ -5,7 +5,6 @@
 
 #include <memory>
 #include <string>
-#include <string_view>
 #include <vector>
 
 #include <picojson.h>
@@ -22,7 +21,6 @@ public:
     std::string m_pixel_material_asset;
   };
 
-  static constexpr std::string_view factory_name = "custom_pipeline";
   static std::unique_ptr<CustomPipelineAction>
   Create(const picojson::value& json_data,
          std::shared_ptr<VideoCommon::CustomAssetLibrary> library);

@@ -30,7 +30,6 @@
 #include "Core/Config/SYSCONFSettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
-#include "Core/System.h"
 
 #include "DolphinQt/QtUtils/DolphinFileDialog.h"
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
@@ -93,8 +92,7 @@ WiiPane::WiiPane(QWidget* parent) : QWidget(parent)
   LoadConfig();
   ConnectLayout();
   ValidateSelectionState();
-  OnEmulationStateChanged(Core::GetState(Core::System::GetInstance()) !=
-                          Core::State::Uninitialized);
+  OnEmulationStateChanged(Core::GetState() != Core::State::Uninitialized);
 }
 
 void WiiPane::CreateLayout()

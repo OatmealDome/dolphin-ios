@@ -113,7 +113,7 @@ static void HandleFrameStepHotkeys()
 
     if ((frame_step_count == 0 || frame_step_count == FRAME_STEP_DELAY) && !frame_step_hold)
     {
-      Core::QueueHostJob([](auto& system) { Core::DoFrameStep(system); });
+      Core::DoFrameStep();
       frame_step_hold = true;
     }
 
@@ -159,7 +159,7 @@ void HotkeyScheduler::Run()
     if (!HotkeyManagerEmu::IsEnabled())
       continue;
 
-    if (Core::GetState(Core::System::GetInstance()) != Core::State::Stopping)
+    if (Core::GetState() != Core::State::Stopping)
     {
       // Obey window focus (config permitting) before checking hotkeys.
       Core::UpdateInputGate(Config::Get(Config::MAIN_FOCUSED_HOTKEYS));
@@ -409,12 +409,6 @@ void HotkeyScheduler::Run()
           break;
         case AspectMode::Custom:
           OSD::AddMessage("Custom");
-          break;
-        case AspectMode::CustomStretch:
-          OSD::AddMessage("Custom (Stretch)");
-          break;
-        case AspectMode::Raw:
-          OSD::AddMessage("Raw (Square Pixels)");
           break;
         case AspectMode::Auto:
         default:

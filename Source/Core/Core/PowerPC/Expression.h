@@ -55,7 +55,6 @@ private:
     FPR,
     SPR,
     PCtr,
-    MSR,
   };
 
   struct VarBinding

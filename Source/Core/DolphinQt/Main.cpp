@@ -28,7 +28,6 @@
 #include "Core/Config/MainSettings.h"
 #include "Core/Core.h"
 #include "Core/DolphinAnalytics.h"
-#include "Core/System.h"
 
 #include "DolphinQt/Host.h"
 #include "DolphinQt/MainWindow.h"
@@ -52,7 +51,7 @@ static bool QtMsgAlertHandler(const char* caption, const char* text, bool yes_no
   std::optional<bool> r = RunOnObject(QApplication::instance(), [&] {
     // If we were called from the CPU/GPU thread, set us as the CPU/GPU thread.
     // This information is used in order to avoid deadlocks when calling e.g.
-    // Host::SetRenderFocus or Core::CPUThreadGuard. (Host::SetRenderFocus
+    // Host::SetRenderFocus or Core::RunAsCPUThread. (Host::SetRenderFocus
     // can get called automatically when a dialog steals the focus.)
 
     Common::ScopeGuard cpu_scope_guard(&Core::UndeclareAsCPUThread);
@@ -180,7 +179,7 @@ int main(int argc, char* argv[])
   // Whenever the event loop is about to go to sleep, dispatch the jobs
   // queued in the Core first.
   QObject::connect(QAbstractEventDispatcher::instance(), &QAbstractEventDispatcher::aboutToBlock,
-                   &app, [] { Core::HostDispatchJobs(Core::System::GetInstance()); });
+                   &app, &Core::HostDispatchJobs);
 
   std::optional<std::string> save_state_path;
   if (options.is_set("save_state"))
@@ -294,7 +293,7 @@ int main(int argc, char* argv[])
     retval = app.exec();
   }
 
-  Core::Shutdown(Core::System::GetInstance());
+  Core::Shutdown();
   UICommon::Shutdown();
   Host::GetInstance()->deleteLater();
 

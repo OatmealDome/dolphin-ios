@@ -158,7 +158,7 @@ public:
       if constexpr (is_preprocess)
       {
         auto& memory = system.GetMemory();
-        const u8* const start_address = memory.GetPointerForRange(address, size);
+        const u8* const start_address = memory.GetPointer(address);
 
         system.GetFifo().PushFifoAuxBuffer(start_address, size);
 
@@ -179,10 +179,10 @@ public:
         else
         {
           auto& memory = system.GetMemory();
-          start_address = memory.GetPointerForRange(address, size);
+          start_address = memory.GetPointer(address);
         }
 
-        // Avoid the crash if memory.GetPointerForRange failed ..
+        // Avoid the crash if memory.GetPointer failed ..
         if (start_address != nullptr)
         {
           // temporarily swap dl and non-dl (small "hack" for the stats)

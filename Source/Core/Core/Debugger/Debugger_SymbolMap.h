@@ -13,8 +13,7 @@
 namespace Core
 {
 class CPUThreadGuard;
-class System;
-}  // namespace Core
+}
 
 namespace Dolphin_Debugger
 {
@@ -27,6 +26,6 @@ struct CallstackEntry
 bool GetCallstack(const Core::CPUThreadGuard& guard, std::vector<CallstackEntry>& output);
 void PrintCallstack(const Core::CPUThreadGuard& guard, Common::Log::LogType type,
                     Common::Log::LogLevel level);
-void PrintDataBuffer(const Core::System& system, Common::Log::LogType type, u32 address, u32 size,
+void PrintDataBuffer(Common::Log::LogType type, const u8* data, size_t size,
                      std::string_view title);
 }  // namespace Dolphin_Debugger

@@ -1,7 +1,6 @@
 // Copyright 2014 Dolphin Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#include <bit>
 #include <limits>
 #include <memory>
 #include <tuple>
@@ -10,6 +9,7 @@
 
 #include <gtest/gtest.h>  // NOLINT
 
+#include "Common/BitUtils.h"
 #include "Common/Common.h"
 #include "Common/MathUtil.h"
 #include "VideoCommon/CPMemory.h"
@@ -81,7 +81,7 @@ protected:
     const float actual = m_dst.Read<float, false>();
 
     if (!actual || actual != actual)
-      EXPECT_EQ(std::bit_cast<u32>(expected), std::bit_cast<u32>(actual));
+      EXPECT_EQ(Common::BitCast<u32>(expected), Common::BitCast<u32>(actual));
     else
       EXPECT_EQ(expected, actual);
   }
@@ -121,9 +121,7 @@ INSTANTIATE_TEST_SUITE_P(
         ::testing::Values(VertexComponentFormat::Direct, VertexComponentFormat::Index8,
                           VertexComponentFormat::Index16),
         ::testing::Values(ComponentFormat::UByte, ComponentFormat::Byte, ComponentFormat::UShort,
-                          ComponentFormat::Short, ComponentFormat::Float,
-                          ComponentFormat::InvalidFloat5, ComponentFormat::InvalidFloat6,
-                          ComponentFormat::InvalidFloat7),
+                          ComponentFormat::Short, ComponentFormat::Float),
         ::testing::Values(CoordComponentCount::XY, CoordComponentCount::XYZ),
         ::testing::Values(0, 1, 31)  // frac
         ));
@@ -172,12 +170,10 @@ TEST_P(VertexLoaderParamTest, PositionAll)
   {
     input_size = addr == VertexComponentFormat::Index8 ? 1 : 2;
     for (int i = 0; i < count; i++)
-    {
       if (addr == VertexComponentFormat::Index8)
         Input<u8>(i);
       else
         Input<u16>(i);
-    }
     VertexLoaderManager::cached_arraybases[CPArray::Position] = m_src.GetPointer();
     g_main_cp_state.array_strides[CPArray::Position] = elem_count * elem_size;
   }
@@ -199,9 +195,6 @@ TEST_P(VertexLoaderParamTest, PositionAll)
       Input(MathUtil::SaturatingCast<s16>(value));
       break;
     case ComponentFormat::Float:
-    case ComponentFormat::InvalidFloat5:
-    case ComponentFormat::InvalidFloat6:
-    case ComponentFormat::InvalidFloat7:
       Input(value);
       break;
     }
@@ -209,7 +202,7 @@ TEST_P(VertexLoaderParamTest, PositionAll)
 
   RunVertices(count);
 
-  float scale = 1.f / (1u << (format >= ComponentFormat::Float ? 0 : frac));
+  float scale = 1.f / (1u << (format == ComponentFormat::Float ? 0 : frac));
   for (auto iter = values.begin(); iter != values.end();)
   {
     float f, g;
@@ -232,9 +225,6 @@ TEST_P(VertexLoaderParamTest, PositionAll)
       g = MathUtil::SaturatingCast<s16>(*iter++);
       break;
     case ComponentFormat::Float:
-    case ComponentFormat::InvalidFloat5:
-    case ComponentFormat::InvalidFloat6:
-    case ComponentFormat::InvalidFloat7:
       f = *iter++;
       g = *iter++;
       break;
@@ -553,9 +543,7 @@ INSTANTIATE_TEST_SUITE_P(
         ::testing::Values(VertexComponentFormat::NotPresent, VertexComponentFormat::Direct,
                           VertexComponentFormat::Index8, VertexComponentFormat::Index16),
         ::testing::Values(ComponentFormat::UByte, ComponentFormat::Byte, ComponentFormat::UShort,
-                          ComponentFormat::Short, ComponentFormat::Float,
-                          ComponentFormat::InvalidFloat5, ComponentFormat::InvalidFloat6,
-                          ComponentFormat::InvalidFloat7),
+                          ComponentFormat::Short, ComponentFormat::Float),
         ::testing::Values(NormalComponentCount::N, NormalComponentCount::NTB),
         ::testing::Values(false, true)));
 
@@ -621,9 +609,7 @@ TEST_P(VertexLoaderNormalTest, NormalAll)
       Input<s16>(value * (1 << 14));
       break;
     case ComponentFormat::Float:
-    case ComponentFormat::InvalidFloat5:
-    case ComponentFormat::InvalidFloat6:
-    case ComponentFormat::InvalidFloat7:
+    default:
       Input<float>(value);
       break;
     }

@@ -6,7 +6,6 @@
 #include "Common/ChunkFile.h"
 #include "Common/CommonTypes.h"
 #include "Common/Logging/Log.h"
-#include "Core/Core.h"
 #include "Core/CoreTiming.h"
 #include "Core/HW/DVD/DVDInterface.h"
 #include "Core/HW/MMIO.h"
@@ -177,8 +176,7 @@ void WiiIPC::RegisterMMIO(MMIO::Mapping* mmio, u32 base)
                    if (wii_ipc.m_gpio_out[GPIO::DO_EJECT])
                    {
                      INFO_LOG_FMT(WII_IPC, "Ejecting disc due to GPIO write");
-                     system.GetDVDInterface().EjectDisc(Core::CPUThreadGuard{system},
-                                                        DVD::EjectCause::Software);
+                     system.GetDVDInterface().EjectDisc(DVD::EjectCause::Software);
                    }
                    // SENSOR_BAR is checked by WiimoteEmu::CameraLogic
                    // TODO: AVE, SLOT_LED
@@ -214,8 +212,7 @@ void WiiIPC::RegisterMMIO(MMIO::Mapping* mmio, u32 base)
                    if (wii_ipc.m_gpio_out[GPIO::DO_EJECT])
                    {
                      INFO_LOG_FMT(WII_IPC, "Ejecting disc due to GPIO write");
-                     system.GetDVDInterface().EjectDisc(Core::CPUThreadGuard{system},
-                                                        DVD::EjectCause::Software);
+                     system.GetDVDInterface().EjectDisc(DVD::EjectCause::Software);
                    }
                    // SENSOR_BAR is checked by WiimoteEmu::CameraLogic
                    // TODO: AVE, SLOT_LED

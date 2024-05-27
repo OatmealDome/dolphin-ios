@@ -3,9 +3,6 @@
 
 #pragma once
 
-#include <cstddef>
-#include <cstdio>
-#include <functional>
 #include <memory>
 #include <string>
 #include <variant>
@@ -19,12 +16,16 @@ class JitBase;
 
 namespace Core
 {
-class CPUThreadGuard;
 class System;
-}  // namespace Core
+}
 namespace PowerPC
 {
 enum class CPUCore;
+}
+
+namespace Profiler
+{
+struct ProfileStats;
 }
 
 class JitInterface
@@ -43,6 +44,11 @@ public:
   CPUCoreBase* GetCore() const;
 
   // Debugging
+  enum class ProfilingState
+  {
+    Enabled,
+    Disabled
+  };
   enum class GetHostCodeError
   {
     NoJitActive,
@@ -56,7 +62,9 @@ public:
   };
 
   void UpdateMembase();
-  void JitBlockLogDump(const Core::CPUThreadGuard& guard, std::FILE* file) const;
+  void SetProfilingState(ProfilingState state);
+  void WriteProfileResults(const std::string& filename) const;
+  void GetProfileResults(Profiler::ProfileStats* prof_stats) const;
   std::variant<GetHostCodeError, GetHostCodeResult> GetHostCode(u32 address) const;
 
   // Memory Utilities
@@ -64,7 +72,7 @@ public:
   bool HandleStackFault();
 
   // Clearing CodeCache
-  void ClearCache(const Core::CPUThreadGuard& guard);
+  void ClearCache();
 
   // This clear is "safe" in the sense that it's okay to run from
   // inside a JIT'ed block: it clears the instruction cache, but not

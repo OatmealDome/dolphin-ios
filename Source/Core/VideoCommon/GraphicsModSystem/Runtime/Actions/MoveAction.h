@@ -4,7 +4,6 @@
 #pragma once
 
 #include <memory>
-#include <string_view>
 
 #include <picojson.h>
 
@@ -13,7 +12,6 @@
 class MoveAction final : public GraphicsModAction
 {
 public:
-  static constexpr std::string_view factory_name = "move";
   static std::unique_ptr<MoveAction> Create(const picojson::value& json_data);
   explicit MoveAction(Common::Vec3 position_offset);
   void OnProjection(GraphicsModActionData::Projection* projection) override;

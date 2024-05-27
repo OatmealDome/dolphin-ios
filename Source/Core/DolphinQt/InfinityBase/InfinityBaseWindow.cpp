@@ -35,7 +35,6 @@ static QString s_last_figure_path;
 
 InfinityBaseWindow::InfinityBaseWindow(QWidget* parent) : QWidget(parent)
 {
-  // i18n: Window for managing Disney Infinity figures
   setWindowTitle(tr("Infinity Manager"));
   setObjectName(QStringLiteral("infinity_manager"));
   setMinimumSize(QSize(700, 200));
@@ -47,7 +46,7 @@ InfinityBaseWindow::InfinityBaseWindow(QWidget* parent) : QWidget(parent)
 
   installEventFilter(this);
 
-  OnEmulationStateChanged(Core::GetState(Core::System::GetInstance()));
+  OnEmulationStateChanged(Core::GetState());
 };
 
 InfinityBaseWindow::~InfinityBaseWindow() = default;
@@ -165,7 +164,7 @@ void InfinityBaseWindow::LoadFigurePath(u8 slot, const QString& path)
   {
     QMessageBox::warning(
         this, tr("Failed to open the Infinity file!"),
-        tr("Failed to open the Infinity file:\n%1\n\nThe file may already be in use on the base.")
+        tr("Failed to open the Infinity file(%1)!\nFile may already be in use on the base.")
             .arg(path),
         QMessageBox::Ok);
     return;
@@ -173,10 +172,9 @@ void InfinityBaseWindow::LoadFigurePath(u8 slot, const QString& path)
   std::array<u8, IOS::HLE::USB::INFINITY_NUM_BLOCKS * IOS::HLE::USB::INFINITY_BLOCK_SIZE> file_data;
   if (!inf_file.ReadBytes(file_data.data(), file_data.size()))
   {
-    QMessageBox::warning(
-        this, tr("Failed to read the Infinity file!"),
-        tr("Failed to read the Infinity file:\n%1\n\nThe file was too small.").arg(path),
-        QMessageBox::Ok);
+    QMessageBox::warning(this, tr("Failed to read the Infinity file!"),
+                         tr("Failed to read the Infinity file(%1)!\nFile was too small.").arg(path),
+                         QMessageBox::Ok);
     return;
   }
 
@@ -276,7 +274,6 @@ CreateFigureDialog::CreateFigureDialog(QWidget* parent, u8 slot) : QDialog(paren
     }
     else
     {
-      // i18n: This is used to create a file name. The string must end in ".bin".
       QString str = tr("Unknown(%1).bin");
       predef_name += str.arg(char_number);
     }
@@ -292,7 +289,7 @@ CreateFigureDialog::CreateFigureDialog(QWidget* parent, u8 slot) : QDialog(paren
     {
       QMessageBox::warning(
           this, tr("Failed to create Infinity file"),
-          tr("Blank figure creation failed at:\n%1\n\nTry again with a different character.")
+          tr("Blank figure creation failed at:\n%1, try again with a different character")
               .arg(m_file_path),
           QMessageBox::Ok);
       return;

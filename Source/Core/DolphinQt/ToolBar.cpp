@@ -11,7 +11,6 @@
 
 #include "Core/Core.h"
 #include "Core/NetPlayProto.h"
-#include "Core/System.h"
 #include "DolphinQt/Host.h"
 #include "DolphinQt/Resources.h"
 #include "DolphinQt/Settings.h"
@@ -37,7 +36,7 @@ ToolBar::ToolBar(QWidget* parent) : QToolBar(parent)
           [this](Core::State state) { OnEmulationStateChanged(state); });
 
   connect(Host::GetInstance(), &Host::UpdateDisasmDialog, this,
-          [this] { OnEmulationStateChanged(Core::GetState(Core::System::GetInstance())); });
+          [this] { OnEmulationStateChanged(Core::GetState()); });
 
   connect(&Settings::Instance(), &Settings::DebugModeToggled, this, &ToolBar::OnDebugModeToggled);
 
@@ -52,7 +51,7 @@ ToolBar::ToolBar(QWidget* parent) : QToolBar(parent)
   connect(&Settings::Instance(), &Settings::GameListRefreshStarted, this,
           [this] { m_refresh_action->setEnabled(true); });
 
-  OnEmulationStateChanged(Core::GetState(Core::System::GetInstance()));
+  OnEmulationStateChanged(Core::GetState());
   OnDebugModeToggled(Settings::Instance().IsDebugModeEnabled());
 }
 
@@ -66,7 +65,7 @@ void ToolBar::OnEmulationStateChanged(Core::State state)
   bool playing = running && state != Core::State::Paused;
   UpdatePausePlayButtonState(playing);
 
-  const bool paused = Core::GetState(Core::System::GetInstance()) == Core::State::Paused;
+  bool paused = Core::GetState() == Core::State::Paused;
   m_step_action->setEnabled(paused);
   m_step_over_action->setEnabled(paused);
   m_step_out_action->setEnabled(paused);
@@ -88,7 +87,7 @@ void ToolBar::OnDebugModeToggled(bool enabled)
   m_show_pc_action->setVisible(enabled);
   m_set_pc_action->setVisible(enabled);
 
-  const bool paused = Core::GetState(Core::System::GetInstance()) == Core::State::Paused;
+  bool paused = Core::GetState() == Core::State::Paused;
   m_step_action->setEnabled(paused);
   m_step_over_action->setEnabled(paused);
   m_step_out_action->setEnabled(paused);
@@ -181,7 +180,7 @@ void ToolBar::UpdateIcons()
   m_open_action->setIcon(Resources::GetThemeIcon("open"));
   m_refresh_action->setIcon(Resources::GetThemeIcon("refresh"));
 
-  const Core::State state = Core::GetState(Core::System::GetInstance());
+  const Core::State state = Core::GetState();
   const bool playing = state != Core::State::Uninitialized && state != Core::State::Paused;
   if (!playing)
     m_pause_play_action->setIcon(Resources::GetThemeIcon("play"));

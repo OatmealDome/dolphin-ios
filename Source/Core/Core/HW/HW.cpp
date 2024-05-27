@@ -35,7 +35,7 @@ void Init(Core::System& system, const Sram* override_sram)
   system.GetCoreTiming().Init();
   system.GetSystemTimers().PreInit();
 
-  State::Init(system);
+  State::Init();
 
   // Init the whole Hardware
   system.GetAudioInterface().Init();
