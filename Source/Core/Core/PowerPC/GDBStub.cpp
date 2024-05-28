@@ -1016,8 +1016,7 @@ void ProcessCommands(bool loop_until_continue)
 
       WriteMemory(guard);
       auto& ppc_state = system.GetPPCState();
-      auto& jit_interface = system.GetJitInterface();
-      ppc_state.iCache.Reset(jit_interface);
+      ppc_state.iCache.Reset();
       Host_UpdateDisasmDialog();
       break;
     }
