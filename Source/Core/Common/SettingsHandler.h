@@ -25,20 +25,18 @@ public:
 
   using Buffer = std::array<u8, SETTINGS_SIZE>;
   SettingsHandler();
-  explicit SettingsHandler(Buffer&& buffer);
+  explicit SettingsHandler(const Buffer& buffer);
 
-  void AddSetting(const std::string& key, const std::string& value);
+  void AddSetting(std::string_view key, std::string_view value);
 
   const Buffer& GetBytes() const;
-  void SetBytes(Buffer&& buffer);
   std::string GetValue(std::string_view key) const;
 
-  void Decrypt();
-  void Reset();
   static std::string GenerateSerialNumber();
 
 private:
-  void WriteLine(const std::string& str);
+  void Decrypt();
+  void WriteLine(std::string_view str);
   void WriteByte(u8 b);
 
   std::array<u8, SETTINGS_SIZE> m_buffer;

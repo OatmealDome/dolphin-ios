@@ -3,7 +3,8 @@
 
 #include "VideoCommon/XFStructs.h"
 
-#include "Common/BitUtils.h"
+#include <bit>
+
 #include "Common/CommonTypes.h"
 #include "Common/Logging/Log.h"
 #include "Common/Swap.h"
@@ -18,18 +19,17 @@
 #include "VideoCommon/PixelShaderManager.h"
 #include "VideoCommon/VertexLoaderManager.h"
 #include "VideoCommon/VertexManagerBase.h"
-#include "VideoCommon/VertexShaderManager.h"
 #include "VideoCommon/XFMemory.h"
+#include "VideoCommon/XFStateManager.h"
 
-static void XFMemWritten(VertexShaderManager& vertex_shader_manager, u32 transferSize,
-                         u32 baseAddress)
+static void XFMemWritten(XFStateManager& xf_state_manager, u32 transferSize, u32 baseAddress)
 {
   g_vertex_manager->Flush();
-  vertex_shader_manager.InvalidateXFRange(baseAddress, baseAddress + transferSize);
+  xf_state_manager.InvalidateXFRange(baseAddress, baseAddress + transferSize);
 }
 
-static void XFRegWritten(Core::System& system, VertexShaderManager& vertex_shader_manager,
-                         u32 address, u32 value)
+static void XFRegWritten(Core::System& system, XFStateManager& xf_state_manager, u32 address,
+                         u32 value)
 {
   if (address >= XFMEM_REGISTERS_START && address < XFMEM_REGISTERS_END)
   {
@@ -63,7 +63,7 @@ static void XFRegWritten(Core::System& system, VertexShaderManager& vertex_shade
     case XFMEM_SETNUMCHAN:
       if (xfmem.numChan.numColorChans != (value & 3))
         g_vertex_manager->Flush();
-      vertex_shader_manager.SetLightingConfigChanged();
+      xf_state_manager.SetLightingConfigChanged();
       break;
 
     case XFMEM_SETCHAN0_AMBCOLOR:  // Channel Ambient Color
@@ -73,7 +73,7 @@ static void XFRegWritten(Core::System& system, VertexShaderManager& vertex_shade
       if (xfmem.ambColor[chan] != value)
       {
         g_vertex_manager->Flush();
-        vertex_shader_manager.SetMaterialColorChanged(chan);
+        xf_state_manager.SetMaterialColorChanged(chan);
       }
       break;
     }
@@ -85,7 +85,7 @@ static void XFRegWritten(Core::System& system, VertexShaderManager& vertex_shade
       if (xfmem.matColor[chan] != value)
       {
         g_vertex_manager->Flush();
-        vertex_shader_manager.SetMaterialColorChanged(chan + 2);
+        xf_state_manager.SetMaterialColorChanged(chan + 2);
       }
       break;
     }
@@ -96,21 +96,21 @@ static void XFRegWritten(Core::System& system, VertexShaderManager& vertex_shade
     case XFMEM_SETCHAN1_ALPHA:
       if (((u32*)&xfmem)[address] != (value & 0x7fff))
         g_vertex_manager->Flush();
-      vertex_shader_manager.SetLightingConfigChanged();
+      xf_state_manager.SetLightingConfigChanged();
       break;
 
     case XFMEM_DUALTEX:
       if (xfmem.dualTexTrans.enabled != bool(value & 1))
         g_vertex_manager->Flush();
-      vertex_shader_manager.SetTexMatrixInfoChanged(-1);
+      xf_state_manager.SetTexMatrixInfoChanged(-1);
       break;
 
     case XFMEM_SETMATRIXINDA:
-      vertex_shader_manager.SetTexMatrixChangedA(value);
+      xf_state_manager.SetTexMatrixChangedA(value);
       VertexLoaderManager::g_needs_cp_xf_consistency_check = true;
       break;
     case XFMEM_SETMATRIXINDB:
-      vertex_shader_manager.SetTexMatrixChangedB(value);
+      xf_state_manager.SetTexMatrixChangedB(value);
       VertexLoaderManager::g_needs_cp_xf_consistency_check = true;
       break;
 
@@ -121,7 +121,7 @@ static void XFRegWritten(Core::System& system, VertexShaderManager& vertex_shade
     case XFMEM_SETVIEWPORT + 4:
     case XFMEM_SETVIEWPORT + 5:
       g_vertex_manager->Flush();
-      vertex_shader_manager.SetViewportChanged();
+      xf_state_manager.SetViewportChanged();
       system.GetPixelShaderManager().SetViewportChanged();
       system.GetGeometryShaderManager().SetViewportChanged();
       break;
@@ -134,7 +134,7 @@ static void XFRegWritten(Core::System& system, VertexShaderManager& vertex_shade
     case XFMEM_SETPROJECTION + 5:
     case XFMEM_SETPROJECTION + 6:
       g_vertex_manager->Flush();
-      vertex_shader_manager.SetProjectionChanged();
+      xf_state_manager.SetProjectionChanged();
       system.GetGeometryShaderManager().SetProjectionChanged();
       break;
 
@@ -152,7 +152,7 @@ static void XFRegWritten(Core::System& system, VertexShaderManager& vertex_shade
     case XFMEM_SETTEXMTXINFO + 6:
     case XFMEM_SETTEXMTXINFO + 7:
       g_vertex_manager->Flush();
-      vertex_shader_manager.SetTexMatrixInfoChanged(address - XFMEM_SETTEXMTXINFO);
+      xf_state_manager.SetTexMatrixInfoChanged(address - XFMEM_SETTEXMTXINFO);
       break;
 
     case XFMEM_SETPOSTMTXINFO:
@@ -164,7 +164,7 @@ static void XFRegWritten(Core::System& system, VertexShaderManager& vertex_shade
     case XFMEM_SETPOSTMTXINFO + 6:
     case XFMEM_SETPOSTMTXINFO + 7:
       g_vertex_manager->Flush();
-      vertex_shader_manager.SetTexMatrixInfoChanged(address - XFMEM_SETPOSTMTXINFO);
+      xf_state_manager.SetTexMatrixInfoChanged(address - XFMEM_SETPOSTMTXINFO);
       break;
 
     // --------------
@@ -218,7 +218,7 @@ void LoadXFReg(u16 base_address, u8 transfer_size, const u8* data)
   }
 
   auto& system = Core::System::GetInstance();
-  auto& vertex_shader_manager = system.GetVertexShaderManager();
+  auto& xf_state_manager = system.GetXFStateManager();
 
   // write to XF mem
   if (base_address < XFMEM_REGISTERS_START)
@@ -232,7 +232,7 @@ void LoadXFReg(u16 base_address, u8 transfer_size, const u8* data)
       base_address = XFMEM_REGISTERS_START;
     }
 
-    XFMemWritten(vertex_shader_manager, xf_mem_transfer_size, xf_mem_base);
+    XFMemWritten(xf_state_manager, xf_mem_transfer_size, xf_mem_base);
     for (u32 i = 0; i < xf_mem_transfer_size; i++)
     {
       ((u32*)&xfmem)[xf_mem_base + i] = Common::swap32(data);
@@ -247,7 +247,7 @@ void LoadXFReg(u16 base_address, u8 transfer_size, const u8* data)
     {
       const u32 value = Common::swap32(data);
 
-      XFRegWritten(system, vertex_shader_manager, address, value);
+      XFRegWritten(system, xf_state_manager, address, value);
       ((u32*)&xfmem)[address] = value;
 
       data += 4;
@@ -260,29 +260,31 @@ void LoadIndexedXF(CPArray array, u32 index, u16 address, u8 size)
 {
   // load stuff from array to address in xf mem
 
-  u32* currData = (u32*)(&xfmem) + address;
+  const u32 buf_size = size * sizeof(u32);
+  u32* currData = reinterpret_cast<u32*>(&xfmem) + address;
   u32* newData;
   auto& system = Core::System::GetInstance();
   auto& fifo = system.GetFifo();
   if (fifo.UseDeterministicGPUThread())
   {
-    newData = (u32*)fifo.PopFifoAuxBuffer(size * sizeof(u32));
+    newData = reinterpret_cast<u32*>(fifo.PopFifoAuxBuffer(buf_size));
   }
   else
   {
     auto& memory = system.GetMemory();
-    newData = (u32*)memory.GetPointer(g_main_cp_state.array_bases[array] +
-                                      g_main_cp_state.array_strides[array] * index);
+    newData = reinterpret_cast<u32*>(memory.GetPointerForRange(
+        g_main_cp_state.array_bases[array] + g_main_cp_state.array_strides[array] * index,
+        buf_size));
   }
 
-  auto& vertex_shader_manager = system.GetVertexShaderManager();
+  auto& xf_state_manager = system.GetXFStateManager();
   bool changed = false;
   for (u32 i = 0; i < size; ++i)
   {
     if (currData[i] != Common::swap32(newData[i]))
     {
       changed = true;
-      XFMemWritten(vertex_shader_manager, size, address);
+      XFMemWritten(xf_state_manager, size, address);
       break;
     }
   }
@@ -295,12 +297,14 @@ void LoadIndexedXF(CPArray array, u32 index, u16 address, u8 size)
 
 void PreprocessIndexedXF(CPArray array, u32 index, u16 address, u8 size)
 {
+  const size_t buf_size = size * sizeof(u32);
+
   auto& system = Core::System::GetInstance();
   auto& memory = system.GetMemory();
-  const u8* new_data = memory.GetPointer(g_preprocess_cp_state.array_bases[array] +
-                                         g_preprocess_cp_state.array_strides[array] * index);
+  const u8* new_data = memory.GetPointerForRange(
+      g_preprocess_cp_state.array_bases[array] + g_preprocess_cp_state.array_strides[array] * index,
+      buf_size);
 
-  const size_t buf_size = size * sizeof(u32);
   system.GetFifo().PushFifoAuxBuffer(new_data, buf_size);
 }
 
@@ -376,42 +380,42 @@ std::pair<std::string, std::string> GetXFRegInfo(u32 address, u32 value)
 
   case XFMEM_SETVIEWPORT:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 0),
-                          fmt::format("Viewport width: {}", Common::BitCast<float>(value)));
+                          fmt::format("Viewport width: {}", std::bit_cast<float>(value)));
   case XFMEM_SETVIEWPORT + 1:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 1),
-                          fmt::format("Viewport height: {}", Common::BitCast<float>(value)));
+                          fmt::format("Viewport height: {}", std::bit_cast<float>(value)));
   case XFMEM_SETVIEWPORT + 2:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 2),
-                          fmt::format("Viewport z range: {}", Common::BitCast<float>(value)));
+                          fmt::format("Viewport z range: {}", std::bit_cast<float>(value)));
   case XFMEM_SETVIEWPORT + 3:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 3),
-                          fmt::format("Viewport x origin: {}", Common::BitCast<float>(value)));
+                          fmt::format("Viewport x origin: {}", std::bit_cast<float>(value)));
   case XFMEM_SETVIEWPORT + 4:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 4),
-                          fmt::format("Viewport y origin: {}", Common::BitCast<float>(value)));
+                          fmt::format("Viewport y origin: {}", std::bit_cast<float>(value)));
   case XFMEM_SETVIEWPORT + 5:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 5),
-                          fmt::format("Viewport far z: {}", Common::BitCast<float>(value)));
+                          fmt::format("Viewport far z: {}", std::bit_cast<float>(value)));
     break;
 
   case XFMEM_SETPROJECTION:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 0),
-                          fmt::format("Projection[0]: {}", Common::BitCast<float>(value)));
+                          fmt::format("Projection[0]: {}", std::bit_cast<float>(value)));
   case XFMEM_SETPROJECTION + 1:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 1),
-                          fmt::format("Projection[1]: {}", Common::BitCast<float>(value)));
+                          fmt::format("Projection[1]: {}", std::bit_cast<float>(value)));
   case XFMEM_SETPROJECTION + 2:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 2),
-                          fmt::format("Projection[2]: {}", Common::BitCast<float>(value)));
+                          fmt::format("Projection[2]: {}", std::bit_cast<float>(value)));
   case XFMEM_SETPROJECTION + 3:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 3),
-                          fmt::format("Projection[3]: {}", Common::BitCast<float>(value)));
+                          fmt::format("Projection[3]: {}", std::bit_cast<float>(value)));
   case XFMEM_SETPROJECTION + 4:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 4),
-                          fmt::format("Projection[4]: {}", Common::BitCast<float>(value)));
+                          fmt::format("Projection[4]: {}", std::bit_cast<float>(value)));
   case XFMEM_SETPROJECTION + 5:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 5),
-                          fmt::format("Projection[5]: {}", Common::BitCast<float>(value)));
+                          fmt::format("Projection[5]: {}", std::bit_cast<float>(value)));
   case XFMEM_SETPROJECTION + 6:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 6),
                           fmt::to_string(static_cast<ProjectionType>(value)));
@@ -543,7 +547,7 @@ std::string GetXFMemDescription(u32 address, u32 value)
       (address >= XFMEM_POSTMATRICES && address < XFMEM_POSTMATRICES_END))
   {
     // The matrices all use floats
-    return fmt::format("{} = {}", GetXFMemName(address), Common::BitCast<float>(value));
+    return fmt::format("{} = {}", GetXFMemName(address), std::bit_cast<float>(value));
   }
   else if (address >= XFMEM_LIGHTS && address < XFMEM_LIGHTS_END)
   {
@@ -557,7 +561,7 @@ std::string GetXFMemDescription(u32 address, u32 value)
     else
     {
       // Everything else is a float
-      return fmt::format("{} = {}", GetXFMemName(address), Common::BitCast<float>(value));
+      return fmt::format("{} = {}", GetXFMemName(address), std::bit_cast<float>(value));
     }
   }
   else

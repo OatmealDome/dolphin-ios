@@ -129,7 +129,8 @@ static ReturnCode InitBackupKey(u64 tid, u32 title_flags, IOSC& iosc, IOSC::Hand
   }
 
   // Otherwise, use a null key.
-  ReturnCode ret = iosc.CreateObject(key, IOSC::TYPE_SECRET_KEY, IOSC::SUBTYPE_AES128, PID_ES);
+  ReturnCode ret =
+      iosc.CreateObject(key, IOSC::TYPE_SECRET_KEY, IOSC::ObjectSubType::AES128, PID_ES);
   return ret == IPC_SUCCESS ? iosc.ImportSecretKey(*key, NULL_KEY.data(), PID_ES) : ret;
 }
 
@@ -206,7 +207,8 @@ IPCReply ESDevice::ImportTmd(Context& context, const IOCtlVRequest& request)
 static ReturnCode InitTitleImportKey(const std::vector<u8>& ticket_bytes, IOSC& iosc,
                                      IOSC::Handle* handle)
 {
-  ReturnCode ret = iosc.CreateObject(handle, IOSC::TYPE_SECRET_KEY, IOSC::SUBTYPE_AES128, PID_ES);
+  ReturnCode ret =
+      iosc.CreateObject(handle, IOSC::TYPE_SECRET_KEY, IOSC::ObjectSubType::AES128, PID_ES);
   if (ret != IPC_SUCCESS)
     return ret;
 
@@ -367,9 +369,9 @@ IPCReply ESDevice::ImportContentData(Context& context, const IOCtlVRequest& requ
   auto& memory = system.GetMemory();
 
   u32 content_fd = memory.Read_U32(request.in_vectors[0].address);
-  u8* data_start = memory.GetPointer(request.in_vectors[1].address);
-  return IPCReply(
-      m_core.ImportContentData(context, content_fd, data_start, request.in_vectors[1].size));
+  u32 data_size = request.in_vectors[1].size;
+  u8* data_start = memory.GetPointerForRange(request.in_vectors[1].address, data_size);
+  return IPCReply(m_core.ImportContentData(context, content_fd, data_start, data_size));
 }
 
 static bool CheckIfContentHashMatches(const std::vector<u8>& content, const ES::Content& info)
@@ -628,7 +630,8 @@ IPCReply ESDevice::DeleteTicket(const IOCtlVRequest& request)
 
   auto& system = GetSystem();
   auto& memory = system.GetMemory();
-  return IPCReply(m_core.DeleteTicket(memory.GetPointer(request.in_vectors[0].address)));
+  return IPCReply(m_core.DeleteTicket(
+      memory.GetPointerForRange(request.in_vectors[0].address, sizeof(ES::TicketView))));
 }
 
 ReturnCode ESCore::DeleteTitleContent(u64 title_id) const
@@ -730,8 +733,8 @@ IPCReply ESDevice::ExportTitleInit(Context& context, const IOCtlVRequest& reques
   auto& memory = system.GetMemory();
 
   const u64 title_id = memory.Read_U64(request.in_vectors[0].address);
-  u8* tmd_bytes = memory.GetPointer(request.io_vectors[0].address);
   const u32 tmd_size = request.io_vectors[0].size;
+  u8* tmd_bytes = memory.GetPointerForRange(request.io_vectors[0].address, tmd_size);
 
   return IPCReply(m_core.ExportTitleInit(context, title_id, tmd_bytes, tmd_size,
                                          m_core.m_title_context.tmd.GetTitleId(),
@@ -830,8 +833,8 @@ IPCReply ESDevice::ExportContentData(Context& context, const IOCtlVRequest& requ
   auto& memory = system.GetMemory();
 
   const u32 content_fd = memory.Read_U32(request.in_vectors[0].address);
-  u8* data = memory.GetPointer(request.io_vectors[0].address);
   const u32 bytes_to_read = request.io_vectors[0].size;
+  u8* data = memory.GetPointerForRange(request.io_vectors[0].address, bytes_to_read);
 
   return IPCReply(m_core.ExportContentData(context, content_fd, data, bytes_to_read));
 }

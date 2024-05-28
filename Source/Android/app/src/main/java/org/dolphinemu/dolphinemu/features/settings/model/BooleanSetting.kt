@@ -14,6 +14,8 @@ enum class BooleanSetting(
     MAIN_SKIP_IPL(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE, "SkipIPL", true),
     MAIN_DSP_HLE(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE, "DSPHLE", true),
     MAIN_FASTMEM(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE, "Fastmem", true),
+    MAIN_FASTMEM_ARENA(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE, "FastmemArena", true),
+    MAIN_LARGE_ENTRY_POINTS_MAP(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE, "LargeEntryPointsMap", true),
     MAIN_CPU_THREAD(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE, "CPUThread", true),
     MAIN_SYNC_ON_SKIP_IDLE(
         Settings.FILE_DOLPHIN,
@@ -128,6 +130,7 @@ enum class BooleanSetting(
         "EnableSaveStates",
         false
     ),
+    MAIN_WII_WIILINK_ENABLE(Settings.FILE_DOLPHIN, Settings.SECTION_INI_CORE, "EnableWiiLink", false),
     MAIN_DSP_JIT(Settings.FILE_DOLPHIN, Settings.SECTION_INI_DSP, "EnableJIT", true),
     MAIN_EXPAND_TO_CUTOUT_AREA(
         Settings.FILE_DOLPHIN,
@@ -209,6 +212,12 @@ enum class BooleanSetting(
         Settings.FILE_DOLPHIN,
         Settings.SECTION_DEBUG,
         "JitRegisterCacheOff",
+        false
+    ),
+    MAIN_DEBUG_JIT_ENABLE_PROFILING(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_DEBUG,
+        "JitEnableProfiling",
         false
     ),
     MAIN_EMULATE_SKYLANDER_PORTAL(
@@ -319,6 +328,54 @@ enum class BooleanSetting(
         "ButtonToggleGCStickC",
         true
     ),
+    MAIN_BUTTON_LATCHING_GC_0(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingGCButtonA",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_GC_1(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingGCButtonB",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_GC_2(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingGCButtonX",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_GC_3(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingGCButtonY",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_GC_4(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingGCButtonZ",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_GC_5(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingGCButtonStart",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_GC_6(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingGCTriggerL",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_GC_7(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingGCTriggerR",
+        false
+    ),
     MAIN_BUTTON_TOGGLE_CLASSIC_0(
         Settings.FILE_DOLPHIN,
         Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
@@ -403,6 +460,72 @@ enum class BooleanSetting(
         "ButtonToggleClassicStickRight",
         true
     ),
+    MAIN_BUTTON_LATCHING_CLASSIC_0(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingClassicButtonA",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_CLASSIC_1(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingClassicButtonB",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_CLASSIC_2(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingClassicButtonX",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_CLASSIC_3(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingClassicButtonY",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_CLASSIC_4(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingClassicButtonPlus",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_CLASSIC_5(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingClassicButtonMinus",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_CLASSIC_6(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingClassicButtonHome",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_CLASSIC_7(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingClassicTriggerL",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_CLASSIC_8(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingClassicTriggerR",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_CLASSIC_9(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingClassicButtonZL",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_CLASSIC_10(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingClassicButtonZR",
+        false
+    ),
     MAIN_BUTTON_TOGGLE_WII_0(
         Settings.FILE_DOLPHIN,
         Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
@@ -468,6 +591,60 @@ enum class BooleanSetting(
         Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
         "ButtonToggleNunchukStick",
         true
+    ),
+    MAIN_BUTTON_LATCHING_WII_0(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingWiimoteButtonA",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_WII_1(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingWiimoteButtonB",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_WII_2(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingWiimoteButton1",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_WII_3(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingWiimoteButton2",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_WII_4(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingWiimoteButtonPlus",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_WII_5(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingWiimoteButtonMinus",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_WII_6(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingWiimoteButtonHome",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_WII_8(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingNunchukC",
+        false
+    ),
+    MAIN_BUTTON_LATCHING_WII_9(
+        Settings.FILE_DOLPHIN,
+        Settings.SECTION_INI_ANDROID_OVERLAY_BUTTONS,
+        "ButtonLatchingNunchukZ",
+        false
     ),
     SYSCONF_SCREENSAVER(Settings.FILE_SYSCONF, "IPL", "SSV", false),
     SYSCONF_WIDESCREEN(Settings.FILE_SYSCONF, "IPL", "AR", true),
@@ -592,7 +769,19 @@ enum class BooleanSetting(
         Settings.FILE_GFX,
         Settings.SECTION_GFX_ENHANCEMENTS,
         "ArbitraryMipmapDetection",
-        true
+        false
+    ),
+    GFX_CC_CORRECT_COLOR_SPACE(
+        Settings.FILE_GFX,
+        Settings.SECTION_GFX_COLOR_CORRECTION,
+        "CorrectColorSpace",
+        false
+    ),
+    GFX_CC_CORRECT_GAMMA(
+        Settings.FILE_GFX,
+        Settings.SECTION_GFX_COLOR_CORRECTION,
+        "CorrectGamma",
+        false
     ),
     GFX_STEREO_SWAP_EYES(Settings.FILE_GFX, Settings.SECTION_STEREOSCOPY, "StereoSwapEyes", false),
     GFX_HACK_EFB_ACCESS_ENABLE(
@@ -716,12 +905,13 @@ enum class BooleanSetting(
     companion object {
         private val NOT_RUNTIME_EDITABLE_ARRAY = arrayOf(
             MAIN_DSP_HLE,
+            MAIN_FASTMEM_ARENA,
+            MAIN_LARGE_ENTRY_POINTS_MAP,
             MAIN_CPU_THREAD,
             MAIN_ENABLE_CHEATS,
             MAIN_OVERRIDE_REGION_SETTINGS,
             MAIN_MMU,
             MAIN_PAUSE_ON_PANIC,
-            MAIN_ACCURATE_CPU_CACHE,
             MAIN_RAM_OVERRIDE_ENABLE,
             MAIN_CUSTOM_RTC_ENABLE,
             MAIN_DSP_JIT,

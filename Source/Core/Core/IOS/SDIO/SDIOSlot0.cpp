@@ -15,6 +15,7 @@
 #include "Common/Logging/Log.h"
 #include "Common/SDCardUtil.h"
 
+#include "Core/CPUThreadConfigCallback.h"
 #include "Core/Config/MainSettings.h"
 #include "Core/Config/SessionSettings.h"
 #include "Core/Core.h"
@@ -32,27 +33,23 @@ SDIOSlot0Device::SDIOSlot0Device(EmulationKernel& ios, const std::string& device
   if (!Config::Get(Config::MAIN_ALLOW_SD_WRITES))
     INFO_LOG_FMT(IOS_SD, "Writes to SD card disabled by user");
 
-  m_config_callback_id = Config::AddConfigChangedCallback([this] { RefreshConfig(); });
+  m_config_callback_id =
+      CPUThreadConfigCallback::AddConfigChangedCallback([this] { RefreshConfig(); });
   m_sd_card_inserted = Config::Get(Config::MAIN_WII_SD_CARD);
 }
 
 SDIOSlot0Device::~SDIOSlot0Device()
 {
-  Config::RemoveConfigChangedCallback(m_config_callback_id);
+  CPUThreadConfigCallback::RemoveConfigChangedCallback(m_config_callback_id);
 }
 
 void SDIOSlot0Device::RefreshConfig()
 {
-  if (m_sd_card_inserted != Config::Get(Config::MAIN_WII_SD_CARD))
+  const bool sd_card_inserted = Config::Get(Config::MAIN_WII_SD_CARD);
+  if (m_sd_card_inserted != sd_card_inserted)
   {
-    Core::RunAsCPUThread([this] {
-      const bool sd_card_inserted = Config::Get(Config::MAIN_WII_SD_CARD);
-      if (m_sd_card_inserted != sd_card_inserted)
-      {
-        m_sd_card_inserted = sd_card_inserted;
-        EventNotify();
-      }
-    });
+    m_sd_card_inserted = sd_card_inserted;
+    EventNotify();
   }
 }
 
@@ -290,7 +287,7 @@ s32 SDIOSlot0Device::ExecuteCommand(const Request& request, u32 buffer_in, u32 b
       if (!m_card.Seek(address, File::SeekOrigin::Begin))
         ERROR_LOG_FMT(IOS_SD, "Seek failed");
 
-      if (m_card.ReadBytes(memory.GetPointer(req.addr), size))
+      if (m_card.ReadBytes(memory.GetPointerForRange(req.addr, size), size))
       {
         DEBUG_LOG_FMT(IOS_SD, "Outbuffer size {} got {}", rw_buffer_size, size);
       }
@@ -320,7 +317,7 @@ s32 SDIOSlot0Device::ExecuteCommand(const Request& request, u32 buffer_in, u32 b
       if (!m_card.Seek(address, File::SeekOrigin::Begin))
         ERROR_LOG_FMT(IOS_SD, "Seek failed");
 
-      if (!m_card.WriteBytes(memory.GetPointer(req.addr), size))
+      if (!m_card.WriteBytes(memory.GetPointerForRange(req.addr, size), size))
       {
         ERROR_LOG_FMT(IOS_SD, "Write Failed - error: {}, eof: {}", std::ferror(m_card.GetHandle()),
                       std::feof(m_card.GetHandle()));

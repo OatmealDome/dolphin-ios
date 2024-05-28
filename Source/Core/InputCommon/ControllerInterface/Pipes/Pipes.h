@@ -21,7 +21,7 @@ namespace ciface::Pipes
 // SET {L, R} [0, 1]
 // SET {MAIN, C} [0, 1] [0, 1]
 
-void PopulateDevices();
+std::unique_ptr<ciface::InputBackend> CreateInputBackend(ControllerInterface* controller_interface);
 
 class PipeDevice : public Core::Device
 {
@@ -29,7 +29,7 @@ public:
   PipeDevice(int fd, const std::string& name);
   ~PipeDevice();
 
-  void UpdateInput() override;
+  Core::DeviceRemoval UpdateInput() override;
   std::string GetName() const override { return m_name; }
   std::string GetSource() const override { return "Pipe"; }
 

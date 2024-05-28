@@ -57,6 +57,8 @@ extern const Info<bool> MAIN_SKIP_IPL;
 extern const Info<PowerPC::CPUCore> MAIN_CPU_CORE;
 extern const Info<bool> MAIN_JIT_FOLLOW_BRANCH;
 extern const Info<bool> MAIN_FASTMEM;
+extern const Info<bool> MAIN_FASTMEM_ARENA;
+extern const Info<bool> MAIN_LARGE_ENTRY_POINTS_MAP;
 extern const Info<bool> MAIN_ACCURATE_CPU_CACHE;
 // Should really be in the DSP section, but we're kind of stuck with bad decisions made in the past.
 extern const Info<bool> MAIN_DSP_HLE;
@@ -95,6 +97,8 @@ extern const Info<std::string> MAIN_BBA_XLINK_IP;
 extern const Info<bool> MAIN_BBA_XLINK_CHAT_OSD;
 extern const Info<std::string> MAIN_BBA_BUILTIN_DNS;
 extern const Info<std::string> MAIN_BBA_BUILTIN_IP;
+extern const Info<std::string> MAIN_BBA_TAPSERVER_DESTINATION;
+extern const Info<std::string> MAIN_MODEM_TAPSERVER_DESTINATION;
 const Info<SerialInterface::SIDevices>& GetInfoForSIDevice(int channel);
 const Info<bool>& GetInfoForAdapterRumble(int channel);
 const Info<bool>& GetInfoForSimulateKonga(int channel);
@@ -151,6 +155,7 @@ extern const Info<DiscIO::Region> MAIN_FALLBACK_REGION;
 extern const Info<bool> MAIN_REAL_WII_REMOTE_REPEAT_REPORTS;
 extern const Info<s32> MAIN_OVERRIDE_BOOT_IOS;
 extern const Info<std::string> MAIN_WII_NUS_SHOP_URL;
+extern const Info<bool> MAIN_WII_WIILINK_ENABLE;
 
 // Main.DSP
 
@@ -331,6 +336,7 @@ extern const Info<bool> MAIN_DEBUG_JIT_PAIRED_OFF;
 extern const Info<bool> MAIN_DEBUG_JIT_SYSTEM_REGISTERS_OFF;
 extern const Info<bool> MAIN_DEBUG_JIT_BRANCH_OFF;
 extern const Info<bool> MAIN_DEBUG_JIT_REGISTER_CACHE_OFF;
+extern const Info<bool> MAIN_DEBUG_JIT_ENABLE_PROFILING;
 
 // Main.BluetoothPassthrough
 
@@ -377,4 +383,6 @@ std::string GetGCIFolderPath(ExpansionInterface::Slot slot, std::optional<DiscIO
 std::string GetGCIFolderPath(std::string configured_folder, ExpansionInterface::Slot slot,
                              std::optional<DiscIO::Region> region);
 bool IsDefaultGCIFolderPathConfigured(ExpansionInterface::Slot slot);
+bool AreCheatsEnabled();
+bool IsDebuggingEnabled();
 }  // namespace Config

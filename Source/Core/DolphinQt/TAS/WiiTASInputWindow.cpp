@@ -25,9 +25,11 @@
 #include "Core/HW/WiimoteEmu/MotionPlus.h"
 #include "Core/HW/WiimoteEmu/WiimoteEmu.h"
 #include "Core/HW/WiimoteReal/WiimoteReal.h"
+#include "Core/System.h"
 
 #include "DolphinQt/QtUtils/AspectRatioWidget.h"
 #include "DolphinQt/QtUtils/QueueOnObject.h"
+#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/TAS/IRWidget.h"
 #include "DolphinQt/TAS/TASCheckBox.h"
 #include "DolphinQt/TAS/TASSpinBox.h"
@@ -69,8 +71,8 @@ WiiTASInputWindow::WiiTASInputWindow(QWidget* parent, int num) : TASInputWindow(
   visual->SetX(ir_x_center);
   visual->SetY(ir_y_center);
 
-  connect(m_ir_x_value, qOverload<int>(&QSpinBox::valueChanged), visual, &IRWidget::SetX);
-  connect(m_ir_y_value, qOverload<int>(&QSpinBox::valueChanged), visual, &IRWidget::SetY);
+  connect(m_ir_x_value, &QSpinBox::valueChanged, visual, &IRWidget::SetX);
+  connect(m_ir_y_value, &QSpinBox::valueChanged, visual, &IRWidget::SetY);
   connect(visual, &IRWidget::ChangedX, m_ir_x_value, &QSpinBox::setValue);
   connect(visual, &IRWidget::ChangedY, m_ir_y_value, &QSpinBox::setValue);
 
@@ -346,7 +348,7 @@ WiiTASInputWindow::WiiTASInputWindow(QWidget* parent, int num) : TASInputWindow(
 
   setLayout(layout);
 
-  if (Core::IsRunning())
+  if (Core::IsRunning(Core::System::GetInstance()))
   {
     m_active_extension = GetWiimote()->GetActiveExtensionNumber();
     m_is_motion_plus_attached = GetWiimote()->IsMotionPlusAttached();
@@ -395,15 +397,21 @@ void WiiTASInputWindow::UpdateExt()
   if (m_active_extension == WiimoteEmu::ExtensionNumber::NUNCHUK)
   {
     setWindowTitle(tr("Wii TAS Input %1 - Wii Remote + Nunchuk").arg(m_num + 1));
+    SetQWidgetWindowDecorations(m_ir_box);
     m_ir_box->show();
+    SetQWidgetWindowDecorations(m_nunchuk_stick_box);
     m_nunchuk_stick_box->show();
     m_classic_right_stick_box->hide();
     m_classic_left_stick_box->hide();
+    SetQWidgetWindowDecorations(m_remote_accelerometer_box);
     m_remote_accelerometer_box->show();
     m_remote_gyroscope_box->setVisible(m_is_motion_plus_attached);
+    SetQWidgetWindowDecorations(m_nunchuk_accelerometer_box);
     m_nunchuk_accelerometer_box->show();
     m_triggers_box->hide();
+    SetQWidgetWindowDecorations(m_nunchuk_buttons_box);
     m_nunchuk_buttons_box->show();
+    SetQWidgetWindowDecorations(m_remote_buttons_box);
     m_remote_buttons_box->show();
     m_classic_buttons_box->hide();
   }
@@ -412,14 +420,18 @@ void WiiTASInputWindow::UpdateExt()
     setWindowTitle(tr("Wii TAS Input %1 - Classic Controller").arg(m_num + 1));
     m_ir_box->hide();
     m_nunchuk_stick_box->hide();
+    SetQWidgetWindowDecorations(m_classic_right_stick_box);
     m_classic_right_stick_box->show();
+    SetQWidgetWindowDecorations(m_classic_left_stick_box);
     m_classic_left_stick_box->show();
     m_remote_accelerometer_box->hide();
     m_remote_gyroscope_box->hide();
     m_nunchuk_accelerometer_box->hide();
+    SetQWidgetWindowDecorations(m_triggers_box);
     m_triggers_box->show();
     m_remote_buttons_box->hide();
     m_nunchuk_buttons_box->hide();
+    SetQWidgetWindowDecorations(m_classic_buttons_box);
     m_classic_buttons_box->show();
   }
   else
@@ -429,10 +441,12 @@ void WiiTASInputWindow::UpdateExt()
     m_nunchuk_stick_box->hide();
     m_classic_right_stick_box->hide();
     m_classic_left_stick_box->hide();
+    SetQWidgetWindowDecorations(m_remote_accelerometer_box);
     m_remote_accelerometer_box->show();
     m_remote_gyroscope_box->setVisible(m_is_motion_plus_attached);
     m_nunchuk_accelerometer_box->hide();
     m_triggers_box->hide();
+    SetQWidgetWindowDecorations(m_remote_buttons_box);
     m_remote_buttons_box->show();
     m_nunchuk_buttons_box->hide();
     m_classic_buttons_box->hide();

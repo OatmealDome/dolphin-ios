@@ -207,7 +207,7 @@ void NetworkWidget::CreateWidgets()
 
 void NetworkWidget::ConnectWidgets()
 {
-  connect(m_dump_format_combo, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+  connect(m_dump_format_combo, &QComboBox::currentIndexChanged, this,
           &NetworkWidget::OnDumpFormatComboChanged);
   connect(m_dump_ssl_read_checkbox, &QCheckBox::stateChanged, [](int state) {
     Config::SetBaseOrCurrent(Config::MAIN_NETWORK_SSL_DUMP_READ, state == Qt::Checked);
@@ -239,7 +239,8 @@ void NetworkWidget::Update()
   if (!isVisible())
     return;
 
-  if (Core::GetState() != Core::State::Paused)
+  auto& system = Core::System::GetInstance();
+  if (Core::GetState(system) != Core::State::Paused)
   {
     m_socket_table->setDisabled(true);
     m_ssl_table->setDisabled(true);
@@ -250,9 +251,9 @@ void NetworkWidget::Update()
   m_ssl_table->setDisabled(false);
 
   // needed because there's a race condition on the IOS instance otherwise
-  Core::CPUThreadGuard guard(Core::System::GetInstance());
+  const Core::CPUThreadGuard guard(system);
 
-  auto* ios = IOS::HLE::GetIOS();
+  auto* ios = system.GetIOS();
   if (!ios)
     return;
 

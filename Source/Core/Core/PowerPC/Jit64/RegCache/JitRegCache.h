@@ -5,6 +5,7 @@
 
 #include <array>
 #include <cstddef>
+#include <span>
 #include <type_traits>
 #include <variant>
 
@@ -45,9 +46,6 @@ public:
   bool IsSimpleReg() const { return Location().IsSimpleReg(); }
   bool IsSimpleReg(Gen::X64Reg reg) const { return Location().IsSimpleReg(reg); }
   Gen::X64Reg GetSimpleReg() const { return Location().GetSimpleReg(); }
-
-  // Use to extract bytes from a register using the regcache. offset is in bytes.
-  Gen::OpArg ExtractWithByteOffset(int offset);
 
   void Unlock();
 
@@ -158,6 +156,8 @@ public:
   u32 Imm32(preg_t preg) const { return R(preg).Imm32(); }
   s32 SImm32(preg_t preg) const { return R(preg).SImm32(); }
 
+  bool IsBound(preg_t preg) const { return m_regs[preg].IsBound(); }
+
   RCOpArg Use(preg_t preg, RCMode mode);
   RCOpArg UseNoImm(preg_t preg, RCMode mode);
   RCOpArg BindOrImm(preg_t preg, RCMode mode);
@@ -187,7 +187,7 @@ protected:
   virtual void StoreRegister(preg_t preg, const Gen::OpArg& new_loc) = 0;
   virtual void LoadRegister(preg_t preg, Gen::X64Reg new_loc) = 0;
 
-  virtual const Gen::X64Reg* GetAllocationOrder(size_t* count) const = 0;
+  virtual std::span<const Gen::X64Reg> GetAllocationOrder() const = 0;
 
   virtual BitSet32 GetRegUtilization() const = 0;
   virtual BitSet32 CountRegsIn(preg_t preg, u32 lookahead) const = 0;

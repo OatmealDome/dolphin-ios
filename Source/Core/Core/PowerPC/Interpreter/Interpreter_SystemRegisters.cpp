@@ -181,6 +181,8 @@ void Interpreter::mtmsr(Interpreter& interpreter, UGeckoInstruction inst)
 
   ppc_state.msr.Hex = ppc_state.gpr[inst.RS];
 
+  PowerPC::MSRUpdated(ppc_state);
+
   // FE0/FE1 may have been set
   CheckFPExceptions(ppc_state);
 
@@ -243,13 +245,14 @@ void Interpreter::mfspr(Interpreter& interpreter, UGeckoInstruction inst)
   case SPR_DEC:
     if ((ppc_state.spr[index] & 0x80000000) == 0)  // We are still decrementing
     {
-      ppc_state.spr[index] = SystemTimers::GetFakeDecrementer();
+      ppc_state.spr[index] = interpreter.m_system.GetSystemTimers().GetFakeDecrementer();
     }
     break;
 
   case SPR_TL:
   case SPR_TU:
-    interpreter.m_system.GetPowerPC().WriteFullTimeBaseValue(SystemTimers::GetFakeTimeBase());
+    interpreter.m_system.GetPowerPC().WriteFullTimeBaseValue(
+        interpreter.m_system.GetSystemTimers().GetFakeTimeBase());
     break;
 
   case SPR_WPAR:
@@ -324,12 +327,12 @@ void Interpreter::mtspr(Interpreter& interpreter, UGeckoInstruction inst)
 
   case SPR_TL_W:
     TL(ppc_state) = ppc_state.gpr[inst.RD];
-    SystemTimers::TimeBaseSet();
+    interpreter.m_system.GetSystemTimers().TimeBaseSet();
     break;
 
   case SPR_TU_W:
     TU(ppc_state) = ppc_state.gpr[inst.RD];
-    SystemTimers::TimeBaseSet();
+    interpreter.m_system.GetSystemTimers().TimeBaseSet();
     break;
 
   case SPR_PVR:
@@ -355,7 +358,8 @@ void Interpreter::mtspr(Interpreter& interpreter, UGeckoInstruction inst)
       INFO_LOG_FMT(POWERPC, "Flush Instruction Cache! ICE={}", HID0(ppc_state).ICE);
       // this is rather slow
       // most games do it only once during initialization
-      ppc_state.iCache.Reset();
+      auto& jit_interface = interpreter.m_system.GetJitInterface();
+      ppc_state.iCache.Reset(jit_interface);
     }
   }
   break;
@@ -431,7 +435,7 @@ void Interpreter::mtspr(Interpreter& interpreter, UGeckoInstruction inst)
       INFO_LOG_FMT(POWERPC, "Software triggered Decrementer exception");
       ppc_state.Exceptions |= EXCEPTION_DECREMENTER;
     }
-    SystemTimers::DecrementerSet();
+    interpreter.m_system.GetSystemTimers().DecrementerSet();
     break;
 
   // Page table base etc
@@ -487,6 +491,11 @@ void Interpreter::mtspr(Interpreter& interpreter, UGeckoInstruction inst)
       INFO_LOG_FMT(POWERPC, "IBAT updated {} {:x} {:x}", index, old_value, ppc_state.spr[index]);
       interpreter.m_mmu.IBATUpdated();
     }
+    break;
+
+  case SPR_MMCR0:
+  case SPR_MMCR1:
+    MMCRUpdated(ppc_state);
     break;
 
   case SPR_THRM1:

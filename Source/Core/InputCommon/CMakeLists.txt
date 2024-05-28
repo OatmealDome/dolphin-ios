@@ -37,6 +37,8 @@ add_library(inputcommon
   ControllerEmu/ControlGroup/IMUCursor.h
   ControllerEmu/ControlGroup/IMUGyroscope.cpp
   ControllerEmu/ControlGroup/IMUGyroscope.h
+  ControllerEmu/ControlGroup/IRPassthrough.cpp
+  ControllerEmu/ControlGroup/IRPassthrough.h
   ControllerEmu/ControlGroup/MixedTriggers.cpp
   ControllerEmu/ControlGroup/MixedTriggers.h
   ControllerEmu/ControlGroup/ModifySettingsButton.cpp
@@ -81,7 +83,8 @@ PUBLIC
 
 PRIVATE
   fmt::fmt
-  ${spng_target}
+  sfml-network
+  spng::spng
 )
 
 if(WIN32)
@@ -111,8 +114,6 @@ elseif(APPLE AND NOT IOS)
     ControllerInterface/Quartz/Quartz.mm
     ControllerInterface/Quartz/QuartzKeyboardAndMouse.h
     ControllerInterface/Quartz/QuartzKeyboardAndMouse.mm
-    ControllerInterface/ForceFeedback/ForceFeedbackDevice.cpp
-    ControllerInterface/ForceFeedback/ForceFeedbackDevice.h
   )
   target_link_libraries(inputcommon PRIVATE
     ${COREFOUNDATION_LIBRARY}
@@ -146,14 +147,12 @@ elseif(IOS)
     ${GAMECONTROLLER_LIBRARY}
   )
 elseif(X11_FOUND)
+  target_include_directories(inputcommon PUBLIC ${X11_INPUT_INCLUDE_DIRS})
   target_sources(inputcommon PRIVATE
     ControllerInterface/Xlib/XInput2.cpp
     ControllerInterface/Xlib/XInput2.h
   )
-  target_link_libraries(inputcommon PUBLIC
-    ${X11_LIBRARIES}
-    ${X11_INPUT_LIBRARIES}
-  )
+  target_link_libraries(inputcommon PRIVATE PkgConfig::X11_INPUT)
 elseif(ANDROID)
   target_compile_definitions(inputcommon PRIVATE -DCIFACE_USE_ANDROID)
   target_sources(inputcommon PRIVATE
@@ -168,7 +167,7 @@ elseif(ANDROID)
 endif()
 
 if(NOT ANDROID)
-  target_link_libraries(inputcommon PUBLIC ${LIBUSB_LIBRARIES})
+  target_link_libraries(inputcommon PUBLIC LibUSB::LibUSB)
 endif()
 
 if(LIBEVDEV_FOUND AND LIBUDEV_FOUND)
@@ -196,12 +195,13 @@ if(UNIX)
   )
 endif()
 
-if(SDL2_FOUND)
+if(ENABLE_SDL)
   target_sources(inputcommon PRIVATE
     ControllerInterface/SDL/SDL.cpp
     ControllerInterface/SDL/SDL.h
   )
   target_link_libraries(inputcommon PRIVATE SDL2::SDL2)
+  target_compile_definitions(inputcommon PUBLIC HAVE_SDL2=1)
 endif()
 
 if(MSVC)

@@ -1,12 +1,14 @@
 // Copyright 2018 Dolphin Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include <bit>
 #include <cstring>
 
-#include "Common/BitUtils.h"
 #include "Common/CommonTypes.h"
 #include "Common/FloatUtils.h"
+#include "Common/ScopeGuard.h"
 #include "Common/x64ABI.h"
+#include "Core/Core.h"
 #include "Core/PowerPC/Gekko.h"
 #include "Core/PowerPC/Jit64/Jit.h"
 #include "Core/PowerPC/Jit64Common/Jit64AsmCommon.h"
@@ -59,15 +61,18 @@ public:
 
 TEST(Jit64, Frsqrte)
 {
+  Core::DeclareAsCPUThread();
+  Common::ScopeGuard cpu_thread_guard([] { Core::UndeclareAsCPUThread(); });
+
   TestCommonAsmRoutines routines(Core::System::GetInstance());
 
   UReg_FPSCR fpscr;
 
   for (const u64 ivalue : double_test_values)
   {
-    double dvalue = Common::BitCast<double>(ivalue);
+    double dvalue = std::bit_cast<double>(ivalue);
 
-    u64 expected = Common::BitCast<u64>(Common::ApproximateReciprocalSquareRoot(dvalue));
+    u64 expected = std::bit_cast<u64>(Common::ApproximateReciprocalSquareRoot(dvalue));
 
     u64 actual = routines.wrapped_frsqrte(ivalue, fpscr);
 

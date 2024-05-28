@@ -17,6 +17,7 @@
 #include "Common/Version.h"
 
 #include "DolphinQt/QtUtils/RunOnObject.h"
+#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/Settings.h"
 
 // Refer to docs/autoupdate_overview.md for a detailed overview of the autoupdate process
@@ -56,6 +57,7 @@ void Updater::OnUpdateAvailable(const NewVersionInformation& info)
 
   std::optional<int> choice = RunOnObject(m_parent, [&] {
     QDialog* dialog = new QDialog(m_parent);
+    dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     dialog->setWindowTitle(tr("Update available"));
     dialog->setWindowFlags(dialog->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -100,6 +102,7 @@ void Updater::OnUpdateAvailable(const NewVersionInformation& info)
     connect(buttons, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
     connect(buttons, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
 
+    SetQWidgetWindowDecorations(dialog);
     return dialog->exec();
   });
 

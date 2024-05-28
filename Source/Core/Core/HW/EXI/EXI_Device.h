@@ -39,9 +39,9 @@ enum class EXIDeviceType : int
   MemoryCardFolder,
   AGP,
   EthernetXLink,
-  // Only used on Apple devices.
   EthernetTapServer,
   EthernetBuiltIn,
+  ModemTapServer,
   None = 0xFF
 };
 
@@ -64,7 +64,6 @@ public:
   virtual bool IsPresent() const;
   virtual void SetCS(int cs);
   virtual void DoState(PointerWrap& p);
-  virtual void PauseAndLock(bool do_lock, bool resume_on_unlock = true);
 
   // Is generating interrupt ?
   virtual bool IsInterruptSet();
@@ -89,7 +88,7 @@ std::unique_ptr<IEXIDevice> EXIDevice_Create(Core::System& system, EXIDeviceType
 
 template <>
 struct fmt::formatter<ExpansionInterface::EXIDeviceType>
-    : EnumFormatter<ExpansionInterface::EXIDeviceType::EthernetBuiltIn>
+    : EnumFormatter<ExpansionInterface::EXIDeviceType::ModemTapServer>
 {
   static constexpr array_type names = {
       _trans("Dummy"),
@@ -106,6 +105,7 @@ struct fmt::formatter<ExpansionInterface::EXIDeviceType>
       _trans("Broadband Adapter (XLink Kai)"),
       _trans("Broadband Adapter (tapserver)"),
       _trans("Broadband Adapter (HLE)"),
+      _trans("Modem Adapter (tapserver)"),
   };
 
   constexpr formatter() : EnumFormatter(names) {}

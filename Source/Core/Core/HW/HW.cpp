@@ -7,7 +7,6 @@
 #include "Common/CommonTypes.h"
 
 #include "Core/Config/MainSettings.h"
-#include "Core/ConfigManager.h"
 #include "Core/Core.h"
 #include "Core/CoreTiming.h"
 #include "Core/HW/AddressSpace.h"
@@ -34,9 +33,9 @@ namespace HW
 void Init(Core::System& system, const Sram* override_sram)
 {
   system.GetCoreTiming().Init();
-  SystemTimers::PreInit();
+  system.GetSystemTimers().PreInit();
 
-  State::Init();
+  State::Init(system);
 
   // Init the whole Hardware
   system.GetAudioInterface().Init();
@@ -52,22 +51,22 @@ void Init(Core::System& system, const Sram* override_sram)
   system.GetDVDInterface().Init();
   system.GetGPFifo().Init();
   system.GetCPU().Init(Config::Get(Config::MAIN_CPU_CORE));
-  SystemTimers::Init();
+  system.GetSystemTimers().Init();
 
-  if (SConfig::GetInstance().bWii)
+  if (system.IsWii())
   {
-    IOS::Init();
-    IOS::HLE::Init();  // Depends on Memory
+    system.GetWiiIPC().Init();
+    IOS::HLE::Init(system);  // Depends on Memory
   }
 }
 
 void Shutdown(Core::System& system)
 {
-  // IOS should always be shut down regardless of bWii because it can be running in GC mode (MIOS).
-  IOS::HLE::Shutdown();  // Depends on Memory
-  IOS::Shutdown();
+  // IOS should always be shut down regardless of IsWii because it can be running in GC mode (MIOS).
+  IOS::HLE::Shutdown(system);  // Depends on Memory
+  system.GetWiiIPC().Shutdown();
 
-  SystemTimers::Shutdown();
+  system.GetSystemTimers().Shutdown();
   system.GetCPU().Shutdown();
   system.GetDVDInterface().Shutdown();
   system.GetDSP().Shutdown();
@@ -108,11 +107,11 @@ void DoState(Core::System& system, PointerWrap& p)
   system.GetHSP().DoState(p);
   p.DoMarker("HSP");
 
-  if (SConfig::GetInstance().bWii)
+  if (system.IsWii())
   {
-    IOS::DoState(p);
+    system.GetWiiIPC().DoState(p);
     p.DoMarker("IOS");
-    IOS::HLE::GetIOS()->DoState(p);
+    system.GetIOS()->DoState(p);
     p.DoMarker("IOS::HLE");
   }
 

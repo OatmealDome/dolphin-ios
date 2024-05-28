@@ -122,7 +122,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
 endif(CMAKE_COMPILER_IS_GNUCC)
 
 if(CMAKE_COMPILER_IS_CLANG)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-declarations -Wmissing-prototypes -Wdocumentation -Wno-documentation-deprecated-sync -Wunreachable-code")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-declarations -Wmissing-prototypes -Wunreachable-code")
 endif(CMAKE_COMPILER_IS_CLANG)
 
 if(WIN32)
@@ -189,39 +189,40 @@ endif()
 
 if(USE_STATIC_MBEDTLS_LIBRARY)
     add_library(${mbedcrypto_static_target} STATIC ${src_crypto})
-    dolphin_disable_warnings_msvc(${mbedcrypto_static_target})
+    dolphin_disable_warnings(${mbedcrypto_static_target})
     set_target_properties(${mbedcrypto_static_target} PROPERTIES OUTPUT_NAME mbedcrypto)
     target_link_libraries(${mbedcrypto_static_target} PUBLIC ${libs})
 
     add_library(${mbedx509_static_target} STATIC ${src_x509})
-    dolphin_disable_warnings_msvc(${mbedx509_static_target})
+    dolphin_disable_warnings(${mbedx509_static_target})
     set_target_properties(${mbedx509_static_target} PROPERTIES OUTPUT_NAME mbedx509)
     target_link_libraries(${mbedx509_static_target} PUBLIC ${libs} ${mbedcrypto_static_target})
 
     add_library(${mbedtls_static_target} STATIC ${src_tls})
-    dolphin_disable_warnings_msvc(${mbedtls_static_target})
+    dolphin_disable_warnings(${mbedtls_static_target})
     set_target_properties(${mbedtls_static_target} PROPERTIES OUTPUT_NAME mbedtls)
     target_link_libraries(${mbedtls_static_target} PUBLIC ${libs} ${mbedx509_static_target})
 endif(USE_STATIC_MBEDTLS_LIBRARY)
 
 if(USE_SHARED_MBEDTLS_LIBRARY)
     add_library(${mbedcrypto_target} SHARED ${src_crypto})
-    dolphin_disable_warnings_msvc(${mbedcrypto_target})
+    dolphin_disable_warnings(${mbedcrypto_target})
     set_target_properties(${mbedcrypto_target} PROPERTIES VERSION 2.28.0 SOVERSION 7)
     target_link_libraries(${mbedcrypto_target} PUBLIC ${libs})
 
     add_library(${mbedx509_target} SHARED ${src_x509})
-    dolphin_disable_warnings_msvc(${mbedx509_target})
+    dolphin_disable_warnings(${mbedx509_target})
     set_target_properties(${mbedx509_target} PROPERTIES VERSION 2.28.0 SOVERSION 1)
     target_link_libraries(${mbedx509_target} PUBLIC ${libs} ${mbedcrypto_target})
 
     add_library(${mbedtls_target} SHARED ${src_tls})
-    dolphin_disable_warnings_msvc(${mbedtls_target})
+    dolphin_disable_warnings(${mbedtls_target})
     set_target_properties(${mbedtls_target} PROPERTIES VERSION 2.28.0 SOVERSION 14)
     target_link_libraries(${mbedtls_target} PUBLIC ${libs} ${mbedx509_target})
 endif(USE_SHARED_MBEDTLS_LIBRARY)
 
 foreach(target IN LISTS target_libraries)
+    add_library(MbedTLS::${target} ALIAS ${target})  # add_subdirectory support
     # Include public header files from /include and other directories
     # declared by /3rdparty/**/CMakeLists.txt. Include private header files
     # from /library and others declared by /3rdparty/**/CMakeLists.txt.

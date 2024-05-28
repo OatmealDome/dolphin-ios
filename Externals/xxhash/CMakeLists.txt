@@ -1,8 +1,8 @@
 project(xxhash C)
 
-add_library(xxhash STATIC xxhash.c)
-dolphin_disable_warnings_msvc(xxhash)
+add_library(xxhash STATIC xxHash/xxhash.c)
+dolphin_disable_warnings(xxhash)
 target_include_directories(xxhash
 PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/xxHash
 )

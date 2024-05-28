@@ -59,9 +59,7 @@ if(HAS_SOCKLEN_T)
     add_definitions(-DHAS_SOCKLEN_T=1)
 endif()
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
-
-set(INCLUDE_FILES_PREFIX include/enet)
+set(INCLUDE_FILES_PREFIX enet/include/enet)
 set(INCLUDE_FILES
     ${INCLUDE_FILES_PREFIX}/callbacks.h
     ${INCLUDE_FILES_PREFIX}/enet.h
@@ -75,15 +73,15 @@ set(INCLUDE_FILES
 )
 
 set(SOURCE_FILES
-    callbacks.c
-    compress.c
-    host.c
-    list.c
-    packet.c
-    peer.c
-    protocol.c
-    unix.c
-    win32.c)
+    enet/callbacks.c
+    enet/compress.c
+    enet/host.c
+    enet/list.c
+    enet/packet.c
+    enet/peer.c
+    enet/protocol.c
+    enet/unix.c
+    enet/win32.c)
 
 source_group(include FILES ${INCLUDE_FILES})
 source_group(source FILES ${SOURCE_FILES})
@@ -92,8 +90,10 @@ add_library(enet STATIC
     ${INCLUDE_FILES}
     ${SOURCE_FILES}
 )
+target_include_directories(enet PUBLIC enet/include)
 
-dolphin_disable_warnings_msvc(enet)
+dolphin_disable_warnings(enet)
+add_library(enet::enet ALIAS enet)
 
 if (MINGW)
     target_link_libraries(enet winmm ws2_32)
