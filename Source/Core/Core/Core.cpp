@@ -190,7 +190,7 @@ std::string StopMessage(bool main_thread, std::string_view message)
 
 void DisplayMessage(std::string message, int time_in_ms)
 {
-  if (!IsRunning(Core::System::GetInstance()))
+  if (!IsRunning())
     return;
 
   // Actually displaying non-ASCII could cause things to go pear-shaped
@@ -200,8 +200,9 @@ void DisplayMessage(std::string message, int time_in_ms)
   OSD::AddMessage(std::move(message), time_in_ms);
 }
 
-bool IsRunning(Core::System& system)
+bool IsRunning()
 {
+  auto& system = Core::System::GetInstance();
   return (GetState(system) != State::Uninitialized || s_hardware_initialized) && !s_is_stopping;
 }
 
@@ -236,7 +237,7 @@ bool Init(Core::System& system, std::unique_ptr<BootParameters> boot, const Wind
 {
   if (s_emu_thread.joinable())
   {
-    if (IsRunning(system))
+    if (IsRunning())
     {
       PanicAlertFmtT("Emu Thread already running");
       return false;
@@ -841,7 +842,7 @@ static bool PauseAndLock(Core::System& system, bool do_lock, bool unpause_on_unl
 void RunOnCPUThread(Core::System& system, std::function<void()> function, bool wait_for_completion)
 {
   // If the CPU thread is not running, assume there is no active CPU thread we can race against.
-  if (!IsRunning(system) || IsCPUThread())
+  if (!IsRunning() || IsCPUThread())
   {
     function();
     return;
@@ -1037,7 +1038,7 @@ void HostDispatchJobs(Core::System& system)
     //   Core::State::Uninitialized: s_is_booting -> s_hardware_initialized
     //   We need to check variables in the same order as the state
     //   transition, otherwise we race and get transient failures.
-    if (!job.run_after_stop && !s_is_booting.IsSet() && !IsRunning(system))
+    if (!job.run_after_stop && !s_is_booting.IsSet() && !IsRunning())
       continue;
 
     guard.unlock();

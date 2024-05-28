@@ -118,7 +118,7 @@ void Host_Message(HostMessageID id)
   }
   else if (id == HostMessageID::WMUserStop)
   {
-    if (Core::IsRunning(Core::System::GetInstance()))
+    if (Core::IsRunning())
       Core::QueueHostJob(&Core::Stop);
   }
 }
@@ -272,8 +272,7 @@ JNIEXPORT void JNICALL Java_org_dolphinemu_dolphinemu_NativeLibrary_SetIsBooting
 
 JNIEXPORT jboolean JNICALL Java_org_dolphinemu_dolphinemu_NativeLibrary_IsRunning(JNIEnv*, jclass)
 {
-  return s_is_booting.IsSet() ||
-         static_cast<jboolean>(Core::IsRunning(Core::System::GetInstance()));
+  return s_is_booting.IsSet() || static_cast<jboolean>(Core::IsRunning());
 }
 
 JNIEXPORT jboolean JNICALL Java_org_dolphinemu_dolphinemu_NativeLibrary_IsRunningAndStarted(JNIEnv*,
@@ -590,7 +589,7 @@ static void Run(JNIEnv* env, std::unique_ptr<BootParameters>&& boot, bool riivol
   s_need_nonblocking_alert_msg = false;
   surface_guard.unlock();
 
-  while (Core::IsRunning(Core::System::GetInstance()))
+  while (Core::IsRunning())
   {
     host_identity_guard.Unlock();
     s_update_main_frame_event.Wait();

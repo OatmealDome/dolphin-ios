@@ -856,7 +856,7 @@ static void LoadFileStateData(const std::string& filename, std::vector<u8>& ret_
 
 void LoadAs(Core::System& system, const std::string& filename)
 {
-  if (!Core::IsRunning(system))
+  if (!Core::IsRunning())
     return;
 
   if (NetPlay::IsNetPlayRunning())

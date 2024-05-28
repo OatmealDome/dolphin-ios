@@ -27,13 +27,12 @@
 #include "Core/IOS/IOS.h"
 #include "Core/IOS/USB/Bluetooth/BTBase.h"
 #include "Core/SysConf.h"
-#include "Core/System.h"
 
 namespace ConfigLoaders
 {
 void SaveToSYSCONF(Config::LayerType layer, std::function<bool(const Config::Location&)> predicate)
 {
-  if (Core::IsRunning(Core::System::GetInstance()))
+  if (Core::IsRunning())
     return;
 
   IOS::HLE::Kernel ios;
@@ -183,7 +182,7 @@ public:
 private:
   void LoadFromSYSCONF(Config::Layer* layer)
   {
-    if (Core::IsRunning(Core::System::GetInstance()))
+    if (Core::IsRunning())
       return;
 
     IOS::HLE::Kernel ios;
