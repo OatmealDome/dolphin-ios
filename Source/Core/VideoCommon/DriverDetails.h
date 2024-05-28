@@ -1,7 +1,6 @@
 // Copyright 2013 Dolphin Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 #pragma once
-#include <string>
 #include "Common/CommonTypes.h"
 
 #undef OS  // CURL defines that, nobody uses it...
@@ -300,23 +299,14 @@ enum Bug
 
   // BUG: Accessing gl_SubgroupInvocationID causes the Metal shader compiler to crash.
   //      Affected devices: AMD (older macOS)
-  // Started version: ???
-  // Ended version: ???
-  // (Workaround currently disabled, will put it back when someone hits the issue and we can
-  //  find out what devices and OSes it actually affects)
-
+  // BUG: gl_HelperInvocation always returns true, even for non-helper invocations
+  //      Affected devices: AMD (newer macOS)
   // BUG: Using subgroupMax in a shader that can discard results in garbage data
   //      (For some reason, this only happens at 4x+ IR on Metal, but 2x+ IR on MoltenVK)
   //      Affected devices: Intel (macOS)
   // Started version: -1
   // Ended version: -1
-  BUG_BROKEN_SUBGROUP_OPS_WITH_DISCARD,
-
-  // BUG: gl_HelperInvocation is actually !gl_HelperInvocation
-  //      Affected devices: AMD (macOS)
-  // Started version: -1
-  // Ended version: -1
-  BUG_INVERTED_IS_HELPER,
+  BUG_BROKEN_SUBGROUP_OPS,
 
   // BUG: Multi-threaded shader pre-compilation sometimes crashes
   // Used primarily in Videoconfig.cpp's GetNumAutoShaderPreCompilerThreads()
@@ -346,13 +336,9 @@ enum Bug
 };
 
 // Initializes our internal vendor, device family, and driver version
-void Init(API api, Vendor vendor, Driver driver, const double version, const Family family,
-          std::string name);
+void Init(API api, Vendor vendor, Driver driver, const double version, const Family family);
 
 // Once Vendor and driver version is set, this will return if it has the applicable bug passed to
 // it.
 bool HasBug(Bug bug);
-
-// Overrides the current state of a bug
-void OverrideBug(Bug bug, bool new_value);
 }  // namespace DriverDetails

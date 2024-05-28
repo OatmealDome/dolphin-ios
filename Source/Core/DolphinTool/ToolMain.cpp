@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <string_view>
@@ -12,10 +13,10 @@
 #include <fmt/ostream.h>
 
 #include "Common/StringUtil.h"
+#include "Common/Version.h"
 #include "Core/Core.h"
 
 #include "DolphinTool/ConvertCommand.h"
-#include "DolphinTool/ExtractCommand.h"
 #include "DolphinTool/HeaderCommand.h"
 #include "DolphinTool/VerifyCommand.h"
 
@@ -23,7 +24,7 @@ static void PrintUsage()
 {
   fmt::print(std::cerr, "usage: dolphin-tool COMMAND -h\n"
                         "\n"
-                        "commands supported: [convert, verify, header, extract]\n");
+                        "commands supported: [convert, verify, header]\n");
 }
 
 #ifdef _WIN32
@@ -50,8 +51,6 @@ int main(int argc, char* argv[])
     return DolphinTool::VerifyCommand(args);
   else if (command_str == "header")
     return DolphinTool::HeaderCommand(args);
-  else if (command_str == "extract")
-    return DolphinTool::Extract(args);
   PrintUsage();
   return EXIT_FAILURE;
 }

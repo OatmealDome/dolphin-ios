@@ -44,16 +44,12 @@ VerifyWidget::VerifyWidget(std::shared_ptr<DiscIO::Volume> volume) : m_volume(st
   connect(&Settings::Instance(), &Settings::EmulationStateChanged, this,
           &VerifyWidget::OnEmulationStateChanged);
 
-  OnEmulationStateChanged(Core::GetState(Core::System::GetInstance()));
+  OnEmulationStateChanged();
 }
 
-void VerifyWidget::OnEmulationStateChanged(Core::State state)
+void VerifyWidget::OnEmulationStateChanged()
 {
-<<<<<<< HEAD
-  const bool running = state != Core::State::Uninitialized;
-=======
   const bool running = Core::GetState() != Core::State::Uninitialized;
->>>>>>> parent of eb92d6f0a8 (Core::GetState: Avoid Global System Accessor)
 
   // Verifying a Wii game while emulation is running doesn't work correctly
   // due to verification of a Wii game creating an instance of IOS

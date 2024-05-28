@@ -62,7 +62,7 @@ namespace GCAdapter
 {
 #if GCADAPTER_USE_LIBUSB_IMPLEMENTATION
 
-constexpr unsigned int USB_TIMEOUT_MS = 100;
+constexpr unsigned int USB_TIMEOUT_MS = 16;
 
 static bool CheckDeviceAccess(libusb_device* device);
 static void AddGCAdapter(libusb_device* device);

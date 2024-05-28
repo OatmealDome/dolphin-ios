@@ -101,8 +101,8 @@ class AdvancedMappingDialog(
             return
         } else if (!isInput) {
             // Find the first device that has an output. (Most built-in devices don't have any)
-            val deviceWithOutputs = devices.firstOrNull { deviceHasOutputs(it) }
-            if (deviceWithOutputs != null) {
+            val deviceWithOutputs = devices.first { deviceHasOutputs(it) }
+            if (deviceWithOutputs.isNotEmpty()) {
                 setSelectedDevice(deviceWithOutputs)
                 binding.dropdownDevice.setText(deviceWithOutputs, false)
                 return

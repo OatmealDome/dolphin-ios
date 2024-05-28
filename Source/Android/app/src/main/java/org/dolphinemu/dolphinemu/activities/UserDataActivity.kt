@@ -102,7 +102,10 @@ class UserDataActivity : AppCompatActivity() {
             dialog.show(supportFragmentManager, UserDataImportWarningDialog.TAG)
         } else if (requestCode == REQUEST_CODE_EXPORT && resultCode == RESULT_OK) {
             taskViewModel.clear()
-            taskViewModel.task = { exportUserData(data!!.data!!) }
+            taskViewModel.task = {
+                val resultResource = exportUserData(data!!.data!!)
+                taskViewModel.setResult(resultResource)
+            }
 
             val arguments = Bundle()
             arguments.putInt(TaskDialog.KEY_TITLE, R.string.export_in_progress)

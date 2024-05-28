@@ -64,10 +64,6 @@ public:
     // May be overridden to allow multiple valid names.
     // Useful for backwards-compatible configurations when names change.
     virtual bool IsMatchingName(std::string_view name) const;
-
-    // May be overridden to hide in UI.
-    // Useful for backwards-compatible configurations when names change.
-    virtual bool IsHidden() const;
   };
 
   //
@@ -168,7 +164,6 @@ protected:
     ControlState GetState() const override;
     std::string GetName() const override;
     bool IsDetectable() const override;
-    bool IsHidden() const override;
     bool IsMatchingName(std::string_view name) const override;
 
   private:

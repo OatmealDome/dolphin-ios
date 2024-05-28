@@ -15,7 +15,6 @@ static constexpr auto X_None = None;
 #include "Core/Config/MainSettings.h"
 #include "Core/Core.h"
 #include "Core/State.h"
-#include "Core/System.h"
 
 #include <climits>
 #include <cstdio>
@@ -152,7 +151,7 @@ void PlatformX11::MainLoop()
   while (IsRunning())
   {
     UpdateRunningFlag();
-    Core::HostDispatchJobs(Core::System::GetInstance());
+    Core::HostDispatchJobs();
     ProcessEvents();
     UpdateWindowPosition();
 
@@ -225,20 +224,20 @@ void PlatformX11::ProcessEvents()
       {
         int slot_number = key - XK_F1 + 1;
         if (event.xkey.state & ShiftMask)
-          State::Save(Core::System::GetInstance(), slot_number);
+          State::Save(slot_number);
         else
-          State::Load(Core::System::GetInstance(), slot_number);
+          State::Load(slot_number);
       }
       else if (key == XK_F9)
         Core::SaveScreenShot();
       else if (key == XK_F11)
-        State::LoadLastSaved(Core::System::GetInstance());
+        State::LoadLastSaved();
       else if (key == XK_F12)
       {
         if (event.xkey.state & ShiftMask)
-          State::UndoLoadState(Core::System::GetInstance());
+          State::UndoLoadState();
         else
-          State::UndoSaveState(Core::System::GetInstance());
+          State::UndoSaveState();
       }
       break;
     case FocusIn:

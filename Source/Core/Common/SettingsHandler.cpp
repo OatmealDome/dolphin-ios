@@ -17,19 +17,26 @@
 
 namespace Common
 {
-SettingsHandler::SettingsHandler() : m_buffer{}, m_position{0}, m_key{INITIAL_SEED}, decoded{""}
+SettingsHandler::SettingsHandler()
 {
+  Reset();
 }
 
-SettingsHandler::SettingsHandler(const Buffer& buffer) : SettingsHandler()
+SettingsHandler::SettingsHandler(Buffer&& buffer)
 {
-  m_buffer = buffer;
-  Decrypt();
+  SetBytes(std::move(buffer));
 }
 
 const SettingsHandler::Buffer& SettingsHandler::GetBytes() const
 {
   return m_buffer;
+}
+
+void SettingsHandler::SetBytes(Buffer&& buffer)
+{
+  Reset();
+  m_buffer = std::move(buffer);
+  Decrypt();
 }
 
 std::string SettingsHandler::GetValue(std::string_view key) const
@@ -75,6 +82,14 @@ void SettingsHandler::Decrypt()
   // To handle this, we remove every CR and treat LF as the line ending.
   // (We ignore empty lines.)
   std::erase(decoded, '\x0d');
+}
+
+void SettingsHandler::Reset()
+{
+  decoded = "";
+  m_position = 0;
+  m_key = INITIAL_SEED;
+  m_buffer = {};
 }
 
 void SettingsHandler::AddSetting(std::string_view key, std::string_view value)

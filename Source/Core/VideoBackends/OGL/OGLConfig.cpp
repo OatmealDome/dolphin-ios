@@ -211,8 +211,7 @@ void InitDriverInfo()
   default:
     break;
   }
-  DriverDetails::Init(DriverDetails::API_OPENGL, vendor, driver, version, family,
-                      std::string(srenderer));
+  DriverDetails::Init(DriverDetails::API_OPENGL, vendor, driver, version, family);
 }
 
 bool PopulateConfig(GLContext* m_main_gl_context)

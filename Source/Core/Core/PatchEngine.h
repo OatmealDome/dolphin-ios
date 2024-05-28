@@ -49,7 +49,7 @@ struct Patch
 
 const char* PatchTypeAsString(PatchType type);
 
-u32 GetSpeedhackCycles(const u32 addr);
+int GetSpeedhackCycles(const u32 addr);
 
 std::optional<PatchEntry> DeserializeLine(std::string line);
 std::string SerializeLine(const PatchEntry& entry);

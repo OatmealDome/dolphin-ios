@@ -15,10 +15,6 @@
 #include <QTextEdit>
 #include <QWidget>
 
-namespace Core
-{
-enum class State;
-}
 namespace DiscIO
 {
 class Volume;
@@ -30,8 +26,10 @@ class VerifyWidget final : public QWidget
 public:
   explicit VerifyWidget(std::shared_ptr<DiscIO::Volume> volume);
 
+private slots:
+  void OnEmulationStateChanged();
+
 private:
-  void OnEmulationStateChanged(Core::State state);
   void CreateWidgets();
   std::pair<QCheckBox*, QLineEdit*> AddHashLine(QFormLayout* layout, QString text);
   void ConnectWidgets();

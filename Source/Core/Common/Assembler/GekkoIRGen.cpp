@@ -3,7 +3,6 @@
 
 #include "Common/Assembler/GekkoIRGen.h"
 
-#include <bit>
 #include <functional>
 #include <map>
 #include <numeric>
@@ -437,13 +436,13 @@ void GekkoIRPlugin::AddBytes(T val)
   else if constexpr (std::is_same_v<T, float>)
   {
     static_assert(sizeof(double) == sizeof(u64));
-    AddBytes(std::bit_cast<u32>(val));
+    AddBytes(BitCast<u32>(val));
   }
   else
   {
     // std::is_same_v<T, double>
     static_assert(sizeof(double) == sizeof(u64));
-    AddBytes(std::bit_cast<u64>(val));
+    AddBytes(BitCast<u64>(val));
   }
 }
 

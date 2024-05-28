@@ -34,7 +34,6 @@ signals:
 
 private:
   void HandleCursorTimer();
-  void OnHandleChanged(void* handle);
   void OnHideCursorChanged();
   void OnNeverHideCursorChanged();
   void OnLockCursorChanged();

@@ -49,7 +49,6 @@
 #include "InputCommon/ControllerEmu/ControlGroup/IMUAccelerometer.h"
 #include "InputCommon/ControllerEmu/ControlGroup/IMUCursor.h"
 #include "InputCommon/ControllerEmu/ControlGroup/IMUGyroscope.h"
-#include "InputCommon/ControllerEmu/ControlGroup/IRPassthrough.h"
 #include "InputCommon/ControllerEmu/ControlGroup/ModifySettingsButton.h"
 #include "InputCommon/ControllerEmu/ControlGroup/Tilt.h"
 
@@ -251,8 +250,6 @@ Wiimote::Wiimote(const unsigned int index) : m_index(index), m_bt_device_index(i
                         _trans("Camera field of view (affects sensitivity of pointing).")},
                        fov_default.y, 0.01, 180);
 
-  groups.emplace_back(m_ir_passthrough = new ControllerEmu::IRPassthrough(
-                          IR_PASSTHROUGH_GROUP, _trans("Point (Passthrough)")));
   groups.emplace_back(m_imu_accelerometer = new ControllerEmu::IMUAccelerometer(
                           ACCELEROMETER_GROUP, _trans("Accelerometer")));
   groups.emplace_back(m_imu_gyroscope =
@@ -363,8 +360,6 @@ ControllerEmu::ControlGroup* Wiimote::GetWiimoteGroup(WiimoteGroup group) const
     return m_imu_gyroscope;
   case WiimoteGroup::IMUPoint:
     return m_imu_ir;
-  case WiimoteGroup::IRPassthrough:
-    return m_ir_passthrough;
   default:
     ASSERT(false);
     return nullptr;
@@ -452,33 +447,6 @@ void Wiimote::UpdateButtonsStatus(const DesiredWiimoteState& target_state)
   m_status.buttons.hex = target_state.buttons.hex & ButtonData::BUTTON_MASK;
 }
 
-static std::array<CameraPoint, CameraLogic::NUM_POINTS>
-GetPassthroughCameraPoints(ControllerEmu::IRPassthrough* ir_passthrough)
-{
-  std::array<CameraPoint, CameraLogic::NUM_POINTS> camera_points;
-  for (size_t i = 0; i < camera_points.size(); ++i)
-  {
-    const ControlState size = ir_passthrough->GetObjectSize(i);
-    if (size <= 0.0f)
-      continue;
-
-    const ControlState x = ir_passthrough->GetObjectPositionX(i);
-    const ControlState y = ir_passthrough->GetObjectPositionY(i);
-
-    camera_points[i].position.x =
-        std::clamp(std::lround(x * ControlState(CameraLogic::CAMERA_RES_X - 1)), long(0),
-                   long(CameraLogic::CAMERA_RES_X - 1));
-    camera_points[i].position.y =
-        std::clamp(std::lround(y * ControlState(CameraLogic::CAMERA_RES_Y - 1)), long(0),
-                   long(CameraLogic::CAMERA_RES_Y - 1));
-    camera_points[i].size =
-        std::clamp(std::lround(size * ControlState(CameraLogic::MAX_POINT_SIZE)), long(0),
-                   long(CameraLogic::MAX_POINT_SIZE));
-  }
-
-  return camera_points;
-}
-
 void Wiimote::BuildDesiredWiimoteState(DesiredWiimoteState* target_state,
                                        SensorBarState sensor_bar_state)
 {
@@ -502,11 +470,7 @@ void Wiimote::BuildDesiredWiimoteState(DesiredWiimoteState* target_state,
       ConvertAccelData(GetTotalAcceleration(), ACCEL_ZERO_G << 2, ACCEL_ONE_G << 2);
 
   // Calculate IR camera state.
-  if (m_ir_passthrough->enabled)
-  {
-    target_state->camera_points = GetPassthroughCameraPoints(m_ir_passthrough);
-  }
-  else if (sensor_bar_state == SensorBarState::Enabled)
+  if (sensor_bar_state == SensorBarState::Enabled)
   {
     target_state->camera_points = CameraLogic::GetCameraPoints(
         GetTotalTransformation(),
@@ -798,12 +762,6 @@ void Wiimote::LoadDefaults(const ControllerInterface& ciface)
   m_imu_gyroscope->SetControlExpression(3, "`Gyro Roll Right`");
   m_imu_gyroscope->SetControlExpression(4, "`Gyro Yaw Left`");
   m_imu_gyroscope->SetControlExpression(5, "`Gyro Yaw Right`");
-  for (int i = 0; i < 4; ++i)
-  {
-    m_ir_passthrough->SetControlExpression(i * 3 + 0, fmt::format("`IR Object {} X`", i + 1));
-    m_ir_passthrough->SetControlExpression(i * 3 + 1, fmt::format("`IR Object {} Y`", i + 1));
-    m_ir_passthrough->SetControlExpression(i * 3 + 2, fmt::format("`IR Object {} Size`", i + 1));
-  }
 #endif
 
   // Enable Nunchuk:

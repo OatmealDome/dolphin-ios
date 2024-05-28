@@ -587,25 +587,28 @@ void IOWindow::UpdateOptionList()
   if (m_selected_device == nullptr)
     return;
 
-  const auto add_rows = [this](auto& container) {
+  if (m_reference->IsInput())
+  {
     int row = 0;
-    for (ciface::Core::Device::Control* control : container)
+    for (const auto* input : m_selected_device->Inputs())
     {
       m_option_list->insertRow(row);
-
-      if (control->IsHidden())
-        m_option_list->hideRow(row);
-
       m_option_list->setItem(row, 0,
-                             new QTableWidgetItem(QString::fromStdString(control->GetName())));
+                             new QTableWidgetItem(QString::fromStdString(input->GetName())));
       ++row;
     }
-  };
-
-  if (m_reference->IsInput())
-    add_rows(m_selected_device->Inputs());
+  }
   else
-    add_rows(m_selected_device->Outputs());
+  {
+    int row = 0;
+    for (const auto* output : m_selected_device->Outputs())
+    {
+      m_option_list->insertRow(row);
+      m_option_list->setItem(row, 0,
+                             new QTableWidgetItem(QString::fromStdString(output->GetName())));
+      ++row;
+    }
+  }
 }
 
 void IOWindow::UpdateDeviceList()

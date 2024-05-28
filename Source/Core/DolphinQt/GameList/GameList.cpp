@@ -372,7 +372,6 @@ void GameList::ShowContextMenu(const QPoint&)
     return;
 
   QMenu* menu = new QMenu(this);
-  menu->setAttribute(Qt::WA_DeleteOnClose, true);
 
   if (HasMultipleSelected())
   {
@@ -880,8 +879,9 @@ void GameList::ChangeDisc()
   if (!game)
     return;
 
-  auto& system = Core::System::GetInstance();
-  system.GetDVDInterface().ChangeDisc(Core::CPUThreadGuard{system}, game->GetFilePath());
+  Core::RunAsCPUThread([file_path = game->GetFilePath()] {
+    Core::System::GetInstance().GetDVDInterface().ChangeDisc(file_path);
+  });
 }
 
 QAbstractItemView* GameList::GetActiveView() const

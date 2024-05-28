@@ -3,9 +3,10 @@
 
 #pragma once
 
-#include "InputCommon/ControllerInterface/InputBackend.h"
-
 namespace ciface::Win32
 {
-std::unique_ptr<ciface::InputBackend> CreateInputBackend(ControllerInterface* controller_interface);
+void Init(void* hwnd);
+void PopulateDevices(void* hwnd);
+void ChangeWindow(void* hwnd);
+void DeInit();
 }  // namespace ciface::Win32

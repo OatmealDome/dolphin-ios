@@ -6,7 +6,6 @@
 #include <climits>
 
 #include "Common/CommonTypes.h"
-#include "Common/EnumUtils.h"
 #include "Common/JitRegister.h"
 #include "Common/x64ABI.h"
 #include "Common/x64Emitter.h"
@@ -106,8 +105,8 @@ void Jit64AsmRoutineManager::Generate()
   if (enable_debugging)
   {
     MOV(64, R(RSCRATCH), ImmPtr(system.GetCPU().GetStatePtr()));
-    CMP(32, MatR(RSCRATCH), Imm32(Common::ToUnderlying(CPU::State::Running)));
-    dbg_exit = J_CC(CC_NE, Jump::Near);
+    TEST(32, MatR(RSCRATCH), Imm32(0xFFFFFFFF));
+    dbg_exit = J_CC(CC_NZ, Jump::Near);
   }
 
   SetJumpTarget(skipToRealDispatch);
@@ -237,8 +236,8 @@ void Jit64AsmRoutineManager::Generate()
   // Check the state pointer to see if we are exiting
   // Gets checked on at the end of every slice
   MOV(64, R(RSCRATCH), ImmPtr(system.GetCPU().GetStatePtr()));
-  CMP(32, MatR(RSCRATCH), Imm32(Common::ToUnderlying(CPU::State::Running)));
-  J_CC(CC_E, outerLoop);
+  TEST(32, MatR(RSCRATCH), Imm32(0xFFFFFFFF));
+  J_CC(CC_Z, outerLoop);
 
   // Landing pad for drec space
   dispatcher_exit = GetCodePtr();

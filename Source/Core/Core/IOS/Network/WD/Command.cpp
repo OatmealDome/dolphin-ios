@@ -346,8 +346,7 @@ std::optional<IPCReply> NetWDCommandDevice::IOCtlV(const IOCtlVRequest& request)
 
     auto& system = GetSystem();
     auto& memory = system.GetMemory();
-    u16* results = (u16*)memory.GetPointerForRange(request.io_vectors.at(0).address,
-                                                   sizeof(u16) + sizeof(BSSInfo));
+    u16* results = (u16*)memory.GetPointer(request.io_vectors.at(0).address);
     // first u16 indicates number of BSSInfo following
     results[0] = Common::swap16(1);
 

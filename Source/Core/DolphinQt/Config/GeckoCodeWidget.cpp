@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "DolphinQt/Config/GeckoCodeWidget.h"
-#include "DolphinQt/QtUtils/WrapInScrollArea.h"
 
 #include <algorithm>
 #include <utility>
@@ -139,7 +138,7 @@ void GeckoCodeWidget::CreateWidgets()
 
   layout->addLayout(btn_layout);
 
-  WrapInScrollArea(this, layout);
+  setLayout(layout);
 }
 
 void GeckoCodeWidget::ConnectWidgets()

@@ -7,7 +7,6 @@
 #include "Core/Config/MainSettings.h"
 #include "Core/Core.h"
 #include "Core/State.h"
-#include "Core/System.h"
 #include "VideoCommon/Present.h"
 #include "VideoCommon/RenderBase.h"
 
@@ -55,27 +54,27 @@
 
 - (void)loadLastSaved
 {
-  State::LoadLastSaved(Core::System::GetInstance());
+  State::LoadLastSaved();
 }
 
 - (void)undoLoadState
 {
-  State::UndoLoadState(Core::System::GetInstance());
+  State::UndoLoadState();
 }
 
 - (void)undoSaveState
 {
-  State::UndoSaveState(Core::System::GetInstance());
+  State::UndoSaveState();
 }
 
 - (void)loadState:(id)sender
 {
-  State::Load(Core::System::GetInstance(), [sender tag]);
+  State::Load([sender tag]);
 }
 
 - (void)saveState:(id)sender
 {
-  State::Save(Core::System::GetInstance(), [sender tag]);
+  State::Save([sender tag]);
 }
 @end
 
@@ -226,7 +225,7 @@ void PlatformMacOS::MainLoop()
   while (IsRunning())
   {
     UpdateRunningFlag();
-    Core::HostDispatchJobs(Core::System::GetInstance());
+    Core::HostDispatchJobs();
     ProcessEvents();
     UpdateWindowPosition();
   }

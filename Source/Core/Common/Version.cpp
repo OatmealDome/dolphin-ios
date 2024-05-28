@@ -20,8 +20,7 @@ namespace Common
 const std::string& GetScmRevStr()
 {
   static const std::string scm_rev_str = "Dolphin "
-  // Note this macro can be empty if the master branch does not exist.
-#if 1 - SCM_COMMITS_AHEAD_MASTER - 1 != 0
+#if !SCM_IS_MASTER
                                          "[" SCM_BRANCH_STR "] "
 #endif
 
@@ -73,12 +72,6 @@ const std::string& GetNetplayDolphinVer()
   static const std::string netplay_dolphin_ver = SCM_DESC_STR " Lin";
 #endif
   return netplay_dolphin_ver;
-}
-
-int GetScmCommitsAheadMaster()
-{
-  // Note this macro can be empty if the master branch does not exist.
-  return SCM_COMMITS_AHEAD_MASTER + 0;
 }
 
 }  // namespace Common

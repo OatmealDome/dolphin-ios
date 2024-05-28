@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include <AppKit/NSScreen.h>
 #include <Metal/Metal.h>
-
 #include <vector>
 
 #include "VideoBackends/Metal/MRCHelpers.h"

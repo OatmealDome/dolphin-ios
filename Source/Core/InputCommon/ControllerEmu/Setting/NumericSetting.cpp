@@ -3,18 +3,13 @@
 
 #include "InputCommon/ControllerEmu/Setting/NumericSetting.h"
 
-#include <fmt/format.h>
+#include <sstream>
 
 namespace ControllerEmu
 {
 NumericSettingBase::NumericSettingBase(const NumericSettingDetails& details) : m_details(details)
 {
 }
-
-// Explicit instantiations so generic definitions can exist outside of the header.
-template class NumericSetting<int>;
-template class NumericSetting<double>;
-template class NumericSetting<bool>;
 
 const char* NumericSettingBase::GetININame() const
 {
@@ -41,20 +36,28 @@ SettingVisibility NumericSettingBase::GetVisibility() const
   return m_details.visibility;
 }
 
-template <typename T>
-void NumericSetting<T>::SetExpressionFromValue()
+template <>
+void NumericSetting<int>::SetExpressionFromValue()
 {
-  // Always include -/+ sign to prevent CoalesceExpression binding.
-  // e.g. 1 is a valid input name for keyboard devices, +1 is not.
-  m_value.m_input.SetExpression(fmt::format("{:+g}", ControlState(GetValue())));
+  m_value.m_input.SetExpression(ValueToString(GetValue()));
 }
 
-template <typename T>
-void NumericSetting<T>::SimplifyIfPossible()
+template <>
+void NumericSetting<double>::SetExpressionFromValue()
 {
-  ValueType value;
-  if (TryParse(std::string(StripWhitespace(m_value.m_input.GetExpression())), &value))
-    m_value.SetValue(value);
+  // We must use a dot decimal separator for expression parser.
+  std::ostringstream ss;
+  ss.imbue(std::locale::classic());
+  ss << GetValue();
+
+  m_value.m_input.SetExpression(ss.str());
+}
+
+template <>
+void NumericSetting<bool>::SetExpressionFromValue()
+{
+  // Cast bool to prevent "true"/"false" strings.
+  m_value.m_input.SetExpression(ValueToString(int(GetValue())));
 }
 
 template <>

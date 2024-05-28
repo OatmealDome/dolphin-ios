@@ -16,11 +16,10 @@ extern "C" {
 #include "Common/CommonTypes.h"
 #include "Common/Matrix.h"
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
-#include "InputCommon/ControllerInterface/InputBackend.h"
 
 namespace ciface::XInput2
 {
-std::unique_ptr<ciface::InputBackend> CreateInputBackend(ControllerInterface* controller_interface);
+void PopulateDevices(void* const hwnd);
 
 class KeyboardMouse : public Core::Device
 {

@@ -449,14 +449,14 @@ void MainWindow::CreateComponents()
   m_jit_widget = new JITWidget(this);
   m_log_widget = new LogWidget(this);
   m_log_config_widget = new LogConfigWidget(this);
-  m_memory_widget = new MemoryWidget(Core::System::GetInstance(), this);
+  m_memory_widget = new MemoryWidget(this);
   m_network_widget = new NetworkWidget(this);
   m_register_widget = new RegisterWidget(this);
   m_thread_widget = new ThreadWidget(this);
   m_watch_widget = new WatchWidget(this);
   m_breakpoint_widget = new BreakpointWidget(this);
   m_code_widget = new CodeWidget(this);
-  m_cheats_manager = new CheatsManager(Core::System::GetInstance(), this);
+  m_cheats_manager = new CheatsManager(this);
   m_assembler_widget = new AssemblerWidget(this);
 
   const auto request_watch = [this](QString name, u32 addr) {
@@ -794,17 +794,15 @@ void MainWindow::ChangeDisc()
 {
   std::vector<std::string> paths = StringListToStdVector(PromptFileNames());
 
-  if (paths.empty())
-    return;
-
-  auto& system = Core::System::GetInstance();
-  system.GetDVDInterface().ChangeDisc(Core::CPUThreadGuard{system}, paths);
+  if (!paths.empty())
+    Core::RunAsCPUThread(
+        [&paths] { Core::System::GetInstance().GetDVDInterface().ChangeDisc(paths); });
 }
 
 void MainWindow::EjectDisc()
 {
-  auto& system = Core::System::GetInstance();
-  system.GetDVDInterface().EjectDisc(Core::CPUThreadGuard{system}, DVD::EjectCause::User);
+  Core::RunAsCPUThread(
+      [] { Core::System::GetInstance().GetDVDInterface().EjectDisc(DVD::EjectCause::User); });
 }
 
 void MainWindow::OpenUserFolder()
@@ -909,7 +907,7 @@ bool MainWindow::RequestStop()
 {
   if (!Core::IsRunning())
   {
-    Core::QueueHostJob([this](Core::System&) { OnStopComplete(); }, true);
+    Core::QueueHostJob([this] { OnStopComplete(); }, true);
     return true;
   }
 
@@ -1009,7 +1007,7 @@ bool MainWindow::RequestStop()
 
 void MainWindow::ForceStop()
 {
-  Core::Stop(Core::System::GetInstance());
+  Core::Stop();
 }
 
 void MainWindow::Reset()
@@ -1128,7 +1126,7 @@ void MainWindow::StartGame(std::unique_ptr<BootParameters>&& parameters)
   ShowRenderWidget();
 
   // Boot up, show an error if it fails to load the game.
-  if (!BootManager::BootCore(Core::System::GetInstance(), std::move(parameters),
+  if (!BootManager::BootCore(std::move(parameters),
                              ::GetWindowSystemInfo(m_render_widget->windowHandle())))
   {
     ModalMessageBox::critical(this, tr("Error"), tr("Failed to init core"), QMessageBox::Ok);
@@ -1414,7 +1412,7 @@ void MainWindow::StateLoad()
       this, tr("Select a File"), dialog_path, tr("All Save States (*.sav *.s##);; All Files (*)"));
   Config::SetBase(Config::MAIN_CURRENT_STATE_PATH, QFileInfo(path).dir().path().toStdString());
   if (!path.isEmpty())
-    State::LoadAs(Core::System::GetInstance(), path.toStdString());
+    State::LoadAs(path.toStdString());
 }
 
 void MainWindow::StateSave()
@@ -1426,47 +1424,47 @@ void MainWindow::StateSave()
       this, tr("Select a File"), dialog_path, tr("All Save States (*.sav *.s##);; All Files (*)"));
   Config::SetBase(Config::MAIN_CURRENT_STATE_PATH, QFileInfo(path).dir().path().toStdString());
   if (!path.isEmpty())
-    State::SaveAs(Core::System::GetInstance(), path.toStdString());
+    State::SaveAs(path.toStdString());
 }
 
 void MainWindow::StateLoadSlot()
 {
-  State::Load(Core::System::GetInstance(), m_state_slot);
+  State::Load(m_state_slot);
 }
 
 void MainWindow::StateSaveSlot()
 {
-  State::Save(Core::System::GetInstance(), m_state_slot);
+  State::Save(m_state_slot);
 }
 
 void MainWindow::StateLoadSlotAt(int slot)
 {
-  State::Load(Core::System::GetInstance(), slot);
+  State::Load(slot);
 }
 
 void MainWindow::StateLoadLastSavedAt(int slot)
 {
-  State::LoadLastSaved(Core::System::GetInstance(), slot);
+  State::LoadLastSaved(slot);
 }
 
 void MainWindow::StateSaveSlotAt(int slot)
 {
-  State::Save(Core::System::GetInstance(), slot);
+  State::Save(slot);
 }
 
 void MainWindow::StateLoadUndo()
 {
-  State::UndoLoadState(Core::System::GetInstance());
+  State::UndoLoadState();
 }
 
 void MainWindow::StateSaveUndo()
 {
-  State::UndoSaveState(Core::System::GetInstance());
+  State::UndoSaveState();
 }
 
 void MainWindow::StateSaveOldest()
 {
-  State::SaveFirstSaved(Core::System::GetInstance());
+  State::SaveFirstSaved();
 }
 
 void MainWindow::SetStateSlot(int slot)
@@ -1932,13 +1930,12 @@ void MainWindow::OnStopRecording()
 
 void MainWindow::OnExportRecording()
 {
-  auto& system = Core::System::GetInstance();
-  const Core::CPUThreadGuard guard(system);
-
-  QString dtm_file = DolphinFileDialog::getSaveFileName(
-      this, tr("Save Recording File As"), QString(), tr("Dolphin TAS Movies (*.dtm)"));
-  if (!dtm_file.isEmpty())
-    system.GetMovie().SaveRecording(dtm_file.toStdString());
+  Core::RunAsCPUThread([this] {
+    QString dtm_file = DolphinFileDialog::getSaveFileName(
+        this, tr("Save Recording File As"), QString(), tr("Dolphin TAS Movies (*.dtm)"));
+    if (!dtm_file.isEmpty())
+      Core::System::GetInstance().GetMovie().SaveRecording(dtm_file.toStdString());
+  });
 }
 
 void MainWindow::OnActivateChat()
@@ -1991,12 +1988,13 @@ void MainWindow::ShowTASInput()
 
 void MainWindow::OnConnectWiiRemote(int id)
 {
-  const Core::CPUThreadGuard guard(Core::System::GetInstance());
-  if (const auto bt = WiiUtils::GetBluetoothEmuDevice())
-  {
-    const auto wm = bt->AccessWiimoteByIndex(id);
-    wm->Activate(!wm->IsConnected());
-  }
+  Core::RunAsCPUThread([&] {
+    if (const auto bt = WiiUtils::GetBluetoothEmuDevice())
+    {
+      const auto wm = bt->AccessWiimoteByIndex(id);
+      wm->Activate(!wm->IsConnected());
+    }
+  });
 }
 
 #ifdef USE_RETRO_ACHIEVEMENTS
@@ -2011,7 +2009,6 @@ void MainWindow::ShowAchievementsWindow()
   m_achievements_window->show();
   m_achievements_window->raise();
   m_achievements_window->activateWindow();
-  m_achievements_window->UpdateData(AchievementManager::UpdatedItems{.all = true});
 }
 
 void MainWindow::ShowAchievementSettings()

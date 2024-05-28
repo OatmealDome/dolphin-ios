@@ -170,8 +170,7 @@ void SConfig::SetRunningGameMetadata(const std::string& game_id, const std::stri
     return;
 
 #ifdef USE_RETRO_ACHIEVEMENTS
-  if (game_id != "00000000")
-    AchievementManager::GetInstance().CloseGame();
+  AchievementManager::GetInstance().SetDisabled(true);
 #endif  // USE_RETRO_ACHIEVEMENTS
 
   if (game_id == "00000000")
@@ -190,7 +189,7 @@ void SConfig::SetRunningGameMetadata(const std::string& game_id, const std::stri
   Host_TitleChanged();
   if (Core::IsRunning())
   {
-    Core::UpdateTitle(system);
+    Core::UpdateTitle();
   }
 
   Config::AddLayer(ConfigLoaders::GenerateGlobalGameConfigLoader(game_id, revision));
@@ -205,14 +204,13 @@ void SConfig::OnNewTitleLoad(const Core::CPUThreadGuard& guard)
   if (!Core::IsRunning())
     return;
 
-  auto& system = guard.GetSystem();
-  auto& ppc_symbol_db = system.GetPPCSymbolDB();
-  if (!ppc_symbol_db.IsEmpty())
+  if (!g_symbolDB.IsEmpty())
   {
-    ppc_symbol_db.Clear();
+    g_symbolDB.Clear();
     Host_NotifyMapLoaded();
   }
-  CBoot::LoadMapFromFilename(guard, ppc_symbol_db);
+  CBoot::LoadMapFromFilename(guard);
+  auto& system = Core::System::GetInstance();
   HLE::Reload(system);
   PatchEngine::Reload();
   HiresTexture::Update();

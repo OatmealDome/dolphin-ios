@@ -4,7 +4,6 @@
 #pragma once
 
 #include <optional>
-#include <span>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -18,9 +17,9 @@ class TextureInfo
 {
 public:
   static TextureInfo FromStage(u32 stage);
-  TextureInfo(u32 stage, std::span<const u8> data, std::span<const u8> tlut_data, u32 address,
+  TextureInfo(u32 stage, const u8* ptr, const u8* tlut_ptr, u32 address,
               TextureFormat texture_format, TLUTFormat tlut_format, u32 width, u32 height,
-              bool from_tmem, std::span<const u8> tmem_odd, std::span<const u8> tmem_even,
+              bool from_tmem, const u8* tmem_odd, const u8* tmem_even,
               std::optional<u32> mip_count);
 
   struct NameDetails
@@ -33,8 +32,6 @@ public:
     std::string GetFullName() const;
   };
   NameDetails CalculateTextureName() const;
-
-  bool IsDataValid() const;
 
   const u8* GetData() const;
   const u8* GetTlutAddress() const;
@@ -64,12 +61,11 @@ public:
   class MipLevel
   {
   public:
-    MipLevel(u32 level, const TextureInfo& parent, bool from_tmem, std::span<const u8>* src_data,
-             std::span<const u8>* tmem_even, std::span<const u8>* tmem_odd);
-
-    bool IsDataValid() const;
+    MipLevel(u32 level, const TextureInfo& parent, bool from_tmem, const u8*& src_data,
+             const u8*& ptr_even, const u8*& ptr_odd);
 
     const u8* GetData() const;
+
     u32 GetTextureSize() const;
 
     u32 GetExpandedWidth() const;
@@ -79,8 +75,6 @@ public:
     u32 GetRawHeight() const;
 
   private:
-    bool m_data_valid;
-
     const u8* m_ptr;
 
     u32 m_texture_size = 0;
@@ -104,8 +98,6 @@ private:
   const u8* m_tlut_ptr;
 
   u32 m_address;
-
-  bool m_data_valid;
 
   bool m_from_tmem;
   const u8* m_tmem_odd;

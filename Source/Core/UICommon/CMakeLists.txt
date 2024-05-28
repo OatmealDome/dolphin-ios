@@ -42,9 +42,10 @@ if ((DEFINED CMAKE_ANDROID_ARCH_ABI AND CMAKE_ANDROID_ARCH_ABI MATCHES "x86|x86_
   target_link_libraries(uicommon PRIVATE bdisasm)
 endif()
 
-if(X11_FOUND)
+if(ENABLE_X11 AND X11_FOUND)
+  target_include_directories(uicommon PRIVATE ${X11_INCLUDE_DIR})
   target_sources(uicommon PRIVATE X11Utils.cpp)
-  target_link_libraries(uicommon PUBLIC PkgConfig::XRANDR PkgConfig::X11)
+  target_link_libraries(uicommon PUBLIC ${XRANDR_LIBRARIES})
 endif()
 
 if(TARGET LibUSB::LibUSB)
@@ -52,22 +53,12 @@ if(TARGET LibUSB::LibUSB)
 endif()
 
 if(ENABLE_LLVM)
-  find_package(LLVM CONFIG)
-  if(LLVM_FOUND)
+  find_package(LLVM CONFIG QUIET)
+  if(LLVM_FOUND AND TARGET LLVM)
     message(STATUS "LLVM found, enabling LLVM support in disassembler")
-    # Minimal documentation about LLVM's CMake functions is available here:
-    # https://releases.llvm.org/16.0.0/docs/CMake.html#embedding-llvm-in-your-project
-    # https://groups.google.com/g/llvm-dev/c/YeEVe7HTasQ?pli=1
-    #
-    # However, you have to read the source code in any case.
-    # Look for LLVM-Config.cmake in your (Unix) system:
-    # $ find /usr -name LLVM-Config\\.cmake 2>/dev/null
-    llvm_expand_pseudo_components(LLVM_EXPAND_COMPONENTS
-      AllTargetsInfos AllTargetsDisassemblers AllTargetsCodeGens
-    )
-    llvm_config(uicommon USE_SHARED
-      mcdisassembler target ${LLVM_EXPAND_COMPONENTS}
-    )
+    target_compile_definitions(uicommon PRIVATE HAVE_LLVM)
+    target_link_libraries(uicommon PRIVATE LLVM)
+    target_include_directories(uicommon PRIVATE ${LLVM_INCLUDE_DIRS})
   endif()
 endif()
 

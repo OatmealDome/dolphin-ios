@@ -327,7 +327,6 @@ void WatchWidget::OnSave()
 void WatchWidget::ShowContextMenu()
 {
   QMenu* menu = new QMenu(this);
-  menu->setAttribute(Qt::WA_DeleteOnClose, true);
 
   if (!m_table->selectedItems().empty())
   {

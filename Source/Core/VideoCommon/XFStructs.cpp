@@ -3,8 +3,7 @@
 
 #include "VideoCommon/XFStructs.h"
 
-#include <bit>
-
+#include "Common/BitUtils.h"
 #include "Common/CommonTypes.h"
 #include "Common/Logging/Log.h"
 #include "Common/Swap.h"
@@ -260,21 +259,19 @@ void LoadIndexedXF(CPArray array, u32 index, u16 address, u8 size)
 {
   // load stuff from array to address in xf mem
 
-  const u32 buf_size = size * sizeof(u32);
-  u32* currData = reinterpret_cast<u32*>(&xfmem) + address;
+  u32* currData = (u32*)(&xfmem) + address;
   u32* newData;
   auto& system = Core::System::GetInstance();
   auto& fifo = system.GetFifo();
   if (fifo.UseDeterministicGPUThread())
   {
-    newData = reinterpret_cast<u32*>(fifo.PopFifoAuxBuffer(buf_size));
+    newData = (u32*)fifo.PopFifoAuxBuffer(size * sizeof(u32));
   }
   else
   {
     auto& memory = system.GetMemory();
-    newData = reinterpret_cast<u32*>(memory.GetPointerForRange(
-        g_main_cp_state.array_bases[array] + g_main_cp_state.array_strides[array] * index,
-        buf_size));
+    newData = (u32*)memory.GetPointer(g_main_cp_state.array_bases[array] +
+                                      g_main_cp_state.array_strides[array] * index);
   }
 
   auto& xf_state_manager = system.GetXFStateManager();
@@ -297,14 +294,12 @@ void LoadIndexedXF(CPArray array, u32 index, u16 address, u8 size)
 
 void PreprocessIndexedXF(CPArray array, u32 index, u16 address, u8 size)
 {
-  const size_t buf_size = size * sizeof(u32);
-
   auto& system = Core::System::GetInstance();
   auto& memory = system.GetMemory();
-  const u8* new_data = memory.GetPointerForRange(
-      g_preprocess_cp_state.array_bases[array] + g_preprocess_cp_state.array_strides[array] * index,
-      buf_size);
+  const u8* new_data = memory.GetPointer(g_preprocess_cp_state.array_bases[array] +
+                                         g_preprocess_cp_state.array_strides[array] * index);
 
+  const size_t buf_size = size * sizeof(u32);
   system.GetFifo().PushFifoAuxBuffer(new_data, buf_size);
 }
 
@@ -380,42 +375,42 @@ std::pair<std::string, std::string> GetXFRegInfo(u32 address, u32 value)
 
   case XFMEM_SETVIEWPORT:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 0),
-                          fmt::format("Viewport width: {}", std::bit_cast<float>(value)));
+                          fmt::format("Viewport width: {}", Common::BitCast<float>(value)));
   case XFMEM_SETVIEWPORT + 1:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 1),
-                          fmt::format("Viewport height: {}", std::bit_cast<float>(value)));
+                          fmt::format("Viewport height: {}", Common::BitCast<float>(value)));
   case XFMEM_SETVIEWPORT + 2:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 2),
-                          fmt::format("Viewport z range: {}", std::bit_cast<float>(value)));
+                          fmt::format("Viewport z range: {}", Common::BitCast<float>(value)));
   case XFMEM_SETVIEWPORT + 3:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 3),
-                          fmt::format("Viewport x origin: {}", std::bit_cast<float>(value)));
+                          fmt::format("Viewport x origin: {}", Common::BitCast<float>(value)));
   case XFMEM_SETVIEWPORT + 4:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 4),
-                          fmt::format("Viewport y origin: {}", std::bit_cast<float>(value)));
+                          fmt::format("Viewport y origin: {}", Common::BitCast<float>(value)));
   case XFMEM_SETVIEWPORT + 5:
     return std::make_pair(RegName(XFMEM_SETVIEWPORT + 5),
-                          fmt::format("Viewport far z: {}", std::bit_cast<float>(value)));
+                          fmt::format("Viewport far z: {}", Common::BitCast<float>(value)));
     break;
 
   case XFMEM_SETPROJECTION:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 0),
-                          fmt::format("Projection[0]: {}", std::bit_cast<float>(value)));
+                          fmt::format("Projection[0]: {}", Common::BitCast<float>(value)));
   case XFMEM_SETPROJECTION + 1:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 1),
-                          fmt::format("Projection[1]: {}", std::bit_cast<float>(value)));
+                          fmt::format("Projection[1]: {}", Common::BitCast<float>(value)));
   case XFMEM_SETPROJECTION + 2:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 2),
-                          fmt::format("Projection[2]: {}", std::bit_cast<float>(value)));
+                          fmt::format("Projection[2]: {}", Common::BitCast<float>(value)));
   case XFMEM_SETPROJECTION + 3:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 3),
-                          fmt::format("Projection[3]: {}", std::bit_cast<float>(value)));
+                          fmt::format("Projection[3]: {}", Common::BitCast<float>(value)));
   case XFMEM_SETPROJECTION + 4:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 4),
-                          fmt::format("Projection[4]: {}", std::bit_cast<float>(value)));
+                          fmt::format("Projection[4]: {}", Common::BitCast<float>(value)));
   case XFMEM_SETPROJECTION + 5:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 5),
-                          fmt::format("Projection[5]: {}", std::bit_cast<float>(value)));
+                          fmt::format("Projection[5]: {}", Common::BitCast<float>(value)));
   case XFMEM_SETPROJECTION + 6:
     return std::make_pair(RegName(XFMEM_SETPROJECTION + 6),
                           fmt::to_string(static_cast<ProjectionType>(value)));
@@ -547,7 +542,7 @@ std::string GetXFMemDescription(u32 address, u32 value)
       (address >= XFMEM_POSTMATRICES && address < XFMEM_POSTMATRICES_END))
   {
     // The matrices all use floats
-    return fmt::format("{} = {}", GetXFMemName(address), std::bit_cast<float>(value));
+    return fmt::format("{} = {}", GetXFMemName(address), Common::BitCast<float>(value));
   }
   else if (address >= XFMEM_LIGHTS && address < XFMEM_LIGHTS_END)
   {
@@ -561,7 +556,7 @@ std::string GetXFMemDescription(u32 address, u32 value)
     else
     {
       // Everything else is a float
-      return fmt::format("{} = {}", GetXFMemName(address), std::bit_cast<float>(value));
+      return fmt::format("{} = {}", GetXFMemName(address), Common::BitCast<float>(value));
     }
   }
   else

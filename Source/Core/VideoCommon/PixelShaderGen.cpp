@@ -485,7 +485,7 @@ void UpdateBoundingBox(float2 rawpos) {{
   int2 pos_tl = pos & ~1;  // round down to even
   int2 pos_br = pos | 1;   // round up to odd
 
-#if defined(SUPPORTS_SUBGROUP_REDUCTION) && !defined(BROKEN_SUBGROUP_WITH_DISCARD)
+#ifdef SUPPORTS_SUBGROUP_REDUCTION
   if (!IS_HELPER_INVOCATION)
   {{
     SUBGROUP_MIN(pos_tl);
@@ -1000,15 +1000,10 @@ ShaderCode GeneratePixelShaderCode(APIType api_type, const ShaderHostConfig& hos
   else
 #endif
   {
-    if (use_framebuffer_fetch)
-    {
-      out.Write("FRAGMENT_OUTPUT_LOCATION(0) FRAGMENT_INOUT vec4 real_ocol0;\n");
-    }
-    else
-    {
-      out.Write("FRAGMENT_OUTPUT_LOCATION_INDEXED(0, 0) out {} ocol0;\n",
-                uid_data->uint_output ? "uvec4" : "vec4");
-    }
+    out.Write("{} {} {} {};\n", "FRAGMENT_OUTPUT_LOCATION_INDEXED(0, 0)",
+              use_framebuffer_fetch ? "FRAGMENT_INOUT" : "out",
+              uid_data->uint_output ? "uvec4" : "vec4",
+              use_framebuffer_fetch ? "real_ocol0" : "ocol0");
 
     if (!uid_data->no_dual_src)
     {

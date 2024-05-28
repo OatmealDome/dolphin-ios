@@ -92,14 +92,14 @@ QVariant GameListModel::data(const QModelIndex& index, int role) const
     {
       QString name = QString::fromStdString(game.GetName(m_title_database));
 
-      const int disc_number = game.GetDiscNumber() + 1;
-      if (disc_number > 1 || game.IsTwoDiscGame())
+      // Add disc numbers > 1 to title if not present.
+      const int disc_nr = game.GetDiscNumber() + 1;
+      if (disc_nr > 1)
       {
-        // Add disc number to title if not present.
-        if (!name.contains(QRegularExpression(QStringLiteral("disc ?%1").arg(disc_number),
+        if (!name.contains(QRegularExpression(QStringLiteral("disc ?%1").arg(disc_nr),
                                               QRegularExpression::CaseInsensitiveOption)))
         {
-          name.append(tr(" (Disc %1)").arg(disc_number));
+          name.append(tr(" (Disc %1)").arg(disc_nr));
         }
       }
 

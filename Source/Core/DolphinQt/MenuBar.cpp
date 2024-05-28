@@ -15,12 +15,9 @@
 #include <QMap>
 #include <QUrl>
 
-#include <fmt/format.h>
-
 #include "Common/Align.h"
 #include "Common/CommonPaths.h"
 #include "Common/FileUtil.h"
-#include "Common/IOFile.h"
 #include "Common/StringUtil.h"
 
 #include "Core/AchievementManager.h"
@@ -153,7 +150,6 @@ void MenuBar::OnEmulationStateChanged(Core::State state)
                                 !Core::System::GetInstance().GetMovie().IsPlayingInput());
 
   // JIT
-  const bool jit_exists = Core::System::GetInstance().GetJitInterface().GetCore() != nullptr;
   m_jit_interpreter_core->setEnabled(running);
   m_jit_block_linking->setEnabled(!running);
   m_jit_disable_cache->setEnabled(!running);
@@ -162,7 +158,6 @@ void MenuBar::OnEmulationStateChanged(Core::State state)
   m_jit_clear_cache->setEnabled(running);
   m_jit_log_coverage->setEnabled(!running);
   m_jit_search_instruction->setEnabled(running);
-  m_jit_write_cache_log_dump->setEnabled(running && jit_exists);
 
   // Symbols
   m_symbols->setEnabled(running);
@@ -200,30 +195,6 @@ void MenuBar::OnDebugModeToggled(bool enabled)
   {
     removeAction(m_jit->menuAction());
     removeAction(m_symbols->menuAction());
-  }
-}
-
-void MenuBar::OnWriteJitBlockLogDump()
-{
-  const std::string filename = fmt::format("{}{}.txt", File::GetUserPath(D_DUMPDEBUG_JITBLOCKS_IDX),
-                                           SConfig::GetInstance().GetGameID());
-  File::IOFile f(filename, "w");
-  if (!f)
-  {
-    ModalMessageBox::warning(
-        this, tr("Error"),
-        tr("Failed to open \"%1\" for writing.").arg(QString::fromStdString(filename)));
-    return;
-  }
-  auto& system = Core::System::GetInstance();
-  system.GetJitInterface().JitBlockLogDump(Core::CPUThreadGuard{system}, f.GetHandle());
-  if (static bool ignore = false; ignore == false)
-  {
-    const int button_pressed = ModalMessageBox::information(
-        this, tr("Success"), tr("Wrote to \"%1\".").arg(QString::fromStdString(filename)),
-        QMessageBox::Ok | QMessageBox::Ignore);
-    if (button_pressed == QMessageBox::Ignore)
-      ignore = true;
   }
 }
 
@@ -921,17 +892,6 @@ void MenuBar::AddJITMenu()
 
   m_jit->addSeparator();
 
-  m_jit_profile_blocks = m_jit->addAction(tr("Enable JIT Block Profiling"));
-  m_jit_profile_blocks->setCheckable(true);
-  m_jit_profile_blocks->setChecked(Config::Get(Config::MAIN_DEBUG_JIT_ENABLE_PROFILING));
-  connect(m_jit_profile_blocks, &QAction::toggled, [](bool enabled) {
-    Config::SetBaseOrCurrent(Config::MAIN_DEBUG_JIT_ENABLE_PROFILING, enabled);
-  });
-  m_jit_write_cache_log_dump =
-      m_jit->addAction(tr("Write JIT Block Log Dump"), this, &MenuBar::OnWriteJitBlockLogDump);
-
-  m_jit->addSeparator();
-
   m_jit_off = m_jit->addAction(tr("JIT Off (JIT Core)"));
   m_jit_off->setCheckable(true);
   m_jit_off->setChecked(Config::Get(Config::MAIN_DEBUG_JIT_OFF));
@@ -1301,37 +1261,35 @@ void MenuBar::ClearSymbols()
   if (result == QMessageBox::Cancel)
     return;
 
-  Core::System::GetInstance().GetPPCSymbolDB().Clear();
+  g_symbolDB.Clear();
   emit NotifySymbolsUpdated();
 }
 
 void MenuBar::GenerateSymbolsFromAddress()
 {
+  Core::CPUThreadGuard guard(Core::System::GetInstance());
+
   auto& system = Core::System::GetInstance();
   auto& memory = system.GetMemory();
-  auto& ppc_symbol_db = system.GetPPCSymbolDB();
-
-  const Core::CPUThreadGuard guard(system);
 
   PPCAnalyst::FindFunctions(guard, Memory::MEM1_BASE_ADDR,
-                            Memory::MEM1_BASE_ADDR + memory.GetRamSizeReal(), &ppc_symbol_db);
+                            Memory::MEM1_BASE_ADDR + memory.GetRamSizeReal(), &g_symbolDB);
   emit NotifySymbolsUpdated();
 }
 
 void MenuBar::GenerateSymbolsFromSignatureDB()
 {
+  Core::CPUThreadGuard guard(Core::System::GetInstance());
+
   auto& system = Core::System::GetInstance();
   auto& memory = system.GetMemory();
-  auto& ppc_symbol_db = system.GetPPCSymbolDB();
-
-  const Core::CPUThreadGuard guard(system);
 
   PPCAnalyst::FindFunctions(guard, Memory::MEM1_BASE_ADDR,
-                            Memory::MEM1_BASE_ADDR + memory.GetRamSizeReal(), &ppc_symbol_db);
+                            Memory::MEM1_BASE_ADDR + memory.GetRamSizeReal(), &g_symbolDB);
   SignatureDB db(SignatureDB::HandlerType::DSY);
   if (db.Load(File::GetSysDirectory() + TOTALDB))
   {
-    db.Apply(guard, &ppc_symbol_db);
+    db.Apply(guard, &g_symbolDB);
     ModalMessageBox::information(
         this, tr("Information"),
         tr("Generated symbol names from '%1'").arg(QString::fromStdString(TOTALDB)));
@@ -1367,13 +1325,12 @@ void MenuBar::GenerateSymbolsFromRSO()
     return;
   }
 
-  auto& system = Core::System::GetInstance();
-  const Core::CPUThreadGuard guard(system);
+  Core::CPUThreadGuard guard(Core::System::GetInstance());
 
   RSOChainView rso_chain;
   if (rso_chain.Load(guard, static_cast<u32>(address)))
   {
-    rso_chain.Apply(guard, &system.GetPPCSymbolDB());
+    rso_chain.Apply(guard, &g_symbolDB);
     emit NotifySymbolsUpdated();
   }
   else
@@ -1425,12 +1382,11 @@ void MenuBar::GenerateSymbolsFromRSOAuto()
   RSOChainView rso_chain;
   const u32 address = item.mid(0, item.indexOf(QLatin1Char(' '))).toUInt(nullptr, 16);
 
-  auto& system = Core::System::GetInstance();
-  const Core::CPUThreadGuard guard(system);
+  Core::CPUThreadGuard guard(Core::System::GetInstance());
 
   if (rso_chain.Load(guard, address))
   {
-    rso_chain.Apply(guard, &system.GetPPCSymbolDB());
+    rso_chain.Apply(guard, &g_symbolDB);
     emit NotifySymbolsUpdated();
   }
   else
@@ -1546,23 +1502,22 @@ void MenuBar::LoadSymbolMap()
 {
   auto& system = Core::System::GetInstance();
   auto& memory = system.GetMemory();
-  auto& ppc_symbol_db = system.GetPPCSymbolDB();
 
   std::string existing_map_file, writable_map_file;
   bool map_exists = CBoot::FindMapFile(&existing_map_file, &writable_map_file);
 
   if (!map_exists)
   {
-    ppc_symbol_db.Clear();
+    g_symbolDB.Clear();
 
     {
-      const Core::CPUThreadGuard guard(system);
+      Core::CPUThreadGuard guard(Core::System::GetInstance());
 
       PPCAnalyst::FindFunctions(guard, Memory::MEM1_BASE_ADDR + 0x1300000,
-                                Memory::MEM1_BASE_ADDR + memory.GetRamSizeReal(), &ppc_symbol_db);
+                                Memory::MEM1_BASE_ADDR + memory.GetRamSizeReal(), &g_symbolDB);
       SignatureDB db(SignatureDB::HandlerType::DSY);
       if (db.Load(File::GetSysDirectory() + TOTALDB))
-        db.Apply(guard, &ppc_symbol_db);
+        db.Apply(guard, &g_symbolDB);
     }
 
     ModalMessageBox::warning(this, tr("Warning"),
@@ -1648,8 +1603,13 @@ void MenuBar::SaveCode()
   const std::string path =
       writable_map_file.substr(0, writable_map_file.find_last_of('.')) + "_code.map";
 
-  auto& system = Core::System::GetInstance();
-  if (!system.GetPPCSymbolDB().SaveCodeMap(Core::CPUThreadGuard{system}, path))
+  bool success;
+  {
+    Core::CPUThreadGuard guard(Core::System::GetInstance());
+    success = g_symbolDB.SaveCodeMap(guard, path);
+  }
+
+  if (!success)
   {
     ModalMessageBox::warning(
         this, tr("Error"),
@@ -1659,10 +1619,9 @@ void MenuBar::SaveCode()
 
 bool MenuBar::TryLoadMapFile(const QString& path, const bool bad)
 {
-  auto& system = Core::System::GetInstance();
-  auto& ppc_symbol_db = system.GetPPCSymbolDB();
+  Core::CPUThreadGuard guard(Core::System::GetInstance());
 
-  if (!ppc_symbol_db.LoadMap(Core::CPUThreadGuard{system}, path.toStdString(), bad))
+  if (!g_symbolDB.LoadMap(guard, path.toStdString(), bad))
   {
     ModalMessageBox::warning(this, tr("Error"), tr("Failed to load map file '%1'").arg(path));
     return false;
@@ -1673,7 +1632,7 @@ bool MenuBar::TryLoadMapFile(const QString& path, const bool bad)
 
 void MenuBar::TrySaveSymbolMap(const QString& path)
 {
-  if (Core::System::GetInstance().GetPPCSymbolDB().SaveSymbolMap(path.toStdString()))
+  if (g_symbolDB.SaveSymbolMap(path.toStdString()))
     return;
 
   ModalMessageBox::warning(this, tr("Error"),
@@ -1694,7 +1653,7 @@ void MenuBar::CreateSignatureFile()
   const std::string prefix = text.toStdString();
   const std::string save_path = file.toStdString();
   SignatureDB db(save_path);
-  db.Populate(&Core::System::GetInstance().GetPPCSymbolDB(), prefix);
+  db.Populate(&g_symbolDB, prefix);
 
   if (!db.Save(save_path))
   {
@@ -1719,7 +1678,7 @@ void MenuBar::AppendSignatureFile()
   const std::string prefix = text.toStdString();
   const std::string signature_path = file.toStdString();
   SignatureDB db(signature_path);
-  db.Populate(&Core::System::GetInstance().GetPPCSymbolDB(), prefix);
+  db.Populate(&g_symbolDB, prefix);
   db.List();
   db.Load(signature_path);
   if (!db.Save(signature_path))
@@ -1740,13 +1699,15 @@ void MenuBar::ApplySignatureFile()
   if (file.isEmpty())
     return;
 
-  auto& system = Core::System::GetInstance();
-
   const std::string load_path = file.toStdString();
   SignatureDB db(load_path);
   db.Load(load_path);
-  db.Apply(Core::CPUThreadGuard{system}, &system.GetPPCSymbolDB());
+  {
+    Core::CPUThreadGuard guard(Core::System::GetInstance());
+    db.Apply(guard, &g_symbolDB);
+  }
   db.List();
+  auto& system = Core::System::GetInstance();
   HLE::PatchFunctions(system);
   emit NotifySymbolsUpdated();
 }
@@ -1792,8 +1753,7 @@ void MenuBar::PatchHLEFunctions()
 
 void MenuBar::ClearCache()
 {
-  auto& system = Core::System::GetInstance();
-  system.GetJitInterface().ClearCache(Core::CPUThreadGuard{system});
+  Core::RunAsCPUThread([] { Core::System::GetInstance().GetJitInterface().ClearCache(); });
 }
 
 void MenuBar::LogInstructions()
@@ -1814,19 +1774,20 @@ void MenuBar::SearchInstruction()
   auto& system = Core::System::GetInstance();
   auto& memory = system.GetMemory();
 
-  const std::string op_std = op.toStdString();
-  const Core::CPUThreadGuard guard(system);
+  Core::CPUThreadGuard guard(system);
 
   bool found = false;
   for (u32 addr = Memory::MEM1_BASE_ADDR; addr < Memory::MEM1_BASE_ADDR + memory.GetRamSizeReal();
        addr += 4)
   {
-    if (op_std == PPCTables::GetInstructionName(PowerPC::MMU::HostRead_U32(guard, addr), addr))
+    const auto ins_name = QString::fromStdString(
+        PPCTables::GetInstructionName(PowerPC::MMU::HostRead_U32(guard, addr), addr));
+    if (op == ins_name)
     {
-      NOTICE_LOG_FMT(POWERPC, "Found {} at {:08x}", op_std, addr);
+      NOTICE_LOG_FMT(POWERPC, "Found {} at {:08x}", op.toStdString(), addr);
       found = true;
     }
   }
   if (!found)
-    NOTICE_LOG_FMT(POWERPC, "Opcode {} not found", op_std);
+    NOTICE_LOG_FMT(POWERPC, "Opcode {} not found", op.toStdString());
 }

@@ -10,7 +10,7 @@
 #include <QPushButton>
 #include <QStyle>
 
-#include "Core/AchievementManager.h"
+#include "Core/Config/AchievementSettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
 
@@ -57,6 +57,6 @@ void HardcoreWarningWidget::ConnectWidgets()
 
 void HardcoreWarningWidget::Update()
 {
-  setHidden(!AchievementManager::GetInstance().IsHardcoreModeActive());
+  setHidden(!Config::Get(Config::RA_HARDCORE_ENABLED));
 }
 #endif  // USE_RETRO_ACHIEVEMENTS

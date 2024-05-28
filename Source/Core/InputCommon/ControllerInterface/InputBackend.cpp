@@ -16,10 +16,6 @@ void InputBackend::UpdateInput(std::vector<std::weak_ptr<ciface::Core::Device>>&
 {
 }
 
-void InputBackend::HandleWindowChange()
-{
-}
-
 ControllerInterface& InputBackend::GetControllerInterface()
 {
   return m_controller_interface;

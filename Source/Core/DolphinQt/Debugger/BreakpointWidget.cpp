@@ -178,7 +178,6 @@ void BreakpointWidget::Update()
   auto& power_pc = m_system.GetPowerPC();
   auto& breakpoints = power_pc.GetBreakPoints();
   auto& memchecks = power_pc.GetMemChecks();
-  auto& ppc_symbol_db = power_pc.GetSymbolDB();
 
   // Breakpoints
   for (const auto& bp : breakpoints.GetBreakPoints())
@@ -193,8 +192,11 @@ void BreakpointWidget::Update()
     m_table->setItem(i, 0, active);
     m_table->setItem(i, 1, create_item(QStringLiteral("BP")));
 
-    if (const Common::Symbol* const symbol = ppc_symbol_db.GetSymbolFromAddr(bp.address))
-      m_table->setItem(i, 2, create_item(QString::fromStdString(symbol->name)));
+    if (g_symbolDB.GetSymbolFromAddr(bp.address))
+    {
+      m_table->setItem(i, 2,
+                       create_item(QString::fromStdString(g_symbolDB.GetDescription(bp.address))));
+    }
 
     m_table->setItem(i, 3,
                      create_item(QStringLiteral("%1").arg(bp.address, 8, 16, QLatin1Char('0'))));
@@ -231,8 +233,11 @@ void BreakpointWidget::Update()
     m_table->setItem(i, 0, active);
     m_table->setItem(i, 1, create_item(QStringLiteral("MBP")));
 
-    if (const Common::Symbol* const symbol = ppc_symbol_db.GetSymbolFromAddr(mbp.start_address))
-      m_table->setItem(i, 2, create_item(QString::fromStdString(symbol->name)));
+    if (g_symbolDB.GetSymbolFromAddr(mbp.start_address))
+    {
+      m_table->setItem(
+          i, 2, create_item(QString::fromStdString(g_symbolDB.GetDescription(mbp.start_address))));
+    }
 
     if (mbp.is_ranged)
     {
@@ -309,7 +314,6 @@ void BreakpointWidget::OnClear()
 void BreakpointWidget::OnNewBreakpoint()
 {
   BreakpointDialog* dialog = new BreakpointDialog(this);
-  dialog->setAttribute(Qt::WA_DeleteOnClose, true);
   SetQWidgetWindowDecorations(dialog);
   dialog->exec();
 }
@@ -320,7 +324,6 @@ void BreakpointWidget::OnEditBreakpoint(u32 address, bool is_instruction_bp)
   {
     auto* dialog =
         new BreakpointDialog(this, m_system.GetPowerPC().GetBreakPoints().GetBreakpoint(address));
-    dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     SetQWidgetWindowDecorations(dialog);
     dialog->exec();
   }
@@ -328,7 +331,6 @@ void BreakpointWidget::OnEditBreakpoint(u32 address, bool is_instruction_bp)
   {
     auto* dialog =
         new BreakpointDialog(this, m_system.GetPowerPC().GetMemChecks().GetMemCheck(address));
-    dialog->setAttribute(Qt::WA_DeleteOnClose, true);
     SetQWidgetWindowDecorations(dialog);
     dialog->exec();
   }
@@ -390,7 +392,6 @@ void BreakpointWidget::OnContextMenu()
   const auto is_memory_breakpoint = selected_item->data(IS_MEMCHECK_ROLE).toBool();
 
   auto* menu = new QMenu(this);
-  menu->setAttribute(Qt::WA_DeleteOnClose, true);
 
   if (!is_memory_breakpoint)
   {

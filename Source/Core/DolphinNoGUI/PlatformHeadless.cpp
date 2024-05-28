@@ -3,9 +3,7 @@
 
 #include <cstdio>
 #include <thread>
-
 #include "Core/Core.h"
-#include "Core/System.h"
 #include "DolphinNoGUI/Platform.h"
 
 namespace
@@ -29,7 +27,7 @@ void PlatformHeadless::MainLoop()
   while (m_running.IsSet())
   {
     UpdateRunningFlag();
-    Core::HostDispatchJobs(Core::System::GetInstance());
+    Core::HostDispatchJobs();
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
   }
 }

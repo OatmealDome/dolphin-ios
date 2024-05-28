@@ -57,7 +57,7 @@ void VideoCommon_DoState(PointerWrap& p)
   p.DoMarker("XF Memory");
 
   // Texture decoder
-  p.DoArray(s_tex_mem);
+  p.DoArray(texMem);
   p.DoMarker("texMem");
 
   // TMEM

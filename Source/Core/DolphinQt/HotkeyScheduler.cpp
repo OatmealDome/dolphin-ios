@@ -113,11 +113,7 @@ static void HandleFrameStepHotkeys()
 
     if ((frame_step_count == 0 || frame_step_count == FRAME_STEP_DELAY) && !frame_step_hold)
     {
-<<<<<<< HEAD
-      Core::QueueHostJob([](auto& system) { Core::DoFrameStep(system); });
-=======
       Core::DoFrameStep();
->>>>>>> parent of eb92d6f0a8 (Core::GetState: Avoid Global System Accessor)
       frame_step_hold = true;
     }
 
@@ -413,12 +409,6 @@ void HotkeyScheduler::Run()
           break;
         case AspectMode::Custom:
           OSD::AddMessage("Custom");
-          break;
-        case AspectMode::CustomStretch:
-          OSD::AddMessage("Custom (Stretch)");
-          break;
-        case AspectMode::Raw:
-          OSD::AddMessage("Raw (Square Pixels)");
           break;
         case AspectMode::Auto:
         default:
