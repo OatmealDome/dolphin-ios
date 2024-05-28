@@ -44,9 +44,9 @@
 {
   auto& system = Core::System::GetInstance();
   if (Core::GetState(system) == Core::State::Running)
-    Core::SetState(system, Core::State::Paused);
+    Core::SetState(Core::State::Paused);
   else
-    Core::SetState(system, Core::State::Running);
+    Core::SetState(Core::State::Running);
 }
 
 - (void)saveScreenShot
