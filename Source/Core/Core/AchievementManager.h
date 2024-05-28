@@ -26,9 +26,8 @@
 
 namespace Core
 {
-class CPUThreadGuard;
 class System;
-}  // namespace Core
+}
 
 class AchievementManager
 {
@@ -143,10 +142,20 @@ private:
 
   std::unique_ptr<DiscIO::Volume>& GetLoadingVolume() { return m_loading_volume; };
 
+<<<<<<< HEAD
   static void LoadGameCallback(int result, const char* error_message, rc_client_t* client,
                                void* userdata);
   static void ChangeMediaCallback(int result, const char* error_message, rc_client_t* client,
                                   void* userdata);
+=======
+  void ActivateDeactivateAchievement(AchievementId id, bool enabled, bool unofficial, bool encore);
+  void GenerateRichPresence();
+
+  ResponseType AwardAchievement(AchievementId achievement_id);
+  ResponseType SubmitLeaderboard(AchievementId leaderboard_id, int value);
+  ResponseType PingRichPresence(const RichPresence& rich_presence);
+
+>>>>>>> parent of 73f9904f2a (Core: Remove RunAsCPUThread)
   void DisplayWelcomeMessage();
 
   static void LeaderboardEntriesCallback(int result, const char* error_message,

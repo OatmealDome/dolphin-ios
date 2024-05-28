@@ -1932,13 +1932,12 @@ void MainWindow::OnStopRecording()
 
 void MainWindow::OnExportRecording()
 {
-  auto& system = Core::System::GetInstance();
-  const Core::CPUThreadGuard guard(system);
-
-  QString dtm_file = DolphinFileDialog::getSaveFileName(
-      this, tr("Save Recording File As"), QString(), tr("Dolphin TAS Movies (*.dtm)"));
-  if (!dtm_file.isEmpty())
-    system.GetMovie().SaveRecording(dtm_file.toStdString());
+  Core::RunAsCPUThread([this] {
+    QString dtm_file = DolphinFileDialog::getSaveFileName(
+        this, tr("Save Recording File As"), QString(), tr("Dolphin TAS Movies (*.dtm)"));
+    if (!dtm_file.isEmpty())
+      Core::System::GetInstance().GetMovie().SaveRecording(dtm_file.toStdString());
+  });
 }
 
 void MainWindow::OnActivateChat()
@@ -1991,12 +1990,13 @@ void MainWindow::ShowTASInput()
 
 void MainWindow::OnConnectWiiRemote(int id)
 {
-  const Core::CPUThreadGuard guard(Core::System::GetInstance());
-  if (const auto bt = WiiUtils::GetBluetoothEmuDevice())
-  {
-    const auto wm = bt->AccessWiimoteByIndex(id);
-    wm->Activate(!wm->IsConnected());
-  }
+  Core::RunAsCPUThread([&] {
+    if (const auto bt = WiiUtils::GetBluetoothEmuDevice())
+    {
+      const auto wm = bt->AccessWiimoteByIndex(id);
+      wm->Activate(!wm->IsConnected());
+    }
+  });
 }
 
 #ifdef USE_RETRO_ACHIEVEMENTS
