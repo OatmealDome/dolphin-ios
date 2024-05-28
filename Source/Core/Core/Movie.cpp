@@ -575,7 +575,7 @@ bool MovieManager::BeginRecordingInput(const ControllerTypeArray& controllers,
     if (Core::IsRunning())
       Core::UpdateWantDeterminism(m_system);
   };
-  Core::RunOnCPUThread(m_system, start_recording, true);
+  Core::RunOnCPUThread(start_recording, true);
 
   Core::DisplayMessage("Starting movie recording", 2000);
   return true;

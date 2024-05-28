@@ -836,7 +836,7 @@ static bool PauseAndLock(Core::System& system, bool do_lock, bool unpause_on_unl
   return was_unpaused;
 }
 
-void RunOnCPUThread(Core::System& system, std::function<void()> function, bool wait_for_completion)
+void RunOnCPUThread(std::function<void()> function, bool wait_for_completion)
 {
   // If the CPU thread is not running, assume there is no active CPU thread we can race against.
   if (!IsRunning() || IsCPUThread())
@@ -844,6 +844,8 @@ void RunOnCPUThread(Core::System& system, std::function<void()> function, bool w
     function();
     return;
   }
+
+  auto& system = Core::System::GetInstance();
 
   // Pause the CPU (set it to stepping mode).
   const bool was_running = PauseAndLock(system, true, true);
