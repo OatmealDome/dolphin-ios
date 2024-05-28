@@ -444,7 +444,7 @@ void MemoryViewWidget::UpdateColumns()
   if (m_table->item(1, 1) == nullptr)
     return;
 
-  if (Core::GetState(m_system) == Core::State::Paused)
+  if (Core::GetState() == Core::State::Paused)
   {
     const Core::CPUThreadGuard guard(m_system);
     UpdateColumns(&guard);

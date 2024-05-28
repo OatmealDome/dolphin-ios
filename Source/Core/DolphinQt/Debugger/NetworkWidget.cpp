@@ -239,8 +239,7 @@ void NetworkWidget::Update()
   if (!isVisible())
     return;
 
-  auto& system = Core::System::GetInstance();
-  if (Core::GetState(system) != Core::State::Paused)
+  if (Core::GetState() != Core::State::Paused)
   {
     m_socket_table->setDisabled(true);
     m_ssl_table->setDisabled(true);
@@ -251,9 +250,9 @@ void NetworkWidget::Update()
   m_ssl_table->setDisabled(false);
 
   // needed because there's a race condition on the IOS instance otherwise
-  const Core::CPUThreadGuard guard(system);
+  Core::CPUThreadGuard guard(Core::System::GetInstance());
 
-  auto* ios = system.GetIOS();
+  auto* ios = guard.GetSystem().GetIOS();
   if (!ios)
     return;
 

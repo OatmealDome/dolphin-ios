@@ -36,7 +36,7 @@ CheatsManager::CheatsManager(Core::System& system, QWidget* parent)
   CreateWidgets();
   ConnectWidgets();
 
-  RefreshCodeTabs(Core::GetState(m_system), true);
+  RefreshCodeTabs(Core::GetState(), true);
 
   auto& settings = Settings::GetQSettings();
   restoreGeometry(settings.value(QStringLiteral("cheatsmanager/geometry")).toByteArray());

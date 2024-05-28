@@ -211,13 +211,12 @@ Cheats::NewSearch(const Core::CPUThreadGuard& guard,
   if (AchievementManager::GetInstance().IsHardcoreModeActive())
     return Cheats::SearchErrorCode::DisabledInHardcoreMode;
 #endif  // USE_RETRO_ACHIEVEMENTS
-  auto& system = guard.GetSystem();
   std::vector<Cheats::SearchResult<T>> results;
-  const Core::State core_state = Core::GetState(system);
+  const Core::State core_state = Core::GetState();
   if (core_state != Core::State::Running && core_state != Core::State::Paused)
     return Cheats::SearchErrorCode::NoEmulationActive;
 
-  const auto& ppc_state = system.GetPPCState();
+  const auto& ppc_state = guard.GetSystem().GetPPCState();
   if (address_space == PowerPC::RequestedAddressSpace::Virtual && !ppc_state.msr.DR)
     return Cheats::SearchErrorCode::VirtualAddressesCurrentlyNotAccessible;
 
@@ -266,13 +265,12 @@ Cheats::NextSearch(const Core::CPUThreadGuard& guard,
   if (AchievementManager::GetInstance().IsHardcoreModeActive())
     return Cheats::SearchErrorCode::DisabledInHardcoreMode;
 #endif  // USE_RETRO_ACHIEVEMENTS
-  auto& system = guard.GetSystem();
   std::vector<Cheats::SearchResult<T>> results;
-  const Core::State core_state = Core::GetState(system);
+  const Core::State core_state = Core::GetState();
   if (core_state != Core::State::Running && core_state != Core::State::Paused)
     return Cheats::SearchErrorCode::NoEmulationActive;
 
-  const auto& ppc_state = system.GetPPCState();
+  const auto& ppc_state = guard.GetSystem().GetPPCState();
   if (address_space == PowerPC::RequestedAddressSpace::Virtual && !ppc_state.msr.DR)
     return Cheats::SearchErrorCode::VirtualAddressesCurrentlyNotAccessible;
 

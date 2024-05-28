@@ -17,7 +17,6 @@
 #include "Core/Config/MainSettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
-#include "Core/System.h"
 
 #include "DolphinQt/Config/ConfigControls/ConfigBool.h"
 #include "DolphinQt/Config/ConfigControls/ConfigChoice.h"
@@ -44,8 +43,7 @@ GeneralWidget::GeneralWidget(GraphicsWindow* parent)
   connect(&Settings::Instance(), &Settings::EmulationStateChanged, this, [this](Core::State state) {
     OnEmulationStateChanged(state != Core::State::Uninitialized);
   });
-  OnEmulationStateChanged(Core::GetState(Core::System::GetInstance()) !=
-                          Core::State::Uninitialized);
+  OnEmulationStateChanged(Core::GetState() != Core::State::Uninitialized);
 }
 
 void GeneralWidget::CreateWidgets()

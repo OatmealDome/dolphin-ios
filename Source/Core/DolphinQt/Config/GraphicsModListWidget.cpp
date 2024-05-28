@@ -18,7 +18,6 @@
 #include "Common/FileUtil.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
-#include "Core/System.h"
 #include "DolphinQt/Config/GraphicsModWarningWidget.h"
 #include "DolphinQt/QtUtils/ClearLayoutRecursively.h"
 #include "DolphinQt/Settings.h"
@@ -29,7 +28,7 @@
 GraphicsModListWidget::GraphicsModListWidget(const UICommon::GameFile& game)
     : m_game_id(game.GetGameID()), m_mod_group(m_game_id)
 {
-  CalculateGameRunning(Core::GetState(Core::System::GetInstance()));
+  CalculateGameRunning(Core::GetState());
   if (m_loaded_game_is_running && g_Config.graphics_mod_config)
   {
     m_mod_group.SetChangeCount(g_Config.graphics_mod_config->GetChangeCount());

@@ -256,14 +256,13 @@ void ThreadWidget::Update()
   if (!isVisible())
     return;
 
-  auto& system = Core::System::GetInstance();
-  const auto emu_state = Core::GetState(system);
+  const auto emu_state = Core::GetState();
   if (emu_state == Core::State::Stopping)
   {
     m_thread_table->setRowCount(0);
     UpdateThreadContext({});
 
-    const Core::CPUThreadGuard guard(system);
+    Core::CPUThreadGuard guard(Core::System::GetInstance());
     UpdateThreadCallstack(guard, {});
   }
   if (emu_state != Core::State::Paused)
@@ -308,7 +307,7 @@ void ThreadWidget::Update()
   };
 
   {
-    const Core::CPUThreadGuard guard(system);
+    Core::CPUThreadGuard guard(Core::System::GetInstance());
 
     // YAGCD - Section 4.2.1.4 Dolphin OS Globals
     m_current_context->setText(format_hex_from(guard, 0x800000D4));

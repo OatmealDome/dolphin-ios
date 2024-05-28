@@ -534,7 +534,7 @@ void RegisterWidget::AddRegister(int row, int column, RegisterType type, std::st
 
 void RegisterWidget::Update()
 {
-  if (isVisible() && Core::GetState(m_system) == Core::State::Paused)
+  if (isVisible() && Core::GetState() == Core::State::Paused)
   {
     m_updating = true;
     emit UpdateTable();

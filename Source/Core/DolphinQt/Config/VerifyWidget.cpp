@@ -17,7 +17,6 @@
 
 #include "Common/CommonTypes.h"
 #include "Core/Core.h"
-#include "Core/System.h"
 #include "DiscIO/Volume.h"
 #include "DiscIO/VolumeVerifier.h"
 #include "DolphinQt/QtUtils/ParallelProgressDialog.h"
@@ -50,7 +49,11 @@ VerifyWidget::VerifyWidget(std::shared_ptr<DiscIO::Volume> volume) : m_volume(st
 
 void VerifyWidget::OnEmulationStateChanged(Core::State state)
 {
+<<<<<<< HEAD
   const bool running = state != Core::State::Uninitialized;
+=======
+  const bool running = Core::GetState() != Core::State::Uninitialized;
+>>>>>>> parent of eb92d6f0a8 (Core::GetState: Avoid Global System Accessor)
 
   // Verifying a Wii game while emulation is running doesn't work correctly
   // due to verification of a Wii game creating an instance of IOS

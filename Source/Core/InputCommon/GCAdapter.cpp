@@ -435,10 +435,9 @@ void Init()
     return;
 #endif
 
-  auto& system = Core::System::GetInstance();
-  if (const Core::State state = Core::GetState(system);
-      state != Core::State::Uninitialized && state != Core::State::Starting)
+  if (Core::GetState() != Core::State::Uninitialized && Core::GetState() != Core::State::Starting)
   {
+    auto& system = Core::System::GetInstance();
     auto& core_timing = system.GetCoreTiming();
     if ((core_timing.GetTicks() - s_last_init) < system.GetSystemTimers().GetTicksPerSecond())
       return;

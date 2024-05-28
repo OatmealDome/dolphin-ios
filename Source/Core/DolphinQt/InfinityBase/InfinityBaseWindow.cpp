@@ -47,7 +47,7 @@ InfinityBaseWindow::InfinityBaseWindow(QWidget* parent) : QWidget(parent)
 
   installEventFilter(this);
 
-  OnEmulationStateChanged(Core::GetState(Core::System::GetInstance()));
+  OnEmulationStateChanged(Core::GetState());
 };
 
 InfinityBaseWindow::~InfinityBaseWindow() = default;

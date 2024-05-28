@@ -14,7 +14,6 @@
 #include "Core/Config/SYSCONFSettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
-#include "Core/System.h"
 
 #include "DolphinQt/Config/ConfigControls/ConfigBool.h"
 #include "DolphinQt/Config/ConfigControls/ConfigChoice.h"
@@ -43,8 +42,7 @@ AdvancedWidget::AdvancedWidget(GraphicsWindow* parent)
   });
 
   OnBackendChanged();
-  OnEmulationStateChanged(Core::GetState(Core::System::GetInstance()) !=
-                          Core::State::Uninitialized);
+  OnEmulationStateChanged(Core::GetState() != Core::State::Uninitialized);
 }
 
 void AdvancedWidget::CreateWidgets()

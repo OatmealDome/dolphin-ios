@@ -42,8 +42,7 @@
 
 - (void)togglePause
 {
-  auto& system = Core::System::GetInstance();
-  if (Core::GetState(system) == Core::State::Running)
+  if (Core::GetState() == Core::State::Running)
     Core::SetState(Core::State::Paused);
   else
     Core::SetState(Core::State::Running);
@@ -264,10 +263,8 @@ void PlatformMacOS::ProcessEvents()
     {
       m_window_focus = true;
       if (Config::Get(Config::MAIN_SHOW_CURSOR) == Config::ShowCursor::Never &&
-          Core::GetState(Core::System::GetInstance()) != Core::State::Paused)
-      {
+          Core::GetState() != Core::State::Paused)
         [NSCursor unhide];
-      }
     }
     else
     {
