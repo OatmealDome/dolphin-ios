@@ -227,76 +227,11 @@ void AchievementManager::DoFrame()
   auto current_time = std::chrono::steady_clock::now();
   if (current_time - m_last_rp_time > std::chrono::seconds{10})
   {
-<<<<<<< HEAD
     m_last_rp_time = current_time;
     rc_client_get_rich_presence_message(m_client, m_rich_presence.data(), RP_SIZE);
     m_update_callback(UpdatedItems{.rich_presence = true});
     if (Config::Get(Config::RA_DISCORD_PRESENCE_ENABLED))
       Discord::UpdateDiscordPresence();
-=======
-    GenerateRichPresence();
-    m_queue.EmplaceItem([this] { PingRichPresence(m_rich_presence); });
-    m_last_ping_time = current_time;
-    m_update_callback();
-  }
-}
-
-u32 AchievementManager::MemoryPeeker(u32 address, u32 num_bytes, void* ud)
-{
-  if (!m_system)
-    return 0u;
-  Core::CPUThreadGuard threadguard(*m_system);
-  switch (num_bytes)
-  {
-  case 1:
-    return m_system->GetMMU()
-        .HostTryReadU8(threadguard, address, PowerPC::RequestedAddressSpace::Physical)
-        .value_or(PowerPC::ReadResult<u8>(false, 0u))
-        .value;
-  case 2:
-    return Common::swap16(
-        m_system->GetMMU()
-            .HostTryReadU16(threadguard, address, PowerPC::RequestedAddressSpace::Physical)
-            .value_or(PowerPC::ReadResult<u16>(false, 0u))
-            .value);
-  case 4:
-    return Common::swap32(
-        m_system->GetMMU()
-            .HostTryReadU32(threadguard, address, PowerPC::RequestedAddressSpace::Physical)
-            .value_or(PowerPC::ReadResult<u32>(false, 0u))
-            .value);
-  default:
-    ASSERT(false);
-    return 0u;
-  }
-}
-
-void AchievementManager::AchievementEventHandler(const rc_runtime_event_t* runtime_event)
-{
-  switch (runtime_event->type)
-  {
-  case RC_RUNTIME_EVENT_ACHIEVEMENT_TRIGGERED:
-    HandleAchievementTriggeredEvent(runtime_event);
-    break;
-  case RC_RUNTIME_EVENT_ACHIEVEMENT_PROGRESS_UPDATED:
-    HandleAchievementProgressUpdatedEvent(runtime_event);
-    break;
-  case RC_RUNTIME_EVENT_ACHIEVEMENT_PRIMED:
-    HandleAchievementPrimedEvent(runtime_event);
-    break;
-  case RC_RUNTIME_EVENT_ACHIEVEMENT_UNPRIMED:
-    HandleAchievementUnprimedEvent(runtime_event);
-    break;
-  case RC_RUNTIME_EVENT_LBOARD_STARTED:
-    HandleLeaderboardStartedEvent(runtime_event);
-    break;
-  case RC_RUNTIME_EVENT_LBOARD_CANCELED:
-    HandleLeaderboardCanceledEvent(runtime_event);
-    break;
-  case RC_RUNTIME_EVENT_LBOARD_TRIGGERED:
-    HandleLeaderboardTriggeredEvent(runtime_event);
-    break;
->>>>>>> parent of 73f9904f2a (Core: Remove RunAsCPUThread)
   }
 }
 
@@ -691,41 +626,8 @@ void AchievementManager::LeaderboardEntriesCallback(int result, const char* erro
     return;
   }
 
-<<<<<<< HEAD
   auto& leaderboard = AchievementManager::GetInstance().m_leaderboard_map[*leaderboard_id];
   for (size_t ix = 0; ix < list->num_entries; ix++)
-=======
-void AchievementManager::GenerateRichPresence()
-{
-  Core::RunAsCPUThread([&] {
-    std::lock_guard lg{m_lock};
-    rc_runtime_get_richpresence(
-        &m_runtime, m_rich_presence.data(), RP_SIZE,
-        [](unsigned address, unsigned num_bytes, void* ud) {
-          return static_cast<AchievementManager*>(ud)->MemoryPeeker(address, num_bytes, ud);
-        },
-        this, nullptr);
-  });
-}
-
-AchievementManager::ResponseType AchievementManager::AwardAchievement(AchievementId achievement_id)
-{
-  std::string username = Config::Get(Config::RA_USERNAME);
-  std::string api_token = Config::Get(Config::RA_API_TOKEN);
-  bool hardcore_mode_enabled = Config::Get(Config::RA_HARDCORE_ENABLED);
-  rc_api_award_achievement_request_t award_request = {.username = username.c_str(),
-                                                      .api_token = api_token.c_str(),
-                                                      .achievement_id = achievement_id,
-                                                      .hardcore = hardcore_mode_enabled,
-                                                      .game_hash = m_game_hash.data()};
-  rc_api_award_achievement_response_t award_response = {};
-  ResponseType r_type =
-      Request<rc_api_award_achievement_request_t, rc_api_award_achievement_response_t>(
-          award_request, &award_response, rc_api_init_award_achievement_request,
-          rc_api_process_award_achievement_response);
-  rc_api_destroy_award_achievement_response(&award_response);
-  if (r_type == ResponseType::SUCCESS)
->>>>>>> parent of 73f9904f2a (Core: Remove RunAsCPUThread)
   {
     std::lock_guard lg{AchievementManager::GetInstance().GetLock()};
     const auto& response_entry = list->entries[ix];
