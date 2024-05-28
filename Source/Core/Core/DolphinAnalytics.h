@@ -94,6 +94,15 @@ enum class GameQuirk
   // only a few read them (from PE_BBOX_LEFT etc.)
   READS_BOUNDING_BOX,
 
+  // A few games use invalid vertex component formats, but the two known cases (Fifa Street and
+  // Def Jam: Fight for New York, see https://bugs.dolphin-emu.org/issues/12719) only use invalid
+  // normal formats and lighting is disabled in those cases, so it doesn't end up mattering.
+  // It's possible other games use invalid formats, possibly on other vertex components.
+  INVALID_POSITION_COMPONENT_FORMAT,
+  INVALID_NORMAL_COMPONENT_FORMAT,
+  INVALID_TEXTURE_COORDINATE_COMPONENT_FORMAT,
+  INVALID_COLOR_COMPONENT_FORMAT,
+
   COUNT,
 };
 
@@ -124,6 +133,9 @@ public:
   // Generates a report for a special condition being hit by a game. This is automatically throttled
   // to once per game run.
   void ReportGameQuirk(GameQuirk quirk);
+
+  // Get the base builder for building a report
+  const Common::AnalyticsReportBuilder& BaseBuilder() const { return m_base_builder; }
 
   struct PerformanceSample
   {
