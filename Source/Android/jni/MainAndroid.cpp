@@ -97,7 +97,7 @@ std::vector<std::string> Host_GetPreferredLocales()
   return {};
 }
 
-void Host_PPCSymbolsChanged()
+void Host_NotifyMapLoaded()
 {
 }
 

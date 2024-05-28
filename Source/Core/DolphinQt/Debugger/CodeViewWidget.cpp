@@ -184,8 +184,6 @@ CodeViewWidget::CodeViewWidget()
     m_address = m_system.GetPPCState().pc;
     Update();
   });
-  connect(Host::GetInstance(), &Host::PPCSymbolsChanged, this,
-          qOverload<>(&CodeViewWidget::Update));
 
   connect(&Settings::Instance(), &Settings::ThemeChanged, this,
           qOverload<>(&CodeViewWidget::Update));
@@ -888,7 +886,8 @@ void CodeViewWidget::OnAddFunction()
   Core::CPUThreadGuard guard(m_system);
 
   m_ppc_symbol_db.AddFunction(guard, addr);
-  emit Host::GetInstance()->PPCSymbolsChanged();
+  emit SymbolsChanged();
+  Update(&guard);
 }
 
 void CodeViewWidget::OnInsertBLR()
@@ -937,7 +936,8 @@ void CodeViewWidget::OnRenameSymbol()
   if (good && !name.isEmpty())
   {
     symbol->Rename(name.toStdString());
-    emit Host::GetInstance()->PPCSymbolsChanged();
+    emit SymbolsChanged();
+    Update();
   }
 }
 
@@ -975,7 +975,8 @@ void CodeViewWidget::OnSetSymbolSize()
   Core::CPUThreadGuard guard(m_system);
 
   PPCAnalyst::ReanalyzeFunction(guard, symbol->address, *symbol, size);
-  emit Host::GetInstance()->PPCSymbolsChanged();
+  emit SymbolsChanged();
+  Update(&guard);
 }
 
 void CodeViewWidget::OnSetSymbolEndAddress()
@@ -1002,7 +1003,8 @@ void CodeViewWidget::OnSetSymbolEndAddress()
   Core::CPUThreadGuard guard(m_system);
 
   PPCAnalyst::ReanalyzeFunction(guard, symbol->address, *symbol, address - symbol->address);
-  emit Host::GetInstance()->PPCSymbolsChanged();
+  emit SymbolsChanged();
+  Update(&guard);
 }
 
 void CodeViewWidget::OnReplaceInstruction()

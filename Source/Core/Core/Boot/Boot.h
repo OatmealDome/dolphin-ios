@@ -179,6 +179,8 @@ private:
                             u32 output_address);
   static void RunFunction(Core::System& system, u32 address);
 
+  static void UpdateDebugger_MapLoaded();
+
   static bool Boot_WiiWAD(Core::System& system, const DiscIO::VolumeWAD& wad);
   static bool BootNANDTitle(Core::System& system, u64 title_id);
 
