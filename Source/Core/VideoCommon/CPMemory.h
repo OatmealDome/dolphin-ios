@@ -122,7 +122,16 @@ enum class ComponentFormat
   UShort = 2,  // Invalid for normals
   Short = 3,
   Float = 4,
+  // Known to be used by Fifa Street and Def Jam: Fight for New York
+  // See https://bugs.dolphin-emu.org/issues/12719
+  // Assumed to behave the same as float, but further testing is needed
+  InvalidFloat5 = 5,
+  // Not known to be used
+  InvalidFloat6 = 6,
+  InvalidFloat7 = 7,
 };
+// NOTE: don't include the invalid formats here, so that EnumFormatter marks them as invalid
+// (EnumFormatter also handles bounds-checking).
 template <>
 struct fmt::formatter<ComponentFormat> : EnumFormatter<ComponentFormat::Float>
 {
@@ -141,6 +150,9 @@ constexpr u32 GetElementSize(ComponentFormat format)
   case ComponentFormat::Short:
     return 2;
   case ComponentFormat::Float:
+  case ComponentFormat::InvalidFloat5:
+  case ComponentFormat::InvalidFloat6:
+  case ComponentFormat::InvalidFloat7:
     return 4;
   default:
     PanicAlertFmt("Unknown format {}", format);
@@ -573,6 +585,102 @@ struct VAT
     default:
       PanicAlertFmt("Invalid tex coord index {}", idx);
       return 0;
+    }
+  }
+  void SetTexElements(size_t idx, TexComponentCount value)
+  {
+    switch (idx)
+    {
+    case 0:
+      g0.Tex0CoordElements = value;
+      return;
+    case 1:
+      g1.Tex1CoordElements = value;
+      return;
+    case 2:
+      g1.Tex2CoordElements = value;
+      return;
+    case 3:
+      g1.Tex3CoordElements = value;
+      return;
+    case 4:
+      g1.Tex4CoordElements = value;
+      return;
+    case 5:
+      g2.Tex5CoordElements = value;
+      return;
+    case 6:
+      g2.Tex6CoordElements = value;
+      return;
+    case 7:
+      g2.Tex7CoordElements = value;
+      return;
+    default:
+      PanicAlertFmt("Invalid tex coord index {}", idx);
+    }
+  }
+  void SetTexFormat(size_t idx, ComponentFormat value)
+  {
+    switch (idx)
+    {
+    case 0:
+      g0.Tex0CoordFormat = value;
+      return;
+    case 1:
+      g1.Tex1CoordFormat = value;
+      return;
+    case 2:
+      g1.Tex2CoordFormat = value;
+      return;
+    case 3:
+      g1.Tex3CoordFormat = value;
+      return;
+    case 4:
+      g1.Tex4CoordFormat = value;
+      return;
+    case 5:
+      g2.Tex5CoordFormat = value;
+      return;
+    case 6:
+      g2.Tex6CoordFormat = value;
+      return;
+    case 7:
+      g2.Tex7CoordFormat = value;
+      return;
+    default:
+      PanicAlertFmt("Invalid tex coord index {}", idx);
+    }
+  }
+  void SetTexFrac(size_t idx, u8 value)
+  {
+    switch (idx)
+    {
+    case 0:
+      g0.Tex0Frac = value;
+      return;
+    case 1:
+      g1.Tex1Frac = value;
+      return;
+    case 2:
+      g1.Tex2Frac = value;
+      return;
+    case 3:
+      g1.Tex3Frac = value;
+      return;
+    case 4:
+      g2.Tex4Frac = value;
+      return;
+    case 5:
+      g2.Tex5Frac = value;
+      return;
+    case 6:
+      g2.Tex6Frac = value;
+      return;
+    case 7:
+      g2.Tex7Frac = value;
+      return;
+    default:
+      PanicAlertFmt("Invalid tex coord index {}", idx);
     }
   }
 };

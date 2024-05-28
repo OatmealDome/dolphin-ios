@@ -18,6 +18,10 @@ namespace ActionReplay
 {
 struct ARCode;
 }
+namespace Core
+{
+class System;
+}
 
 class QCheckBox;
 class QComboBox;
@@ -36,8 +40,19 @@ class CheatSearchWidget : public QWidget
 {
   Q_OBJECT
 public:
-  explicit CheatSearchWidget(std::unique_ptr<Cheats::CheatSearchSessionBase> session);
+  explicit CheatSearchWidget(Core::System& system,
+                             std::unique_ptr<Cheats::CheatSearchSessionBase> session,
+                             QWidget* parent = nullptr);
   ~CheatSearchWidget() override;
+
+  enum class UpdateSource
+  {
+    User,
+    Auto,
+  };
+
+  bool UpdateTableAllCurrentValues(UpdateSource source);
+  void UpdateTableVisibleCurrentValues(UpdateSource source);
 
 signals:
   void ActionReplayCodeGenerated(const ActionReplay::ARCode& ar_code);
@@ -56,9 +71,16 @@ private:
   void OnValueSourceChanged();
   void OnDisplayHexCheckboxStateChanged();
 
-  bool RefreshValues();
-  void UpdateGuiTable();
-  void GenerateARCode();
+  void RefreshCurrentValueTableItem(QTableWidgetItem* current_value_table_item);
+  void RefreshGUICurrentValues(size_t begin_index, size_t end_index);
+  bool UpdateTableRows(const Core::CPUThreadGuard& guard, size_t begin_index, size_t end_index,
+                       UpdateSource source);
+  void RecreateGUITable();
+  void GenerateARCodes();
+  int GetVisibleRowsBeginIndex() const;
+  int GetVisibleRowsEndIndex() const;
+
+  Core::System& m_system;
 
   std::unique_ptr<Cheats::CheatSearchSessionBase> m_session;
 
@@ -79,5 +101,6 @@ private:
   QPushButton* m_reset_button;
   QCheckBox* m_parse_values_as_hex_checkbox;
   QCheckBox* m_display_values_in_hex_checkbox;
+  QCheckBox* m_autoupdate_current_values;
   QTableWidget* m_address_table;
 };

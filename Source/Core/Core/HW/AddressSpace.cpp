@@ -4,9 +4,8 @@
 #include "Core/HW/AddressSpace.h"
 
 #include <algorithm>
+#include <bit>
 
-#include "Common/BitUtils.h"
-#include "Core/ConfigManager.h"
 #include "Core/Core.h"
 #include "Core/HW/DSP.h"
 #include "Core/HW/Memmap.h"
@@ -56,7 +55,7 @@ void Accessors::WriteU64(const Core::CPUThreadGuard& guard, u32 address, u64 val
 
 float Accessors::ReadF32(const Core::CPUThreadGuard& guard, u32 address) const
 {
-  return Common::BitCast<float>(ReadU32(guard, address));
+  return std::bit_cast<float>(ReadU32(guard, address));
 }
 
 Accessors::iterator Accessors::begin() const
@@ -146,20 +145,19 @@ struct EffectiveAddressSpaceAccessors : Accessors
 
       // For now, limit to only mem1 and mem2 regions
       // GetPointer can get confused by the locked dcache region that dolphin pins at 0xe0000000
-      u32 memory_area = (*page_physical_address) >> 24;
-      if ((memory_area != 0x00) && (memory_area != 0x01))
-      {
-        return false;
-      }
-
-      u8* page_ptr = memory.GetPointer(*page_physical_address);
-      if (page_ptr == nullptr)
+      if (page_physical_address >= 0xE0000000)
       {
         return false;
       }
 
       std::size_t chunk_size = std::min<std::size_t>(0x1000 - offset, needle_size);
-      if (memcmp(needle_start, page_ptr + offset, chunk_size) != 0)
+      u8* page_ptr = memory.GetPointerForRange(*page_physical_address + offset, chunk_size);
+      if (page_ptr == nullptr)
+      {
+        return false;
+      }
+
+      if (memcmp(needle_start, page_ptr, chunk_size) != 0)
       {
         return false;
       }
@@ -210,7 +208,7 @@ struct AuxiliaryAddressSpaceAccessors : Accessors
   static constexpr u32 aram_base_address = 0;
   bool IsValidAddress(const Core::CPUThreadGuard& guard, u32 address) const override
   {
-    return !SConfig::GetInstance().bWii && (address - aram_base_address) < GetSize();
+    return !guard.GetSystem().IsWii() && (address - aram_base_address) < GetSize();
   }
   u8 ReadU8(const Core::CPUThreadGuard& guard, u32 address) const override
   {
@@ -443,7 +441,7 @@ Accessors* GetAccessors(Type address_space)
   case Type::Effective:
     return &s_effective_address_space_accessors;
   case Type::Physical:
-    if (SConfig::GetInstance().bWii)
+    if (Core::System::GetInstance().IsWii())
     {
       return &s_physical_address_space_accessors_wii;
     }
@@ -454,13 +452,13 @@ Accessors* GetAccessors(Type address_space)
   case Type::Mem1:
     return &s_mem1_address_space_accessors;
   case Type::Mem2:
-    if (SConfig::GetInstance().bWii)
+    if (Core::System::GetInstance().IsWii())
     {
       return &s_mem2_address_space_accessors;
     }
     break;
   case Type::Auxiliary:
-    if (!SConfig::GetInstance().bWii)
+    if (!Core::System::GetInstance().IsWii())
     {
       return &s_auxiliary_address_space_accessors;
     }

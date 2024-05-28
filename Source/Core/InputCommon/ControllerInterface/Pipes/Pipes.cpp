@@ -39,7 +39,19 @@ static double StringToDouble(const std::string& text)
   return result;
 }
 
-void PopulateDevices()
+class InputBackend final : public ciface::InputBackend
+{
+public:
+  using ciface::InputBackend::InputBackend;
+  void PopulateDevices() override;
+};
+
+std::unique_ptr<ciface::InputBackend> CreateInputBackend(ControllerInterface* controller_interface)
+{
+  return std::make_unique<InputBackend>(controller_interface);
+}
+
+void InputBackend::PopulateDevices()
 {
   // Search the Pipes directory for files that we can open in read-only,
   // non-blocking mode. The device name is the virtual name of the file.
@@ -86,7 +98,7 @@ PipeDevice::~PipeDevice()
   close(m_fd);
 }
 
-void PipeDevice::UpdateInput()
+Core::DeviceRemoval PipeDevice::UpdateInput()
 {
   // Read any pending characters off the pipe. If we hit a newline,
   // then dequeue a command off the front of m_buf and parse it.
@@ -105,6 +117,7 @@ void PipeDevice::UpdateInput()
     m_buf.erase(0, newline + 1);
     newline = m_buf.find("\n");
   }
+  return Core::DeviceRemoval::Keep;
 }
 
 void PipeDevice::AddAxis(const std::string& name, double value)

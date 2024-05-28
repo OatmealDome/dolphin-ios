@@ -35,9 +35,6 @@
 constexpr u32 CODEPAGE_SHIFT_JIS = 932;
 constexpr u32 CODEPAGE_WINDOWS_1252 = 1252;
 #else
-#if defined(__NetBSD__)
-#define LIBICONV_PLUG
-#endif
 #include <errno.h>
 #include <iconv.h>
 #include <locale.h>
@@ -83,25 +80,6 @@ std::string HexDump(const u8* data, size_t size)
     out += "\n";
   }
   return out;
-}
-
-// faster than sscanf
-bool AsciiToHex(const std::string& _szValue, u32& result)
-{
-  // Set errno to a good state.
-  errno = 0;
-
-  char* endptr = nullptr;
-  const u32 value = strtoul(_szValue.c_str(), &endptr, 16);
-
-  if (!endptr || *endptr)
-    return false;
-
-  if (errno == ERANGE)
-    return false;
-
-  result = value;
-  return true;
 }
 
 bool CharArrayFromFormatV(char* out, int outsize, const char* format, va_list args)
@@ -445,7 +423,7 @@ size_t StringUTF8CodePointCount(std::string_view str)
 
 #ifdef _WIN32
 
-std::wstring CPToUTF16(u32 code_page, std::string_view input)
+static std::wstring CPToUTF16(u32 code_page, std::string_view input)
 {
   auto const size =
       MultiByteToWideChar(code_page, 0, input.data(), static_cast<int>(input.size()), nullptr, 0);
@@ -463,7 +441,7 @@ std::wstring CPToUTF16(u32 code_page, std::string_view input)
   return output;
 }
 
-std::string UTF16ToCP(u32 code_page, std::wstring_view input)
+static std::string UTF16ToCP(u32 code_page, std::wstring_view input)
 {
   if (input.empty())
     return {};
@@ -547,13 +525,8 @@ std::string CodeTo(const char* tocode, const char* fromcode, std::basic_string_v
     while (src_bytes != 0)
     {
       size_t const iconv_result =
-#if defined(__NetBSD__)
-          iconv(conv_desc, reinterpret_cast<const char**>(&src_buffer), &src_bytes, &dst_buffer,
-                &dst_bytes);
-#else
           iconv(conv_desc, const_cast<char**>(reinterpret_cast<const char**>(&src_buffer)),
                 &src_bytes, &dst_buffer, &dst_bytes);
-#endif
       if ((size_t)-1 == iconv_result)
       {
         if (EILSEQ == errno || EINVAL == errno)
@@ -711,5 +684,10 @@ bool CaseInsensitiveEquals(std::string_view a, std::string_view b)
     return false;
   return std::equal(a.begin(), a.end(), b.begin(),
                     [](char ca, char cb) { return Common::ToLower(ca) == Common::ToLower(cb); });
+}
+
+std::string BytesToHexString(std::span<const u8> bytes)
+{
+  return fmt::format("{:02x}", fmt::join(bytes, ""));
 }
 }  // namespace Common

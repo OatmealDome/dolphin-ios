@@ -35,7 +35,7 @@ public:
   std::string GetSource() const override;
   int GetSortPriority() const override;
 
-  void UpdateInput() override;
+  Core::DeviceRemoval UpdateInput() override;
 
 private:
   using Clock = std::chrono::steady_clock;
@@ -126,7 +126,7 @@ private:
   {
     static u32 GetDesiredIRSensitivity();
 
-    void ProcessData(const std::array<WiimoteEmu::IRBasic, 2>&);
+    void ProcessData(const DataReportManipulator& manipulator);
     bool IsFullyConfigured() const;
 
     u32 current_sensitivity = u32(-1);
@@ -139,6 +139,9 @@ private:
     float distance = 0;
 
     bool is_hidden = true;
+
+    std::array<Common::Vec2, 4> raw_ir_object_position;
+    std::array<float, 4> raw_ir_object_size;
   };
 
   class ReportHandler

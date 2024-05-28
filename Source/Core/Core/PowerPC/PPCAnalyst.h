@@ -32,11 +32,12 @@ struct CodeOp  // 16B
   const GekkoOPInfo* opinfo = nullptr;
   u32 address = 0;
   u32 branchTo = 0;  // if UINT32_MAX, not a branch
-  BitSet32 regsOut;
   BitSet32 regsIn;
+  BitSet32 regsOut;
   BitSet32 fregsIn;
   s8 fregOut = 0;
-  bool isBranchTarget = false;
+  BitSet8 crIn;
+  BitSet8 crOut;
   bool branchUsesCtr = false;
   bool branchIsIdleLoop = false;
   BitSet8 wantsCR;
@@ -50,6 +51,8 @@ struct CodeOp  // 16B
   bool canCauseException = false;
   bool skipLRStack = false;
   bool skip = false;  // followed BL-s for example
+  BitSet8 crInUse;
+  BitSet8 crDiscardable;
   // which registers are still needed after this instruction in this block
   BitSet32 fprInUse;
   BitSet32 gprInUse;
@@ -84,7 +87,7 @@ struct CodeOp  // 16B
 
 struct BlockStats
 {
-  int numCycles;
+  u32 numCycles;
 };
 
 struct BlockRegStats

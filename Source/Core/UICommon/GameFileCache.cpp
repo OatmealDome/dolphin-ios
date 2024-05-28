@@ -26,7 +26,7 @@
 
 namespace UICommon
 {
-static constexpr u32 CACHE_REVISION = 24;  // Last changed in PR 11557
+static constexpr u32 CACHE_REVISION = 25;  // Last changed in PR 12702
 
 std::vector<std::string> FindAllGamePaths(const std::vector<std::string>& directories_to_scan,
                                           bool recursive_scan)
@@ -43,7 +43,7 @@ GameFileCache::GameFileCache() : m_path(File::GetUserPath(D_CACHE_IDX) + "gameli
 {
 }
 
-void GameFileCache::ForEach(std::function<void(const std::shared_ptr<const GameFile>&)> f) const
+void GameFileCache::ForEach(const ForEachFn& f) const
 {
   for (const std::shared_ptr<GameFile>& item : m_cached_files)
     f(item);
@@ -83,11 +83,10 @@ std::shared_ptr<const GameFile> GameFileCache::AddOrGet(const std::string& path,
   return result;
 }
 
-bool GameFileCache::Update(
-    const std::vector<std::string>& all_game_paths,
-    std::function<void(const std::shared_ptr<const GameFile>&)> game_added_to_cache,
-    std::function<void(const std::string&)> game_removed_from_cache,
-    const std::atomic_bool& processing_halted)
+bool GameFileCache::Update(std::span<const std::string> all_game_paths,
+                           const GameAddedToCacheFn& game_added_to_cache,
+                           const GameRemovedFromCacheFn& game_removed_from_cache,
+                           const std::atomic_bool& processing_halted)
 {
   // Copy game paths into a set, except ones that match DiscIO::ShouldHideFromGameList.
   // TODO: Prevent DoFileSearch from looking inside /files/ directories of DirectoryBlobs at all?
@@ -151,9 +150,8 @@ bool GameFileCache::Update(
   return cache_changed;
 }
 
-bool GameFileCache::UpdateAdditionalMetadata(
-    std::function<void(const std::shared_ptr<const GameFile>&)> game_updated,
-    const std::atomic_bool& processing_halted)
+bool GameFileCache::UpdateAdditionalMetadata(const GameUpdatedFn& game_updated,
+                                             const std::atomic_bool& processing_halted)
 {
   bool cache_changed = false;
 

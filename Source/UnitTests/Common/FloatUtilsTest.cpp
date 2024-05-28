@@ -1,13 +1,16 @@
 // Copyright 2018 Dolphin Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include <array>
+#include <bit>
 #include <limits>
 #include <random>
 
 #include <gtest/gtest.h>
 
-#include "Common/BitUtils.h"
 #include "Common/FloatUtils.h"
+
+#include "../Core/PowerPC/TestValues.h"
 
 TEST(FloatUtils, IsQNAN)
 {
@@ -50,15 +53,47 @@ TEST(FloatUtils, FlushToZero)
   for (u32 i = 0; i <= 0x007fffffu; ++i)
   {
     u32 i_tmp = i;
-    EXPECT_EQ(+0.f, Common::FlushToZero(Common::BitCast<float>(i_tmp)));
+    EXPECT_EQ(+0.f, Common::FlushToZero(std::bit_cast<float>(i_tmp)));
 
     i_tmp |= 0x80000000u;
-    EXPECT_EQ(-0.f, Common::FlushToZero(Common::BitCast<float>(i_tmp)));
+    EXPECT_EQ(-0.f, Common::FlushToZero(std::bit_cast<float>(i_tmp)));
 
     i_tmp = dist(engine);
-    EXPECT_EQ(i_tmp, Common::BitCast<u32>(Common::FlushToZero(Common::BitCast<float>(i_tmp))));
+    EXPECT_EQ(i_tmp, std::bit_cast<u32>(Common::FlushToZero(std::bit_cast<float>(i_tmp))));
 
     i_tmp |= 0x80000000u;
-    EXPECT_EQ(i_tmp, Common::BitCast<u32>(Common::FlushToZero(Common::BitCast<float>(i_tmp))));
+    EXPECT_EQ(i_tmp, std::bit_cast<u32>(Common::FlushToZero(std::bit_cast<float>(i_tmp))));
+  }
+}
+
+TEST(FloatUtils, ApproximateReciprocalSquareRoot)
+{
+  constexpr std::array<u64, 57> expected_values{
+      0x7FF0'0000'0000'0000, 0x617F'FE80'0000'0000, 0x60BF'FE80'0000'0000, 0x5FE0'0008'2C00'0000,
+      0x5FDF'FE80'0000'0000, 0x5FDF'FE80'0000'0000, 0x3FEF'FE80'0000'0000, 0x1FF0'0008'2C00'0000,
+      0x0000'0000'0000'0000, 0x7FF8'0000'0000'0001, 0x7FFF'FFFF'FFFF'FFFF, 0x7FF8'0000'0000'0000,
+      0x7FFF'FFFF'FFFF'FFFF, 0xFFF0'0000'0000'0000, 0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000,
+      0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000,
+      0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000, 0xFFF8'0000'0000'0001, 0xFFFF'FFFF'FFFF'FFFF,
+      0xFFF8'0000'0000'0000, 0xFFFF'FFFF'FFFF'FFFF, 0x43E6'9FA0'0000'0000, 0x43DF'FE80'0000'0000,
+      0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000, 0x43E6'9360'6000'0000, 0x43DF'ED30'7000'0000,
+      0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000, 0x44A6'9FA0'0000'0000, 0x4496'9FA0'0000'0000,
+      0x448F'FE80'0000'0000, 0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000,
+      0x44A6'9360'6000'0000, 0x4496'9360'6000'0000, 0x448F'ED30'7000'0000, 0x7FF8'0000'0000'0000,
+      0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000, 0x3C06'9FA0'0000'0000, 0x3BFF'FE80'0000'0000,
+      0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000, 0x43EF'FE80'0000'0000, 0x43F6'9FA0'0000'0000,
+      0x7FF8'0000'0000'0000, 0x7FF8'0000'0000'0000, 0x3FEA'2040'0000'0000, 0x3FA0'3108'0000'0000,
+      0x7FF8'0000'0000'0000};
+
+  for (size_t i = 0; i < double_test_values.size(); ++i)
+  {
+    u64 ivalue = double_test_values[i];
+    double dvalue = std::bit_cast<double>(ivalue);
+
+    u64 expected = expected_values[i];
+
+    u64 actual = std::bit_cast<u64>(Common::ApproximateReciprocalSquareRoot(dvalue));
+
+    EXPECT_EQ(expected, actual);
   }
 }

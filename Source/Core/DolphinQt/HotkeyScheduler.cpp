@@ -17,11 +17,12 @@
 #include "Common/Config/Config.h"
 #include "Common/Thread.h"
 
+#include "Core/AchievementManager.h"
+#include "Core/Config/AchievementSettings.h"
 #include "Core/Config/FreeLookSettings.h"
 #include "Core/Config/GraphicsSettings.h"
 #include "Core/Config/MainSettings.h"
 #include "Core/Config/UISettings.h"
-#include "Core/ConfigManager.h"
 #include "Core/Core.h"
 #include "Core/FreeLookManager.h"
 #include "Core/Host.h"
@@ -112,7 +113,7 @@ static void HandleFrameStepHotkeys()
 
     if ((frame_step_count == 0 || frame_step_count == FRAME_STEP_DELAY) && !frame_step_hold)
     {
-      Core::DoFrameStep();
+      Core::QueueHostJob([](auto& system) { Core::DoFrameStep(system); });
       frame_step_hold = true;
     }
 
@@ -158,7 +159,7 @@ void HotkeyScheduler::Run()
     if (!HotkeyManagerEmu::IsEnabled())
       continue;
 
-    if (Core::GetState() != Core::State::Stopping)
+    if (Core::GetState(Core::System::GetInstance()) != Core::State::Stopping)
     {
       // Obey window focus (config permitting) before checking hotkeys.
       Core::UpdateInputGate(Config::Get(Config::MAIN_FOCUSED_HOTKEYS));
@@ -257,14 +258,14 @@ void HotkeyScheduler::Run()
       if (auto bt = WiiUtils::GetBluetoothRealDevice())
         bt->UpdateSyncButtonState(IsHotkey(HK_TRIGGER_SYNC_BUTTON, true));
 
-      if (Config::Get(Config::MAIN_ENABLE_DEBUGGING))
+      if (Config::IsDebuggingEnabled())
       {
         CheckDebuggingHotkeys();
       }
 
       // TODO: HK_MBP_ADD
 
-      if (SConfig::GetInstance().bWii)
+      if (Core::System::GetInstance().IsWii())
       {
         int wiimote_id = -1;
         if (IsHotkey(HK_WIIMOTE1_CONNECT))
@@ -359,8 +360,8 @@ void HotkeyScheduler::Run()
 
       // Graphics
       const auto efb_scale = Config::Get(Config::GFX_EFB_SCALE);
-      auto ShowEFBScale = []() {
-        switch (Config::Get(Config::GFX_EFB_SCALE))
+      const auto ShowEFBScale = [](int new_efb_scale) {
+        switch (new_efb_scale)
         {
         case EFB_SCALE_AUTO_INTEGRAL:
           OSD::AddMessage("Internal Resolution: Auto (integral)");
@@ -369,7 +370,7 @@ void HotkeyScheduler::Run()
           OSD::AddMessage("Internal Resolution: Native");
           break;
         default:
-          OSD::AddMessage(fmt::format("Internal Resolution: {}x", g_Config.iEFBScale));
+          OSD::AddMessage(fmt::format("Internal Resolution: {}x", new_efb_scale));
           break;
         }
       };
@@ -377,14 +378,14 @@ void HotkeyScheduler::Run()
       if (IsHotkey(HK_INCREASE_IR))
       {
         Config::SetCurrent(Config::GFX_EFB_SCALE, efb_scale + 1);
-        ShowEFBScale();
+        ShowEFBScale(efb_scale + 1);
       }
       if (IsHotkey(HK_DECREASE_IR))
       {
         if (efb_scale > EFB_SCALE_AUTO_INTEGRAL)
         {
           Config::SetCurrent(Config::GFX_EFB_SCALE, efb_scale - 1);
-          ShowEFBScale();
+          ShowEFBScale(efb_scale - 1);
         }
       }
 
@@ -400,11 +401,20 @@ void HotkeyScheduler::Run()
         case AspectMode::Stretch:
           OSD::AddMessage("Stretch");
           break;
-        case AspectMode::Analog:
+        case AspectMode::ForceStandard:
           OSD::AddMessage("Force 4:3");
           break;
-        case AspectMode::AnalogWide:
+        case AspectMode::ForceWide:
           OSD::AddMessage("Force 16:9");
+          break;
+        case AspectMode::Custom:
+          OSD::AddMessage("Custom");
+          break;
+        case AspectMode::CustomStretch:
+          OSD::AddMessage("Custom (Stretch)");
+          break;
+        case AspectMode::Raw:
+          OSD::AddMessage("Raw (Square Pixels)");
           break;
         case AspectMode::Auto:
         default:
@@ -470,8 +480,11 @@ void HotkeyScheduler::Run()
       if (IsHotkey(HK_DECREASE_EMULATION_SPEED))
       {
         auto speed = Config::Get(Config::MAIN_EMULATION_SPEED) - 0.1;
-        speed = (speed <= 0 || (speed >= 0.95 && speed <= 1.05)) ? 1.0 : speed;
-        Config::SetCurrent(Config::MAIN_EMULATION_SPEED, speed);
+        if (speed > 0)
+        {
+          speed = (speed >= 0.95 && speed <= 1.05) ? 1.0 : speed;
+          Config::SetCurrent(Config::MAIN_EMULATION_SPEED, speed);
+        }
         ShowEmulationSpeed();
       }
 
@@ -576,7 +589,15 @@ void HotkeyScheduler::Run()
     {
       const bool new_value = !Config::Get(Config::FREE_LOOK_ENABLED);
       Config::SetCurrent(Config::FREE_LOOK_ENABLED, new_value);
+#ifdef USE_RETRO_ACHIEVEMENTS
+      const bool hardcore = AchievementManager::GetInstance().IsHardcoreModeActive();
+      if (hardcore)
+        OSD::AddMessage("Free Look is Disabled in Hardcore Mode");
+      else
+        OSD::AddMessage(fmt::format("Free Look: {}", new_value ? "Enabled" : "Disabled"));
+#else   // USE_RETRO_ACHIEVEMENTS
       OSD::AddMessage(fmt::format("Free Look: {}", new_value ? "Enabled" : "Disabled"));
+#endif  // USE_RETRO_ACHIEVEMENTS
     }
 
     // Savestates

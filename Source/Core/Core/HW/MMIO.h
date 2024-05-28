@@ -5,17 +5,20 @@
 
 #include <array>
 #include <atomic>
+#include <bit>
 #include <string>
 #include <tuple>
 #include <type_traits>
 
 #include "Common/Assert.h"
-#include "Common/BitUtils.h"
 #include "Common/CommonTypes.h"
-#include "Core/ConfigManager.h"
 #include "Core/HW/GPFifo.h"
 #include "Core/HW/MMIOHandlers.h"
-#include "Core/System.h"
+
+namespace Core
+{
+class System;
+}
 
 namespace MMIO
 {
@@ -43,14 +46,14 @@ const u32 NUM_MMIOS = NUM_BLOCKS * BLOCK_SIZE;
 // We have a special exception here for FIFO writes: these are handled via a
 // different mechanism and should not go through the normal MMIO access
 // interface.
-inline bool IsMMIOAddress(u32 address)
+inline bool IsMMIOAddress(u32 address, bool is_wii)
 {
   if (address == GPFifo::GATHER_PIPE_PHYSICAL_ADDRESS)
     return false;  // WG Pipe
   if ((address & 0xFFFF0000) == 0x0C000000)
     return true;  // GameCube MMIOs
 
-  if (SConfig::GetInstance().bWii)
+  if (is_wii)
   {
     return ((address & 0xFFFF0000) == 0x0D000000) ||  // Wii MMIOs
            ((address & 0xFFFF0000) == 0x0D800000);    // Mirror of Wii MMIOs
@@ -85,7 +88,7 @@ inline u16* LowPart(u32* ptr)
 inline u16* LowPart(std::atomic<u32>* ptr)
 {
   static_assert(std::atomic<u32>::is_always_lock_free && sizeof(std::atomic<u32>) == sizeof(u32));
-  return LowPart(Common::BitCast<u32*>(ptr));
+  return LowPart(std::bit_cast<u32*>(ptr));
 }
 inline u16* HighPart(u32* ptr)
 {
@@ -94,7 +97,7 @@ inline u16* HighPart(u32* ptr)
 inline u16* HighPart(std::atomic<u32>* ptr)
 {
   static_assert(std::atomic<u32>::is_always_lock_free && sizeof(std::atomic<u32>) == sizeof(u32));
-  return HighPart(Common::BitCast<u32*>(ptr));
+  return HighPart(std::bit_cast<u32*>(ptr));
 }
 }  // namespace Utils
 
@@ -131,15 +134,15 @@ public:
   // called in interpreter mode, from Dolphin's own code, or from JIT'd code
   // where the access address could not be predicted.
   template <typename Unit>
-  Unit Read(u32 addr)
+  Unit Read(Core::System& system, u32 addr)
   {
-    return GetHandlerForRead<Unit>(addr).Read(Core::System::GetInstance(), addr);
+    return GetHandlerForRead<Unit>(addr).Read(system, addr);
   }
 
   template <typename Unit>
-  void Write(u32 addr, Unit val)
+  void Write(Core::System& system, u32 addr, Unit val)
   {
-    GetHandlerForWrite<Unit>(addr).Write(Core::System::GetInstance(), addr, val);
+    GetHandlerForWrite<Unit>(addr).Write(system, addr, val);
   }
 
   // Handlers access interface.
@@ -214,14 +217,14 @@ private:
 // Dummy 64 bits variants of these functions. While 64 bits MMIO access is
 // not supported, we need these in order to make the code compile.
 template <>
-inline u64 Mapping::Read<u64>(u32 addr)
+inline u64 Mapping::Read<u64>(Core::System& system, u32 addr)
 {
   DEBUG_ASSERT(false);
   return 0;
 }
 
 template <>
-inline void Mapping::Write(u32 addr, u64 val)
+inline void Mapping::Write(Core::System& system, u32 addr, u64 val)
 {
   DEBUG_ASSERT(false);
 }

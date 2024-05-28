@@ -125,4 +125,21 @@ void MemArena::UnmapFromMemoryRegion(void* view, size_t size)
 
   vm_deallocate(mach_task_self(), reinterpret_cast<vm_address_t>(view), size);
 }
+LazyMemoryRegion::LazyMemoryRegion() = default;
+LazyMemoryRegion::~LazyMemoryRegion()
+{
+  Release();
+}
+void* LazyMemoryRegion::Create(size_t size)
+{
+  if (size == 0)
+  return nullptr;
+}
+void LazyMemoryRegion::Clear()
+{
+}
+void LazyMemoryRegion::Release()
+{
+}
+
 }  // namespace Common

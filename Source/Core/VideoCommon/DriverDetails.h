@@ -1,6 +1,7 @@
 // Copyright 2013 Dolphin Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 #pragma once
+#include <string>
 #include "Common/CommonTypes.h"
 
 #undef OS  // CURL defines that, nobody uses it...
@@ -224,14 +225,6 @@ enum Bug
   // the gl_ClipDistance inputs from the vertex shader.
   BUG_BROKEN_CLIP_DISTANCE,
 
-  // Bug: Dual-source outputs from fragment shaders are broken on AMD Vulkan drivers
-  // Started Version: -1
-  // Ended Version: -1
-  // Fragment shaders that specify dual-source outputs, via layout(location = 0, index = ...) cause
-  // the driver to fail to create graphics pipelines. The workaround for this is to specify the
-  // index as a MRT location instead, or omit the binding completely.
-  BUG_BROKEN_FRAGMENT_SHADER_INDEX_DECORATION,
-
   // Bug: Dual-source outputs from fragment shaders are broken on some drivers.
   // Started Version: -1
   // Ended Version: -1
@@ -307,14 +300,23 @@ enum Bug
 
   // BUG: Accessing gl_SubgroupInvocationID causes the Metal shader compiler to crash.
   //      Affected devices: AMD (older macOS)
-  // BUG: gl_HelperInvocation always returns true, even for non-helper invocations
-  //      Affected devices: AMD (newer macOS)
+  // Started version: ???
+  // Ended version: ???
+  // (Workaround currently disabled, will put it back when someone hits the issue and we can
+  //  find out what devices and OSes it actually affects)
+
   // BUG: Using subgroupMax in a shader that can discard results in garbage data
   //      (For some reason, this only happens at 4x+ IR on Metal, but 2x+ IR on MoltenVK)
   //      Affected devices: Intel (macOS)
   // Started version: -1
   // Ended version: -1
-  BUG_BROKEN_SUBGROUP_OPS,
+  BUG_BROKEN_SUBGROUP_OPS_WITH_DISCARD,
+
+  // BUG: gl_HelperInvocation is actually !gl_HelperInvocation
+  //      Affected devices: AMD (macOS)
+  // Started version: -1
+  // Ended version: -1
+  BUG_INVERTED_IS_HELPER,
 
   // BUG: Multi-threaded shader pre-compilation sometimes crashes
   // Used primarily in Videoconfig.cpp's GetNumAutoShaderPreCompilerThreads()
@@ -344,9 +346,13 @@ enum Bug
 };
 
 // Initializes our internal vendor, device family, and driver version
-void Init(API api, Vendor vendor, Driver driver, const double version, const Family family);
+void Init(API api, Vendor vendor, Driver driver, const double version, const Family family,
+          std::string name);
 
 // Once Vendor and driver version is set, this will return if it has the applicable bug passed to
 // it.
 bool HasBug(Bug bug);
+
+// Overrides the current state of a bug
+void OverrideBug(Bug bug, bool new_value);
 }  // namespace DriverDetails

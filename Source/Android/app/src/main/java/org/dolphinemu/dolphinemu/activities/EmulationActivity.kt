@@ -56,6 +56,7 @@ import org.dolphinemu.dolphinemu.overlay.InputOverlayPointer
 import org.dolphinemu.dolphinemu.ui.main.MainPresenter
 import org.dolphinemu.dolphinemu.ui.main.ThemeProvider
 import org.dolphinemu.dolphinemu.utils.AfterDirectoryInitializationRunner
+import org.dolphinemu.dolphinemu.utils.DirectoryInitialization
 import org.dolphinemu.dolphinemu.utils.FileBrowserHelper
 import org.dolphinemu.dolphinemu.utils.ThemeHelper
 import kotlin.math.roundToInt
@@ -108,8 +109,6 @@ class EmulationActivity : AppCompatActivity(), ThemeProvider {
 
         settings = Settings()
         settings.loadSettings()
-
-        updateOrientation()
 
         // Set these options now so that the SurfaceView the game renders into is the right size.
         enableFullscreenImmersive()
@@ -203,21 +202,19 @@ class EmulationActivity : AppCompatActivity(), ThemeProvider {
 
         super.onResume()
 
-        // Only android 9+ support this feature.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val attributes = window.attributes
-
-            attributes.layoutInDisplayCutoutMode =
-                if (BooleanSetting.MAIN_EXPAND_TO_CUTOUT_AREA.boolean) {
-                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-                } else {
-                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER
-                }
-
-            window.attributes = attributes
+        // If the whole app process was recreated, directory initialization might not be done yet.
+        // If that's the case, we can't read settings, so skip reading the settings for now and do
+        // it once onTitleChanged runs instead.
+        if (DirectoryInitialization.areDolphinDirectoriesReady()) {
+            updateDisplaySettings();
+        } else {
+            // If the process was recreated and DolphinApplication.onStart didn't think it should
+            // start directory initialization, we have to start it, otherwise emulation will never
+            // start. Technically it would be nicer to ask the user for write permission first,
+            // but because this problem can only happen in very convoluted situations, this code is
+            // going to get essentially no testing, so let's go with the simplest possible fix.
+            DirectoryInitialization.start(this);
         }
-
-        updateOrientation()
 
         DolphinSensorEventListener.setDeviceRotation(windowManager.defaultDisplay.rotation)
     }
@@ -234,9 +231,16 @@ class EmulationActivity : AppCompatActivity(), ThemeProvider {
             menuToastShown = true
         }
 
-        title = NativeLibrary.GetCurrentTitleDescription()
+        try {
+            title = NativeLibrary.GetCurrentTitleDescription()
 
-        emulationFragment?.refreshInputOverlay()
+            emulationFragment?.refreshInputOverlay()
+
+            updateDisplaySettings()
+        } catch (_: IllegalStateException) {
+            // Most likely the core delivered an onTitleChanged while emulation was shutting down.
+            // Let's just ignore it, since we're about to shut down anyway.
+        }
     }
 
     override fun onDestroy() {
@@ -333,7 +337,20 @@ class EmulationActivity : AppCompatActivity(), ThemeProvider {
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
     }
 
-    private fun updateOrientation() {
+    private fun updateDisplaySettings() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val attributes = window.attributes
+
+            attributes.layoutInDisplayCutoutMode =
+                if (BooleanSetting.MAIN_EXPAND_TO_CUTOUT_AREA.boolean) {
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+                } else {
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER
+                }
+
+            window.attributes = attributes
+        }
+
         requestedOrientation = IntSetting.MAIN_EMULATION_ORIENTATION.int
     }
 
@@ -434,6 +451,7 @@ class EmulationActivity : AppCompatActivity(), ThemeProvider {
             MENU_ACTION_EDIT_CONTROLS_PLACEMENT -> editControlsPlacement()
             MENU_ACTION_RESET_OVERLAY -> resetOverlay()
             MENU_ACTION_TOGGLE_CONTROLS -> toggleControls()
+            MENU_ACTION_LATCHING_CONTROLS -> latchingControls()
             MENU_ACTION_ADJUST_SCALE -> adjustScale()
             MENU_ACTION_CHOOSE_CONTROLLER -> chooseController()
             MENU_ACTION_REFRESH_WIIMOTES -> NativeLibrary.RefreshWiimotes()
@@ -507,6 +525,85 @@ class EmulationActivity : AppCompatActivity(), ThemeProvider {
             }
         }
         return super.dispatchKeyEvent(event)
+    }
+
+    private fun latchingControls() {
+        val builder = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.emulation_latching_controls)
+
+        when (InputOverlay.configuredControllerType) {
+            InputOverlay.OVERLAY_GAMECUBE -> {
+                val gcLatchingButtons = BooleanArray(8)
+                val gcSettingBase = "MAIN_BUTTON_LATCHING_GC_"
+
+                for (i in gcLatchingButtons.indices) {
+                    gcLatchingButtons[i] = BooleanSetting.valueOf(gcSettingBase + i).boolean
+                }
+
+                builder.setMultiChoiceItems(
+                    R.array.gcpadLatchableButtons, gcLatchingButtons
+                ) { _: DialogInterface?, indexSelected: Int, isChecked: Boolean ->
+                    BooleanSetting.valueOf(gcSettingBase + indexSelected)
+                        .setBoolean(settings, isChecked)
+                }
+            }
+            InputOverlay.OVERLAY_WIIMOTE_CLASSIC -> {
+                val wiiClassicLatchingButtons = BooleanArray(11)
+                val classicSettingBase = "MAIN_BUTTON_LATCHING_CLASSIC_"
+
+                for (i in wiiClassicLatchingButtons.indices) {
+                    wiiClassicLatchingButtons[i] = BooleanSetting.valueOf(classicSettingBase + i).boolean
+                }
+                builder.setMultiChoiceItems(
+                    R.array.classicLatchableButtons, wiiClassicLatchingButtons
+                ) { _: DialogInterface?, indexSelected: Int, isChecked: Boolean ->
+                    BooleanSetting.valueOf(classicSettingBase + indexSelected)
+                        .setBoolean(settings, isChecked)
+                }
+            }
+            InputOverlay.OVERLAY_WIIMOTE_NUNCHUK -> {
+                val nunchukLatchingButtons = BooleanArray(9)
+                val nunchukSettingBase = "MAIN_BUTTON_LATCHING_WII_"
+
+                // For OVERLAY_WIIMOTE_NUNCHUK, settings index 7 is the D-Pad (which cannot be
+                // latching). C and Z (settings indices 8 and 9) need to map to multichoice array
+                // indices 7 and 8 to avoid a gap.
+                fun translateToSettingsIndex(idx: Int): Int = if (idx >= 7) idx + 1 else idx
+
+                for (i in nunchukLatchingButtons.indices) {
+                    nunchukLatchingButtons[i] = BooleanSetting
+                        .valueOf(nunchukSettingBase + translateToSettingsIndex(i)).boolean
+                }
+
+                builder.setMultiChoiceItems(
+                    R.array.nunchukLatchableButtons, nunchukLatchingButtons
+                ) { _: DialogInterface?, indexSelected: Int, isChecked: Boolean ->
+                    BooleanSetting.valueOf(nunchukSettingBase + translateToSettingsIndex(indexSelected))
+                        .setBoolean(settings, isChecked)
+                }
+            }
+            else -> {
+                val wiimoteLatchingButtons = BooleanArray(7)
+                val wiimoteSettingBase = "MAIN_BUTTON_LATCHING_WII_"
+
+                for (i in wiimoteLatchingButtons.indices) {
+                    wiimoteLatchingButtons[i] = BooleanSetting.valueOf(wiimoteSettingBase + i).boolean
+                }
+
+                builder.setMultiChoiceItems(
+                      R.array.wiimoteLatchableButtons, wiimoteLatchingButtons
+                ) { _: DialogInterface?, indexSelected: Int, isChecked: Boolean ->
+                    BooleanSetting.valueOf(wiimoteSettingBase + indexSelected)
+                        .setBoolean(settings, isChecked)
+                }
+            }
+        }
+
+        builder
+            .setPositiveButton(R.string.ok) { _: DialogInterface?, _: Int ->
+                emulationFragment?.refreshInputOverlay()
+            }
+            .show()
     }
 
     private fun toggleControls() {
@@ -963,11 +1060,13 @@ class EmulationActivity : AppCompatActivity(), ThemeProvider {
         const val MENU_ACTION_SETTINGS = 35
         const val MENU_ACTION_SKYLANDERS = 36
         const val MENU_ACTION_INFINITY_BASE = 37
+        const val MENU_ACTION_LATCHING_CONTROLS = 38
 
         init {
             buttonsActionsMap.apply {
                 append(R.id.menu_emulation_edit_layout, MENU_ACTION_EDIT_CONTROLS_PLACEMENT)
                 append(R.id.menu_emulation_toggle_controls, MENU_ACTION_TOGGLE_CONTROLS)
+                append(R.id.menu_emulation_latching_controls, MENU_ACTION_LATCHING_CONTROLS)
                 append(R.id.menu_emulation_adjust_scale, MENU_ACTION_ADJUST_SCALE)
                 append(R.id.menu_emulation_choose_controller, MENU_ACTION_CHOOSE_CONTROLLER)
                 append(R.id.menu_emulation_joystick_rel_center, MENU_ACTION_JOYSTICK_REL_CENTER)
@@ -979,16 +1078,16 @@ class EmulationActivity : AppCompatActivity(), ThemeProvider {
         }
 
         @JvmStatic
-        fun launch(activity: FragmentActivity, filePaths: Array<String>, riivolution: Boolean) {
+        fun launch(activity: FragmentActivity, filePaths: Array<String>, riivolution: Boolean, fromIntent: Boolean = false) {
             if (ignoreLaunchRequests)
                 return
 
-            performLaunchChecks(activity) { launchWithoutChecks(activity, filePaths, riivolution) }
+            performLaunchChecks(activity, fromIntent) { launchWithoutChecks(activity, filePaths, riivolution) }
         }
 
         @JvmStatic
-        fun launch(activity: FragmentActivity, filePath: String, riivolution: Boolean) =
-            launch(activity, arrayOf(filePath), riivolution)
+        fun launch(activity: FragmentActivity, filePath: String, riivolution: Boolean, fromIntent: Boolean = false) =
+            launch(activity, arrayOf(filePath), riivolution, fromIntent)
 
         private fun launchWithoutChecks(
             activity: FragmentActivity,
@@ -1002,8 +1101,11 @@ class EmulationActivity : AppCompatActivity(), ThemeProvider {
             activity.startActivity(launcher)
         }
 
-        private fun performLaunchChecks(activity: FragmentActivity, continueCallback: Runnable) {
+        private fun performLaunchChecks(activity: FragmentActivity, fromIntent: Boolean, continueCallback: Runnable) {
             AfterDirectoryInitializationRunner().runWithLifecycle(activity) {
+                if (fromIntent) {
+                    activity.finish()
+                }
                 if (!FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_DEFAULT_ISO) ||
                     !FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_FS_PATH) ||
                     !FileBrowserHelper.isPathEmptyOrValid(StringSetting.MAIN_DUMP_PATH) ||
@@ -1042,7 +1144,7 @@ class EmulationActivity : AppCompatActivity(), ThemeProvider {
             if (ignoreLaunchRequests)
                 return
 
-            performLaunchChecks(activity) { launchSystemMenuWithoutChecks(activity) }
+            performLaunchChecks(activity, false) { launchSystemMenuWithoutChecks(activity) }
         }
 
         private fun launchSystemMenuWithoutChecks(activity: FragmentActivity) {

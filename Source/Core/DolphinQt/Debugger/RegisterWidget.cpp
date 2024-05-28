@@ -18,6 +18,7 @@
 #include "Core/PowerPC/PowerPC.h"
 #include "Core/System.h"
 #include "DolphinQt/Host.h"
+#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/Settings.h"
 
 RegisterWidget::RegisterWidget(QWidget* parent)
@@ -105,7 +106,7 @@ void RegisterWidget::ConnectWidgets()
   connect(m_table, &QTableWidget::customContextMenuRequested, this,
           &RegisterWidget::ShowContextMenu);
   connect(m_table, &QTableWidget::itemChanged, this, &RegisterWidget::OnItemChanged);
-  connect(&Settings::Instance(), &Settings::DebugFontChanged, m_table, &QWidget::setFont);
+  connect(&Settings::Instance(), &Settings::DebugFontChanged, m_table, &RegisterWidget::setFont);
 }
 
 void RegisterWidget::OnItemChanged(QTableWidgetItem* item)
@@ -117,6 +118,7 @@ void RegisterWidget::OnItemChanged(QTableWidgetItem* item)
 void RegisterWidget::ShowContextMenu()
 {
   QMenu* menu = new QMenu(this);
+  menu->setAttribute(Qt::WA_DeleteOnClose, true);
 
   auto* raw_item = m_table->currentItem();
 
@@ -307,6 +309,7 @@ void RegisterWidget::AutoStep(const std::string& reg) const
       break;
 
     // Can keep running and try again after a time out.
+    SetQWidgetWindowDecorations(&msgbox);
     msgbox.exec();
     if (msgbox.clickedButton() != (QAbstractButton*)run_button)
       break;
@@ -446,7 +449,10 @@ void RegisterWidget::PopulateTable()
   // MSR
   AddRegister(
       23, 5, RegisterType::msr, "MSR", [this] { return m_system.GetPPCState().msr.Hex; },
-      [this](u64 value) { m_system.GetPPCState().msr.Hex = value; });
+      [this](u64 value) {
+        m_system.GetPPCState().msr.Hex = value;
+        PowerPC::MSRUpdated(m_system.GetPPCState());
+      });
 
   // SRR 0-1
   AddRegister(
@@ -528,7 +534,7 @@ void RegisterWidget::AddRegister(int row, int column, RegisterType type, std::st
 
 void RegisterWidget::Update()
 {
-  if (isVisible() && Core::GetState() == Core::State::Paused)
+  if (isVisible() && Core::GetState(m_system) == Core::State::Paused)
   {
     m_updating = true;
     emit UpdateTable();

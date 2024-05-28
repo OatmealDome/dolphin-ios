@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "DolphinQt/Config/ARCodeWidget.h"
+#include "DolphinQt/QtUtils/WrapInScrollArea.h"
 
 #include <algorithm>
 #include <utility>
@@ -21,7 +22,9 @@
 
 #include "DolphinQt/Config/CheatCodeEditor.h"
 #include "DolphinQt/Config/CheatWarningWidget.h"
+#include "DolphinQt/Config/HardcoreWarningWidget.h"
 #include "DolphinQt/QtUtils/NonDefaultQPushButton.h"
+#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 
 #include "UICommon/GameFile.h"
 
@@ -54,6 +57,9 @@ ARCodeWidget::~ARCodeWidget() = default;
 void ARCodeWidget::CreateWidgets()
 {
   m_warning = new CheatWarningWidget(m_game_id, m_restart_required, this);
+#ifdef USE_RETRO_ACHIEVEMENTS
+  m_hc_warning = new HardcoreWarningWidget(this);
+#endif  // USE_RETRO_ACHIEVEMENTS
   m_code_list = new QListWidget;
   m_code_add = new NonDefaultQPushButton(tr("&Add New Code..."));
   m_code_edit = new NonDefaultQPushButton(tr("&Edit Code..."));
@@ -75,16 +81,23 @@ void ARCodeWidget::CreateWidgets()
   QVBoxLayout* layout = new QVBoxLayout;
 
   layout->addWidget(m_warning);
+#ifdef USE_RETRO_ACHIEVEMENTS
+  layout->addWidget(m_hc_warning);
+#endif  // USE_RETRO_ACHIEVEMENTS
   layout->addWidget(m_code_list);
   layout->addLayout(button_layout);
 
-  setLayout(layout);
+  WrapInScrollArea(this, layout);
 }
 
 void ARCodeWidget::ConnectWidgets()
 {
   connect(m_warning, &CheatWarningWidget::OpenCheatEnableSettings, this,
           &ARCodeWidget::OpenGeneralSettings);
+#ifdef USE_RETRO_ACHIEVEMENTS
+  connect(m_hc_warning, &HardcoreWarningWidget::OpenAchievementSettings, this,
+          &ARCodeWidget::OpenAchievementSettings);
+#endif  // USE_RETRO_ACHIEVEMENTS
 
   connect(m_code_list, &QListWidget::itemChanged, this, &ARCodeWidget::OnItemChanged);
   connect(m_code_list, &QListWidget::itemSelectionChanged, this, &ARCodeWidget::OnSelectionChanged);
@@ -230,6 +243,7 @@ void ARCodeWidget::OnCodeAddClicked()
 
   CheatCodeEditor ed(this);
   ed.SetARCode(&ar);
+  SetQWidgetWindowDecorations(&ed);
   if (ed.exec() == QDialog::Rejected)
     return;
 
@@ -253,6 +267,7 @@ void ARCodeWidget::OnCodeEditClicked()
   {
     ed.SetARCode(&current_ar);
 
+    SetQWidgetWindowDecorations(&ed);
     if (ed.exec() == QDialog::Rejected)
       return;
   }
@@ -261,6 +276,7 @@ void ARCodeWidget::OnCodeEditClicked()
     ActionReplay::ARCode ar = current_ar;
     ed.SetARCode(&ar);
 
+    SetQWidgetWindowDecorations(&ed);
     if (ed.exec() == QDialog::Rejected)
       return;
 

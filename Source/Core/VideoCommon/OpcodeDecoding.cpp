@@ -27,8 +27,8 @@
 #include "VideoCommon/Statistics.h"
 #include "VideoCommon/VertexLoaderBase.h"
 #include "VideoCommon/VertexLoaderManager.h"
-#include "VideoCommon/VertexShaderManager.h"
 #include "VideoCommon/XFMemory.h"
+#include "VideoCommon/XFStateManager.h"
 #include "VideoCommon/XFStructs.h"
 
 namespace OpcodeDecoder
@@ -60,13 +60,13 @@ public:
       {
         VertexLoaderManager::g_needs_cp_xf_consistency_check = true;
         auto& system = Core::System::GetInstance();
-        system.GetVertexShaderManager().SetTexMatrixChangedA(value);
+        system.GetXFStateManager().SetTexMatrixChangedA(value);
       }
       else if (sub_command == MATINDEX_B)
       {
         VertexLoaderManager::g_needs_cp_xf_consistency_check = true;
         auto& system = Core::System::GetInstance();
-        system.GetVertexShaderManager().SetTexMatrixChangedB(value);
+        system.GetXFStateManager().SetTexMatrixChangedB(value);
       }
       else if (sub_command == VCD_LO || sub_command == VCD_HI)
       {
@@ -158,7 +158,7 @@ public:
       if constexpr (is_preprocess)
       {
         auto& memory = system.GetMemory();
-        const u8* const start_address = memory.GetPointer(address);
+        const u8* const start_address = memory.GetPointerForRange(address, size);
 
         system.GetFifo().PushFifoAuxBuffer(start_address, size);
 
@@ -179,10 +179,10 @@ public:
         else
         {
           auto& memory = system.GetMemory();
-          start_address = memory.GetPointer(address);
+          start_address = memory.GetPointerForRange(address, size);
         }
 
-        // Avoid the crash if memory.GetPointer failed ..
+        // Avoid the crash if memory.GetPointerForRange failed ..
         if (start_address != nullptr)
         {
           // temporarily swap dl and non-dl (small "hack" for the stats)
@@ -220,7 +220,7 @@ public:
     else
     {
       auto& system = Core::System::GetInstance();
-      system.GetCommandProcessor().HandleUnknownOpcode(system, opcode, data, is_preprocess);
+      system.GetCommandProcessor().HandleUnknownOpcode(opcode, data, is_preprocess);
       m_cycles += 1;
     }
   }
@@ -234,7 +234,7 @@ public:
       // process them.
       if (g_record_fifo_data && static_cast<Opcode>(data[0]) != Opcode::GX_CMD_CALL_DL)
       {
-        FifoRecorder::GetInstance().WriteGPCommand(data, size);
+        Core::System::GetInstance().GetFifoRecorder().WriteGPCommand(data, size);
       }
     }
   }

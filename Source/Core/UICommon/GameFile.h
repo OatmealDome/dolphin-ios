@@ -27,6 +27,9 @@ struct GameBanner
   std::vector<u32> buffer;
   u32 width{};
   u32 height{};
+
+  bool operator==(const GameBanner&) const = default;
+
   bool empty() const { return buffer.empty(); }
   void DoState(PointerWrap& p);
 };
@@ -37,9 +40,6 @@ struct GameCover
   bool empty() const { return buffer.empty(); }
   void DoState(PointerWrap& p);
 };
-
-bool operator==(const GameBanner& lhs, const GameBanner& rhs);
-bool operator!=(const GameBanner& lhs, const GameBanner& rhs);
 
 // This class caches the metadata of a DiscIO::Volume (or a DOL/ELF file).
 class GameFile final
@@ -81,6 +81,7 @@ public:
   u16 GetRevision() const { return m_revision; }
   // 0 is the first disc, 1 is the second disc
   u8 GetDiscNumber() const { return m_disc_number; }
+  bool IsTwoDiscGame() const { return m_is_two_disc_game; }
   std::string GetNetPlayName(const Core::TitleDatabase& title_database) const;
 
   // This function is slow
@@ -134,6 +135,7 @@ private:
   bool ReadXMLMetadata(const std::string& path);
   bool ReadPNGBanner(const std::string& path);
   bool TryLoadGameModDescriptorBanner();
+  bool CheckIfTwoDiscGame(const std::string& game_id) const;
 
   // IMPORTANT: Nearly all data members must be save/restored in DoState.
   // If anything is changed, make sure DoState handles it properly and
@@ -168,6 +170,7 @@ private:
   std::string m_compression_method{};
   u16 m_revision{};
   u8 m_disc_number{};
+  bool m_is_two_disc_game{};
   std::string m_apploader_date;
 
   std::string m_custom_name;

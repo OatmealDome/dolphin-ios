@@ -5,7 +5,6 @@
 
 #include <algorithm>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 #include <fmt/format.h>
@@ -90,7 +89,8 @@ bool IsTitlePath(const std::string& path, std::optional<FromWhichRoot> from, u64
   }
 
   u32 title_id_high, title_id_low;
-  if (!AsciiToHex(components[0], title_id_high) || !AsciiToHex(components[1], title_id_low))
+  if (Common::FromChars(components[0], title_id_high, 16).ec != std::errc{} ||
+      Common::FromChars(components[1], title_id_low, 16).ec != std::errc{})
   {
     return false;
   }
@@ -104,9 +104,9 @@ bool IsTitlePath(const std::string& path, std::optional<FromWhichRoot> from, u64
 
 static bool IsIllegalCharacter(char c)
 {
-  static const std::unordered_set<char> illegal_chars = {'\"', '*', '/',  ':', '<',
-                                                         '>',  '?', '\\', '|', '\x7f'};
-  return (c >= 0 && c <= 0x1F) || illegal_chars.find(c) != illegal_chars.end();
+  static constexpr auto illegal_chars = {'\"', '*', '/', ':', '<', '>', '?', '\\', '|', '\x7f'};
+  return static_cast<unsigned char>(c) <= 0x1F ||
+         std::find(illegal_chars.begin(), illegal_chars.end(), c) != illegal_chars.end();
 }
 
 std::string EscapeFileName(const std::string& filename)
@@ -155,8 +155,11 @@ std::string UnescapeFileName(const std::string& filename)
   {
     u32 character;
     if (pos + 6 <= result.size() && result[pos + 4] == '_' && result[pos + 5] == '_')
-      if (AsciiToHex(result.substr(pos + 2, 2), character))
+      if (Common::FromChars(std::string_view{result}.substr(pos + 2, 2), character, 16).ec ==
+          std::errc{})
+      {
         result.replace(pos, 6, {static_cast<char>(character)});
+      }
 
     ++pos;
   }

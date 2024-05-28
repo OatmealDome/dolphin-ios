@@ -4,6 +4,7 @@
 #include "DolphinQt/FIFO/FIFOAnalyzer.h"
 
 #include <algorithm>
+#include <bit>
 
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -37,7 +38,7 @@ constexpr int PART_START_ROLE = Qt::UserRole + 1;
 // Values range from 1 to number of parts
 constexpr int PART_END_ROLE = Qt::UserRole + 2;
 
-FIFOAnalyzer::FIFOAnalyzer()
+FIFOAnalyzer::FIFOAnalyzer(FifoPlayer& fifo_player) : m_fifo_player(fifo_player)
 {
   CreateWidgets();
   ConnectWidgets();
@@ -51,13 +52,9 @@ FIFOAnalyzer::FIFOAnalyzer()
   m_search_splitter->restoreState(
       settings.value(QStringLiteral("fifoanalyzer/searchsplitter")).toByteArray());
 
-  m_detail_list->setFont(Settings::Instance().GetDebugFont());
-  m_entry_detail_browser->setFont(Settings::Instance().GetDebugFont());
-
-  connect(&Settings::Instance(), &Settings::DebugFontChanged, this, [this] {
-    m_detail_list->setFont(Settings::Instance().GetDebugFont());
-    m_entry_detail_browser->setFont(Settings::Instance().GetDebugFont());
-  });
+  OnDebugFontChanged(Settings::Instance().GetDebugFont());
+  connect(&Settings::Instance(), &Settings::DebugFontChanged, this,
+          &FIFOAnalyzer::OnDebugFontChanged);
 }
 
 FIFOAnalyzer::~FIFOAnalyzer()
@@ -138,7 +135,7 @@ void FIFOAnalyzer::UpdateTree()
 {
   m_tree_widget->clear();
 
-  if (!FifoPlayer::GetInstance().IsPlaying())
+  if (!m_fifo_player.IsPlaying())
   {
     m_tree_widget->addTopLevelItem(new QTreeWidgetItem({tr("No recording loaded.")}));
     return;
@@ -148,7 +145,7 @@ void FIFOAnalyzer::UpdateTree()
 
   m_tree_widget->addTopLevelItem(recording_item);
 
-  auto* file = FifoPlayer::GetInstance().GetFile();
+  auto* file = m_fifo_player.GetFile();
 
   const u32 frame_count = file->GetFrameCount();
 
@@ -158,7 +155,7 @@ void FIFOAnalyzer::UpdateTree()
 
     recording_item->addChild(frame_item);
 
-    const AnalyzedFrameInfo& frame_info = FifoPlayer::GetInstance().GetAnalyzedFrameInfo(frame);
+    const AnalyzedFrameInfo& frame_info = m_fifo_player.GetAnalyzedFrameInfo(frame);
     ASSERT(frame_info.parts.size() != 0);
 
     Common::EnumMap<u32, FramePartType::EFBCopy> part_counts;
@@ -339,7 +336,7 @@ void FIFOAnalyzer::UpdateDetails()
   m_search_previous->setEnabled(false);
   m_search_label->clear();
 
-  if (!FifoPlayer::GetInstance().IsPlaying())
+  if (!m_fifo_player.IsPlaying())
     return;
 
   const auto items = m_tree_widget->selectedItems();
@@ -351,8 +348,8 @@ void FIFOAnalyzer::UpdateDetails()
   const u32 start_part_nr = items[0]->data(0, PART_START_ROLE).toUInt();
   const u32 end_part_nr = items[0]->data(0, PART_END_ROLE).toUInt();
 
-  const AnalyzedFrameInfo& frame_info = FifoPlayer::GetInstance().GetAnalyzedFrameInfo(frame_nr);
-  const auto& fifo_frame = FifoPlayer::GetInstance().GetFile()->GetFrame(frame_nr);
+  const AnalyzedFrameInfo& frame_info = m_fifo_player.GetAnalyzedFrameInfo(frame_nr);
+  const auto& fifo_frame = m_fifo_player.GetFile()->GetFrame(frame_nr);
 
   const u32 object_start = frame_info.parts[start_part_nr].m_start;
   const u32 object_end = frame_info.parts[end_part_nr].m_end;
@@ -386,7 +383,7 @@ void FIFOAnalyzer::BeginSearch()
 {
   const QString search_str = m_search_edit->text();
 
-  if (!FifoPlayer::GetInstance().IsPlaying())
+  if (!m_fifo_player.IsPlaying())
     return;
 
   const auto items = m_tree_widget->selectedItems();
@@ -434,8 +431,8 @@ void FIFOAnalyzer::BeginSearch()
   const u32 start_part_nr = items[0]->data(0, PART_START_ROLE).toUInt();
   const u32 end_part_nr = items[0]->data(0, PART_END_ROLE).toUInt();
 
-  const AnalyzedFrameInfo& frame_info = FifoPlayer::GetInstance().GetAnalyzedFrameInfo(frame_nr);
-  const FifoFrameInfo& fifo_frame = FifoPlayer::GetInstance().GetFile()->GetFrame(frame_nr);
+  const AnalyzedFrameInfo& frame_info = m_fifo_player.GetAnalyzedFrameInfo(frame_nr);
+  const FifoFrameInfo& fifo_frame = m_fifo_player.GetFile()->GetFrame(frame_nr);
 
   const u32 object_start = frame_info.parts[start_part_nr].m_start;
   const u32 object_end = frame_info.parts[end_part_nr].m_end;
@@ -650,7 +647,7 @@ public:
         }
         if (format == ComponentFormat::Float)
         {
-          const float value = Common::BitCast<float>(Common::swap32(&vertex_data[i]));
+          const float value = std::bit_cast<float>(Common::swap32(&vertex_data[i]));
           text += QStringLiteral(" (%1)").arg(value);
         }
         i += component_size;
@@ -750,7 +747,7 @@ void FIFOAnalyzer::UpdateDescription()
 {
   m_entry_detail_browser->clear();
 
-  if (!FifoPlayer::GetInstance().IsPlaying())
+  if (!m_fifo_player.IsPlaying())
     return;
 
   const auto items = m_tree_widget->selectedItems();
@@ -766,8 +763,8 @@ void FIFOAnalyzer::UpdateDescription()
   const u32 end_part_nr = items[0]->data(0, PART_END_ROLE).toUInt();
   const u32 entry_nr = m_detail_list->currentRow();
 
-  const AnalyzedFrameInfo& frame_info = FifoPlayer::GetInstance().GetAnalyzedFrameInfo(frame_nr);
-  const FifoFrameInfo& fifo_frame = FifoPlayer::GetInstance().GetFile()->GetFrame(frame_nr);
+  const AnalyzedFrameInfo& frame_info = m_fifo_player.GetAnalyzedFrameInfo(frame_nr);
+  const FifoFrameInfo& fifo_frame = m_fifo_player.GetFile()->GetFrame(frame_nr);
 
   const u32 object_start = frame_info.parts[start_part_nr].m_start;
   const u32 object_end = frame_info.parts[end_part_nr].m_end;
@@ -778,4 +775,10 @@ void FIFOAnalyzer::UpdateDescription()
   OpcodeDecoder::RunCommand(&fifo_frame.fifoData[object_start + entry_start],
                             object_size - entry_start, callback);
   m_entry_detail_browser->setText(callback.text);
+}
+
+void FIFOAnalyzer::OnDebugFontChanged(const QFont& font)
+{
+  m_detail_list->setFont(font);
+  m_entry_detail_browser->setFont(font);
 }

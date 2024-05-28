@@ -14,6 +14,7 @@
 #include "Core/Config/SYSCONFSettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
+#include "Core/System.h"
 
 #include "DolphinQt/Config/ConfigControls/ConfigBool.h"
 #include "DolphinQt/Config/ConfigControls/ConfigChoice.h"
@@ -36,9 +37,14 @@ AdvancedWidget::AdvancedWidget(GraphicsWindow* parent)
   connect(&Settings::Instance(), &Settings::EmulationStateChanged, this, [this](Core::State state) {
     OnEmulationStateChanged(state != Core::State::Uninitialized);
   });
+  connect(m_manual_texture_sampling, &QCheckBox::toggled, [this, parent] {
+    SaveSettings();
+    emit parent->UseFastTextureSamplingChanged();
+  });
 
   OnBackendChanged();
-  OnEmulationStateChanged(Core::GetState() != Core::State::Uninitialized);
+  OnEmulationStateChanged(Core::GetState(Core::System::GetInstance()) !=
+                          Core::State::Uninitialized);
 }
 
 void AdvancedWidget::CreateWidgets()
@@ -80,6 +86,8 @@ void AdvancedWidget::CreateWidgets()
 
   m_enable_wireframe = new ConfigBool(tr("Enable Wireframe"), Config::GFX_ENABLE_WIREFRAME);
   m_show_statistics = new ConfigBool(tr("Show Statistics"), Config::GFX_OVERLAY_STATS);
+  m_show_proj_statistics =
+      new ConfigBool(tr("Show Projection Statistics"), Config::GFX_OVERLAY_PROJ_STATS);
   m_enable_format_overlay =
       new ConfigBool(tr("Texture Format Overlay"), Config::GFX_TEXFMT_OVERLAY_ENABLE);
   m_enable_api_validation =
@@ -88,7 +96,8 @@ void AdvancedWidget::CreateWidgets()
   debugging_layout->addWidget(m_enable_wireframe, 0, 0);
   debugging_layout->addWidget(m_show_statistics, 0, 1);
   debugging_layout->addWidget(m_enable_format_overlay, 1, 0);
-  debugging_layout->addWidget(m_enable_api_validation, 1, 1);
+  debugging_layout->addWidget(m_show_proj_statistics, 1, 1);
+  debugging_layout->addWidget(m_enable_api_validation, 2, 0);
 
   // Utility
   auto* utility_box = new QGroupBox(tr("Utility"));
@@ -131,21 +140,24 @@ void AdvancedWidget::CreateWidgets()
   auto* dump_layout = new QGridLayout();
   dump_box->setLayout(dump_layout);
 
-  m_use_fullres_framedumps = new ConfigBool(tr("Dump at Internal Resolution"),
-                                            Config::GFX_INTERNAL_RESOLUTION_FRAME_DUMPS);
+  m_frame_dumps_resolution_type =
+      new ConfigChoice({tr("Window Resolution"), tr("Aspect Ratio Corrected Internal Resolution"),
+                        tr("Raw Internal Resolution")},
+                       Config::GFX_FRAME_DUMPS_RESOLUTION_TYPE);
   m_dump_use_ffv1 = new ConfigBool(tr("Use Lossless Codec (FFV1)"), Config::GFX_USE_FFV1);
   m_dump_bitrate = new ConfigInteger(0, 1000000, Config::GFX_BITRATE_KBPS, 1000);
   m_png_compression_level = new ConfigInteger(0, 9, Config::GFX_PNG_COMPRESSION_LEVEL);
 
-  dump_layout->addWidget(m_use_fullres_framedumps, 0, 0);
+  dump_layout->addWidget(new QLabel(tr("Resolution Type:")), 0, 0);
+  dump_layout->addWidget(m_frame_dumps_resolution_type, 0, 1);
 #if defined(HAVE_FFMPEG)
-  dump_layout->addWidget(m_dump_use_ffv1, 0, 1);
-  dump_layout->addWidget(new QLabel(tr("Bitrate (kbps):")), 1, 0);
-  dump_layout->addWidget(m_dump_bitrate, 1, 1);
+  dump_layout->addWidget(m_dump_use_ffv1, 1, 0);
+  dump_layout->addWidget(new QLabel(tr("Bitrate (kbps):")), 2, 0);
+  dump_layout->addWidget(m_dump_bitrate, 2, 1);
 #endif
-  dump_layout->addWidget(new QLabel(tr("PNG Compression Level:")), 2, 0);
+  dump_layout->addWidget(new QLabel(tr("PNG Compression Level:")), 3, 0);
   m_png_compression_level->SetTitle(tr("PNG Compression Level"));
-  dump_layout->addWidget(m_png_compression_level, 2, 1);
+  dump_layout->addWidget(m_png_compression_level, 3, 1);
 
   // Misc.
   auto* misc_box = new QGroupBox(tr("Misc"));
@@ -290,6 +302,9 @@ void AdvancedWidget::AddDescriptions()
   static const char TR_SHOW_STATS_DESCRIPTION[] =
       QT_TR_NOOP("Shows various rendering statistics.<br><br><dolphin_emphasis>If unsure, "
                  "leave this unchecked.</dolphin_emphasis>");
+  static const char TR_SHOW_PROJ_STATS_DESCRIPTION[] =
+      QT_TR_NOOP("Shows various projection statistics.<br><br><dolphin_emphasis>If unsure, "
+                 "leave this unchecked.</dolphin_emphasis>");
   static const char TR_TEXTURE_FORMAT_DESCRIPTION[] =
       QT_TR_NOOP("Modifies textures to show the format they're encoded in.<br><br>May require "
                  "an emulation reset to apply.<br><br><dolphin_emphasis>If unsure, leave this "
@@ -334,11 +349,21 @@ void AdvancedWidget::AddDescriptions()
   static const char TR_LOAD_GRAPHICS_MODS_DESCRIPTION[] =
       QT_TR_NOOP("Loads graphics mods from User/Load/GraphicsMods/.<br><br><dolphin_emphasis>If "
                  "unsure, leave this unchecked.</dolphin_emphasis>");
-  static const char TR_INTERNAL_RESOLUTION_FRAME_DUMPING_DESCRIPTION[] = QT_TR_NOOP(
-      "Creates frame dumps and screenshots at the internal resolution of the renderer, rather than "
-      "the size of the window it is displayed within.<br><br>If the aspect ratio is widescreen, "
-      "the output image will be scaled horizontally to preserve the vertical resolution.<br><br>"
-      "<dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>");
+  static const char TR_FRAME_DUMPS_RESOLUTION_TYPE_DESCRIPTION[] = QT_TR_NOOP(
+      "Selects how frame dumps (videos) and screenshots are going to be captured.<br>If the game "
+      "or window resolution change during a recording, multiple video files might be created.<br>"
+      "Note that color correction and cropping are always ignored by the captures."
+      "<br><br><b>Window Resolution</b>: Uses the output window resolution (without black bars)."
+      "<br>This is a simple dumping option that will capture the image more or less as you see it."
+      "<br><b>Aspect Ratio Corrected Internal Resolution</b>: "
+      "Uses the Internal Resolution (XFB size), and corrects it by the target aspect ratio.<br>"
+      "This option will consistently dump at the specified Internal Resolution "
+      "regardless of how the image is displayed during recording."
+      "<br><b>Raw Internal Resolution</b>: Uses the Internal Resolution (XFB size) "
+      "without correcting it with the target aspect ratio.<br>"
+      "This will provide a clean dump without any aspect ratio correction so users have as raw as "
+      "possible input for external editing software.<br><br><dolphin_emphasis>If unsure, leave "
+      "this at \"Aspect Ratio Corrected Internal Resolution\".</dolphin_emphasis>");
 #if defined(HAVE_FFMPEG)
   static const char TR_USE_FFV1_DESCRIPTION[] =
       QT_TR_NOOP("Encodes frame dumps using the FFV1 codec.<br><br><dolphin_emphasis>If "
@@ -355,8 +380,9 @@ void AdvancedWidget::AddDescriptions()
                  "level 9 but finish in significantly less time.<br><br>"
                  "<dolphin_emphasis>If unsure, leave this at 6.</dolphin_emphasis>");
   static const char TR_CROPPING_DESCRIPTION[] = QT_TR_NOOP(
-      "Crops the picture from its native aspect ratio to 4:3 or "
-      "16:9.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>");
+      "Crops the picture from its native aspect ratio (which rarely exactly matches 4:3 or 16:9),"
+      " to the specific user target aspect ratio (e.g. 4:3 or 16:9).<br><br>"
+      "<dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>");
   static const char TR_PROGRESSIVE_SCAN_DESCRIPTION[] = QT_TR_NOOP(
       "Enables progressive scan if supported by the emulated software. Most games don't have "
       "any issue with this.<br><br><dolphin_emphasis>If unsure, leave this "
@@ -416,6 +442,7 @@ void AdvancedWidget::AddDescriptions()
 
   m_enable_wireframe->SetDescription(tr(TR_WIREFRAME_DESCRIPTION));
   m_show_statistics->SetDescription(tr(TR_SHOW_STATS_DESCRIPTION));
+  m_show_proj_statistics->SetDescription(tr(TR_SHOW_PROJ_STATS_DESCRIPTION));
   m_enable_format_overlay->SetDescription(tr(TR_TEXTURE_FORMAT_DESCRIPTION));
   m_enable_api_validation->SetDescription(tr(TR_VALIDATION_LAYER_DESCRIPTION));
   m_perf_samp_window->SetDescription(tr(TR_PERF_SAMP_WINDOW_DESCRIPTION));
@@ -428,7 +455,7 @@ void AdvancedWidget::AddDescriptions()
   m_dump_xfb_target->SetDescription(tr(TR_DUMP_XFB_DESCRIPTION));
   m_disable_vram_copies->SetDescription(tr(TR_DISABLE_VRAM_COPIES_DESCRIPTION));
   m_enable_graphics_mods->SetDescription(tr(TR_LOAD_GRAPHICS_MODS_DESCRIPTION));
-  m_use_fullres_framedumps->SetDescription(tr(TR_INTERNAL_RESOLUTION_FRAME_DUMPING_DESCRIPTION));
+  m_frame_dumps_resolution_type->SetDescription(tr(TR_FRAME_DUMPS_RESOLUTION_TYPE_DESCRIPTION));
 #ifdef HAVE_FFMPEG
   m_dump_use_ffv1->SetDescription(tr(TR_USE_FFV1_DESCRIPTION));
 #endif

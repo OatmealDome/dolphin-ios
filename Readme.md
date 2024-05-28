@@ -8,9 +8,10 @@ This is the repository for the new DolphiniOS codebase.
 
 You will need the following:
 
-* A Mac capable of running macOS Big Sur 11.3 or later
-* Xcode 13 or later
+* A Mac capable of running MacOS Sonoma 14 or later
+* Xcode 15 or later
 * Homebrew (or your favourite package manager)
+* iOS 14 or later
 
 First, install the necessary tools using Homebrew:
 
@@ -20,11 +21,24 @@ brew install cmake ninja bartycrouch
 
 If you are using a different package manager, refer to its documentation.
 
+Get the repo
+
+```
+git clone https://github.com/brand175/dolphin-ios.git
+```
+
 Finally, use the following command to install `polib` using the Xcode-provided `python3`:
 
 ```
-/path/to/Xcode.app/Contents/Developer/usr/bin/python3 -m pip install polib
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3 -m pip install polib
 ```
+If Xcode isn't installed via Appstore. Find the install location, select Get Info and copy the path, replace Applications/
+
+Make sure to pull submodules before building:
+```sh
+git submodule update --init --recursive
+```
+
 
 Once all of the prerequisites are installed, you can open the Xcode project at `Source/iOS/App/DolphiniOS.xcodeproj`.
 
@@ -33,6 +47,8 @@ You must change the organization identifier and team ID before you can build!
 To change the organization identifier, go to `Project` -> `Config` -> `BundleIdentifier.xcconfig`, and change `use.your.own.organization.identifier` to something unique.
 
 To change the team ID, go to `Project` -> `Config` -> `DevelopmentTeam.xcconfig`, and replace `your-team-id` with your developer account's team ID.
+
+Make sure to select NJB option in Xcode top header
 
 Once this is complete, you are now able to build and run DolphiniOS.
 
@@ -84,7 +100,7 @@ installed when building.
 
 Make sure to pull submodules before building:
 ```sh
-git submodule update --init
+git submodule update --init --recursive
 ```
 
 The "Release" solution configuration includes performance optimizations for the best user experience but complicates debugging Dolphin.
@@ -101,7 +117,7 @@ to install any missing packages yourself. You may refer to the [wiki](https://gi
 
 Make sure to pull submodules before building:
 ```sh
-git submodule update --init
+git submodule update --init --recursive
 ```
 
 ### macOS Build Steps:
@@ -166,7 +182,7 @@ Android dev environment set up, see [AndroidSetup.md](AndroidSetup.md).
 
 Make sure to pull submodules before building:
 ```sh
-git submodule update --init
+git submodule update --init --recursive
 ```
 
 If using Android Studio, import the Gradle project located in `./Source/Android`.
@@ -231,7 +247,7 @@ is intended for debugging purposes only.
 ```
 usage: dolphin-tool COMMAND -h
 
-commands supported: [convert, verify, header]
+commands supported: [convert, verify, header, extract]
 ```
 
 ```
@@ -289,4 +305,23 @@ then exit.
   -l, --compression_level
                         Optional. Print the level of compression for WIA/RVZ
                         formats, then exit.
+```
+
+```
+Usage: extract [options]...
+
+Options:
+  -h, --help            show this help message and exit
+  -i FILE, --input=FILE
+                        Path to disc image FILE.
+  -o FOLDER, --output=FOLDER
+                        Path to the destination FOLDER.
+  -p PARTITION, --partition=PARTITION
+                        Which specific partition you want to extract.
+  -s SINGLE, --single=SINGLE
+                        Which specific file/directory you want to extract.
+  -l, --list            List all files in volume/partition. Will print the
+                        directory/file specified with --single if defined.
+  -q, --quiet           Mute all messages except for errors.
+  -g, --gameonly        Only extracts the DATA partition.
 ```

@@ -66,6 +66,7 @@
 #include "VideoCommon/VideoConfig.h"
 #include "VideoCommon/VideoState.h"
 #include "VideoCommon/Widescreen.h"
+#include "VideoCommon/XFStateManager.h"
 
 VideoBackendBase* g_video_backend = nullptr;
 
@@ -92,7 +93,7 @@ std::string VideoBackendBase::BadShaderFilename(const char* shader_stage, int co
 void VideoBackendBase::Video_ExitLoop()
 {
   auto& system = Core::System::GetInstance();
-  system.GetFifo().ExitGpuLoop(system);
+  system.GetFifo().ExitGpuLoop();
 }
 
 // Run from the CPU thread (from VideoInterface.cpp)
@@ -231,18 +232,17 @@ const std::vector<std::unique_ptr<VideoBackendBase>>& VideoBackendBase::GetAvail
   static auto s_available_backends = [] {
     std::vector<std::unique_ptr<VideoBackendBase>> backends;
 
-    // OGL > D3D11 > D3D12 > Vulkan > SW > Null
-    // On macOS, we prefer Vulkan over OpenGL due to OpenGL support being deprecated by Apple.
-#ifdef HAS_OPENGL
-    backends.push_back(std::make_unique<OGL::VideoBackend>());
-#endif
 #ifdef _WIN32
     backends.push_back(std::make_unique<DX11::VideoBackend>());
     backends.push_back(std::make_unique<DX12::VideoBackend>());
 #endif
+#ifdef HAS_OPENGL
+    backends.push_back(std::make_unique<OGL::VideoBackend>());
+#endif
 #ifdef HAS_VULKAN
 #ifdef __APPLE__
     // Emplace the Vulkan backend at the beginning so it takes precedence over OpenGL.
+    // On macOS, we prefer Vulkan over OpenGL due to OpenGL support being deprecated by Apple.
     backends.emplace(backends.begin(), std::make_unique<Vulkan::VideoBackend>());
 #else
     backends.push_back(std::make_unique<Vulkan::VideoBackend>());
@@ -299,7 +299,7 @@ void VideoBackendBase::PopulateBackendInfoFromUI(const WindowSystemInfo& wsi)
 {
   // If the core is running, the backend info will have been populated already.
   // If we did it here, the UI thread can race with the with the GPU thread.
-  if (!Core::IsRunning())
+  if (!Core::IsRunning(Core::System::GetInstance()))
     PopulateBackendInfo(wsi);
 }
 
@@ -344,7 +344,7 @@ bool VideoBackendBase::InitializeShared(std::unique_ptr<AbstractGfx> gfx,
 {
   memset(reinterpret_cast<u8*>(&g_main_cp_state), 0, sizeof(g_main_cp_state));
   memset(reinterpret_cast<u8*>(&g_preprocess_cp_state), 0, sizeof(g_preprocess_cp_state));
-  memset(texMem, 0, TMEM_SIZE);
+  s_tex_mem.fill(0);
 
   // do not initialize again for the config window
   m_initialized = true;
@@ -368,7 +368,8 @@ bool VideoBackendBase::InitializeShared(std::unique_ptr<AbstractGfx> gfx,
   if (!g_vertex_manager->Initialize() || !g_shader_cache->Initialize() ||
       !g_perf_query->Initialize() || !g_presenter->Initialize() ||
       !g_framebuffer_manager->Initialize() || !g_texture_cache->Initialize() ||
-      !g_bounding_box->Initialize() || !g_graphics_mod_manager->Initialize())
+      (g_ActiveConfig.backend_info.bSupportsBBox && !g_bounding_box->Initialize()) ||
+      !g_graphics_mod_manager->Initialize())
   {
     PanicAlertFmtT("Failed to initialize renderer classes");
     Shutdown();
@@ -377,14 +378,15 @@ bool VideoBackendBase::InitializeShared(std::unique_ptr<AbstractGfx> gfx,
 
   auto& system = Core::System::GetInstance();
   auto& command_processor = system.GetCommandProcessor();
-  command_processor.Init(system);
-  system.GetFifo().Init(system);
-  system.GetPixelEngine().Init(system);
+  command_processor.Init();
+  system.GetFifo().Init();
+  system.GetPixelEngine().Init();
   BPInit();
   VertexLoaderManager::Init();
   system.GetVertexShaderManager().Init();
   system.GetGeometryShaderManager().Init();
   system.GetPixelShaderManager().Init();
+  system.GetXFStateManager().Init();
   TMEM::Init();
 
   g_Config.VerifyValidity();
@@ -407,6 +409,7 @@ void VideoBackendBase::ShutdownShared()
 
   g_bounding_box.reset();
   g_perf_query.reset();
+  g_graphics_mod_manager.reset();
   g_texture_cache.reset();
   g_framebuffer_manager.reset();
   g_shader_cache.reset();

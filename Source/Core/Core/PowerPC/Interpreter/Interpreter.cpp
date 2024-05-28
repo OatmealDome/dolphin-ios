@@ -64,8 +64,10 @@ void Interpreter::UpdatePC()
   m_ppc_state.pc = m_ppc_state.npc;
 }
 
-Interpreter::Interpreter(Core::System& system, PowerPC::PowerPCState& ppc_state, PowerPC::MMU& mmu)
-    : m_system(system), m_ppc_state(ppc_state), m_mmu(mmu)
+Interpreter::Interpreter(Core::System& system, PowerPC::PowerPCState& ppc_state, PowerPC::MMU& mmu,
+                         Core::BranchWatch& branch_watch, PPCSymbolDB& ppc_symbol_db)
+    : m_system(system), m_ppc_state(ppc_state), m_mmu(mmu), m_branch_watch(branch_watch),
+      m_ppc_symbol_db(ppc_symbol_db)
 {
 }
 
@@ -106,10 +108,14 @@ void Interpreter::Trace(const UGeckoInstruction& inst)
 
 bool Interpreter::HandleFunctionHooking(u32 address)
 {
-  return HLE::ReplaceFunctionIfPossible(address, [this](u32 hook_index, HLE::HookType type) {
-    HLEFunction(*this, hook_index);
-    return type != HLE::HookType::Start;
-  });
+  const auto result =
+      HLE::TryReplaceFunction(m_ppc_symbol_db, address, PowerPC::CoreMode::Interpreter);
+  if (!result)
+    return false;
+
+  HLEFunction(*this, result.hook_index);
+
+  return result.type != HLE::HookType::Start;
 }
 
 int Interpreter::SingleStepInner()
@@ -233,7 +239,7 @@ void Interpreter::Run()
     core_timing.Advance();
 
     // we have to check exceptions at branches apparently (or maybe just rfi?)
-    if (Config::Get(Config::MAIN_ENABLE_DEBUGGING))
+    if (Config::IsDebuggingEnabled())
     {
 #ifdef SHOW_HISTORY
       s_pc_block_vec.push_back(m_ppc_state.pc);
@@ -320,7 +326,7 @@ void Interpreter::unknown_instruction(Interpreter& interpreter, UGeckoInstructio
   const u32 opcode = PowerPC::MMU::HostRead_U32(guard, last_pc);
   const std::string disasm = Common::GekkoDisassembler::Disassemble(opcode, last_pc);
   NOTICE_LOG_FMT(POWERPC, "Last PC = {:08x} : {}", last_pc, disasm);
-  Dolphin_Debugger::PrintCallstack(system, guard, Common::Log::LogType::POWERPC,
+  Dolphin_Debugger::PrintCallstack(guard, Common::Log::LogType::POWERPC,
                                    Common::Log::LogLevel::LNOTICE);
 
   const auto& ppc_state = interpreter.m_ppc_state;

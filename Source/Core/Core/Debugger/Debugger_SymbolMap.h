@@ -24,12 +24,9 @@ struct CallstackEntry
   u32 vAddress = 0;
 };
 
-bool GetCallstack(Core::System& system, const Core::CPUThreadGuard& guard,
-                  std::vector<CallstackEntry>& output);
-void PrintCallstack(Core::System& system, const Core::CPUThreadGuard& guard,
-                    Common::Log::LogType type, Common::Log::LogLevel level);
-void PrintDataBuffer(Common::Log::LogType type, const u8* data, size_t size,
+bool GetCallstack(const Core::CPUThreadGuard& guard, std::vector<CallstackEntry>& output);
+void PrintCallstack(const Core::CPUThreadGuard& guard, Common::Log::LogType type,
+                    Common::Log::LogLevel level);
+void PrintDataBuffer(const Core::System& system, Common::Log::LogType type, u32 address, u32 size,
                      std::string_view title);
-void AddAutoBreakpoints();
-
 }  // namespace Dolphin_Debugger

@@ -125,12 +125,13 @@ public:
   static void SetCurrentInputChannel(ciface::InputChannel);
   static ciface::InputChannel GetCurrentInputChannel();
 
+  WindowSystemInfo GetWindowSystemInfo() const;
+
 private:
   void ClearDevices();
 
   std::list<std::function<void()>> m_devices_changed_callbacks;
   mutable std::recursive_mutex m_devices_population_mutex;
-  mutable std::mutex m_pre_population_mutex;
   mutable std::mutex m_callbacks_mutex;
   std::atomic<bool> m_is_init;
   // This is now always protected by m_devices_population_mutex, so
