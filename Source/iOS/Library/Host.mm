@@ -8,6 +8,7 @@
 
 #include "Core/Core.h"
 #include "Core/Host.h"
+#include "Core/System.h"
 
 #include "HostNotifications.h"
 #include "HostQueue.h"
@@ -17,7 +18,7 @@ std::vector<std::string> Host_GetPreferredLocales()
   return {};
 }
 
-void Host_NotifyMapLoaded()
+void Host_PPCSymbolsChanged()
 {
 }
 
@@ -30,12 +31,12 @@ void Host_Message(HostMessageID message)
   if (message == HostMessageID::WMUserJobDispatch)
   {
     DOLHostQueueRunAsync(^{
-      Core::HostDispatchJobs();
+      Core::HostDispatchJobs(Core::System::GetInstance());
     });
   }
   else if (message == HostMessageID::WMUserStop)
   {
-    if (Core::IsRunning())
+      if (Core::IsRunning(Core::System::GetInstance()))
     {
       Core::QueueHostJob(&Core::Stop);
     }
