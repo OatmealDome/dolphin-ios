@@ -185,9 +185,6 @@ void ControllerInterface::RefreshDevices(RefreshReason reason)
 #ifdef CIFACE_USE_ANDROID
   ciface::Android::PopulateDevices();
 #endif
-#ifdef CIFACE_USE_PIPES
-  ciface::Pipes::PopulateDevices();
-#endif
 
   for (auto& backend : m_input_backends)
     backend->PopulateDevices();

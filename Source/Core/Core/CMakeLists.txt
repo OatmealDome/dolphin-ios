@@ -215,8 +215,6 @@ add_library(core
   HW/EXI/EXI_DeviceIPL.h
   HW/EXI/EXI_DeviceMemoryCard.cpp
   HW/EXI/EXI_DeviceMemoryCard.h
-  HW/EXI/EXI_DeviceMic.cpp
-  HW/EXI/EXI_DeviceMic.h
   HW/EXI/EXI_DeviceModem.cpp
   HW/EXI/EXI_DeviceModem.h
   HW/EXI/EXI.cpp
@@ -644,7 +642,6 @@ PUBLIC
   videosoftware
 
 PRIVATE
-  cubeb::cubeb
   FatFs
   fmt::fmt
   LZO::LZO

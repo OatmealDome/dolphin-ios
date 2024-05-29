@@ -77,8 +77,8 @@ void Metal::Util::PopulateBackendInfo(VideoConfig* config)
   config->backend_info.bSupportsPartialMultisampleResolve = false;
   config->backend_info.bSupportsDynamicVertexLoader = true;
   config->backend_info.bSupportsVSLinePointExpand = true;
-  config->backend_info.bSupportsHDROutput =
-      1.0 < [[NSScreen deepestScreen] maximumPotentialExtendedDynamicRangeColorComponentValue];
+  // Please fix this!!!
+  config->backend_info.bSupportsHDROutput = false;
 }
 
 void Metal::Util::PopulateBackendInfoAdapters(VideoConfig* config,

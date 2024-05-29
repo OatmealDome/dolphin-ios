@@ -124,14 +124,13 @@ private:
   void* m_reserved_region = nullptr;
   void* m_memory_handle = nullptr;
   WindowsMemoryFunctions m_memory_functions;
+#elif defined(IPHONEOS)
+  vm_address_t m_shm_address;
+  vm_size_t m_shm_size;
 #else
   int m_shm_fd = 0;
   void* m_reserved_region = nullptr;
   std::size_t m_reserved_region_size = 0;
-  
-#elif defined(IPHONEOS)
-  vm_address_t m_shm_address;
-  vm_size_t m_shm_size;
 #endif
 };
 

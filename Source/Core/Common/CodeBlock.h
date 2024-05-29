@@ -82,8 +82,8 @@ public:
   }
 
   bool IsInSpace(const u8* ptr) const { return ptr >= region && ptr < (region + region_size); }
-  bool IsInSpaceOrChildSpace(const u8* ptr) const
   u8* GetRegionPtr() { return region; }
+  bool IsInSpaceOrChildSpace(const u8* ptr) const
   {
     return ptr >= region && ptr < (region + total_region_size);
   }
