@@ -51,10 +51,10 @@
     case AspectMode::Auto:
       aspectRatio = @"Auto";
       break;
-    case AspectMode::Analog:
+    case AspectMode::ForceStandard:
       aspectRatio = @"Force 4:3";
       break;
-    case AspectMode::AnalogWide:
+    case AspectMode::ForceWide:
       aspectRatio = @"Force 16:9";
       break;
     case AspectMode::Stretch:
