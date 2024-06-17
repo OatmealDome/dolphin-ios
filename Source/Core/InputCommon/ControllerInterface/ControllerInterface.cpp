@@ -71,7 +71,7 @@ void ControllerInterface::Initialize(const WindowSystemInfo& wsi)
   m_input_backends.emplace_back(ciface::Quartz::CreateInputBackend(this));
 #endif
 #ifdef CIFACE_USE_IOS
-  ciface::iOS::Init();
+  m_input_backends.emplace_back(ciface::iOS::CreateInputBackend(this));
 #endif
 #ifdef CIFACE_USE_SDL
   m_input_backends.emplace_back(ciface::SDL::CreateInputBackend(this));
@@ -163,29 +163,6 @@ void ControllerInterface::RefreshDevices(RefreshReason reason)
   // do it async, to not risk the emulated controllers default config loading not finding a default
   // device.
 
-#ifdef CIFACE_USE_WIN32
-  ciface::Win32::PopulateDevices(m_wsi.render_window);
-#endif
-#ifdef CIFACE_USE_XLIB
-  if (m_wsi.type == WindowSystemType::X11)
-    ciface::XInput2::PopulateDevices(m_wsi.render_window);
-#endif
-#ifdef CIFACE_USE_OSX
-  if (m_wsi.type == WindowSystemType::MacOS)
-  {
-    ciface::Quartz::PopulateDevices(m_wsi.render_window);
-  }
-#endif
-#ifdef CIFACE_USE_IOS
-  ciface::iOS::PopulateDevices();
-#endif
-#ifdef CIFACE_USE_SDL
-  ciface::SDL::PopulateDevices();
-#endif
-#ifdef CIFACE_USE_ANDROID
-  ciface::Android::PopulateDevices();
-#endif
-
   for (auto& backend : m_input_backends)
     backend->PopulateDevices();
 
@@ -223,25 +200,6 @@ void ControllerInterface::Shutdown()
 
   // Update control references so shared_ptr<Device>s are freed up BEFORE we shutdown the backends.
   ClearDevices();
-
-#ifdef CIFACE_USE_WIN32
-  ciface::Win32::DeInit();
-#endif
-#ifdef CIFACE_USE_XLIB
-// nothing needed
-#endif
-#ifdef CIFACE_USE_OSX
-  ciface::Quartz::DeInit();
-#endif
-#ifdef CIFACE_USE_IOS
-  ciface::iOS::DeInit();
-#endif
-#ifdef CIFACE_USE_SDL
-  ciface::SDL::DeInit();
-#endif
-#ifdef CIFACE_USE_ANDROID
-  ciface::Android::Shutdown();
-#endif
 
   // Empty the container of input backends to deconstruct and deinitialize them.
   m_input_backends.clear();
