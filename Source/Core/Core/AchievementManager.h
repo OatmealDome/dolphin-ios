@@ -5,19 +5,26 @@
 
 #ifdef USE_RETRO_ACHIEVEMENTS
 #include <array>
+#include <chrono>
 #include <ctime>
 #include <functional>
 #include <map>
+#include <memory>
 #include <mutex>
+#include <set>
 #include <string>
+#include <string_view>
 #include <thread>
 #include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 #include <rcheevos/include/rc_api_runtime.h>
 #include <rcheevos/include/rc_api_user.h>
 #include <rcheevos/include/rc_client.h>
 #include <rcheevos/include/rc_runtime.h>
 
+#include "Common/CommonTypes.h"
 #include "Common/Event.h"
 #include "Common/HttpRequest.h"
 #include "Common/WorkQueueThread.h"
@@ -44,7 +51,6 @@ public:
   static constexpr size_t RP_SIZE = 256;
   using RichPresence = std::array<char, RP_SIZE>;
   using Badge = VideoCommon::CustomTextureData::ArraySlice::Level;
-  using NamedBadgeMap = std::unordered_map<std::string, const Badge*>;
   static constexpr size_t MAX_DISPLAYED_LBOARDS = 4;
 
   static constexpr std::string_view DEFAULT_PLAYER_BADGE_FILENAME = "achievements_player.png";
@@ -110,7 +116,9 @@ public:
   const Badge& GetAchievementBadge(AchievementId id, bool locked) const;
   const LeaderboardStatus* GetLeaderboardInfo(AchievementId leaderboard_id);
   RichPresence GetRichPresence() const;
-  const NamedBadgeMap& GetChallengeIcons() const;
+  const bool AreChallengesUpdated() const;
+  void ResetChallengesUpdated();
+  const std::unordered_set<AchievementId>& GetActiveChallenges() const;
   std::vector<std::string> GetActiveLeaderboards() const;
 
   void DoState(PointerWrap& p);
@@ -169,6 +177,7 @@ private:
 
   static void Request(const rc_api_request_t* request, rc_client_server_callback_t callback,
                       void* callback_data, rc_client_t* client);
+  static u32 MemoryVerifier(u32 address, u8* buffer, u32 num_bytes, rc_client_t* client);
   static u32 MemoryPeeker(u32 address, u8* buffer, u32 num_bytes, rc_client_t* client);
   void FetchBadge(Badge* badge, u32 badge_type, const BadgeNameFunction function,
                   const UpdatedItems callback_data);
@@ -195,9 +204,11 @@ private:
   std::unordered_map<AchievementId, Badge> m_locked_badges;
   RichPresence m_rich_presence;
   std::chrono::steady_clock::time_point m_last_rp_time = std::chrono::steady_clock::now();
+  std::chrono::steady_clock::time_point m_last_progress_message = std::chrono::steady_clock::now();
 
   std::unordered_map<AchievementId, LeaderboardStatus> m_leaderboard_map;
-  NamedBadgeMap m_active_challenges;
+  bool m_challenges_updated = false;
+  std::unordered_set<AchievementId> m_active_challenges;
   std::vector<rc_client_leaderboard_tracker_t> m_active_leaderboards;
 
   Common::WorkQueueThread<std::function<void()>> m_queue;
@@ -205,5 +216,32 @@ private:
   mutable std::recursive_mutex m_lock;
   std::recursive_mutex m_filereader_lock;
 };  // class AchievementManager
+
+#else  // USE_RETRO_ACHIEVEMENTS
+
+#include <string>
+
+namespace DiscIO
+{
+class Volume;
+}
+
+class AchievementManager
+{
+public:
+  static AchievementManager& GetInstance()
+  {
+    static AchievementManager s_instance;
+    return s_instance;
+  }
+
+  constexpr bool IsHardcoreModeActive() { return false; }
+
+  constexpr void LoadGame(const std::string&, const DiscIO::Volume*) {}
+
+  constexpr void DoFrame() {}
+
+  constexpr void CloseGame() {}
+};
 
 #endif  // USE_RETRO_ACHIEVEMENTS

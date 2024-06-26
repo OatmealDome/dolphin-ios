@@ -51,7 +51,7 @@ public:
   static QSettings& GetQSettings();
 
   // UI
-  void SetThemeName(const QString& theme_name);
+  void TriggerThemeChanged();
   void InitDefaultPalette();
   void UpdateSystemDark();
   void SetSystemDark(bool dark);
@@ -104,7 +104,6 @@ public:
   void RefreshGameList();
   void NotifyRefreshGameListStarted();
   void NotifyRefreshGameListComplete();
-  void RefreshMetadata();
   void NotifyMetadataRefreshComplete();
   void ReloadTitleDB();
   bool IsAutoRefreshEnabled() const;
@@ -122,9 +121,7 @@ public:
   void SetUSBKeyboardConnected(bool connected);
 
   // Graphics
-  void SetCursorVisibility(Config::ShowCursor hideCursor);
   Config::ShowCursor GetCursorVisibility() const;
-  void SetLockCursor(bool lock_cursor);
   bool GetLockCursor() const;
   void SetKeepWindowOnTop(bool top);
   bool IsKeepWindowOnTopEnabled() const;
@@ -226,6 +223,7 @@ signals:
   void SDCardInsertionChanged(bool inserted);
   void USBKeyboardConnectionChanged(bool connected);
   void EnableGfxModsChanged(bool enabled);
+  void HardcoreStateChanged();
 
 private:
   Settings();
