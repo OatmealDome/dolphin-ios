@@ -7,7 +7,6 @@
 #import "Core/Config/MainSettings.h"
 #import "Core/Config/GraphicsSettings.h"
 #import "Core/Core.h"
-#import "Core/System.h"
 #import "Core/HW/GCPad.h"
 #import "Core/HW/Wiimote.h"
 
@@ -64,16 +63,16 @@
 
 - (void)applicationDidBecomeActive:(UIApplication*)application {
   DOLHostQueueRunSync(^{
-    if (Core::IsRunning(Core::System::GetInstance()) && ![EmulationCoordinator shared].userRequestedPause) {
-      Core::SetState(Core::System::GetInstance(), Core::State::Running);
+    if (Core::IsRunning() && ![EmulationCoordinator shared].userRequestedPause) {
+      Core::SetState(Core::State::Running);
     }
   });
 }
 
 - (void)applicationWillResignActive:(UIApplication*)application {
   DOLHostQueueRunSync(^{
-    if (Core::IsRunning(Core::System::GetInstance()) && ![EmulationCoordinator shared].userRequestedPause) {
-      Core::SetState(Core::System::GetInstance(), Core::State::Paused);
+    if (Core::IsRunning() && ![EmulationCoordinator shared].userRequestedPause) {
+      Core::SetState(Core::State::Paused);
     }
     
     // Write out the configuration in case we don't get a chance later
@@ -83,11 +82,11 @@
 
 - (void)applicationWillTerminate:(UIApplication*)application {
   DOLHostQueueRunSync(^{
-    if (Core::IsRunning(Core::System::GetInstance())) {
-      Core::Stop(Core::System::GetInstance());
+    if (Core::IsRunning()) {
+      Core::Stop();
       
       // Spin while Core stops
-      while (Core::GetState(Core::System::GetInstance()) != Core::State::Uninitialized) {}
+      while (Core::GetState() != Core::State::Uninitialized) {}
     }
     
     Pad::Shutdown();
@@ -96,7 +95,7 @@
     
     Config::Save();
     
-    Core::Shutdown(Core::System::GetInstance());
+    Core::Shutdown();
     UICommon::Shutdown();
   });
 }

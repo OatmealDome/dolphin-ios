@@ -425,7 +425,7 @@ bool MovieManager::IsNetPlayRecording() const
 // NOTE: Host Thread
 void MovieManager::ChangePads()
 {
-  if (!Core::IsRunning(m_system))
+  if (!Core::IsRunning())
     return;
 
   ControllerTypeArray controllers{};
@@ -542,7 +542,7 @@ bool MovieManager::BeginRecordingInput(const ControllerTypeArray& controllers,
       if (File::Exists(save_path))
         File::Delete(save_path);
 
-      State::SaveAs(m_system, save_path);
+      State::SaveAs(save_path);
       m_recording_from_save_state = true;
 
       std::thread md5thread(&MovieManager::GetMD5, this);
@@ -572,10 +572,10 @@ bool MovieManager::BeginRecordingInput(const ControllerTypeArray& controllers,
     ConfigLoaders::SaveToDTM(&header);
     Config::AddLayer(ConfigLoaders::GenerateMovieConfigLoader(&header));
 
-    if (Core::IsRunning(m_system))
-      Core::UpdateWantDeterminism(m_system);
+    if (Core::IsRunning())
+      Core::UpdateWantDeterminism();
   };
-  Core::RunOnCPUThread(m_system, start_recording, true);
+  Core::RunOnCPUThread(start_recording, true);
 
   Core::DisplayMessage("Starting movie recording", 2000);
   return true;
@@ -959,7 +959,7 @@ bool MovieManager::PlayInput(const std::string& movie_path,
   // Wiimotes cause desync issues if they're not reset before launching the game
   Wiimote::ResetAllWiimotes();
 
-  Core::UpdateWantDeterminism(m_system);
+  Core::UpdateWantDeterminism();
 
   m_temp_input.resize(recording_file.GetSize() - 256);
   recording_file.ReadBytes(m_temp_input.data(), m_temp_input.size());
@@ -1153,7 +1153,7 @@ void MovieManager::LoadInput(const std::string& movie_path)
       if (m_play_mode != PlayMode::Playing)
       {
         m_play_mode = PlayMode::Playing;
-        Core::UpdateWantDeterminism(m_system);
+        Core::UpdateWantDeterminism();
         Core::DisplayMessage("Switched to playback", 2000);
       }
     }
@@ -1162,7 +1162,7 @@ void MovieManager::LoadInput(const std::string& movie_path)
       if (m_play_mode != PlayMode::Recording)
       {
         m_play_mode = PlayMode::Recording;
-        Core::UpdateWantDeterminism(m_system);
+        Core::UpdateWantDeterminism();
         Core::DisplayMessage("Switched to recording", 2000);
       }
     }
@@ -1356,7 +1356,7 @@ void MovieManager::EndPlayInput(bool cont)
     // delete tmpInput;
     // tmpInput = nullptr;
 
-    Core::QueueHostJob([](Core::System& system) { Core::UpdateWantDeterminism(system); });
+    Core::QueueHostJob([]() { Core::UpdateWantDeterminism(); });
   }
 }
 

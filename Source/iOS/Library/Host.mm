@@ -8,7 +8,6 @@
 
 #include "Core/Core.h"
 #include "Core/Host.h"
-#include "Core/System.h"
 
 #include "HostNotifications.h"
 #include "HostQueue.h"
@@ -31,12 +30,12 @@ void Host_Message(HostMessageID message)
   if (message == HostMessageID::WMUserJobDispatch)
   {
     DOLHostQueueRunAsync(^{
-      Core::HostDispatchJobs(Core::System::GetInstance());
+      Core::HostDispatchJobs();
     });
   }
   else if (message == HostMessageID::WMUserStop)
   {
-      if (Core::IsRunning(Core::System::GetInstance()))
+      if (Core::IsRunning())
     {
       Core::QueueHostJob(&Core::Stop);
     }

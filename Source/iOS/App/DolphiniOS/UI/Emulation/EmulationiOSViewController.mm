@@ -143,14 +143,14 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Save State") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[
       [UIAction actionWithTitle:DOLCoreLocalizedString(@"Load State") image:[UIImage systemImageNamed:@"tray.and.arrow.down"] identifier:nil handler:^(UIAction*) {
         DOLHostQueueRunAsync(^{
-          State::Load(Core::System::GetInstance(), self->_stateSlot);
+          State::Load(self->_stateSlot);
         });
       
         [self.navigationController setNavigationBarHidden:true animated:true];
       }],
       [UIAction actionWithTitle:DOLCoreLocalizedString(@"Save State") image:[UIImage systemImageNamed:@"tray.and.arrow.up"] identifier:nil handler:^(UIAction*) {
         DOLHostQueueRunAsync(^{
-          State::Save(Core::System::GetInstance(), self->_stateSlot);
+          State::Save(self->_stateSlot);
         });
       
         [self.navigationController setNavigationBarHidden:true animated:true];

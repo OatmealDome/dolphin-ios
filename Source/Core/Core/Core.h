@@ -122,8 +122,8 @@ private:
 };
 
 bool Init(Core::System& system, std::unique_ptr<BootParameters> boot, const WindowSystemInfo& wsi);
-void Stop(Core::System& system);
-void Shutdown(Core::System& system);
+void Stop();
+void Shutdown();
 
 void DeclareAsCPUThread();
 void UndeclareAsCPUThread();
@@ -134,7 +134,7 @@ void UndeclareAsHostThread();
 
 std::string StopMessage(bool main_thread, std::string_view message);
 
-bool IsRunning(Core::System& system);
+bool IsRunning();
 bool IsRunningAndStarted();  // is running and the CPU loop has been entered
 bool IsCPUThread();          // this tells us whether we are the CPU thread.
 bool IsGPUThread();
@@ -143,8 +143,8 @@ bool IsHostThread();
 bool WantsDeterminism();
 
 // [NOT THREADSAFE] For use by Host only
-void SetState(Core::System& system, State state, bool report_state_change = true);
-State GetState(Core::System& system);
+void SetState(State state, bool report_state_change = true);
+State GetState();
 
 void SaveScreenShot();
 void SaveScreenShot(std::string_view name);
@@ -153,11 +153,11 @@ void SaveScreenShot(std::string_view name);
 void DisplayMessage(std::string message, int time_in_ms);
 
 void FrameUpdateOnCPUThread();
-void OnFrameEnd(Core::System& system);
+void OnFrameEnd();
 
 // Run a function on the CPU thread, asynchronously.
 // This is only valid to call from the host thread, since it uses PauseAndLock() internally.
-void RunOnCPUThread(Core::System& system, std::function<void()> function, bool wait_for_completion);
+void RunOnCPUThread(std::function<void()> function, bool wait_for_completion);
 
 // for calling back into UI code without introducing a dependency on it in core
 using StateChangedCallbackFunc = std::function<void(Core::State)>;
@@ -168,7 +168,7 @@ bool RemoveOnStateChangedCallback(int* handle);
 void CallOnStateChangedCallbacks(Core::State state);
 
 // Run on the Host thread when the factors change. [NOT THREADSAFE]
-void UpdateWantDeterminism(Core::System& system, bool initial = false);
+void UpdateWantDeterminism(bool initial = false);
 
 // Queue an arbitrary function to asynchronously run once on the Host thread later.
 // Threadsafe. Can be called by any thread, including the Host itself.
@@ -179,16 +179,16 @@ void UpdateWantDeterminism(Core::System& system, bool initial = false);
 // NOTE: Make sure the jobs check the global state instead of assuming everything is
 //   still the same as when the job was queued.
 // NOTE: Jobs that are not set to run during stop will be discarded instead.
-void QueueHostJob(std::function<void(Core::System&)> job, bool run_during_stop = false);
+void QueueHostJob(std::function<void()> job, bool run_during_stop = false);
 
 // Should be called periodically by the Host to run pending jobs.
 // WMUserJobDispatch will be sent when something is added to the queue.
-void HostDispatchJobs(Core::System& system);
+void HostDispatchJobs();
 
-void DoFrameStep(Core::System& system);
+void DoFrameStep();
 
 void UpdateInputGate(bool require_focus, bool require_full_focus = false);
 
-void UpdateTitle(Core::System& system);
+void UpdateTitle();
 
 }  // namespace Core

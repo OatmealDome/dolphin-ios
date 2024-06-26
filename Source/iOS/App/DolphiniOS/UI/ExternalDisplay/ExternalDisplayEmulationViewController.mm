@@ -4,7 +4,6 @@
 #import "ExternalDisplayEmulationViewController.h"
 
 #import "Core/Core.h"
-#import "Core/System.h"
 
 #import "EmulationCoordinator.h"
 
@@ -19,7 +18,7 @@
   
   [[EmulationCoordinator shared] registerExternalDisplayView:self.rendererView];
   
-  if (Core::IsRunning(Core::System::GetInstance())) {
+  if (Core::IsRunning()) {
     self.rendererView.alpha = 1.0f;
     self.waitView.alpha = 0.0f;
   }

@@ -55,12 +55,13 @@
 namespace BootManager
 {
 // Boot the ISO or file
-bool BootCore(Core::System& system, std::unique_ptr<BootParameters> boot,
+bool BootCore(std::unique_ptr<BootParameters> boot,
               const WindowSystemInfo& wsi)
 {
   if (!boot)
     return false;
 
+  auto& system = Core::System::GetInstance();
   SConfig& StartUp = SConfig::GetInstance();
 
   if (!StartUp.SetPathsAndGameMetadata(system, *boot))
@@ -146,7 +147,7 @@ bool BootCore(Core::System& system, std::unique_ptr<BootParameters> boot,
 
   system.Initialize();
 
-  Core::UpdateWantDeterminism(system, /*initial*/ true);
+  Core::UpdateWantDeterminism(/*initial*/ true);
 
   if (system.IsWii())
   {

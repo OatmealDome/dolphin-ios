@@ -213,7 +213,7 @@ Cheats::NewSearch(const Core::CPUThreadGuard& guard,
 #endif  // USE_RETRO_ACHIEVEMENTS
   auto& system = guard.GetSystem();
   std::vector<Cheats::SearchResult<T>> results;
-  const Core::State core_state = Core::GetState(system);
+  const Core::State core_state = Core::GetState();
   if (core_state != Core::State::Running && core_state != Core::State::Paused)
     return Cheats::SearchErrorCode::NoEmulationActive;
 
@@ -268,7 +268,7 @@ Cheats::NextSearch(const Core::CPUThreadGuard& guard,
 #endif  // USE_RETRO_ACHIEVEMENTS
   auto& system = guard.GetSystem();
   std::vector<Cheats::SearchResult<T>> results;
-  const Core::State core_state = Core::GetState(system);
+  const Core::State core_state = Core::GetState();
   if (core_state != Core::State::Running && core_state != Core::State::Paused)
     return Cheats::SearchErrorCode::NoEmulationActive;
 
