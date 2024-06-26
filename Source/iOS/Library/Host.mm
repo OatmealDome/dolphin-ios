@@ -35,7 +35,7 @@ void Host_Message(HostMessageID message)
   }
   else if (message == HostMessageID::WMUserStop)
   {
-      if (Core::IsRunning())
+    if (Core::IsRunning())
     {
       Core::QueueHostJob(&Core::Stop);
     }
@@ -91,6 +91,11 @@ bool Host_RendererHasFullFocus()
 bool Host_RendererIsFullscreen()
 {
   return true;
+}
+
+bool Host_TASInputHasFocus()
+{
+  return false;
 }
 
 void Host_YieldToUI()
