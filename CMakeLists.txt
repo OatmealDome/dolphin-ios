@@ -106,7 +106,6 @@ option(USE_MGBA "Enables GBA controllers emulation using libmgba" ON)
 option(ENABLE_AUTOUPDATE "Enables support for automatic updates" ON)
 option(STEAM "Creates a build for Steam" OFF)
 option(USE_RETRO_ACHIEVEMENTS "Enables integration with retroachievements.org" ON)
-option(ENABLE_CUBEB "Enables Cubeb sound backend" ON)
 
 # Maintainers: if you consider blanket disabling this for your users, please
 # consider the following points:
@@ -125,7 +124,7 @@ option(OPROFILING "Enable profiling" OFF)
 # TODO: Add DSPSpy
 option(DSPTOOL "Build dsptool" OFF)
 
-# Enable SDL by default on operating systems that aren't Android.
+# Enable SDL by default on operating systems that aren't Android or iOS.
 if(NOT ANDROID AND NOT IOS)
   option(ENABLE_SDL "Enables SDL as a generic controller backend" ON)
 else()
@@ -479,7 +478,6 @@ if(IOS)
   set(ENABLE_NOGUI 0)
   set(ENABLE_QT 0)
   set(ENABLE_AUTOUPDATE 0)
-  set(ENABLE_CUBEB 0)
   set(USE_DISCORD_PRESENCE 0)
 
   # We are cross compiling, search only the toolchain for libraries and includes
@@ -706,7 +704,6 @@ dolphin_find_optional_system_library(LibLZMA Externals/liblzma)
 # Imported target added in CMake 3.14
 dolphin_make_imported_target_if_missing(LibLZMA::LibLZMA LIBLZMA)
 
-
 dolphin_find_optional_system_library_pkgconfig(ZSTD libzstd>=1.4.0 zstd::zstd Externals/zstd)
 
 dolphin_find_optional_system_library_pkgconfig(ZLIB zlib-ng ZLIB::ZLIB Externals/zlib-ng)
@@ -737,10 +734,8 @@ endif()
 add_subdirectory(Externals/soundtouch)
 include_directories(Externals/soundtouch)
 
-if(ENABLE_CUBEB)
-  dolphin_find_optional_system_library(CUBEB Externals/cubeb)
-  dolphin_make_imported_target_if_missing(cubeb::cubeb CUBEB)
-  add_definitions(-DHAVE_CUBEB)
+if(NOT ANDROID AND NOT IOS)
+dolphin_find_optional_system_library(CUBEB Externals/cubeb)
 endif()
 
 if(NOT ANDROID AND NOT IOS)
@@ -767,7 +762,6 @@ else()
   message(STATUS "Using static iconv from Externals")
   add_subdirectory(Externals/libiconv-1.14 EXCLUDE_FROM_ALL)
 endif()
-
 
 if(NOT ANDROID AND NOT IOS)
   dolphin_find_optional_system_library(HIDAPI Externals/hidapi)

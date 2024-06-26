@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #pragma once
-
+//Removed AppKit NSScreen
 #include <Metal/Metal.h>
 
 #include <vector>

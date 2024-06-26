@@ -132,14 +132,18 @@ LazyMemoryRegion::~LazyMemoryRegion()
 {
   Release();
 }
+
 void* LazyMemoryRegion::Create(size_t size)
 {
+  
   if (size == 0)
     return nullptr;
 }
+
 void LazyMemoryRegion::Clear()
 {
 }
+
 void LazyMemoryRegion::Release()
 {
 }

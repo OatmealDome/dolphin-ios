@@ -1,9 +1,9 @@
 // Copyright 2022 DolphiniOS Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#include "InputCommon/ControllerInterface/iOS/iOS.h"
-
 #include "InputCommon/ControllerInterface/InputBackend.h"
+
+#include "InputCommon/ControllerInterface/iOS/iOS.h"
 #include "InputCommon/ControllerInterface/iOS/MFiController.h"
 #include "InputCommon/ControllerInterface/iOS/MFiControllerScanner.h"
 #include "InputCommon/ControllerInterface/iOS/StateManager.h"

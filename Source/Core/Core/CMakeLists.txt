@@ -669,14 +669,6 @@ elseif (ANDROID)
   )
 endif()
 
-if(ENABLE_CUBEB)
-  target_link_libraries(core PUBLIC cubeb::cubeb)
-  target_sources(core PRIVATE
-    HW/EXI/EXI_DeviceMic.cpp
-    HW/EXI/EXI_DeviceMic.h
-  )
-endif()
-
 if(TARGET LibUSB::LibUSB)
   target_link_libraries(core PUBLIC LibUSB::LibUSB)
   target_sources(core PRIVATE

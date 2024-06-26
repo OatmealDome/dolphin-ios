@@ -140,9 +140,7 @@ void EnableCompression(bool compression)
 
 static void DoState(PointerWrap& p)
 {
-    
   auto& system = Core::System::GetInstance();
-    
   bool is_wii = system.IsWii() || system.IsMIOS();
   const bool is_wii_currently = is_wii;
   p.Do(is_wii);

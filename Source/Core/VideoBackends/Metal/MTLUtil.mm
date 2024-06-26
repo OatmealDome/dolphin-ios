@@ -77,7 +77,7 @@ void Metal::Util::PopulateBackendInfo(VideoConfig* config)
   config->backend_info.bSupportsPartialMultisampleResolve = false;
   config->backend_info.bSupportsDynamicVertexLoader = true;
   config->backend_info.bSupportsVSLinePointExpand = true;
-  // Please fix this!!!
+  //This is set to false for now
   config->backend_info.bSupportsHDROutput = false;
 }
 

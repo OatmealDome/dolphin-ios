@@ -299,9 +299,8 @@ void Stop()  // - Hammertime!
 
   // Dump left over jobs
   HostDispatchJobs();
-    
-  auto& system = Core::System::GetInstance();
 
+  auto& system = Core::System::GetInstance();
   system.GetFifo().EmulatorState(false);
 
   INFO_LOG_FMT(CONSOLE, "Stop [Main Thread]\t\t---- Shutting down ----");
@@ -1024,11 +1023,6 @@ void HostDispatchJobs()
     HostJob job = std::move(s_host_jobs_queue.front());
     s_host_jobs_queue.pop();
 
-    // NOTE: Memory ordering is important. The booting flag needs to be
-    //   checked first because the state transition is:
-    //   Core::State::Uninitialized: s_is_booting -> s_hardware_initialized
-    //   We need to check variables in the same order as the state
-    //   transition, otherwise we race and get transient failures.
     if (!job.run_after_stop)
     {
       const State state = s_state.load();
@@ -1050,7 +1044,6 @@ void DoFrameStep()
     OSD::AddMessage("Frame stepping is disabled in RetroAchievements hardcore mode");
     return;
   }
-#endif  // USE_RETRO_ACHIEVEMENTS
   if (GetState() == State::Paused)
   {
     // if already paused, frame advance for 1 frame

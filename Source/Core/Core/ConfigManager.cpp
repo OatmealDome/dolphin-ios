@@ -185,6 +185,7 @@ void SConfig::SetRunningGameMetadata(const std::string& game_id, const std::stri
   m_title_description = title_database.Describe(m_gametdb_id, language);
   NOTICE_LOG_FMT(CORE, "Active title: {}", m_title_description);
   Host_TitleChanged();
+
   const bool is_running_or_starting = Core::IsRunningOrStarting();
   if (is_running_or_starting)
     Core::UpdateTitle();
