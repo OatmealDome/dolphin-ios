@@ -227,8 +227,6 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
   setAcceptDrops(true);
   setAttribute(Qt::WA_NativeWindow);
 
-  InitControllers();
-
   CreateComponents();
 
   ConnectGameList();
@@ -237,6 +235,14 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
   ConnectRenderWidget();
   ConnectStack();
   ConnectMenuBar();
+
+  QSettings& settings = Settings::GetQSettings();
+  restoreState(settings.value(QStringLiteral("mainwindow/state")).toByteArray());
+  restoreGeometry(settings.value(QStringLiteral("mainwindow/geometry")).toByteArray());
+  if (!Settings::Instance().IsBatchModeEnabled())
+    show();
+
+  InitControllers();
   ConnectHotkeys();
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
@@ -289,11 +295,6 @@ MainWindow::MainWindow(std::unique_ptr<BootParameters> boot_parameters,
   m_state_slot =
       std::clamp(Settings::Instance().GetStateSlot(), 1, static_cast<int>(State::NUM_STATES));
 
-  QSettings& settings = Settings::GetQSettings();
-
-  restoreState(settings.value(QStringLiteral("mainwindow/state")).toByteArray());
-  restoreGeometry(settings.value(QStringLiteral("mainwindow/geometry")).toByteArray());
-
   m_render_widget_geometry = settings.value(QStringLiteral("renderwidget/geometry")).toByteArray();
 
   // Restoring of window states can sometimes go wrong, resulting in widgets being visible when they
@@ -345,8 +346,11 @@ MainWindow::~MainWindow()
 
   QSettings& settings = Settings::GetQSettings();
 
-  settings.setValue(QStringLiteral("mainwindow/state"), saveState());
-  settings.setValue(QStringLiteral("mainwindow/geometry"), saveGeometry());
+  if (!Settings::Instance().IsBatchModeEnabled())
+  {
+    settings.setValue(QStringLiteral("mainwindow/state"), saveState());
+    settings.setValue(QStringLiteral("mainwindow/geometry"), saveGeometry());
+  }
 
   settings.setValue(QStringLiteral("renderwidget/geometry"), m_render_widget_geometry);
 
@@ -901,7 +905,7 @@ void MainWindow::OnStopComplete()
 
 bool MainWindow::RequestStop()
 {
-  if (!Core::IsRunning(Core::System::GetInstance()))
+  if (Core::IsUninitialized(Core::System::GetInstance()))
   {
     Core::QueueHostJob([this](Core::System&) { OnStopComplete(); }, true);
     return true;
@@ -1108,7 +1112,7 @@ void MainWindow::StartGame(std::unique_ptr<BootParameters>&& parameters)
   }
 
   // If we're running, only start a new game once we've stopped the last.
-  if (Core::GetState(Core::System::GetInstance()) != Core::State::Uninitialized)
+  if (!Core::IsUninitialized(Core::System::GetInstance()))
   {
     if (!RequestStop())
       return;
@@ -1532,7 +1536,7 @@ void MainWindow::NetPlayInit()
 
 bool MainWindow::NetPlayJoin()
 {
-  if (Core::IsRunning(Core::System::GetInstance()))
+  if (!Core::IsUninitialized(Core::System::GetInstance()))
   {
     ModalMessageBox::critical(nullptr, tr("Error"),
                               tr("Can't start a NetPlay Session while a game is still running!"));
@@ -1599,7 +1603,7 @@ bool MainWindow::NetPlayJoin()
 
 bool MainWindow::NetPlayHost(const UICommon::GameFile& game)
 {
-  if (Core::IsRunning(Core::System::GetInstance()))
+  if (!Core::IsUninitialized(Core::System::GetInstance()))
   {
     ModalMessageBox::critical(nullptr, tr("Error"),
                               tr("Can't start a NetPlay Session while a game is still running!"));
@@ -1846,7 +1850,7 @@ void MainWindow::OnImportNANDBackup()
 
   result.wait();
 
-  m_menu_bar->UpdateToolsMenu(Core::IsRunning(Core::System::GetInstance()));
+  m_menu_bar->UpdateToolsMenu(Core::State::Uninitialized);
 }
 
 void MainWindow::OnPlayRecording()
@@ -1878,7 +1882,8 @@ void MainWindow::OnStartRecording()
 {
   auto& system = Core::System::GetInstance();
   auto& movie = system.GetMovie();
-  if ((!Core::IsRunningAndStarted() && Core::IsRunning(system)) || movie.IsRecordingInput() ||
+  if (Core::GetState(system) == Core::State::Starting ||
+      Core::GetState(system) == Core::State::Stopping || movie.IsRecordingInput() ||
       movie.IsPlayingInput())
   {
     return;
@@ -1910,7 +1915,7 @@ void MainWindow::OnStartRecording()
   {
     emit RecordingStatusChanged(true);
 
-    if (!Core::IsRunning(system))
+    if (Core::IsUninitialized(system))
       Play();
   }
 }

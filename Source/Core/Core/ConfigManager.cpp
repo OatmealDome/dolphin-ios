@@ -169,17 +169,14 @@ void SConfig::SetRunningGameMetadata(const std::string& game_id, const std::stri
   if (!was_changed)
     return;
 
-#ifdef USE_RETRO_ACHIEVEMENTS
-  if (game_id != "00000000")
-    AchievementManager::GetInstance().CloseGame();
-#endif  // USE_RETRO_ACHIEVEMENTS
-
   if (game_id == "00000000")
   {
     m_title_name.clear();
     m_title_description.clear();
     return;
   }
+
+  AchievementManager::GetInstance().CloseGame();
 
   const Core::TitleDatabase title_database;
   auto& system = Core::System::GetInstance();
@@ -188,22 +185,21 @@ void SConfig::SetRunningGameMetadata(const std::string& game_id, const std::stri
   m_title_description = title_database.Describe(m_gametdb_id, language);
   NOTICE_LOG_FMT(CORE, "Active title: {}", m_title_description);
   Host_TitleChanged();
-  if (Core::IsRunning())
-  {
+  const bool is_running_or_starting = Core::IsRunningOrStarting();
+  if (is_running_or_starting)
     Core::UpdateTitle();
-  }
 
   Config::AddLayer(ConfigLoaders::GenerateGlobalGameConfigLoader(game_id, revision));
   Config::AddLayer(ConfigLoaders::GenerateLocalGameConfigLoader(game_id, revision));
 
-  if (Core::IsRunning())
+  if (is_running_or_starting)
     DolphinAnalytics::Instance().ReportGameStart();
 }
 
 void SConfig::OnNewTitleLoad(const Core::CPUThreadGuard& guard)
 {
   auto& system = guard.GetSystem();
-  if (!Core::IsRunning())
+  if (!Core::IsRunningOrStarting())
     return;
 
   auto& ppc_symbol_db = system.GetPPCSymbolDB();
