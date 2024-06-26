@@ -151,7 +151,7 @@
 }
 
 - (void)stopPressed {
-  if (!Core::IsRunningAndStarted()) {
+  if (!Core::IsRunningOrStarting()) {
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Emulation Starting" message:@"Emulation is still starting. Please wait for emulation to start before requesting for it to stop." preferredStyle:UIAlertControllerStyleAlert];
   
     [alert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"OK") style:UIAlertActionStyleDefault handler:nil]];
@@ -181,7 +181,7 @@
 }
 
 - (void)pausePressed {
-  if (!Core::IsRunningAndStarted()) {
+  if (!Core::IsRunningOrStarting()) {
     return;
   }
   
@@ -194,7 +194,7 @@
 }
 
 - (void)playPressed {
-  if (!Core::IsRunningAndStarted()) {
+  if (!Core::IsRunningOrStarting()) {
     return;
   }
   
