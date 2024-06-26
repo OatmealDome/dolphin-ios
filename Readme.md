@@ -4,12 +4,17 @@ DolphiniOS is a port of the Dolphin Emulator to iOS and iPadOS. For installation
 
 This is the repository for the new DolphiniOS codebase.
 
+## DISCLAIMER
+Majority of the code i've modified was from existing code and doesn't belong to me. However, I made some changes/modifications and implemented them for it to work on iOS.
+
+This is based off ([https://github.com/OatmealDome/dolphin-ios](https://github.com/OatmealDome/dolphin-ios)).
+
 ## Building
 
 You will need the following:
 
-* A Mac capable of running macOS Big Sur 11.3 or later
-* Xcode 13 or later
+* A Mac capable of running macOS Sonoma 14 or later
+* Xcode 15 or later
 * Homebrew (or your favourite package manager)
 
 First, install the necessary tools using Homebrew:
@@ -23,7 +28,7 @@ If you are using a different package manager, refer to its documentation.
 Finally, use the following command to install `polib` using the Xcode-provided `python3`:
 
 ```
-/path/to/Xcode.app/Contents/Developer/usr/bin/python3 -m pip install polib
+/Applications/Xcode.app/Contents/Developer/usr/bin/python3 -m pip install polib
 ```
 
 Once all of the prerequisites are installed, you can open the Xcode project at `Source/iOS/App/DolphiniOS.xcodeproj`.
@@ -73,6 +78,20 @@ Please read the [FAQ](https://dolphin-emu.org/docs/faq/) before using Dolphin.
     * A graphics processor that supports standard desktop OpenGL features is recommended for best performance.
 
 Dolphin can only be installed on devices that satisfy the above requirements. Attempting to install on an unsupported device will fail and display an error message.
+
+## Building for iOS
+Open Terminal in Utilities (Press Shift + Command + U)
+
+Download DolphiniOS and it's submodules:
+```sh
+git clone https://github.com/brand175/dolphin-ios.git
+cd dolphin-ios
+git submodule update --init --recursive
+```
+Press Shift + Command + C
+
+Click on the Hard Drive Disk icon
+Select Users, (your_name or the house icon) this is where you find the dolphin-ios folder
 
 ## Building for Windows
 
