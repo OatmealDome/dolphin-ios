@@ -11,7 +11,6 @@
 
 #include "Common/Assert.h"
 #include "Common/GekkoDisassembler.h"
-#include "Common/Unreachable.h"
 #include "Core/Debugger/BranchWatch.h"
 #include "Core/PowerPC/PPCSymbolDB.h"
 
@@ -143,6 +142,18 @@ void BranchWatchTableModel::OnWipeInspection()
   emit dataChanged(createIndex(0, Column::Origin), createIndex(last, Column::Destination), roles);
   emit dataChanged(createIndex(0, Column::OriginSymbol), createIndex(last, Column::DestinSymbol),
                    roles);
+}
+
+void BranchWatchTableModel::OnDelete(QModelIndexList index_list)
+{
+  std::sort(index_list.begin(), index_list.end());
+  // TODO C++20: std::ranges::reverse_view
+  for (auto iter = index_list.rbegin(); iter != index_list.rend(); ++iter)
+  {
+    if (!iter->isValid())
+      continue;
+    removeRow(iter->row());
+  }
 }
 
 void BranchWatchTableModel::Save(const Core::CPUThreadGuard& guard, std::FILE* file) const
@@ -344,8 +355,7 @@ QVariant BranchWatchTableModel::DisplayRoleData(const QModelIndex& index) const
   case Column::TotalHits:
     return QString::number(kv->second.total_hits);
   }
-  static_assert(Column::NumberOfColumns == 8);
-  Common::Unreachable();
+  return QVariant();
 }
 
 QVariant BranchWatchTableModel::FontRoleData(const QModelIndex& index) const
@@ -390,8 +400,7 @@ QVariant BranchWatchTableModel::TextAlignmentRoleData(const QModelIndex& index) 
   case Column::DestinSymbol:
     return QVariant::fromValue(Qt::AlignLeft | Qt::AlignVCenter);
   }
-  static_assert(Column::NumberOfColumns == 8);
-  Common::Unreachable();
+  return QVariant();
 }
 
 QVariant BranchWatchTableModel::ForegroundRoleData(const QModelIndex& index) const
@@ -489,6 +498,5 @@ QVariant BranchWatchTableModel::SortRoleData(const QModelIndex& index) const
   case Column::TotalHits:
     return qulonglong{kv->second.total_hits};
   }
-  static_assert(Column::NumberOfColumns == 8);
-  Common::Unreachable();
+  return QVariant();
 }

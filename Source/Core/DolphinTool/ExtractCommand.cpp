@@ -355,8 +355,7 @@ int Extract(const std::vector<std::string>& args)
     return EXIT_FAILURE;
   }
 
-  if (!quiet)
-    fmt::println(std::cerr, "Finished Successfully!");
+  fmt::println(std::cerr, "Finished Successfully!");
   return EXIT_SUCCESS;
 }
 }  // namespace DolphinTool

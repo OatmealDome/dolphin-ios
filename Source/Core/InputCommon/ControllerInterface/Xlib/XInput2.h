@@ -120,7 +120,6 @@ public:
 
   std::string GetName() const override;
   std::string GetSource() const override;
-  int GetSortPriority() const override;
 
 private:
   Window m_window;

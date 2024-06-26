@@ -58,20 +58,8 @@ std::optional<IPCReply> STMImmediateDevice::IOCtl(const IOCtlRequest& request)
     INFO_LOG_FMT(IOS_STM, "    IOCTL_STM_LEDMODE");
     break;
 
-  case IOCTL_STM_HOTRESET_FOR_PD:
-  case IOCTL_STM_WAKEUP:
-  case IOCTL_STM_GET_IDLEMODE:
-  case IOCTL_STM_READDDRREG:
-  case IOCTL_STM_READDDRREG2:
-  case IOCTL_STM_LEDFLASH:
-  case IOCTL_STM_READVER:
-    ERROR_LOG_FMT(IOS_STM, "{} - Unimplemented IOCtl: {}", GetDeviceName(), request.request);
-    break;
-
   default:
     request.DumpUnknown(GetSystem(), GetDeviceName(), Common::Log::LogType::IOS_STM);
-    return_value = IPC_UNKNOWN;
-    break;
   }
 
   return IPCReply(return_value);
@@ -85,7 +73,7 @@ STMEventHookDevice::~STMEventHookDevice()
 std::optional<IPCReply> STMEventHookDevice::IOCtl(const IOCtlRequest& request)
 {
   if (request.request != IOCTL_STM_EVENTHOOK)
-    return IPCReply(IPC_UNKNOWN);
+    return IPCReply(IPC_EINVAL);
 
   if (s_event_hook_request)
     return IPCReply(IPC_EEXIST);

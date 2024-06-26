@@ -33,7 +33,7 @@ namespace ConfigLoaders
 {
 void SaveToSYSCONF(Config::LayerType layer, std::function<bool(const Config::Location&)> predicate)
 {
-  if (!Core::IsUninitialized())
+  if (Core::IsRunning())
     return;
 
   IOS::HLE::Kernel ios;
@@ -183,7 +183,7 @@ public:
 private:
   void LoadFromSYSCONF(Config::Layer* layer)
   {
-    if (!Core::IsUninitialized())
+    if (Core::IsRunning())
       return;
 
     IOS::HLE::Kernel ios;

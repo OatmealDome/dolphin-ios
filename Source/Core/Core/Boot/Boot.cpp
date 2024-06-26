@@ -575,7 +575,9 @@ bool CBoot::BootUp(Core::System& system, const Core::CPUThreadGuard& guard,
         SetupGCMemory(system, guard);
       }
 
+#ifdef USE_RETRO_ACHIEVEMENTS
       AchievementManager::GetInstance().LoadGame(executable.path, nullptr);
+#endif  // USE_RETRO_ACHIEVEMENTS
 
       if (!executable.reader->LoadIntoMemory(system))
       {

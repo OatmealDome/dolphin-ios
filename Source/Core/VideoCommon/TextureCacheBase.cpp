@@ -1012,8 +1012,8 @@ static bool IsAnisostropicEnhancementSafe(const TexMode0& tm0)
   return !(tm0.min_filter == FilterMode::Near && tm0.mag_filter == FilterMode::Near);
 }
 
-SamplerState TextureCacheBase::GetSamplerState(u32 index, float custom_tex_scale, bool custom_tex,
-                                               bool has_arbitrary_mips)
+static void SetSamplerState(u32 index, float custom_tex_scale, bool custom_tex,
+                            bool has_arbitrary_mips)
 {
   const TexMode0& tm0 = bpmem.tex.GetUnit(index).texMode0;
 
@@ -1073,11 +1073,13 @@ SamplerState TextureCacheBase::GetSamplerState(u32 index, float custom_tex_scale
     state.tm0.anisotropic_filtering = false;
   }
 
-  return state;
+  g_gfx->SetSamplerState(index, state);
+  auto& system = Core::System::GetInstance();
+  auto& pixel_shader_manager = system.GetPixelShaderManager();
+  pixel_shader_manager.SetSamplerState(index, state.tm0.hex, state.tm1.hex);
 }
 
-void TextureCacheBase::BindTextures(BitSet32 used_textures,
-                                    const std::array<SamplerState, 8>& samplers)
+void TextureCacheBase::BindTextures(BitSet32 used_textures)
 {
   auto& system = Core::System::GetInstance();
   auto& pixel_shader_manager = system.GetPixelShaderManager();
@@ -1089,9 +1091,8 @@ void TextureCacheBase::BindTextures(BitSet32 used_textures,
       g_gfx->SetTexture(i, tentry->texture.get());
       pixel_shader_manager.SetTexDims(i, tentry->native_width, tentry->native_height);
 
-      auto& state = samplers[i];
-      g_gfx->SetSamplerState(i, state);
-      pixel_shader_manager.SetSamplerState(i, state.tm0.hex, state.tm1.hex);
+      const float custom_tex_scale = tentry->GetWidth() / float(tentry->native_width);
+      SetSamplerState(i, custom_tex_scale, tentry->is_custom_tex, tentry->has_arbitrary_mips);
     }
   }
 

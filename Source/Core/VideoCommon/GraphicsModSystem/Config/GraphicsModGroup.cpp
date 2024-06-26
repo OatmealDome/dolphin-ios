@@ -12,7 +12,6 @@
 #include "Common/CommonPaths.h"
 #include "Common/FileSearch.h"
 #include "Common/FileUtil.h"
-#include "Common/JsonUtil.h"
 #include "Common/Logging/Log.h"
 #include "Common/StringUtil.h"
 #include "Core/ConfigManager.h"
@@ -43,9 +42,17 @@ void GraphicsModGroupConfig::Load()
   std::set<std::string> known_paths;
   if (File::Exists(file_path))
   {
+    std::string json_data;
+    if (!File::ReadFileToString(file_path, json_data))
+    {
+      ERROR_LOG_FMT(VIDEO, "Failed to load graphics mod group json file '{}'", file_path);
+      return;
+    }
+
     picojson::value root;
-    std::string error;
-    if (!JsonFromFile(file_path, &root, &error))
+    const auto error = picojson::parse(root, json_data);
+
+    if (!error.empty())
     {
       ERROR_LOG_FMT(VIDEO,
                     "Failed to load graphics mod group json file '{}' due to parse error: {}",

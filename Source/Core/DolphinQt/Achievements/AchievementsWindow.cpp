@@ -34,8 +34,6 @@ AchievementsWindow::AchievementsWindow(QWidget* parent) : QDialog(parent)
         });
       });
   connect(&Settings::Instance(), &Settings::EmulationStateChanged, this,
-          [this] { m_settings_widget->UpdateData(); });
-  connect(&Settings::Instance(), &Settings::HardcoreStateChanged, this,
           [this] { AchievementsWindow::UpdateData({.all = true}); });
 }
 

@@ -118,8 +118,9 @@ QSettings& Settings::GetQSettings()
   return settings;
 }
 
-void Settings::TriggerThemeChanged()
+void Settings::SetThemeName(const QString& theme_name)
 {
+  Config::SetBaseOrCurrent(Config::MAIN_THEME_NAME, theme_name.toStdString());
   emit ThemeChanged();
 }
 
@@ -354,6 +355,11 @@ void Settings::NotifyRefreshGameListComplete()
   emit GameListRefreshCompleted();
 }
 
+void Settings::RefreshMetadata()
+{
+  emit MetadataRefreshRequested();
+}
+
 void Settings::NotifyMetadataRefreshComplete()
 {
   emit MetadataRefreshCompleted();
@@ -413,9 +419,21 @@ void Settings::SetStateSlot(int slot)
   GetQSettings().setValue(QStringLiteral("Emulation/StateSlot"), slot);
 }
 
+void Settings::SetCursorVisibility(Config::ShowCursor hideCursor)
+{
+  Config::SetBaseOrCurrent(Config::MAIN_SHOW_CURSOR, hideCursor);
+  emit CursorVisibilityChanged();
+}
+
 Config::ShowCursor Settings::GetCursorVisibility() const
 {
   return Config::Get(Config::MAIN_SHOW_CURSOR);
+}
+
+void Settings::SetLockCursor(bool lock_cursor)
+{
+  Config::SetBaseOrCurrent(Config::MAIN_LOCK_CURSOR, lock_cursor);
+  emit LockCursorChanged();
 }
 
 bool Settings::GetLockCursor() const
@@ -428,6 +446,7 @@ void Settings::SetKeepWindowOnTop(bool top)
   if (IsKeepWindowOnTopEnabled() == top)
     return;
 
+  Config::SetBaseOrCurrent(Config::MAIN_KEEP_WINDOW_ON_TOP, top);
   emit KeepWindowOnTopChanged(top);
 }
 
@@ -545,8 +564,10 @@ void Settings::SetCheatsEnabled(bool enabled)
 
 void Settings::SetDebugModeEnabled(bool enabled)
 {
+#ifdef USE_RETRO_ACHIEVEMENTS
   if (AchievementManager::GetInstance().IsHardcoreModeActive())
     enabled = false;
+#endif  // USE_RETRO_ACHIEVEMENTS
   if (IsDebugModeEnabled() != enabled)
   {
     Config::SetBaseOrCurrent(Config::MAIN_ENABLE_DEBUGGING, enabled);

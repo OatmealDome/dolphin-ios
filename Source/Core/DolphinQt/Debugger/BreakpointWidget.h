@@ -3,28 +3,19 @@
 
 #pragma once
 
-#include <optional>
-
 #include <QDockWidget>
-#include <QString>
 
 #include "Common/CommonTypes.h"
 
 class QAction;
 class QCloseEvent;
-class QPoint;
 class QShowEvent;
 class QTableWidget;
-class QTableWidgetItem;
 class QToolBar;
-class QWidget;
-
 namespace Core
 {
 class System;
 }
-
-class CustomDelegate;
 
 class BreakpointWidget : public QDockWidget
 {
@@ -54,17 +45,14 @@ protected:
 private:
   void CreateWidgets();
 
-  void EditBreakpoint(u32 address, int edit, std::optional<QString> = std::nullopt);
-  void EditMBP(u32 address, int edit, std::optional<QString> = std::nullopt);
-
+  void OnDelete();
   void OnClear();
-  void OnClicked(QTableWidgetItem* item);
   void OnNewBreakpoint();
   void OnEditBreakpoint(u32 address, bool is_instruction_bp);
   void OnLoad();
   void OnSave();
-  void OnContextMenu(const QPoint& pos);
-  void OnItemChanged(QTableWidgetItem* item);
+  void OnContextMenu();
+
   void UpdateIcons();
 
   Core::System& m_system;
@@ -72,6 +60,7 @@ private:
   QToolBar* m_toolbar;
   QTableWidget* m_table;
   QAction* m_new;
+  QAction* m_delete;
   QAction* m_clear;
   QAction* m_load;
   QAction* m_save;

@@ -162,11 +162,6 @@ bool Host::GetGBAFocus()
 #endif
 }
 
-bool Host::GetTASInputFocus() const
-{
-  return m_tas_input_focus;
-}
-
 bool Host::GetRenderFullscreen()
 {
   return m_render_fullscreen;
@@ -180,11 +175,6 @@ void Host::SetRenderFullscreen(bool fullscreen)
   {
     RunWithGPUThreadInactive([fullscreen] { g_gfx->SetFullscreen(fullscreen); });
   }
-}
-
-void Host::SetTASInputFocus(const bool focus)
-{
-  m_tas_input_focus = focus;
 }
 
 void Host::ResizeSurface(int new_width, int new_height)
@@ -236,11 +226,6 @@ bool Host_RendererHasFullFocus()
 bool Host_RendererIsFullscreen()
 {
   return Host::GetInstance()->GetRenderFullscreen();
-}
-
-bool Host_TASInputHasFocus()
-{
-  return Host::GetInstance()->GetTASInputFocus();
 }
 
 void Host_YieldToUI()

@@ -524,8 +524,10 @@ static bool MemoryMatchesAt(const Core::CPUThreadGuard& guard, u32 offset,
 static void ApplyMemoryPatch(const Core::CPUThreadGuard& guard, u32 offset,
                              std::span<const u8> value, std::span<const u8> original)
 {
+#ifdef USE_RETRO_ACHIEVEMENTS
   if (AchievementManager::GetInstance().IsHardcoreModeActive())
     return;
+#endif  // USE_RETRO_ACHIEVEMENTS
 
   if (value.empty())
     return;

@@ -111,11 +111,6 @@ bool Host_RendererIsFullscreen()
   return s_platform->IsWindowFullscreen();
 }
 
-bool Host_TASInputHasFocus()
-{
-  return false;
-}
-
 void Host_YieldToUI()
 {
 }
