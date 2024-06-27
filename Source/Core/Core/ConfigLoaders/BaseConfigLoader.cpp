@@ -183,7 +183,7 @@ public:
 private:
   void LoadFromSYSCONF(Config::Layer* layer)
   {
-    if (Core::IsRunning()))
+    if (Core::IsRunning())
       return;
 
     IOS::HLE::Kernel ios;
