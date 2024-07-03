@@ -13,10 +13,12 @@
 
 #include "Core/Boot/Boot.h"
 
+class QMenu;
 class QStackedWidget;
 class QString;
 
 class AchievementsWindow;
+class AssemblerWidget;
 class BreakpointWidget;
 struct BootParameters;
 class CheatsManager;
@@ -80,6 +82,7 @@ public:
   WindowSystemInfo GetWindowSystemInfo() const;
 
   bool eventFilter(QObject* object, QEvent* event) override;
+  QMenu* createPopupMenu() override;
 
 signals:
   void ReadOnlyModeChanged(bool read_only);
@@ -173,6 +176,7 @@ private:
 
 #ifdef USE_RETRO_ACHIEVEMENTS
   void ShowAchievementsWindow();
+  void ShowAchievementSettings();
 #endif  // USE_RETRO_ACHIEVEMENTS
 
   void NetPlayInit();
@@ -209,6 +213,11 @@ private:
   void dragEnterEvent(QDragEnterEvent* event) override;
   void dropEvent(QDropEvent* event) override;
   QSize sizeHint() const override;
+
+#ifdef _WIN32
+  // This gets called for each event from the Windows message queue.
+  bool nativeEvent(const QByteArray& eventType, void* message, qintptr* result) override;
+#endif
 
 #ifdef HAVE_XRANDR
   std::unique_ptr<X11Utils::XRRConfiguration> m_xrr_config;
@@ -252,6 +261,7 @@ private:
   AchievementsWindow* m_achievements_window = nullptr;
 #endif  // USE_RETRO_ACHIEVEMENTS
 
+  AssemblerWidget* m_assembler_widget;
   BreakpointWidget* m_breakpoint_widget;
   CodeWidget* m_code_widget;
   JITWidget* m_jit_widget;

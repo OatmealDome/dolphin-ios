@@ -7,9 +7,12 @@
 #include <sstream>
 #include <string>
 
+#include <picojson.h>
+
 #include "Common/CommonPaths.h"
 #include "Common/FileSearch.h"
 #include "Common/FileUtil.h"
+#include "Common/JsonUtil.h"
 #include "Common/Logging/Log.h"
 #include "Common/StringUtil.h"
 #include "Core/ConfigManager.h"
@@ -18,7 +21,7 @@
 #include "VideoCommon/GraphicsModSystem/Constants.h"
 #include "VideoCommon/HiresTextures.h"
 
-GraphicsModGroupConfig::GraphicsModGroupConfig(const std::string& game_id) : m_game_id(game_id)
+GraphicsModGroupConfig::GraphicsModGroupConfig(std::string game_id) : m_game_id(std::move(game_id))
 {
 }
 
@@ -26,11 +29,12 @@ GraphicsModGroupConfig::~GraphicsModGroupConfig() = default;
 
 GraphicsModGroupConfig::GraphicsModGroupConfig(const GraphicsModGroupConfig&) = default;
 
-GraphicsModGroupConfig::GraphicsModGroupConfig(GraphicsModGroupConfig&&) = default;
+GraphicsModGroupConfig::GraphicsModGroupConfig(GraphicsModGroupConfig&&) noexcept = default;
 
 GraphicsModGroupConfig& GraphicsModGroupConfig::operator=(const GraphicsModGroupConfig&) = default;
 
-GraphicsModGroupConfig& GraphicsModGroupConfig::operator=(GraphicsModGroupConfig&&) = default;
+GraphicsModGroupConfig&
+GraphicsModGroupConfig::operator=(GraphicsModGroupConfig&&) noexcept = default;
 
 void GraphicsModGroupConfig::Load()
 {
@@ -39,17 +43,9 @@ void GraphicsModGroupConfig::Load()
   std::set<std::string> known_paths;
   if (File::Exists(file_path))
   {
-    std::string json_data;
-    if (!File::ReadFileToString(file_path, json_data))
-    {
-      ERROR_LOG_FMT(VIDEO, "Failed to load graphics mod group json file '{}'", file_path);
-      return;
-    }
-
     picojson::value root;
-    const auto error = picojson::parse(root, json_data);
-
-    if (!error.empty())
+    std::string error;
+    if (!JsonFromFile(file_path, &root, &error))
     {
       ERROR_LOG_FMT(VIDEO,
                     "Failed to load graphics mod group json file '{}' due to parse error: {}",
@@ -82,7 +78,7 @@ void GraphicsModGroupConfig::Load()
 
           auto mod_full_path = graphics_mod->GetAbsolutePath();
           known_paths.insert(std::move(mod_full_path));
-          m_graphics_mods.push_back(*graphics_mod);
+          m_graphics_mods.push_back(std::move(*graphics_mod));
         }
       }
     }
@@ -92,15 +88,11 @@ void GraphicsModGroupConfig::Load()
                                                 GraphicsModConfig::Source source) {
     auto file = dir + DIR_SEP + "metadata.json";
     UnifyPathSeparators(file);
-    if (known_paths.find(file) != known_paths.end())
-    {
+    if (known_paths.contains(file))
       return;
-    }
-    const auto mod = GraphicsModConfig::Create(file, source);
-    if (mod)
-    {
-      m_graphics_mods.push_back(*mod);
-    }
+
+    if (auto mod = GraphicsModConfig::Create(file, source))
+      m_graphics_mods.push_back(std::move(*mod));
   };
 
   const std::set<std::string> graphics_mod_user_directories =
@@ -145,9 +137,9 @@ void GraphicsModGroupConfig::Save() const
   {
     picojson::object serialized_mod;
     mod.SerializeToProfile(&serialized_mod);
-    serialized_mods.push_back(picojson::value{serialized_mod});
+    serialized_mods.emplace_back(std::move(serialized_mod));
   }
-  serialized_root["mods"] = picojson::value{serialized_mods};
+  serialized_root.emplace("mods", std::move(serialized_mods));
 
   const auto output = picojson::value{serialized_root}.serialize(true);
   json_stream << output;
@@ -173,7 +165,7 @@ std::vector<GraphicsModConfig>& GraphicsModGroupConfig::GetMods()
   return m_graphics_mods;
 }
 
-GraphicsModConfig* GraphicsModGroupConfig::GetMod(const std::string& absolute_path) const
+GraphicsModConfig* GraphicsModGroupConfig::GetMod(std::string_view absolute_path) const
 {
   if (const auto iter = m_path_to_graphics_mod.find(absolute_path);
       iter != m_path_to_graphics_mod.end())

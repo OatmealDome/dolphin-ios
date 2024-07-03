@@ -11,7 +11,6 @@
 #include "Common/MathUtil.h"
 #include "Common/Matrix.h"
 
-#include "Core/HW/WII_IPC.h"
 #include "Core/HW/WiimoteCommon/WiimoteReport.h"
 
 namespace WiimoteEmu
@@ -60,7 +59,7 @@ CameraLogic::GetCameraPoints(const Common::Matrix44& transform, Common::Vec2 fie
   using Common::Vec3;
   using Common::Vec4;
 
-  const std::array<Vec3, NUM_POINTS> leds{
+  const std::array<Vec3, 2> leds{
       Vec3{-SENSOR_BAR_LED_SEPARATION / 2, 0, 0},
       Vec3{SENSOR_BAR_LED_SEPARATION / 2, 0, 0},
   };
@@ -69,7 +68,7 @@ CameraLogic::GetCameraPoints(const Common::Matrix44& transform, Common::Vec2 fie
       Matrix44::Perspective(field_of_view.y, field_of_view.x / field_of_view.y, 0.001f, 1000) *
       Matrix44::FromMatrix33(Matrix33::RotateX(float(MathUtil::TAU / 4))) * transform;
 
-  std::array<CameraPoint, leds.size()> camera_points;
+  std::array<CameraPoint, CameraLogic::NUM_POINTS> camera_points;
 
   std::transform(leds.begin(), leds.end(), camera_points.begin(), [&](const Vec3& v) {
     const auto point = camera_view * Vec4(v, 1.0);
@@ -109,10 +108,6 @@ void CameraLogic::Update(const std::array<CameraPoint, NUM_POINTS>& camera_point
   // If Address 0x30 is not 0x08 the camera will return 0xFFs.
   // The Wii seems to write 0x01 here before changing modes/sensitivities.
   if (m_reg_data.enable_object_tracking != OBJECT_TRACKING_ENABLE)
-    return;
-
-  // If the sensor bar is off the camera will see no LEDs and return 0xFFs.
-  if (!IOS::g_gpio_out[IOS::GPIO::SENSOR_BAR])
     return;
 
   switch (m_reg_data.mode)

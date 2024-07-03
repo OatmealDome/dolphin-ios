@@ -31,7 +31,6 @@
 #include "Common/CommonTypes.h"
 #include "Common/MemoryUtil.h"
 
-#include "Core/ConfigManager.h"
 #include "Core/CoreTiming.h"
 #include "Core/DSPEmulator.h"
 #include "Core/HW/HSP/HSP.h"
@@ -119,10 +118,10 @@ void DSPManager::Init(bool hle)
 
 void DSPManager::Reinit(bool hle)
 {
-  m_dsp_emulator = CreateDSPEmulator(hle);
+  m_dsp_emulator = CreateDSPEmulator(m_system, hle);
   m_is_lle = m_dsp_emulator->IsLLE();
 
-  if (SConfig::GetInstance().bWii)
+  if (m_system.IsWii())
   {
     auto& memory = m_system.GetMemory();
     m_aram.wii_mode = true;
@@ -317,8 +316,8 @@ void DSPManager::RegisterMMIO(MMIO::Mapping* mmio, u32 base)
                  MMIO::ComplexWrite<u16>([](Core::System& system, u32, u16 val) {
                    auto& dsp = system.GetDSP();
                    *MMIO::Utils::HighPart(&dsp.m_audio_dma.SourceAddress) =
-                       val & (SConfig::GetInstance().bWii ? WMASK_AUDIO_HI_RESTRICT_WII :
-                                                            WMASK_AUDIO_HI_RESTRICT_GCN);
+                       val &
+                       (system.IsWii() ? WMASK_AUDIO_HI_RESTRICT_WII : WMASK_AUDIO_HI_RESTRICT_GCN);
                  }));
 
   // Audio DMA MMIO controlling the DMA start.
@@ -431,7 +430,7 @@ void DSPManager::UpdateAudioDMA()
     // external audio fifo in the emulator, to be mixed with the disc
     // streaming output.
     auto& memory = m_system.GetMemory();
-    void* address = memory.GetPointer(m_audio_dma.current_source_address);
+    void* address = memory.GetPointerForRange(m_audio_dma.current_source_address, 32);
     AudioCommon::SendAIBuffer(m_system, reinterpret_cast<short*>(address), 8);
 
     if (m_audio_dma.remaining_blocks_count != 0)

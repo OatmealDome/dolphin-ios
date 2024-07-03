@@ -8,7 +8,6 @@ import android.widget.Toast
 import org.dolphinemu.dolphinemu.NativeLibrary
 import org.dolphinemu.dolphinemu.R
 import org.dolphinemu.dolphinemu.features.input.model.MappingCommon
-import org.dolphinemu.dolphinemu.services.GameFileCacheManager
 import java.io.Closeable
 
 class Settings : Closeable {
@@ -19,7 +18,6 @@ class Settings : Closeable {
         private set
 
     private var settingsLoaded = false
-    private var loadedRecursiveIsoPathsValue = false
 
     private val isGameSpecific: Boolean
         get() = !TextUtils.isEmpty(gameId)
@@ -41,8 +39,6 @@ class Settings : Closeable {
             check(!NativeLibrary.IsRunning()) { "Attempted to load game INI while emulating" }
             NativeConfig.loadGameInis(gameId, revision)
         }
-
-        loadedRecursiveIsoPathsValue = BooleanSetting.MAIN_RECURSIVE_ISO_PATHS.boolean
     }
 
     fun loadSettings(gameId: String, revision: Int, isWii: Boolean) {
@@ -65,11 +61,6 @@ class Settings : Closeable {
 
             NativeLibrary.ReloadLoggerConfig()
             NativeLibrary.UpdateGCAdapterScanThread()
-
-            if (loadedRecursiveIsoPathsValue != BooleanSetting.MAIN_RECURSIVE_ISO_PATHS.boolean) {
-                // Refresh game library
-                GameFileCacheManager.startRescan()
-            }
         } else {
             // custom game settings
             if (context != null) {
@@ -135,6 +126,7 @@ class Settings : Closeable {
         const val SECTION_LOGGER_OPTIONS = "Options"
         const val SECTION_GFX_SETTINGS = "Settings"
         const val SECTION_GFX_ENHANCEMENTS = "Enhancements"
+        const val SECTION_GFX_COLOR_CORRECTION = "ColorCorrection"
         const val SECTION_GFX_HACKS = "Hacks"
         const val SECTION_DEBUG = "Debug"
         const val SECTION_EMULATED_USB_DEVICES = "EmulatedUSBDevices"

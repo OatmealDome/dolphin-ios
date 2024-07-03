@@ -1,6 +1,18 @@
 add_library(common
   Analytics.cpp
   Analytics.h
+  Assembler/AssemblerShared.cpp
+  Assembler/AssemblerShared.h
+  Assembler/AssemblerTables.cpp
+  Assembler/AssemblerTables.h
+  Assembler/GekkoAssembler.cpp
+  Assembler/GekkoAssembler.h
+  Assembler/GekkoIRGen.cpp
+  Assembler/GekkoIRGen.h
+  Assembler/GekkoLexer.cpp
+  Assembler/GekkoLexer.h
+  Assembler/GekkoParser.cpp
+  Assembler/GekkoParser.h
   Assert.h
   BitField.h
   BitSet.h
@@ -29,6 +41,8 @@ add_library(common
   Crypto/bn.h
   Crypto/ec.cpp
   Crypto/ec.h
+  Crypto/HMAC.cpp
+  Crypto/HMAC.h
   Crypto/SHA1.cpp
   Crypto/SHA1.h
   Debug/MemoryPatches.cpp
@@ -72,6 +86,8 @@ add_library(common
   IOFile.h
   JitRegister.cpp
   JitRegister.h
+  JsonUtil.h
+  JsonUtil.cpp
   Lazy.h
   LinearDiskCache.h
   Logging/ConsoleListener.h
@@ -93,8 +109,6 @@ add_library(common
   Network.h
   PcapFile.cpp
   PcapFile.h
-  PerformanceCounter.cpp
-  PerformanceCounter.h
   Profiler.cpp
   Profiler.h
   QoSSession.cpp
@@ -110,8 +124,10 @@ add_library(common
   SettingsHandler.h
   SFMLHelper.cpp
   SFMLHelper.h
+  SmallVector.h
   SocketContext.cpp
   SocketContext.h
+  SpanUtils.h
   SPSCQueue.h
   StringLiteral.h
   StringUtil.cpp
@@ -122,10 +138,13 @@ add_library(common
   Thread.h
   Timer.cpp
   Timer.h
+  TimeUtil.cpp
+  TimeUtil.h
   TraversalClient.cpp
   TraversalClient.h
   TraversalProto.h
   TypeUtils.h
+  Unreachable.h
   UPnP.cpp
   UPnP.h
   VariantUtil.h
@@ -134,6 +153,8 @@ add_library(common
   WindowSystemInfo.h
   WorkQueueThread.h
 )
+
+add_dependencies(common dolphin_scmrev)
 
 if(NOT MSVC AND _M_ARM_64)
   set_source_files_properties(
@@ -145,16 +166,17 @@ endif()
 target_link_libraries(common
 PUBLIC
   ${CMAKE_THREAD_LIBS_INIT}
-  enet
+  enet::enet
   fmt::fmt
-  ${MBEDTLS_LIBRARIES}
-  minizip-ng
+  MbedTLS::mbedtls
+  minizip::minizip
+  sfml-network
 
 PRIVATE
-  ${CURL_LIBRARIES}
+  CURL::libcurl
   FatFs
   Iconv::Iconv
-  ${spng_target}
+  spng::spng
   ${VTUNE_LIBRARIES}
 )
 
@@ -221,7 +243,7 @@ if(_M_ARM_64)
     ArmFPURoundMode.cpp
   )
 else()
-  if(_M_X86) #X86
+  if(_M_X86_64) #X86
     target_sources(common PRIVATE
       x64ABI.cpp
       x64ABI.h
@@ -318,7 +340,7 @@ endif()
 if(UNIX AND NOT IOS)
   # Posix networking code needs to be fixed for Windows
   add_executable(traversal_server TraversalServer.cpp)
-  target_link_libraries(traversal_server PRIVATE common)
+  target_link_libraries(traversal_server PRIVATE common fmt::fmt)
   if(SYSTEMD_FOUND)
     target_link_libraries(traversal_server PRIVATE ${SYSTEMD_LIBRARIES})
   endif()

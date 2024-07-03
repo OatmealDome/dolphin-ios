@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #ifdef _WIN32
+#include <cstdio>
 #include <string>
 #include <vector>
 
 #include <Windows.h>
-#include <cstdio>
 #endif
 
 #ifdef __linux__
@@ -28,11 +28,13 @@
 #include "Core/Config/MainSettings.h"
 #include "Core/Core.h"
 #include "Core/DolphinAnalytics.h"
+#include "Core/System.h"
 
 #include "DolphinQt/Host.h"
 #include "DolphinQt/MainWindow.h"
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
 #include "DolphinQt/QtUtils/RunOnObject.h"
+#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/Resources.h"
 #include "DolphinQt/Settings.h"
 #include "DolphinQt/Translation.h"
@@ -50,7 +52,7 @@ static bool QtMsgAlertHandler(const char* caption, const char* text, bool yes_no
   std::optional<bool> r = RunOnObject(QApplication::instance(), [&] {
     // If we were called from the CPU/GPU thread, set us as the CPU/GPU thread.
     // This information is used in order to avoid deadlocks when calling e.g.
-    // Host::SetRenderFocus or Core::RunAsCPUThread. (Host::SetRenderFocus
+    // Host::SetRenderFocus or Core::CPUThreadGuard. (Host::SetRenderFocus
     // can get called automatically when a dialog steals the focus.)
 
     Common::ScopeGuard cpu_scope_guard(&Core::UndeclareAsCPUThread);
@@ -90,6 +92,7 @@ static bool QtMsgAlertHandler(const char* caption, const char* text, bool yes_no
       return QMessageBox::NoIcon;
     }());
 
+    SetQWidgetWindowDecorations(&message_box);
     const int button = message_box.exec();
     if (button == QMessageBox::Yes)
       return true;
@@ -177,7 +180,7 @@ int main(int argc, char* argv[])
   // Whenever the event loop is about to go to sleep, dispatch the jobs
   // queued in the Core first.
   QObject::connect(QAbstractEventDispatcher::instance(), &QAbstractEventDispatcher::aboutToBlock,
-                   &app, &Core::HostDispatchJobs);
+                   &app, [] { Core::HostDispatchJobs(Core::System::GetInstance()); });
 
   std::optional<std::string> save_state_path;
   if (options.is_set("save_state"))
@@ -243,8 +246,11 @@ int main(int argc, char* argv[])
   {
     DolphinAnalytics::Instance().ReportDolphinStart("qt");
 
+    Settings::Instance().InitDefaultPalette();
+    Settings::Instance().UpdateSystemDark();
+    Settings::Instance().ApplyStyle();
+
     MainWindow win{std::move(boot), static_cast<const char*>(options.get("movie"))};
-    Settings::Instance().SetCurrentUserStyle(Settings::Instance().GetCurrentUserStyle());
     win.Show();
 
 #if defined(USE_ANALYTICS) && USE_ANALYTICS
@@ -268,6 +274,7 @@ int main(int argc, char* argv[])
                       "This authorization can be revoked at any time through Dolphin's "
                       "settings."));
 
+      SetQWidgetWindowDecorations(&analytics_prompt);
       const int answer = analytics_prompt.exec();
 
       Config::SetBase(Config::MAIN_ANALYTICS_PERMISSION_ASKED, true);
@@ -287,7 +294,7 @@ int main(int argc, char* argv[])
     retval = app.exec();
   }
 
-  Core::Shutdown();
+  Core::Shutdown(Core::System::GetInstance());
   UICommon::Shutdown();
   Host::GetInstance()->deleteLater();
 

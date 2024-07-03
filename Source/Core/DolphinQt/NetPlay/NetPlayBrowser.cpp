@@ -26,6 +26,7 @@
 
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
 #include "DolphinQt/QtUtils/NonDefaultQPushButton.h"
+#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/Settings.h"
 
 NetPlayBrowser::NetPlayBrowser(QWidget* parent) : QDialog(parent)
@@ -129,8 +130,7 @@ void NetPlayBrowser::CreateWidgets()
 
 void NetPlayBrowser::ConnectWidgets()
 {
-  connect(m_region_combo, qOverload<int>(&QComboBox::currentIndexChanged), this,
-          &NetPlayBrowser::Refresh);
+  connect(m_region_combo, &QComboBox::currentIndexChanged, this, &NetPlayBrowser::Refresh);
 
   connect(m_button_box, &QDialogButtonBox::accepted, this, &NetPlayBrowser::accept);
   connect(m_button_box, &QDialogButtonBox::rejected, this, &NetPlayBrowser::reject);
@@ -295,18 +295,19 @@ void NetPlayBrowser::accept()
 
   if (m_sessions[index].has_password)
   {
-    auto* dialog = new QInputDialog(this);
+    QInputDialog dialog(this);
 
-    dialog->setWindowFlags(dialog->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    dialog->setWindowTitle(tr("Enter password"));
-    dialog->setLabelText(tr("This session requires a password:"));
-    dialog->setWindowModality(Qt::WindowModal);
-    dialog->setTextEchoMode(QLineEdit::Password);
+    dialog.setWindowFlags(dialog.windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    dialog.setWindowTitle(tr("Enter password"));
+    dialog.setLabelText(tr("This session requires a password:"));
+    dialog.setWindowModality(Qt::WindowModal);
+    dialog.setTextEchoMode(QLineEdit::Password);
 
-    if (dialog->exec() != QDialog::Accepted)
+    SetQWidgetWindowDecorations(&dialog);
+    if (dialog.exec() != QDialog::Accepted)
       return;
 
-    const std::string password = dialog->textValue().toStdString();
+    const std::string password = dialog.textValue().toStdString();
 
     auto decrypted_id = session.DecryptID(password);
 

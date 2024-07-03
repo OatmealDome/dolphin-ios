@@ -24,6 +24,7 @@
 #include "DolphinQt/Config/Mapping/GCPadWiiUConfigDialog.h"
 #include "DolphinQt/Config/Mapping/MappingWindow.h"
 #include "DolphinQt/QtUtils/NonDefaultQPushButton.h"
+#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/QtUtils/SignalBlocking.h"
 #include "DolphinQt/Settings.h"
 
@@ -65,10 +66,10 @@ GamecubeControllersWidget::GamecubeControllersWidget(QWidget* parent) : QWidget(
   ConnectWidgets();
 
   connect(&Settings::Instance(), &Settings::ConfigChanged, this,
-          [this] { LoadSettings(Core::GetState()); });
+          [this] { LoadSettings(Core::GetState(Core::System::GetInstance())); });
   connect(&Settings::Instance(), &Settings::EmulationStateChanged, this,
           [this](Core::State state) { LoadSettings(state); });
-  LoadSettings(Core::GetState());
+  LoadSettings(Core::GetState(Core::System::GetInstance()));
 }
 
 void GamecubeControllersWidget::CreateLayout()
@@ -107,11 +108,10 @@ void GamecubeControllersWidget::ConnectWidgets()
 {
   for (size_t i = 0; i < m_gc_controller_boxes.size(); ++i)
   {
-    connect(m_gc_controller_boxes[i], qOverload<int>(&QComboBox::currentIndexChanged), this,
-            [this, i] {
-              OnGCTypeChanged(i);
-              SaveSettings();
-            });
+    connect(m_gc_controller_boxes[i], &QComboBox::currentIndexChanged, this, [this, i] {
+      OnGCTypeChanged(i);
+      SaveSettings();
+    });
     connect(m_gc_buttons[i], &QPushButton::clicked, this, [this, i] { OnGCPadConfigure(i); });
   }
 }
@@ -137,8 +137,12 @@ void GamecubeControllersWidget::OnGCPadConfigure(size_t index)
     type = MappingWindow::Type::MAPPING_GCPAD;
     break;
   case SerialInterface::SIDEVICE_WIIU_ADAPTER:
-    GCPadWiiUConfigDialog(static_cast<int>(index), this).exec();
+  {
+    GCPadWiiUConfigDialog dialog(static_cast<int>(index), this);
+    SetQWidgetWindowDecorations(&dialog);
+    dialog.exec();
     return;
+  }
   case SerialInterface::SIDEVICE_GC_STEERING:
     type = MappingWindow::Type::MAPPING_GC_STEERINGWHEEL;
     break;
@@ -161,6 +165,7 @@ void GamecubeControllersWidget::OnGCPadConfigure(size_t index)
   MappingWindow* window = new MappingWindow(this, type, static_cast<int>(index));
   window->setAttribute(Qt::WA_DeleteOnClose, true);
   window->setWindowModality(Qt::WindowModality::WindowModal);
+  SetQWidgetWindowDecorations(window);
   window->show();
 }
 
@@ -186,24 +191,23 @@ void GamecubeControllersWidget::SaveSettings()
   {
     Config::ConfigChangeCallbackGuard config_guard;
 
+    auto& system = Core::System::GetInstance();
     for (size_t i = 0; i < m_gc_groups.size(); ++i)
     {
       const SerialInterface::SIDevices si_device =
           FromGCMenuIndex(m_gc_controller_boxes[i]->currentIndex());
       Config::SetBaseOrCurrent(Config::GetInfoForSIDevice(static_cast<int>(i)), si_device);
 
-      if (Core::IsRunning())
+      if (Core::IsRunning(system))
       {
-        Core::System::GetInstance().GetSerialInterface().ChangeDevice(si_device,
-                                                                      static_cast<s32>(i));
+        system.GetSerialInterface().ChangeDevice(si_device, static_cast<s32>(i));
       }
     }
-
-    if (GCAdapter::UseAdapter())
-      GCAdapter::StartScanThread();
-    else
-      GCAdapter::StopScanThread();
   }
+  if (GCAdapter::UseAdapter())
+    GCAdapter::StartScanThread();
+  else
+    GCAdapter::StopScanThread();
 
   SConfig::GetInstance().SaveSettings();
 }

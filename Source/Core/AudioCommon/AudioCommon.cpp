@@ -105,7 +105,7 @@ std::string GetDefaultSoundBackend()
     backend = BACKEND_ALSA;
 #elif defined(IPHONEOS)
   backend = BACKEND_COREAUDIO;
-#elif defined(__APPLE__) || defined(_WIN32)
+#elif defined(__APPLE__) || defined(_WIN32) || defined(__OpenBSD__)
   backend = BACKEND_CUBEB;
 #endif
   return backend;

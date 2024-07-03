@@ -13,6 +13,10 @@ namespace Common
 {
 class IniFile;
 }
+namespace Core
+{
+class System;
+}
 
 namespace PatchEngine
 {
@@ -45,8 +49,6 @@ struct Patch
 
 const char* PatchTypeAsString(PatchType type);
 
-int GetSpeedhackCycles(const u32 addr);
-
 std::optional<PatchEntry> DeserializeLine(std::string line);
 std::string SerializeLine(const PatchEntry& entry);
 void LoadPatchSection(const std::string& section, std::vector<Patch>* patches,
@@ -57,7 +59,7 @@ void LoadPatches();
 void AddMemoryPatch(std::size_t index);
 void RemoveMemoryPatch(std::size_t index);
 
-bool ApplyFramePatches();
+bool ApplyFramePatches(Core::System& system);
 void Shutdown();
 void Reload();
 

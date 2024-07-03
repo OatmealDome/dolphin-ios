@@ -40,7 +40,8 @@
 
 using Type = MemoryViewWidget::Type;
 
-MemoryWidget::MemoryWidget(QWidget* parent) : QDockWidget(parent)
+MemoryWidget::MemoryWidget(Core::System& system, QWidget* parent)
+    : QDockWidget(parent), m_system(system)
 {
   setWindowTitle(tr("Memory"));
   setObjectName(QStringLiteral("memory"));
@@ -199,6 +200,7 @@ void MemoryWidget::CreateWidgets()
   m_display_combo->addItem(tr("Double"), int(Type::Double));
 
   m_align_combo = new QComboBox;
+  // i18n: "Fixed" here means that the alignment is always the same
   m_align_combo->addItem(tr("Fixed Alignment"));
   m_align_combo->addItem(tr("Type-based Alignment"), 0);
   m_align_combo->addItem(tr("No Alignment"), 1);
@@ -287,7 +289,7 @@ void MemoryWidget::CreateWidgets()
   sidebar_scroll->setWidget(sidebar);
   sidebar_scroll->setWidgetResizable(true);
 
-  m_memory_view = new MemoryViewWidget(this);
+  m_memory_view = new MemoryViewWidget(m_system, this);
 
   m_splitter->addWidget(m_memory_view);
   m_splitter->addWidget(sidebar_scroll);
@@ -307,7 +309,7 @@ void MemoryWidget::ConnectWidgets()
   connect(m_search_offset, &QLineEdit::textChanged, this, &MemoryWidget::OnSearchAddress);
   connect(m_data_edit, &QLineEdit::textChanged, this, &MemoryWidget::ValidateAndPreviewInputValue);
 
-  connect(m_input_combo, qOverload<int>(&QComboBox::currentIndexChanged), this,
+  connect(m_input_combo, &QComboBox::currentIndexChanged, this,
           &MemoryWidget::ValidateAndPreviewInputValue);
   connect(m_set_value, &QPushButton::clicked, this, &MemoryWidget::OnSetValue);
 
@@ -321,8 +323,7 @@ void MemoryWidget::ConnectWidgets()
   }
   for (auto* combo : {m_display_combo, m_align_combo, m_row_length_combo})
   {
-    connect(combo, qOverload<int>(&QComboBox::currentIndexChanged), this,
-            &MemoryWidget::OnDisplayChanged);
+    connect(combo, &QComboBox::currentIndexChanged, this, &MemoryWidget::OnDisplayChanged);
   }
 
   connect(m_dual_check, &QCheckBox::toggled, this, &MemoryWidget::OnDisplayChanged);
@@ -497,7 +498,7 @@ void MemoryWidget::SetAddress(u32 address)
     AddressSpace::Accessors* accessors =
         AddressSpace::GetAccessors(m_memory_view->GetAddressSpace());
 
-    Core::CPUThreadGuard guard(Core::System::GetInstance());
+    const Core::CPUThreadGuard guard(m_system);
     good = accessors->IsValidAddress(guard, current_addr);
   }
 
@@ -628,7 +629,7 @@ QByteArray MemoryWidget::GetInputData() const
 
 void MemoryWidget::OnSetValue()
 {
-  if (!Core::IsRunning())
+  if (!Core::IsRunning(m_system))
     return;
 
   auto target_addr = GetTargetAddress();
@@ -654,7 +655,7 @@ void MemoryWidget::OnSetValue()
     return;
   }
 
-  Core::CPUThreadGuard guard(Core::System::GetInstance());
+  const Core::CPUThreadGuard guard(m_system);
 
   AddressSpace::Accessors* accessors = AddressSpace::GetAccessors(m_memory_view->GetAddressSpace());
   u32 end_address = target_addr.address + static_cast<u32>(bytes.size()) - 1;
@@ -674,7 +675,7 @@ void MemoryWidget::OnSetValue()
 
 void MemoryWidget::OnSetValueFromFile()
 {
-  if (!Core::IsRunning())
+  if (!Core::IsRunning(m_system))
     return;
 
   auto target_addr = GetTargetAddress();
@@ -716,7 +717,7 @@ void MemoryWidget::OnSetValueFromFile()
 
   AddressSpace::Accessors* accessors = AddressSpace::GetAccessors(m_memory_view->GetAddressSpace());
 
-  Core::CPUThreadGuard guard(Core::System::GetInstance());
+  const Core::CPUThreadGuard guard(m_system);
 
   for (u8 b : file_contents)
     accessors->WriteU8(guard, target_addr.address++, b);
@@ -834,7 +835,7 @@ void MemoryWidget::FindValue(bool next)
     AddressSpace::Accessors* accessors =
         AddressSpace::GetAccessors(m_memory_view->GetAddressSpace());
 
-    Core::CPUThreadGuard guard(Core::System::GetInstance());
+    const Core::CPUThreadGuard guard(m_system);
     return accessors->Search(guard, target_addr.address,
                              reinterpret_cast<const u8*>(search_for.data()),
                              static_cast<u32>(search_for.size()), next);

@@ -12,6 +12,7 @@
 #include <array>
 #include <cstring>
 #include <memory>
+#include <span>
 #include <tuple>
 
 #include "Common/ChunkFile.h"
@@ -21,7 +22,6 @@
 #include "Common/MsgHandler.h"
 #include "Common/Swap.h"
 #include "Core/Config/MainSettings.h"
-#include "Core/ConfigManager.h"
 #include "Core/Core.h"
 #include "Core/HW/AudioInterface.h"
 #include "Core/HW/DSP.h"
@@ -51,7 +51,7 @@ void MemoryManager::InitMMIO(bool is_wii)
 {
   m_mmio_mapping = std::make_unique<MMIO::Mapping>();
 
-  m_system.GetCommandProcessor().RegisterMMIO(m_system, m_mmio_mapping.get(), 0x0C000000);
+  m_system.GetCommandProcessor().RegisterMMIO(m_mmio_mapping.get(), 0x0C000000);
   m_system.GetPixelEngine().RegisterMMIO(m_mmio_mapping.get(), 0x0C001000);
   m_system.GetVideoInterface().RegisterMMIO(m_mmio_mapping.get(), 0x0C002000);
   m_system.GetProcessorInterface().RegisterMMIO(m_mmio_mapping.get(), 0x0C003000);
@@ -63,7 +63,7 @@ void MemoryManager::InitMMIO(bool is_wii)
   m_system.GetAudioInterface().RegisterMMIO(m_mmio_mapping.get(), 0x0C006C00);
   if (is_wii)
   {
-    IOS::RegisterMMIO(m_mmio_mapping.get(), 0x0D000000);
+    m_system.GetWiiIPC().RegisterMMIO(m_mmio_mapping.get(), 0x0D000000);
     m_system.GetDVDInterface().RegisterMMIO(m_mmio_mapping.get(), 0x0D006000, true);
     m_system.GetSerialInterface().RegisterMMIO(m_mmio_mapping.get(), 0x0D006400);
     m_system.GetExpansionInterface().RegisterMMIO(m_mmio_mapping.get(), 0x0D006800);
@@ -103,7 +103,7 @@ void MemoryManager::Init()
   m_physical_regions[3] = PhysicalMemoryRegion{
       &m_exram, 0x10000000, GetExRamSize(), PhysicalMemoryRegion::WII_ONLY, 0, false};
 
-  const bool wii = SConfig::GetInstance().bWii;
+  const bool wii = m_system.IsWii();
   const bool mmu = m_system.IsMMUMode();
 
   // If MMU is turned off in GameCube mode, turn on fake VMEM hack.
@@ -401,22 +401,23 @@ void MemoryManager::Clear()
 
 u8* MemoryManager::GetPointerForRange(u32 address, size_t size) const
 {
-  // Make sure we don't have a range spanning 2 separate banks
-  if (size >= GetExRamSizeReal())
+  std::span<u8> span = GetSpanForAddress(address);
+
+  if (span.data() == nullptr)
   {
+    // The address isn't in a valid memory region.
+    // A panic alert has already been raised by GetPointer, so let's not raise another one.
+    return nullptr;
+  }
+
+  if (span.size() < size)
+  {
+    // The start address is in a valid region, but the end address is beyond the end of that region.
     PanicAlertFmt("Oversized range in GetPointerForRange. {:x} bytes at {:#010x}", size, address);
     return nullptr;
   }
 
-  // Check that the beginning and end of the range are valid
-  u8* pointer = GetPointer(address);
-  if (!pointer || !GetPointer(address + u32(size) - 1))
-  {
-    // A panic alert has already been raised by GetPointer
-    return nullptr;
-  }
-
-  return pointer;
+  return span.data();
 }
 
 void MemoryManager::CopyFromEmu(void* data, u32 address, size_t size) const
@@ -463,39 +464,52 @@ void MemoryManager::Memset(u32 address, u8 value, size_t size)
 
 std::string MemoryManager::GetString(u32 em_address, size_t size)
 {
-  const char* ptr = reinterpret_cast<const char*>(GetPointer(em_address));
-  if (ptr == nullptr)
-    return "";
+  std::string result;
 
   if (size == 0)  // Null terminated string.
   {
-    return std::string(ptr);
+    while (true)
+    {
+      const u8 value = Read_U8(em_address);
+      if (value == 0)
+        break;
+
+      result.push_back(value);
+      ++em_address;
+    }
+    return result;
   }
   else  // Fixed size string, potentially null terminated or null padded.
   {
-    size_t length = strnlen(ptr, size);
-    return std::string(ptr, length);
+    result.resize(size);
+    CopyFromEmu(result.data(), em_address, size);
+    size_t length = strnlen(result.data(), size);
+    result.resize(length);
+    return result;
   }
 }
 
-u8* MemoryManager::GetPointer(u32 address) const
+std::span<u8> MemoryManager::GetSpanForAddress(u32 address) const
 {
   // TODO: Should we be masking off more bits here?  Can all devices access
   // EXRAM?
   address &= 0x3FFFFFFF;
   if (address < GetRamSizeReal())
-    return m_ram + address;
+    return std::span(m_ram + address, GetRamSizeReal() - address);
 
   if (m_exram)
   {
     if ((address >> 28) == 0x1 && (address & 0x0fffffff) < GetExRamSizeReal())
-      return m_exram + (address & GetExRamMask());
+    {
+      return std::span(m_exram + (address & GetExRamMask()),
+                       GetExRamSizeReal() - (address & GetExRamMask()));
+    }
   }
 
   auto& ppc_state = m_system.GetPPCState();
   PanicAlertFmt("Unknown Pointer {:#010x} PC {:#010x} LR {:#010x}", address, ppc_state.pc,
                 LR(ppc_state));
-  return nullptr;
+  return {};
 }
 
 u8 MemoryManager::Read_U8(u32 address) const

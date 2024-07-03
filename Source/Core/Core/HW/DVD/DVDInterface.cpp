@@ -20,8 +20,10 @@
 #include "Common/Config/Config.h"
 #include "Common/Logging/Log.h"
 
+#include "Core/AchievementManager.h"
 #include "Core/Config/MainSettings.h"
 #include "Core/Config/SessionSettings.h"
+#include "Core/Core.h"
 #include "Core/CoreTiming.h"
 #include "Core/DolphinAnalytics.h"
 #include "Core/HW/AudioInterface.h"
@@ -233,7 +235,7 @@ void DVDInterface::DTKStreamingCallback(DIInterruptType interrupt_type,
   }
 
   // Read the next chunk of audio data asynchronously.
-  s64 ticks_to_dtk = SystemTimers::GetTicksPerSecond() * s64(m_pending_blocks) *
+  s64 ticks_to_dtk = m_system.GetSystemTimers().GetTicksPerSecond() * s64(m_pending_blocks) *
                      StreamADPCM::SAMPLES_PER_BLOCK * sample_rate_divisor /
                      Mixer::FIXED_SAMPLE_RATE_DIVIDEND;
   ticks_to_dtk -= cycles_late;
@@ -376,7 +378,7 @@ void DVDInterface::SetDisc(std::unique_ptr<DiscIO::VolumeDisc> disc,
     // Wii disc, which triggers Error #001. In those cases we manually make the check succeed to
     // avoid problems.
     const bool should_fake_error_001 =
-        SConfig::GetInstance().bWii && blob.GetBlobType() == DiscIO::BlobType::DIRECTORY;
+        m_system.IsWii() && blob.GetBlobType() == DiscIO::BlobType::DIRECTORY;
     Config::SetCurrent(Config::SESSION_SHOULD_FAKE_ERROR_001, should_fake_error_001);
 
     if (!blob.HasFastRandomAccessInBlock() && blob.GetBlockSize() > 0x200000)
@@ -396,6 +398,8 @@ void DVDInterface::SetDisc(std::unique_ptr<DiscIO::VolumeDisc> disc,
     m_auto_disc_change_index = 0;
   }
 
+  AchievementManager::GetInstance().LoadGame("", disc.get());
+
   // Assume that inserting a disc requires having an empty disc before
   if (had_disc != has_disc)
     ExpansionInterface::g_rtc_flags[ExpansionInterface::RTCFlag::DiscChanged] = true;
@@ -413,7 +417,7 @@ bool DVDInterface::IsDiscInside() const
 
 void DVDInterface::AutoChangeDiscCallback(Core::System& system, u64 userdata, s64 cyclesLate)
 {
-  system.GetDVDInterface().AutoChangeDisc();
+  system.GetDVDInterface().AutoChangeDisc(Core::CPUThreadGuard{system});
 }
 
 void DVDInterface::EjectDiscCallback(Core::System& system, u64 userdata, s64 cyclesLate)
@@ -435,7 +439,7 @@ void DVDInterface::InsertDiscCallback(Core::System& system, u64 userdata, s64 cy
 }
 
 // Must only be called on the CPU thread
-void DVDInterface::EjectDisc(EjectCause cause)
+void DVDInterface::EjectDisc(const Core::CPUThreadGuard& guard, EjectCause cause)
 {
   m_system.GetCoreTiming().ScheduleEvent(0, m_eject_disc);
   if (cause == EjectCause::User)
@@ -443,7 +447,8 @@ void DVDInterface::EjectDisc(EjectCause cause)
 }
 
 // Must only be called on the CPU thread
-void DVDInterface::ChangeDisc(const std::vector<std::string>& paths)
+void DVDInterface::ChangeDisc(const Core::CPUThreadGuard& guard,
+                              const std::vector<std::string>& paths)
 {
   ASSERT_MSG(DISCIO, !paths.empty(), "Trying to insert an empty list of discs");
 
@@ -453,11 +458,11 @@ void DVDInterface::ChangeDisc(const std::vector<std::string>& paths)
     m_auto_disc_change_index = 0;
   }
 
-  ChangeDisc(paths[0]);
+  ChangeDisc(guard, paths[0]);
 }
 
 // Must only be called on the CPU thread
-void DVDInterface::ChangeDisc(const std::string& new_path)
+void DVDInterface::ChangeDisc(const Core::CPUThreadGuard& guard, const std::string& new_path)
 {
   if (!m_disc_path_to_insert.empty())
   {
@@ -465,11 +470,12 @@ void DVDInterface::ChangeDisc(const std::string& new_path)
     return;
   }
 
-  EjectDisc(EjectCause::User);
+  EjectDisc(guard, EjectCause::User);
 
   m_disc_path_to_insert = new_path;
-  m_system.GetCoreTiming().ScheduleEvent(SystemTimers::GetTicksPerSecond(), m_insert_disc);
-  Movie::SignalDiscChange(new_path);
+  m_system.GetCoreTiming().ScheduleEvent(m_system.GetSystemTimers().GetTicksPerSecond(),
+                                         m_insert_disc);
+  m_system.GetMovie().SignalDiscChange(new_path);
 
   for (size_t i = 0; i < m_auto_disc_change_paths.size(); ++i)
   {
@@ -484,13 +490,13 @@ void DVDInterface::ChangeDisc(const std::string& new_path)
 }
 
 // Must only be called on the CPU thread
-bool DVDInterface::AutoChangeDisc()
+bool DVDInterface::AutoChangeDisc(const Core::CPUThreadGuard& guard)
 {
   if (m_auto_disc_change_paths.empty())
     return false;
 
   m_auto_disc_change_index = (m_auto_disc_change_index + 1) % m_auto_disc_change_paths.size();
-  ChangeDisc(m_auto_disc_change_paths[m_auto_disc_change_index]);
+  ChangeDisc(guard, m_auto_disc_change_paths[m_auto_disc_change_index]);
   return true;
 }
 
@@ -1080,16 +1086,16 @@ void DVDInterface::ExecuteCommand(ReplyType reply_type)
 
     const bool force_eject = eject && !kill;
 
-    if (Config::Get(Config::MAIN_AUTO_DISC_CHANGE) && !Movie::IsPlayingInput() &&
+    if (Config::Get(Config::MAIN_AUTO_DISC_CHANGE) && !m_system.GetMovie().IsPlayingInput() &&
         m_system.GetDVDThread().IsInsertedDiscRunning() && !m_auto_disc_change_paths.empty())
     {
       m_system.GetCoreTiming().ScheduleEvent(
-          force_eject ? 0 : SystemTimers::GetTicksPerSecond() / 2, m_auto_change_disc);
+          force_eject ? 0 : m_system.GetSystemTimers().GetTicksPerSecond() / 2, m_auto_change_disc);
       OSD::AddMessage("Changing discs automatically...", OSD::Duration::NORMAL);
     }
     else if (force_eject)
     {
-      EjectDisc(EjectCause::Software);
+      EjectDisc(Core::CPUThreadGuard{m_system}, EjectCause::Software);
     }
     break;
   }
@@ -1175,7 +1181,7 @@ void DVDInterface::ExecuteCommand(ReplyType reply_type)
   {
     // TODO: Needs testing to determine if MINIMUM_COMMAND_LATENCY_US is accurate for this
     m_system.GetCoreTiming().ScheduleEvent(
-        MINIMUM_COMMAND_LATENCY_US * (SystemTimers::GetTicksPerSecond() / 1000000),
+        MINIMUM_COMMAND_LATENCY_US * (m_system.GetSystemTimers().GetTicksPerSecond() / 1000000),
         m_finish_executing_command, PackFinishExecutingCommandUserdata(reply_type, interrupt_type));
   }
 }
@@ -1196,7 +1202,7 @@ void DVDInterface::PerformDecryptingRead(u32 position, u32 length, u32 output_ad
   {
     // TODO: Needs testing to determine if MINIMUM_COMMAND_LATENCY_US is accurate for this
     m_system.GetCoreTiming().ScheduleEvent(
-        MINIMUM_COMMAND_LATENCY_US * (SystemTimers::GetTicksPerSecond() / 1000000),
+        MINIMUM_COMMAND_LATENCY_US * (m_system.GetSystemTimers().GetTicksPerSecond() / 1000000),
         m_finish_executing_command, PackFinishExecutingCommandUserdata(reply_type, interrupt_type));
   }
 }
@@ -1213,7 +1219,7 @@ void DVDInterface::ForceOutOfBoundsRead(ReplyType reply_type)
   // TODO: Needs testing to determine if MINIMUM_COMMAND_LATENCY_US is accurate for this
   const DIInterruptType interrupt_type = DIInterruptType::DEINT;
   m_system.GetCoreTiming().ScheduleEvent(
-      MINIMUM_COMMAND_LATENCY_US * (SystemTimers::GetTicksPerSecond() / 1000000),
+      MINIMUM_COMMAND_LATENCY_US * (m_system.GetSystemTimers().GetTicksPerSecond() / 1000000),
       m_finish_executing_command, PackFinishExecutingCommandUserdata(reply_type, interrupt_type));
 }
 
@@ -1315,7 +1321,7 @@ void DVDInterface::ScheduleReads(u64 offset, u32 length, const DiscIO::Partition
 
   auto& core_timing = m_system.GetCoreTiming();
   const u64 current_time = core_timing.GetTicks();
-  const u32 ticks_per_second = SystemTimers::GetTicksPerSecond();
+  const u32 ticks_per_second = m_system.GetSystemTimers().GetTicksPerSecond();
   auto& dvd_thread = m_system.GetDVDThread();
   const bool wii_disc = dvd_thread.GetDiscType() == DiscIO::Platform::WiiDisc;
 
@@ -1394,7 +1400,7 @@ void DVDInterface::ScheduleReads(u64 offset, u32 length, const DiscIO::Partition
                 length, output_address);
 
   s64 ticks_until_completion =
-      READ_COMMAND_LATENCY_US * (SystemTimers::GetTicksPerSecond() / 1000000);
+      READ_COMMAND_LATENCY_US * (m_system.GetSystemTimers().GetTicksPerSecond() / 1000000);
 
   u32 buffered_blocks = 0;
   u32 unbuffered_blocks = 0;
@@ -1522,7 +1528,7 @@ void DVDInterface::ScheduleReads(u64 offset, u32 length, const DiscIO::Partition
                 "Schedule reads: ECC blocks unbuffered={}, buffered={}, "
                 "ticks={}, time={} us",
                 unbuffered_blocks, buffered_blocks, ticks_until_completion,
-                ticks_until_completion * 1000000 / SystemTimers::GetTicksPerSecond());
+                ticks_until_completion * 1000000 / m_system.GetSystemTimers().GetTicksPerSecond());
 }
 
 }  // namespace DVD

@@ -51,12 +51,32 @@ public:
   static QSettings& GetQSettings();
 
   // UI
-  void SetThemeName(const QString& theme_name);
-  void SetCurrentUserStyle(const QString& stylesheet_name);
-  QString GetCurrentUserStyle() const;
+  void TriggerThemeChanged();
+  void InitDefaultPalette();
+  void UpdateSystemDark();
+  void SetSystemDark(bool dark);
+  bool IsSystemDark();
+  bool IsThemeDark();
 
-  void SetUserStylesEnabled(bool enabled);
-  bool AreUserStylesEnabled() const;
+  void SetUserStyleName(const QString& stylesheet_name);
+  QString GetUserStyleName() const;
+
+  enum class StyleType : int
+  {
+    System = 0,
+    Light = 1,
+    Dark = 2,
+    User = 3,
+
+    MinValue = 0,
+    MaxValue = 3,
+  };
+
+  void SetStyleType(StyleType type);
+  StyleType GetStyleType() const;
+
+  // this evaluates the current stylesheet settings and refreshes the GUI with them
+  void ApplyStyle();
 
   void GetToolTipStyle(QColor& window_color, QColor& text_color, QColor& emphasis_text_color,
                        QColor& border_color, const QPalette& palette,
@@ -84,7 +104,6 @@ public:
   void RefreshGameList();
   void NotifyRefreshGameListStarted();
   void NotifyRefreshGameListComplete();
-  void RefreshMetadata();
   void NotifyMetadataRefreshComplete();
   void ReloadTitleDB();
   bool IsAutoRefreshEnabled() const;
@@ -102,9 +121,7 @@ public:
   void SetUSBKeyboardConnected(bool connected);
 
   // Graphics
-  void SetCursorVisibility(Config::ShowCursor hideCursor);
   Config::ShowCursor GetCursorVisibility() const;
-  void SetLockCursor(bool lock_cursor);
   bool GetLockCursor() const;
   void SetKeepWindowOnTop(bool top);
   bool IsKeepWindowOnTopEnabled() const;
@@ -146,6 +163,8 @@ public:
   bool IsNetworkVisible() const;
   void SetJITVisible(bool enabled);
   bool IsJITVisible() const;
+  void SetAssemblerVisible(bool enabled);
+  bool IsAssemblerVisible() const;
   QFont GetDebugFont() const;
   void SetDebugFont(QFont font);
 
@@ -193,8 +212,9 @@ signals:
   void MemoryVisibilityChanged(bool visible);
   void NetworkVisibilityChanged(bool visible);
   void JITVisibilityChanged(bool visible);
+  void AssemblerVisibilityChanged(bool visible);
   void DebugModeToggled(bool enabled);
-  void DebugFontChanged(QFont font);
+  void DebugFontChanged(const QFont& font);
   void AutoUpdateTrackChanged(const QString& mode);
   void FallbackRegionChanged(const DiscIO::Region& region);
   void AnalyticsToggled(bool enabled);
@@ -203,6 +223,7 @@ signals:
   void SDCardInsertionChanged(bool inserted);
   void USBKeyboardConnectionChanged(bool connected);
   void EnableGfxModsChanged(bool enabled);
+  void HardcoreStateChanged();
 
 private:
   Settings();

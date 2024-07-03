@@ -16,10 +16,11 @@ extern "C" {
 #include "Common/CommonTypes.h"
 #include "Common/Matrix.h"
 #include "InputCommon/ControllerInterface/ControllerInterface.h"
+#include "InputCommon/ControllerInterface/InputBackend.h"
 
 namespace ciface::XInput2
 {
-void PopulateDevices(void* const hwnd);
+std::unique_ptr<ciface::InputBackend> CreateInputBackend(ControllerInterface* controller_interface);
 
 class KeyboardMouse : public Core::Device
 {
@@ -111,7 +112,7 @@ private:
   void UpdateCursor(bool should_center_mouse);
 
 public:
-  void UpdateInput() override;
+  Core::DeviceRemoval UpdateInput() override;
 
   KeyboardMouse(Window window, int opcode, int pointer_deviceid, int keyboard_deviceid,
                 double scroll_increment);
@@ -119,6 +120,7 @@ public:
 
   std::string GetName() const override;
   std::string GetSource() const override;
+  int GetSortPriority() const override;
 
 private:
   Window m_window;

@@ -55,22 +55,24 @@
 namespace BootManager
 {
 // Boot the ISO or file
-bool BootCore(std::unique_ptr<BootParameters> boot, const WindowSystemInfo& wsi)
+bool BootCore(Core::System& system, std::unique_ptr<BootParameters> boot,
+              const WindowSystemInfo& wsi)
 {
   if (!boot)
     return false;
 
   SConfig& StartUp = SConfig::GetInstance();
 
-  if (!StartUp.SetPathsAndGameMetadata(*boot))
+  if (!StartUp.SetPathsAndGameMetadata(system, *boot))
     return false;
 
   // Movie settings
-  if (Movie::IsPlayingInput() && Movie::IsConfigSaved())
+  auto& movie = system.GetMovie();
+  if (movie.IsPlayingInput() && movie.IsConfigSaved())
   {
     for (ExpansionInterface::Slot slot : ExpansionInterface::MEMCARD_SLOTS)
     {
-      if (Movie::IsUsingMemcard(slot) && Movie::IsStartingFromClearSave() && !StartUp.bWii)
+      if (movie.IsUsingMemcard(slot) && movie.IsStartingFromClearSave() && !system.IsWii())
       {
         const auto raw_path =
             File::GetUserPath(D_GCUSER_IDX) +
@@ -102,7 +104,7 @@ bool BootCore(std::unique_ptr<BootParameters> boot, const WindowSystemInfo& wsi)
         Config::MAIN_GC_LANGUAGE,
         DiscIO::ToGameCubeLanguage(StartUp.GetLanguageAdjustedForRegion(false, StartUp.m_region)));
 
-    if (StartUp.bWii)
+    if (system.IsWii())
     {
       const u32 wii_language =
           static_cast<u32>(StartUp.GetLanguageAdjustedForRegion(true, StartUp.m_region));
@@ -135,18 +137,18 @@ bool BootCore(std::unique_ptr<BootParameters> boot, const WindowSystemInfo& wsi)
 
   // Some NTSC Wii games such as Doc Louis's Punch-Out!! and
   // 1942 (Virtual Console) crash if the PAL60 option is enabled
-  if (StartUp.bWii && DiscIO::IsNTSC(StartUp.m_region) && Config::Get(Config::SYSCONF_PAL60))
+  if (system.IsWii() && DiscIO::IsNTSC(StartUp.m_region) && Config::Get(Config::SYSCONF_PAL60))
     Config::SetCurrent(Config::SYSCONF_PAL60, false);
 
   // Disable loading time emulation for Riivolution-patched games until we have proper emulation.
   if (!boot->riivolution_patches.empty())
     Config::SetCurrent(Config::MAIN_FAST_DISC_SPEED, true);
 
-  Core::System::GetInstance().Initialize();
+  system.Initialize();
 
-  Core::UpdateWantDeterminism(/*initial*/ true);
+  Core::UpdateWantDeterminism(system, /*initial*/ true);
 
-  if (StartUp.bWii)
+  if (system.IsWii())
   {
     Core::InitializeWiiRoot(Core::WantsDeterminism());
 
@@ -164,28 +166,21 @@ bool BootCore(std::unique_ptr<BootParameters> boot, const WindowSystemInfo& wsi)
     }
   }
 
-#ifdef USE_RETRO_ACHIEVEMENTS
-  std::string path = "";
-  if (std::holds_alternative<BootParameters::Disc>(boot->parameters))
-  {
-    path = std::get<BootParameters::Disc>(boot->parameters).path;
-  }
-  AchievementManager::GetInstance()->LoadGameByFilenameAsync(
-      path, [](AchievementManager::ResponseType r_type) {});
-#endif  // USE_RETRO_ACHIEVEMENTS
+  AchievementManager::GetInstance().CloseGame();
 
-  const bool load_ipl = !StartUp.bWii && !Config::Get(Config::MAIN_SKIP_IPL) &&
+  const bool load_ipl = !system.IsWii() && !Config::Get(Config::MAIN_SKIP_IPL) &&
                         std::holds_alternative<BootParameters::Disc>(boot->parameters);
   if (load_ipl)
   {
     return Core::Init(
+        system,
         std::make_unique<BootParameters>(
             BootParameters::IPL{StartUp.m_region,
                                 std::move(std::get<BootParameters::Disc>(boot->parameters))},
             std::move(boot->boot_session_data)),
         wsi);
   }
-  return Core::Init(std::move(boot), wsi);
+  return Core::Init(system, std::move(boot), wsi);
 }
 
 // SYSCONF can be modified during emulation by the user and internally, which makes it

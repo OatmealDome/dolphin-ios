@@ -4,6 +4,7 @@
 #pragma once
 
 #include <chrono>
+#include <limits>
 #include <memory>
 #include <mutex>
 #include <optional>
@@ -36,6 +37,12 @@ constexpr ControlState BATTERY_INPUT_MAX_VALUE = 100.0;
 
 namespace Core
 {
+enum class DeviceRemoval
+{
+  Remove,
+  Keep,
+};
+
 class Device
 {
 public:
@@ -58,6 +65,10 @@ public:
     // May be overridden to allow multiple valid names.
     // Useful for backwards-compatible configurations when names change.
     virtual bool IsMatchingName(std::string_view name) const;
+
+    // May be overridden to hide in UI.
+    // Useful for backwards-compatible configurations when names change.
+    virtual bool IsHidden() const;
   };
 
   //
@@ -118,7 +129,7 @@ public:
   virtual std::string GetName() const = 0;
   virtual std::string GetSource() const = 0;
   std::string GetQualifiedName() const;
-  virtual void UpdateInput() {}
+  virtual DeviceRemoval UpdateInput() { return DeviceRemoval::Keep; }
 
   // May be overridden to implement hotplug removal.
   // Currently handled on a per-backend basis but this could change.
@@ -137,6 +148,7 @@ public:
   // A higher priority means it will be one of the first ones (smaller index), making it more
   // likely to be index 0, which is automatically set as the default device when there isn't one.
   // Every platform should have at least one device with priority >= 0.
+  static constexpr int DEFAULT_DEVICE_SORT_PRIORITY = std::numeric_limits<int>::max();
   virtual int GetSortPriority() const { return 0; }
 
   const std::vector<Input*>& Inputs() const { return m_inputs; }
@@ -157,6 +169,8 @@ protected:
     FullAnalogSurface(Input* low, Input* high) : m_low(*low), m_high(*high) {}
     ControlState GetState() const override;
     std::string GetName() const override;
+    bool IsDetectable() const override;
+    bool IsHidden() const override;
     bool IsMatchingName(std::string_view name) const override;
 
   private:
@@ -242,7 +256,8 @@ public:
   std::recursive_mutex& GetDevicesMutex() const { return m_devices_mutex; }
 
 protected:
-  // Exclusively needed when reading/writing "m_devices"
+  // Exclusively needed when reading/writing the "m_devices" array.
+  // Not needed when individually readring/writing a single device ptr.
   mutable std::recursive_mutex m_devices_mutex;
   std::vector<std::shared_ptr<Device>> m_devices;
 };

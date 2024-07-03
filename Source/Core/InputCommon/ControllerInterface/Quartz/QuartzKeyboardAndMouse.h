@@ -62,13 +62,14 @@ private:
   };
 
 public:
-  void UpdateInput() override;
+  Core::DeviceRemoval UpdateInput() override;
 
   explicit KeyboardAndMouse(void* view);
   ~KeyboardAndMouse() override;
 
   std::string GetName() const override;
   std::string GetSource() const override;
+  int GetSortPriority() const override;
 
 private:
   void MainThreadInitialization(void* view);

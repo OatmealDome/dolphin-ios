@@ -4,6 +4,7 @@
 #include "VideoCommon/Present.h"
 
 #include "Common/ChunkFile.h"
+#include "Core/Config/GraphicsSettings.h"
 #include "Core/HW/VideoInterface.h"
 #include "Core/Host.h"
 #include "Core/System.h"
@@ -13,6 +14,7 @@
 #include "Present.h"
 #include "VideoCommon/AbstractGfx.h"
 #include "VideoCommon/FrameDumper.h"
+#include "VideoCommon/FramebufferManager.h"
 #include "VideoCommon/OnScreenUI.h"
 #include "VideoCommon/PostProcessing.h"
 #include "VideoCommon/Statistics.h"
@@ -25,9 +27,69 @@ std::unique_ptr<VideoCommon::Presenter> g_presenter;
 
 namespace VideoCommon
 {
-static float AspectToWidescreen(float aspect)
+// Stretches the native/internal analog resolution aspect ratio from ~4:3 to ~16:9
+static float SourceAspectRatioToWidescreen(float source_aspect)
 {
-  return aspect * ((16.0f / 9.0f) / (4.0f / 3.0f));
+  return source_aspect * ((16.0f / 9.0f) / (4.0f / 3.0f));
+}
+
+static std::tuple<int, int> FindClosestIntegerResolution(float width, float height,
+                                                         float aspect_ratio)
+{
+  // We can't round both the x and y resolution as that might generate an aspect ratio
+  // further away from the target one, we also can't either ceil or floor both sides,
+  // so we find the combination or flooring and ceiling that is closest to the target ar.
+  const int ceiled_width = static_cast<int>(std::ceil(width));
+  const int ceiled_height = static_cast<int>(std::ceil(height));
+  const int floored_width = static_cast<int>(std::floor(width));
+  const int floored_height = static_cast<int>(std::floor(height));
+
+  int int_width = floored_width;
+  int int_height = floored_height;
+
+  float min_aspect_ratio_distance = std::numeric_limits<float>::max();
+  for (const int new_width : std::array<int, 2>{ceiled_width, floored_width})
+  {
+    for (const int new_height : std::array<int, 2>{ceiled_height, floored_height})
+    {
+      const float new_aspect_ratio = static_cast<float>(new_width) / new_height;
+      const float aspect_ratio_distance = std::abs((new_aspect_ratio / aspect_ratio) - 1.f);
+      if (aspect_ratio_distance < min_aspect_ratio_distance)
+      {
+        min_aspect_ratio_distance = aspect_ratio_distance;
+        int_width = new_width;
+        int_height = new_height;
+      }
+    }
+  }
+
+  return std::make_tuple(int_width, int_height);
+}
+
+static void TryToSnapToXFBSize(int& width, int& height, int xfb_width, int xfb_height)
+{
+  // Screen is blanking (e.g. game booting up), nothing to do here
+  if (xfb_width == 0 || xfb_height == 0)
+    return;
+
+  // If there's only 1 pixel of either horizontal or vertical resolution difference,
+  // make the output size match a multiple of the XFB native resolution,
+  // to achieve the highest quality (least scaling).
+  // The reason why the threshold is 1 pixel (per internal resolution multiplier) is because of
+  // minor inaccuracies of the VI aspect ratio (and because some resolutions are rounded
+  // while other are floored).
+  const unsigned int efb_scale = g_framebuffer_manager->GetEFBScale();
+  const unsigned int pixel_difference_width = std::abs(width - xfb_width);
+  const unsigned int pixel_difference_height = std::abs(height - xfb_height);
+  // We ignore this if there's an offset on both hor and ver size,
+  // as then we'd be changing the aspect ratio too much and would need to
+  // re-calculate a lot of stuff (like black bars).
+  if ((pixel_difference_width <= efb_scale && pixel_difference_height == 0) ||
+      (pixel_difference_height <= efb_scale && pixel_difference_width == 0))
+  {
+    width = xfb_width;
+    height = xfb_height;
+  }
 }
 
 Presenter::Presenter()
@@ -75,6 +137,7 @@ bool Presenter::FetchXFB(u32 xfb_addr, u32 fb_width, u32 fb_stride, u32 fb_heigh
   {
     // Game is blanking the screen
     m_xfb_entry.reset();
+    m_xfb_rect = MathUtil::Rectangle<int>();
     m_last_xfb_id = std::numeric_limits<u64>::max();
   }
   else
@@ -112,6 +175,25 @@ void Presenter::ViSwap(u32 xfb_addr, u32 fb_width, u32 fb_stride, u32 fb_height,
     present_info.reason = PresentInfo::PresentReason::VideoInterface;
   }
 
+  if (m_xfb_entry)
+  {
+    // With no references, this XFB copy wasn't stitched together
+    // so just use its name directly
+    if (m_xfb_entry->references.empty())
+    {
+      if (!m_xfb_entry->texture_info_name.empty())
+        present_info.xfb_copy_hashes.push_back(m_xfb_entry->texture_info_name);
+    }
+    else
+    {
+      for (const auto& reference : m_xfb_entry->references)
+      {
+        if (!reference->texture_info_name.empty())
+          present_info.xfb_copy_hashes.push_back(reference->texture_info_name);
+      }
+    }
+  }
+
   BeforePresentEvent::Trigger(present_info);
 
   if (!is_duplicate || !g_ActiveConfig.bSkipPresentingDuplicateXFBs)
@@ -146,18 +228,61 @@ void Presenter::ProcessFrameDumping(u64 ticks) const
   if (g_frame_dumper->IsFrameDumping() && m_xfb_entry)
   {
     MathUtil::Rectangle<int> target_rect;
-    if (!g_ActiveConfig.bInternalResolutionFrameDumps && !g_gfx->IsHeadless())
+    switch (g_ActiveConfig.frame_dumps_resolution_type)
     {
-      target_rect = GetTargetRectangle();
+    default:
+    case FrameDumpResolutionType::WindowResolution:
+    {
+      if (!g_gfx->IsHeadless())
+      {
+        target_rect = GetTargetRectangle();
+        break;
+      }
+      [[fallthrough]];
     }
-    else
+    case FrameDumpResolutionType::XFBAspectRatioCorrectedResolution:
     {
-      int width, height;
-      std::tie(width, height) =
-          CalculateOutputDimensions(m_xfb_rect.GetWidth(), m_xfb_rect.GetHeight());
-      target_rect = MathUtil::Rectangle<int>(0, 0, width, height);
+      target_rect = m_xfb_rect;
+      const bool allow_stretch = false;
+      auto [float_width, float_height] =
+          ScaleToDisplayAspectRatio(m_xfb_rect.GetWidth(), m_xfb_rect.GetHeight(), allow_stretch);
+      const float draw_aspect_ratio = CalculateDrawAspectRatio(allow_stretch);
+      auto [int_width, int_height] =
+          FindClosestIntegerResolution(float_width, float_height, draw_aspect_ratio);
+      target_rect = MathUtil::Rectangle<int>(0, 0, int_width, int_height);
+      break;
+    }
+    case FrameDumpResolutionType::XFBRawResolution:
+    {
+      target_rect = m_xfb_rect;
+      break;
+    }
     }
 
+    int width = target_rect.GetWidth();
+    int height = target_rect.GetHeight();
+
+    const int resolution_lcm = g_frame_dumper->GetRequiredResolutionLeastCommonMultiple();
+
+    // Ensure divisibility by the dumper LCM and a min of 1 to make it compatible with all the
+    // video encoders. Note that this is theoretically only necessary when recording videos and not
+    // screenshots.
+    // We always scale positively to make sure the least amount of information is lost.
+    //
+    // TODO: this should be added as black padding on the edges by the frame dumper.
+    if ((width % resolution_lcm) != 0 || width == 0)
+      width += resolution_lcm - (width % resolution_lcm);
+    if ((height % resolution_lcm) != 0 || height == 0)
+      height += resolution_lcm - (height % resolution_lcm);
+
+    // Remove any black borders, there would be no point in including them in the recording
+    target_rect.left = 0;
+    target_rect.top = 0;
+    target_rect.right = width;
+    target_rect.bottom = height;
+
+    // TODO: any scaling done by this won't be gamma corrected,
+    // we should either apply post processing as well, or port its gamma correction code
     g_frame_dumper->DumpCurrentFrame(m_xfb_entry->texture.get(), m_xfb_rect, target_rect, ticks,
                                      m_frame_count);
   }
@@ -165,20 +290,46 @@ void Presenter::ProcessFrameDumping(u64 ticks) const
 
 void Presenter::SetBackbuffer(int backbuffer_width, int backbuffer_height)
 {
+  const bool is_first = m_backbuffer_width == 0 && m_backbuffer_height == 0;
+  const bool size_changed =
+      (m_backbuffer_width != backbuffer_width || m_backbuffer_height != backbuffer_height);
   m_backbuffer_width = backbuffer_width;
   m_backbuffer_height = backbuffer_height;
   UpdateDrawRectangle();
+
+  OnBackbufferSet(size_changed, is_first);
 }
 
 void Presenter::SetBackbuffer(SurfaceInfo info)
 {
+  const bool is_first = m_backbuffer_width == 0 && m_backbuffer_height == 0;
+  const bool size_changed =
+      (m_backbuffer_width != (int)info.width || m_backbuffer_height != (int)info.height);
   m_backbuffer_width = info.width;
   m_backbuffer_height = info.height;
   m_backbuffer_scale = info.scale;
   m_backbuffer_format = info.format;
   if (m_onscreen_ui)
     m_onscreen_ui->SetScale(info.scale);
+
+  OnBackbufferSet(size_changed, is_first);
+}
+
+void Presenter::OnBackbufferSet(bool size_changed, bool is_first_set)
+{
   UpdateDrawRectangle();
+
+  // Automatically update the resolution scale if the window size changed,
+  // or if the game XFB resolution changed.
+  if (size_changed && !is_first_set && g_ActiveConfig.iEFBScale == EFB_SCALE_AUTO_INTEGRAL &&
+      m_auto_resolution_scale != AutoIntegralScale())
+  {
+    g_framebuffer_manager->RecreateEFBFramebuffer();
+  }
+  if (size_changed || is_first_set)
+  {
+    m_auto_resolution_scale = AutoIntegralScale();
+  }
 }
 
 void Presenter::ConfigChanged(u32 changed_bits)
@@ -244,24 +395,43 @@ Presenter::ConvertStereoRectangle(const MathUtil::Rectangle<int>& rc) const
   return std::make_tuple(left_rc, right_rc);
 }
 
-float Presenter::CalculateDrawAspectRatio() const
+float Presenter::CalculateDrawAspectRatio(bool allow_stretch) const
 {
-  const auto aspect_mode = g_ActiveConfig.aspect_mode;
+  auto aspect_mode = g_ActiveConfig.aspect_mode;
+
+  if (!allow_stretch && aspect_mode == AspectMode::Stretch)
+    aspect_mode = AspectMode::Auto;
 
   // If stretch is enabled, we prefer the aspect ratio of the window.
   if (aspect_mode == AspectMode::Stretch)
     return (static_cast<float>(m_backbuffer_width) / static_cast<float>(m_backbuffer_height));
 
-  auto& vi = Core::System::GetInstance().GetVideoInterface();
-  const float aspect_ratio = vi.GetAspectRatio();
+  // The actual aspect ratio of the XFB texture is irrelevant, the VI one is the one that matters
+  const auto& vi = Core::System::GetInstance().GetVideoInterface();
+  const float source_aspect_ratio = vi.GetAspectRatio();
 
-  if (aspect_mode == AspectMode::AnalogWide ||
+  // This will scale up the source ~4:3 resolution to its equivalent ~16:9 resolution
+  if (aspect_mode == AspectMode::ForceWide ||
       (aspect_mode == AspectMode::Auto && g_widescreen->IsGameWidescreen()))
   {
-    return AspectToWidescreen(aspect_ratio);
+    return SourceAspectRatioToWidescreen(source_aspect_ratio);
+  }
+  else if (aspect_mode == AspectMode::Custom)
+  {
+    return source_aspect_ratio * (g_ActiveConfig.GetCustomAspectRatio() / (4.0f / 3.0f));
+  }
+  // For the "custom stretch" mode, we force the exact target aspect ratio, without
+  // acknowleding the difference between the source aspect ratio and 4:3.
+  else if (aspect_mode == AspectMode::CustomStretch)
+  {
+    return g_ActiveConfig.GetCustomAspectRatio();
+  }
+  else if (aspect_mode == AspectMode::Raw)
+  {
+    return m_xfb_entry ? (static_cast<float>(m_last_xfb_width) / m_last_xfb_height) : 1.f;
   }
 
-  return aspect_ratio;
+  return source_aspect_ratio;
 }
 
 void Presenter::AdjustRectanglesToFitBounds(MathUtil::Rectangle<int>* target_rect,
@@ -326,14 +496,37 @@ void* Presenter::GetNewSurfaceHandle()
 
 u32 Presenter::AutoIntegralScale() const
 {
-  // Calculate a scale based on the window size
-  u32 width = EFB_WIDTH * m_target_rectangle.GetWidth() / m_last_xfb_width;
-  u32 height = EFB_HEIGHT * m_target_rectangle.GetHeight() / m_last_xfb_height;
-  return std::max((width - 1) / EFB_WIDTH + 1, (height - 1) / EFB_HEIGHT + 1);
+  // Take the source/native resolution (XFB) and stretch it on the target (window) aspect ratio.
+  // If the target resolution is larger (on either x or y), we scale the source
+  // by a integer multiplier until it won't have to be scaled up anymore.
+  // NOTE: this might conflict with "Config::MAIN_RENDER_WINDOW_AUTOSIZE",
+  // as they mutually influence each other.
+  u32 source_width = m_last_xfb_width;
+  u32 source_height = m_last_xfb_height;
+  const u32 target_width = m_target_rectangle.GetWidth();
+  const u32 target_height = m_target_rectangle.GetHeight();
+  const float source_aspect_ratio = (float)source_width / source_height;
+  const float target_aspect_ratio = (float)target_width / target_height;
+  if (source_aspect_ratio >= target_aspect_ratio)
+    source_width = std::round(source_height * target_aspect_ratio);
+  else
+    source_height = std::round(source_width / target_aspect_ratio);
+  const u32 width_scale =
+      source_width > 0 ? ((target_width + (source_width - 1)) / source_width) : 1;
+  const u32 height_scale =
+      source_height > 0 ? ((target_height + (source_height - 1)) / source_height) : 1;
+  // Limit to the max to avoid creating textures larger than their max supported resolution.
+  return std::min(std::max(width_scale, height_scale),
+                  static_cast<u32>(Config::Get(Config::GFX_MAX_EFB_SCALE)));
 }
-void Presenter::SetWindowSize(int width, int height)
+
+void Presenter::SetSuggestedWindowSize(int width, int height)
 {
-  const auto [out_width, out_height] = g_presenter->CalculateOutputDimensions(width, height);
+  // While trying to guess the best window resolution, we can't allow it to use the
+  // "AspectMode::Stretch" setting because that would self influence the output result,
+  // given it would be based on the previous frame resolution
+  const bool allow_stretch = false;
+  const auto [out_width, out_height] = CalculateOutputDimensions(width, height, allow_stretch);
 
   // Track the last values of width/height to avoid sending a window resize event every frame.
   if (out_width == m_last_window_request_width && out_height == m_last_window_request_height)
@@ -341,24 +534,47 @@ void Presenter::SetWindowSize(int width, int height)
 
   m_last_window_request_width = out_width;
   m_last_window_request_height = out_height;
+  // Pass in the suggested window size. This might not always be acknowledged.
   Host_RequestRenderWindowSize(out_width, out_height);
 }
 
-// Crop to exactly 16:9 or 4:3 if enabled and not AspectMode::Stretch.
-std::tuple<float, float> Presenter::ApplyStandardAspectCrop(float width, float height) const
+// Crop to exact forced aspect ratios if enabled and not AspectMode::Stretch.
+std::tuple<float, float> Presenter::ApplyStandardAspectCrop(float width, float height,
+                                                            bool allow_stretch) const
 {
-  const auto aspect_mode = g_ActiveConfig.aspect_mode;
+  auto aspect_mode = g_ActiveConfig.aspect_mode;
 
-  if (!g_ActiveConfig.bCrop || aspect_mode == AspectMode::Stretch)
+  if (!allow_stretch && aspect_mode == AspectMode::Stretch)
+    aspect_mode = AspectMode::Auto;
+
+  if (!g_ActiveConfig.bCrop || aspect_mode == AspectMode::Stretch || aspect_mode == AspectMode::Raw)
     return {width, height};
 
-  // Force 4:3 or 16:9 by cropping the image.
+  // Force aspect ratios by cropping the image.
   const float current_aspect = width / height;
-  const float expected_aspect =
-      (aspect_mode == AspectMode::AnalogWide ||
-       (aspect_mode == AspectMode::Auto && g_widescreen->IsGameWidescreen())) ?
-          (16.0f / 9.0f) :
-          (4.0f / 3.0f);
+  float expected_aspect;
+  switch (aspect_mode)
+  {
+  default:
+  case AspectMode::Auto:
+    expected_aspect = g_widescreen->IsGameWidescreen() ? (16.0f / 9.0f) : (4.0f / 3.0f);
+    break;
+  case AspectMode::ForceWide:
+    expected_aspect = 16.0f / 9.0f;
+    break;
+  case AspectMode::ForceStandard:
+    expected_aspect = 4.0f / 3.0f;
+    break;
+  // For the custom (relative) case, we want to crop from the native aspect ratio
+  // to the specific target one, as they likely have a small difference
+  case AspectMode::Custom:
+  // There should be no cropping needed in the custom strech case,
+  // as output should always exactly match the target aspect ratio
+  case AspectMode::CustomStretch:
+    expected_aspect = g_ActiveConfig.GetCustomAspectRatio();
+    break;
+  }
+
   if (current_aspect > expected_aspect)
   {
     // keep height, crop width
@@ -382,12 +598,14 @@ void Presenter::UpdateDrawRectangle()
   // Don't know if there is a better place for this code so there isn't a 1 frame delay
   if (g_ActiveConfig.bWidescreenHack)
   {
-    auto& vi = Core::System::GetInstance().GetVideoInterface();
-    float source_aspect = vi.GetAspectRatio();
+    const auto& vi = Core::System::GetInstance().GetVideoInterface();
+    float source_aspect_ratio = vi.GetAspectRatio();
+    // If the game is meant to be in widescreen (or forced to),
+    // scale the source aspect ratio to it.
     if (g_widescreen->IsGameWidescreen())
-      source_aspect = AspectToWidescreen(source_aspect);
+      source_aspect_ratio = SourceAspectRatioToWidescreen(source_aspect_ratio);
 
-    const float adjust = source_aspect / draw_aspect_ratio;
+    const float adjust = source_aspect_ratio / draw_aspect_ratio;
     if (adjust > 1)
     {
       // Vert+
@@ -411,20 +629,23 @@ void Presenter::UpdateDrawRectangle()
   // The rendering window size
   const float win_width = static_cast<float>(m_backbuffer_width);
   const float win_height = static_cast<float>(m_backbuffer_height);
+  const float win_aspect_ratio = win_width / win_height;
 
   // FIXME: this breaks at very low widget sizes
   // Make ControllerInterface aware of the render window region actually being used
   // to adjust mouse cursor inputs.
-  g_controller_interface.SetAspectRatioAdjustment(draw_aspect_ratio / (win_width / win_height));
+  // This also fails to acknowledge "g_ActiveConfig.bCrop".
+  g_controller_interface.SetAspectRatioAdjustment(draw_aspect_ratio / win_aspect_ratio);
 
   float draw_width = draw_aspect_ratio;
   float draw_height = 1;
 
   // Crop the picture to a standard aspect ratio. (if enabled)
   auto [crop_width, crop_height] = ApplyStandardAspectCrop(draw_width, draw_height);
+  const float crop_aspect_ratio = crop_width / crop_height;
 
   // scale the picture to fit the rendering window
-  if (win_width / win_height >= crop_width / crop_height)
+  if (win_aspect_ratio >= crop_aspect_ratio)
   {
     // the window is flatter than the picture
     draw_width *= win_height / crop_height;
@@ -441,27 +662,50 @@ void Presenter::UpdateDrawRectangle()
     crop_width = win_width;
   }
 
-  // ensure divisibility by 4 to make it compatible with all the video encoders
-  if (g_frame_dumper->IsFrameDumping())
+  int int_draw_width;
+  int int_draw_height;
+
+  if (g_ActiveConfig.aspect_mode != AspectMode::Raw || !m_xfb_entry)
   {
-    draw_width = std::ceil(draw_width) - static_cast<int>(std::ceil(draw_width)) % 4;
-    draw_height = std::ceil(draw_height) - static_cast<int>(std::ceil(draw_height)) % 4;
+    // Find the best integer resolution: the closest aspect ratio with the least black bars.
+    // This should have no influence if "AspectMode::Stretch" is active.
+    const float updated_draw_aspect_ratio = draw_width / draw_height;
+    const auto int_draw_res =
+        FindClosestIntegerResolution(draw_width, draw_height, updated_draw_aspect_ratio);
+    int_draw_width = std::get<0>(int_draw_res);
+    int_draw_height = std::get<1>(int_draw_res);
+    if (!g_ActiveConfig.bCrop)
+    {
+      if (g_ActiveConfig.aspect_mode != AspectMode::Stretch)
+      {
+        TryToSnapToXFBSize(int_draw_width, int_draw_height, m_xfb_rect.GetWidth(),
+                           m_xfb_rect.GetHeight());
+      }
+      // We can't draw something bigger than the window, it will crop
+      int_draw_width = std::min(int_draw_width, static_cast<int>(win_width));
+      int_draw_height = std::min(int_draw_height, static_cast<int>(win_height));
+    }
+  }
+  else
+  {
+    int_draw_width = m_xfb_rect.GetWidth();
+    int_draw_height = m_xfb_rect.GetHeight();
   }
 
-  m_target_rectangle.left = static_cast<int>(std::round(win_width / 2.0 - draw_width / 2.0));
-  m_target_rectangle.top = static_cast<int>(std::round(win_height / 2.0 - draw_height / 2.0));
-  m_target_rectangle.right = m_target_rectangle.left + static_cast<int>(draw_width);
-  m_target_rectangle.bottom = m_target_rectangle.top + static_cast<int>(draw_height);
+  m_target_rectangle.left = static_cast<int>(std::round(win_width / 2.0 - int_draw_width / 2.0));
+  m_target_rectangle.top = static_cast<int>(std::round(win_height / 2.0 - int_draw_height / 2.0));
+  m_target_rectangle.right = m_target_rectangle.left + int_draw_width;
+  m_target_rectangle.bottom = m_target_rectangle.top + int_draw_height;
 }
 
-std::tuple<float, float> Presenter::ScaleToDisplayAspectRatio(const int width,
-                                                              const int height) const
+std::tuple<float, float> Presenter::ScaleToDisplayAspectRatio(const int width, const int height,
+                                                              bool allow_stretch) const
 {
   // Scale either the width or height depending the content aspect ratio.
   // This way we preserve as much resolution as possible when scaling.
   float scaled_width = static_cast<float>(width);
   float scaled_height = static_cast<float>(height);
-  const float draw_aspect = CalculateDrawAspectRatio();
+  const float draw_aspect = CalculateDrawAspectRatio(allow_stretch);
   if (scaled_width / scaled_height >= draw_aspect)
     scaled_height = scaled_width / draw_aspect;
   else
@@ -469,23 +713,43 @@ std::tuple<float, float> Presenter::ScaleToDisplayAspectRatio(const int width,
   return std::make_tuple(scaled_width, scaled_height);
 }
 
-std::tuple<int, int> Presenter::CalculateOutputDimensions(int width, int height) const
+std::tuple<int, int> Presenter::CalculateOutputDimensions(int width, int height,
+                                                          bool allow_stretch) const
 {
+  // Protect against zero width and height, a minimum of 1 will do
   width = std::max(width, 1);
   height = std::max(height, 1);
 
-  auto [scaled_width, scaled_height] = ScaleToDisplayAspectRatio(width, height);
+  auto [scaled_width, scaled_height] = ScaleToDisplayAspectRatio(width, height, allow_stretch);
 
   // Apply crop if enabled.
-  std::tie(scaled_width, scaled_height) = ApplyStandardAspectCrop(scaled_width, scaled_height);
+  std::tie(scaled_width, scaled_height) =
+      ApplyStandardAspectCrop(scaled_width, scaled_height, allow_stretch);
 
-  width = static_cast<int>(std::ceil(scaled_width));
-  height = static_cast<int>(std::ceil(scaled_height));
+  auto aspect_mode = g_ActiveConfig.aspect_mode;
 
-  // UpdateDrawRectangle() makes sure that the rendered image is divisible by four for video
-  // encoders, so do that here too to match it
-  width -= width % 4;
-  height -= height % 4;
+  if (!allow_stretch && aspect_mode == AspectMode::Stretch)
+    aspect_mode = AspectMode::Auto;
+
+  if (!g_ActiveConfig.bCrop && aspect_mode != AspectMode::Stretch)
+  {
+    // Find the closest integer resolution for the aspect ratio,
+    // this avoids a small black line from being drawn on one of the four edges
+    const float draw_aspect_ratio = CalculateDrawAspectRatio(allow_stretch);
+    auto [int_width, int_height] =
+        FindClosestIntegerResolution(scaled_width, scaled_height, draw_aspect_ratio);
+    if (aspect_mode != AspectMode::Raw)
+    {
+      TryToSnapToXFBSize(int_width, int_height, m_xfb_rect.GetWidth(), m_xfb_rect.GetHeight());
+    }
+    width = int_width;
+    height = int_height;
+  }
+  else
+  {
+    width = static_cast<int>(std::ceil(scaled_width));
+    height = static_cast<int>(std::ceil(scaled_height));
+  }
 
   return std::make_tuple(width, height);
 }
@@ -514,9 +778,11 @@ void Presenter::RenderXFBToScreen(const MathUtil::Rectangle<int>& target_rc,
     m_post_processor->BlitFromTexture(left_rc, source_rc, source_texture, 0);
     m_post_processor->BlitFromTexture(right_rc, source_rc, source_texture, 1);
   }
+  // Every other case will be treated the same (stereo or not).
+  // If there's multiple source layers, they should all be copied.
   else
   {
-    m_post_processor->BlitFromTexture(target_rc, source_rc, source_texture, 0);
+    m_post_processor->BlitFromTexture(target_rc, source_rc, source_texture);
   }
 }
 
@@ -537,7 +803,7 @@ void Presenter::Present()
 
       // Update the window size based on the frame that was just rendered.
       // Due to depending on guest state, we need to call this every frame.
-      SetWindowSize(m_xfb_rect.GetWidth(), m_xfb_rect.GetHeight());
+      SetSuggestedWindowSize(m_xfb_rect.GetWidth(), m_xfb_rect.GetHeight());
     }
     return;
   }
@@ -579,7 +845,7 @@ void Presenter::Present()
   {
     // Update the window size based on the frame that was just rendered.
     // Due to depending on guest state, we need to call this every frame.
-    SetWindowSize(m_xfb_rect.GetWidth(), m_xfb_rect.GetHeight());
+    SetSuggestedWindowSize(m_xfb_rect.GetWidth(), m_xfb_rect.GetHeight());
   }
 
   if (m_onscreen_ui)
@@ -621,12 +887,12 @@ void Presenter::DoState(PointerWrap& p)
   p.Do(m_last_xfb_stride);
   p.Do(m_last_xfb_height);
 
-  if (p.IsReadMode())
+  // If we're loading and there is a last XFB, re-display it.
+  if (p.IsReadMode() && m_last_xfb_stride != 0)
   {
     // This technically counts as the end of the frame
-    AfterFrameEvent::Trigger();
+    AfterFrameEvent::Trigger(Core::System::GetInstance());
 
-    // re-display the most recent XFB
     ImmediateSwap(m_last_xfb_addr, m_last_xfb_width, m_last_xfb_stride, m_last_xfb_height,
                   m_last_xfb_ticks);
   }

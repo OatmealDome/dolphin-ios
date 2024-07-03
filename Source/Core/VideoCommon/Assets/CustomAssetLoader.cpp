@@ -3,7 +3,6 @@
 
 #include "VideoCommon/Assets/CustomAssetLoader.h"
 
-#include "Common/Logging/Log.h"
 #include "Common/MemoryUtil.h"
 #include "VideoCommon/Assets/CustomAssetLibrary.h"
 
@@ -48,19 +47,22 @@ void CustomAssetLoader::Init()
   m_asset_load_thread.Reset("Custom Asset Loader", [this](std::weak_ptr<CustomAsset> asset) {
     if (auto ptr = asset.lock())
     {
+      if (m_memory_exceeded)
+        return;
+
       if (ptr->Load())
       {
         std::lock_guard lk(m_asset_load_lock);
         const std::size_t asset_memory_size = ptr->GetByteSizeInMemory();
-        if (m_max_memory_available >= m_total_bytes_loaded + asset_memory_size)
+        m_total_bytes_loaded += asset_memory_size;
+        m_assets_to_monitor.try_emplace(ptr->GetAssetId(), ptr);
+        if (m_total_bytes_loaded > m_max_memory_available)
         {
-          m_total_bytes_loaded += asset_memory_size;
-          m_assets_to_monitor.try_emplace(ptr->GetAssetId(), ptr);
-        }
-        else
-        {
-          ERROR_LOG_FMT(VIDEO, "Failed to load asset {} because there was not enough memory.",
+          ERROR_LOG_FMT(VIDEO,
+                        "Asset memory exceeded with asset '{}', future assets won't load until "
+                        "memory is available.",
                         ptr->GetAssetId());
+          m_memory_exceeded = true;
         }
       }
     }
@@ -77,17 +79,30 @@ void CustomAssetLoader ::Shutdown()
   m_total_bytes_loaded = 0;
 }
 
-std::shared_ptr<RawTextureAsset>
-CustomAssetLoader::LoadTexture(const CustomAssetLibrary::AssetID& asset_id,
-                               std::shared_ptr<CustomAssetLibrary> library)
-{
-  return LoadOrCreateAsset<RawTextureAsset>(asset_id, m_textures, std::move(library));
-}
-
 std::shared_ptr<GameTextureAsset>
 CustomAssetLoader::LoadGameTexture(const CustomAssetLibrary::AssetID& asset_id,
                                    std::shared_ptr<CustomAssetLibrary> library)
 {
   return LoadOrCreateAsset<GameTextureAsset>(asset_id, m_game_textures, std::move(library));
+}
+
+std::shared_ptr<PixelShaderAsset>
+CustomAssetLoader::LoadPixelShader(const CustomAssetLibrary::AssetID& asset_id,
+                                   std::shared_ptr<CustomAssetLibrary> library)
+{
+  return LoadOrCreateAsset<PixelShaderAsset>(asset_id, m_pixel_shaders, std::move(library));
+}
+
+std::shared_ptr<MaterialAsset>
+CustomAssetLoader::LoadMaterial(const CustomAssetLibrary::AssetID& asset_id,
+                                std::shared_ptr<CustomAssetLibrary> library)
+{
+  return LoadOrCreateAsset<MaterialAsset>(asset_id, m_materials, std::move(library));
+}
+
+std::shared_ptr<MeshAsset> CustomAssetLoader::LoadMesh(const CustomAssetLibrary::AssetID& asset_id,
+                                                       std::shared_ptr<CustomAssetLibrary> library)
+{
+  return LoadOrCreateAsset<MeshAsset>(asset_id, m_meshes, std::move(library));
 }
 }  // namespace VideoCommon

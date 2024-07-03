@@ -14,7 +14,9 @@
 #include "Core/ConfigManager.h"
 #include "Core/PatchEngine.h"
 
+#include "DolphinQt/Config/HardcoreWarningWidget.h"
 #include "DolphinQt/Config/NewPatchDialog.h"
+#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 
 #include "UICommon/GameFile.h"
 
@@ -39,23 +41,38 @@ PatchesWidget::PatchesWidget(const UICommon::GameFile& game)
 
 void PatchesWidget::CreateWidgets()
 {
+#ifdef USE_RETRO_ACHIEVEMENTS
+  m_hc_warning = new HardcoreWarningWidget(this);
+#endif  // USE_RETRO_ACHIEVEMENTS
   m_list = new QListWidget;
   m_add_button = new QPushButton(tr("&Add..."));
   m_edit_button = new QPushButton();
   m_remove_button = new QPushButton(tr("&Remove"));
 
-  auto* layout = new QGridLayout;
+  auto* grid_layout = new QGridLayout;
 
-  layout->addWidget(m_list, 0, 0, 1, -1);
-  layout->addWidget(m_add_button, 1, 0);
-  layout->addWidget(m_edit_button, 1, 2);
-  layout->addWidget(m_remove_button, 1, 1);
+  grid_layout->addWidget(m_list, 0, 0, 1, -1);
+  grid_layout->addWidget(m_add_button, 1, 0);
+  grid_layout->addWidget(m_edit_button, 1, 2);
+  grid_layout->addWidget(m_remove_button, 1, 1);
+
+  auto* layout = new QVBoxLayout;
+
+#ifdef USE_RETRO_ACHIEVEMENTS
+  layout->addWidget(m_hc_warning);
+#endif  // USE_RETRO_ACHIEVEMENTS
+  layout->addLayout(grid_layout);
 
   setLayout(layout);
 }
 
 void PatchesWidget::ConnectWidgets()
 {
+#ifdef USE_RETRO_ACHIEVEMENTS
+  connect(m_hc_warning, &HardcoreWarningWidget::OpenAchievementSettings, this,
+          &PatchesWidget::OpenAchievementSettings);
+#endif  // USE_RETRO_ACHIEVEMENTS
+
   connect(m_list, &QListWidget::itemSelectionChanged, this, &PatchesWidget::UpdateActions);
   connect(m_list, &QListWidget::itemChanged, this, &PatchesWidget::OnItemChanged);
   connect(m_remove_button, &QPushButton::clicked, this, &PatchesWidget::OnRemove);
@@ -74,7 +91,13 @@ void PatchesWidget::OnAdd()
   PatchEngine::Patch patch;
   patch.user_defined = true;
 
-  if (NewPatchDialog(this, patch).exec())
+  bool new_patch_confirmed = false;
+  {
+    NewPatchDialog dialog(this, patch);
+    SetQWidgetWindowDecorations(&dialog);
+    new_patch_confirmed = dialog.exec();
+  }
+  if (new_patch_confirmed)
   {
     m_patches.push_back(patch);
     SavePatches();
@@ -98,7 +121,13 @@ void PatchesWidget::OnEdit()
     patch.name = tr("%1 (Copy)").arg(QString::fromStdString(patch.name)).toStdString();
   }
 
-  if (NewPatchDialog(this, patch).exec())
+  bool new_patch_confirmed = false;
+  {
+    NewPatchDialog dialog(this, patch);
+    SetQWidgetWindowDecorations(&dialog);
+    new_patch_confirmed = dialog.exec();
+  }
+  if (new_patch_confirmed)
   {
     if (patch.user_defined)
     {

@@ -28,11 +28,13 @@
 #include "Core/IOS/IOS.h"
 #include "Core/IOS/USB/Bluetooth/BTReal.h"
 #include "Core/NetPlayProto.h"
+#include "Core/System.h"
 #include "Core/WiiUtils.h"
 
 #include "DolphinQt/Config/Mapping/MappingWindow.h"
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
 #include "DolphinQt/QtUtils/NonDefaultQPushButton.h"
+#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/QtUtils/SignalBlocking.h"
 #include "DolphinQt/Settings.h"
 
@@ -44,10 +46,10 @@ WiimoteControllersWidget::WiimoteControllersWidget(QWidget* parent) : QWidget(pa
   ConnectWidgets();
 
   connect(&Settings::Instance(), &Settings::ConfigChanged, this,
-          [this] { LoadSettings(Core::GetState()); });
+          [this] { LoadSettings(Core::GetState(Core::System::GetInstance())); });
   connect(&Settings::Instance(), &Settings::EmulationStateChanged, this,
           [this](Core::State state) { LoadSettings(state); });
-  LoadSettings(Core::GetState());
+  LoadSettings(Core::GetState(Core::System::GetInstance()));
 }
 
 void WiimoteControllersWidget::UpdateBluetoothAvailableStatus()
@@ -171,16 +173,16 @@ void WiimoteControllersWidget::ConnectWidgets()
 {
   connect(m_wiimote_passthrough, &QRadioButton::toggled, this, [this] {
     SaveSettings();
-    LoadSettings(Core::GetState());
+    LoadSettings(Core::GetState(Core::System::GetInstance()));
   });
   connect(m_wiimote_ciface, &QCheckBox::toggled, this, [this] {
     SaveSettings();
-    LoadSettings(Core::GetState());
+    LoadSettings(Core::GetState(Core::System::GetInstance()));
     WiimoteReal::HandleWiimotesInControllerInterfaceSettingChange();
   });
   connect(m_wiimote_continuous_scanning, &QCheckBox::toggled, this, [this] {
     SaveSettings();
-    LoadSettings(Core::GetState());
+    LoadSettings(Core::GetState(Core::System::GetInstance()));
   });
 
   connect(m_wiimote_real_balance_board, &QCheckBox::toggled, this,
@@ -196,9 +198,9 @@ void WiimoteControllersWidget::ConnectWidgets()
 
   for (size_t i = 0; i < m_wiimote_groups.size(); i++)
   {
-    connect(m_wiimote_boxes[i], qOverload<int>(&QComboBox::currentIndexChanged), this, [this] {
+    connect(m_wiimote_boxes[i], &QComboBox::currentIndexChanged, this, [this] {
       SaveSettings();
-      LoadSettings(Core::GetState());
+      LoadSettings(Core::GetState(Core::System::GetInstance()));
     });
     connect(m_wiimote_buttons[i], &QPushButton::clicked, this,
             [this, i] { OnWiimoteConfigure(i); });
@@ -207,7 +209,7 @@ void WiimoteControllersWidget::ConnectWidgets()
 
 void WiimoteControllersWidget::OnBluetoothPassthroughResetPressed()
 {
-  const auto ios = IOS::HLE::GetIOS();
+  const auto ios = Core::System::GetInstance().GetIOS();
 
   if (!ios)
   {
@@ -224,7 +226,7 @@ void WiimoteControllersWidget::OnBluetoothPassthroughResetPressed()
 
 void WiimoteControllersWidget::OnBluetoothPassthroughSyncPressed()
 {
-  const auto ios = IOS::HLE::GetIOS();
+  const auto ios = Core::System::GetInstance().GetIOS();
 
   if (!ios)
   {
@@ -261,6 +263,7 @@ void WiimoteControllersWidget::OnWiimoteConfigure(size_t index)
   MappingWindow* window = new MappingWindow(this, type, static_cast<int>(index));
   window->setAttribute(Qt::WA_DeleteOnClose, true);
   window->setWindowModality(Qt::WindowModality::WindowModal);
+  SetQWidgetWindowDecorations(window);
   window->show();
 }
 
@@ -293,7 +296,7 @@ void WiimoteControllersWidget::LoadSettings(Core::State state)
   m_wiimote_emu->setEnabled(!running);
   m_wiimote_passthrough->setEnabled(!running);
 
-  const bool running_gc = running && !SConfig::GetInstance().bWii;
+  const bool running_gc = running && !Core::System::GetInstance().IsWii();
   const bool enable_passthrough = m_wiimote_passthrough->isChecked() && !running_gc;
   const bool enable_emu_bt = !m_wiimote_passthrough->isChecked() && !running_gc;
   const bool is_netplay = NetPlay::IsNetPlayRunning();

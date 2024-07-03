@@ -25,6 +25,7 @@
 #include "DolphinQt/QtUtils/DolphinFileDialog.h"
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
 #include "DolphinQt/QtUtils/ParallelProgressDialog.h"
+#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/Resources.h"
 
 #include "UICommon/UICommon.h"
@@ -225,6 +226,7 @@ void FilesystemWidget::ShowContextMenu(const QPoint&)
   auto* item = m_tree_model->itemFromIndex(selection->selectedIndexes()[0]);
 
   QMenu* menu = new QMenu(this);
+  menu->setAttribute(Qt::WA_DeleteOnClose, true);
 
   EntryType type = item->data(ENTRY_TYPE).value<EntryType>();
 
@@ -364,6 +366,7 @@ void FilesystemWidget::ExtractDirectory(const DiscIO::Partition& partition, cons
     dialog.Reset();
   });
 
+  SetQWidgetWindowDecorations(dialog.GetRaw());
   dialog.GetRaw()->exec();
   future.get();
 }

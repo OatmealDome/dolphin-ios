@@ -18,6 +18,7 @@
 #include "Common/MathUtil.h"
 #include "Common/StringUtil.h"
 #include "Common/Version.h"
+#include "Core/AchievementManager.h"
 #include "Core/Config/DefaultLocale.h"
 #include "Core/HW/EXI/EXI.h"
 #include "Core/HW/EXI/EXI_Device.h"
@@ -38,6 +39,8 @@ const Info<PowerPC::CPUCore> MAIN_CPU_CORE{{System::Main, "Core", "CPUCore"},
                                            PowerPC::DefaultCPUCore()};
 const Info<bool> MAIN_JIT_FOLLOW_BRANCH{{System::Main, "Core", "JITFollowBranch"}, true};
 const Info<bool> MAIN_FASTMEM{{System::Main, "Core", "Fastmem"}, true};
+const Info<bool> MAIN_FASTMEM_ARENA{{System::Main, "Core", "FastmemArena"}, true};
+const Info<bool> MAIN_LARGE_ENTRY_POINTS_MAP{{System::Main, "Core", "LargeEntryPointsMap"}, true};
 const Info<bool> MAIN_ACCURATE_CPU_CACHE{{System::Main, "Core", "AccurateCPUCache"}, false};
 const Info<bool> MAIN_DSP_HLE{{System::Main, "Core", "DSPHLE"}, true};
 const Info<int> MAIN_MAX_FALLBACK{{System::Main, "Core", "MaxFallback"}, 100};
@@ -133,7 +136,11 @@ const Info<bool> MAIN_BBA_XLINK_CHAT_OSD{{System::Main, "Core", "BBA_XLINK_CHAT_
 
 // Schthack PSO Server - https://schtserv.com/
 const Info<std::string> MAIN_BBA_BUILTIN_DNS{{System::Main, "Core", "BBA_BUILTIN_DNS"},
-                                             "149.56.167.128"};
+                                             "3.18.217.27"};
+const Info<std::string> MAIN_BBA_TAPSERVER_DESTINATION{
+    {System::Main, "Core", "BBA_TAPSERVER_DESTINATION"}, "/tmp/dolphin-tap"};
+const Info<std::string> MAIN_MODEM_TAPSERVER_DESTINATION{
+    {System::Main, "Core", "MODEM_TAPSERVER_DESTINATION"}, "/tmp/dolphin-modem-tap"};
 const Info<std::string> MAIN_BBA_BUILTIN_IP{{System::Main, "Core", "BBA_BUILTIN_IP"}, ""};
 
 const Info<SerialInterface::SIDevices>& GetInfoForSIDevice(int channel)
@@ -241,6 +248,7 @@ const Info<bool> MAIN_ALLOW_SD_WRITES{{System::Main, "Core", "WiiSDCardAllowWrit
 const Info<bool> MAIN_ENABLE_SAVESTATES{{System::Main, "Core", "EnableSaveStates"}, false};
 const Info<bool> MAIN_REAL_WII_REMOTE_REPEAT_REPORTS{
     {System::Main, "Core", "RealWiiRemoteRepeatReports"}, true};
+const Info<bool> MAIN_WII_WIILINK_ENABLE{{System::Main, "Core", "EnableWiiLink"}, false};
 
 // Empty means use the Dolphin default URL
 const Info<std::string> MAIN_WII_NUS_SHOP_URL{{System::Main, "Core", "WiiNusShopUrl"}, ""};
@@ -501,6 +509,8 @@ const Info<bool> MAIN_DEBUG_JIT_SYSTEM_REGISTERS_OFF{
 const Info<bool> MAIN_DEBUG_JIT_BRANCH_OFF{{System::Main, "Debug", "JitBranchOff"}, false};
 const Info<bool> MAIN_DEBUG_JIT_REGISTER_CACHE_OFF{{System::Main, "Debug", "JitRegisterCacheOff"},
                                                    false};
+const Info<bool> MAIN_DEBUG_JIT_ENABLE_PROFILING{{System::Main, "Debug", "JitEnableProfiling"},
+                                                 false};
 
 // Main.BluetoothPassthrough
 
@@ -736,4 +746,17 @@ bool IsDefaultGCIFolderPathConfigured(ExpansionInterface::Slot slot)
 {
   return Config::Get(GetInfoForGCIPath(slot)).empty();
 }
+
+bool AreCheatsEnabled()
+{
+  return Config::Get(::Config::MAIN_ENABLE_CHEATS) &&
+         !AchievementManager::GetInstance().IsHardcoreModeActive();
+}
+
+bool IsDebuggingEnabled()
+{
+  return Config::Get(::Config::MAIN_ENABLE_DEBUGGING) &&
+         !AchievementManager::GetInstance().IsHardcoreModeActive();
+}
+
 }  // namespace Config

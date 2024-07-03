@@ -124,7 +124,7 @@ void ProcessorInterfaceManager::RegisterMMIO(MMIO::Mapping* mmio, u32 base)
                    processor_interface.m_reset_code = val;
                    INFO_LOG_FMT(PROCESSORINTERFACE, "Wrote PI_RESET_CODE: {:08x}",
                                 processor_interface.m_reset_code);
-                   if (!SConfig::GetInstance().bWii && ~processor_interface.m_reset_code & 0x4)
+                   if (!system.IsWii() && (~processor_interface.m_reset_code & 0x4))
                    {
                      system.GetDVDInterface().ResetDrive(true);
                    }
@@ -232,7 +232,7 @@ void ProcessorInterfaceManager::ToggleResetButtonCallback(Core::System& system, 
 void ProcessorInterfaceManager::IOSNotifyResetButtonCallback(Core::System& system, u64 userdata,
                                                              s64 cyclesLate)
 {
-  const auto ios = IOS::HLE::GetIOS();
+  const auto ios = system.GetIOS();
   if (!ios)
     return;
 
@@ -244,7 +244,7 @@ void ProcessorInterfaceManager::IOSNotifyResetButtonCallback(Core::System& syste
 void ProcessorInterfaceManager::IOSNotifyPowerButtonCallback(Core::System& system, u64 userdata,
                                                              s64 cyclesLate)
 {
-  const auto ios = IOS::HLE::GetIOS();
+  const auto ios = system.GetIOS();
   if (!ios)
     return;
 
@@ -255,20 +255,20 @@ void ProcessorInterfaceManager::IOSNotifyPowerButtonCallback(Core::System& syste
 
 void ProcessorInterfaceManager::ResetButton_Tap()
 {
-  if (!Core::IsRunning())
+  if (!Core::IsRunning(m_system))
     return;
 
   auto& core_timing = m_system.GetCoreTiming();
   core_timing.ScheduleEvent(0, m_event_type_toggle_reset_button, true, CoreTiming::FromThread::ANY);
   core_timing.ScheduleEvent(0, m_event_type_ios_notify_reset_button, 0,
                             CoreTiming::FromThread::ANY);
-  core_timing.ScheduleEvent(SystemTimers::GetTicksPerSecond() / 2, m_event_type_toggle_reset_button,
-                            false, CoreTiming::FromThread::ANY);
+  core_timing.ScheduleEvent(m_system.GetSystemTimers().GetTicksPerSecond() / 2,
+                            m_event_type_toggle_reset_button, false, CoreTiming::FromThread::ANY);
 }
 
 void ProcessorInterfaceManager::PowerButton_Tap()
 {
-  if (!Core::IsRunning())
+  if (!Core::IsRunning(m_system))
     return;
 
   auto& core_timing = m_system.GetCoreTiming();

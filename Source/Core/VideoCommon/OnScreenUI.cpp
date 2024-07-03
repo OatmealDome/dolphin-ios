@@ -7,9 +7,11 @@
 #include "Common/Profiler.h"
 #include "Common/Timer.h"
 
+#include "Core/AchievementManager.h"
 #include "Core/Config/MainSettings.h"
 #include "Core/Config/NetplaySettings.h"
 #include "Core/Movie.h"
+#include "Core/System.h"
 
 #include "VideoCommon/AbstractGfx.h"
 #include "VideoCommon/AbstractPipeline.h"
@@ -76,7 +78,8 @@ bool OnScreenUI::Initialize(u32 width, u32 height, float scale)
     io.Fonts->GetTexDataAsRGBA32(&font_tex_pixels, &font_tex_width, &font_tex_height);
 
     TextureConfig font_tex_config(font_tex_width, font_tex_height, 1, 1, 1,
-                                  AbstractTextureFormat::RGBA8, 0);
+                                  AbstractTextureFormat::RGBA8, 0,
+                                  AbstractTextureType::Texture_2DArray);
     std::unique_ptr<AbstractTexture> font_tex =
         g_gfx->CreateTexture(font_tex_config, "ImGui font texture");
     if (!font_tex)
@@ -120,11 +123,15 @@ bool OnScreenUI::RecompileImGuiPipeline()
     return true;
   }
 
+  const bool linear_space_output =
+      g_presenter->GetBackbufferFormat() == AbstractTextureFormat::RGBA16F;
+
   std::unique_ptr<AbstractShader> vertex_shader = g_gfx->CreateShaderFromSource(
       ShaderStage::Vertex, FramebufferShaderGen::GenerateImGuiVertexShader(),
       "ImGui vertex shader");
   std::unique_ptr<AbstractShader> pixel_shader = g_gfx->CreateShaderFromSource(
-      ShaderStage::Pixel, FramebufferShaderGen::GenerateImGuiPixelShader(), "ImGui pixel shader");
+      ShaderStage::Pixel, FramebufferShaderGen::GenerateImGuiPixelShader(linear_space_output),
+      "ImGui pixel shader");
   if (!vertex_shader || !pixel_shader)
   {
     PanicAlertFmt("Failed to compile ImGui shaders");
@@ -278,26 +285,28 @@ void OnScreenUI::DrawDebugText()
         ImGui::GetIO().DisplaySize);
     if (ImGui::Begin("Movie", nullptr, ImGuiWindowFlags_NoFocusOnAppearing))
     {
-      if (Movie::IsPlayingInput())
+      auto& movie = Core::System::GetInstance().GetMovie();
+      if (movie.IsPlayingInput())
       {
-        ImGui::Text("Frame: %" PRIu64 " / %" PRIu64, Movie::GetCurrentFrame(),
-                    Movie::GetTotalFrames());
-        ImGui::Text("Input: %" PRIu64 " / %" PRIu64, Movie::GetCurrentInputCount(),
-                    Movie::GetTotalInputCount());
+        ImGui::Text("Frame: %" PRIu64 " / %" PRIu64, movie.GetCurrentFrame(),
+                    movie.GetTotalFrames());
+        ImGui::Text("Input: %" PRIu64 " / %" PRIu64, movie.GetCurrentInputCount(),
+                    movie.GetTotalInputCount());
       }
       else if (Config::Get(Config::MAIN_SHOW_FRAME_COUNT))
       {
-        ImGui::Text("Frame: %" PRIu64, Movie::GetCurrentFrame());
-        ImGui::Text("Input: %" PRIu64, Movie::GetCurrentInputCount());
+        ImGui::Text("Frame: %" PRIu64, movie.GetCurrentFrame());
+        if (movie.IsRecordingInput())
+          ImGui::Text("Input: %" PRIu64, movie.GetCurrentInputCount());
       }
       if (Config::Get(Config::MAIN_SHOW_LAG))
-        ImGui::Text("Lag: %" PRIu64 "\n", Movie::GetCurrentLagCount());
+        ImGui::Text("Lag: %" PRIu64 "\n", movie.GetCurrentLagCount());
       if (Config::Get(Config::MAIN_MOVIE_SHOW_INPUT_DISPLAY))
-        ImGui::TextUnformatted(Movie::GetInputDisplay().c_str());
+        ImGui::TextUnformatted(movie.GetInputDisplay().c_str());
       if (Config::Get(Config::MAIN_MOVIE_SHOW_RTC))
-        ImGui::TextUnformatted(Movie::GetRTCDisplay().c_str());
+        ImGui::TextUnformatted(movie.GetRTCDisplay().c_str());
       if (Config::Get(Config::MAIN_MOVIE_SHOW_RERECORD))
-        ImGui::TextUnformatted(Movie::GetRerecords().c_str());
+        ImGui::TextUnformatted(movie.GetRerecords().c_str());
     }
     ImGui::End();
   }
@@ -322,6 +331,75 @@ void OnScreenUI::DrawDebugText()
     ImGui::TextUnformatted(profile_output.c_str());
 }
 
+void OnScreenUI::DrawChallengesAndLeaderboards()
+{
+  if (!Config::Get(Config::MAIN_OSD_MESSAGES))
+    return;
+#ifdef USE_RETRO_ACHIEVEMENTS
+  auto& instance = AchievementManager::GetInstance();
+  std::lock_guard lg{instance.GetLock()};
+  if (instance.AreChallengesUpdated())
+  {
+    instance.ResetChallengesUpdated();
+    const auto& challenges = instance.GetActiveChallenges();
+    m_challenge_texture_map.clear();
+    for (const auto& name : challenges)
+    {
+      const auto& icon = instance.GetAchievementBadge(name, false);
+      const u32 width = icon.width;
+      const u32 height = icon.height;
+      TextureConfig tex_config(width, height, 1, 1, 1, AbstractTextureFormat::RGBA8, 0,
+                               AbstractTextureType::Texture_2DArray);
+      auto res = m_challenge_texture_map.insert_or_assign(name, g_gfx->CreateTexture(tex_config));
+      res.first->second->Load(0, width, height, width, icon.data.data(),
+                              sizeof(u32) * width * height);
+    }
+  }
+
+  float leaderboard_y = ImGui::GetIO().DisplaySize.y;
+  if (!m_challenge_texture_map.empty())
+  {
+    float scale = ImGui::GetIO().DisplaySize.y / 1024.0;
+    ImGui::SetNextWindowSize(ImVec2(0, 0));
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y), 0,
+                            ImVec2(1, 1));
+    if (ImGui::Begin("Challenges", nullptr,
+                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs |
+                         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings |
+                         ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoNav |
+                         ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing))
+    {
+      for (auto& [name, texture] : m_challenge_texture_map)
+      {
+        ImGui::Image(texture.get(), ImVec2(static_cast<float>(texture->GetWidth()) * scale,
+                                           static_cast<float>(texture->GetHeight()) * scale));
+        ImGui::SameLine();
+      }
+    }
+    leaderboard_y -= ImGui::GetWindowHeight();
+    ImGui::End();
+  }
+
+  const auto& leaderboard_progress = instance.GetActiveLeaderboards();
+  if (!leaderboard_progress.empty())
+  {
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x, leaderboard_y), 0,
+                            ImVec2(1.0, 1.0));
+    ImGui::SetNextWindowSize(ImVec2(0.0f, 0.0f));
+    if (ImGui::Begin("Leaderboards", nullptr,
+                     ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs |
+                         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings |
+                         ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoNav |
+                         ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing))
+    {
+      for (const auto& value : leaderboard_progress)
+        ImGui::TextUnformatted(value.c_str());
+    }
+    ImGui::End();
+  }
+#endif  // USE_RETRO_ACHIEVEMENTS
+}
+
 void OnScreenUI::Finalize()
 {
   auto lock = GetImGuiLock();
@@ -329,6 +407,7 @@ void OnScreenUI::Finalize()
   g_perf_metrics.DrawImGuiStats(m_backbuffer_scale);
   DrawDebugText();
   OSD::DrawMessages();
+  DrawChallengesAndLeaderboards();
   ImGui::Render();
 }
 
@@ -352,35 +431,37 @@ void OnScreenUI::SetScale(float backbuffer_scale)
 }
 void OnScreenUI::SetKeyMap(const DolphinKeyMap& key_map)
 {
-  // Right now this is a 1:1 mapping. But might not be true later
   static constexpr DolphinKeyMap dolphin_to_imgui_map = {
       ImGuiKey_Tab,       ImGuiKey_LeftArrow, ImGuiKey_RightArrow, ImGuiKey_UpArrow,
       ImGuiKey_DownArrow, ImGuiKey_PageUp,    ImGuiKey_PageDown,   ImGuiKey_Home,
       ImGuiKey_End,       ImGuiKey_Insert,    ImGuiKey_Delete,     ImGuiKey_Backspace,
-      ImGuiKey_Space,     ImGuiKey_Enter,     ImGuiKey_Escape,     ImGuiKey_KeyPadEnter,
+      ImGuiKey_Space,     ImGuiKey_Enter,     ImGuiKey_Escape,     ImGuiKey_KeypadEnter,
       ImGuiKey_A,         ImGuiKey_C,         ImGuiKey_V,          ImGuiKey_X,
       ImGuiKey_Y,         ImGuiKey_Z,
   };
-  static_assert(dolphin_to_imgui_map.size() == ImGuiKey_COUNT);  // Fail if ImGui adds keys
 
   auto lock = GetImGuiLock();
 
   if (!ImGui::GetCurrentContext())
     return;
 
+  m_dolphin_to_imgui_map.clear();
   for (int dolphin_key = 0; dolphin_key <= static_cast<int>(DolphinKey::Z); dolphin_key++)
   {
-    int imgui_key = dolphin_to_imgui_map[DolphinKey(dolphin_key)];
+    const int imgui_key = dolphin_to_imgui_map[DolphinKey(dolphin_key)];
     if (imgui_key >= 0)
-      ImGui::GetIO().KeyMap[imgui_key] = (key_map[DolphinKey(dolphin_key)] & 0x1FF);
+    {
+      const int mapped_key = key_map[DolphinKey(dolphin_key)];
+      m_dolphin_to_imgui_map[mapped_key & 0x1FF] = imgui_key;
+    }
   }
 }
 
 void OnScreenUI::SetKey(u32 key, bool is_down, const char* chars)
 {
   auto lock = GetImGuiLock();
-  if (key < std::size(ImGui::GetIO().KeysDown))
-    ImGui::GetIO().KeysDown[key] = is_down;
+  if (auto iter = m_dolphin_to_imgui_map.find(key); iter != m_dolphin_to_imgui_map.end())
+    ImGui::GetIO().AddKeyEvent((ImGuiKey)iter->second, is_down);
 
   if (chars)
     ImGui::GetIO().AddInputCharactersUTF8(chars);
@@ -390,8 +471,7 @@ void OnScreenUI::SetMousePos(float x, float y)
 {
   auto lock = GetImGuiLock();
 
-  ImGui::GetIO().MousePos.x = x;
-  ImGui::GetIO().MousePos.y = y;
+  ImGui::GetIO().AddMousePosEvent(x, y);
 }
 
 void OnScreenUI::SetMousePress(u32 button_mask)
@@ -399,7 +479,9 @@ void OnScreenUI::SetMousePress(u32 button_mask)
   auto lock = GetImGuiLock();
 
   for (size_t i = 0; i < std::size(ImGui::GetIO().MouseDown); i++)
-    ImGui::GetIO().MouseDown[i] = (button_mask & (1u << i)) != 0;
+  {
+    ImGui::GetIO().AddMouseButtonEvent(static_cast<int>(i), (button_mask & (1u << i)) != 0);
+  }
 }
 
 }  // namespace VideoCommon

@@ -25,7 +25,8 @@ static void LogCallback(const char* format, ...)
     return;
 
   constexpr auto log_type = Common::Log::LogType::AUDIO;
-  if (!instance->IsEnabled(log_type))
+  constexpr auto log_level = Common::Log::LogLevel::LINFO;
+  if (!instance->IsEnabled(log_type, log_level))
     return;
 
   va_list args;
@@ -36,8 +37,7 @@ static void LogCallback(const char* format, ...)
   const std::string message = StringFromFormatV(adapted_format.c_str(), args);
   va_end(args);
 
-  instance->LogWithFullPath(Common::Log::LogLevel::LNOTICE, log_type, filename, lineno,
-                            message.c_str());
+  instance->LogWithFullPath(log_level, log_type, filename, lineno, message.c_str());
 }
 
 static void DestroyContext(cubeb* ctx)
@@ -72,7 +72,7 @@ std::shared_ptr<cubeb> CubebUtils::GetContext()
   }
 
   cubeb* ctx;
-  if (cubeb_init(&ctx, "Dolphin", nullptr) != CUBEB_OK)
+  if (cubeb_init(&ctx, "Dolphin Emulator", nullptr) != CUBEB_OK)
   {
     ERROR_LOG_FMT(AUDIO, "Error initializing cubeb library");
     return nullptr;
