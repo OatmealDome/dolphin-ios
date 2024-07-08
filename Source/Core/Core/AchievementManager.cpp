@@ -201,7 +201,7 @@ void AchievementManager::SetBackgroundExecutionAllowed(bool allowed)
   if (!system)
     return;
 
-  if (allowed && Core::GetState(*system) == Core::State::Paused)
+  if (allowed && Core::GetState() == Core::State::Paused)
     DoIdle();
 }
 
