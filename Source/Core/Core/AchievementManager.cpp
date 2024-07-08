@@ -316,7 +316,7 @@ void AchievementManager::DoIdle()
       {
         std::lock_guard lg{m_lock};
         Core::System* system = m_system.load(std::memory_order_acquire);
-        if (!system || Core::GetState(*system) != Core::State::Paused)
+        if (!system || Core::GetState() != Core::State::Paused)
           return;
         if (!m_background_execution_allowed)
           return;
@@ -325,9 +325,9 @@ void AchievementManager::DoIdle()
       }
       // rc_client_idle peeks at memory to recalculate rich presence and therefore
       // needs to be on host or CPU thread to access memory.
-      Core::QueueHostJob([this](Core::System& system) {
+      Core::QueueHostJob([this]() {
         std::lock_guard lg{m_lock};
-        if (Core::GetState(system) != Core::State::Paused)
+        if (Core::GetState() != Core::State::Paused)
           return;
         if (!m_background_execution_allowed)
           return;
