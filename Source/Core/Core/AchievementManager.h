@@ -5,6 +5,7 @@
 
 #ifdef USE_RETRO_ACHIEVEMENTS
 #include <array>
+#include <atomic>
 #include <chrono>
 #include <ctime>
 #include <functional>
@@ -27,6 +28,7 @@
 #include "Common/CommonTypes.h"
 #include "Common/Event.h"
 #include "Common/HttpRequest.h"
+#include "Common/JsonUtil.h"
 #include "Common/WorkQueueThread.h"
 #include "DiscIO/Volume.h"
 #include "VideoCommon/Assets/CustomTextureData.h"
@@ -36,6 +38,11 @@ namespace Core
 class CPUThreadGuard;
 class System;
 }  // namespace Core
+
+namespace PatchEngine
+{
+struct Patch;
+}  // namespace PatchEngine
 
 class AchievementManager
 {
@@ -60,6 +67,10 @@ public:
   static constexpr std::string_view GRAY = "transparent";
   static constexpr std::string_view GOLD = "#FFD700";
   static constexpr std::string_view BLUE = "#0B71C1";
+  static constexpr std::string_view APPROVED_LIST_FILENAME = "ApprovedInis.json";
+  static const inline Common::SHA1::Digest APPROVED_LIST_HASH = {
+      0x01, 0x1E, 0x2E, 0x74, 0xDD, 0x07, 0x79, 0xDA, 0x0E, 0x5D,
+      0xF8, 0x51, 0x09, 0xC7, 0x9B, 0x46, 0x22, 0x95, 0x50, 0xE9};
 
   struct LeaderboardEntry
   {
@@ -96,15 +107,22 @@ public:
   bool HasAPIToken() const;
   void LoadGame(const std::string& file_path, const DiscIO::Volume* volume);
   bool IsGameLoaded() const;
+  void SetBackgroundExecutionAllowed(bool allowed);
 
   void FetchPlayerBadge();
   void FetchGameBadges();
 
   void DoFrame();
 
+  bool CanPause();
+  void DoIdle();
+
   std::recursive_mutex& GetLock();
   void SetHardcoreMode();
   bool IsHardcoreModeActive() const;
+  void SetGameIniId(const std::string& game_ini_id) { m_game_ini_id = game_ini_id; }
+  void FilterApprovedPatches(std::vector<PatchEngine::Patch>& patches,
+                             const std::string& game_ini_id) const;
   void SetSpectatorMode();
   std::string_view GetPlayerDisplayName() const;
   u32 GetPlayerScore() const;
@@ -116,7 +134,7 @@ public:
   const Badge& GetAchievementBadge(AchievementId id, bool locked) const;
   const LeaderboardStatus* GetLeaderboardInfo(AchievementId leaderboard_id);
   RichPresence GetRichPresence() const;
-  const bool AreChallengesUpdated() const;
+  bool AreChallengesUpdated() const;
   void ResetChallengesUpdated();
   const std::unordered_set<AchievementId>& GetActiveChallenges() const;
   std::vector<std::string> GetActiveLeaderboards() const;
@@ -128,13 +146,15 @@ public:
   void Shutdown();
 
 private:
-  AchievementManager() = default;
+  AchievementManager() { LoadApprovedList(); };
 
   struct FilereaderState
   {
     int64_t position = 0;
     std::unique_ptr<DiscIO::Volume> volume;
   };
+
+  void LoadApprovedList();
 
   static void* FilereaderOpenByFilepath(const char* path_utf8);
   static void* FilereaderOpenByVolume(const char* path_utf8);
@@ -185,7 +205,7 @@ private:
 
   rc_runtime_t m_runtime{};
   rc_client_t* m_client{};
-  Core::System* m_system{};
+  std::atomic<Core::System*> m_system{};
   bool m_is_runtime_initialized = false;
   UpdateCallback m_update_callback = [](const UpdatedItems&) {};
   std::unique_ptr<DiscIO::Volume> m_loading_volume;
@@ -193,6 +213,7 @@ private:
   Badge m_default_game_badge;
   Badge m_default_unlocked_badge;
   Badge m_default_locked_badge;
+  std::atomic_bool m_background_execution_allowed = true;
   Badge m_player_badge;
   Hash m_game_hash{};
   u32 m_game_id = 0;
@@ -205,6 +226,9 @@ private:
   RichPresence m_rich_presence;
   std::chrono::steady_clock::time_point m_last_rp_time = std::chrono::steady_clock::now();
   std::chrono::steady_clock::time_point m_last_progress_message = std::chrono::steady_clock::now();
+
+  picojson::value m_ini_root;
+  std::string m_game_ini_id;
 
   std::unordered_map<AchievementId, LeaderboardStatus> m_leaderboard_map;
   bool m_challenges_updated = false;
@@ -238,6 +262,8 @@ public:
   constexpr bool IsHardcoreModeActive() { return false; }
 
   constexpr void LoadGame(const std::string&, const DiscIO::Volume*) {}
+
+  constexpr void SetBackgroundExecutionAllowed(bool allowed) {}
 
   constexpr void DoFrame() {}
 

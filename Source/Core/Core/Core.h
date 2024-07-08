@@ -143,7 +143,8 @@ bool IsHostThread();
 bool WantsDeterminism();
 
 // [NOT THREADSAFE] For use by Host only
-void SetState(State state, bool report_state_change = true);
+void SetState(State state, bool report_state_change = true,
+              bool initial_execution_state = false);
 State GetState();
 
 void SaveScreenShot();
