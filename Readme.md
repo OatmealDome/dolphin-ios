@@ -39,6 +39,8 @@ To change the organization identifier, go to `Project` -> `Config` -> `BundleIde
 
 To change the team ID, go to `Project` -> `Config` -> `DevelopmentTeam.xcconfig`, and replace `your-team-id` with your developer account's team ID.
 
+Make sure to set build scheme to DiOS (NJB) which is located in the Xcode hotbar `Product` -> `Scheme` -> `DiOS (NJB)`
+
 Once this is complete, you are now able to build and run DolphiniOS.
 
 # Dolphin - A GameCube and Wii Emulator
