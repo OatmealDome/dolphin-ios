@@ -9,6 +9,10 @@ Majority of the code i've modified was from existing code and doesn't belong to 
 
 This is based off ([https://github.com/OatmealDome/dolphin-ios](https://github.com/OatmealDome/dolphin-ios)).
 
+## Enabling JIT
+* For Windows - https://github.com/fritzlb/iOS17-JIT-WIN
+* for MacOS - Use Xcode's debugger process
+
 ## Building
 
 You will need the following:
