@@ -49,7 +49,7 @@ struct Profile {
     }
   }
 
-  const std::string builtInPath = File::GetSysDirectory() + "Profiles/" + self.inputConfig->GetProfileKey();
+  const std::string builtInPath = File::GetSysDirectory() + "Profiles/" + self.inputConfig->GetProfileDirectoryName();
   for (const auto& filename : Common::DoFileSearch({builtInPath}, {".ini"}))
   {
     std::string basename;
