@@ -549,6 +549,13 @@ add_library(core
   WiiUtils.cpp
   WiiUtils.h
 )
+if(WIN32)
+  target_link_libraries(core PUBLIC cubeb::cubeb)
+  target_sources(core PRIVATE
+    HW/EXI/EXI_DeviceMic.cpp
+    HW/EXI/EXI_DeviceMic.h
+  )
+endif()
 
 if(_M_X86_64)
   target_sources(core PRIVATE
