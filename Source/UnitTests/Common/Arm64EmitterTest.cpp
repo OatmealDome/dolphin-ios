@@ -49,7 +49,7 @@ public:
 
     m_code_pointer = GetCodePtr();
     {
-      const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes();
+      const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes(GetRegionPtr());
 
       constexpr BitSet32 link_register{DecodeReg(ARM64Reg::X30)};
       ABI_PushRegisters(link_register);

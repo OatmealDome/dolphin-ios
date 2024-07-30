@@ -27,7 +27,7 @@ class TestFrsqrte : public JitArm64
 public:
   explicit TestFrsqrte(Core::System& system) : JitArm64(system)
   {
-    const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes();
+    const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes(GetRegionPtr());
 
     AllocCodeSpace(4096);
 

@@ -36,7 +36,7 @@ class TestConversion : private JitArm64
 public:
   explicit TestConversion(Core::System& system) : JitArm64(system)
   {
-    const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes();
+    const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes(GetRegionPtr());
 
     AllocCodeSpace(4096);
     AddChildCodeSpace(&m_far_code, 2048);

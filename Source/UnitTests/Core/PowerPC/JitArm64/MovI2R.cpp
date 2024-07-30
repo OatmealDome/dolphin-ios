@@ -26,7 +26,7 @@ public:
 
     const u8* fn = GetCodePtr();
     {
-      const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes();
+      const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes(GetRegionPtr());
       MOVI2R(ARM64Reg::W0, value);
       RET();
     }
@@ -43,7 +43,7 @@ public:
 
     const u8* fn = GetCodePtr();
     {
-      const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes();
+      const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes(GetRegionPtr());
       MOVI2R(ARM64Reg::X0, value);
       RET();
     }
