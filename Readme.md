@@ -13,12 +13,13 @@ This is based off ([https://github.com/OatmealDome/dolphin-ios](https://github.c
 * For Windows - https://github.com/fritzlb/iOS17-JIT-WIN
 * for MacOS - Use Xcode's debugger process
 
-## Building
+## Requirements for Building iOS
 
 You will need the following:
 
 * A Mac capable of running macOS Sonoma 14 or later
 * Xcode 15 or later
+* iOS 14 or later
 * Homebrew (or your favourite package manager)
 
 First, install the necessary tools using Homebrew:
@@ -35,17 +36,9 @@ Finally, use the following command to install `polib` using the Xcode-provided `
 /Applications/Xcode.app/Contents/Developer/usr/bin/python3 -m pip install polib
 ```
 
-Once all of the prerequisites are installed, you can open the Xcode project at `Source/iOS/App/DolphiniOS.xcodeproj`.
+If polib says it's already installed or needs to update, you can ignore the message.
 
-You must change the organization identifier and team ID before you can build!
-
-To change the organization identifier, go to `Project` -> `Config` -> `BundleIdentifier.xcconfig`, and change `use.your.own.organization.identifier` to something unique.
-
-To change the team ID, go to `Project` -> `Config` -> `DevelopmentTeam.xcconfig`, and replace `your-team-id` with your developer account's team ID.
-
-Make sure to set build scheme to DiOS (NJB) which is located in the Xcode hotbar `Product` -> `Scheme` -> `DiOS (NJB)`
-
-Once this is complete, you are now able to build and run DolphiniOS.
+Once this is complete, you can git clone the project and get the submodules.
 
 # Dolphin - A GameCube and Wii Emulator
 
@@ -85,8 +78,8 @@ Please read the [FAQ](https://dolphin-emu.org/docs/faq/) before using Dolphin.
 
 Dolphin can only be installed on devices that satisfy the above requirements. Attempting to install on an unsupported device will fail and display an error message.
 
-## Building for iOS
-Open Terminal in Utilities (Press Shift + Command + U)
+## Download instructions for iOS
+Open Terminal in Utilities `Press Shift + Command + U`.
 
 Download DolphiniOS and it's submodules:
 ```sh
@@ -94,10 +87,31 @@ git clone https://github.com/brand175/dolphin-ios.git
 cd dolphin-ios
 git submodule update --init --recursive
 ```
-Press Shift + Command + C
+Wait for the clone to finish then you can continue to the next step.
 
-Click on the Hard Drive Disk icon
-Select Users, (your_name or the house icon) this is where you find the dolphin-ios folder
+Press `Shift + Command + C`.
+
+Click on the `Hard Drive Disk` icon
+then `Users`, (YourName, folder with the `Home` icon) this is where you find the `dolphin-ios` folder.
+
+You can open the Xcode project at `dolphin-ios/Source/iOS/App/DolphiniOS.xcodeproj`.
+
+You must change the organization identifier and team ID before you can build!
+
+## Building for iOS
+
+To change the organization identifier, go to `Project` -> `Config` -> `BundleIdentifier.xcconfig`, and change `use.your.own.organization.identifier` to something unique (example, `com.YourUsername`).
+
+To change the team ID, go to `Project` -> `Config` -> `DevelopmentTeam.xcconfig`, and replace `your-team-id` with your developer account's team ID.
+
+Make sure to set build scheme to DiOS (NJB) which is located in the Xcode hotbar `Product` -> `Scheme` -> `DiOS (NJB)`.
+
+Once this is complete, you are now able to build and run DolphiniOS.
+
+## Not Building for iOS
+
+If you see this error (Command PhaseScriptExecution failed with a nonzero exit code) when you build, try deleting the contents inside the DerivedData folder in Xcode (~/Library/Developer/Xcode/DerivedData)
+and delete a folder in `dolphin-ios` called `Debug` or `Release`. Make sure to close Xcode when you do this by pressing `Command + Q`.
 
 ## Building for Windows
 
