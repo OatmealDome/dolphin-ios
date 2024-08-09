@@ -154,6 +154,34 @@ bool SwapChain::SelectSurfaceFormat()
                                              &format_count, surface_formats.data());
   ASSERT(res == VK_SUCCESS);
 
+#if defined(IPHONEOS)
+  // If there is a single undefined surface format, the device doesn't care, so we'll just use RGBA
+  if (surface_formats[0].format == VK_FORMAT_UNDEFINED)
+  {
+    m_surface_format.format = VK_FORMAT_R8G8B8A8_UNORM;
+    m_surface_format.colorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+    return true;
+  }
+  
+  // Try to find a suitable format.
+  for (const VkSurfaceFormatKHR& surface_format : surface_formats)
+  {
+    // Some drivers seem to return a SRGB format here (Intel Mesa).
+    // This results in gamma correction when presenting to the screen, which we don't want.
+    // Use a linear format instead, if this is the case.
+    VkFormat format = VKTexture::GetLinearFormat(surface_format.format);
+    if (format == VK_FORMAT_R8G8B8A8_UNORM)
+      m_texture_format = AbstractTextureFormat::RGBA8;
+    else if (format == VK_FORMAT_B8G8R8A8_UNORM)
+      m_texture_format = AbstractTextureFormat::BGRA8;
+    else
+      continue;
+      
+    m_surface_format.format = format;
+    m_surface_format.colorSpace = surface_format.colorSpace;
+    return true;
+  }
+#else
   // If there is a single undefined surface format, the device doesn't care, so we'll just use RGBA8
   if (surface_formats[0].format == VK_FORMAT_UNDEFINED)
   {
@@ -219,6 +247,7 @@ bool SwapChain::SelectSurfaceFormat()
     m_surface_format.colorSpace = surface_format->colorSpace;
     return true;
   }
+#endif
 
   PanicAlertFmt("Failed to find a suitable format for swap chain buffers.");
   return false;
