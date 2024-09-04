@@ -925,7 +925,8 @@ bool MainWindow::RequestStop()
   }
 
   const bool rendered_widget_was_active =
-      m_render_widget->isActiveWindow() && !m_render_widget->isFullScreen();
+      Settings::Instance().IsKeepWindowOnTopEnabled() ||
+      (m_render_widget->isActiveWindow() && !m_render_widget->isFullScreen());
   QWidget* confirm_parent = (!m_rendering_to_main && rendered_widget_was_active) ?
                                 m_render_widget :
                                 static_cast<QWidget*>(this);
@@ -1820,7 +1821,7 @@ void MainWindow::OnImportNANDBackup()
     return;
 
   QString file =
-      DolphinFileDialog::getOpenFileName(this, tr("Select the save file"), QDir::currentPath(),
+      DolphinFileDialog::getOpenFileName(this, tr("Select NAND Backup"), QDir::currentPath(),
                                          tr("BootMii NAND backup file (*.bin);;"
                                             "All Files (*)"));
 
@@ -1846,7 +1847,7 @@ void MainWindow::OnImportNANDBackup()
         [this] {
           std::optional<std::string> keys_file = RunOnObject(this, [this] {
             return DolphinFileDialog::getOpenFileName(
-                       this, tr("Select the keys file (OTP/SEEPROM dump)"), QDir::currentPath(),
+                       this, tr("Select Keys File (OTP/SEEPROM Dump)"), QDir::currentPath(),
                        tr("BootMii keys file (*.bin);;"
                           "All Files (*)"))
                 .toStdString();
