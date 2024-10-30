@@ -11,6 +11,10 @@ This is based off ([https://github.com/OatmealDome/dolphin-ios](https://github.c
 
 ## Enabling JIT
 * For Windows - https://github.com/fritzlb/iOS17-JIT-WIN
+
+  * Python 3.12.2 (Exact Version) - https://www.python.org/ftp/python/3.12.2/python-3.12.2-amd64.exe
+  * iTunes installed
+  
 * for MacOS - Use Xcode's debugger process
 
 ## Requirements for Building iOS
