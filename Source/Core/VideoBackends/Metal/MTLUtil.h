@@ -3,7 +3,10 @@
 
 #pragma once
 
+#ifndef IPHONEOS
 #include <AppKit/NSScreen.h>
+#endif
+
 #include <Metal/Metal.h>
 
 #include <vector>
