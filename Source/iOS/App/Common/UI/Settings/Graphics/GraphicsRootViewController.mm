@@ -15,7 +15,7 @@
   WindowSystemInfo wsi;
   wsi.type = WindowSystemType::iOS;
   
-  VideoBackendBase::PopulateBackendInfoFromUI(wsi);
+  VideoBackendBase::PopulateBackendInfo(wsi);
 }
 
 @end
