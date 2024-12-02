@@ -9,6 +9,7 @@
 #import "Core/Core.h"
 #import "Core/HW/GCPad.h"
 #import "Core/HW/Wiimote.h"
+#import "Core/System.h"
 
 #import "Common/MsgHandler.h"
 
@@ -42,7 +43,9 @@
   
   Config::SetBase(Config::MAIN_USE_GAME_COVERS, true);
   
-  Config::SetBase(Config::MAIN_FASTMEM, [FastmemManager shared].fastmemAvailable);
+  const bool fastmemAvailable = [FastmemManager shared].fastmemAvailable;
+  Config::SetBase(Config::MAIN_FASTMEM, fastmemAvailable);
+  Config::SetBase(Config::MAIN_FASTMEM_ARENA, fastmemAvailable);
   
   WindowSystemInfo wsi;
   wsi.type = WindowSystemType::iOS;
@@ -63,16 +66,20 @@
 
 - (void)applicationDidBecomeActive:(UIApplication*)application {
   DOLHostQueueRunSync(^{
-    if (Core::IsRunning() && ![EmulationCoordinator shared].userRequestedPause) {
-      Core::SetState(Core::State::Running);
+    auto& system = Core::System::GetInstance();
+    
+    if (Core::IsRunning(system) && ![EmulationCoordinator shared].userRequestedPause) {
+      Core::SetState(system, Core::State::Running);
     }
   });
 }
 
 - (void)applicationWillResignActive:(UIApplication*)application {
   DOLHostQueueRunSync(^{
-    if (Core::IsRunning() && ![EmulationCoordinator shared].userRequestedPause) {
-      Core::SetState(Core::State::Paused);
+    auto& system = Core::System::GetInstance();
+    
+    if (Core::IsRunning(system) && ![EmulationCoordinator shared].userRequestedPause) {
+      Core::SetState(system, Core::State::Paused);
     }
     
     // Write out the configuration in case we don't get a chance later
@@ -82,11 +89,13 @@
 
 - (void)applicationWillTerminate:(UIApplication*)application {
   DOLHostQueueRunSync(^{
-    if (Core::IsRunning()) {
-      Core::Stop();
+    auto& system = Core::System::GetInstance();
+    
+    if (Core::IsRunning(system)) {
+      Core::Stop(Core::System::GetInstance());
       
       // Spin while Core stops
-      while (Core::GetState() != Core::State::Uninitialized) {}
+      while (Core::GetState(Core::System::GetInstance()) != Core::State::Uninitialized) {}
     }
     
     Pad::Shutdown();
@@ -95,7 +104,7 @@
     
     Config::Save();
     
-    Core::Shutdown();
+    Core::Shutdown(system);
     UICommon::Shutdown();
   });
 }
