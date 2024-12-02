@@ -161,7 +161,7 @@ void JitArm64::ClearCache()
 
   blocks.Clear();
   blocks.ClearRangesToFree();
-  const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes;
+  const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes(GetRegionPtr());
   m_far_code_0.ClearCodeSpace();
   m_near_code_0.ClearCodeSpace();
   m_near_code_1.ClearCodeSpace();
