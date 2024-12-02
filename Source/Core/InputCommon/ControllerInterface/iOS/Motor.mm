@@ -45,7 +45,7 @@ Motor::Motor(CHHapticEngine* engine, const std::string name) : m_haptic_engine(e
 
       break;
     default:
-      ERROR_LOG_FMT(CONTROLLERINTERFACE, "Motor received unexpected stopped reason: {}", reason);
+      ERROR_LOG_FMT(CONTROLLERINTERFACE, "Motor received unexpected stopped reason: {}", (NSInteger)reason);
 
       // This error is probably unrecoverable.
       m_player_created = false;
