@@ -10,6 +10,7 @@
 #import "Core/Boot/Boot.h"
 #import "Core/BootManager.h"
 #import "Core/Core.h"
+#import "Core/System.h"
 
 #import "VideoCommon/RenderBase.h"
 #import "VideoCommon/Present.h"
@@ -100,18 +101,18 @@
     
     std::unique_ptr<BootParameters> boot = [bootParameter generateDolphinBootParameter];
     
-    if (!BootManager::BootCore(std::move(boot), wsi)) {
+    if (!BootManager::BootCore(Core::System::GetInstance(), std::move(boot), wsi)) {
       PanicAlertFmt("Failed to init core!");
     }
   });
   
-  while (Core::GetState() == Core::State::Starting) {
+  while (Core::GetState(Core::System::GetInstance()) == Core::State::Starting) {
     [NSThread sleepForTimeInterval:0.025];
   }
   
   [[NSNotificationCenter defaultCenter] postNotificationName:DOLEmulationDidStartNotification object:self userInfo:nil];
   
-  while (Core::IsRunning()) {
+  while (Core::IsRunning(Core::System::GetInstance())) {
     [NSThread sleepForTimeInterval:0.025];
   }
   
@@ -134,7 +135,7 @@
   }
   
   DOLHostQueueRunSync(^{
-    Core::SetState(userRequestedPause ? Core::State::Paused : Core::State::Running);
+    Core::SetState(Core::System::GetInstance(), userRequestedPause ? Core::State::Paused : Core::State::Running);
   });
   
   _userRequestedPause = userRequestedPause;
