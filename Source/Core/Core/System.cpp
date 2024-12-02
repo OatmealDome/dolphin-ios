@@ -106,6 +106,12 @@ System::System() : m_impl{std::make_unique<Impl>(*this)}
 
 System::~System() = default;
 
+System& System::GetInstance()
+{
+  static System instance;
+  return instance;
+}
+
 void System::Initialize()
 {
   m_separate_cpu_and_gpu_threads = Config::Get(Config::MAIN_CPU_THREAD);
