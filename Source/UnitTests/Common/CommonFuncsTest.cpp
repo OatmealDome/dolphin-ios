@@ -5,7 +5,11 @@
 
 #include "Common/CommonFuncs.h"
 
+#ifndef IPHONEOS
+
 TEST(CommonFuncs, CrashMacro)
 {
   EXPECT_DEATH({ Crash(); }, "");
 }
+
+#endif
