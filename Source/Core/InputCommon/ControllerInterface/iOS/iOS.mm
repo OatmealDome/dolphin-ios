@@ -10,23 +10,38 @@
 
 namespace ciface::iOS
 {
-static MFiControllerScanner* g_mfi_scanner;
+class InputBackend final : public ciface::InputBackend
+{
+public:
+  InputBackend(ControllerInterface* controller_interface);
+  ~InputBackend();
+  void PopulateDevices() override;
 
-void Init()
+private:
+  MFiControllerScanner* m_mfi_scanner;
+};
+
+std::unique_ptr<ciface::InputBackend> CreateInputBackend(ControllerInterface* controller_interface)
+{
+  return std::make_unique<InputBackend>(controller_interface);
+}
+
+InputBackend::InputBackend(ControllerInterface* controller_interface)
+    : ciface::InputBackend(controller_interface)
 {
   StateManager::GetInstance()->Init();
 
-  g_mfi_scanner = [[MFiControllerScanner alloc] init];
+  m_mfi_scanner = [[MFiControllerScanner alloc] init];
 }
 
-void DeInit()
+InputBackend::~InputBackend()
 {
   StateManager::GetInstance()->DeInit();
 
-  g_mfi_scanner = nil;
+  m_mfi_scanner = nil;
 }
 
-void PopulateDevices()
+void InputBackend::PopulateDevices()
 {
   for (int i = 0; i < 8; ++i)
     g_controller_interface.AddDevice(std::make_shared<ciface::iOS::Touchscreen>(

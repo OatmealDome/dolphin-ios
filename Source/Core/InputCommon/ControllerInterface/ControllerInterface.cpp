@@ -71,7 +71,7 @@ void ControllerInterface::Initialize(const WindowSystemInfo& wsi)
   m_input_backends.emplace_back(ciface::Quartz::CreateInputBackend(this));
 #endif
 #ifdef CIFACE_USE_IOS
-  ciface::iOS::Init();
+  m_input_backends.emplace_back(ciface::iOS::CreateInputBackend(this));
 #endif
 #ifdef CIFACE_USE_SDL
   m_input_backends.emplace_back(ciface::SDL::CreateInputBackend(this));
