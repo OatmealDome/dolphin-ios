@@ -353,7 +353,7 @@ static void CPUSetInitialExecutionState(bool force_paused = false)
   // SetState must be called on the host thread, so we defer it for later.
   QueueHostJob([force_paused](Core::System& system) {
     bool paused = SConfig::GetInstance().bBootToPause || force_paused;
-    SetState(system, paused ? State::Paused : State::Running);
+    SetState(system, paused ? State::Paused : State::Running, true, true);
     Host_UpdateDisasmDialog();
     Host_UpdateMainFrame();
     Host_Message(HostMessageID::WMUserCreate);
@@ -693,7 +693,8 @@ static void EmuThread(Core::System& system, std::unique_ptr<BootParameters> boot
 
 // Set or get the running state
 
-void SetState(Core::System& system, State state, bool report_state_change)
+void SetState(Core::System& system, State state, bool report_state_change,
+              bool initial_execution_state)
 {
   // State cannot be controlled until the CPU Thread is operational
   if (s_state.load() != State::Running)
@@ -702,15 +703,22 @@ void SetState(Core::System& system, State state, bool report_state_change)
   switch (state)
   {
   case State::Paused:
+#ifdef USE_RETRO_ACHIEVEMENTS
+    if (!initial_execution_state && !AchievementManager::GetInstance().CanPause())
+      return;
+#endif  // USE_RETRO_ACHIEVEMENTS
     // NOTE: GetState() will return State::Paused immediately, even before anything has
     //   stopped (including the CPU).
-    system.GetCPU().EnableStepping(true);  // Break
+    system.GetCPU().SetStepping(true);  // Break
     Wiimote::Pause();
     ResetRumble();
+#ifdef USE_RETRO_ACHIEVEMENTS
+    AchievementManager::GetInstance().DoIdle();
+#endif  // USE_RETRO_ACHIEVEMENTS
     break;
   case State::Running:
   {
-    system.GetCPU().EnableStepping(false);
+    system.GetCPU().SetStepping(false);
     Wiimote::Resume();
     break;
   }
@@ -813,7 +821,7 @@ static bool PauseAndLock(Core::System& system, bool do_lock, bool unpause_on_unl
     // The CPU is responsible for managing the Audio and FIFO state so we use its
     // mechanism to unpause them. If we unpaused the systems above when releasing
     // the locks then they could call CPU::Break which would require detecting it
-    // and re-pausing with CPU::EnableStepping.
+    // and re-pausing with CPU::SetStepping.
     was_unpaused = system.GetCPU().PauseAndLock(false, unpause_on_unlock, true);
   }
 

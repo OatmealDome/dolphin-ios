@@ -79,7 +79,7 @@ void AchievementBox::UpdateData()
       return;
 
     const auto& badge = AchievementManager::GetInstance().GetAchievementBadge(
-        m_achievement->id, m_achievement->state != RC_CLIENT_ACHIEVEMENT_STATE_UNLOCKED);
+        m_achievement->id, !m_achievement->unlocked);
     std::string_view color = AchievementManager::GRAY;
     if (m_achievement->unlocked & RC_CLIENT_ACHIEVEMENT_UNLOCKED_HARDCORE)
       color = AchievementManager::GOLD;
@@ -92,11 +92,19 @@ void AchievementBox::UpdateData()
     m_badge->setStyleSheet(
         QStringLiteral("border: 4px solid %1").arg(QtUtils::FromStdString(color)));
 
-    if (m_achievement->state == RC_CLIENT_ACHIEVEMENT_STATE_UNLOCKED)
+    if (m_achievement->unlocked)
     {
-      m_status->setText(
-          tr("Unlocked at %1")
-              .arg(QDateTime::fromSecsSinceEpoch(m_achievement->unlock_time).toString()));
+      if (m_achievement->unlock_time != 0)
+      {
+        m_status->setText(
+            // i18n: %1 is a date/time.
+            tr("Unlocked at %1")
+                .arg(QDateTime::fromSecsSinceEpoch(m_achievement->unlock_time).toString()));
+      }
+      else
+      {
+        m_status->setText(tr("Unlocked"));
+      }
     }
     else
     {
@@ -117,11 +125,12 @@ void AchievementBox::UpdateProgress()
   if (m_achievement->measured_percent > 0.000)
   {
     m_progress_bar->setRange(0, 100);
-    m_progress_bar->setValue(m_achievement->measured_percent);
+    m_progress_bar->setValue(m_achievement->unlocked ? 100 : m_achievement->measured_percent);
     m_progress_bar->setTextVisible(false);
     m_progress_label->setText(
         QString::fromUtf8(m_achievement->measured_progress,
                           qstrnlen(m_achievement->measured_progress, PROGRESS_LENGTH)));
+    m_progress_label->setVisible(!m_achievement->unlocked);
     m_progress_bar->setVisible(true);
   }
   else

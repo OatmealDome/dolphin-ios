@@ -104,7 +104,6 @@ option(ENABLE_VULKAN "Enables vulkan video backend" ON)
 option(USE_DISCORD_PRESENCE "Enables Discord Rich Presence, show the current game on Discord" ON)
 option(USE_MGBA "Enables GBA controllers emulation using libmgba" ON)
 option(ENABLE_AUTOUPDATE "Enables support for automatic updates" ON)
-option(STEAM "Creates a build for Steam" OFF)
 option(USE_RETRO_ACHIEVEMENTS "Enables integration with retroachievements.org" ON)
 option(ENABLE_CUBEB "Enables Cubeb sound backend" ON)
 
@@ -139,7 +138,6 @@ if(APPLE)
   option(MACOS_CODE_SIGNING "Enable codesigning" ON)
   option(USE_BUNDLED_MOLTENVK "Build MoltenVK from Externals with Dolphin-specific patches" ON)
   set(MACOS_CODE_SIGNING_IDENTITY "-" CACHE STRING "The identity used for codesigning.")
-  set(MACOS_CODE_SIGNING_IDENTITY_UPDATER "-" CACHE STRING "The identity used for codesigning, for the updater.")
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -395,7 +393,7 @@ if(ENABLE_LTO)
 endif()
 
 if(UNIX)
-  if(LINUX_LOCAL_DEV OR (CMAKE_SYSTEM_NAME STREQUAL "Linux" AND STEAM))
+  if(LINUX_LOCAL_DEV)
     add_definitions(-DLINUX_LOCAL_DEV)
   endif()
 endif()
@@ -621,7 +619,7 @@ if(UNIX)
 endif()
 
 if(ENABLE_SDL)
-  dolphin_find_optional_system_library(SDL2 Externals/SDL 2.26.0)
+  dolphin_find_optional_system_library(SDL2 Externals/SDL 2.30.6)
 endif()
 
 if(ENABLE_ANALYTICS)
@@ -711,7 +709,7 @@ dolphin_find_optional_system_library_pkgconfig(ZSTD libzstd>=1.4.0 zstd::zstd Ex
 dolphin_find_optional_system_library_pkgconfig(ZLIB zlib-ng ZLIB::ZLIB Externals/zlib-ng)
 
 dolphin_find_optional_system_library_pkgconfig(MINIZIP
-  "minizip-ng>=4.0.4;minizip>=4.0.4" minizip::minizip Externals/minizip-ng
+  "minizip>=4.0.4" minizip::minizip Externals/minizip-ng
 )
 
 dolphin_find_optional_system_library(LZO Externals/LZO)
@@ -788,10 +786,6 @@ if(SYSTEMD_FOUND)
   add_definitions(-DHAVE_LIBSYSTEMD)
 else()
   message(STATUS "libsystemd not found, disabling traversal server watchdog support")
-endif()
-
-if(STEAM)
-  add_definitions(-DSTEAM)
 endif()
 
 if (WIN32)

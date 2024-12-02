@@ -73,7 +73,7 @@ EventType* CoreTimingManager::RegisterEvent(const std::string& name, TimedCallba
 {
   // check for existing type with same name.
   // we want event type names to remain unique so that we can use them for serialization.
-  ASSERT_MSG(POWERPC, m_event_types.find(name) == m_event_types.end(),
+  ASSERT_MSG(POWERPC, !m_event_types.contains(name),
              "CoreTiming Event \"{}\" is already registered. Events should only be registered "
              "during Init to avoid breaking save states.",
              name);
@@ -282,13 +282,12 @@ void CoreTimingManager::ScheduleEvent(s64 cycles_into_future, EventType* event_t
 
 void CoreTimingManager::RemoveEvent(EventType* event_type)
 {
-  auto itr = std::remove_if(m_event_queue.begin(), m_event_queue.end(),
-                            [&](const Event& e) { return e.type == event_type; });
+  const size_t erased =
+      std::erase_if(m_event_queue, [&](const Event& e) { return e.type == event_type; });
 
   // Removing random items breaks the invariant so we have to re-establish it.
-  if (itr != m_event_queue.end())
+  if (erased != 0)
   {
-    m_event_queue.erase(itr, m_event_queue.end());
     std::make_heap(m_event_queue.begin(), m_event_queue.end(), std::greater<Event>());
   }
 }

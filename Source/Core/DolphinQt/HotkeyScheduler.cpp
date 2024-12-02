@@ -113,6 +113,8 @@ static void HandleFrameStepHotkeys()
 
     if ((frame_step_count == 0 || frame_step_count == FRAME_STEP_DELAY) && !frame_step_hold)
     {
+      if (frame_step_count > 0)
+        Settings::Instance().SetIsContinuouslyFrameStepping(true);
       Core::QueueHostJob([](auto& system) { Core::DoFrameStep(system); });
       frame_step_hold = true;
     }
@@ -138,6 +140,8 @@ static void HandleFrameStepHotkeys()
     frame_step_count = 0;
     frame_step_hold = false;
     frame_step_delay_count = 0;
+    Settings::Instance().SetIsContinuouslyFrameStepping(false);
+    emit Settings::Instance().EmulationStateChanged(Core::GetState(Core::System::GetInstance()));
   }
 }
 
@@ -187,6 +191,11 @@ void HotkeyScheduler::Run()
       // Exit
       if (IsHotkey(HK_EXIT))
         emit ExitHotkey();
+
+#ifdef USE_RETRO_ACHIEVEMENTS
+      if (IsHotkey(HK_OPEN_ACHIEVEMENTS))
+        emit OpenAchievements();
+#endif  // USE_RETRO_ACHIEVEMENTS
 
       if (!Core::IsRunning(system))
       {
@@ -268,20 +277,16 @@ void HotkeyScheduler::Run()
 
       if (Core::System::GetInstance().IsWii())
       {
-        int wiimote_id = -1;
         if (IsHotkey(HK_WIIMOTE1_CONNECT))
-          wiimote_id = 0;
+          emit ConnectWiiRemote(0);
         if (IsHotkey(HK_WIIMOTE2_CONNECT))
-          wiimote_id = 1;
+          emit ConnectWiiRemote(1);
         if (IsHotkey(HK_WIIMOTE3_CONNECT))
-          wiimote_id = 2;
+          emit ConnectWiiRemote(2);
         if (IsHotkey(HK_WIIMOTE4_CONNECT))
-          wiimote_id = 3;
+          emit ConnectWiiRemote(3);
         if (IsHotkey(HK_BALANCEBOARD_CONNECT))
-          wiimote_id = 4;
-
-        if (wiimote_id > -1)
-          emit ConnectWiiRemote(wiimote_id);
+          emit ConnectWiiRemote(4);
 
         if (IsHotkey(HK_TOGGLE_SD_CARD))
           Settings::Instance().SetSDCardInserted(!Settings::Instance().IsSDCardInserted());
