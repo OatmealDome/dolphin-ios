@@ -642,13 +642,16 @@ PUBLIC
   videosoftware
 
 PRIVATE
-  cubeb::cubeb
   FatFs
   fmt::fmt
   LZO::LZO
   LZ4::LZ4
   ZLIB::ZLIB
 )
+
+if (ENABLE_CUBEB)
+  target_link_libraries(core PRIVATE cubeb::cubeb)
+endif()
 
 if ((DEFINED CMAKE_ANDROID_ARCH_ABI AND CMAKE_ANDROID_ARCH_ABI MATCHES "x86|x86_64") OR
     (NOT DEFINED CMAKE_ANDROID_ARCH_ABI AND _M_X86_64))
