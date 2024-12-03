@@ -479,6 +479,7 @@ add_library(core
   PatchEngine.h
   PowerPC/BreakPoints.cpp
   PowerPC/BreakPoints.h
+  PowerPC/CachedInterpreter/CachedInterpreter_Disassembler.cpp
   PowerPC/CachedInterpreter/CachedInterpreter.cpp
   PowerPC/CachedInterpreter/CachedInterpreter.h
   PowerPC/CachedInterpreter/CachedInterpreterBlockCache.cpp
@@ -653,11 +654,6 @@ PRIVATE
 
 if (ENABLE_CUBEB)
   target_link_libraries(core PRIVATE cubeb::cubeb)
-endif()
-
-if ((DEFINED CMAKE_ANDROID_ARCH_ABI AND CMAKE_ANDROID_ARCH_ABI MATCHES "x86|x86_64") OR
-    (NOT DEFINED CMAKE_ANDROID_ARCH_ABI AND _M_X86_64))
-  target_link_libraries(core PRIVATE bdisasm)
 endif()
 
 if (APPLE)

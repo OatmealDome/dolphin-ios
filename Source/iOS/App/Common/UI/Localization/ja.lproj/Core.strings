@@ -8,6 +8,7 @@ Because GameCube disc images contain little verification data, there may be prob
 Because this title is not for retail Wii consoles, Dolphin cannot ensure that it hasn't been tampered with, even if signatures appear valid." = "
 
 このタイトルは販売物ではないため、署名がされていたとしても、Dolphinはゲームデータが改竄されていないことを証明できません。";
+" %1 %2 (%3% fragmented)" = " %1 %2 (%3% fragmented)";
 " (Disc %1)" = "(ディスク %1)";
 "! Not" = "! Not（否定）";
 "\"{0}\" is an invalid GCM/ISO file, or is not a GC/Wii ISO." = "\"{0}\" は無効なファイル、またはゲームキューブ／Wii のISOではありません";
@@ -89,6 +90,7 @@ Current Frame: %3" = "%1 フレーム
 "Audio Settings" = "サウンド設定";
 "Auto Update" = "Auto Update";
 "Borderless Window" = "ボーダーレス ウィンドウ";
+"Branch Type" = "Branch Type";
 "Break on Hit" = "Break on Hit";
 "Breakpoints" = "ブレークポイント";
 "Bug Tracker" = "バグトラッカー";
@@ -98,6 +100,7 @@ Current Frame: %3" = "%1 フレーム
 "Clear Symbols" = "クリアシンボル";
 "Clone..." = "クローン...";
 "Code" = "コード";
+"Condition" = "Condition";
 "Connected" = "Connected";
 "Controller Settings" = "Dolphin コントローラ設定";
 "Copy Address" = "Copy Address";
@@ -109,6 +112,7 @@ Current Frame: %3" = "%1 フレーム
 "Edit..." = "Edit...";
 "Eject Disc" = "ディスクの取り出し";
 "Emulation" = "エミュレーション";
+"Erase Block(s)" = "Erase Block(s)";
 "Export" = "エクスポート";
 "Export Save Game..." = "セーブファイルのエクスポート...";
 "Export State..." = "ステートのエクスポート...";
@@ -139,12 +143,14 @@ Current Frame: %3" = "%1 フレーム
 "Lock Widgets In Place" = "ツールバーの位置を固定";
 "Log on Hit" = "Log on Hit";
 "Memory" = "Memory";
+"Misc. Controls" = "Misc. Controls";
 "Movie" = "記録";
 "Mute" = "ミュート";
 "Network" = "ネットワーク関係";
 "No" = "いいえ";
 "Open..." = "開く...";
 "Options" = "設定";
+"Origin and Destination" = "Origin and Destination";
 "Patch HLE Functions" = "Patch HLE Functions";
 "Pause" = "一時停止";
 "Play" = "開始";
@@ -166,6 +172,7 @@ Current Frame: %3" = "%1 フレーム
 "Theme" = "Theme";
 "Threads" = "Threads";
 "Tool" = "Tool";
+"Toolbar Visibility" = "Toolbar Visibility";
 "Tools" = "ツール";
 "Unload ROM" = "ROMを取り外してリセット";
 "Unlock Watches" = "ウォッチのロックを解除";
@@ -179,9 +186,7 @@ Current Frame: %3" = "%1 フレーム
 "(Dark)" = "(ダーク)";
 "(Light)" = "(ライト)";
 "(System)" = "(システム)";
-"(host)" = "(host)";
 "(off)" = "オフ";
-"(ppc)" = "(ppc)";
 "* Multiply" = "* Multiply（乗算）";
 "+ Add" = "+ Add（加算）";
 ", Comma" = ", コンマ";
@@ -342,7 +347,7 @@ Master codes are not needed. Do not use master codes." = "Action Replay エラ�
 "Address" = "Address";
 "Address Space" = "Address Space";
 "Address space by CPU state" = "Address space by CPU state";
-"Adjust the texture filtering. Anisotropic filtering enhances the visual quality of textures that are at oblique viewing angles. Force Nearest and Force Linear override the texture scaling filter selected by the game.<br><br>Any option except 'Default' will alter the look of the game's textures and might cause issues in a small number of games.<br><br>This option is incompatible with Manual Texture Sampling.<br><br><dolphin_emphasis>If unsure, select 'Default'.</dolphin_emphasis>" = "テクスチャフィルタリングを調整します。異方性フィルタリングは、斜めから見た時のテクスチャの視覚的品質を向上させます。「ニアレストを強制」と「リニアを強制」は、ゲームによって選択されたテクスチャのスケーリングフィルタを上書きします。<br><br>「既定」以外のオプションを選ぶと、テクスチャの見た目が変わり、少数のゲームで問題を引き起こすおそれがあります。<br><br>このオプションはマニュアルテクスチャサンプリングとは互換性がありません。<br><br><dolphin_emphasis>よく分からない場合は、「既定」を選択してください。</dolphin_emphasis>";
+"Adjust the texture filtering. Anisotropic filtering enhances the visual quality of textures that are at oblique viewing angles. Force Nearest and Force Linear override the texture scaling filter selected by the game.<br><br>Any option except 'Default' will alter the look of the game's textures and might cause issues in a small number of games.<br><br>This setting is disabled when Manual Texture Sampling is enabled.<br><br><dolphin_emphasis>If unsure, select 'Default'.</dolphin_emphasis>" = "Adjust the texture filtering. Anisotropic filtering enhances the visual quality of textures that are at oblique viewing angles. Force Nearest and Force Linear override the texture scaling filter selected by the game.<br><br>Any option except 'Default' will alter the look of the game's textures and might cause issues in a small number of games.<br><br>This setting is disabled when Manual Texture Sampling is enabled.<br><br><dolphin_emphasis>If unsure, select 'Default'.</dolphin_emphasis>";
 "Adjusts target radius of simulated stick gate." = "シミュレートされたスティック ゲートの目標半径を調整します。";
 "Adjusts the accuracy at which the GPU receives texture updates from RAM.<br><br>The \"Safe\" setting eliminates the likelihood of the GPU missing texture updates from RAM. Lower accuracies cause in-game text to appear garbled in certain games.<br><br><dolphin_emphasis>If unsure, select the rightmost value.</dolphin_emphasis>" = "RAMからGPUへのテクスチャ更新の受信精度を調整する設定です。<br><br>Safe 側にセットすると、RAMからのテクスチャ更新を見逃す可能性が低くなります。Fast 側によせるとタイトルによっては文字化けの原因になります。<br><br><dolphin_emphasis>よく分からなければ、右端に合わせておいてください。</dolphin_emphasis>";
 "Adjusts the amount of RAM in the emulated console.
@@ -407,7 +412,9 @@ WARNING: Changing this from the default (100%) can and will break games and caus
 "Are you sure that you want to delete '%1'?" = "次のプロファイルを削除しますか？ '%1'";
 "Are you sure you want to delete this file?" = "このタイトルの実体ファイルを削除しますか？";
 "Are you sure you want to delete this pack?" = "このリソースパックを削除しますか？";
+"Are you sure you want to log out of RetroAchievements?" = "Are you sure you want to log out of RetroAchievements?";
 "Are you sure you want to quit NetPlay?" = "ネットプレイを終了しますか？";
+"Are you sure you want to turn hardcore mode off?" = "Are you sure you want to turn hardcore mode off?";
 "Are you sure?" = "本当によろしいですか？";
 "Area Sampling" = "エリアサンプリング";
 "Aspect Ratio" = "アスペクト比";
@@ -506,7 +513,6 @@ Try again with a different character.";
 "Branch Conditional to Link Register" = "Branch Conditional to Link Register";
 "Branch Conditional to Link Register (LR saved)" = "Branch Conditional to Link Register (LR saved)";
 "Branch Not Overwritten" = "Branch Not Overwritten";
-"Branch Type" = "Branch Type";
 "Branch Was Overwritten" = "Branch Was Overwritten";
 "Branch Watch" = "Branch Watch";
 "Branch Watch Tool" = "Branch Watch Tool";
@@ -626,6 +632,8 @@ Please either install the closed-source GPU driver or update your Mesa 3D versio
 "Clone and Edit Code..." = "コードをコピーして編集...";
 "Close" = "閉じる";
 "Configuration" = "Dolphinの設定";
+"Code Buff. Size" = "Code Buff. Size";
+"Code Buffer Size" = "Code Buffer Size";
 "Code Path Not Taken" = "Code Path Not Taken";
 "Code Path Was Taken" = "Code Path Was Taken";
 "Codes received!" = "コードを受け取りました！";
@@ -643,7 +651,6 @@ Please either install the closed-source GPU driver or update your Mesa 3D versio
 "Compression" = "圧縮形式";
 "Compression Level" = "圧縮レベル";
 "Cond." = "Cond.";
-"Condition" = "Condition";
 "Conditional" = "条件付き";
 "Conditional help" = "Conditional help";
 "Conditions:
@@ -726,6 +733,8 @@ Note: All values are internally converted to Doubles for calculations. It's poss
 "Configure Input" = "入力設定";
 "Configure Output" = "出力設定";
 "Confirm" = "確認";
+"Confirm Hardcore Off" = "Confirm Hardcore Off";
+"Confirm Logout" = "Confirm Logout";
 "Confirm backend change" = "出力バックエンド変更の確認";
 "Confirm on Stop" = "動作停止時に確認";
 "Confirmation" = "確認";
@@ -787,10 +796,8 @@ Note: All values are internally converted to Doubles for calculations. It's poss
 "Copy to A" = "Aへコピー";
 "Copy to B" = "Bへコピー";
 "Core" = "コア";
-"Core is uninitialized." = "Core is uninitialized.";
 "Correct Color Space" = "適切な色空間";
 "Correct SDR Gamma" = "適切なSDRガンマ";
-"Cost" = "Cost";
 "Could not communicate with host." = "ホストと通信できませんでした";
 "Could not create client." = "クライアントを作成できませんでした";
 "Could not create peer." = "ピアを作成できませんでした";
@@ -863,6 +870,11 @@ DolphinをCD/DVDから起動していませんか？ それとも保存ファイ
 "Custom Aspect Ratio" = "カスタム アスペクト比";
 "Custom RTC Options" = "リアルタイムクロック設定";
 "Customize" = "カスタマイズ";
+"Cycles %" = "Cycles %";
+"Cycles Average" = "Cycles Average";
+"Cycles Avg." = "Cycles Avg.";
+"Cycles Percent" = "Cycles Percent";
+"Cycles Spent" = "Cycles Spent";
 "D-Pad" = "十字ボタン";
 "DFF file magic number is incorrect: got {0:08x}, expected {1:08x}" = "DFFファイルのマジックナンバーが正しくありません: got {0:08x}, expected {1:08x}";
 "DFF file size is 0; corrupt/incomplete file?" = "DFFファイルサイズが0です。ファイルが破損しているか不完全ではありませんか？";
@@ -1041,8 +1053,11 @@ Suitable for competitive games where fairness and minimal latency are most impor
 "Edit Conditional" = "Edit Conditional";
 "Edit conditional expression" = "Edit conditional expression";
 "Editor" = "エディタ";
+"Eff. Address" = "Eff. Address";
 "Effect" = "エフェクト";
 "Effective" = "Effective";
+"Effective Address" = "Effective Address";
+"Effective address %1 has no physical address translation." = "Effective address %1 has no physical address translation.";
 "Effective priority" = "Effective priority";
 "EiB" = "EiB";
 "Element" = "要素";
@@ -1101,13 +1116,13 @@ DFF: MEM1 {4:08X} ({5} MiB), MEM2 {6:08X} ({7} MiB)";
 "Enable unlocking unofficial achievements as well as official achievements.<br><br>Unofficial achievements may be optional or unfinished achievements that have not been deemed official by RetroAchievements and may be useful for testing or simply for fun.<br><br>Setting takes effect on next game load." = "Enable unlocking unofficial achievements as well as official achievements.<br><br>Unofficial achievements may be optional or unfinished achievements that have not been deemed official by RetroAchievements and may be useful for testing or simply for fun.<br><br>Setting takes effect on next game load.";
 "Enables Dolby Pro Logic II emulation using 5.1 surround. Certain backends only." = "Dolby Pro Logic II を使用した5.1サラウンドのエミュレーションを行います。特定のAPIでのみ有効";
 "Enables Floating Point Result Flag calculation, needed for a few games. (ON = Compatible, OFF = Fast)" = "浮動小数点演算結果フラグを有効にします。必要なゲームはわずかです [有効＝互換性重視／無効＝速度向上]";
-"Enables detection of arbitrary mipmaps, which some games use for special distance-based effects.<br><br>May have false positives that result in blurry textures at increased internal resolution, such as in games that use very low resolution mipmaps. Disabling this can also reduce stutter in games that frequently load new textures. This feature is not compatible with GPU Texture Decoding.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "一部のゲームで特別なディスタンスベースのエフェクトに使用される任意のミップマップの検出を有効にします。<br><br>極端に低い解像度のミップマップを使用するゲームなどでは、内部解像度を上げるとテクスチャが不鮮明になる誤検出が発生する場合があります。無効にすると、新しいテクスチャを頻繁に読み込むゲームでの途切れも軽減されます。この機能は GPU テクスチャ デコーディングと互換性がありません。<br><br><dolphin_emphasis>よく分からない場合は、チェックを外してください。</dolphin_emphasis>";
+"Enables detection of arbitrary mipmaps, which some games use for special distance-based effects.<br><br>May have false positives that result in blurry textures at increased internal resolution, such as in games that use very low resolution mipmaps. Disabling this can also reduce stutter in games that frequently load new textures.<br><br>This setting is disabled when GPU Texture Decoding is enabled.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Enables detection of arbitrary mipmaps, which some games use for special distance-based effects.<br><br>May have false positives that result in blurry textures at increased internal resolution, such as in games that use very low resolution mipmaps. Disabling this can also reduce stutter in games that frequently load new textures.<br><br>This setting is disabled when GPU Texture Decoding is enabled.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Enables emulation of the CPU write-back cache.<br>Enabling will have a significant impact on performance.<br>This should be left disabled unless absolutely needed.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "CPUライトバックキャッシュのエミュレーションを有効にします。<br>有効にするとパフォーマンスに大きな影響を与えます。<br>どうしても必要な場合を除き、無効のままにしておくこと。<br><br><dolphin_emphasis>よく分からない場合は、チェックを外したままにしておいてください。</dolphin_emphasis>";
 "Enables multithreaded command submission in backends where supported. Enabling this option may result in a performance improvement on systems with more than two CPU cores. Currently, this is limited to the Vulkan backend.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "サポートされている場合、バックエンドでのマルチスレッドコマンド送信を有効にします。このオプションを有効にすると、2つ以上のCPUコアを持つシステムでパフォーマンスが向上することがあります。現在、これはVulkanバックエンドに限定されています。<br><br><dolphin_emphasis>よく分からない場合は、チェックを外したままにしてください。</dolphin_emphasis>";
 "Enables progressive scan if supported by the emulated software. Most games don't have any issue with this.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "プログレッシブ表示を有効にします（サポートタイトルのみ）ほとんどのタイトルはこの設定について考える必要はありません。<br><br><dolphin_emphasis>よく分からなければ、チェックを入れないでください。</dolphin_emphasis>";
 "Enables scRGB HDR output (if supported by your graphics backend and monitor). Fullscreen might be required.<br><br>This gives post process shaders more room for accuracy, allows \"AutoHDR\" post-process shaders to work, and allows to fully display the PAL and NTSC-J color spaces.<br><br>Note that games still render in SDR internally.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "scRGB HDR出力を有効にします（グラフィックスバックエンドとモニターでサポートされている場合）。フルスクリーンが必要な場合があります。<br><br>これにより、ポストプロセスシェーダの精度に余裕ができ、「AutoHDR」ポストプロセスシェーダが機能するようになり、PALおよびNTSC-J色空間を完全に表示できるようになります。<br><br>なお、ゲームは内部的にSDRでレンダリングします。<br><br><dolphin_emphasis>よく分からない場合は、このチェックを外したままにしてください。</dolphin_emphasis>";
 "Enables stretching of the audio to match emulation speed." = "有効にすると音声をエミュレーション速度に合わせて伸長させます";
-"Enables texture decoding using the GPU instead of the CPU.<br><br>This may result in performance gains in some scenarios, or on systems where the CPU is the bottleneck.<br><br>This option is incompatible with Arbitrary Mipmap Detection.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "CPU の代わりに GPU を使用したテクスチャ デコードを有効にします。<br><br>これにより、一部のシナリオや、CPU がボトルネックになっているシステムではパフォーマンスが向上することがあります。<br><br>このオプションは、任意のミップマップ検出とは互換性がありません。<br><br><dolphin_emphasis>よく分からない場合は、チェックを外したままにしてください。</dolphin_emphasis>";
+"Enables texture decoding using the GPU instead of the CPU.<br><br>This may result in performance gains in some scenarios, or on systems where the CPU is the bottleneck.<br><br>If this setting is enabled, Arbitrary Mipmap Detection will be disabled.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Enables texture decoding using the GPU instead of the CPU.<br><br>This may result in performance gains in some scenarios, or on systems where the CPU is the bottleneck.<br><br>If this setting is enabled, Arbitrary Mipmap Detection will be disabled.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Enables the Memory Management Unit, needed for some games. (ON = Compatible, OFF = Fast)" = "メモリ管理機構を有効にします。いくつかのタイトルで必要です [有効＝互換性重視／無効＝速度向上]";
 "Enables the Memory Management Unit, needed for some games. (ON = Compatible, OFF = Fast)<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "ゲームによっては必要なメモリ管理ユニットを有効にします。(ON=互換、OFF=高速)<br><br><dolphin_emphasis>よく分からない場合はチェックを外してください。</dolphin_emphasis>";
 "Enables the WiiLink service for WiiConnect24 channels.
@@ -1274,7 +1289,7 @@ Make sure your video card supports at least D3D 10.0
 "Failed to open \"%1\" for writing." = "Failed to open \"%1\" for writing.";
 "Failed to open \"{0}\" for writing." = "Failed to open \"{0}\" for writing.";
 "Failed to open '%1'" = "'%1' のオープンに失敗しました";
-"Failed to open Bluetooth device: {0}" = "Bluetooth デバイスのオープンに失敗しました: {0}";
+"Failed to open Bluetooth device {:04x}:{:04x}: {}" = "Failed to open Bluetooth device {:04x}:{:04x}: {}";
 "Failed to open Branch Watch snapshot \"%1\"" = "Failed to open Branch Watch snapshot \"%1\"";
 "Failed to open config file!" = "設定ファイルのオープンに失敗しました！";
 "Failed to open file" = "ファイルを開くことができませんでした";
@@ -1395,7 +1410,6 @@ This can take a while." = "更新の最終処理中...
 "Fix Checksums" = "チェックサムを修正";
 "Fix Checksums Failed" = "チェックサムの修正に失敗";
 "Fixed Alignment" = "Fixed Alignment";
-"Flags" = "Flags";
 "Float" = "Float";
 "Follow Branch" = "Follow Branch";
 "For best results please slowly move your input to all possible regions." = "最良の結果を得るには、全ての方向に対しゆっくりと入力を行ってください";
@@ -1435,6 +1449,7 @@ This can take a while." = "更新の最終処理中...
 "Free Look Control Type" = "フリールックカメラの操作タイプ";
 "Free Look Controller %1" = "フリールック コントローラ設定 %1";
 "Free Look allows for manipulation of the in-game camera. Different camera types are available from the dropdown.<br><br>For detailed instructions, <a href=\"https://wiki.dolphin-emu.org/index.php?title=Free_Look\">refer to this page</a>." = "フリールックはゲーム内のカメラの操作を可能にする機能です。ドロップダウンから使用するカメラの種類を選択できます。<br><br>より詳しい説明は<a href=\"https://wiki.dolphin-emu.org/index.php?title=Free_Look\">こちらから確認</a>できます。";
+"Free memory" = "Free memory";
 "FreeLook" = "フリールック";
 "Freelook" = "フリールック";
 "Freelook Toggle" = "フリールック 切替";
@@ -1592,14 +1607,20 @@ OpenGL 2.xに対応したビデオカードを使っていますか？";
 "Horizontal FOV" = "水平視野";
 "Host" = "ホストになる";
 "Host Code" = "ホストコード";
+"Host F. Size" = "Host F. Size";
+"Host Far Code Cache" = "Host Far Code Cache";
+"Host Far Code Size" = "Host Far Code Size";
 "Host Input Authority" = "Host Input Authority";
-"Host Size" = "Host Size";
+"Host N. Size" = "Host N. Size";
+"Host Near Code Cache" = "Host Near Code Cache";
+"Host Near Code Size" = "Host Near Code Size";
 "Host has control of sending all inputs to the game, as received from other players, giving the host zero latency but increasing latency for others.
 Suitable for casual games with 3+ players, possibly on unstable or high latency connections." = "ホストが他プレイヤーの入力をすべて受け取ってゲームへの入力処理を行います
 ホスト側のレイテンシは0になりますが、他プレイヤーのレイテンシは大きくなります
 3人以上の環境で、通信が不安定な場合やレイテンシが大きい場合に効果的です";
 "Host input authority disabled" = "Host Input Authority が無効になりました";
 "Host input authority enabled" = "Host Input Authority が有効になりました";
+"Host instruction count: %1 near %2 far (%3% blowup)" = "Host instruction count: %1 near %2 far (%3% blowup)";
 "Host with NetPlay" = "ネットプレイを開始（ホスト）";
 "Hostname" = "Hostname";
 "Hotkeys" = "ホットキー";
@@ -1658,7 +1679,7 @@ to the connection state of the real default device (if there is one)." = "チェ
 "Ignore Format Changes" = "フォーマットの変更を無視する";
 "Ignore for this session" = "このセッションでは無視";
 "Ignores any changes to the EFB format.<br><br>Improves performance in many games without any negative effect. Causes graphical defects in a small number of other games.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "EFBフォーマットに対する変更を一切無視するようにします。<br><br>多くのタイトルでデメリットなしに動作速度が改善されますが、 タイトルによっては描画バグの原因になります。<br><br><dolphin_emphasis>よく分からなければ、チェックを外さないでください。</dolphin_emphasis>";
-"Ignores any requests from the CPU to read from or write to the EFB. <br><br>Improves performance in some games, but will disable all EFB-based graphical effects or gameplay-related features.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "CPUのEFBに対する読込／書込リクエストを無視するようにします。<br><br>タイトルによっては動作速度が改善されますが、特定のゲームの機能や画面効果が無効化されます。<br><br><dolphin_emphasis>よく分からなければ、チェックを入れないでください。</dolphin_emphasis>";
+"Ignores any requests from the CPU to read from or write to the EFB. <br><br>Improves performance in some games, but will disable all EFB-based graphical effects or gameplay-related features.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Ignores any requests from the CPU to read from or write to the EFB. <br><br>Improves performance in some games, but will disable all EFB-based graphical effects or gameplay-related features.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
 "Immediately Present XFB" = "XFBを即時表示する";
 "Implements fullscreen mode with a borderless window spanning the whole screen instead of using exclusive mode. Allows for faster transitions between fullscreen and windowed mode, but slightly increases input latency, makes movement less smooth and slightly decreases performance.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "通常の排他的フルスクリーン表示ではなく、枠のないウィンドウを全画面に広げる形でフルスクリーン表示します。他のウィンドウとの切替が高速になりますが、代わりに若干の操作遅延、動作速度の低下などのデメリットも発生します。<br><br><dolphin_emphasis>よく分からなければ、チェックを入れないでください。</dolphin_emphasis>";
 "Import BootMii NAND Backup..." = "BootMii NAND バックアップをインポート...";
@@ -1755,6 +1776,8 @@ Unable to retrieve outdated savestate version info." = "内部 LZO エラー - �
 "Invalid search string (only even string lengths supported)" = "Invalid search string (only even string lengths supported)";
 "Invalid title ID." = "無効なタイトルID";
 "Invalid watch address: %1" = "Invalid watch address: %1";
+"Invert Condition" = "Invert Condition";
+"Invert Decrement Check" = "Invert Decrement Check";
 "Italian" = "イタリア語";
 "Italy" = "イタリア";
 "Item" = "アイテム";
@@ -1895,6 +1918,9 @@ User/Load/DynamicInputTextures/lt;game_idgt;/<br><br><dolphin_emphasis>よく分
 "Log Types" = "表示するログ情報";
 "Logger Outputs" = "ログ出力先";
 "Login Failed" = "ログインに失敗しました";
+"Login Failed - Invalid Username/Password" = "Login Failed - Invalid Username/Password";
+"Login Failed - No Internet Connection" = "Login Failed - No Internet Connection";
+"Login Failed - Server Error" = "Login Failed - Server Error";
 "Logs the render time of every frame to User/Logs/render_time.txt.<br><br>Use this feature to measure Dolphin's performance.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "レンダリング所要時間のログを以下のファイルへ保存します
 User/Logs/render_time.txt.<br><br>ベンチマークとして有用な機能です。<br><br><dolphin_emphasis>よく分からなければ、チェックを入れないでください。</dolphin_emphasis>";
 "Loop" = "ループ";
@@ -1907,6 +1933,7 @@ User/Logs/render_time.txt.<br><br>ベンチマークとして有用な機能で�
 "MadCatz Gameshark files" = "MadCatz Gameshark 形式";
 "Magic" = "まほう";
 "Main Stick" = "コントロールスティック";
+"Make Unconditional" = "Make Unconditional";
 "Make sure that the hero level value is between 0 and 100!" = "ヒーロー レベルの値が 0 ～ 100 であることを確認してください！";
 "Make sure that the last placed datetime value is valid!" = "最後にセットされたdatetime値が有効であることを確認してください！";
 "Make sure that the last reset datetime value is valid!" = "最終リセット日時の値が有効であることを確認してください！";
@@ -1922,6 +1949,7 @@ User/Logs/render_time.txt.<br><br>ベンチマークとして有用な機能で�
 "Mask ROM" = "マスクロム";
 "Match Found" = "Match Found";
 "Max Buffer" = "最大バッファサイズ";
+"Max Effective Address" = "Max Effective Address";
 "Max buffer size changed to %1" = "最大バッファサイズが変更されました: %1";
 "Maximum tilt angle." = "最大傾斜角度。";
 "May cause slow down in Wii Menu and some games." = "有効にしているとWiiメニューやいくつかのタイトルで動作速度が低下する場合があります";
@@ -1941,10 +1969,11 @@ User/Logs/render_time.txt.<br><br>ベンチマークとして有用な機能で�
 続行しますか？";
 "MiB" = "MiB";
 "Microphone" = "マイク";
+"Min Effective Address" = "Min Effective Address";
 "Mini" = "ミニ";
 "Misc" = "その他";
 "Misc Settings" = "その他の設定";
-"Misc. Controls" = "Misc. Controls";
+"Miscellaneous Settings" = "Miscellaneous Settings";
 "Mismatch between free block count in header and actually unused blocks." = "Mismatch between free block count in header and actually unused blocks.";
 "Mismatch between internal data structures." = "Mismatch between internal data structures.";
 "Mismatched ROMs
@@ -1978,6 +2007,8 @@ Expected:
 "Movie {0} indicates that it starts from a savestate, but {1} doesn't exist. The movie will likely not sync!" = "ムービー {0} はセーブステートから開始することを示していますが、{1} は存在しません。ムービーは同期しない可能性があります！";
 "Multiple errors while generating AR codes." = "Multiple errors while generating AR codes.";
 "Multiplier" = "乗数";
+"Mute When Disabling Speed Limit" = "Mute When Disabling Speed Limit";
+"Mutes the audio when overriding the emulation speed limit (default hotkey: Tab)." = "Mutes the audio when overriding the emulation speed limit (default hotkey: Tab).";
 "No to All" = "すべていいえ";
 "NAND Check" = "NAND 整合性チェック";
 "NKit Warning" = "NKit Warning";
@@ -2053,7 +2084,6 @@ Expected:
 "Nothing to configure" = "設定するものは何もありません";
 "Notice" = "注意";
 "Null" = "ビデオ出力なし (Null)";
-"NumExec" = "NumExec";
 "Number of shakes per second." = "1秒間に行うシェイクの回数";
 "Nunchuk" = "ヌンチャク";
 "Nunchuk Accelerometer" = "ヌンチャク加速度センサー";
@@ -2116,7 +2146,6 @@ After enough passes and experimentation, you may be able to find function calls 
 "Origin Max" = "Origin Max";
 "Origin Min" = "Origin Min";
 "Origin Symbol" = "Origin Symbol";
-"Origin and Destination" = "Origin and Destination";
 "Other" = "その他";
 "Other Partition (%1)" = "その他のパーティション (%1)";
 "Other State Hotkeys" = "その他";
@@ -2131,7 +2160,9 @@ After enough passes and experimentation, you may be able to find function calls 
 "PCAP" = "PCAP";
 "PNG Compression Level" = "PNG圧縮レベル";
 "PNG image file (*.png);; All Files (*)" = "PNG画像ファイル (*.png);; すべてのファイル (*)";
-"PPC Size" = "PPC Size";
+"PPC Feat. Flags" = "PPC Feat. Flags";
+"PPC Feature Flags" = "PPC Feature Flags";
+"PPC Instruction Coverage" = "PPC Instruction Coverage";
 "PPC vs Host" = "PPC vs Host";
 "Pad" = "パッド";
 "Pads" = "パッド";
@@ -2182,6 +2213,7 @@ After enough passes and experimentation, you may be able to find function calls 
 "Player Two Ability One" = "プレイヤー 2 アビリティ 1";
 "Player Two Ability Two" = "プレイヤー 2 アビリティ 2";
 "Players" = "プレイヤー数";
+"Playing a game" = "Playing a game";
 "Playtime" = "プレイ時間";
 "Please change the \"SyncOnSkipIdle\" setting to \"True\"! It's currently disabled, which makes this problem very likely to happen." = "「SyncOnSkipIdle」設定を「True」に変更してください。現在無効になっているため、この問題が発生する確率が非常に高くなります。";
 "Please start a game before starting a search with standard memory regions." = "Please start a game before starting a search with standard memory regions.";
@@ -2245,6 +2277,7 @@ This can take a while." = "更新の準備中...
 "Raw" = "Raw";
 "Raw Internal Resolution" = "Raw Internal Resolution";
 "Replace Instruction" = "Replace Instruction";
+"Re-initialize software JIT block profiling data." = "Re-initialize software JIT block profiling data.";
 "Read" = "Read";
 "Read and write" = "Read and write";
 "Read only" = "Read only";
@@ -2254,6 +2287,7 @@ This can take a while." = "更新の準備中...
 "Received invalid Wii Remote data from Netplay." = "ネットプレイから無効なWiiリモコンデータを受信しました。";
 "Recent Hits" = "Recent Hits";
 "Recenter" = "リセット";
+"Recompiles Physical Address" = "Recompiles Physical Address";
 "Record" = "録画";
 "Record Inputs" = "コントローラ操作を記録";
 "Recording" = "Recording";
@@ -2285,6 +2319,8 @@ This can take a while." = "更新の準備中...
 "Render Window" = "ゲームウィンドウ設定";
 "Render to Main Window" = "メインウィンドウ部分に描画";
 "Renders the scene as a wireframe.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Renders the scene as a wireframe.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
+"Repeat Instr." = "Repeat Instr.";
+"Repeat Instructions" = "Repeat Instructions";
 "Report: GCIFolder Writing to unallocated block {0:#x}" = "Report: GCIFolder Writing to unallocated block {0:#x}";
 "Request to Join Your Party" = "参加要請";
 "Requires the render window to be focused for hotkeys to take effect.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Requires the render window to be focused for hotkeys to take effect.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
@@ -2323,6 +2359,10 @@ This can take a while." = "更新の準備中...
 
 If the origin, destination, or symbol columns are right-clicked, an action copy the relevant address(es) to the clipboard will be available, and an action to set a breakpoint at the relevant address(es) will be available. Note that, for the origin / destination symbol columns, these actions will only be enabled if every row in the selection has a symbol.
 
+If the instruction column of a row selection is right-clicked, an action to invert the branch instruction's condition and an action to invert the branch instruction's decrement check will be available, but only if the branch instruction is a conditional one.
+
+If the condition column of a row selection is right-clicked, an action to make the branch instruction unconditional will be available, but only if the branch instruction is a conditional one.
+
 If the origin column of a row selection is right-clicked, an action to replace the branch instruction at the origin(s) with a NOP instruction (No Operation) will be available.
 
 If the destination column of a row selection is right-clicked, an action to replace the instruction at the destination(s) with a BLR instruction (Branch to Link Register) will be available, but will only be enabled if the branch instruction at every origin updates the link register.
@@ -2333,6 +2373,10 @@ All context menus have the action to delete the selected row(s) from the candida
 
 If the origin, destination, or symbol columns are right-clicked, an action copy the relevant address(es) to the clipboard will be available, and an action to set a breakpoint at the relevant address(es) will be available. Note that, for the origin / destination symbol columns, these actions will only be enabled if every row in the selection has a symbol.
 
+If the instruction column of a row selection is right-clicked, an action to invert the branch instruction's condition and an action to invert the branch instruction's decrement check will be available, but only if the branch instruction is a conditional one.
+
+If the condition column of a row selection is right-clicked, an action to make the branch instruction unconditional will be available, but only if the branch instruction is a conditional one.
+
 If the origin column of a row selection is right-clicked, an action to replace the branch instruction at the origin(s) with a NOP instruction (No Operation) will be available.
 
 If the destination column of a row selection is right-clicked, an action to replace the instruction at the destination(s) with a BLR instruction (Branch to Link Register) will be available, but will only be enabled if the branch instruction at every origin updates the link register.
@@ -2342,6 +2386,7 @@ If the origin / destination symbol column of a row selection is right-clicked, a
 All context menus have the action to delete the selected row(s) from the candidates.";
 "Rumble" = "振動";
 "Run to Here" = "Run to Here";
+"Run Count" = "Run Count";
 "Run GBA Cores in Dedicated Threads" = "GBAコアを専用のスレッドで実行する";
 "Run Until" = "Run Until";
 "Run Until (Ignoring Breakpoints)" = "Run Until (Ignoring Breakpoints)";
@@ -2482,9 +2527,7 @@ Overwrite now?" = "このタイトルのセーブデータは既にNAND内に存
 "Selects how frame dumps (videos) and screenshots are going to be captured.<br>If the game or window resolution change during a recording, multiple video files might be created.<br>Note that color correction and cropping are always ignored by the captures.<br><br><b>Window Resolution</b>: Uses the output window resolution (without black bars).<br>This is a simple dumping option that will capture the image more or less as you see it.<br><b>Aspect Ratio Corrected Internal Resolution</b>: Uses the Internal Resolution (XFB size), and corrects it by the target aspect ratio.<br>This option will consistently dump at the specified Internal Resolution regardless of how the image is displayed during recording.<br><b>Raw Internal Resolution</b>: Uses the Internal Resolution (XFB size) without correcting it with the target aspect ratio.<br>This will provide a clean dump without any aspect ratio correction so users have as raw as possible input for external editing software.<br><br><dolphin_emphasis>If unsure, leave this at \"Aspect Ratio Corrected Internal Resolution\".</dolphin_emphasis>" = "Selects how frame dumps (videos) and screenshots are going to be captured.<br>If the game or window resolution change during a recording, multiple video files might be created.<br>Note that color correction and cropping are always ignored by the captures.<br><br><b>Window Resolution</b>: Uses the output window resolution (without black bars).<br>This is a simple dumping option that will capture the image more or less as you see it.<br><b>Aspect Ratio Corrected Internal Resolution</b>: Uses the Internal Resolution (XFB size), and corrects it by the target aspect ratio.<br>This option will consistently dump at the specified Internal Resolution regardless of how the image is displayed during recording.<br><b>Raw Internal Resolution</b>: Uses the Internal Resolution (XFB size) without correcting it with the target aspect ratio.<br>This will provide a clean dump without any aspect ratio correction so users have as raw as possible input for external editing software.<br><br><dolphin_emphasis>If unsure, leave this at \"Aspect Ratio Corrected Internal Resolution\".</dolphin_emphasis>";
 "Selects the stereoscopic 3D mode. Stereoscopy allows a better feeling of depth if the necessary hardware is present. Heavily decreases emulation speed and sometimes causes issues.<br><br>Side-by-Side and Top-and-Bottom are used by most 3D TVs.<br>Anaglyph is used for Red-Cyan colored glasses.<br>HDMI 3D is used when the monitor supports 3D display resolutions.<br>Passive is another type of 3D used by some TVs.<br><br><dolphin_emphasis>If unsure, select Off.</dolphin_emphasis>" = "立体視の表示方式を選択します。立体視が可能なハードウェアが必要ですが、より良い奥行き感を味わうことができます。どの方式も動作速度に大きな影響があり、時に描画バグの原因にもなり得ることに注意してください。<br><br>多くの3Dテレビでは、Side-by-Side または Top-and-Bottom 方式を採用しています。<br>3Dメガネ方式の場合は Anaglyph を選んでください。<br>HDMI 3D は使用しているモニタが 3D解像度に対応している必要があります。<br>Passive は一部の3Dテレビで採用されています。<br><br><dolphin_emphasis>よく分からなければ、「オフ」を選択してください。</dolphin_emphasis>";
 "Selects which aspect ratio to use for displaying the game.<br><br>The aspect ratio of the image sent out by the original consoles varied depending on the game and rarely exactly matched 4:3 or 16:9. Some of the image would be cut off by the edges of the TV, or the image wouldn't fill the TV entirely. By default, Dolphin shows the whole image without distorting its proportions, which means it's normal for the image to not entirely fill your display.<br><br><b>Auto</b>: Mimics a TV with either a 4:3 or 16:9 aspect ratio, depending on which type of TV the game seems to be targeting.<br><br><b>Force 16:9</b>: Mimics a TV with a 16:9 (widescreen) aspect ratio.<br><br><b>Force 4:3</b>: Mimics a TV with a 4:3 aspect ratio.<br><br><b>Stretch to Window</b>: Stretches the image to the window size. This will usually distort the image's proportions.<br><br><b>Custom</b>: Mimics a TV with the specified aspect ratio. This is mostly intended to be used with aspect ratio cheats/mods.<br><br><b>Custom (Stretch)</b>: Similar to `Custom`, but stretches the image to the specified aspect ratio. This will usually distort the image's proportions, and should not be used under normal circumstances.<br><br><dolphin_emphasis>If unsure, select Auto.</dolphin_emphasis>" = "Selects which aspect ratio to use for displaying the game.<br><br>The aspect ratio of the image sent out by the original consoles varied depending on the game and rarely exactly matched 4:3 or 16:9. Some of the image would be cut off by the edges of the TV, or the image wouldn't fill the TV entirely. By default, Dolphin shows the whole image without distorting its proportions, which means it's normal for the image to not entirely fill your display.<br><br><b>Auto</b>: Mimics a TV with either a 4:3 or 16:9 aspect ratio, depending on which type of TV the game seems to be targeting.<br><br><b>Force 16:9</b>: Mimics a TV with a 16:9 (widescreen) aspect ratio.<br><br><b>Force 4:3</b>: Mimics a TV with a 4:3 aspect ratio.<br><br><b>Stretch to Window</b>: Stretches the image to the window size. This will usually distort the image's proportions.<br><br><b>Custom</b>: Mimics a TV with the specified aspect ratio. This is mostly intended to be used with aspect ratio cheats/mods.<br><br><b>Custom (Stretch)</b>: Similar to `Custom`, but stretches the image to the specified aspect ratio. This will usually distort the image's proportions, and should not be used under normal circumstances.<br><br><dolphin_emphasis>If unsure, select Auto.</dolphin_emphasis>";
-"Selects which graphics API to use internally.<br><br>The software renderer is extremely slow and only useful for debugging, so any of the other backends are recommended. Different games and different GPUs will behave differently on each backend, so for the best emulation experience it is recommended to try each and select the backend that is least problematic.<br><br><dolphin_emphasis>If unsure, select OpenGL.</dolphin_emphasis>" = "描画に使用する出力バックエンドAPIを選択します。
-<br><br>Software Render はデバッグ用としてのみ有用で、非常に低速なため、通常は選択しないでください。
-各APIの動作はタイトルとビデオカードによってそれぞれ異なるため、それぞれ試してうまく動作するものを選んでください。<br><br><dolphin_emphasis>よく分からない場合は OpenGL を選択してください。</dolphin_emphasis>";
+"Selects which graphics API to use internally.<br><br>The software renderer is extremely slow and only useful for debugging, so any of the other backends are recommended. Different games and different GPUs will behave differently on each backend, so for the best emulation experience it is recommended to try each and select the backend that is least problematic.<br><br><dolphin_emphasis>If unsure, select %1.</dolphin_emphasis>" = "Selects which graphics API to use internally.<br><br>The software renderer is extremely slow and only useful for debugging, so any of the other backends are recommended. Different games and different GPUs will behave differently on each backend, so for the best emulation experience it is recommended to try each and select the backend that is least problematic.<br><br><dolphin_emphasis>If unsure, select %1.</dolphin_emphasis>";
 "Selects which update track Dolphin uses when checking for updates at startup. If a new update is available, Dolphin will show a list of changes made since your current version and ask you if you want to update.<br><br>The Dev track has the latest version of Dolphin which often updates multiple times per day. Select this track if you want the newest features and fixes.<br><br>The Releases track has an update every few months. Some reasons you might prefer to use this track:<br>- You prefer using versions that have had additional testing.<br>- NetPlay requires players to have the same Dolphin version, and the latest Release version will have the most players to match with.<br>- You frequently use Dolphin's savestate system, which doesn't guarantee backward compatibility of savestates between Dolphin versions. If this applies to you, make sure you make an in-game save before updating (i.e. save your game in the same way you would on a physical GameCube or Wii), then load the in-game save after updating Dolphin and before making any new savestates.<br><br>Selecting \"Don't Update\" will prevent Dolphin from automatically checking for updates.<br><br><dolphin_emphasis>If unsure, select Releases.</dolphin_emphasis>" = "Selects which update track Dolphin uses when checking for updates at startup. If a new update is available, Dolphin will show a list of changes made since your current version and ask you if you want to update.<br><br>The Dev track has the latest version of Dolphin which often updates multiple times per day. Select this track if you want the newest features and fixes.<br><br>The Releases track has an update every few months. Some reasons you might prefer to use this track:<br>- You prefer using versions that have had additional testing.<br>- NetPlay requires players to have the same Dolphin version, and the latest Release version will have the most players to match with.<br>- You frequently use Dolphin's savestate system, which doesn't guarantee backward compatibility of savestates between Dolphin versions. If this applies to you, make sure you make an in-game save before updating (i.e. save your game in the same way you would on a physical GameCube or Wii), then load the in-game save after updating Dolphin and before making any new savestates.<br><br>Selecting \"Don't Update\" will prevent Dolphin from automatically checking for updates.<br><br><dolphin_emphasis>If unsure, select Releases.</dolphin_emphasis>";
 "Send" = "送信";
 "Sensor Bar Position" = "センサーバーの位置";
@@ -2653,6 +2696,7 @@ Please check the highlighted values." = "いくつかの値は不正です。
 "Start NetPlay..." = "ネットプレイを開始...";
 "Start Branch Watch" = "Start Branch Watch";
 "Start New Cheat Search" = "新しいチート検索を開始します";
+"Start Profiling" = "Start Profiling";
 "Start Recording Input" = "操作の記録を開始";
 "Start Recording" = "操作の記録を開始";
 "Start in Fullscreen" = "フルスクリーンで開始する";
@@ -2675,6 +2719,7 @@ Please check the highlighted values." = "いくつかの値は不正です。
 "Stereoscopy" = "立体視";
 "Stick" = "スティック";
 "Stop Playing/Recording Input" = "操作の再生／記録を停止";
+"Stop Profiling" = "Stop Profiling";
 "Stopped game" = "ゲームを終了";
 "Store EFB Copies to Texture Only" = "Store EFB Copies to Texture Only";
 "Store XFB Copies to Texture Only" = "Store XFB Copies to Texture Only";
@@ -2942,6 +2987,11 @@ EFB 読み取りを使用する一部のゲームで非同期が妨げられる�
 "Threshold" = "しきい値";
 "TiB" = "TiB";
 "Tilt" = "傾き";
+"Time %" = "Time %";
+"Time Average (ns)" = "Time Average (ns)";
+"Time Avg. (ns)" = "Time Avg. (ns)";
+"Time Percent" = "Time Percent";
+"Time Spent (ns)" = "Time Spent (ns)";
 "Time period of stable input to trigger calibration. (zero to disable)" = "キャリブレーションを起動するまでの安定した入力の期間。 (無効にする場合はゼロ)";
 "Timed Out" = "Timed Out";
 "Title" = "タイトル";
@@ -2965,6 +3015,7 @@ EFB 読み取りを使用する一部のゲームで非同期が妨げられる�
 "Toggle USB Keyboard" = "USB キーボード 切替";
 "Toggle XFB Copies" = "EFB Copies 設定切替";
 "Toggle XFB Immediate Mode" = "XFB Immediate Mode 設定切替";
+"Toggle software JIT block profiling (will clear the JIT cache)." = "Toggle software JIT block profiling (will clear the JIT cache).";
 "Tokenizing failed." = "トークン化に失敗しました。";
 "Tool Controls" = "Tool Controls";
 "Toolbar" = "ツールバー";
@@ -3083,7 +3134,7 @@ This can take a while." = "次のタイトルを更新中... %1
 "Use PAL60 Mode (EuRGB60)" = "PAL60 (EuRGB60) モードを使用する";
 "Use Panic Handlers" = "パニックハンドラーを使用する";
 "Use RetroAchievements rich presence in your Discord status.<br><br>Show Current Game on Discord must be enabled." = "Use RetroAchievements rich presence in your Discord status.<br><br>Show Current Game on Discord must be enabled.";
-"Use a manual implementation of texture sampling instead of the graphics backend's built-in functionality.<br><br>This setting can fix graphical issues in some games on certain GPUs, most commonly vertical lines on FMVs. In addition to this, enabling Manual Texture Sampling will allow for correct emulation of texture wrapping special cases (at 1x IR or when scaled EFB is disabled, and with custom textures disabled) and better emulates Level of Detail calculation.<br><br>This comes at the cost of potentially worse performance, especially at higher internal resolutions; additionally, Anisotropic Filtering is currently incompatible with Manual Texture Sampling.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "グラフィックス・バックエンドの組み込み機能の代わりに、テクスチャサンプリングのマニュアル実装を使用します。<br><br>この設定によりGPUによっては、FMVの縦線など、一部のゲームにおけるグラフィックの問題を修正することができます。これに加えて、手動テクスチャ サンプリングを有効にすると、テクスチャ ラッピングの特殊なケース (1x IR またはスケーリングされた EFB が無効で、カスタム テクスチャが無効になっている場合) を正しくエミュレーションできるようになり、LoD の計算をより適切にエミュレートできるようになります。<br><br>これには、特に内部解像度が高い場合にパフォーマンスが低下する可能性があるという代償が伴います。さらに、異方性フィルタリングは現在、手動テクスチャ サンプリングと互換性がありません。<br><br><dolphin_emphasis>よく分からない場合はチェックを外してください。</dolphin_emphasis>";
+"Use a manual implementation of texture sampling instead of the graphics backend's built-in functionality.<br><br>This setting can fix graphical issues in some games on certain GPUs, most commonly vertical lines on FMVs. In addition to this, enabling Manual Texture Sampling will allow for correct emulation of texture wrapping special cases (at 1x IR or when scaled EFB is disabled, and with custom textures disabled) and better emulates Level of Detail calculation.<br><br>This comes at the cost of potentially worse performance, especially at higher internal resolutions.<br><br>If this setting is enabled, the Texture Filtering setting will be disabled.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Use a manual implementation of texture sampling instead of the graphics backend's built-in functionality.<br><br>This setting can fix graphical issues in some games on certain GPUs, most commonly vertical lines on FMVs. In addition to this, enabling Manual Texture Sampling will allow for correct emulation of texture wrapping special cases (at 1x IR or when scaled EFB is disabled, and with custom textures disabled) and better emulates Level of Detail calculation.<br><br>This comes at the cost of potentially worse performance, especially at higher internal resolutions.<br><br>If this setting is enabled, the Texture Filtering setting will be disabled.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Use a single depth buffer for both eyes. Needed for a few games." = "両方の目に単一の深度バッファを使用します。必要となるタイトルはわずかです。";
 "Use memory mapper configuration at time of scan" = "スキャン時にメモリ マッパー構成を使用します";
 "Use physical addresses" = "実在するアドレスを使います";
@@ -3126,6 +3177,7 @@ inputs and outputs of the same parent controller." = "制御式で使用でき�
 "Vertical FOV" = "垂直視野";
 "Vertical Offset" = "垂直オフセット";
 "Video" = "描画";
+"View Code" = "View Code";
 "View code" = "View code";
 "View memory" = "View memory";
 "Virtual Notches" = "バーチャルノッチ";
@@ -3204,6 +3256,8 @@ Start={24}, A={25}, B={26}, X={27}, Y={28}, Z={29}, DUp={30}, DDown={31}, DLeft=
 "Window Resolution" = "Window Resolution";
 "Window Size" = "画面サイズ";
 "Wipe Inspection Data" = "Wipe Inspection Data";
+"Wipe JIT Block Profiling Data" = "Wipe JIT Block Profiling Data";
+"Wipe Profiling" = "Wipe Profiling";
 "Wipe Recent Hits" = "Wipe Recent Hits";
 "Word Wrap" = "テキストの折り返し";
 "World" = "地域なし";
