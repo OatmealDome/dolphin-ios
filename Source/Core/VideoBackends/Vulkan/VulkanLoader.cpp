@@ -55,7 +55,7 @@ static bool OpenVulkanLibrary(bool force_system_library)
   // Use the libMoltenVK.dylib from the application bundle.
   std::string filename = File::GetBundleDirectory() + "/Contents/Frameworks/libMoltenVK.dylib";
 #else
-  std::string filename = File::GetBundleDirectory() + "/Frameworks/libMoltenVK.dylib";
+  std::string filename = File::GetBundleDirectory() + "/Frameworks/MoltenVK.framework/MoltenVK";
 #endif
   return s_vulkan_module.Open(filename.c_str());
 #else
