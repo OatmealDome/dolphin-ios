@@ -183,6 +183,9 @@
 		B9FCB7E12898D1E80020E233 /* SwiftLocalizationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7E02898D1E80020E233 /* SwiftLocalizationUtil.swift */; };
 		B9FCB7E42898F4D60020E233 /* JitManager+JitStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7E32898F4D60020E233 /* JitManager+JitStreamer.m */; };
 		B9FCB7E62898FAC10020E233 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FCB7E52898FAC10020E233 /* GameController.framework */; };
+		D6C2781E2BFE8B18007F4D10 /* LowPowerModeWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C2781D2BFE8B18007F4D10 /* LowPowerModeWarningViewController.swift */; };
+		D6C278202BFE8B5C007F4D10 /* LowPowerModeWarning.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6C2781F2BFE8B5C007F4D10 /* LowPowerModeWarning.xib */; };
+		D6C278242BFE8DEA007F4D10 /* LowPowerModeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D6C278232BFE8DEA007F4D10 /* LowPowerModeManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -544,6 +547,10 @@
 		B9FF01E72977DCBE00B49B00 /* TrollStore.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TrollStore.xcconfig; sourceTree = "<group>"; };
 		B9FF01E82977DCF700B49B00 /* Release (TrollStore).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (TrollStore).xcconfig"; sourceTree = "<group>"; };
 		B9FF01E92977DD0000B49B00 /* Release (Beta, TrollStore).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Beta, TrollStore).xcconfig"; sourceTree = "<group>"; };
+		D6C2781D2BFE8B18007F4D10 /* LowPowerModeWarningViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LowPowerModeWarningViewController.swift; sourceTree = "<group>"; };
+		D6C2781F2BFE8B5C007F4D10 /* LowPowerModeWarning.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LowPowerModeWarning.xib; sourceTree = "<group>"; };
+		D6C278222BFE8DEA007F4D10 /* LowPowerModeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LowPowerModeManager.h; sourceTree = "<group>"; };
+		D6C278232BFE8DEA007F4D10 /* LowPowerModeManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LowPowerModeManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -585,6 +592,7 @@
 		B900A7A427F26F17000361DD /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				D6C278212BFE8DB7007F4D10 /* Battery */,
 				B9B2C65C288E481300CB6569 /* Emulation */,
 				B974923D296035E500794509 /* Fastmem */,
 				B900A7BB27F4CD16000361DD /* FoundationUtil */,
@@ -882,6 +890,7 @@
 		B933EDC527F8E8D6004D7DD7 /* Emulation */ = {
 			isa = PBXGroup;
 			children = (
+				D6C2781C2BFE8ADE007F4D10 /* LowPowerModeWarning */,
 				B9FCB7C328976C340020E233 /* JitWait */,
 				B9FCB7CF2897B9A90020E233 /* NKitWarning */,
 				B9D9388D283DE3C800B290FC /* EmulationViewController.h */,
@@ -1458,6 +1467,7 @@
 		B9D93890283DE62700B290FC /* Emulation */ = {
 			isa = PBXGroup;
 			children = (
+				D6C2781B2BFE8A9F007F4D10 /* LowPowerModeWarning */,
 				B9FCB7C2289762840020E233 /* JitWait */,
 				B9114FA32894E0B400B9C57A /* NKitWarning */,
 				B9D9389F283F239200B290FC /* TouchController */,
@@ -1653,6 +1663,31 @@
 			path = Alert;
 			sourceTree = "<group>";
 		};
+		D6C2781B2BFE8A9F007F4D10 /* LowPowerModeWarning */ = {
+			isa = PBXGroup;
+			children = (
+				D6C2781F2BFE8B5C007F4D10 /* LowPowerModeWarning.xib */,
+			);
+			path = LowPowerModeWarning;
+			sourceTree = "<group>";
+		};
+		D6C2781C2BFE8ADE007F4D10 /* LowPowerModeWarning */ = {
+			isa = PBXGroup;
+			children = (
+				D6C2781D2BFE8B18007F4D10 /* LowPowerModeWarningViewController.swift */,
+			);
+			path = LowPowerModeWarning;
+			sourceTree = "<group>";
+		};
+		D6C278212BFE8DB7007F4D10 /* Battery */ = {
+			isa = PBXGroup;
+			children = (
+				D6C278222BFE8DEA007F4D10 /* LowPowerModeManager.h */,
+				D6C278232BFE8DEA007F4D10 /* LowPowerModeManager.m */,
+			);
+			path = Battery;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1765,6 +1800,7 @@
 				B99137AC28827AD200588446 /* SettingsRoot.storyboard in Resources */,
 				B991379E2881F23A00588446 /* Core.strings in Resources */,
 				B9B2C624288DB62D00CB6569 /* TCWiiPad.xib in Resources */,
+				D6C278202BFE8B5C007F4D10 /* LowPowerModeWarning.xib in Resources */,
 				B904ACF42886AB06008B6BE9 /* ButtonMapping.storyboard in Resources */,
 				B950CFB6296179E000197719 /* UnofficialBuildNotice.xib in Resources */,
 				B950CA942846A13100F45219 /* Sys in Resources */,
@@ -2041,6 +2077,7 @@
 				B9EC1A43295FFFD30013EBE4 /* SoftwareListiOSViewController.mm in Sources */,
 				B904AD1228886B0D008B6BE9 /* MappingRootExtensionCell.m in Sources */,
 				B99137982881D68600588446 /* CpuEngineViewController.mm in Sources */,
+				D6C2781E2BFE8B18007F4D10 /* LowPowerModeWarningViewController.swift in Sources */,
 				B9B2C5E2288D0A9800CB6569 /* MappingLoadProfileViewController.mm in Sources */,
 				B99137C928832A0800588446 /* LocalizationUtil.m in Sources */,
 				B9FCB7DB28988E4C0020E233 /* JitManager+AltServer.m in Sources */,
@@ -2049,6 +2086,7 @@
 				B9447AFD28418D7600BC9110 /* TCButton.swift in Sources */,
 				B9D938A1283F23A000B290FC /* TCButtonType.swift in Sources */,
 				B904ACF128868E4B008B6BE9 /* ControllersSettingsUtil.mm in Sources */,
+				D6C278242BFE8DEA007F4D10 /* LowPowerModeManager.m in Sources */,
 				B99137952881D62C00588446 /* CpuEngineCell.m in Sources */,
 				B904ACC4288524D9008B6BE9 /* GraphicsAspectRatioViewController.mm in Sources */,
 				B9FCB7E42898F4D60020E233 /* JitManager+JitStreamer.m in Sources */,
