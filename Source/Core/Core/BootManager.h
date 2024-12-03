@@ -14,7 +14,7 @@ struct WindowSystemInfo;
 
 namespace BootManager
 {
-bool BootCore(std::unique_ptr<BootParameters> parameters,
+bool BootCore(Core::System& system, std::unique_ptr<BootParameters> parameters,
               const WindowSystemInfo& wsi);
 
 // Synchronise Dolphin's configuration with the SYSCONF (which may have changed during emulation),

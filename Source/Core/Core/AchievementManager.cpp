@@ -200,7 +200,7 @@ void AchievementManager::SetBackgroundExecutionAllowed(bool allowed)
   if (!system)
     return;
 
-  if (allowed && Core::GetState() == Core::State::Paused)
+  if (allowed && Core::GetState(*system) == Core::State::Paused)
     DoIdle();
 }
 
@@ -314,7 +314,7 @@ void AchievementManager::DoIdle()
       {
         std::lock_guard lg{m_lock};
         Core::System* system = m_system.load(std::memory_order_acquire);
-        if (!system || Core::GetState() != Core::State::Paused)
+        if (!system || Core::GetState(*system) != Core::State::Paused)
           return;
         if (!m_background_execution_allowed)
           return;
@@ -323,9 +323,9 @@ void AchievementManager::DoIdle()
       }
       // rc_client_idle peeks at memory to recalculate rich presence and therefore
       // needs to be on host or CPU thread to access memory.
-      Core::QueueHostJob([this]() {
+      Core::QueueHostJob([this](Core::System& system) {
         std::lock_guard lg{m_lock};
-        if (Core::GetState() != Core::State::Paused)
+        if (Core::GetState(system) != Core::State::Paused)
           return;
         if (!m_background_execution_allowed)
           return;
@@ -1038,7 +1038,7 @@ void AchievementManager::HandleGameCompletedEvent(const rc_client_event_t* clien
 void AchievementManager::HandleResetEvent(const rc_client_event_t* client_event)
 {
   INFO_LOG_FMT(ACHIEVEMENTS, "Reset requested by Achievement Mananger");
-  Core::Stop();
+  Core::Stop(Core::System::GetInstance());
 }
 
 void AchievementManager::HandleServerErrorEvent(const rc_client_event_t* client_event)

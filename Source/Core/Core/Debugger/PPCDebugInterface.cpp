@@ -350,7 +350,7 @@ u32 PPCDebugInterface::ReadInstruction(const Core::CPUThreadGuard& guard, u32 ad
 
 bool PPCDebugInterface::IsAlive() const
 {
-  return Core::IsRunning();
+  return Core::IsRunning(m_system);
 }
 
 bool PPCDebugInterface::IsBreakpoint(u32 address) const

@@ -120,7 +120,7 @@ static std::unique_ptr<MemoryWatcher> s_memory_watcher;
 
 struct HostJob
 {
-  std::function<void()> job;
+  std::function<void(Core::System&)> job;
   bool run_after_stop;
 };
 static std::mutex s_host_jobs_lock;
@@ -166,13 +166,13 @@ void FrameUpdateOnCPUThread()
     NetPlay::NetPlayClient::SendTimeBase();
 }
 
-void OnFrameEnd()
+void OnFrameEnd(Core::System& system)
 {
 #ifdef USE_MEMORYWATCHER
   if (s_memory_watcher)
   {
     ASSERT(IsCPUThread());
-    const CPUThreadGuard guard(Core::System::GetInstance());
+    const CPUThreadGuard guard(system);
 
     s_memory_watcher->Step(guard);
   }
@@ -190,7 +190,7 @@ std::string StopMessage(bool main_thread, std::string_view message)
 
 void DisplayMessage(std::string message, int time_in_ms)
 {
-  if (!IsRunningOrStarting())
+  if (!IsRunningOrStarting(Core::System::GetInstance()))
     return;
 
   // Actually displaying non-ASCII could cause things to go pear-shaped
@@ -200,12 +200,12 @@ void DisplayMessage(std::string message, int time_in_ms)
   OSD::AddMessage(std::move(message), time_in_ms);
 }
 
-bool IsRunning()
+bool IsRunning(Core::System& system)
 {
   return s_state.load() == State::Running;
 }
 
-bool IsRunningOrStarting()
+bool IsRunningOrStarting(Core::System& system)
 {
   const State state = s_state.load();
   return state == State::Running || state == State::Starting;
@@ -237,7 +237,7 @@ bool Init(Core::System& system, std::unique_ptr<BootParameters> boot, const Wind
 {
   if (s_emu_thread.joinable())
   {
-    if (IsRunning())
+    if (IsRunning(system))
     {
       PanicAlertFmtT("Emu Thread already running");
       return false;
@@ -248,7 +248,7 @@ bool Init(Core::System& system, std::unique_ptr<BootParameters> boot, const Wind
   }
 
   // Drain any left over jobs
-  HostDispatchJobs();
+  HostDispatchJobs(system);
 
   INFO_LOG_FMT(BOOT, "Starting core = {} mode", system.IsWii() ? "Wii" : "GameCube");
   INFO_LOG_FMT(BOOT, "CPU Thread separate = {}", system.IsDualCoreMode() ? "Yes" : "No");
@@ -280,7 +280,7 @@ static void ResetRumble()
 }
 
 // Called from GUI thread
-void Stop()  // - Hammertime!
+void Stop(Core::System& system)  // - Hammertime!
 {
   const State state = s_state.load();
   if (state == State::Stopping || state == State::Uninitialized)
@@ -293,9 +293,8 @@ void Stop()  // - Hammertime!
   CallOnStateChangedCallbacks(State::Stopping);
 
   // Dump left over jobs
-  HostDispatchJobs();
+  HostDispatchJobs(system);
 
-  auto& system = Core::System::GetInstance();
   system.GetFifo().EmulatorState(false);
 
   INFO_LOG_FMT(CONSOLE, "Stop [Main Thread]\t\t---- Shutting down ----");
@@ -352,9 +351,9 @@ static void CPUSetInitialExecutionState(bool force_paused = false)
 {
   // The CPU starts in stepping state, and will wait until a new state is set before executing.
   // SetState must be called on the host thread, so we defer it for later.
-  QueueHostJob([force_paused]() {
+  QueueHostJob([force_paused](Core::System& system) {
     bool paused = SConfig::GetInstance().bBootToPause || force_paused;
-    SetState(paused ? State::Paused : State::Running, true, true);
+    SetState(system, paused ? State::Paused : State::Running, true, true);
     Host_UpdateDisasmDialog();
     Host_UpdateMainFrame();
     Host_Message(HostMessageID::WMUserCreate);
@@ -389,7 +388,7 @@ static void CpuThread(Core::System& system, const std::optional<std::string>& sa
 
   if (savestate_path)
   {
-    ::State::LoadAs(*savestate_path);
+    ::State::LoadAs(system, *savestate_path);
     if (delete_savestate)
       File::Delete(*savestate_path);
   }
@@ -652,7 +651,7 @@ static void EmuThread(Core::System& system, std::unique_ptr<BootParameters> boot
     system.GetPowerPC().SetMode(PowerPC::CoreMode::Interpreter);
   }
 
-  UpdateTitle();
+  UpdateTitle(system);
 
   // ENTER THE VIDEO THREAD LOOP
   if (system.IsDualCoreMode())
@@ -694,14 +693,13 @@ static void EmuThread(Core::System& system, std::unique_ptr<BootParameters> boot
 
 // Set or get the running state
 
-void SetState(State state, bool report_state_change,
+void SetState(Core::System& system, State state, bool report_state_change,
               bool initial_execution_state)
 {
   // State cannot be controlled until the CPU Thread is operational
   if (s_state.load() != State::Running)
     return;
 
-  auto& system = Core::System::GetInstance();
   switch (state)
   {
   case State::Paused:
@@ -732,13 +730,12 @@ void SetState(State state, bool report_state_change,
   // Certain callers only change the state momentarily. Sending a callback for them causes
   // unwanted updates, such as the Pause/Play button flickering between states on frame advance.
   if (report_state_change)
-    CallOnStateChangedCallbacks(GetState());
+    CallOnStateChangedCallbacks(GetState(system));
 }
 
-State GetState()
+State GetState(Core::System& system)
 {
   const State state = s_state.load();
-  auto& system = Core::System::GetInstance();
   if (state == State::Running && system.GetCPU().IsStepping())
     return State::Paused;
   else
@@ -796,7 +793,7 @@ static bool PauseAndLock(Core::System& system, bool do_lock, bool unpause_on_unl
 {
   // WARNING: PauseAndLock is not fully threadsafe so is only valid on the Host Thread
 
-  if (!IsRunning())
+  if (!IsRunning(system))
     return true;
 
   bool was_unpaused = true;
@@ -831,17 +828,15 @@ static bool PauseAndLock(Core::System& system, bool do_lock, bool unpause_on_unl
   return was_unpaused;
 }
 
-void RunOnCPUThread(std::function<void()> function, bool wait_for_completion)
+void RunOnCPUThread(Core::System& system, std::function<void()> function, bool wait_for_completion)
 {
   // If the CPU thread is not running, assume there is no active CPU thread we can race against.
-  if (!IsRunning() || IsCPUThread())
+  if (!IsRunning(system) || IsCPUThread())
   {
     function();
     return;
   }
 
-  auto& system = Core::System::GetInstance();
-    
   // Pause the CPU (set it to stepping mode).
   const bool was_running = PauseAndLock(system, true, true);
 
@@ -900,18 +895,18 @@ void Callback_NewField(Core::System& system)
     {
       s_frame_step = false;
       system.GetCPU().Break();
-      CallOnStateChangedCallbacks(Core::GetState());
+      CallOnStateChangedCallbacks(Core::GetState(system));
     }
   }
 
   AchievementManager::GetInstance().DoFrame();
 }
 
-void UpdateTitle()
+void UpdateTitle(Core::System& system)
 {
   // Settings are shown the same for both extended and summary info
   const std::string SSettings = fmt::format(
-      "{} {} | {} | {}", Core::System::GetInstance().GetPowerPC().GetCPUName(), Core::System::GetInstance().IsDualCoreMode() ? "DC" : "SC",
+      "{} {} | {} | {}", system.GetPowerPC().GetCPUName(), system.IsDualCoreMode() ? "DC" : "SC",
       g_video_backend->GetDisplayName(), Config::Get(Config::MAIN_DSP_HLE) ? "HLE" : "LLE");
 
   std::string message = fmt::format("{} | {}", Common::GetScmRevStr(), SSettings);
@@ -925,7 +920,7 @@ void UpdateTitle()
   Host_UpdateTitle(message);
 }
 
-void Shutdown()
+void Shutdown(Core::System& system)
 {
   // During shutdown DXGI expects us to handle some messages on the UI thread.
   // Therefore we can't immediately block and wait for the emu thread to shut
@@ -937,7 +932,7 @@ void Shutdown()
     s_emu_thread.join();
 
   // Make sure there's nothing left over in case we're about to exit.
-  HostDispatchJobs();
+  HostDispatchJobs(system);
 }
 
 int AddOnStateChangedCallback(StateChangedCallbackFunc callback)
@@ -974,12 +969,11 @@ void CallOnStateChangedCallbacks(Core::State state)
   }
 }
 
-void UpdateWantDeterminism(bool initial)
+void UpdateWantDeterminism(Core::System& system, bool initial)
 {
   // For now, this value is not itself configurable.  Instead, individual
   // settings that depend on it, such as GPU determinism mode. should have
   // override options for testing,
-  auto& system = Core::System::GetInstance();
   bool new_want_determinism = system.GetMovie().IsMovieActive() || NetPlay::IsNetPlayRunning();
   if (new_want_determinism != s_wants_determinism || initial)
   {
@@ -999,7 +993,7 @@ void UpdateWantDeterminism(bool initial)
   }
 }
 
-void QueueHostJob(std::function<void()> job, bool run_during_stop)
+void QueueHostJob(std::function<void(Core::System&)> job, bool run_during_stop)
 {
   if (!job)
     return;
@@ -1015,7 +1009,7 @@ void QueueHostJob(std::function<void()> job, bool run_during_stop)
     Host_Message(HostMessageID::WMUserJobDispatch);
 }
 
-void HostDispatchJobs()
+void HostDispatchJobs(Core::System& system)
 {
   // WARNING: This should only run on the Host Thread.
   // NOTE: This function is potentially re-entrant. If a job calls
@@ -1034,30 +1028,30 @@ void HostDispatchJobs()
     }
 
     guard.unlock();
-    job.job();
+    job.job(system);
     guard.lock();
   }
 }
 
 // NOTE: Host Thread
-void DoFrameStep()
+void DoFrameStep(Core::System& system)
 {
   if (AchievementManager::GetInstance().IsHardcoreModeActive())
   {
     OSD::AddMessage("Frame stepping is disabled in RetroAchievements hardcore mode");
     return;
   }
-  if (GetState() == State::Paused)
+  if (GetState(system) == State::Paused)
   {
     // if already paused, frame advance for 1 frame
     s_stop_frame_step = false;
     s_frame_step = true;
-    SetState(State::Running, false);
+    SetState(system, State::Running, false);
   }
   else if (!s_frame_step)
   {
     // if not paused yet, pause immediately instead
-    SetState(State::Paused);
+    SetState(system, State::Paused);
   }
 }
 

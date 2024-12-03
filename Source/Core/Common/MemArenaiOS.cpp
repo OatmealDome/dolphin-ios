@@ -3,6 +3,7 @@
 
 #include "Common/MemArena.h"
 
+#include "Common/Assert.h"
 #include "Common/Logging/Log.h"
 
 namespace Common
@@ -135,17 +136,41 @@ LazyMemoryRegion::~LazyMemoryRegion()
 
 void* LazyMemoryRegion::Create(size_t size)
 {
-  
+  ASSERT(!m_memory);
+
   if (size == 0)
     return nullptr;
+
+  vm_address_t memory = 0;
+
+  kern_return_t retval = vm_allocate(mach_task_self(), &memory, size, VM_FLAGS_ANYWHERE);
+  if (retval != KERN_SUCCESS)
+  {
+    m_memory = 0;
+    ERROR_LOG_FMT(MEMMAP, "Failed to allocate memory space: {0:#x}", retval);
+  }
+
+  m_memory = reinterpret_cast<void*>(memory);
+  m_size = size;
+
+  return m_memory;
 }
 
 void LazyMemoryRegion::Clear()
 {
+  ASSERT(m_memory);
+
+  memset(m_memory, 0, m_size);
 }
 
 void LazyMemoryRegion::Release()
 {
-}
+  if (m_memory)
+  {
+    vm_deallocate(mach_task_self(), reinterpret_cast<vm_address_t>(m_memory), m_size);
 
+    m_memory = nullptr;
+    m_size = 0;
+  }
+}
 }  // namespace Common

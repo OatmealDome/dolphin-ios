@@ -11,6 +11,7 @@
 #import "Core/Config/MainSettings.h"
 #import "Core/Core.h"
 #import "Core/Host.h"
+#import "Core/System.h"
 
 #import "EmulationBootParameter.h"
 #import "EmulationCoordinator.h"
@@ -151,7 +152,7 @@
 }
 
 - (void)stopPressed {
-  if (!Core::IsRunningOrStarting()) {
+  if (Core::GetState(Core::System::GetInstance()) == Core::State::Starting) {
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Emulation Starting" message:@"Emulation is still starting. Please wait for emulation to start before requesting for it to stop." preferredStyle:UIAlertControllerStyleAlert];
   
     [alert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"OK") style:UIAlertActionStyleDefault handler:nil]];
@@ -181,7 +182,7 @@
 }
 
 - (void)pausePressed {
-  if (!Core::IsRunningOrStarting()) {
+  if (!Core::IsRunningOrStarting(Core::System::GetInstance())) {
     return;
   }
   
@@ -194,7 +195,7 @@
 }
 
 - (void)playPressed {
-  if (!Core::IsRunningOrStarting()) {
+  if (!Core::IsRunningOrStarting(Core::System::GetInstance())) {
     return;
   }
   

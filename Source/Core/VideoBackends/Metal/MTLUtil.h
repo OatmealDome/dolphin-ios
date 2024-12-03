@@ -3,7 +3,7 @@
 
 #pragma once
 
-#ifdef APPLE
+#ifndef IPHONEOS
 #include <AppKit/NSScreen.h>
 #endif
 

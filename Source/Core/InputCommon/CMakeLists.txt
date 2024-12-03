@@ -166,7 +166,7 @@ elseif(ANDROID)
   )
 endif()
 
-if(NOT ANDROID AND NOT IOS)
+if(TARGET LibUSB::LibUSB)
   target_link_libraries(inputcommon PUBLIC LibUSB::LibUSB)
 endif()
 

@@ -549,13 +549,6 @@ add_library(core
   WiiUtils.cpp
   WiiUtils.h
 )
-if(WIN32)
-  target_link_libraries(core PUBLIC cubeb::cubeb)
-  target_sources(core PRIVATE
-    HW/EXI/EXI_DeviceMic.cpp
-    HW/EXI/EXI_DeviceMic.h
-  )
-endif()
 
 if(_M_X86_64)
   target_sources(core PRIVATE
@@ -658,6 +651,10 @@ PRIVATE
   ZLIB::ZLIB
 )
 
+if (ENABLE_CUBEB)
+  target_link_libraries(core PRIVATE cubeb::cubeb)
+endif()
+
 if ((DEFINED CMAKE_ANDROID_ARCH_ABI AND CMAKE_ANDROID_ARCH_ABI MATCHES "x86|x86_64") OR
     (NOT DEFINED CMAKE_ANDROID_ARCH_ABI AND _M_X86_64))
   target_link_libraries(core PRIVATE bdisasm)
@@ -675,6 +672,14 @@ elseif (ANDROID)
   target_link_libraries(core
   PRIVATE
     androidcommon
+  )
+endif()
+
+if(ENABLE_CUBEB)
+  target_link_libraries(core PUBLIC cubeb)
+  target_sources(core PRIVATE
+    HW/EXI/EXI_DeviceMic.cpp
+    HW/EXI/EXI_DeviceMic.h
   )
 endif()
 

@@ -37,8 +37,7 @@ struct Profile {
   
   _profiles.clear();
   
-  const std::string profilesPath = File::GetUserPath(D_CONFIG_IDX) + "Profiles/" + self.inputConfig->GetProfileKey();
-  for (const auto& filename : Common::DoFileSearch({profilesPath}, {".ini"}))
+  for (const auto& filename : Common::DoFileSearch({self.inputConfig->GetUserProfileDirectoryPath()}, {".ini"}))
   {
     std::string basename;
     SplitPath(filename, nullptr, &basename, nullptr);
@@ -49,8 +48,7 @@ struct Profile {
     }
   }
 
-  const std::string builtInPath = File::GetSysDirectory() + "Profiles/" + self.inputConfig->GetProfileDirectoryName();
-  for (const auto& filename : Common::DoFileSearch({builtInPath}, {".ini"}))
+  for (const auto& filename : Common::DoFileSearch({self.inputConfig->GetSysProfileDirectoryPath()}, {".ini"}))
   {
     std::string basename;
     SplitPath(filename, nullptr, &basename, nullptr);

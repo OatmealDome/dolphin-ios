@@ -154,7 +154,7 @@ struct Device {
           iniName = "Physical Controller";
         }
         
-        const std::string profilePath = File::GetSysDirectory() + "Profiles/" + self.inputConfig->GetProfileDirectoryName() + "/" + iniName + ".ini";
+        const std::string profilePath = self.inputConfig->GetSysProfileDirectoryPath() + iniName + ".ini";
         
         Common::IniFile iniFile;
         iniFile.Load(profilePath);

@@ -77,12 +77,10 @@ void Metal::Util::PopulateBackendInfo(VideoConfig* config)
   config->backend_info.bSupportsPartialMultisampleResolve = false;
   config->backend_info.bSupportsDynamicVertexLoader = true;
   config->backend_info.bSupportsVSLinePointExpand = true;
-
-#if TARGET_OS_OSX
+#ifndef IPHONEOS
   config->backend_info.bSupportsHDROutput =
       1.0 < [[NSScreen deepestScreen] maximumPotentialExtendedDynamicRangeColorComponentValue];
 #else
-  //iOS HDR isn't implemented yet
   config->backend_info.bSupportsHDROutput = false;
 #endif
 }

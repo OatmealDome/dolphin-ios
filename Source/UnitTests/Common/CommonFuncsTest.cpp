@@ -5,11 +5,11 @@
 
 #include "Common/CommonFuncs.h"
 
+#ifndef IPHONEOS
+
 TEST(CommonFuncs, CrashMacro)
 {
-//This is a hack
-#ifdef IPHONEOS
-#elif
   EXPECT_DEATH({ Crash(); }, "");
-#endif
 }
+
+#endif

@@ -129,11 +129,7 @@ public:
   System& operator=(System&&) = delete;
 
   // Intermediate instance accessor until global state is eliminated.
-  static System& GetInstance()
-  {
-    static System instance;
-    return instance;
-  }
+  static System& GetInstance();
 
   void Initialize();
 

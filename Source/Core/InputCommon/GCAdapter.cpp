@@ -436,7 +436,7 @@ void Init()
 #endif
 
   auto& system = Core::System::GetInstance();
-  if (const Core::State state = Core::GetState();
+  if (const Core::State state = Core::GetState(system);
       state != Core::State::Uninitialized && state != Core::State::Starting)
   {
     auto& core_timing = system.GetCoreTiming();

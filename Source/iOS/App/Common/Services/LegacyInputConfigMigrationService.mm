@@ -30,7 +30,7 @@
     // If this is not the first device, we will skip loading the INI file, which will cause
     // the code to import a blank profile.
     if (i == 0) {
-      const std::string builtInPath = File::GetSysDirectory() + "Profiles/" + config->GetProfileDirectoryName() + "/Touchscreen.ini";
+      const std::string builtInPath = config->GetSysProfileDirectoryPath() + "Touchscreen.ini";
       
       iniFile.Load(builtInPath);
     }

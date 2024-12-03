@@ -21,7 +21,7 @@
 - (void)importDefaultProfileForInputConfig:(InputConfig*)config {
   ControllerEmu::EmulatedController* controller = config->GetController(0);
   
-  const std::string builtInPath = File::GetSysDirectory() + "Profiles/" + config->GetProfileDirectoryName() + "/Touchscreen.ini";
+  const std::string builtInPath = config->GetSysProfileDirectoryPath() + "Touchscreen.ini";
   
   Common::IniFile iniFile;
   iniFile.Load(builtInPath);
