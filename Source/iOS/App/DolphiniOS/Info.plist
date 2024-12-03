@@ -6,6 +6,8 @@
 	<string>NotSet</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+  <key>GCSupportsGameMode</key>
+  <true/>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
