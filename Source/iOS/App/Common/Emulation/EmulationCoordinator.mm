@@ -18,6 +18,7 @@
 #import "EmulationBootParameter.h"
 #import "HostNotifications.h"
 #import "HostQueue.h"
+#import "JitManager.h"
 
 @implementation EmulationCoordinator {
   MTKView* _mtkView;
@@ -99,9 +100,14 @@
     wsi.render_surface = (__bridge void*)self->_metalLayer;
     wsi.render_surface_scale = UIScreen.mainScreen.scale;
     
+    auto& system = Core::System::GetInstance();
+    
+    // Signal to the core whether JIT is available or not.
+    system.SetJitAvailable([JitManager shared].acquiredJit);
+    
     std::unique_ptr<BootParameters> boot = [bootParameter generateDolphinBootParameter];
     
-    if (!BootManager::BootCore(Core::System::GetInstance(), std::move(boot), wsi)) {
+    if (!BootManager::BootCore(system, std::move(boot), wsi)) {
       PanicAlertFmt("Failed to init core!");
     }
   });
