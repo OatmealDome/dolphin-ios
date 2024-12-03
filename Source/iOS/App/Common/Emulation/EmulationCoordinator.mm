@@ -43,6 +43,7 @@
   if (self = [super init]) {
     _mtkView = [[MTKView alloc] init];
     _mtkView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _mtkView.preferredFramesPerSecond = 120;
     
     _metalLayer = (CAMetalLayer*)_mtkView.layer;
     
