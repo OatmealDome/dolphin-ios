@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) EmulationBootType bootType;
 @property (nonatomic) NSString* path;
+@property (nonatomic) NSString* secondPath;
 @property (nonatomic) bool isNKit;
 
 - (std::unique_ptr<BootParameters>) generateDolphinBootParameter;

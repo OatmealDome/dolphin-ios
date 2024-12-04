@@ -14,7 +14,13 @@
   std::unique_ptr<BootParameters> boot;
   
   if (self.bootType == EmulationBootTypeFile) {
-    boot = BootParameters::GenerateFromFile(FoundationToCppString(self.path), BootSessionData());
+    std::vector<std::string> paths = {FoundationToCppString(self.path)};
+    
+    if (self.secondPath != nil) {
+      paths.push_back(FoundationToCppString(self.secondPath));
+    }
+    
+    boot = BootParameters::GenerateFromFile(paths, BootSessionData());
   } else if (self.bootType == EmulationBootTypeSystemMenu) {
     boot = std::make_unique<BootParameters>(BootParameters::NANDTitle{Titles::SYSTEM_MENU});
   } else {
