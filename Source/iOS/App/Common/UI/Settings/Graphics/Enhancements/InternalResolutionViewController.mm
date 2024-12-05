@@ -34,7 +34,11 @@
     DOLCoreLocalizedString(@"5x Native (3200x2640)"),
     DOLCoreLocalizedString(@"6x Native (3840x3168) for 4K"),
     DOLCoreLocalizedString(@"7x Native (4480x3696)"),
-    DOLCoreLocalizedString(@"8x Native (5120x4224) for 5K")
+    DOLCoreLocalizedString(@"8x Native (5120x4224) for 5K"),
+    DOLCoreLocalizedString(@"9x Native (5760x4752)"),
+    DOLCoreLocalizedString(@"10x Native (6400x5280)"),
+    DOLCoreLocalizedString(@"11x Native (7040x5808)"),
+    DOLCoreLocalizedString(@"12x Native (7680x6336) for 8K")
   ];
   
   [resolutions addObjectsFromArray:hardcodedResolutions];
