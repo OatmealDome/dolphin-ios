@@ -11,6 +11,7 @@
 #import "Core/Config/MainSettings.h"
 #import "Core/Core.h"
 #import "Core/Host.h"
+#import "Core/PowerPC/PowerPC.h"
 #import "Core/System.h"
 
 #import "EmulationBootParameter.h"
@@ -62,7 +63,10 @@
   [super viewDidAppear:animated];
   
   if (!_didStartEmulation) {
-    if (![JitManager shared].acquiredJit) {
+    const PowerPC::CPUCore current_core = Config::Get(Config::MAIN_CPU_CORE);
+    const bool is_interpreter_core = current_core == PowerPC::CPUCore::Interpreter || current_core == PowerPC::CPUCore::CachedInterpreter;
+    
+    if (![JitManager shared].acquiredJit && !is_interpreter_core) {
       JitWaitViewController* jitController = [[JitWaitViewController alloc] initWithNibName:@"JitWait" bundle:nil];
       jitController.delegate = self;
       jitController.modalInPresentation = true;

@@ -92,6 +92,7 @@
 		B950CFC92962562200197719 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFC82962562200197719 /* main.m */; };
 		B950CFCC2962590600197719 /* JitManager+PTrace.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFCB2962590600197719 /* JitManager+PTrace.m */; };
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
+		B96C5DC92CFE4B200046C029 /* Logger.ini in Resources */ = {isa = PBXBuildFile; fileRef = B96C5DC82CFE4B200046C029 /* Logger.ini */; };
 		B96C9A4A2A46501C002B5ECF /* DOLAppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96C9A492A46501B002B5ECF /* DOLAppVersion.swift */; };
 		B96C9A602A46C2C1002B5ECF /* DOLAppVersionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96C9A5F2A46C2C1002B5ECF /* DOLAppVersionTests.swift */; };
 		B974923C2960096C00794509 /* ImportFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B974923B2960096C00794509 /* ImportFileManager.m */; };
@@ -369,6 +370,7 @@
 		B950CFCE2962D08100197719 /* Private.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Private.entitlements; sourceTree = "<group>"; };
 		B950CFCF2962D1A500197719 /* Public.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Public.entitlements; sourceTree = "<group>"; };
 		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
+		B96C5DC82CFE4B200046C029 /* Logger.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = Logger.ini; sourceTree = "<group>"; };
 		B96C9A492A46501B002B5ECF /* DOLAppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOLAppVersion.swift; sourceTree = "<group>"; };
 		B96C9A4F2A46C1CE002B5ECF /* DolphiniOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DolphiniOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B96C9A5E2A46C2C0002B5ECF /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
@@ -1016,6 +1018,7 @@
 			children = (
 				B97492482960F64300794509 /* DefaultPreferences.plist */,
 				B97E4B5929657BCB00B3EE9C /* GoogleService-Info.plist */,
+				B96C5DC82CFE4B200046C029 /* Logger.ini */,
 				B950CA932846A13100F45219 /* Sys */,
 			);
 			path = Assets;
@@ -1791,6 +1794,7 @@
 				B9114F972893C5E600B9C57A /* DebugSettings.storyboard in Resources */,
 				B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */,
 				B904ACE828866E2D008B6BE9 /* ControllersSettings.storyboard in Resources */,
+				B96C5DC92CFE4B200046C029 /* Logger.ini in Resources */,
 				B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */,
 				B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */,
 				B9114FA52894E0C800B9C57A /* NKitWarning.xib in Resources */,

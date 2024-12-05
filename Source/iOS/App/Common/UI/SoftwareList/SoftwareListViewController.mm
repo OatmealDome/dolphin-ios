@@ -75,9 +75,35 @@
 - (void)collectionView:(UICollectionView*)collectionView didSelectItemAtIndexPath:(NSIndexPath*)indexPath {
   GameFilePtrWrapper* gameFileWrapper = [self->_gameFiles objectAtIndex:indexPath.item];
   
+  std::shared_ptr<const UICommon::GameFile> game = gameFileWrapper.gameFile;
+  
+  std::shared_ptr<const UICommon::GameFile> second_game = nullptr;
+  std::shared_ptr<const UICommon::GameFile> match_without_revision = nullptr;
+  
+  if (DiscIO::IsDisc(game->GetPlatform())) {
+    for (GameFilePtrWrapper* otherWrapper in self->_gameFiles) {
+      std::shared_ptr<const UICommon::GameFile> other_game = otherWrapper.gameFile;
+      
+      if (game->GetGameID() == other_game->GetGameID() &&
+          game->GetDiscNumber() != other_game->GetDiscNumber()) {
+        if (game->GetRevision() == other_game->GetRevision()) {
+          second_game = other_game;
+          break;
+        } else {
+          match_without_revision = other_game;
+        }
+      }
+    }
+  }
+  
+  if (second_game == nullptr) {
+    second_game = match_without_revision;
+  }
+  
   _bootParameter = [[EmulationBootParameter alloc] init];
   _bootParameter.bootType = EmulationBootTypeFile;
-  _bootParameter.path = CppToFoundationString(gameFileWrapper.gameFile->GetFilePath());
+  _bootParameter.path = CppToFoundationString(game->GetFilePath());
+  _bootParameter.secondPath = second_game != nullptr ? CppToFoundationString(second_game->GetFilePath()) : nil;
   _bootParameter.isNKit = gameFileWrapper.gameFile->IsNKit();
   
   [self performSegueWithIdentifier:@"emulation" sender:nil];

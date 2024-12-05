@@ -11,6 +11,7 @@
 #import "Core/HW/Wiimote.h"
 #import "Core/System.h"
 
+#import "Common/FileUtil.h"
 #import "Common/MsgHandler.h"
 
 #import "InputCommon/ControllerInterface/ControllerInterface.h"
@@ -33,6 +34,16 @@
   
   UICommon::SetUserDirectory(FoundationToCppString([UserFolderUtil getUserFolder]));
   UICommon::CreateDirectories();
+
+#ifdef DEBUG
+  NSURL* loggerIniPath = [[NSBundle mainBundle] URLForResource:@"Logger" withExtension:@"ini"];
+  std::string loggerIniCppPath = FoundationToCppString([loggerIniPath path]);
+  std::string destPath = File::GetUserPath(F_LOGGERCONFIG_IDX);
+  
+  File::Delete(File::GetUserPath(F_LOGGERCONFIG_IDX));
+  File::Copy(loggerIniCppPath, File::GetUserPath(F_LOGGERCONFIG_IDX));
+#endif
+  
   UICommon::Init();
   
   [[MsgAlertManager shared] registerHandler];
