@@ -42,7 +42,6 @@
 - (id)init {
   if (self = [super init]) {
     _mtkView = [[MTKView alloc] init];
-    _mtkView.preferredFramesPerSecond = 10000;
     _mtkView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _mtkView.preferredFramesPerSecond = 120;
     
