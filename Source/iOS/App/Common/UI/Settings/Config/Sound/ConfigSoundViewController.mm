@@ -31,6 +31,9 @@
   self.bufferSizeSlider.enabled = stretchingEnabled;
   
   [self updateBufferSizeLabel];
+  
+  self.muteSpeedLimitSwitch.on = Config::Get(Config::MAIN_AUDIO_MUTE_ON_DISABLED_SPEED_LIMIT);
+  [self.muteSpeedLimitSwitch addValueChangedTarget:self action:@selector(muteSpeedLimitChanged)];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -71,6 +74,10 @@
 - (void)updateBufferSizeLabel {
   int bufferSize = Config::Get(Config::MAIN_AUDIO_STRETCH_LATENCY);
   self.bufferSizeLabel.text = [NSString stringWithFormat:DOLCoreLocalizedStringWithArgs(@"%1 ms", @"d"), bufferSize];
+}
+
+- (void)muteSpeedLimitChanged {
+  Config::SetBaseOrCurrent(Config::MAIN_AUDIO_MUTE_ON_DISABLED_SPEED_LIMIT, self.muteSpeedLimitSwitch.on);
 }
 
 @end

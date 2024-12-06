@@ -360,3 +360,9 @@
 
 /* Class = "UITableViewSection"; headerTitle = "Wii Remote Settings"; ObjectID = "zwp-Y9-R4u"; */
 "zwp-Y9-R4u.headerTitle" = "Wiiリモコンの設定";
+
+/* Class = "UITableViewSection"; headerTitle = "Miscellaneous Settings"; ObjectID = "Ivi-K4-ZZ7"; */
+"Ivi-K4-ZZ7.headerTitle" = "Miscellaneous Settings";
+
+/* Class = "UILabel"; text = "Mute When Disabling Speed Limit"; ObjectID = "Mfd-Gl-VAJ"; */
+"Mfd-Gl-VAJ.text" = "Mute When Disabling Speed Limit";

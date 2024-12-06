@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet DOLSwitch* stretchingSwitch;
 @property (weak, nonatomic) IBOutlet UISlider* bufferSizeSlider;
 @property (weak, nonatomic) IBOutlet UILabel* bufferSizeLabel;
+@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* muteSpeedLimitSwitch;
 
 @end
 
