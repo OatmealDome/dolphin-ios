@@ -118,7 +118,7 @@
           message = @"Ignores any requests from the CPU to read from or write to the EFB. "
                     "<br><br>Improves performance in some games, but will disable all EFB-based "
                     "graphical effects or gameplay-related features.<br><br><dolphin_emphasis>If unsure, "
-                    "leave this unchecked.</dolphin_emphasis>";
+                    "leave this checked.</dolphin_emphasis>";
           break;
         case 1:
           message = @"Stores EFB copies exclusively on the GPU, bypassing system memory. Causes graphical defects "
