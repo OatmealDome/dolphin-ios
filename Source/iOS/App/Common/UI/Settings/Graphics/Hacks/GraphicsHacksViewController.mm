@@ -203,7 +203,7 @@
                     "unsure, leave this checked.</dolphin_emphasis>";
           break;
         case 4:
-          message = @"Skips VI interrupts when lag is detected, allowing for "
+          message = @"Skips Vertical Blank Interrupts when lag is detected, allowing for "
                     "smooth audio playback when emulation speed is not 100%. <br><br>"
                     "<dolphin_emphasis>WARNING: Can cause freezes and compatibility "
                     "issues.</dolphin_emphasis> <br><br>"

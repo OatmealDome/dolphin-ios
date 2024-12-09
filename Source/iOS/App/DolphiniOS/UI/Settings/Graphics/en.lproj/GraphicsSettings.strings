@@ -250,8 +250,8 @@
 /* Class = "UILabel"; text = "Type"; ObjectID = "zwr-G9-cCf"; */
 "zwr-G9-cCf.text" = "Type";
 
-/* Class = "UILabel"; text = "VI Skip"; ObjectID = "hup-by-p7x"; */
-"hup-by-p7x.text" = "VI Skip";
+/* Class = "UILabel"; text = "VBI Skip"; ObjectID = "hup-by-p7x"; */
+"hup-by-p7x.text" = "VBI Skip";
 
 /* Class = "UILabel"; text = "Force Linear and 8x Anisotropic"; ObjectID = "2G3-K2-Hl0"; */
 "2G3-K2-Hl0.text" = "Force Linear and 8x Anisotropic";
