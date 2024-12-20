@@ -391,6 +391,8 @@
 		B97492452960CD2B00794509 /* FirstRunInitializationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstRunInitializationService.h; sourceTree = "<group>"; };
 		B97492462960CD2B00794509 /* FirstRunInitializationService.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FirstRunInitializationService.mm; sourceTree = "<group>"; };
 		B97492482960F64300794509 /* DefaultPreferences.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultPreferences.plist; sourceTree = "<group>"; };
+		B976EDDF2D15DF4900F51C83 /* control-beta-rootless.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = "control-beta-rootless.in"; sourceTree = "<group>"; };
+		B976EDE02D15E0D200F51C83 /* control-normal-rootless.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = "control-normal-rootless.in"; sourceTree = "<group>"; };
 		B97C49AE297E6CFF00E30877 /* AboutSettings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AboutSettings.storyboard; sourceTree = "<group>"; };
 		B97C49B0297E717C00E30877 /* AboutViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		B97C49B1297E717C00E30877 /* AboutViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
@@ -1266,7 +1268,9 @@
 			isa = PBXGroup;
 			children = (
 				B97E4B6729664E1500B3EE9C /* control-beta.in */,
+				B976EDDF2D15DF4900F51C83 /* control-beta-rootless.in */,
 				B97E4B6929664E1500B3EE9C /* control-normal.in */,
+				B976EDE02D15E0D200F51C83 /* control-normal-rootless.in */,
 				B97E4B6829664E1500B3EE9C /* postinst.sh */,
 				B97E4B6A29664E1600B3EE9C /* postrm.sh */,
 			);

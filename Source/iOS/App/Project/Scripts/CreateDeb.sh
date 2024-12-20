@@ -12,22 +12,23 @@ ENTITLEMENTS_PATH=$3
 CONTROL_PATH=$4
 POSTINST_PATH=$5
 POSTRM_PATH=$6
-OUTPUT_FILE=$7
+APP_INSTALLATION_DESTINATION=$7
+OUTPUT_FILE=$8
 
 VERSION_STRING=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$APP_BUNDLE_PATH/Info.plist")
 BUILD_NUMBER=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$APP_BUNDLE_PATH/Info.plist")
 
-mkdir "$BASE_DIR/Applications"
+mkdir "$BASE_DIR/$APP_INSTALLATION_DESTINATION"
 
 # As recommended by saurik, don't copy dot files
 export COPYFILE_DISABLE
 export COPY_EXTENDED_ATTRIBUTES_DISABLE
 
-cp -R "$APP_BUNDLE_PATH" "$BASE_DIR/Applications"
+cp -R "$APP_BUNDLE_PATH" "$BASE_DIR/$APP_INSTALLATION_DESTINATION"
 
 # Sign in two steps: frameworks, and then the main executable
-codesign -f -s "$SIGNING_CERTIFICATE" "$BASE_DIR/Applications/DolphiniOS.app/Frameworks/"*
-codesign -f -s "$SIGNING_CERTIFICATE" --entitlements "$ENTITLEMENTS_PATH" "$BASE_DIR/Applications/DolphiniOS.app"
+codesign -f -s "$SIGNING_CERTIFICATE" "$BASE_DIR/$APP_INSTALLATION_DESTINATION/DolphiniOS.app/Frameworks/"*
+codesign -f -s "$SIGNING_CERTIFICATE" --entitlements "$ENTITLEMENTS_PATH" "$BASE_DIR/$APP_INSTALLATION_DESTINATION/DolphiniOS.app"
 
 mkdir "$BASE_DIR/DEBIAN"
 
