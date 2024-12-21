@@ -35,6 +35,7 @@
   [self.cropCell registerSetting:Config::GFX_CROP];
   [self.backendMultithreadingCell registerSetting:Config::GFX_BACKEND_MULTITHREADING];
   [self.vsPointLineExpansionCell registerSetting:Config::GFX_PREFER_VS_FOR_LINE_POINT_EXPANSION];
+  [self.cpuCullCell registerSetting:Config::GFX_CPU_CULL];
   [self.deferEfbCacheCell registerSetting:Config::GFX_HACK_EFB_DEFER_INVALIDATION];
   [self.manualSamplingCell registerSetting:Config::GFX_HACK_FAST_TEXTURE_SAMPLING shouldReverse:true];
   
@@ -163,7 +164,7 @@
                     "two CPU cores. Currently, this is limited to the Vulkan backend.<br><br>"
                     "<dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
           break;
-        case 3:
+        case 3: {
           NSString* messageFormat = @"On backends that support both using the geometry shader and the vertex shader "
                                     "for expanding points and lines, selects the vertex shader for the job.  May "
                                     "affect performance."
@@ -186,6 +187,12 @@
           [self showHelpWithMessage:message];
           
           return;
+        }
+        case 4:
+          message = @"Cull vertices on the CPU to reduce the number of draw calls required.  "
+                    "May affect performance and draw statistics.<br><br>"
+                    "<dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
+          break;
       }
       break;
     case 4:

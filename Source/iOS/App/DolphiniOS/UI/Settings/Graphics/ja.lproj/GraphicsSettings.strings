@@ -300,3 +300,6 @@
 
 /* Class = "UILabel"; text = "Prefer VS for Point/Line Expansion"; ObjectID = "bwF-e9-QVL"; */
 "bwF-e9-QVL.text" = "点/線の展開時に頂点シェーダーを優先する";
+
+/* Class = "UILabel"; text = "Cull Vertices on the CPU"; ObjectID = "edj-Ox-q0H"; */
+"edj-Ox-q0H.text" = "CPUで頂点をカリングする";

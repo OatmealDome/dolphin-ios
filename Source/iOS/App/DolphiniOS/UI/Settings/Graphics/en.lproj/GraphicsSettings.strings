@@ -300,3 +300,6 @@
 
 /* Class = "UILabel"; text = "Prefer VS for Point/Line Expansion"; ObjectID = "bwF-e9-QVL"; */
 "bwF-e9-QVL.text" = "Prefer VS for Point/Line Expansion";
+
+/* Class = "UILabel"; text = "Cull Vertices on the CPU"; ObjectID = "edj-Ox-q0H"; */
+"edj-Ox-q0H.text" = "Cull Vertices on the CPU";

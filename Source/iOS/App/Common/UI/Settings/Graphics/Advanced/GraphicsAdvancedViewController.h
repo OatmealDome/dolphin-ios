@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet DOLUIKitSwitch* progressiveScanSwitch;
 @property (weak, nonatomic) IBOutlet GraphicsBoolCell* backendMultithreadingCell;
 @property (weak, nonatomic) IBOutlet GraphicsBoolCell* vsPointLineExpansionCell;
+@property (weak, nonatomic) IBOutlet GraphicsBoolCell* cpuCullCell;
 @property (weak, nonatomic) IBOutlet GraphicsBoolCell* deferEfbCacheCell;
 @property (weak, nonatomic) IBOutlet GraphicsBoolCell* manualSamplingCell;
 
