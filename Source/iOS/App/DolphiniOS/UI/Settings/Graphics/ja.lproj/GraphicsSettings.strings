@@ -297,3 +297,6 @@
 
 /* Class = "UILabel"; text = "Log Render Time to File"; ObjectID = "iod-j5-y6w"; */
 "iod-j5-y6w.text" = "レンダリング時間を記録";
+
+/* Class = "UILabel"; text = "Prefer VS for Point/Line Expansion"; ObjectID = "bwF-e9-QVL"; */
+"bwF-e9-QVL.text" = "点/線の展開時に頂点シェーダーを優先する";

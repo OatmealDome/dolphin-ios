@@ -6,6 +6,10 @@
 #import "Core/Config/GraphicsSettings.h"
 #import "Core/Config/SYSCONFSettings.h"
 
+#import "LocalizationUtil.h"
+
+#import "VideoCommon/VideoConfig.h"
+
 @interface GraphicsAdvancedViewController ()
 
 @end
@@ -30,6 +34,7 @@
   [self.disableEfbVramCell registerSetting:Config::GFX_HACK_DISABLE_COPY_TO_VRAM];
   [self.cropCell registerSetting:Config::GFX_CROP];
   [self.backendMultithreadingCell registerSetting:Config::GFX_BACKEND_MULTITHREADING];
+  [self.vsPointLineExpansionCell registerSetting:Config::GFX_PREFER_VS_FOR_LINE_POINT_EXPANSION];
   [self.deferEfbCacheCell registerSetting:Config::GFX_HACK_EFB_DEFER_INVALIDATION];
   [self.manualSamplingCell registerSetting:Config::GFX_HACK_FAST_TEXTURE_SAMPLING shouldReverse:true];
   
@@ -158,6 +163,29 @@
                     "two CPU cores. Currently, this is limited to the Vulkan backend.<br><br>"
                     "<dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
           break;
+        case 3:
+          NSString* messageFormat = @"On backends that support both using the geometry shader and the vertex shader "
+                                    "for expanding points and lines, selects the vertex shader for the job.  May "
+                                    "affect performance."
+                                    "<br><br>%1";
+          
+          NSString* extraFormat;
+          
+          if (!g_Config.backend_info.bSupportsGeometryShaders) {
+            extraFormat = @"Forced on because %1 doesn't support geometry shaders.";
+          } else if (!g_Config.backend_info.bSupportsVSLinePointExpand) {
+            extraFormat = @"Forced off because %1 doesn't support VS expansion.";
+          } else {
+            extraFormat = @"<dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
+          }
+          
+          NSString* extraMessage = [NSString stringWithFormat:DOLCoreLocalizedStringWithArgs(extraFormat, @"s"), g_Config.backend_info.DisplayName.c_str()];
+          
+          NSString* message = [NSString stringWithFormat:DOLCoreLocalizedStringWithArgs(messageFormat, @"@"), extraMessage];
+          
+          [self showHelpWithMessage:message];
+          
+          return;
       }
       break;
     case 4:

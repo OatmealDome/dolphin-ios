@@ -297,3 +297,6 @@
 
 /* Class = "UILabel"; text = "Log Render Time to File"; ObjectID = "iod-j5-y6w"; */
 "iod-j5-y6w.text" = "Log Render Time to File";
+
+/* Class = "UILabel"; text = "Prefer VS for Point/Line Expansion"; ObjectID = "bwF-e9-QVL"; */
+"bwF-e9-QVL.text" = "Prefer VS for Point/Line Expansion";
