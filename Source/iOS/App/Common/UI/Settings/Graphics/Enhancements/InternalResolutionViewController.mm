@@ -27,29 +27,51 @@
   // Hardcoded resolutions
   NSArray<NSString*>* hardcodedResolutions = @[
     DOLCoreLocalizedString(@"Auto (Multiple of 640x528)"),
-    DOLCoreLocalizedString(@"Native (640x528)"),
-    DOLCoreLocalizedString(@"2x Native (1280x1056) for 720p"),
-    DOLCoreLocalizedString(@"3x Native (1920x1584) for 1080p"),
-    DOLCoreLocalizedString(@"4x Native (2560x2112) for 1440p"),
-    DOLCoreLocalizedString(@"5x Native (3200x2640)"),
-    DOLCoreLocalizedString(@"6x Native (3840x3168) for 4K"),
-    DOLCoreLocalizedString(@"7x Native (4480x3696)"),
-    DOLCoreLocalizedString(@"8x Native (5120x4224) for 5K"),
-    DOLCoreLocalizedString(@"9x Native (5760x4752)"),
-    DOLCoreLocalizedString(@"10x Native (6400x5280)"),
-    DOLCoreLocalizedString(@"11x Native (7040x5808)"),
-    DOLCoreLocalizedString(@"12x Native (7680x6336) for 8K")
+    DOLCoreLocalizedString(@"Native (640x528)")
+  ];
+  
+  NSArray<NSString*>* extraOptions = @[
+    DOLCoreLocalizedString(@"720p"),
+    DOLCoreLocalizedString(@"1080p"),
+    DOLCoreLocalizedString(@"1440p"),
+    @"",
+    DOLCoreLocalizedString(@"4K"),
+    @"",
+    DOLCoreLocalizedString(@"5K"),
+    @"",
+    @"",
+    @"",
+    DOLCoreLocalizedString(@"8K")
   ];
   
   [resolutions addObjectsFromArray:hardcodedResolutions];
   
-  NSString* additionalResolution = DOLCoreLocalizedStringWithArgs(@"%1x Native (%2x%3)", @"d", @"d", @"d");
+  NSString* additionalResolutionWithExtra = DOLCoreLocalizedStringWithArgs(@"%1x Native (%2x%3) for %4", @"d", @"d", @"d", @"@");
+  NSString* additionalResolutionWithoutExtra = DOLCoreLocalizedStringWithArgs(@"%1x Native (%2x%3)", @"d", @"d", @"d");
   
   const int current_efb_scale = Config::Get(Config::GFX_EFB_SCALE);
   const int max_efb_scale = std::max(current_efb_scale, Config::Get(Config::GFX_MAX_EFB_SCALE));
   
    for (int scale = (int)[hardcodedResolutions count]; scale <= max_efb_scale; scale++) {
-     NSString* resolution = [NSString stringWithFormat:additionalResolution, scale, EFB_WIDTH * scale, EFB_HEIGHT * scale];
+     const int extraIndex = scale - (int)hardcodedResolutions.count;
+     
+     NSString* extraOption;
+     
+     if (extraOptions.count > extraIndex) {
+       extraOption = extraOptions[extraIndex];
+     } else {
+       extraOption = @"";
+     }
+     
+     NSString* format;
+     
+     if ([extraOption isEqualToString:@""]) {
+       format = additionalResolutionWithoutExtra;
+     } else {
+       format = additionalResolutionWithExtra;
+     }
+     
+     NSString* resolution = [NSString stringWithFormat:format, scale, EFB_WIDTH * scale, EFB_HEIGHT * scale, extraOption];
      [resolutions addObject:resolution];
    }
   
