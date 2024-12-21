@@ -41,6 +41,9 @@
   
   [self.loadTexturesCell.boolSwitch addValueChangedTarget:self action:@selector(updatePrefetchTexturesEnabled)];
   
+  bool enableVsExpansionSwitch = g_Config.backend_info.bSupportsGeometryShaders && g_Config.backend_info.bSupportsVSLinePointExpand;
+  [self.vsPointLineExpansionCell.boolSwitch setEnabled:enableVsExpansionSwitch];
+  
   [self updatePrefetchTexturesEnabled];
   
   self.graphicsModsSwitch.on = Config::Get(Config::GFX_MODS_ENABLE);
