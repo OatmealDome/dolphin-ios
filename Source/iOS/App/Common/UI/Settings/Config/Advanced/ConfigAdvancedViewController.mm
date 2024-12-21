@@ -27,6 +27,9 @@
   self.panicPauseSwitch.on = Config::Get(Config::MAIN_PAUSE_ON_PANIC);
   [self.panicPauseSwitch addValueChangedTarget:self action:@selector(panicPauseChanged)];
   
+  self.writeBackCacheSwitch.on = Config::Get(Config::MAIN_ACCURATE_CPU_CACHE);
+  [self.writeBackCacheSwitch addValueChangedTarget:self action:@selector(writeBackCacheChanged)];
+  
   self.cpuClockSwitch.on = Config::Get(Config::MAIN_OVERCLOCK_ENABLE);
   [self.cpuClockSwitch addValueChangedTarget:self action:@selector(cpuClockSwitchChanged)];
   
@@ -87,6 +90,10 @@
 
 - (void)panicPauseChanged {
   Config::SetBaseOrCurrent(Config::MAIN_PAUSE_ON_PANIC, self.panicPauseSwitch.on);
+}
+
+- (void)writeBackCacheChanged {
+  Config::SetBaseOrCurrent(Config::MAIN_ACCURATE_CPU_CACHE, self.writeBackCacheSwitch.on);
 }
 
 - (void)cpuClockSwitchChanged {

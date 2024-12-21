@@ -2240,6 +2240,33 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="2bY-9u-beJ">
+                                        <rect key="frame" x="16" y="184.5" width="343" height="43"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2bY-9u-beJ" id="7Dm-zT-q7d">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable Write-Back Cache (slow)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Hdd-5M-Mss">
+                                                    <rect key="frame" x="16" y="11" width="254" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aGg-fW-Ora" customClass="DOLUIKitSwitch">
+                                                    <rect key="frame" x="278" y="6" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="aGg-fW-Ora" firstAttribute="centerY" secondItem="7Dm-zT-q7d" secondAttribute="centerY" id="7ar-7V-8kB"/>
+                                                <constraint firstItem="Hdd-5M-Mss" firstAttribute="leading" secondItem="7Dm-zT-q7d" secondAttribute="leadingMargin" id="Ep4-fF-Agf"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="aGg-fW-Ora" secondAttribute="trailing" id="GL7-fP-Fp2"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Hdd-5M-Mss" secondAttribute="bottom" id="T65-Yw-nbb"/>
+                                                <constraint firstItem="aGg-fW-Ora" firstAttribute="leading" secondItem="Hdd-5M-Mss" secondAttribute="trailing" constant="8" id="jL5-5s-Bm3"/>
+                                                <constraint firstItem="Hdd-5M-Mss" firstAttribute="top" secondItem="7Dm-zT-q7d" secondAttribute="topMargin" id="sRc-lW-rt4"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="Clock Override" id="fDr-Gl-zZI">
@@ -2250,7 +2277,7 @@ Higher values may make variable-framerate games run at a higher framerate, at th
 WARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default clock.</string>
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="2Tk-vQ-Rof">
-                                        <rect key="frame" x="16" y="248" width="343" height="43"/>
+                                        <rect key="frame" x="16" y="291" width="343" height="43"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2Tk-vQ-Rof" id="bpS-ys-uZQ">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
@@ -2277,7 +2304,7 @@ WARNING: Changing this from the default (100%) can and will break games and caus
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="84" id="Jhk-1x-3Kd">
-                                        <rect key="frame" x="16" y="291" width="343" height="84"/>
+                                        <rect key="frame" x="16" y="334" width="343" height="84"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Jhk-1x-3Kd" id="ccK-xp-Yml">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="84"/>
@@ -2315,7 +2342,7 @@ WARNING: Changing this from the default (100%) can and will break games and caus
 WARNING: Enabling this will completely break many games. Only a small number of games can benefit from this.</string>
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="EnS-PQ-ajT">
-                                        <rect key="frame" x="16" y="626.5" width="343" height="43"/>
+                                        <rect key="frame" x="16" y="669.5" width="343" height="43"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="EnS-PQ-ajT" id="Kwx-tN-8Ag">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
@@ -2342,7 +2369,7 @@ WARNING: Enabling this will completely break many games. Only a small number of 
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="120" id="BX9-N9-GQi">
-                                        <rect key="frame" x="16" y="669.5" width="343" height="120"/>
+                                        <rect key="frame" x="16" y="712.5" width="343" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="BX9-N9-GQi" id="Uhm-mm-Ljs">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="120"/>
@@ -2382,7 +2409,7 @@ WARNING: Enabling this will completely break many games. Only a small number of 
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="120" id="Ejg-Xn-9ez">
-                                        <rect key="frame" x="16" y="789.5" width="343" height="120"/>
+                                        <rect key="frame" x="16" y="832.5" width="343" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ejg-Xn-9ez" id="EG6-Df-suR">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="120"/>
@@ -2429,7 +2456,7 @@ WARNING: Enabling this will completely break many games. Only a small number of 
 If unsure, leave this unchecked.</string>
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="XLb-rT-8ua">
-                                        <rect key="frame" x="16" y="1065" width="343" height="43.5"/>
+                                        <rect key="frame" x="16" y="1108" width="343" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="XLb-rT-8ua" id="rwV-PK-E7l">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
@@ -2456,7 +2483,7 @@ If unsure, leave this unchecked.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="oX9-0p-Swb">
-                                        <rect key="frame" x="16" y="1108.5" width="343" height="53.5"/>
+                                        <rect key="frame" x="16" y="1151.5" width="343" height="53.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oX9-0p-Swb" id="mWI-IB-LxA">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="53.5"/>
@@ -2510,6 +2537,7 @@ If unsure, leave this unchecked.</string>
                         <outlet property="panicPauseSwitch" destination="pvS-wI-wVX" id="z5h-MF-Qcj"/>
                         <outlet property="rtcPicker" destination="8BE-Ko-fhA" id="uKQ-Tg-OHJ"/>
                         <outlet property="rtcSwitch" destination="FrB-mO-aLE" id="3Qn-zg-fYA"/>
+                        <outlet property="writeBackCacheSwitch" destination="aGg-fW-Ora" id="fSc-Sp-IP1"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="avF-nM-hae" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -372,3 +372,6 @@
 
 /* Class = "UILabel"; text = "Pause on Panic"; ObjectID = "UJ6-vy-Mp0"; */
 "UJ6-vy-Mp0.text" = "Pause on Panic";
+
+/* Class = "UILabel"; text = "Enable Write-Back Cache (slow)"; ObjectID = "Hdd-5M-Mss"; */
+"Hdd-5M-Mss.text" = "Enable Write-Back Cache (slow)";
