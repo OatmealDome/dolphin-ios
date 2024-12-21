@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) IBOutlet UILabel* engineLabel;
 @property (weak, nonatomic) IBOutlet DOLSwitch* mmuSwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* panicPauseSwitch;
 @property (weak, nonatomic) IBOutlet DOLSwitch* cpuClockSwitch;
 @property (weak, nonatomic) IBOutlet UISlider* cpuClockSlider;
 @property (weak, nonatomic) IBOutlet UILabel* cpuClockLabel;

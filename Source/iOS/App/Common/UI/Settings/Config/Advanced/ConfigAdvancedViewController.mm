@@ -24,6 +24,9 @@
   self.mmuSwitch.on = Config::Get(Config::MAIN_MMU);
   [self.mmuSwitch addValueChangedTarget:self action:@selector(mmuChanged)];
   
+  self.panicPauseSwitch.on = Config::Get(Config::MAIN_PAUSE_ON_PANIC);
+  [self.panicPauseSwitch addValueChangedTarget:self action:@selector(panicPauseChanged)];
+  
   self.cpuClockSwitch.on = Config::Get(Config::MAIN_OVERCLOCK_ENABLE);
   [self.cpuClockSwitch addValueChangedTarget:self action:@selector(cpuClockSwitchChanged)];
   
@@ -80,6 +83,10 @@
 
 - (void)mmuChanged {
   Config::SetBaseOrCurrent(Config::MAIN_MMU, self.mmuSwitch.on);
+}
+
+- (void)panicPauseChanged {
+  Config::SetBaseOrCurrent(Config::MAIN_PAUSE_ON_PANIC, self.panicPauseSwitch.on);
 }
 
 - (void)cpuClockSwitchChanged {

@@ -369,3 +369,6 @@
 
 /* Class = "UILabel"; text = "Enable WiiConnect24 via WiiLink"; ObjectID = "gqx-Vg-DvG"; */
 "gqx-Vg-DvG.text" = "Enable WiiConnect24 via WiiLink";
+
+/* Class = "UILabel"; text = "Pause on Panic"; ObjectID = "UJ6-vy-Mp0"; */
+"UJ6-vy-Mp0.text" = "Pause on Panic";
