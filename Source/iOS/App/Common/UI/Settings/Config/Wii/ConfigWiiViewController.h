@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet DOLSwitch* palSwitch;
 @property (weak, nonatomic) IBOutlet DOLSwitch* screenSaverSwitch;
 @property (weak, nonatomic) IBOutlet DOLSwitch* usbKeyboardSwitch;
+@property (weak, nonatomic) IBOutlet DOLSwitch* wc24Switch;
 @property (weak, nonatomic) IBOutlet UILabel* aspectRatioLabel;
 @property (weak, nonatomic) IBOutlet UILabel* languageLabel;
 @property (weak, nonatomic) IBOutlet UILabel* audioLabel;

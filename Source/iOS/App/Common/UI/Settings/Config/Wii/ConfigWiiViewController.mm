@@ -26,6 +26,9 @@
   self.usbKeyboardSwitch.on = Config::Get(Config::MAIN_WII_KEYBOARD);
   [self.usbKeyboardSwitch addValueChangedTarget:self action:@selector(usbKeyboardChanged)];
   
+  self.wc24Switch.on = Config::Get(Config::MAIN_WII_WIILINK_ENABLE);
+  [self.wc24Switch addValueChangedTarget:self action:@selector(wc24Changed)];
+  
   self.sdInsertedSwitch.on = Config::Get(Config::MAIN_WII_SD_CARD);
   [self.sdInsertedSwitch addValueChangedTarget:self action:@selector(sdInsertedChanged)];
   
@@ -132,6 +135,10 @@
 
 - (void)usbKeyboardChanged {
   Config::SetBaseOrCurrent(Config::MAIN_WII_KEYBOARD, self.usbKeyboardSwitch.on);
+}
+
+- (void)wc24Changed {
+  Config::SetBase(Config::MAIN_WII_WIILINK_ENABLE, self.wc24Switch.on);
 }
 
 - (void)sdInsertedChanged {
