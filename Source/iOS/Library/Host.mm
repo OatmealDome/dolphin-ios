@@ -84,6 +84,7 @@ void Host_UpdateMainFrame()
 
 void Host_RequestRenderWindowSize(int, int)
 {
+  [[NSNotificationCenter defaultCenter] postNotificationName:DOLHostRequestRenderWindowSizeNotification object:nil];
 }
 
 bool Host_UIBlocksControllerState()

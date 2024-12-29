@@ -4,3 +4,4 @@
 #pragma once
 
 NSString* const DOLHostTitleChangedNotification = @"DOLHostTitleChangedNotification";
+NSString* const DOLHostRequestRenderWindowSizeNotification = @"DOLHostRequestRenderWindowSizeNotification";
