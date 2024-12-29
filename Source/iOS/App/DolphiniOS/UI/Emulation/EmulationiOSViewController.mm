@@ -72,6 +72,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   [super viewWillAppear:animated];
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTitleChangedNotificationiOS) name:DOLHostTitleChangedNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveRequestRenderWindowSizeNotificationiOS) name:DOLHostRequestRenderWindowSizeNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveEmulationEndNotificationiOS) name:DOLEmulationDidEndNotification object:nil];
 }
 
@@ -79,6 +80,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   [super viewDidDisappear:animated];
   
   [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLHostTitleChangedNotification object:nil];
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLHostRequestRenderWindowSizeNotification object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLEmulationDidEndNotification object:nil];
 }
 
@@ -165,6 +167,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   }
   
   [[TCDeviceMotion shared] statusBarOrientationChanged];
+  
+  [self updatePointerValuesOnWiiTouchPads];
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
@@ -180,6 +184,14 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     }
     
     [self recreateMenu];
+  });
+}
+
+- (void)receiveRequestRenderWindowSizeNotificationiOS {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    if (Core::System::GetInstance().IsWii()) {
+      [self updatePointerValuesOnWiiTouchPads];
+    }
   });
 }
 
@@ -236,6 +248,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   }
   
   [self updateVisibleTouchPadWithType:targetTouchPad];
+  
+  [self updatePointerValuesOnWiiTouchPads];
 }
 
 - (void)updateVisibleTouchPadToGameCube {
@@ -275,6 +289,25 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   }];
   
   _visibleTouchPad = touchPad;
+}
+
+- (void)updatePointerValuesOnWiiTouchPads {
+  if (!g_presenter) {
+    return;
+  }
+  
+  ControllerEmu::ControlGroup* group = Wiimote::GetWiimoteGroup(0, WiimoteEmu::WiimoteGroup::IMUPoint);
+  
+  for (int i = 0; i < [self.touchPads count]; i++) {
+    TCView* padView = self.touchPads[i];
+    
+    if ([padView isKindOfClass:[TCWiiPad class]]) {
+      TCWiiPad* wiiPadView = (TCWiiPad*)padView;
+      
+      [wiiPadView setTouchPointerEnabled:!group->enabled];
+      [wiiPadView recalculatePointerValuesWithNew_rect:self.rendererView.bounds game_aspect:g_presenter->CalculateDrawAspectRatio()];
+    }
+  }
 }
 
 - (IBAction)pullDownPressed:(id)sender {
