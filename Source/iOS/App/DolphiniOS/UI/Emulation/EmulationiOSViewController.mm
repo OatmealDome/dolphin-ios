@@ -4,6 +4,7 @@
 #import "EmulationiOSViewController.h"
 
 #import "Core/ConfigManager.h"
+#import "Core/Config/iOSSettings.h"
 #import "Core/Config/MainSettings.h"
 #import "Core/Config/WiimoteSettings.h"
 #import "Core/HW/GCPad.h"
@@ -281,10 +282,12 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     padView.userInteractionEnabled = i == targetIdx;
   }
   
+  const float targetOpacity = Config::Get(Config::MAIN_TOUCH_PAD_OPACITY);
+  
   [UIView animateWithDuration:0.5f animations:^{
     for (int i = 0; i < [self.touchPads count]; i++) {
       TCView* padView = self.touchPads[i];
-      padView.alpha = i == targetIdx ? 1.0f : 0.0f;
+      padView.alpha = i == targetIdx ? targetOpacity : 0.0f;
     }
   }];
   
