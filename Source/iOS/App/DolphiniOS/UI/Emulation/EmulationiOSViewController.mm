@@ -315,6 +315,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
       TCWiiPad* wiiPadView = (TCWiiPad*)padView;
       
       [wiiPadView setTouchIRMode:irMode];
+      [wiiPadView resetPointer];
       [wiiPadView recalculatePointerValuesWithNew_rect:self.rendererView.bounds game_aspect:g_presenter->CalculateDrawAspectRatio()];
     }
   }
