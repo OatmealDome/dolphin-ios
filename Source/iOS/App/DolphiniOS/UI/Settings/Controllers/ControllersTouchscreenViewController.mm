@@ -5,6 +5,8 @@
 
 #import "Core/Config/iOSSettings.h"
 
+#import "Swift.h"
+
 @interface ControllersTouchscreenViewController ()
 
 @end
@@ -15,6 +17,19 @@
   [super viewWillAppear:animated];
   
   self.opacitySlider.value = Config::Get(Config::MAIN_TOUCH_PAD_OPACITY);
+  
+  TCWiiTouchIRMode irMode = (TCWiiTouchIRMode)Config::Get(Config::MAIN_TOUCH_PAD_IR_MODE);
+  NSString* irModeString;
+  
+  if (irMode == TCWiiTouchIRModeNone) {
+    irModeString = @"Disabled";
+  } else if (irMode == TCWiiTouchIRModeFollow) {
+    irModeString = @"Follow";
+  } else {
+    irModeString = @"Drag";
+  }
+  
+  self.irModeLabel.text = irModeString;
 }
 
 - (IBAction)opacitySliderChanged:(id)sender {

@@ -8,6 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ControllersTouchscreenViewController : UITableViewController
 
 @property (weak, nonatomic) IBOutlet UISlider* opacitySlider;
+@property (weak, nonatomic) IBOutlet UILabel* irModeLabel;
 
 @end
 
