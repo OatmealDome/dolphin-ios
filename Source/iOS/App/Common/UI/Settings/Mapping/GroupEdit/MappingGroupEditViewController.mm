@@ -192,6 +192,7 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
       MappingGroupEditEnabledCell* enabledCell = [tableView dequeueReusableCellWithIdentifier:@"EnabledCell" forIndexPath:indexPath];
       
       enabledCell.delegate = self;
+      enabledCell.enabledSwitch.on = self.controlGroup->enabled;
       
       return enabledCell;
     }
