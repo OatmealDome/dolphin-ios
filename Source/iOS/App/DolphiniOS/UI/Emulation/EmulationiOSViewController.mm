@@ -67,6 +67,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
       [virtualMfi connectControllerToView:self.view];
     }
   }
+  
+  _stateSlot = Config::GetBase(Config::MAIN_SELECTED_STATE_SLOT);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -177,9 +179,24 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     [controllerActions addObject:menu];
   }
   
+  NSMutableArray<UIMenuElement*>* stateSlotActions = [[NSMutableArray alloc] init];
+  
+  for (int i = 1; i <= State::NUM_STATES; i++) {
+    [stateSlotActions addObject:[UIAction actionWithTitle:[NSString stringWithFormat:@"Slot %d", i] image:nil identifier:nil handler:^(UIAction* action) {
+      self->_stateSlot = i;
+      Config::SetBase(Config::MAIN_SELECTED_STATE_SLOT, i);
+      
+      [self recreateMenu];
+    }]];
+  }
+  
+  UIAction* selectedSlotElement = (UIAction*)[stateSlotActions objectAtIndex:Config::GetBase(Config::MAIN_SELECTED_STATE_SLOT) - 1];
+  selectedSlotElement.state = UIMenuElementStateOn;
+  
   self.navigationItem.leftBarButtonItem.menu = [UIMenu menuWithChildren:@[
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Controllers") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:controllerActions],
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Save State") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[
+      [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Select State Slot") image:[UIImage systemImageNamed:@"filemenu.and.selection"] identifier:nil options:0 children:stateSlotActions],
       [UIAction actionWithTitle:DOLCoreLocalizedString(@"Load State") image:[UIImage systemImageNamed:@"tray.and.arrow.down"] identifier:nil handler:^(UIAction*) {
         DOLHostQueueRunAsync(^{
           State::Load(Core::System::GetInstance(), self->_stateSlot);
