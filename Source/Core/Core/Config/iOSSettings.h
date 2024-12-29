@@ -11,5 +11,6 @@ namespace Config
 
 extern const Info<float> MAIN_TOUCH_PAD_OPACITY;
 extern const Info<int> MAIN_TOUCH_PAD_IR_MODE;
+extern const Info<int> MAIN_SELECTED_STATE_SLOT;
 
 }  // namespace Config
