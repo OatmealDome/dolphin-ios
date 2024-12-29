@@ -66,6 +66,8 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
         break;
     }
   }
+  
+  [self.delegate controlGroupDidChange:self];
 }
 
 - (void)updateControlCellBasedOnEnabled:(MappingGroupEditControlCell*)cell {
