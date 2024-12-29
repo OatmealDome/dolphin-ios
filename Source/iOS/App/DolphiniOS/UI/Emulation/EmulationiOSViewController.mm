@@ -86,7 +86,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 }
 
 - (void)recreateMenu {
-  NSMutableArray<UIAction*>* controllerActions = [[NSMutableArray alloc] init];
+  NSMutableArray<UIMenuElement*>* controllerActions = [[NSMutableArray alloc] init];
   
   if ([self isWiimoteTouchPadAttached] && Core::System::GetInstance().IsWii()) {
     UIAction* wiimoteAction = [UIAction actionWithTitle:DOLCoreLocalizedString(@"Wii Remote") image:[UIImage systemImageNamed:@"gamecontroller"] identifier:nil handler:^(UIAction*) {
@@ -139,6 +139,42 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     }
     
     [controllerActions addObject:noneAction];
+  }
+  
+  if ([self isWiimoteTouchPadAttached] && Core::System::GetInstance().IsWii()) {
+    TCWiiTouchIRMode irMode = (TCWiiTouchIRMode)Config::Get(Config::MAIN_TOUCH_PAD_IR_MODE);
+    
+    UIMenu* menu = [UIMenu menuWithTitle:@"Touch IR Pointer" image:[UIImage systemImageNamed:@"hand.point.up.left"] identifier:nil options:0 children:@[
+      [UIAction actionWithTitle:@"Disabled" image:nil identifier:nil handler:^(UIAction*) {
+        Config::SetBaseOrCurrent(Config::MAIN_TOUCH_PAD_IR_MODE, TCWiiTouchIRModeNone);
+        
+        [self updatePointerValuesOnWiiTouchPads];
+        [self recreateMenu];
+        
+        [self.navigationController setNavigationBarHidden:true animated:true];
+      }],
+      [UIAction actionWithTitle:@"Follow" image:nil identifier:nil handler:^(UIAction*) {
+        Config::SetBaseOrCurrent(Config::MAIN_TOUCH_PAD_IR_MODE, TCWiiTouchIRModeFollow);
+        
+        [self updatePointerValuesOnWiiTouchPads];
+        [self recreateMenu];
+        
+        [self.navigationController setNavigationBarHidden:true animated:true];
+      }],
+      [UIAction actionWithTitle:@"Drag" image:nil identifier:nil handler:^(UIAction*) {
+        Config::SetBaseOrCurrent(Config::MAIN_TOUCH_PAD_IR_MODE, TCWiiTouchIRModeDrag);
+        
+        [self updatePointerValuesOnWiiTouchPads];
+        [self recreateMenu];
+        
+        [self.navigationController setNavigationBarHidden:true animated:true];
+      }]
+    ]];
+    
+    UIAction* selectedAction = (UIAction*)menu.children[(int)irMode];
+    selectedAction.state = UIMenuElementStateOn;
+    
+    [controllerActions addObject:menu];
   }
   
   self.navigationItem.leftBarButtonItem.menu = [UIMenu menuWithChildren:@[
