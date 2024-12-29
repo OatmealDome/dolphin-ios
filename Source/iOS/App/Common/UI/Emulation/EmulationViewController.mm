@@ -43,10 +43,12 @@
   self.stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(stopPressed)];
   self.pauseButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pausePressed)];
   self.playButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(playPressed)];
+  self.hideBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"eye.slash"] style:UIBarButtonItemStylePlain target:self action:@selector(hideBarPressed)];
   
   self.navigationItem.rightBarButtonItems = @[
     self.stopButton,
-    self.pauseButton
+    self.pauseButton,
+    self.hideBarButton
   ];
   
   [self.navigationController setNavigationBarHidden:true animated:true];
@@ -194,7 +196,8 @@
   
   self.navigationItem.rightBarButtonItems = @[
     self.stopButton,
-    self.playButton
+    self.playButton,
+    self.hideBarButton
   ];
 }
 
@@ -207,8 +210,13 @@
   
   self.navigationItem.rightBarButtonItems = @[
     self.stopButton,
-    self.pauseButton
+    self.pauseButton,
+    self.hideBarButton
   ];
+}
+
+- (void)hideBarPressed {
+  [self updateNavigationBar:true];
 }
 
 - (void)receiveTitleChangedNotification {
