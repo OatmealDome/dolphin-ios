@@ -171,6 +171,7 @@
 		B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */; };
 		B9EC1A43295FFFD30013EBE4 /* SoftwareListiOSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EC1A42295FFFD30013EBE4 /* SoftwareListiOSViewController.mm */; };
 		B9EC28382D21D429000FAE09 /* ControllersTouchscreenViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EC28372D21D429000FAE09 /* ControllersTouchscreenViewController.mm */; };
+		B9EC283A2D21DA56000FAE09 /* TCWiiTouchIRMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EC28392D21DA56000FAE09 /* TCWiiTouchIRMode.swift */; };
 		B9FCB7B9289670830020E233 /* JitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7B8289670830020E233 /* JitManager.m */; };
 		B9FCB7BC289672830020E233 /* JitManager+Debugger.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BB289672830020E233 /* JitManager+Debugger.m */; };
 		B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BD28967C130020E233 /* JitAcquisitionService.swift */; };
@@ -528,6 +529,7 @@
 		B9EC1A42295FFFD30013EBE4 /* SoftwareListiOSViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SoftwareListiOSViewController.mm; sourceTree = "<group>"; };
 		B9EC28362D21D429000FAE09 /* ControllersTouchscreenViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersTouchscreenViewController.h; sourceTree = "<group>"; };
 		B9EC28372D21D429000FAE09 /* ControllersTouchscreenViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersTouchscreenViewController.mm; sourceTree = "<group>"; };
+		B9EC28392D21DA56000FAE09 /* TCWiiTouchIRMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCWiiTouchIRMode.swift; sourceTree = "<group>"; };
 		B9FCB7B7289670830020E233 /* JitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JitManager.h; sourceTree = "<group>"; };
 		B9FCB7B8289670830020E233 /* JitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JitManager.m; sourceTree = "<group>"; };
 		B9FCB7BA289672830020E233 /* JitManager+Debugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+Debugger.h"; sourceTree = "<group>"; };
@@ -1527,6 +1529,7 @@
 				B9B2C61E288DB62D00CB6569 /* TCSidewaysWiiPad.xib */,
 				B9B2C625288DB64700CB6569 /* TCWiiPad.swift */,
 				B9B2C61F288DB62D00CB6569 /* TCWiiPad.xib */,
+				B9EC28392D21DA56000FAE09 /* TCWiiTouchIRMode.swift */,
 				B9447B062841906000BC9110 /* TCView.swift */,
 			);
 			path = TouchController;
@@ -2020,6 +2023,7 @@
 				B904ACC728852708008B6BE9 /* GraphicsShaderModeViewController.mm in Sources */,
 				B9D9388F283DE3C800B290FC /* EmulationViewController.mm in Sources */,
 				B904AD2E2888D75F008B6BE9 /* MappingExtensionCell.m in Sources */,
+				B9EC283A2D21DA56000FAE09 /* TCWiiTouchIRMode.swift in Sources */,
 				B991378E28814BCD00588446 /* WiiSensorBarViewController.mm in Sources */,
 				B97492472960CD2B00794509 /* FirstRunInitializationService.mm in Sources */,
 				B904ACD22885561E008B6BE9 /* InternalResolutionCell.m in Sources */,
