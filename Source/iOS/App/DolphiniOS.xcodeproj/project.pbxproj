@@ -170,6 +170,7 @@
 		B9DC5FB62884A563004BD94A /* GraphicsBoolCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB52884A563004BD94A /* GraphicsBoolCell.mm */; };
 		B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */; };
 		B9EC1A43295FFFD30013EBE4 /* SoftwareListiOSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EC1A42295FFFD30013EBE4 /* SoftwareListiOSViewController.mm */; };
+		B9EC28382D21D429000FAE09 /* ControllersTouchscreenViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EC28372D21D429000FAE09 /* ControllersTouchscreenViewController.mm */; };
 		B9FCB7B9289670830020E233 /* JitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7B8289670830020E233 /* JitManager.m */; };
 		B9FCB7BC289672830020E233 /* JitManager+Debugger.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BB289672830020E233 /* JitManager+Debugger.m */; };
 		B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BD28967C130020E233 /* JitAcquisitionService.swift */; };
@@ -525,6 +526,8 @@
 		B9DC5FB82884CB7C004BD94A /* GraphicsChoiceCell.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphicsChoiceCell.mm; sourceTree = "<group>"; };
 		B9EC1A41295FFFD30013EBE4 /* SoftwareListiOSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SoftwareListiOSViewController.h; sourceTree = "<group>"; };
 		B9EC1A42295FFFD30013EBE4 /* SoftwareListiOSViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SoftwareListiOSViewController.mm; sourceTree = "<group>"; };
+		B9EC28362D21D429000FAE09 /* ControllersTouchscreenViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersTouchscreenViewController.h; sourceTree = "<group>"; };
+		B9EC28372D21D429000FAE09 /* ControllersTouchscreenViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersTouchscreenViewController.mm; sourceTree = "<group>"; };
 		B9FCB7B7289670830020E233 /* JitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JitManager.h; sourceTree = "<group>"; };
 		B9FCB7B8289670830020E233 /* JitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JitManager.m; sourceTree = "<group>"; };
 		B9FCB7BA289672830020E233 /* JitManager+Debugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+Debugger.h"; sourceTree = "<group>"; };
@@ -734,6 +737,8 @@
 			isa = PBXGroup;
 			children = (
 				B904ACE728866E2D008B6BE9 /* ControllersSettings.storyboard */,
+				B9EC28362D21D429000FAE09 /* ControllersTouchscreenViewController.h */,
+				B9EC28372D21D429000FAE09 /* ControllersTouchscreenViewController.mm */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -2064,6 +2069,7 @@
 				B9D938A728418AFE00B290FC /* TCManagerInterface.mm in Sources */,
 				B9B2C661288E569E00CB6569 /* ExternalDisplayEmulationViewController.mm in Sources */,
 				B950CFA32961696100197719 /* BootNoticeNavigationViewController.m in Sources */,
+				B9EC28382D21D429000FAE09 /* ControllersTouchscreenViewController.mm in Sources */,
 				B9B1483C29642CB8002C4BE7 /* UpdateRequiredNoticeViewController.m in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
 				B974923C2960096C00794509 /* ImportFileManager.m in Sources */,
