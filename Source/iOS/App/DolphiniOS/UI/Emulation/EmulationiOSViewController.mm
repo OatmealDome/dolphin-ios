@@ -299,7 +299,14 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     return;
   }
   
-  ControllerEmu::ControlGroup* group = Wiimote::GetWiimoteGroup(0, WiimoteEmu::WiimoteGroup::IMUPoint);
+  TCWiiTouchIRMode irMode = TCWiiTouchIRModeNone;
+  
+  if ([self isWiimoteTouchPadAttached]) {
+    irMode = (TCWiiTouchIRMode)Config::Get(Config::MAIN_TOUCH_PAD_IR_MODE);
+    
+    ControllerEmu::ControlGroup* group = Wiimote::GetWiimoteGroup(0, WiimoteEmu::WiimoteGroup::IMUPoint);
+    group->enabled = irMode == TCWiiTouchIRModeNone;
+  }
   
   for (int i = 0; i < [self.touchPads count]; i++) {
     TCView* padView = self.touchPads[i];
@@ -307,7 +314,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     if ([padView isKindOfClass:[TCWiiPad class]]) {
       TCWiiPad* wiiPadView = (TCWiiPad*)padView;
       
-      [wiiPadView setTouchPointerEnabled:!group->enabled];
+      [wiiPadView setTouchIRMode:irMode];
       [wiiPadView recalculatePointerValuesWithNew_rect:self.rendererView.bounds game_aspect:g_presenter->CalculateDrawAspectRatio()];
     }
   }

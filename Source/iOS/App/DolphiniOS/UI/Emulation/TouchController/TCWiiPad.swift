@@ -5,12 +5,16 @@ import Foundation
 import UIKit
 
 class TCWiiPad: TCView, UIGestureRecognizerDelegate {
-  var touchPointerEnabled: Bool = true
+  var mode: TCWiiTouchIRMode = .none
   
   var gameCenterX: CGFloat = 0
   var gameCenterY: CGFloat = 0
   var gameWidthHalfInv: CGFloat = 0
   var gameHeightHalfInv: CGFloat = 0
+  
+  var touchStartPoint: CGPoint = CGPoint(x: 0, y: 0)
+  var oldX: CGFloat = 0
+  var oldY: CGFloat = 0
   
   required init?(coder: NSCoder) {
     super.init(coder: coder)
@@ -63,24 +67,45 @@ class TCWiiPad: TCView, UIGestureRecognizerDelegate {
   }
   
   @objc func handleLongPress(gesture: UILongPressGestureRecognizer) {
-    if (!self.touchPointerEnabled) {
+    if (mode == .none) {
       return
     }
     
     let point = gesture.location(in: self)
     
-    var axises: (y: CGFloat, x: CGFloat) = (0, 0)
+    if (gesture.state == .began) {
+      touchStartPoint = point
+      return;
+    }
     
-    axises.x = (point.x - gameCenterX) * gameWidthHalfInv
-    axises.y = (point.y - gameCenterY) * gameHeightHalfInv
+    var x: CGFloat, y: CGFloat
+    
+    if (mode == .follow) {
+      x = (point.x - gameCenterX) * gameWidthHalfInv
+      y = (point.y - gameCenterY) * gameHeightHalfInv
+    } else {
+      x = oldX + (point.x - touchStartPoint.x) * gameWidthHalfInv
+      y = oldY + (point.y - touchStartPoint.y) * gameHeightHalfInv
+    }
     
     let axisStartIdx = TCButtonType.wiiInfrared
-    for (i, axis) in [axises.y, axises.y, axises.x, axises.x].enumerated() {
+    for (i, axis) in [y, y, x, x].enumerated() {
       TCManagerInterface.setAxisValueFor(axisStartIdx.rawValue + i + 1, controller: self.port, value: Float(axis))
+    }
+    
+    if (gesture.state == .ended && mode == .drag) {
+      oldX = x
+      oldY = y
     }
   }
   
-  @objc func setTouchPointerEnabled(_ enabled: Bool) {
-    self.touchPointerEnabled = enabled
+  @objc func setTouchIRMode(_ newMode: TCWiiTouchIRMode) {
+    self.mode = newMode
+  }
+  
+  @objc func resetPointer() {
+    touchStartPoint = CGPoint(x: 0, y: 0)
+    oldX = 0
+    oldY = 0
   }
 }
