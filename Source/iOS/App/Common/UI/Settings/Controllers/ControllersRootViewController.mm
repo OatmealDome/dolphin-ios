@@ -54,6 +54,15 @@
 
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+  if (indexPath.section == 0) {
+    _targetType = DOLControllerPortTypePad;
+  } else if (indexPath.section == 1) {
+    _targetType = DOLControllerPortTypeWiimote;
+  } else {
+    // The storyboard will handle any segues.
+    return;
+  }
+  
   _targetType = indexPath.section == 0 ? DOLControllerPortTypePad : DOLControllerPortTypeWiimote;
   _targetPort = (int)indexPath.row;
   
