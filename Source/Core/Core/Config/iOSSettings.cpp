@@ -5,4 +5,8 @@
 
 namespace Config
 {
+// Main.iOS
+
+const Info<float> MAIN_TOUCH_PAD_OPACITY{{System::Main, "iOS", "TouchPadOpacity"}, 0.50f};
+
 }  // namespace Config

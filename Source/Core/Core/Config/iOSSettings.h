@@ -7,4 +7,8 @@
 
 namespace Config
 {
+// Main.iOS
+
+extern const Info<float> MAIN_TOUCH_PAD_OPACITY;
+
 }  // namespace Config
