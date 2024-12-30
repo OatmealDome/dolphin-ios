@@ -5,6 +5,8 @@
 
 #import <UIKit/UIKit.h>
 
+NSString* const DOLImportFileFinishedNotification = @"DOLImportFileFinishedNotification";
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ImportFileManager : NSObject

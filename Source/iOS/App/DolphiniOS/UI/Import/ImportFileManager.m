@@ -71,9 +71,9 @@
   void (^finish)(void) = ^void() {
     [url stopAccessingSecurityScopedResource];
     
-    [[GameFileCacheManager sharedManager] rescanAndFetchMetadataWithCompletionHandler:nil];
-    
     [self hideWindow];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:DOLImportFileFinishedNotification object:self userInfo:nil];
   };
   
   NSString* sourcePath = [url path];
