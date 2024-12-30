@@ -17,7 +17,13 @@
 #import "ImportFileManager.h"
 #import "LocalizationUtil.h"
 
-@implementation SoftwareListiOSViewController
+typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
+  DOLSoftwareListDocumentPickerTypeImport
+};
+
+@implementation SoftwareListiOSViewController {
+  DOLSoftwareListDocumentPickerType _pickerType;
+}
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
@@ -87,11 +93,15 @@
   pickerController.modalPresentationStyle = UIModalPresentationPageSheet;
   pickerController.allowsMultipleSelection = false;
   
+  _pickerType = DOLSoftwareListDocumentPickerTypeImport;
+  
   [self presentViewController:pickerController animated:true completion:nil];
 }
 
 - (void)documentPicker:(UIDocumentPickerViewController*)controller didPickDocumentsAtURLs:(NSArray<NSURL*>*)urls {
-  [[ImportFileManager shared] importFileAtUrl:urls[0]];
+  if (_pickerType == DOLSoftwareListDocumentPickerTypeImport) {
+    [[ImportFileManager shared] importFileAtUrl:urls[0]];
+  }
 }
 
 - (UIContextMenuConfiguration*)collectionView:(UICollectionView*)collectionView contextMenuConfigurationForItemAtIndexPath:(NSIndexPath*)indexPath point:(CGPoint)point {
