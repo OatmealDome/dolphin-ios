@@ -25,6 +25,18 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
   DOLSoftwareListDocumentPickerType _pickerType;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveImportFileFinishedNotification) name:DOLImportFileFinishedNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+  [super viewWillDisappear:animated];
+  
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLImportFileFinishedNotification object:nil];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
   
@@ -120,6 +132,10 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
     
     return [UIMenu menuWithTitle:gameName children:[actions copy]];
   }];
+}
+
+- (void)receiveImportFileFinishedNotification {
+  [self reloadGameFiles];
 }
 
 @end

@@ -32,6 +32,10 @@
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
   
+  [self reloadGameFiles];
+}
+
+- (void)reloadGameFiles {
   [[GameFileCacheManager sharedManager] rescanAndFetchMetadataWithCompletionHandler:^{
     dispatch_async(dispatch_get_main_queue(), ^{
       self->_gameFiles = [[GameFileCacheManager sharedManager] getGames];

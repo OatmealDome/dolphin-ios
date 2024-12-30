@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
   EmulationBootParameter* _bootParameter;
 }
 
+- (void)reloadGameFiles;
+
 - (void)performSegueForWiiUpdateWithSource:(NSString*)source isOnline:(bool)online;
 
 @end
