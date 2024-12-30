@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)reloadGameFiles;
+- (void)loadGameFile:(GameFilePtrWrapper*)gameFileWrapper;
 
 - (void)performSegueForWiiUpdateWithSource:(NSString*)source isOnline:(bool)online;
 

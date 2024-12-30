@@ -18,11 +18,13 @@
 #import "LocalizationUtil.h"
 
 typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
-  DOLSoftwareListDocumentPickerTypeImport
+  DOLSoftwareListDocumentPickerTypeImport,
+  DOLSoftwareListDocumentPickerTypeOpenExternal
 };
 
 @implementation SoftwareListiOSViewController {
   DOLSoftwareListDocumentPickerType _pickerType;
+  NSURL* _openedUrl;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -39,6 +41,11 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
+  
+  if (_openedUrl != nil) {
+    [_openedUrl stopAccessingSecurityScopedResource];
+    _openedUrl = nil;
+  }
   
   NSArray<UIMenuElement*>* wiiActions;
   
@@ -89,30 +96,74 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
   
   
   self.navigationItem.leftBarButtonItem.menu = [UIMenu menuWithChildren:@[
+    [UIAction actionWithTitle:DOLCoreLocalizedString(@"Open") image:[UIImage systemImageNamed:@"externaldrive"] identifier:nil handler:^(UIAction*) {
+      [self openDocumentPickerWithSoftwareContentTypesAndPickerType:DOLSoftwareListDocumentPickerTypeOpenExternal];
+    }],
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Wii") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:wiiActions]
   ]];
 }
 
-- (IBAction)addButtonPressed:(id)sender {
+- (void)openDocumentPickerWithSoftwareContentTypesAndPickerType:(DOLSoftwareListDocumentPickerType)pickerType {
   NSArray<UTType*>* types = @[
     [UTType exportedTypeWithIdentifier:@"me.oatmealdome.dolphinios.generic-software"],
     [UTType exportedTypeWithIdentifier:@"me.oatmealdome.dolphinios.gamecube-software"],
     [UTType exportedTypeWithIdentifier:@"me.oatmealdome.dolphinios.wii-software"]
   ];
   
-  UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:types];
+  [self openDocumentPickerWithContentTypes:types pickerType:pickerType];
+}
+
+- (void)openDocumentPickerWithContentTypes:(NSArray<UTType*>*)contentTypes pickerType:(DOLSoftwareListDocumentPickerType)pickerType {
+  UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes];
   pickerController.delegate = self;
   pickerController.modalPresentationStyle = UIModalPresentationPageSheet;
   pickerController.allowsMultipleSelection = false;
   
-  _pickerType = DOLSoftwareListDocumentPickerTypeImport;
+  _pickerType = pickerType;
   
   [self presentViewController:pickerController animated:true completion:nil];
+}
+
+- (IBAction)addButtonPressed:(id)sender {
+  [self openDocumentPickerWithSoftwareContentTypesAndPickerType:DOLSoftwareListDocumentPickerTypeImport];
 }
 
 - (void)documentPicker:(UIDocumentPickerViewController*)controller didPickDocumentsAtURLs:(NSArray<NSURL*>*)urls {
   if (_pickerType == DOLSoftwareListDocumentPickerTypeImport) {
     [[ImportFileManager shared] importFileAtUrl:urls[0]];
+  } else if (_pickerType == DOLSoftwareListDocumentPickerTypeOpenExternal) {
+    void (^showError)(NSString*) = ^(NSString* error) {
+      UIAlertController* errorAlert = [UIAlertController alertControllerWithTitle:DOLCoreLocalizedString(@"Error") message:error preferredStyle:UIAlertControllerStyleAlert];
+      
+      [errorAlert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"OK") style:UIAlertActionStyleDefault
+        handler:nil]];
+      
+       [self presentViewController:errorAlert animated:true completion:nil];
+    };
+    
+    NSURL* url = urls[0];
+    
+    if (![url startAccessingSecurityScopedResource]) {
+      showError(@"Failed to start accessing security scoped resource.");
+      return;
+    }
+    
+    _openedUrl = url;
+    
+    NSString* sourcePath = [_openedUrl path];
+    
+    GameFilePtrWrapper* gameFileWrapper = [[GameFilePtrWrapper alloc] init];
+    gameFileWrapper.gameFile = std::make_shared<UICommon::GameFile>(FoundationToCppString(sourcePath));
+    
+    if (!gameFileWrapper.gameFile->IsValid()) {
+      [_openedUrl stopAccessingSecurityScopedResource];
+      
+      showError(@"File is invalid.");
+      
+      return;
+    }
+    
+    [self loadGameFile:gameFileWrapper];
   }
 }
 
