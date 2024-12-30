@@ -196,7 +196,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   self.navigationItem.leftBarButtonItem.menu = [UIMenu menuWithChildren:@[
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Controllers") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:controllerActions],
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Save State") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[
-      [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Select State Slot") image:[UIImage systemImageNamed:@"filemenu.and.selection"] identifier:nil options:0 children:stateSlotActions],
+      [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Select State Slot") image:nil identifier:nil options:0 children:stateSlotActions],
       [UIAction actionWithTitle:DOLCoreLocalizedString(@"Load State") image:[UIImage systemImageNamed:@"tray.and.arrow.down"] identifier:nil handler:^(UIAction*) {
         DOLHostQueueRunAsync(^{
           State::Load(Core::System::GetInstance(), self->_stateSlot);
