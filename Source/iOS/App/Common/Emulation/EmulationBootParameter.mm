@@ -24,8 +24,7 @@
   } else if (self.bootType == EmulationBootTypeSystemMenu) {
     boot = std::make_unique<BootParameters>(BootParameters::NANDTitle{Titles::SYSTEM_MENU});
   } else {
-    // TODO: GCIPL
-    @throw [NSException exceptionWithName:@"UnsupportedBootTypeException" reason:@"Specified EmulationBootType not supported at this time" userInfo:nil];
+    boot = std::make_unique<BootParameters>(BootParameters::IPL{self.iplRegion});
   }
   
   return boot;
