@@ -3,6 +3,10 @@
 
 #import <UIKit/UIKit.h>
 
+namespace DiscIO {
+enum class Region;
+}
+
 @class EmulationBootParameter;
 @class GameFilePtrWrapper;
 
@@ -16,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)reloadGameFiles;
 - (void)loadGameFile:(GameFilePtrWrapper*)gameFileWrapper;
+- (void)loadGameCubeIPLForRegion:(DiscIO::Region)region;
 
 - (void)performSegueForWiiUpdateWithSource:(NSString*)source isOnline:(bool)online;
 

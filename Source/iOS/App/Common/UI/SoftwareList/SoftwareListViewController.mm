@@ -79,6 +79,14 @@
   [self performSegueWithIdentifier:@"emulation" sender:nil];
 }
 
+- (void)loadGameCubeIPLForRegion:(DiscIO::Region)region {
+  _bootParameter = [[EmulationBootParameter alloc] init];
+  _bootParameter.bootType = EmulationBootTypeGCIPL;
+  _bootParameter.iplRegion = region;
+  
+  [self performSegueWithIdentifier:@"emulation" sender:nil];
+}
+
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView*)collectionView {

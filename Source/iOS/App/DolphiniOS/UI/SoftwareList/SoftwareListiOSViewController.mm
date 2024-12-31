@@ -5,9 +5,11 @@
 
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
+#import "Common/CommonPaths.h"
 #import "Common/FileUtil.h"
 
 #import "Core/CommonTitles.h"
+#import "Core/Config/MainSettings.h"
 #import "Core/IOS/ES/ES.h"
 #import "Core/IOS/IOS.h"
 
@@ -109,11 +111,31 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
     ]];
   }
   
+  NSMutableArray<UIMenuElement*>* iplActions = [[NSMutableArray alloc] init];
+  
+  void(^addIPLAction)(DiscIO::Region, NSString*, std::string) = ^(DiscIO::Region region, NSString* regionName, std::string regionDir) {
+    UIAction* iplAction = [UIAction actionWithTitle:DOLCoreLocalizedString(regionName) image:nil identifier:nil handler:^(UIAction*) {
+      [self loadGameCubeIPLForRegion:region];
+    }];
+    
+    if (!File::Exists(Config::GetBootROMPath(regionDir))) {
+      [iplAction setAttributes:UIMenuElementAttributesDisabled];
+    }
+    
+    [iplActions addObject:iplAction];
+  };
+  
+  addIPLAction(DiscIO::Region::NTSC_J, @"NTSC-J", JAP_DIR);
+  addIPLAction(DiscIO::Region::NTSC_U, @"NTSC-U", USA_DIR);
+  addIPLAction(DiscIO::Region::PAL, @"PAL", EUR_DIR);
   
   self.navigationItem.leftBarButtonItem.menu = [UIMenu menuWithChildren:@[
     [UIAction actionWithTitle:DOLCoreLocalizedString(@"Open") image:[UIImage systemImageNamed:@"externaldrive"] identifier:nil handler:^(UIAction*) {
       [self openDocumentPickerWithSoftwareContentTypesAndPickerType:DOLSoftwareListDocumentPickerTypeOpenExternal];
     }],
+    [UIMenu menuWithTitle:DOLCoreLocalizedString(@"GameCube") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[
+      [UIMenu menuWithTitle:@"Load GameCube Main Menu" children:iplActions]
+    ]],
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Wii") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:wiiActions]
   ]];
 }
