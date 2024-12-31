@@ -119,6 +119,13 @@ enum TCButtonType: Int
   case wiiGyroYawRight = 636
   // Wiimote IMU IR
   case wiiInfraredRecenter = 800
+  // Nunchuk IMU
+  case nunchukAccelLeft = 900
+  case nunchukAccelRight = 901
+  case nunchukAccelForward = 902
+  case nunchukAccelBackward = 903
+  case nunchukAccelUp = 904
+  case nunchukAccelDown = 905
   // TODO: Guitar, Drums, Turntable, Rumble
   
   func getImageName() -> String

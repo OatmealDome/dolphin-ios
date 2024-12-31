@@ -148,6 +148,14 @@ Touchscreen::Touchscreen(int controller_id, bool wiimote)
     AddInput(new Axis(m_controller_id, ButtonType::WIIMOTE_GYRO_ROLL_RIGHT, -1.0f));
     AddInput(new Axis(m_controller_id, ButtonType::WIIMOTE_GYRO_YAW_LEFT));
     AddInput(new Axis(m_controller_id, ButtonType::WIIMOTE_GYRO_YAW_RIGHT, -1.0f));
+    
+    // Nunchuk IMU
+    AddInput(new Axis(m_controller_id, ButtonType::NUNCHUK_ACCEL_LEFT));
+    AddInput(new Axis(m_controller_id, ButtonType::NUNCHUK_ACCEL_RIGHT, -1.0f));
+    AddInput(new Axis(m_controller_id, ButtonType::NUNCHUK_ACCEL_FORWARD, -1.0f));
+    AddInput(new Axis(m_controller_id, ButtonType::NUNCHUK_ACCEL_BACKWARD));
+    AddInput(new Axis(m_controller_id, ButtonType::NUNCHUK_ACCEL_UP));
+    AddInput(new Axis(m_controller_id, ButtonType::NUNCHUK_ACCEL_DOWN, -1.0f));
   }
 
   // Rumble

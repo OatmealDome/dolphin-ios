@@ -149,6 +149,14 @@ StateManager::StateManager()
     state.PopulateAxis(ButtonType::WIIMOTE_GYRO_YAW_LEFT);
     state.PopulateAxis(ButtonType::WIIMOTE_GYRO_YAW_RIGHT);
 
+    // Nunchuk IMU
+    state.PopulateAxis(ButtonType::NUNCHUK_ACCEL_LEFT);
+    state.PopulateAxis(ButtonType::NUNCHUK_ACCEL_RIGHT);
+    state.PopulateAxis(ButtonType::NUNCHUK_ACCEL_FORWARD);
+    state.PopulateAxis(ButtonType::NUNCHUK_ACCEL_BACKWARD);
+    state.PopulateAxis(ButtonType::NUNCHUK_ACCEL_UP);
+    state.PopulateAxis(ButtonType::NUNCHUK_ACCEL_DOWN);
+
     m_controllers.push_back(state);
   }
 }
