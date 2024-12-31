@@ -5,6 +5,8 @@
 
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
+#import "Common/FileUtil.h"
+
 #import "Core/CommonTitles.h"
 #import "Core/IOS/ES/ES.h"
 #import "Core/IOS/IOS.h"
@@ -218,6 +220,24 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
       
       [self performSegueWithIdentifier:@"properties" sender:nil];
     }]];
+    
+    UIAction* deleteAction = [UIAction actionWithTitle:DOLCoreLocalizedString(@"Delete") image:[UIImage systemImageNamed:@"trash"] identifier:nil handler:^(UIAction*) {
+      UIAlertController* confirmAlert = [UIAlertController alertControllerWithTitle:DOLCoreLocalizedString(@"Confirm") message:DOLCoreLocalizedString(@"Are you sure you want to delete this file?") preferredStyle:UIAlertControllerStyleAlert];
+        
+      [confirmAlert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"No") style:UIAlertActionStyleDefault handler:nil]];
+      
+      [confirmAlert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"Yes") style:UIAlertActionStyleDestructive handler:^(UIAlertAction*) {
+        if (File::Delete(gameFileWrapper.gameFile->GetFilePath())) {
+          [self reloadGameFiles];
+        }
+      }]];
+      
+      [self presentViewController:confirmAlert animated:true completion:nil];
+    }];
+    
+    [deleteAction setAttributes:UIMenuElementAttributesDestructive];
+    
+    [actions addObject:deleteAction];
     
     NSString* gameName = CppToFoundationString(gameFileWrapper.gameFile->GetName(UICommon::GameFile::Variant::LongAndPossiblyCustom));
     
