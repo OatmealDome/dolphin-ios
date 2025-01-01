@@ -91,9 +91,9 @@
   [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLEmulationDidEndNotification object:nil];
 }
 
-- (void)didFinishJitScreenWithResult:(BOOL)result sender:(id)sender {
+- (void)didFinishJitScreenWithResult:(JitWaitViewControllerResult)result sender:(id)sender {
   [self dismissViewControllerAnimated:true completion:^{
-    if (result) {
+    if (result == JitWaitViewControllerResultJitAcquired) {
       if ([self checkIfNeedToShowNKitWarning]) {
         [self showNKitWarning];
       } else {
