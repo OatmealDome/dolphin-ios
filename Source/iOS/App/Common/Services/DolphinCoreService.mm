@@ -7,6 +7,7 @@
 #import "Core/Config/MainSettings.h"
 #import "Core/Config/GraphicsSettings.h"
 #import "Core/Core.h"
+#import "Core/DolphinAnalytics.h"
 #import "Core/HW/GCPad.h"
 #import "Core/HW/Wiimote.h"
 #import "Core/System.h"
@@ -71,6 +72,10 @@
 
   Pad::LoadConfig();
   Pad::GetConfig()->SaveConfig();
+  
+  // This technically doesn't send any reports since we disabled analytics...
+  // However, it initializes DolphinAnalytics, which we need to do before starting any Wii games.
+  DolphinAnalytics::Instance().ReportDolphinStart("ios");
 
   return YES;
 }
