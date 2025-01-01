@@ -65,6 +65,10 @@
     }]];
     
     [self presentViewController:launchAlert animated:true completion:nil];
+  } else if (indexPath.section == 2 && indexPath.row == 1) { // Force Start Motion
+    TCDeviceMotion* sharedMotion = [TCDeviceMotion shared];
+    [sharedMotion setPort:4];
+    [sharedMotion setMotionEnabled:true];
   }
   
   [self.tableView deselectRowAtIndexPath:indexPath animated:true];
