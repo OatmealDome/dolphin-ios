@@ -31,6 +31,7 @@
 #import "MappingDeviceViewController.h"
 #import "MappingExtensionViewController.h"
 #import "MappingGroupEditViewController.h"
+#import "MappingInputDisplayViewController.h"
 #import "MappingLoadProfileViewController.h"
 #import "MappingRootDeviceCell.h"
 #import "MappingRootExtensionCell.h"
@@ -230,7 +231,7 @@ struct Section {
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
   switch (section) {
     case 0: // Devices
-      return 1;
+      return 2;
     case 1: // Profiles
       return 2;
     default:
@@ -266,17 +267,21 @@ struct Section {
 
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
   if (indexPath.section == 0) { // Devices
-    MappingRootDeviceCell* deviceCell = [tableView dequeueReusableCellWithIdentifier:@"DeviceCell" forIndexPath:indexPath];
-    
-    const auto deviceString = _controller->GetDefaultDevice().ToString();
-    if (!deviceString.empty()) {
-      deviceCell.deviceLabel.text = CppToFoundationString(deviceString);
+    if (indexPath.row == 0) {
+      MappingRootDeviceCell* deviceCell = [tableView dequeueReusableCellWithIdentifier:@"DeviceCell" forIndexPath:indexPath];
+      
+      const auto deviceString = _controller->GetDefaultDevice().ToString();
+      if (!deviceString.empty()) {
+        deviceCell.deviceLabel.text = CppToFoundationString(deviceString);
+      } else {
+        // Show at least *something* to make it clear that no device is selected.
+        deviceCell.deviceLabel.text = @"—";
+      }
+      
+      return deviceCell;
     } else {
-      // Show at least *something* to make it clear that no device is selected.
-      deviceCell.deviceLabel.text = @"—";
+      return [tableView dequeueReusableCellWithIdentifier:@"InputDisplayCell" forIndexPath:indexPath];
     }
-    
-    return deviceCell;
   } else if (indexPath.section == 1) { // Profiles
     NSString* profileCellIdentifier = indexPath.row == 1 ? @"ProfileSaveCell" : @"ProfileLoadCell";
     
@@ -381,6 +386,10 @@ struct Section {
     loadController.inputConfig = _config;
     loadController.emulatedController = _controller;
     loadController.filterTouchscreen = (self.mappingType == DOLMappingTypePad || self.mappingType == DOLMappingTypeWiimote) && self.mappingPort != 0;
+  } else if ([segue.identifier isEqualToString:@"toInputDisplay"]) {
+    MappingInputDisplayViewController* inputDisplayController = segue.destinationViewController;
+    
+    inputDisplayController.deviceStr = CppToFoundationString(_controller->GetDefaultDevice().ToString());
   }
 }
 

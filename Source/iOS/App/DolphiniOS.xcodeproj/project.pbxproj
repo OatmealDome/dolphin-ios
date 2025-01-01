@@ -92,6 +92,8 @@
 		B950CFC92962562200197719 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFC82962562200197719 /* main.m */; };
 		B950CFCC2962590600197719 /* JitManager+PTrace.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFCB2962590600197719 /* JitManager+PTrace.m */; };
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
+		B9661F332D2318D300FB2AAB /* MappingInputDisplayViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9661F322D2318D300FB2AAB /* MappingInputDisplayViewController.mm */; };
+		B9661F362D23190300FB2AAB /* MappingInputDisplayInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B9661F352D23190300FB2AAB /* MappingInputDisplayInputCell.m */; };
 		B96C5DC92CFE4B200046C029 /* Logger.ini in Resources */ = {isa = PBXBuildFile; fileRef = B96C5DC82CFE4B200046C029 /* Logger.ini */; };
 		B96C9A4A2A46501C002B5ECF /* DOLAppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96C9A492A46501B002B5ECF /* DOLAppVersion.swift */; };
 		B96C9A602A46C2C1002B5ECF /* DOLAppVersionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96C9A5F2A46C2C1002B5ECF /* DOLAppVersionTests.swift */; };
@@ -373,6 +375,10 @@
 		B950CFCE2962D08100197719 /* Private.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Private.entitlements; sourceTree = "<group>"; };
 		B950CFCF2962D1A500197719 /* Public.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Public.entitlements; sourceTree = "<group>"; };
 		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
+		B9661F312D2318D300FB2AAB /* MappingInputDisplayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingInputDisplayViewController.h; sourceTree = "<group>"; };
+		B9661F322D2318D300FB2AAB /* MappingInputDisplayViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingInputDisplayViewController.mm; sourceTree = "<group>"; };
+		B9661F342D23190300FB2AAB /* MappingInputDisplayInputCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingInputDisplayInputCell.h; sourceTree = "<group>"; };
+		B9661F352D23190300FB2AAB /* MappingInputDisplayInputCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MappingInputDisplayInputCell.m; sourceTree = "<group>"; };
 		B96C5DC82CFE4B200046C029 /* Logger.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = Logger.ini; sourceTree = "<group>"; };
 		B96C9A492A46501B002B5ECF /* DOLAppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOLAppVersion.swift; sourceTree = "<group>"; };
 		B96C9A4F2A46C1CE002B5ECF /* DolphiniOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DolphiniOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -778,6 +784,7 @@
 				B904AD172888AB3B008B6BE9 /* Device */,
 				B904AD282888D719008B6BE9 /* Extension */,
 				B904AD2F2888FEDE008B6BE9 /* GroupEdit */,
+				B9661F302D2318AD00FB2AAB /* InputDisplay */,
 				B9B2C5DF288D0A7900CB6569 /* LoadProfile */,
 				B904AD0A28886AE6008B6BE9 /* MappingRootDeviceCell.h */,
 				B904AD0B28886AE6008B6BE9 /* MappingRootDeviceCell.m */,
@@ -1131,6 +1138,17 @@
 				B950CFCE2962D08100197719 /* Private.entitlements */,
 			);
 			path = Entitlements;
+			sourceTree = "<group>";
+		};
+		B9661F302D2318AD00FB2AAB /* InputDisplay */ = {
+			isa = PBXGroup;
+			children = (
+				B9661F342D23190300FB2AAB /* MappingInputDisplayInputCell.h */,
+				B9661F352D23190300FB2AAB /* MappingInputDisplayInputCell.m */,
+				B9661F312D2318D300FB2AAB /* MappingInputDisplayViewController.h */,
+				B9661F322D2318D300FB2AAB /* MappingInputDisplayViewController.mm */,
+			);
+			path = InputDisplay;
 			sourceTree = "<group>";
 		};
 		B96C9A502A46C1CE002B5ECF /* DolphiniOSTests */ = {
@@ -1962,6 +1980,7 @@
 				B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */,
 				B9114F9C2893C6CA00B9C57A /* DebugRootViewController.mm in Sources */,
 				B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */,
+				B9661F362D23190300FB2AAB /* MappingInputDisplayInputCell.m in Sources */,
 				B9FCB7B9289670830020E233 /* JitManager.m in Sources */,
 				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
@@ -2043,6 +2062,7 @@
 				B900A7BA27F4CB80000361DD /* DefaultsInitService.swift in Sources */,
 				B950CFC3296219C800197719 /* WiiSystemUpdateViewController.mm in Sources */,
 				B9809C6C2A49705500877579 /* GeckoCodeViewController.mm in Sources */,
+				B9661F332D2318D300FB2AAB /* MappingInputDisplayViewController.mm in Sources */,
 				B9DC5FAF28849640004BD94A /* GraphicsTabViewController.m in Sources */,
 				B904ACD52885D2C4008B6BE9 /* AnisotropicFilteringViewController.mm in Sources */,
 				B9B2C65B288E454700CB6569 /* ExternalDisplaySceneDelegate.swift in Sources */,
