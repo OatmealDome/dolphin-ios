@@ -62,6 +62,11 @@ class JitWaitViewController: UIViewController {
     UIApplication.shared.open(url!, options: [:], completionHandler: nil)
   }
   
+  @IBAction func noJitPressed(_ sender: Any) {
+    self.timer?.invalidate()
+    self.delegate?.didFinishJitScreen(result: .noJitRequested, sender: self)
+  }
+  
   @IBAction func cancelPressed(_ sender: Any) {
     self.timer?.invalidate()
     self.delegate?.didFinishJitScreen(result: .cancel, sender: self)

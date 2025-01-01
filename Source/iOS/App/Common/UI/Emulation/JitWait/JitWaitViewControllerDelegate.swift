@@ -5,6 +5,7 @@ import Foundation
 
 @objc enum JitWaitViewControllerResult: Int {
   case jitAcquired
+  case noJitRequested
   case cancel
 }
 

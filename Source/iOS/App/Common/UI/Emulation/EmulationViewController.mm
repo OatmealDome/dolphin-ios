@@ -93,14 +93,19 @@
 
 - (void)didFinishJitScreenWithResult:(JitWaitViewControllerResult)result sender:(id)sender {
   [self dismissViewControllerAnimated:true completion:^{
-    if (result == JitWaitViewControllerResultJitAcquired) {
-      if ([self checkIfNeedToShowNKitWarning]) {
-        [self showNKitWarning];
-      } else {
-        [self startEmulation];
-      }
-    } else {
+    if (result == JitWaitViewControllerResultCancel) {
       [self.navigationController dismissViewControllerAnimated:true completion:nil];
+      return;
+    }
+    
+    if (result == JitWaitViewControllerResultNoJitRequested) {
+      Config::Set(Config::LayerType::CurrentRun, Config::MAIN_CPU_CORE, PowerPC::CPUCore::CachedInterpreter);
+    }
+    
+    if ([self checkIfNeedToShowNKitWarning]) {
+      [self showNKitWarning];
+    } else {
+      [self startEmulation];
     }
   }];
 }
