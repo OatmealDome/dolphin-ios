@@ -62,16 +62,7 @@
   WindowSystemInfo wsi;
   wsi.type = WindowSystemType::iOS;
   
-  g_controller_interface.Initialize(wsi);
-  
-  Pad::Initialize();
-  Wiimote::Initialize(Wiimote::InitializeMode::DO_NOT_WAIT_FOR_WIIMOTES);
-  
-  Wiimote::LoadConfig();
-  Wiimote::GetConfig()->SaveConfig();
-
-  Pad::LoadConfig();
-  Pad::GetConfig()->SaveConfig();
+  UICommon::InitControllers(wsi);
   
   // This technically doesn't send any reports since we disabled analytics...
   // However, it initializes DolphinAnalytics, which we need to do before starting any Wii games.
@@ -114,13 +105,11 @@
       while (Core::GetState(Core::System::GetInstance()) != Core::State::Uninitialized) {}
     }
     
-    Pad::Shutdown();
-    Wiimote::Shutdown();
-    g_controller_interface.Shutdown();
-    
     Config::Save();
     
     Core::Shutdown(system);
+    
+    UICommon::ShutdownControllers();
     UICommon::Shutdown();
   });
 }
