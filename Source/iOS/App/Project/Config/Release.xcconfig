@@ -1,5 +1,5 @@
 // Copyright 2022 DolphiniOS Project
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-DOL_CORE_BUILD_TARGET = RelWithDebInfo
+DOL_CORE_BUILD_TARGET = Release
 DOL_BUILD_SOURCE = unofficial
