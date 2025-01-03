@@ -54,6 +54,34 @@
   [VirtualMFiControllerManager shared].shouldConnectController = self.mfiSwitch.on;
 }
 
+#ifndef DEBUG
+
+- (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {
+  if (section == 1 || section == 2) {
+    return CGFLOAT_MIN;
+  }
+  
+  return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger)section {
+  if (section == 1 || section == 2) {
+    return CGFLOAT_MIN;
+  }
+  
+  return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath {
+  if (indexPath.section == 1 || indexPath.section == 2) {
+    return CGFLOAT_MIN;
+  }
+  
+  return UITableViewAutomaticDimension;
+}
+
+#endif
+
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
   if (indexPath.section == 2 && indexPath.row == 0) { // Reset Launch Times
     [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"launch_times"];
