@@ -66,9 +66,11 @@
     
     [self presentViewController:launchAlert animated:true completion:nil];
   } else if (indexPath.section == 2 && indexPath.row == 1) { // Force Start Motion
+#if TARGET_OS_IOS
     TCDeviceMotion* sharedMotion = [TCDeviceMotion shared];
     [sharedMotion setPort:4];
     [sharedMotion setMotionEnabled:true];
+#endif
   }
   
   [self.tableView deselectRowAtIndexPath:indexPath animated:true];
