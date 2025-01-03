@@ -84,6 +84,3 @@
 [submodule "Externals/Vulkan-Headers"]
 	path = Externals/Vulkan-Headers
 	url = https://github.com/KhronosGroup/Vulkan-Headers.git
-[submodule "Externals/ios-cmake"]
-	path = Externals/ios-cmake
-	url = https://github.com/leetal/ios-cmake.git
