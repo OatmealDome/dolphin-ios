@@ -17,6 +17,7 @@ class ServiceManager {
     GameFileCacheService(),
     JitAcquisitionService(),
     FirebaseService(),
+    AudioSessionCategoryService(),
     UpdateCheckService()
   ]
   

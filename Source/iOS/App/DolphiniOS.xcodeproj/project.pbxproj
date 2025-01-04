@@ -91,6 +91,10 @@
 		B950CFC629621AFC00197719 /* WiiSystemUpdate.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B950CFC529621AFC00197719 /* WiiSystemUpdate.storyboard */; };
 		B950CFC92962562200197719 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFC82962562200197719 /* main.m */; };
 		B950CFCC2962590600197719 /* JitManager+PTrace.m in Sources */ = {isa = PBXBuildFile; fileRef = B950CFCB2962590600197719 /* JitManager+PTrace.m */; };
+		B95AC52A2D29BA5C0048E48B /* AudioSessionManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = B95AC5292D29BA5C0048E48B /* AudioSessionManager.mm */; };
+		B95AC52C2D29BA7F0048E48B /* AudioMuteSwitchMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95AC52B2D29BA790048E48B /* AudioMuteSwitchMode.swift */; };
+		B95AC52E2D29C49F0048E48B /* AudioSessionCategoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95AC52D2D29C48F0048E48B /* AudioSessionCategoryService.swift */; };
+		B95AC5302D29C7FD0048E48B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B95AC52F2D29C7FD0048E48B /* AVFoundation.framework */; };
 		B960AFF1295FB45500A246F0 /* TCDeviceMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */; };
 		B9661F332D2318D300FB2AAB /* MappingInputDisplayViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9661F322D2318D300FB2AAB /* MappingInputDisplayViewController.mm */; };
 		B9661F362D23190300FB2AAB /* MappingInputDisplayInputCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B9661F352D23190300FB2AAB /* MappingInputDisplayInputCell.m */; };
@@ -374,6 +378,11 @@
 		B950CFCB2962590600197719 /* JitManager+PTrace.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "JitManager+PTrace.m"; sourceTree = "<group>"; };
 		B950CFCE2962D08100197719 /* Private.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Private.entitlements; sourceTree = "<group>"; };
 		B950CFCF2962D1A500197719 /* Public.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Public.entitlements; sourceTree = "<group>"; };
+		B95AC5282D29BA5C0048E48B /* AudioSessionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioSessionManager.h; sourceTree = "<group>"; };
+		B95AC5292D29BA5C0048E48B /* AudioSessionManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioSessionManager.mm; sourceTree = "<group>"; };
+		B95AC52B2D29BA790048E48B /* AudioMuteSwitchMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMuteSwitchMode.swift; sourceTree = "<group>"; };
+		B95AC52D2D29C48F0048E48B /* AudioSessionCategoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionCategoryService.swift; sourceTree = "<group>"; };
+		B95AC52F2D29C7FD0048E48B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		B960AFF0295FB45500A246F0 /* TCDeviceMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeviceMotion.swift; sourceTree = "<group>"; };
 		B9661F312D2318D300FB2AAB /* MappingInputDisplayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MappingInputDisplayViewController.h; sourceTree = "<group>"; };
 		B9661F322D2318D300FB2AAB /* MappingInputDisplayViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MappingInputDisplayViewController.mm; sourceTree = "<group>"; };
@@ -576,6 +585,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B95AC5302D29C7FD0048E48B /* AVFoundation.framework in Frameworks */,
 				B97C49B6297F8B0D00E30877 /* UniformTypeIdentifiers.framework in Frameworks */,
 				B9FCB7DE28988E7E0020E233 /* AltKit in Frameworks */,
 				B9D9389E283EF7AD00B290FC /* MetalKit.framework in Frameworks */,
@@ -603,6 +613,7 @@
 		B900A7A427F26F17000361DD /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				B95AC5242D29B9100048E48B /* Audio */,
 				B9B2C65C288E481300CB6569 /* Emulation */,
 				B974923D296035E500794509 /* Fastmem */,
 				B900A7BB27F4CD16000361DD /* FoundationUtil */,
@@ -626,6 +637,7 @@
 		B900A7A827F27EB9000361DD /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				B95AC52D2D29C48F0048E48B /* AudioSessionCategoryService.swift */,
 				B900A7B927F4CB80000361DD /* DefaultsInitService.swift */,
 				B900A7AC27F27F36000361DD /* DolphinCoreService.h */,
 				B900A7AD27F27F36000361DD /* DolphinCoreService.mm */,
@@ -1140,6 +1152,16 @@
 			path = Entitlements;
 			sourceTree = "<group>";
 		};
+		B95AC5242D29B9100048E48B /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				B95AC52B2D29BA790048E48B /* AudioMuteSwitchMode.swift */,
+				B95AC5282D29BA5C0048E48B /* AudioSessionManager.h */,
+				B95AC5292D29BA5C0048E48B /* AudioSessionManager.mm */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
 		B9661F302D2318AD00FB2AAB /* InputDisplay */ = {
 			isa = PBXGroup;
 			children = (
@@ -1527,6 +1549,7 @@
 		B9D9389C283EF7AD00B290FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B95AC52F2D29C7FD0048E48B /* AVFoundation.framework */,
 				B97C49B5297F8B0D00E30877 /* UniformTypeIdentifiers.framework */,
 				B9FCB7E52898FAC10020E233 /* GameController.framework */,
 				B9D9389D283EF7AD00B290FC /* MetalKit.framework */,
@@ -1979,6 +2002,7 @@
 				B9DC5FB92884CB7C004BD94A /* GraphicsChoiceCell.mm in Sources */,
 				B9B2C626288DB64700CB6569 /* TCWiiPad.swift in Sources */,
 				B9114F9C2893C6CA00B9C57A /* DebugRootViewController.mm in Sources */,
+				B95AC52A2D29BA5C0048E48B /* AudioSessionManager.mm in Sources */,
 				B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */,
 				B9661F362D23190300FB2AAB /* MappingInputDisplayInputCell.m in Sources */,
 				B9FCB7B9289670830020E233 /* JitManager.m in Sources */,
@@ -1997,6 +2021,7 @@
 				B9809C792A4A166D00877579 /* DOLSwitch.swift in Sources */,
 				B904AD322888FF17008B6BE9 /* MappingGroupEditViewController.mm in Sources */,
 				B991377C28808D9000588446 /* GameCubeSystemLanguageViewController.mm in Sources */,
+				B95AC52C2D29BA7F0048E48B /* AudioMuteSwitchMode.swift in Sources */,
 				B9FCB7CC2897700C0020E233 /* JitWaitViewController.swift in Sources */,
 				B9809C802A4A190C00877579 /* ActionReplayCodeViewController.mm in Sources */,
 				B9913781288096A300588446 /* ConfigWiiViewController.mm in Sources */,
@@ -2103,6 +2128,7 @@
 				B9B1483C29642CB8002C4BE7 /* UpdateRequiredNoticeViewController.m in Sources */,
 				B900A7B027F2866D000361DD /* UserFolderUtil.swift in Sources */,
 				B974923C2960096C00794509 /* ImportFileManager.m in Sources */,
+				B95AC52E2D29C49F0048E48B /* AudioSessionCategoryService.swift in Sources */,
 				B97E4B532965011C00B3EE9C /* FirebaseService.mm in Sources */,
 				B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */,
 			);
