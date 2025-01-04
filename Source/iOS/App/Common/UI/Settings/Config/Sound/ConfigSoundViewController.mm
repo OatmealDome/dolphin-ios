@@ -3,10 +3,14 @@
 
 #import "ConfigSoundViewController.h"
 
+#import "Core/Config/iOSSettings.h"
 #import "Core/Config/MainSettings.h"
 
+#import "AudioSessionManager.h"
 #import "FoundationStringUtil.h"
 #import "LocalizationUtil.h"
+
+#import "Swift.h"
 
 @interface ConfigSoundViewController ()
 
@@ -34,6 +38,10 @@
   
   self.muteSpeedLimitSwitch.on = Config::Get(Config::MAIN_AUDIO_MUTE_ON_DISABLED_SPEED_LIMIT);
   [self.muteSpeedLimitSwitch addValueChangedTarget:self action:@selector(muteSpeedLimitChanged)];
+  
+  AudioMuteSwitchMode muteSwitchMode = (AudioMuteSwitchMode)Config::Get(Config::MAIN_MUTE_SWITCH_MODE);
+  self.muteModeSwitch.on = muteSwitchMode == AudioMuteSwitchModeObey;
+  [self.muteModeSwitch addValueChangedTarget:self action:@selector(muteModeSwitchChanged)];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -78,6 +86,20 @@
 
 - (void)muteSpeedLimitChanged {
   Config::SetBaseOrCurrent(Config::MAIN_AUDIO_MUTE_ON_DISABLED_SPEED_LIMIT, self.muteSpeedLimitSwitch.on);
+}
+
+- (void)muteModeSwitchChanged {
+  AudioMuteSwitchMode mode;
+  
+  if (self.muteModeSwitch.on) {
+    mode = AudioMuteSwitchModeObey;
+  } else {
+    mode = AudioMuteSwitchModeIgnore;
+  }
+  
+  Config::SetBaseOrCurrent(Config::MAIN_MUTE_SWITCH_MODE, (int)mode);
+  
+  [[AudioSessionManager shared] setSessionCategory];
 }
 
 @end

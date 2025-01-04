@@ -375,3 +375,6 @@
 
 /* Class = "UILabel"; text = "Enable Write-Back Cache (slow)"; ObjectID = "Hdd-5M-Mss"; */
 "Hdd-5M-Mss.text" = "ライトバックキャッシュを有効にする (低速)";
+
+/* Class = "UILabel"; text = "Respect Silent Mode"; ObjectID = "2bp-Ny-hqL"; */
+"2bp-Ny-hqL.text" = "Respect Silent Mode";
