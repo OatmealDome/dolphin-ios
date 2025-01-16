@@ -27,8 +27,28 @@ jobs:
       #     brew install cmake ninja bartycrouch
       #     /usr/bin/python3 -m pip install polib
 
+      - name: Set Schema for Beta
+        if: "github.event.release.prerelease"
+        run: |
+          echo "XCODE_CONFIGURATION_NJB=Release (Beta, Non-Jailbroken)" >> $GITHUB_ENV
+          echo "XCODE_CONFIGURATION_JB=Release (Beta, Jailbroken)" >> $GITHUB_ENV
+          echo "XCODE_CONFIGURATION_TS=Release (Beta, TrollStore)" >> $GITHUB_ENV
+          echo "DEB_CONTROL_NAME=control-beta" >> $GITHUB_ENV
+
       - name: Build Application
         run: |
           xcodebuild -configuration "Release (Non-Jailbroken)" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
           xcodebuild -configuration "Release (TrollStore)" -scheme "DiOS (JB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
           xcodebuild -configuration "Release (Jailbroken)" -scheme "DiOS (JB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
+      
+      - name: Build IPA Files
+        run: |
+          mkdir "${{ github.workspace }}/products"
+          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_NJB }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Public.entitlements" "${{ github.workspace }}/products/Non-Jailbroken.ipa"
+          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateIpa.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_TS }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Private.entitlements" "${{ github.workspace }}/products/TrollStore.tipa"
+      
+      - name: Build DEB File
+        run: |
+          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateDeb.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_JB }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Private.entitlements" "${{ github.workspace }}/Source/iOS/App/Project/Package/Deb/${{ env.DEB_CONTROL_NAME }}.in" "${{ github.workspace }}/Source/iOS/App/Project/Package/Deb/postinst.sh" "${{ github.workspace }}/Source/iOS/App/Project/Package/Deb/postrm.sh" "Applications" "${{ github.workspace }}/products/Jailbroken-Rootful.deb"
+          "${{ github.workspace }}/Source/iOS/App/Project/Scripts/CreateDeb.sh" "${{ github.workspace }}/build-Xcode/Build/Products/${{ env.XCODE_CONFIGURATION_JB }}-iphoneos/DolphiniOS.app" "OatmealDome Software" "${{ github.workspace }}/Source/iOS/App/Project/Entitlements/Private.entitlements" "${{ github.workspace }}/Source/iOS/App/Project/Package/Deb/${{ env.DEB_CONTROL_NAME }}-rootless.in" "${{ github.workspace }}/Source/iOS/App/Project/Package/Deb/postinst.sh" "${{ github.workspace }}/Source/iOS/App/Project/Package/Deb/postrm.sh" "var/jb/Applications" "${{ github.workspace }}/products/Jailbroken-Rootless.deb"
+      
