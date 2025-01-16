@@ -27,8 +27,7 @@ jobs:
       #     brew install cmake ninja bartycrouch
       #     /usr/bin/python3 -m pip install polib
 
-      - name: Set Schema for Beta
-        if: "github.event.release.prerelease"
+      - name: Set Schema
         run: |
           echo "XCODE_CONFIGURATION_NJB=Release (Beta, Non-Jailbroken)" >> $GITHUB_ENV
           echo "XCODE_CONFIGURATION_JB=Release (Beta, Jailbroken)" >> $GITHUB_ENV
