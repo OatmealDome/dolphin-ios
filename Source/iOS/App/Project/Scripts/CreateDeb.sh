@@ -18,7 +18,7 @@ OUTPUT_FILE=$8
 VERSION_STRING=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$APP_BUNDLE_PATH/Info.plist")
 BUILD_NUMBER=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$APP_BUNDLE_PATH/Info.plist")
 
-mkdir "$BASE_DIR/$APP_INSTALLATION_DESTINATION"
+mkdir -p "$BASE_DIR/$APP_INSTALLATION_DESTINATION"
 
 # As recommended by saurik, don't copy dot files
 export COPYFILE_DISABLE
