@@ -12,7 +12,7 @@ jobs:
     runs-on: [self-hosted, macOS]
 
     env:
-      XCODE_COMMON_BUILD_ARGS: -project Source/iOS/App/DolphiniOS.xcodeproj -derivedDataPath "${{ github.workspace }}/build-Xcode" DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" DOL_BUILD_SOURCE="development" CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
+      XCODE_COMMON_BUILD_ARGS: -project Source/iOS/App/DolphiniOS.xcodeproj -derivedDataPath "${{ github.workspace }}/build-Xcode" -sdk iphoneos -destination generic/platform=iOS DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" DOL_BUILD_SOURCE="development" CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
     
     steps:
       - uses: actions/checkout@v2
