@@ -88,9 +88,3 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
-
-# DolphinAssets.xcassets
-#
-# A script automatically copies these images from the Android sources, so don't
-# commit these.
-Common/DolphinAssets.xcassets/*.imageset

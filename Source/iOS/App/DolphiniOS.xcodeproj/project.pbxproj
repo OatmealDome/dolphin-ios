@@ -347,7 +347,6 @@
 		B9447B032841901200BC9110 /* TCGameCubePad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCGameCubePad.swift; sourceTree = "<group>"; };
 		B9447B062841906000BC9110 /* TCView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCView.swift; sourceTree = "<group>"; };
 		B9447B08284192FA00BC9110 /* DolphinAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DolphinAssets.xcassets; sourceTree = "<group>"; };
-		B9447B0A2841931E00BC9110 /* CopyAssets.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CopyAssets.sh; sourceTree = "<group>"; };
 		B9447B0C2841939300BC9110 /* ImageAsset.json.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = ImageAsset.json.in; sourceTree = "<group>"; };
 		B9476B1B27F1A6D8009C0A4B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PreprocessorCombine.xcconfig; sourceTree = "<group>"; };
@@ -1036,7 +1035,6 @@
 			isa = PBXGroup;
 			children = (
 				B9476B2227F235A0009C0A4B /* BuildCore.sh */,
-				B9447B0A2841931E00BC9110 /* CopyAssets.sh */,
 				B97E4B642966480300B3EE9C /* CreateDeb.sh */,
 				B9B1483429636565002C4BE7 /* CreateIpa.sh */,
 				B99137B328827BF300588446 /* TransferCoreStringsToStoryboard.py */,
@@ -1742,7 +1740,6 @@
 				B9476B2327F23920009C0A4B /* Build Dolphin Core */,
 				B9DC3DF227EFBD2C0084DAA4 /* Sources */,
 				B9DC3DF327EFBD2C0084DAA4 /* Frameworks */,
-				B9447B0E2841941D00BC9110 /* Copy Dolphin Assets */,
 				B991379B2881DCAC00588446 /* Update Storyboard Strings */,
 				B99137A428825CFA00588446 /* Update Core Strings */,
 				B99137B428829F1400588446 /* Transfer Core Strings to Storyboard Strings */,
@@ -1862,25 +1859,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		B9447B0E2841941D00BC9110 /* Copy Dolphin Assets */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Dolphin Assets";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(PROJECT_DIR)/Common/DolphinAssets.xcassets/**",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"$PROJECT_DIR/Project/Scripts/CopyAssets.sh\"\n";
-		};
 		B9476B2327F23920009C0A4B /* Build Dolphin Core */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
