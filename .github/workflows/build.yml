@@ -36,6 +36,7 @@ jobs:
       
       - name: Build Application
         run: |
+          rm -rf "${{ github.workspace }}/archives" || true
           mkdir "${{ github.workspace }}/archives"
           xcodebuild archive -archivePath "${{ github.workspace }}/archives/NonJailbroken.xcarchive" -configuration "${{ env.XCODE_CONFIGURATION_NJB }}" -scheme "DiOS (NJB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
           xcodebuild archive -archivePath "${{ github.workspace }}/archives/Jailbroken.xcarchive" -configuration "${{ env.XCODE_CONFIGURATION_TS }}" -scheme "DiOS (JB)" ${{ env.XCODE_COMMON_BUILD_ARGS }}
