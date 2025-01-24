@@ -140,7 +140,9 @@ public:
   void QueryBlock(u8 sky_num, u8 block, u8* reply_buf);
   void WriteBlock(u8 sky_num, u8 block, const u8* to_write_buf, u8* reply_buf);
 
+  bool RemoveSkylanderiOS(u8 sky_num);
   bool RemoveSkylander(u8 sky_num);
+  u8 LoadSkylanderiOS(u8* buf, File::IOFile in_file);
   u8 LoadSkylander(std::unique_ptr<SkylanderFigure> figure);
   Skylander* GetSkylander(u8 slot);
   std::pair<u16, u16> CalculateIDs(const std::array<u8, 0x40 * 0x10>& file_data);

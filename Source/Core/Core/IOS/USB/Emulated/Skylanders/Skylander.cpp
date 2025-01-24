@@ -1278,6 +1278,11 @@ void SkylanderPortal::WriteBlock(u8 sky_num, u8 block, const u8* to_write_buf, u
   }
 }
 
+bool SkylanderPortal::RemoveSkylanderiOS(u8 sky_num)
+{
+  return Core::System::GetInstance().GetSkylanderPortal().RemoveSkylander(sky_num);
+}
+
 bool SkylanderPortal::RemoveSkylander(u8 sky_num)
 {
   if (!IsSkylanderNumberValid(sky_num))
@@ -1302,6 +1307,11 @@ bool SkylanderPortal::RemoveSkylander(u8 sky_num)
   }
 
   return false;
+}
+
+u8 SkylanderPortal::LoadSkylanderiOS(File::IOFile in_file)
+{
+  return Core::System::GetInstance().GetSkylanderPortal().LoadSkylander(std::make_unique<IOS::HLE::USB::SkylanderFigure>(std::move(in_file)));
 }
 
 u8 SkylanderPortal::LoadSkylander(std::unique_ptr<SkylanderFigure> figure)
