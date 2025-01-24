@@ -387,3 +387,6 @@
 
 /* Class = "UILabel"; text = "100% (59.94 VPS)"; ObjectID = "cZ7-Ck-sxG"; */
 "cZ7-Ck-sxG.text" = "100% (59.94 VPS)";
+
+/* Class = "UILabel"; text = "Emulate Skylander Portal"; ObjectID = "v5h-zA-gqE"; */
+"v5h-zA-gqE.text" = "Emulate Skylander Portal";

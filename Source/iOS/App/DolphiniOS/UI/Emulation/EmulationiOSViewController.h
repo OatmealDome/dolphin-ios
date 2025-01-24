@@ -7,7 +7,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EmulationiOSViewController : EmulationViewController
+@interface EmulationiOSViewController : EmulationViewController <UIDocumentPickerDelegate>
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint* metalHalfConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint* metalBottomConstraint;
@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIButton* pullDownButton;
 
 @property (strong, nonatomic) IBOutletCollection(TCView) NSArray* touchPads;
+
+@property unsigned int skylanderSlot;
 
 @end
 
