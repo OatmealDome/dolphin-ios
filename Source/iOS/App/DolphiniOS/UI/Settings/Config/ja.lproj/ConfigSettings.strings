@@ -362,10 +362,10 @@
 "zwp-Y9-R4u.headerTitle" = "Wiiリモコンの設定";
 
 /* Class = "UITableViewSection"; headerTitle = "Miscellaneous Settings"; ObjectID = "Ivi-K4-ZZ7"; */
-"Ivi-K4-ZZ7.headerTitle" = "Miscellaneous Settings";
+"Ivi-K4-ZZ7.headerTitle" = "その他の設定";
 
 /* Class = "UILabel"; text = "Mute When Disabling Speed Limit"; ObjectID = "Mfd-Gl-VAJ"; */
-"Mfd-Gl-VAJ.text" = "Mute When Disabling Speed Limit";
+"Mfd-Gl-VAJ.text" = "速度制限の無効時にミュート";
 
 /* Class = "UILabel"; text = "Enable WiiConnect24 via WiiLink"; ObjectID = "gqx-Vg-DvG"; */
 "gqx-Vg-DvG.text" = "WiiLink経由でWiiConnect24を有効にする";
