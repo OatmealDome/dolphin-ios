@@ -487,6 +487,7 @@
 		B99137C5288327BB00588446 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/ConfigSettings.strings; sourceTree = "<group>"; };
 		B99137C728832A0800588446 /* LocalizationUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalizationUtil.h; sourceTree = "<group>"; };
 		B99137C828832A0800588446 /* LocalizationUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalizationUtil.m; sourceTree = "<group>"; };
+		B9A0EBC32DC3E13E00F929BA /* SetUpPython.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = SetUpPython.sh; sourceTree = "<group>"; };
 		B9B1483429636565002C4BE7 /* CreateIpa.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CreateIpa.sh; sourceTree = "<group>"; };
 		B9B1483729642C75002C4BE7 /* UpdateRequiredNotice.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UpdateRequiredNotice.xib; sourceTree = "<group>"; };
 		B9B1483A29642CB8002C4BE7 /* UpdateRequiredNoticeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateRequiredNoticeViewController.m; sourceTree = "<group>"; };
@@ -1034,6 +1035,7 @@
 		B9476B2127F2357B009C0A4B /* Scripts */ = {
 			isa = PBXGroup;
 			children = (
+				B9A0EBC32DC3E13E00F929BA /* SetUpPython.sh */,
 				B9476B2227F235A0009C0A4B /* BuildCore.sh */,
 				B97E4B642966480300B3EE9C /* CreateDeb.sh */,
 				B9B1483429636565002C4BE7 /* CreateIpa.sh */,
@@ -1737,6 +1739,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B9DC3E0F27EFBD2F0084DAA4 /* Build configuration list for PBXNativeTarget "DolphiniOS" */;
 			buildPhases = (
+				B9A0EBC42DC3E1B500F929BA /* ShellScript */,
 				B9476B2327F23920009C0A4B /* Build Dolphin Core */,
 				B9DC3DF227EFBD2C0084DAA4 /* Sources */,
 				B9DC3DF327EFBD2C0084DAA4 /* Frameworks */,
@@ -1935,7 +1938,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/bin/python3 \"$PROJECT_DIR/Project/Scripts/UpdateCoreStrings.py\" \"$PROJECT_DIR/../../../Languages/po/\" \"$PROJECT_DIR/Common/UI/Localization\"\n";
+			shellScript = "\"$PROJECT_DIR/venv/bin/python3\" \"$PROJECT_DIR/Project/Scripts/UpdateCoreStrings.py\" \"$PROJECT_DIR/../../../Languages/po/\" \"$PROJECT_DIR/Common/UI/Localization\"\n";
 		};
 		B99137B428829F1400588446 /* Transfer Core Strings to Storyboard Strings */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1953,7 +1956,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/bin/python3 \"$PROJECT_DIR/Project/Scripts/TransferCoreStringsToStoryboard.py\" \"$PROJECT_DIR/DolphiniOS\" \"$PROJECT_DIR/Common/UI/Localization/\"\n";
+			shellScript = "\"$PROJECT_DIR/venv/bin/python3\" \"$PROJECT_DIR/Project/Scripts/TransferCoreStringsToStoryboard.py\" \"$PROJECT_DIR/DolphiniOS\" \"$PROJECT_DIR/Common/UI/Localization/\"\n";
+		};
+		B9A0EBC42DC3E1B500F929BA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PROJECT_DIR/Project/Scripts/SetUpPython.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
