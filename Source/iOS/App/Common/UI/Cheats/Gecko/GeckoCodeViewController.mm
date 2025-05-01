@@ -111,7 +111,7 @@
           };
           
           bool success;
-          std::vector<Gecko::GeckoCode> downloadedCodes = Gecko::DownloadCodes(self.gametdbId, &success, false);
+          std::vector<Gecko::GeckoCode> downloadedCodes = Gecko::DownloadCodes(self.gametdbId, &success);
 
           if (!success) {
             showResult(DOLCoreLocalizedString(@"Error"), DOLCoreLocalizedString(@"Failed to download codes."));
