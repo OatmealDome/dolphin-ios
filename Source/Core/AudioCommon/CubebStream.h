@@ -28,6 +28,7 @@ public:
   bool Init() override;
   bool SetRunning(bool running) override;
   void SetVolume(int) override;
+  static bool IsValid() { return true; }
 
 private:
   bool m_stereo = false;

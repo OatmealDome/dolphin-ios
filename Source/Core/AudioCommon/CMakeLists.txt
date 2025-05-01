@@ -3,6 +3,7 @@ add_library(audiocommon
   AudioCommon.h
   AudioStretcher.cpp
   AudioStretcher.h
+  CubebStream.h
   Enums.h
   Mixer.cpp
   Mixer.h
@@ -18,7 +19,6 @@ if(ENABLE_CUBEB)
   message(STATUS "Cubeb found, enabling Cubeb sound backend")
   target_sources(audiocommon PRIVATE
     CubebStream.cpp
-    CubebStream.h
     CubebUtils.cpp
     CubebUtils.h
   )

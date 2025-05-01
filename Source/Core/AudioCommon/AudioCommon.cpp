@@ -103,10 +103,13 @@ std::string GetDefaultSoundBackend()
 #elif defined __linux__
   if (AlsaSound::IsValid())
     backend = BACKEND_ALSA;
+  else if (CubebStream::IsValid())
+    backend = BACKEND_CUBEB;
 #elif defined(IPHONEOS)
   backend = BACKEND_COREAUDIO;
 #elif defined(__APPLE__) || defined(_WIN32) || defined(__OpenBSD__)
-  backend = BACKEND_CUBEB;
+  if (CubebStream::IsValid())
+    backend = BACKEND_CUBEB;
 #endif
   return backend;
 }
