@@ -134,7 +134,6 @@ std::unique_ptr<IEXIDevice> EXIDevice_Create(Core::System& system, const EXIDevi
     result = std::make_unique<CEXIAD16>(system);
     break;
 
-#ifdef HAVE_CUBEB
   case EXIDeviceType::Microphone:
 #ifdef HAVE_CUBEB
     result = std::make_unique<CEXIMic>(system, channel_num);
@@ -143,7 +142,6 @@ std::unique_ptr<IEXIDevice> EXIDevice_Create(Core::System& system, const EXIDevi
     result = std::make_unique<IEXIDevice>(system);
 #endif
     break;
-#endif
 
   case EXIDeviceType::Ethernet:
     result = std::make_unique<CEXIETHERNET>(system, BBADeviceType::TAP);
