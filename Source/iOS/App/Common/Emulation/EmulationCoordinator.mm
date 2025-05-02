@@ -9,11 +9,13 @@
 
 #import "Core/Boot/Boot.h"
 #import "Core/BootManager.h"
+#import "Core/Config/GraphicsSettings.h"
 #import "Core/Core.h"
 #import "Core/System.h"
 
 #import "VideoCommon/RenderBase.h"
 #import "VideoCommon/Present.h"
+#import "VideoCommon/VideoConfig.h"
 
 #import "EmulationBootParameter.h"
 #import "HostNotifications.h"
@@ -103,8 +105,7 @@
     
     auto& system = Core::System::GetInstance();
     
-    // Signal to the core whether JIT is available or not.
-    system.SetJitAvailable([JitManager shared].acquiredJit);
+    Config::SetBase(Config::GFX_VERTEX_LOADER_TYPE, [JitManager shared].acquiredJit ? VertexLoaderType::Native : VertexLoaderType::Software);
     
     std::unique_ptr<BootParameters> boot = [bootParameter generateDolphinBootParameter];
     

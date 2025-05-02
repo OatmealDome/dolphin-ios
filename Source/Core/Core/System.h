@@ -151,11 +151,6 @@ public:
   bool IsAudioDumpStarted() const;
   void SetAudioDumpStarted(bool started);
 
-#if defined(IPHONEOS) || TARGET_OS_IOS
-  bool IsJitAvailable() const { return m_jit_available; }
-  void SetJitAvailable(bool available) { m_jit_available = available; }
-#endif
-
   IOS::HLE::EmulationKernel* GetIOS() const;
   void SetIOS(std::unique_ptr<IOS::HLE::EmulationKernel> ios);
 
@@ -208,8 +203,5 @@ private:
   bool m_is_mios = false;
   bool m_is_wii = false;
   bool m_branch_watch_ignore_apploader = false;
-#if defined(IPHONEOS) || TARGET_OS_IOS
-  bool m_jit_available = false;
-#endif
 };
 }  // namespace Core

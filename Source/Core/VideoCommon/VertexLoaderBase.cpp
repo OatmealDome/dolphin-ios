@@ -19,8 +19,6 @@
 #include "Common/Logging/Log.h"
 #include "Common/MsgHandler.h"
 
-#include "Core/System.h"
-
 #include "VideoCommon/VertexLoader.h"
 #include "VideoCommon/VertexLoaderManager.h"
 #include "VideoCommon/VertexLoader_Color.h"
@@ -250,16 +248,11 @@ std::unique_ptr<VertexLoaderBase> VertexLoaderBase::CreateVertexLoader(const TVt
 
   std::unique_ptr<VertexLoaderBase> native_loader = nullptr;
 
-#ifdef IPHONEOS
-  if (Core::System::GetInstance().IsJitAvailable())
-#endif
-  {
 #if defined(_M_X86_64)
-    native_loader = std::make_unique<VertexLoaderX64>(vtx_desc, vtx_attr);
+  native_loader = std::make_unique<VertexLoaderX64>(vtx_desc, vtx_attr);
 #elif defined(_M_ARM_64)
-    native_loader = std::make_unique<VertexLoaderARM64>(vtx_desc, vtx_attr);
+  native_loader = std::make_unique<VertexLoaderARM64>(vtx_desc, vtx_attr);
 #endif
-  }
 
   // Use the software loader as a fallback
   // (not currently applicable, as both VertexLoaderX64 and VertexLoaderARM64
