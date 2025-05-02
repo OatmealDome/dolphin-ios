@@ -5,6 +5,7 @@
 
 #include "InputCommon/ControllerInterface/iOS/MFiController.h"
 #include "InputCommon/ControllerInterface/iOS/MFiControllerScanner.h"
+#include "InputCommon/ControllerInterface/iOS/MFiKeyboard.h"
 #include "InputCommon/ControllerInterface/iOS/StateManager.h"
 #include "InputCommon/ControllerInterface/iOS/Touchscreen.h"
 
@@ -49,5 +50,8 @@ void InputBackend::PopulateDevices()
   
   for (GCController* controller in [GCController controllers])
     g_controller_interface.AddDevice(std::make_shared<MFiController>(controller));
+
+  for (GCKeyboard* keyboard in [m_mfi_scanner keyboards])
+    g_controller_interface.AddDevice(std::make_shared<MFiKeyboard>(keyboard));
 }
 }  // namespace ciface::iOS
