@@ -7,4 +7,6 @@
 
 @interface MFiControllerScanner : NSObject
 
+@property (nonatomic, strong) NSMutableArray* keyboards;
+
 @end

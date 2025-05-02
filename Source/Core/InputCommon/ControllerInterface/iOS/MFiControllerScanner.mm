@@ -15,6 +15,8 @@
 {
   if (self = [super init])
   {
+    _keyboards = [[NSMutableArray alloc] init];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(controllerConnected:)
                                                  name:GCControllerDidConnectNotification
@@ -61,6 +63,7 @@
 {
   GCKeyboard* keyboard = (GCKeyboard*)notification.object;
   g_controller_interface.AddDevice(std::make_shared<ciface::iOS::MFiKeyboard>(keyboard));
+  [_keyboards addObject:keyboard];
 }
 
 - (void)keyboardDisconnected:(NSNotification*)notification
@@ -70,6 +73,7 @@
         dynamic_cast<const ciface::iOS::MFiKeyboard*>(device);
     return keyboard != nullptr;
   });
+  [_keyboards removeObject:notification.object];
 }
 
 @end
