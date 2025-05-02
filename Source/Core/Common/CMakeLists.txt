@@ -233,7 +233,7 @@ elseif(IOS)
     Logging/ConsoleListenerNix.cpp
     JITMemoryTracker.h
     JITMemoryTracker.cpp
-    MemArenaiOS.cpp
+    MemArenaDarwin.cpp
   )
 elseif(APPLE)
   target_sources(common PRIVATE

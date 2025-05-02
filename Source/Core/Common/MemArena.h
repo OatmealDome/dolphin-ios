@@ -124,9 +124,6 @@ private:
   void* m_reserved_region = nullptr;
   void* m_memory_handle = nullptr;
   WindowsMemoryFunctions m_memory_functions;
-#elif defined(IPHONEOS)
-  vm_address_t m_shm_address;
-  vm_size_t m_shm_size;
 #elif defined(__APPLE__)
   vm_address_t m_shm_address = 0;
   vm_size_t m_shm_size = 0;
