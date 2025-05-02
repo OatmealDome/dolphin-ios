@@ -9,6 +9,8 @@
 
 #include <curl/curl.h>
 
+#include "Common/CommonPaths.h"
+#include "Common/FileUtil.h"
 #include "Common/Logging/Log.h"
 #include "Common/ScopeGuard.h"
 #include "Common/StringUtil.h"
@@ -150,6 +152,9 @@ HttpRequest::Impl::Impl(std::chrono::milliseconds timeout_ms, ProgressCallback c
 #ifdef _WIN32
   // ALPN support is enabled by default but requires Windows >= 8.1.
   curl_easy_setopt(m_curl.get(), CURLOPT_SSL_ENABLE_ALPN, false);
+#endif
+#ifdef IPHONEOS
+  curl_easy_setopt(m_curl.get(), CURLOPT_CAINFO, (File::GetBundleDirectory() + DIR_SEP + "cacert.pem").c_str());
 #endif
 }
 

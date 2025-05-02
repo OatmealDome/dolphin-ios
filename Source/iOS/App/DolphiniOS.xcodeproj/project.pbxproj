@@ -179,6 +179,7 @@
 		B9EC28382D21D429000FAE09 /* ControllersTouchscreenViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EC28372D21D429000FAE09 /* ControllersTouchscreenViewController.mm */; };
 		B9EC283A2D21DA56000FAE09 /* TCWiiTouchIRMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EC28392D21DA56000FAE09 /* TCWiiTouchIRMode.swift */; };
 		B9EC283D2D21DE2F000FAE09 /* ControllersTouchscreenIRModeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EC283C2D21DE2F000FAE09 /* ControllersTouchscreenIRModeViewController.mm */; };
+		B9F41C3C2DC53699006D2434 /* cacert.pem in Resources */ = {isa = PBXBuildFile; fileRef = B9F41C3B2DC53699006D2434 /* cacert.pem */; };
 		B9FCB7B9289670830020E233 /* JitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7B8289670830020E233 /* JitManager.m */; };
 		B9FCB7BC289672830020E233 /* JitManager+Debugger.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BB289672830020E233 /* JitManager+Debugger.m */; };
 		B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BD28967C130020E233 /* JitAcquisitionService.swift */; };
@@ -548,6 +549,7 @@
 		B9EC28392D21DA56000FAE09 /* TCWiiTouchIRMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCWiiTouchIRMode.swift; sourceTree = "<group>"; };
 		B9EC283B2D21DE2F000FAE09 /* ControllersTouchscreenIRModeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersTouchscreenIRModeViewController.h; sourceTree = "<group>"; };
 		B9EC283C2D21DE2F000FAE09 /* ControllersTouchscreenIRModeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersTouchscreenIRModeViewController.mm; sourceTree = "<group>"; };
+		B9F41C3B2DC53699006D2434 /* cacert.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = cacert.pem; sourceTree = "<group>"; };
 		B9FCB7B7289670830020E233 /* JitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JitManager.h; sourceTree = "<group>"; };
 		B9FCB7B8289670830020E233 /* JitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JitManager.m; sourceTree = "<group>"; };
 		B9FCB7BA289672830020E233 /* JitManager+Debugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JitManager+Debugger.h"; sourceTree = "<group>"; };
@@ -1049,6 +1051,7 @@
 		B950CA922846A10400F45219 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				B9F41C3B2DC53699006D2434 /* cacert.pem */,
 				B97492482960F64300794509 /* DefaultPreferences.plist */,
 				B97E4B5929657BCB00B3EE9C /* GoogleService-Info.plist */,
 				B96C5DC82CFE4B200046C029 /* Logger.ini */,
@@ -1851,6 +1854,7 @@
 				B9B2C621288DB62D00CB6569 /* TCClassicWiiPad.xib in Resources */,
 				B9114F972893C5E600B9C57A /* DebugSettings.storyboard in Resources */,
 				B9DC3E0427EFBD2D0084DAA4 /* Main.storyboard in Resources */,
+				B9F41C3C2DC53699006D2434 /* cacert.pem in Resources */,
 				B904ACE828866E2D008B6BE9 /* ControllersSettings.storyboard in Resources */,
 				B96C5DC92CFE4B200046C029 /* Logger.ini in Resources */,
 				B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */,
