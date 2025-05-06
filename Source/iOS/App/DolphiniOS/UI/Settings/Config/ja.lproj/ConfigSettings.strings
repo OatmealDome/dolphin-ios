@@ -378,3 +378,6 @@
 
 /* Class = "UILabel"; text = "Respect Silent Mode"; ObjectID = "2bp-Ny-hqL"; */
 "2bp-Ny-hqL.text" = "Respect Silent Mode";
+
+/* Class = "UILabel"; text = "Emulate Skylander Portal"; ObjectID = "v5h-zA-gqE"; */
+"v5h-zA-gqE.text" = "Skylander ポータルをエミュレートする";
