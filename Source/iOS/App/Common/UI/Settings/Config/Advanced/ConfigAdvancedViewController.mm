@@ -7,6 +7,7 @@
 
 #import "Core/Config/MainSettings.h"
 #import "Core/HW/SystemTimers.h"
+#import "Core/HW/VideoInterface.h"
 #import "Core/System.h"
 #import "Core/PowerPC/PowerPC.h"
 
@@ -37,6 +38,14 @@
   self.cpuClockSlider.enabled = self.cpuClockSwitch.on;
   
   [self setCpuClockLabel];
+  
+  self.vbiClockSwitch.on = Config::Get(Config::MAIN_VI_OVERCLOCK_ENABLE);
+  [self.vbiClockSwitch addValueChangedTarget:self action:@selector(vbiClockSwitchChanged)];
+  
+  self.vbiClockSlider.value = std::round(std::log2f(Config::Get(Config::MAIN_VI_OVERCLOCK)) * 25.f + 100.f);
+  self.vbiClockSlider.enabled = self.vbiClockSwitch.on;
+  
+  [self setVbiClockLabel];
   
   self.memorySwitch.on = Config::Get(Config::MAIN_RAM_OVERRIDE_ENABLE);
   [self.memorySwitch addValueChangedTarget:self action:@selector(memorySwitchChanged)];
@@ -122,6 +131,34 @@
   int clock = static_cast<int>(std::round(overclock * core_clock));
   
   self.cpuClockLabel.text = [NSString stringWithFormat:@"%d%% (%d MHz)", percent, clock];
+}
+
+- (void)vbiClockSwitchChanged {
+  bool enabled = self.vbiClockSwitch.on;
+  
+  Config::SetBaseOrCurrent(Config::MAIN_VI_OVERCLOCK_ENABLE, enabled);
+  self.vbiClockSlider.enabled = enabled;
+  
+  // There is a bug on iOS 14+ where a UISlider won't update its appearance when enabled is toggled.
+  [self.vbiClockSlider setNeedsLayout];
+  [self.vbiClockSlider layoutIfNeeded];
+}
+
+- (IBAction)vbiClockSliderChanged:(id)sender {
+  const float factor = std::exp2f((self.vbiClockSlider.value - 100.f) / 21.5);
+  
+  Config::SetBaseOrCurrent(Config::MAIN_VI_OVERCLOCK, factor);
+  
+  [self setVbiClockLabel];
+}
+
+- (void)setVbiClockLabel {
+  const float factor = Config::Get(Config::MAIN_VI_OVERCLOCK);
+  int percent = static_cast<int>(std::round(factor * 100.f));
+  float vps = static_cast<float>(Core::System::GetInstance().GetVideoInterface().GetTargetRefreshRate());
+  vps = 59.94f * Config::Get(Config::MAIN_VI_OVERCLOCK);
+  
+  self.vbiClockLabel.text = [NSString stringWithFormat:@"%d%% (%f VPS)", percent, vps];
 }
 
 - (void)memorySwitchChanged {
