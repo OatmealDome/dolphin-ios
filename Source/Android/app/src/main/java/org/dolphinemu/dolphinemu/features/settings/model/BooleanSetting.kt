@@ -101,7 +101,7 @@ enum class BooleanSetting(
         false
     ),
     MAIN_VI_OVERCLOCK_ENABLE(
-        Settings.FILE_DOLPHIN,Add commentMore actions
+        Settings.FILE_DOLPHIN,
         Settings.SECTION_INI_CORE,
         "VIOverclockEnable",
         false
