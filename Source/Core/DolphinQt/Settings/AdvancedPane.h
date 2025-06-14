@@ -39,6 +39,10 @@ private:
   QSlider* m_cpu_clock_override_slider;
   QLabel* m_cpu_clock_override_slider_label;
   QLabel* m_cpu_clock_override_description;
+  
+  ConfigBool* m_vi_rate_override_checkbox;
+  QSlider* m_vi_rate_override_slider;
+  QLabel* m_vi_rate_override_slider_label;
 
   QCheckBox* m_custom_rtc_checkbox;
   QDateTimeEdit* m_custom_rtc_datetime;

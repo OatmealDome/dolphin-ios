@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "Common/CommonTypes.h"
+#include "Common/Config/Config.h"
 
 enum class FieldType;
 class PointerWrap;
@@ -406,6 +407,9 @@ private:
   void OutputField(FieldType field, u64 ticks);
   void BeginField(FieldType field, u64 ticks);
   void EndField(FieldType field, u64 ticks);
+  
+  void RefreshConfig();
+  void UpdateRefreshRate();
 
   // Registers listed in order:
   UVIVerticalTimingRegister m_vertical_timing_register;
@@ -446,7 +450,10 @@ private:
   u32 m_odd_field_first_hl = 0;   // index first halfline of the odd field
   u32 m_even_field_last_hl = 0;   // index last halfline of the even field
   u32 m_odd_field_last_hl = 0;    // index last halfline of the odd field
+  
+  float m_config_vi_oc_factor = 0.0f;
 
+  Config::ConfigChangedCallbackID m_config_changed_callback_id;
   Core::System& m_system;
 };
 }  // namespace VideoInterface
