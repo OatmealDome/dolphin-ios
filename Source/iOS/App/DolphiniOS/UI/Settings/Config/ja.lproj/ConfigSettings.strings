@@ -380,7 +380,7 @@
 "2bp-Ny-hqL.text" = "Respect Silent Mode";
 
 /* Class = "UILabel"; text = "Enable VBI Frequency Override"; ObjectID = "ddk-ko-VXW"; */
-"ddk-ko-VXW.text" = "CPU Clock Override を有効にする";
+"ddk-ko-VXW.text" = "VBI Frequency Override を有効にする";
 
 /* Class = "UITableViewSection"; footerTitle = "Makes games run at a different frame rate, making the emulation less demanding when lowered, or improving smoothness when increased. This may affect gameplay speed, as it is often tied to the frame rate."; ObjectID = "mc7-WC-pX7"; */
 "mc7-WC-pX7.footerTitle" = "Makes games run at a different frame rate, making the emulation less demanding when lowered, or improving smoothness when increased. This may affect gameplay speed, as it is often tied to the frame rate.";
