@@ -141,7 +141,7 @@ void RenderWidget::OnHandleChanged(void* handle)
 #ifdef _WIN32
     // Remove rounded corners from the render window on Windows 11
     const DWM_WINDOW_CORNER_PREFERENCE corner_preference = DWMWCP_DONOTROUND;
-    DwmSetWindowAttribute(reinterpret_cast<HWND>(handle), DWMWA_WINDOW_CORNER_PREFERENCE,
+    DwmSetWindowAttribute(static_cast<HWND>(handle), DWMWA_WINDOW_CORNER_PREFERENCE,
                           &corner_preference, sizeof(corner_preference));
 #endif
   }
@@ -384,6 +384,10 @@ bool RenderWidget::event(QEvent* event)
     SetCursorLocked(false);
     break;
   case QEvent::MouseButtonPress:
+
+    // Grab focus to stop unwanted keyboard input UI interaction.
+    setFocus();
+
     if (isActiveWindow())
     {
       // Lock the cursor with any mouse button click (behave the same as window focus change).

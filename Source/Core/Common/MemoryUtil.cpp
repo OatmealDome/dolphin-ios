@@ -117,10 +117,7 @@ void JITPageWriteEnableExecuteDisable()
 #if defined(_M_ARM_64) && defined(__APPLE__) && !defined(IPHONEOS)
   if (JITPageWriteNestCounter() == 0)
   {
-    if (__builtin_available(macOS 11.0, *))
-    {
-      pthread_jit_write_protect_np(0);
-    }
+    pthread_jit_write_protect_np(0);
   }
 #endif
   JITPageWriteNestCounter()++;
@@ -139,10 +136,7 @@ void JITPageWriteDisableExecuteEnable()
 #if defined(_M_ARM_64) && defined(__APPLE__) && !defined(IPHONEOS)
   if (JITPageWriteNestCounter() == 0)
   {
-    if (__builtin_available(macOS 11.0, *))
-    {
-      pthread_jit_write_protect_np(1);
-    }
+    pthread_jit_write_protect_np(1);
   }
 #endif
 }
