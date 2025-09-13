@@ -41,7 +41,7 @@
   
   [self.loadTexturesCell.boolSwitch addValueChangedTarget:self action:@selector(updatePrefetchTexturesEnabled)];
   
-  bool enableVsExpansionSwitch = g_Config.backend_info.bSupportsGeometryShaders && g_Config.backend_info.bSupportsVSLinePointExpand;
+  bool enableVsExpansionSwitch = g_backend_info.bSupportsGeometryShaders && g_backend_info.bSupportsVSLinePointExpand;
   [self.vsPointLineExpansionCell.boolSwitch setEnabled:enableVsExpansionSwitch];
   
   [self updatePrefetchTexturesEnabled];
@@ -175,15 +175,15 @@
           
           NSString* extraFormat;
           
-          if (!g_Config.backend_info.bSupportsGeometryShaders) {
+          if (!g_backend_info.bSupportsGeometryShaders) {
             extraFormat = @"Forced on because %1 doesn't support geometry shaders.";
-          } else if (!g_Config.backend_info.bSupportsVSLinePointExpand) {
+          } else if (!g_backend_info.bSupportsVSLinePointExpand) {
             extraFormat = @"Forced off because %1 doesn't support VS expansion.";
           } else {
             extraFormat = @"<dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
           }
           
-          NSString* extraMessage = [NSString stringWithFormat:DOLCoreLocalizedStringWithArgs(extraFormat, @"s"), g_Config.backend_info.DisplayName.c_str()];
+          NSString* extraMessage = [NSString stringWithFormat:DOLCoreLocalizedStringWithArgs(extraFormat, @"s"), g_backend_info.DisplayName.c_str()];
           
           NSString* message = [NSString stringWithFormat:DOLCoreLocalizedStringWithArgs(messageFormat, @"@"), extraMessage];
           
