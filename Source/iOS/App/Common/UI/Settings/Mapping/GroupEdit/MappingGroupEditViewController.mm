@@ -25,7 +25,13 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
   DOLMappingGroupEditSectionCount
 };
 
-@interface MappingGroupEditViewController ()
+@interface MappingGroupEditViewController () {
+  NSTimer* _inputTimer;
+  NSLock* _inputLock;
+  std::unique_ptr<ciface::Core::InputDetector> _inputDetector;
+  UIAlertController* _inputAlertController;
+  
+}
 
 @end
 
@@ -35,6 +41,20 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
   [super viewDidLoad];
   
   self.navigationItem.title = DOLCoreLocalizedString(CppToFoundationString(self.controlGroup->ui_name));
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  _inputTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f / 60.0f target:self selector:@selector(processMappingButtons) userInfo:nil repeats:true];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+  [super viewWillDisappear:animated];
+  
+  if (_inputTimer != nil)
+  {
+    [_inputTimer invalidate];
+    _inputTimer = nil;
+  }
 }
 
 - (void)enableSwitchValueDidChange:(MappingGroupEditEnabledCell*)cell {
@@ -275,27 +295,8 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
   if (indexPath.section == DOLMappingGroupEditSectionControls) {
-    MappingGroupEditControlCell* controlCell = [tableView cellForRowAtIndexPath:indexPath];
-    
     // TODO: All devices
-    [MappingUtil detectExpressionWithDefaultDevice:self.controller->GetDefaultDevice()
-                                        allDevices:false
-                                             quote:ciface::MappingCommon::Quote::On
-                                    viewController:self
-                                          callback:^(std::string expression) {
-      if (!expression.empty()) {
-        auto& controlRef = self.controlGroup->controls[indexPath.row]->control_ref;
-        
-        controlRef->SetExpression(expression);
-        self.controller->UpdateSingleControlReference(g_controller_interface, controlRef.get());
-        
-        [self.delegate controlGroupDidChange:self];
-        
-        [self updateControlCell:controlCell withExpression:expression];
-      }
-      
-      [tableView deselectRowAtIndexPath:indexPath animated:true];
-    }];
+    [self startInputDetectionWithAllDevices:false];
   } else {
     [tableView deselectRowAtIndexPath:indexPath animated:true];
   }
@@ -342,6 +343,81 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
   actions.performsFirstActionWithFullSwipe = false;
   
   return actions;
+}
+
+#pragma mark - Input detection
+
+- (void)startInputDetectionWithAllDevices:(bool)allDevices {
+  _inputAlertController = [UIAlertController alertControllerWithTitle:DOLCoreLocalizedString(@"[ Press Now ]") message:nil preferredStyle:UIAlertControllerStyleAlert];
+  
+  [self presentViewController:_inputAlertController animated:true completion:^{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+      [self->_inputLock lock];
+      
+      self->_inputDetector = std::make_unique<ciface::Core::InputDetector>();
+      
+      std::vector<std::string> devices;
+      
+      if (allDevices) {
+        devices = g_controller_interface.GetAllDeviceStrings();
+      } else {
+        devices = {self.controller->GetDefaultDevice().ToString()};
+      }
+      
+      self->_inputDetector->Start(g_controller_interface, devices);
+      
+      [self->_inputLock unlock];
+    });
+  }];
+}
+
+- (void)processMappingButtons {
+  [self->_inputLock lock];
+  
+  if (!_inputDetector) {
+    return;
+  }
+  
+  constexpr auto initial_time = std::chrono::seconds(3);
+  constexpr auto confirmation_time = std::chrono::milliseconds(0);
+  constexpr auto maximum_time = std::chrono::seconds(5);
+  
+  _inputDetector->Update(initial_time, confirmation_time, maximum_time);
+  
+  if (!_inputDetector->IsComplete()) {
+    return;
+  }
+  
+  auto results = _inputDetector->TakeResults();
+  
+  if (ciface::MappingCommon::ContainsCompleteDetection(results)) {
+    std::string expression = BuildExpression(results, self.controller->GetDefaultDevice(), ciface::MappingCommon::Quote::On);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+      NSIndexPath* indexPath = self.tableView.indexPathForSelectedRow;
+      
+      [self->_inputAlertController dismissViewControllerAnimated:true completion:^{
+        if (!expression.empty()) {
+          auto& controlRef = self.controlGroup->controls[indexPath.row]->control_ref;
+          
+          controlRef->SetExpression(expression);
+          self.controller->UpdateSingleControlReference(g_controller_interface, controlRef.get());
+          
+          [self.delegate controlGroupDidChange:self];
+          
+          [self updateControlCell:[self.tableView cellForRowAtIndexPath:indexPath] withExpression:expression];
+        } else {
+          UIAlertController* noInputAlert = [UIAlertController alertControllerWithTitle:@"No input was detected." message:nil preferredStyle:UIAlertControllerStyleAlert];
+          [noInputAlert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"OK") style:UIAlertActionStyleDefault handler:nil]];
+          
+          [self presentViewController:noInputAlert animated:true completion:nil];
+        }
+        
+        [self.tableView deselectRowAtIndexPath:indexPath animated:true];
+      }];
+    });
+  }
+  
 }
 
 @end
