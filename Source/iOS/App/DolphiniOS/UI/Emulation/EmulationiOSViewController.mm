@@ -16,7 +16,6 @@
 
 #import "InputCommon/InputConfig.h"
 
-#import "VideoCommon/RenderBase.h"
 #import "VideoCommon/Present.h"
 
 #import "EmulationCoordinator.h"
