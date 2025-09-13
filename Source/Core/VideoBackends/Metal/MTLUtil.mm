@@ -81,7 +81,7 @@ void Metal::Util::PopulateBackendInfo(BackendInfo* backend_info)
   backend_info->bSupportsHDROutput =
       1.0 < [[NSScreen deepestScreen] maximumPotentialExtendedDynamicRangeColorComponentValue];
 #else
-  backend_info.bSupportsHDROutput = false;
+  backend_info->bSupportsHDROutput = false;
 #endif
 }
 
