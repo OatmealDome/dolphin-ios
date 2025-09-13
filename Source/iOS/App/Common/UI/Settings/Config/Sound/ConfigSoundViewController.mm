@@ -20,21 +20,17 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  
-  bool stretchingEnabled = Config::Get(Config::MAIN_AUDIO_STRETCH);
-  
-  self.stretchingSwitch.on = stretchingEnabled;
-  [self.stretchingSwitch addValueChangedTarget:self action:@selector(stretchingChanged)];
-  
+
   int volume = Config::Get(Config::MAIN_AUDIO_VOLUME);
   self.volumeSlider.value = volume;
   
   [self updateVolumeLabel];
   
-  self.bufferSizeSlider.value = Config::Get(Config::MAIN_AUDIO_STRETCH_LATENCY);
-  self.bufferSizeSlider.enabled = stretchingEnabled;
+  self.bufferSizeSlider.value = Config::Get(Config::MAIN_AUDIO_BUFFER_SIZE);
   
   [self updateBufferSizeLabel];
+  
+  self.fillGapsSwitch.on = Config::Get(Config::MAIN_AUDIO_FILL_GAPS);
   
   self.muteSpeedLimitSwitch.on = Config::Get(Config::MAIN_AUDIO_MUTE_ON_DISABLED_SPEED_LIMIT);
   [self.muteSpeedLimitSwitch addValueChangedTarget:self action:@selector(muteSpeedLimitChanged)];
@@ -61,27 +57,19 @@
   self.volumeLabel.text = [NSString stringWithFormat:@"%d%%", volume];
 }
 
-- (void)stretchingChanged {
-  bool stretchingEnabled = self.stretchingSwitch.on;
-  
-  Config::SetBaseOrCurrent(Config::MAIN_AUDIO_STRETCH, stretchingEnabled);
-  
-  self.bufferSizeSlider.enabled = stretchingEnabled;
-  
-  // There is a bug on iOS 14+ where a UISlider won't update its appearance when enabled is toggled.
-  [self.bufferSizeSlider setNeedsLayout];
-  [self.bufferSizeSlider layoutIfNeeded];
-}
-
 - (IBAction)bufferSizeChanged:(id)sender {
-  Config::SetBaseOrCurrent(Config::MAIN_AUDIO_STRETCH_LATENCY, (int)self.bufferSizeSlider.value);
+  Config::SetBaseOrCurrent(Config::MAIN_AUDIO_BUFFER_SIZE, (int)self.bufferSizeSlider.value);
   
   [self updateBufferSizeLabel];
 }
 
 - (void)updateBufferSizeLabel {
-  int bufferSize = Config::Get(Config::MAIN_AUDIO_STRETCH_LATENCY);
+  int bufferSize = Config::Get(Config::MAIN_AUDIO_BUFFER_SIZE);
   self.bufferSizeLabel.text = [NSString stringWithFormat:DOLCoreLocalizedStringWithArgs(@"%1 ms", @"d"), bufferSize];
+}
+
+- (IBAction)fillGapsChanged:(id)sender {
+  Config::SetBaseOrCurrent(Config::MAIN_AUDIO_FILL_GAPS, self.fillGapsSwitch.on);
 }
 
 - (void)muteSpeedLimitChanged {

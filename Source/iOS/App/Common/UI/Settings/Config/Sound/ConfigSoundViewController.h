@@ -12,9 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel* backendLabel;
 @property (weak, nonatomic) IBOutlet UISlider* volumeSlider;
 @property (weak, nonatomic) IBOutlet UILabel* volumeLabel;
-@property (weak, nonatomic) IBOutlet DOLSwitch* stretchingSwitch;
 @property (weak, nonatomic) IBOutlet UISlider* bufferSizeSlider;
 @property (weak, nonatomic) IBOutlet UILabel* bufferSizeLabel;
+@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* fillGapsSwitch;
 @property (weak, nonatomic) IBOutlet DOLUIKitSwitch* muteSpeedLimitSwitch;
 @property (weak, nonatomic) IBOutlet DOLUIKitSwitch* muteModeSwitch;
 
