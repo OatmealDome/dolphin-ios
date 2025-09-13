@@ -99,7 +99,7 @@ std::string GetDefaultSoundBackend()
 #if defined(ANDROID)
   return BACKEND_OPENSLES;
 #elif defined(IPHONEOS)
-  backend = BACKEND_COREAUDIO;
+  return BACKEND_COREAUDIO;
 #else
   if (CubebStream::IsValid())
     return BACKEND_CUBEB;
