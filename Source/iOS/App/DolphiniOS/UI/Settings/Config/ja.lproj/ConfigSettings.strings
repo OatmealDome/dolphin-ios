@@ -109,7 +109,7 @@
 /* Class = "UILabel"; text = "Spanish"; ObjectID = "Kq3-zO-Wz6"; */
 "Kq3-zO-Wz6.text" = "スペイン語";
 
-/* Class = "UILabel"; text = "Buffer Size"; ObjectID = "LaS-K8-o67"; */
+/* Class = "UILabel"; text = "Audio Buffer Size"; ObjectID = "LaS-K8-o67"; */
 "LaS-K8-o67.text" = "バッファサイズ";
 
 /* Class = "UITableViewSection"; headerTitle = "User Interface"; ObjectID = "Lbj-Vb-zkU"; */
@@ -129,9 +129,6 @@
 
 /* Class = "UILabel"; text = "Traditional Chinese"; ObjectID = "OOb-ot-bsG"; */
 "OOb-ot-bsG.text" = "繁体字中国語";
-
-/* Class = "UILabel"; text = "Enable Audio Stretching"; ObjectID = "PIN-oZ-jnV"; */
-"PIN-oZ-jnV.text" = "タイムストレッチを有効にする (Audio Stretching)";
 
 /* Class = "UITableViewSection"; footerTitle = "Adjusts the amount of RAM in the emulated console.\n\nWARNING: Enabling this will completely break many games. Only a small number of games can benefit from this."; ObjectID = "Q01-LG-j5M"; */
 "Q01-LG-j5M.footerTitle" = "Adjusts the amount of RAM in the emulated console.\n\nWARNING: Enabling this will completely break many games. Only a small number of games can benefit from this.";
@@ -283,7 +280,7 @@
 /* Class = "UILabel"; text = "Convert File to Folder Now"; ObjectID = "nCM-18-d00"; */
 "nCM-18-d00.text" = "ファイルをフォルダーに変換する";
 
-/* Class = "UITableViewSection"; headerTitle = "Audio Stretching Settings"; ObjectID = "owp-az-Oz8"; */
+/* Class = "UITableViewSection"; headerTitle = "Audio Playback Settings"; ObjectID = "owp-az-Oz8"; */
 "owp-az-Oz8.headerTitle" = "タイムストレッチの設定";
 
 /* Class = "UINavigationItem"; title = "Audio"; ObjectID = "oxt-T9-VEG"; */
@@ -361,9 +358,6 @@
 /* Class = "UITableViewSection"; headerTitle = "Wii Remote Settings"; ObjectID = "zwp-Y9-R4u"; */
 "zwp-Y9-R4u.headerTitle" = "Wiiリモコンの設定";
 
-/* Class = "UITableViewSection"; headerTitle = "Miscellaneous Settings"; ObjectID = "Ivi-K4-ZZ7"; */
-"Ivi-K4-ZZ7.headerTitle" = "その他の設定";
-
 /* Class = "UILabel"; text = "Mute When Disabling Speed Limit"; ObjectID = "Mfd-Gl-VAJ"; */
 "Mfd-Gl-VAJ.text" = "速度制限の無効時にミュート";
 
@@ -378,3 +372,6 @@
 
 /* Class = "UILabel"; text = "Respect Silent Mode"; ObjectID = "2bp-Ny-hqL"; */
 "2bp-Ny-hqL.text" = "Respect Silent Mode";
+
+/* Class = "UILabel"; text = "Fill Audio Gaps"; ObjectID = "5ek-pI-D2E"; */
+"5ek-pI-D2E.text" = "Fill Audio Gaps";
