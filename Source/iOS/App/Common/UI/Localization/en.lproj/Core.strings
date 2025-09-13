@@ -58,6 +58,7 @@ Current Frame: %3";
 "%1 sessions found" = "%1 sessions found";
 "%1%" = "%1%";
 "%1% (%2 MHz)" = "%1% (%2 MHz)";
+"%1% (%2 VPS)" = "%1% (%2 VPS)";
 "%1% (Normal Speed)" = "%1% (Normal Speed)";
 "%1's value is changed" = "%1's value is changed";
 "%1's value is hit" = "%1's value is hit";
@@ -65,6 +66,14 @@ Current Frame: %3";
 "%1, %2, %3, %4" = "%1, %2, %3, %4";
 "%1/%2" = "%1/%2";
 "%1: %2" = "%1: %2";
+"%1: Failed to import save file. Please launch the game once, then try again." = "%1: Failed to import save file. Please launch the game once, then try again.";
+"%1: Failed to import save file. The given file appears to be corrupted or is not a valid Wii save." = "%1: Failed to import save file. The given file appears to be corrupted or is not a valid Wii save.";
+"%1: Failed to import save file. Your NAND may be corrupt, or something is preventing access to files within it. Try repairing your NAND (Tools -> Manage NAND -> Check NAND...), then import the save again." = "%1: Failed to import save file. Your NAND may be corrupt, or something is preventing access to files within it. Try repairing your NAND (Tools -> Manage NAND -> Check NAND...), then import the save again.";
+"%1: Save data for this title already exists in the NAND. Consider backing up the current data before overwriting.
+
+Overwrite existing save data?" = "%1: Save data for this title already exists in the NAND. Consider backing up the current data before overwriting.
+
+Overwrite existing save data?";
 "%1<br><br>%2" = "%1<br><br>%2";
 "%1[%2]: %3" = "%1[%2]: %3";
 "%1[%2]: %3 %" = "%1[%2]: %3 %";
@@ -180,6 +189,7 @@ Current Frame: %3";
 "View" = "View";
 "Watch" = "Watch";
 "Website" = "Website";
+"Wii Speak" = "Wii Speak";
 "Wiki" = "Wiki";
 "Yes" = "Yes";
 "'%1' not found, no symbol names generated" = "'%1' not found, no symbol names generated";
@@ -210,6 +220,7 @@ Current Frame: %3";
 "16-bit Unsigned Integer" = "16-bit Unsigned Integer";
 "16:9" = "16:9";
 "16x Anisotropic" = "16x Anisotropic";
+"1x Anisotropic" = "1x Anisotropic";
 "2 GiB" = "2 GiB";
 "256 MiB" = "256 MiB";
 "2x Anisotropic" = "2x Anisotropic";
@@ -351,22 +362,13 @@ Master codes are not needed. Do not use master codes.";
 "Address Space" = "Address Space";
 "Address space by CPU state" = "Address space by CPU state";
 "Adjust the texture filtering. Anisotropic filtering enhances the visual quality of textures that are at oblique viewing angles. Force Nearest and Force Linear override the texture scaling filter selected by the game.<br><br>Any option except 'Default' will alter the look of the game's textures and might cause issues in a small number of games.<br><br>This setting is disabled when Manual Texture Sampling is enabled.<br><br><dolphin_emphasis>If unsure, select 'Default'.</dolphin_emphasis>" = "Adjust the texture filtering. Anisotropic filtering enhances the visual quality of textures that are at oblique viewing angles. Force Nearest and Force Linear override the texture scaling filter selected by the game.<br><br>Any option except 'Default' will alter the look of the game's textures and might cause issues in a small number of games.<br><br>This setting is disabled when Manual Texture Sampling is enabled.<br><br><dolphin_emphasis>If unsure, select 'Default'.</dolphin_emphasis>";
+"Adjusts audio output volume.<br><br><dolphin_emphasis>If unsure, leave this at 100%.</dolphin_emphasis>" = "Adjusts audio output volume.<br><br><dolphin_emphasis>If unsure, leave this at 100%.</dolphin_emphasis>";
 "Adjusts target radius of simulated stick gate." = "Adjusts target radius of simulated stick gate.";
+"Adjusts the VBI frequency. Also adjusts the emulated CPU's clock rate, to keep it relatively the same.<br><br>Makes games run at a different frame rate, making the emulation less demanding when lowered, or improving smoothness when increased. This may affect gameplay speed, as it is often tied to the frame rate.<br><br>WARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default frequency.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Adjusts the VBI frequency. Also adjusts the emulated CPU's clock rate, to keep it relatively the same.<br><br>Makes games run at a different frame rate, making the emulation less demanding when lowered, or improving smoothness when increased. This may affect gameplay speed, as it is often tied to the frame rate.<br><br>WARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default frequency.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Adjusts the accuracy at which the GPU receives texture updates from RAM.<br><br>The \"Safe\" setting eliminates the likelihood of the GPU missing texture updates from RAM. Lower accuracies cause in-game text to appear garbled in certain games.<br><br><dolphin_emphasis>If unsure, select the rightmost value.</dolphin_emphasis>" = "Adjusts the accuracy at which the GPU receives texture updates from RAM.<br><br>The \"Safe\" setting eliminates the likelihood of the GPU missing texture updates from RAM. Lower accuracies cause in-game text to appear garbled in certain games.<br><br><dolphin_emphasis>If unsure, select the rightmost value.</dolphin_emphasis>";
-"Adjusts the amount of RAM in the emulated console.
-
-WARNING: Enabling this will completely break many games. Only a small number of games can benefit from this." = "Adjusts the amount of RAM in the emulated console.
-
-WARNING: Enabling this will completely break many games. Only a small number of games can benefit from this.";
-"Adjusts the emulated CPU's clock rate.
-
-Higher values may make variable-framerate games run at a higher framerate, at the expense of performance. Lower values may activate a game's internal frameskip, potentially improving performance.
-
-WARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default clock." = "Adjusts the emulated CPU's clock rate.
-
-Higher values may make variable-framerate games run at a higher framerate, at the expense of performance. Lower values may activate a game's internal frameskip, potentially improving performance.
-
-WARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default clock.";
+"Adjusts the amount of RAM in the emulated console.<br><br><b>WARNING</b>: Enabling this will completely break many games.<br>Only a small number of games can benefit from this.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Adjusts the amount of RAM in the emulated console.<br><br><b>WARNING</b>: Enabling this will completely break many games.<br>Only a small number of games can benefit from this.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
+"Adjusts the emulated CPU's clock rate.<br><br>On games that have an unstable frame rate despite full emulation speed, higher values can improve their performance, requiring a powerful device. Lower values reduce the emulated console's performance, but improve the emulation speed.<br><br>WARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default clock.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Adjusts the emulated CPU's clock rate.<br><br>On games that have an unstable frame rate despite full emulation speed, higher values can improve their performance, requiring a powerful device. Lower values reduce the emulated console's performance, but improve the emulation speed.<br><br>WARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default clock.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
+"Adjusts the quality setting of the Dolby Pro Logic II decoder. Higher presets increases audio latency.<br><br><dolphin_emphasis>If unsure, select High.</dolphin_emphasis>" = "Adjusts the quality setting of the Dolby Pro Logic II decoder. Higher presets increases audio latency.<br><br><dolphin_emphasis>If unsure, select High.</dolphin_emphasis>";
 "Advance Game Port" = "Advance Game Port";
 "Advanced" = "Advanced";
 "Advanced Settings" = "Advanced Settings";
@@ -430,7 +432,9 @@ WARNING: Changing this from the default (100%) can and will break games and caus
 "Attach MotionPlus" = "Attach MotionPlus";
 "Audio" = "Audio";
 "Audio Backend" = "Audio Backend";
-"Audio Stretching Settings" = "Audio Stretching Settings";
+"Audio Buffer Size" = "Audio Buffer Size";
+"Audio Playback Settings" = "Audio Playback Settings";
+"Audio backend unsupported" = "Audio backend unsupported";
 "Australia" = "Australia";
 "Author" = "Author";
 "Authors" = "Authors";
@@ -446,6 +450,8 @@ Please select a specific internal resolution.";
 "Auto-Adjust Window Size" = "Auto-Adjust Window Size";
 "Auto-Hide" = "Auto-Hide";
 "Auto-detect RSO modules?" = "Auto-detect RSO modules?";
+"Autodetect preferred microphone" = "Autodetect preferred microphone";
+"Automatic" = "Automatic";
 "Automatically Sync with Folder" = "Automatically Sync with Folder";
 "Automatically adjusts the window size to the internal resolution.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Automatically adjusts the window size to the internal resolution.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Automatically changes the game disc when requested by games with two discs. This feature requires the game to be launched in one of the following ways:<br>- From the game list, with both discs being present in the game list.<br>- With File > Open or the command line interface, with the paths to both discs being provided.<br>- By launching an M3U file with File > Open or the command line interface.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Automatically changes the game disc when requested by games with two discs. This feature requires the game to be launched in one of the following ways:<br>- From the game list, with both discs being present in the game list.<br>- With File > Open or the command line interface, with the paths to both discs being provided.<br>- By launching an M3U file with File > Open or the command line interface.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
@@ -546,7 +552,6 @@ Press the \"Start Branch Watch\" button to activate Branch Watch. Branch Watch p
 "Broadband Adapter Error" = "Broadband Adapter Error";
 "Broadband Adapter MAC Address" = "Broadband Adapter MAC Address";
 "Browse NetPlay Sessions...." = "Browse NetPlay Sessions....";
-"Buffer Size" = "Buffer Size";
 "Buffer size changed to %1" = "Buffer size changed to %1";
 "Buffer" = "Buffer";
 "Buggy GPU driver detected.
@@ -767,6 +772,7 @@ Note: All values are internally converted to Doubles for calculations. It's poss
 "Controls how fast emulation runs relative to the original hardware.<br><br>Values higher than 100% will emulate faster than the original hardware can run, if your hardware is able to keep up. Values lower than 100% will slow emulation instead. Unlimited will emulate as fast as your hardware is able to.<br><br><dolphin_emphasis>If unsure, select 100%.</dolphin_emphasis>" = "Controls how fast emulation runs relative to the original hardware.<br><br>Values higher than 100% will emulate faster than the original hardware can run, if your hardware is able to keep up. Values lower than 100% will slow emulation instead. Unlimited will emulate as fast as your hardware is able to.<br><br><dolphin_emphasis>If unsure, select 100%.</dolphin_emphasis>";
 "Controls the base luminance of a paper white surface in nits. Useful for adjusting to different environmental lighting conditions when using a HDR display.<br><br>HDR output is required for this setting to take effect.<br><br><dolphin_emphasis>If unsure, leave this at 203.</dolphin_emphasis>" = "Controls the base luminance of a paper white surface in nits. Useful for adjusting to different environmental lighting conditions when using a HDR display.<br><br>HDR output is required for this setting to take effect.<br><br><dolphin_emphasis>If unsure, leave this at 203.</dolphin_emphasis>";
 "Controls the distance of the convergence plane. This is the distance at which virtual objects will appear to be in front of the screen.<br><br>A higher value creates stronger out-of-screen effects while a lower value is more comfortable." = "Controls the distance of the convergence plane. This is the distance at which virtual objects will appear to be in front of the screen.<br><br>A higher value creates stronger out-of-screen effects while a lower value is more comfortable.";
+"Controls the number of audio samples buffered. Lower values reduce latency but may cause more crackling or stuttering.<br><br><dolphin_emphasis>If unsure, set this to 80 ms.</dolphin_emphasis>" = "Controls the number of audio samples buffered. Lower values reduce latency but may cause more crackling or stuttering.<br><br><dolphin_emphasis>If unsure, set this to 80 ms.</dolphin_emphasis>";
 "Controls the rendering resolution.<br><br>A high resolution greatly improves visual quality, but also greatly increases GPU load and can cause issues in certain games. Generally speaking, the lower the internal resolution, the better performance will be.<br><br><dolphin_emphasis>If unsure, select Native.</dolphin_emphasis>" = "Controls the rendering resolution.<br><br>A high resolution greatly improves visual quality, but also greatly increases GPU load and can cause issues in certain games. Generally speaking, the lower the internal resolution, the better performance will be.<br><br><dolphin_emphasis>If unsure, select Native.</dolphin_emphasis>";
 "Controls the separation distance between the virtual cameras.<br><br>A higher value creates a stronger feeling of depth while a lower value is more comfortable." = "Controls the separation distance between the virtual cameras.<br><br>A higher value creates a stronger feeling of depth while a lower value is more comfortable.";
 "Controls whether or not Dual Core should be enabled. Can improve performance but can also cause issues. Defaults to <b>True</b>" = "Controls whether or not Dual Core should be enabled. Can improve performance but can also cause issues. Defaults to <b>True</b>";
@@ -842,6 +848,7 @@ Are you receiving this after moving the emulator directory?
 If so, then you may need to re-specify your memory card location in the options.";
 "Couldn't look up central server" = "Couldn't look up central server";
 "Couldn't open file." = "Couldn't open file.";
+"Couldn't open port {0}. This might stop the game's LAN mode from working properly." = "Couldn't open port {0}. This might stop the game's LAN mode from working properly.";
 "Couldn't read file." = "Couldn't read file.";
 "Country" = "Country";
 "Create" = "Create";
@@ -881,9 +888,7 @@ If so, then you may need to re-specify your memory card location in the options.
 "DK Bongos" = "DK Bongos";
 "DSP Emulation Engine" = "DSP Emulation Engine";
 "DSP HLE (fast)" = "DSP HLE (fast)";
-"DSP HLE (recommended)" = "DSP HLE (recommended)";
-"DSP LLE Interpreter (very slow)" = "DSP LLE Interpreter (very slow)";
-"DSP LLE Recompiler (slow)" = "DSP LLE Recompiler (slow)";
+"DSP Options" = "DSP Options";
 "DSU Client" = "DSU Client";
 "DSU protocol enables the use of input and motion data from compatible sources, like PlayStation, Nintendo Switch and Steam controllers.<br><br>For setup instructions, <a href=\"https://wiki.dolphin-emu.org/index.php?title=DSU_Client\">refer to this page</a>." = "DSU protocol enables the use of input and motion data from compatible sources, like PlayStation, Nintendo Switch and Steam controllers.<br><br>For setup instructions, <a href=\"https://wiki.dolphin-emu.org/index.php?title=DSU_Client\">refer to this page</a>.";
 "Dance Mat" = "Dance Mat";
@@ -965,7 +970,7 @@ If so, then you may need to re-specify your memory card location in the options.
 "Display Settings" = "Display Settings";
 "Display Type" = "Display Type";
 "Display values in Hex" = "Display values in Hex";
-"Displays XFB copies as soon as they are created, instead of waiting for scanout.<br><br>Can cause graphical defects in some games if the game doesn't expect all XFB copies to be displayed. However, turning this setting on reduces latency.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Displays XFB copies as soon as they are created, instead of waiting for scanout.<br><br>Can cause graphical defects in some games if the game doesn't expect all XFB copies to be displayed. However, turning this setting on reduces latency.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
+"Displays XFB copies as soon as they are created, instead of waiting for scanout.<br><br>Can cause graphical defects in some games if the game doesn't expect all XFB copies to be displayed. However, turning this setting on reduces latency.<br><br>Enabling this also forces an effect equivalent to the Skip Presenting Duplicate Frames setting.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Displays XFB copies as soon as they are created, instead of waiting for scanout.<br><br>Can cause graphical defects in some games if the game doesn't expect all XFB copies to be displayed. However, turning this setting on reduces latency.<br><br>Enabling this also forces an effect equivalent to the Skip Presenting Duplicate Frames setting.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Distance" = "Distance";
 "Distance of travel from neutral position." = "Distance of travel from neutral position.";
 "Do you authorize Dolphin to report information to Dolphin's developers?" = "Do you authorize Dolphin to report information to Dolphin's developers?";
@@ -973,6 +978,7 @@ If so, then you may need to re-specify your memory card location in the options.
 "Do you want to clear the list of symbol names?" = "Do you want to clear the list of symbol names?";
 "Do you want to delete the %n selected save file(s)?" = "Do you want to delete the %n selected save file(s)?";
 "Do you want to stop the current emulation?" = "Do you want to stop the current emulation?";
+"Do you want to stop the current emulation? Unsaved achievement modifications detected." = "Do you want to stop the current emulation? Unsaved achievement modifications detected.";
 "Do you want to try to repair the NAND?" = "Do you want to try to repair the NAND?";
 "Dolby Pro Logic II Decoder" = "Dolby Pro Logic II Decoder";
 "Dolphin FIFO Log (*.dff)" = "Dolphin FIFO Log (*.dff)";
@@ -995,6 +1001,7 @@ Double-click here to set a games directory..." = "Dolphin could not find any Gam
 Double-click here to set a games directory...";
 "Dolphin failed to complete the requested action." = "Dolphin failed to complete the requested action.";
 "Dolphin is a free and open-source GameCube and Wii emulator." = "Dolphin is a free and open-source GameCube and Wii emulator.";
+"Dolphin is currently unable to verify Triforce games." = "Dolphin is currently unable to verify Triforce games.";
 "Dolphin is too old for traversal server" = "Dolphin is too old for traversal server";
 "Dolphin is unable to verify typical TGC files properly, since they are not dumps of actual discs." = "Dolphin is unable to verify typical TGC files properly, since they are not dumps of actual discs.";
 "Dolphin is unable to verify unlicensed discs." = "Dolphin is unable to verify unlicensed discs.";
@@ -1068,6 +1075,7 @@ Suitable for competitive games where fairness and minimal latency are most impor
 "Emulate Disc Speed" = "Emulate Disc Speed";
 "Emulate Infinity Base" = "Emulate Infinity Base";
 "Emulate Skylander Portal" = "Emulate Skylander Portal";
+"Emulate Wii Speak" = "Emulate Wii Speak";
 "Emulate the Wii's Bluetooth adapter" = "Emulate the Wii's Bluetooth adapter";
 "Emulate the disc speed of real hardware. Disabling can cause instability. Defaults to <b>True</b>" = "Emulate the disc speed of real hardware. Disabling can cause instability. Defaults to <b>True</b>";
 "Emulated USB Devices" = "Emulated USB Devices";
@@ -1080,7 +1088,6 @@ DFF: MEM1 {4:08X} ({5} MiB), MEM2 {6:08X} ({7} MiB)";
 "Emulation Speed" = "Emulation Speed";
 "Enable" = "Enable";
 "Enable API Validation Layers" = "Enable API Validation Layers";
-"Enable Audio Stretching" = "Enable Audio Stretching";
 "Enable Cheats" = "Enable Cheats";
 "Enable Controller Input" = "Enable Controller Input";
 "Enable Custom RTC" = "Enable Custom RTC";
@@ -1108,6 +1115,7 @@ DFF: MEM1 {4:08X} ({5} MiB), MEM2 {6:08X} ({7} MiB)";
 "Enable Spectator Mode" = "Enable Spectator Mode";
 "Enable Unofficial Achievements" = "Enable Unofficial Achievements";
 "Enable Usage Statistics Reporting" = "Enable Usage Statistics Reporting";
+"Enable VBI Frequency Override" = "Enable VBI Frequency Override";
 "Enable WiiConnect24 via WiiLink" = "Enable WiiConnect24 via WiiLink";
 "Enable Wireframe" = "Enable Wireframe";
 "Enable Write-Back Cache (slow)" = "Enable Write-Back Cache (slow)";
@@ -1117,14 +1125,13 @@ DFF: MEM1 {4:08X} ({5} MiB), MEM2 {6:08X} ({7} MiB)";
 "Enable unlocking achievements in Encore Mode.<br><br>Encore Mode re-enables achievements the player has already unlocked on the site so that the player will be notified if they meet the unlock conditions again, useful for custom speedrun criteria or simply for fun.<br><br>Setting takes effect on next game load." = "Enable unlocking achievements in Encore Mode.<br><br>Encore Mode re-enables achievements the player has already unlocked on the site so that the player will be notified if they meet the unlock conditions again, useful for custom speedrun criteria or simply for fun.<br><br>Setting takes effect on next game load.";
 "Enable unlocking achievements in Spectator Mode.<br><br>While in Spectator Mode, achievements and leaderboards will be processed and displayed on screen, but will not be submitted to the server.<br><br>If this is on at game launch, it will not be turned off until game close, because a RetroAchievements session will not be created.<br><br>If this is off at game launch, it can be toggled freely while the game is running." = "Enable unlocking achievements in Spectator Mode.<br><br>While in Spectator Mode, achievements and leaderboards will be processed and displayed on screen, but will not be submitted to the server.<br><br>If this is on at game launch, it will not be turned off until game close, because a RetroAchievements session will not be created.<br><br>If this is off at game launch, it can be toggled freely while the game is running.";
 "Enable unlocking unofficial achievements as well as official achievements.<br><br>Unofficial achievements may be optional or unfinished achievements that have not been deemed official by RetroAchievements and may be useful for testing or simply for fun.<br><br>Setting takes effect on next game load." = "Enable unlocking unofficial achievements as well as official achievements.<br><br>Unofficial achievements may be optional or unfinished achievements that have not been deemed official by RetroAchievements and may be useful for testing or simply for fun.<br><br>Setting takes effect on next game load.";
-"Enables Dolby Pro Logic II emulation using 5.1 surround. Certain backends only." = "Enables Dolby Pro Logic II emulation using 5.1 surround. Certain backends only.";
+"Enables Dolby Pro Logic II emulation using 5.1 surround. Certain backends only. <br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Enables Dolby Pro Logic II emulation using 5.1 surround. Certain backends only. <br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Enables Floating Point Result Flag calculation, needed for a few games. (ON = Compatible, OFF = Fast)" = "Enables Floating Point Result Flag calculation, needed for a few games. (ON = Compatible, OFF = Fast)";
 "Enables detection of arbitrary mipmaps, which some games use for special distance-based effects.<br><br>May have false positives that result in blurry textures at increased internal resolution, such as in games that use very low resolution mipmaps. Disabling this can also reduce stutter in games that frequently load new textures.<br><br>This setting is disabled when GPU Texture Decoding is enabled.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Enables detection of arbitrary mipmaps, which some games use for special distance-based effects.<br><br>May have false positives that result in blurry textures at increased internal resolution, such as in games that use very low resolution mipmaps. Disabling this can also reduce stutter in games that frequently load new textures.<br><br>This setting is disabled when GPU Texture Decoding is enabled.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Enables emulation of the CPU write-back cache.<br>Enabling will have a significant impact on performance.<br>This should be left disabled unless absolutely needed.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Enables emulation of the CPU write-back cache.<br>Enabling will have a significant impact on performance.<br>This should be left disabled unless absolutely needed.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Enables multithreaded command submission in backends where supported. Enabling this option may result in a performance improvement on systems with more than two CPU cores. Currently, this is limited to the Vulkan backend.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Enables multithreaded command submission in backends where supported. Enabling this option may result in a performance improvement on systems with more than two CPU cores. Currently, this is limited to the Vulkan backend.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
 "Enables progressive scan if supported by the emulated software. Most games don't have any issue with this.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Enables progressive scan if supported by the emulated software. Most games don't have any issue with this.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Enables scRGB HDR output (if supported by your graphics backend and monitor). Fullscreen might be required.<br><br>This gives post process shaders more room for accuracy, allows \"AutoHDR\" post-process shaders to work, and allows to fully display the PAL and NTSC-J color spaces.<br><br>Note that games still render in SDR internally.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Enables scRGB HDR output (if supported by your graphics backend and monitor). Fullscreen might be required.<br><br>This gives post process shaders more room for accuracy, allows \"AutoHDR\" post-process shaders to work, and allows to fully display the PAL and NTSC-J color spaces.<br><br>Note that games still render in SDR internally.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
-"Enables stretching of the audio to match emulation speed." = "Enables stretching of the audio to match emulation speed.";
 "Enables texture decoding using the GPU instead of the CPU.<br><br>This may result in performance gains in some scenarios, or on systems where the CPU is the bottleneck.<br><br>If this setting is enabled, Arbitrary Mipmap Detection will be disabled.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Enables texture decoding using the GPU instead of the CPU.<br><br>This may result in performance gains in some scenarios, or on systems where the CPU is the bottleneck.<br><br>If this setting is enabled, Arbitrary Mipmap Detection will be disabled.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Enables the Memory Management Unit, needed for some games. (ON = Compatible, OFF = Fast)" = "Enables the Memory Management Unit, needed for some games. (ON = Compatible, OFF = Fast)";
 "Enables the Memory Management Unit, needed for some games. (ON = Compatible, OFF = Fast)<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Enables the Memory Management Unit, needed for some games. (ON = Compatible, OFF = Fast)<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
@@ -1400,6 +1407,7 @@ Check that you have enough space available on the target drive.";
 "Filesize does not match any known GameCube Memory Card size." = "Filesize does not match any known GameCube Memory Card size.";
 "Filesize in header mismatches actual card size." = "Filesize in header mismatches actual card size.";
 "Filesystem" = "Filesystem";
+"Fill Audio Gaps" = "Fill Audio Gaps";
 "Filters" = "Filters";
 "Find Next" = "Find Next";
 "Find Previous" = "Find Previous";
@@ -1420,13 +1428,13 @@ This can take a while.";
 "Force 16:9" = "Force 16:9";
 "Force 24-Bit Color" = "Force 24-Bit Color";
 "Force 4:3" = "Force 4:3";
-"Force Linear" = "Force Linear";
 "Force Linear and 16x Anisotropic" = "Force Linear and 16x Anisotropic";
+"Force Linear and 1x Anisotropic" = "Force Linear and 1x Anisotropic";
 "Force Linear and 2x Anisotropic" = "Force Linear and 2x Anisotropic";
 "Force Linear and 4x Anisotropic" = "Force Linear and 4x Anisotropic";
 "Force Linear and 8x Anisotropic" = "Force Linear and 8x Anisotropic";
 "Force Listen Port" = "Force Listen Port";
-"Force Nearest" = "Force Nearest";
+"Force Nearest and 1x Anisotropic " = "Force Nearest and 1x Anisotropic ";
 "Forced off because %1 doesn't support VS expansion." = "Forced off because %1 doesn't support VS expansion.";
 "Forced on because %1 doesn't support geometry shaders." = "Forced on because %1 doesn't support geometry shaders.";
 "Forces the game to output graphics at any aspect ratio by expanding the view frustum without stretching the image.<br>This is a hack, and its results will vary widely game to game (it often causes the UI to stretch).<br>Game-specific AR/Gecko-code aspect ratio patches are preferable over this if available.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Forces the game to output graphics at any aspect ratio by expanding the view frustum without stretching the image.<br>This is a hack, and its results will vary widely game to game (it often causes the UI to stretch).<br>Game-specific AR/Gecko-code aspect ratio patches are preferable over this if available.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
@@ -1585,6 +1593,7 @@ GPU: Does your video card support OpenGL 2.x?";
 "HDR" = "HDR";
 "HDR Paper White Nits" = "HDR Paper White Nits";
 "HDR Post-Processing" = "HDR Post-Processing";
+"HLE (recommended)" = "HLE (recommended)";
 "Hacks" = "Hacks";
 "Head" = "Head";
 "Hero level" = "Hero level";
@@ -1602,7 +1611,8 @@ GPU: Does your video card support OpenGL 2.x?";
 "Hide Remote GBAs" = "Hide Remote GBAs";
 "Hides the mouse cursor whenever it is inside the render window and the render window is focused.<br><br><dolphin_emphasis>If unsure, select quot;On Movementquot;.</dolphin_emphasis>" = "Hides the mouse cursor whenever it is inside the render window and the render window is focused.<br><br><dolphin_emphasis>If unsure, select quot;On Movementquot;.</dolphin_emphasis>";
 "High" = "High";
-"Highest" = "Highest";
+"High (Latency ~40 ms)" = "High (Latency ~40 ms)";
+"Highest (Latency ~80 ms)" = "Highest (Latency ~80 ms)";
 "Highlight color" = "Highlight color";
 "Highlight recently changed values" = "Highlight recently changed values";
 "Hit Strength" = "Hit Strength";
@@ -1684,6 +1694,7 @@ to the connection state of the real default device (if there is one).";
 "Import Failed" = "Import Failed";
 "Import Save File(s)" = "Import Save File(s)";
 "Import Wii Save..." = "Import Wii Save...";
+"Import Wii Saves..." = "Import Wii Saves...";
 "Importing NAND backup" = "Importing NAND backup";
 "Importing NAND backup
  Time elapsed: %1s" = "Importing NAND backup
@@ -1825,16 +1836,16 @@ Anti-Aliasing settings are disabled when the global graphics backend doesn't mat
 "L" = "L";
 "Load ROM..." = "Load ROM...";
 "L-Analog" = "L-Analog";
+"LLE Interpreter (very slow)" = "LLE Interpreter (very slow)";
+"LLE Recompiler (slow)" = "LLE Recompiler (slow)";
 "LR Save" = "LR Save";
 "Label" = "Label";
 "Last Value" = "Last Value";
 "Last placed" = "Last placed";
 "Last reset" = "Last reset";
 "Latency" = "Latency";
-"Latency: ~10 ms" = "Latency: ~10 ms";
-"Latency: ~20 ms" = "Latency: ~20 ms";
-"Latency: ~40 ms" = "Latency: ~40 ms";
-"Latency: ~80 ms" = "Latency: ~80 ms";
+"Latency:  000 ms" = "Latency:  000 ms";
+"Latency: %1 ms" = "Latency: %1 ms";
 "Launching these titles may also fix the issues." = "Launching these titles may also fix the issues.";
 "Leaderboards" = "Leaderboards";
 "Left" = "Left";
@@ -1930,7 +1941,8 @@ Middle-click to clear.";
 "Loop" = "Loop";
 "Lost connection to NetPlay server..." = "Lost connection to NetPlay server...";
 "Low" = "Low";
-"Lowest" = "Lowest";
+"Low (Latency ~20 ms)" = "Low (Latency ~20 ms)";
+"Lowest (Latency ~10 ms)" = "Lowest (Latency ~10 ms)";
 "MD5" = "MD5";
 "MMU" = "MMU";
 "MORIBUND" = "MORIBUND";
@@ -1970,11 +1982,11 @@ Middle-click to clear.";
 "Merging a new NAND over your currently selected NAND will overwrite any channels and savegames that already exist. This process is not reversible, so it is recommended that you keep backups of both NANDs. Are you sure you want to continue?" = "Merging a new NAND over your currently selected NAND will overwrite any channels and savegames that already exist. This process is not reversible, so it is recommended that you keep backups of both NANDs. Are you sure you want to continue?";
 "MiB" = "MiB";
 "Microphone" = "Microphone";
+"Microphone Configuration" = "Microphone Configuration";
 "Min Effective Address" = "Min Effective Address";
 "Mini" = "Mini";
 "Misc" = "Misc";
 "Misc Settings" = "Misc Settings";
-"Miscellaneous Settings" = "Miscellaneous Settings";
 "Mismatch between free block count in header and actually unused blocks." = "Mismatch between free block count in header and actually unused blocks.";
 "Mismatch between internal data structures." = "Mismatch between internal data structures.";
 "Mismatched ROMs
@@ -2009,7 +2021,7 @@ Expected:
 "Multiple errors while generating AR codes." = "Multiple errors while generating AR codes.";
 "Multiplier" = "Multiplier";
 "Mute When Disabling Speed Limit" = "Mute When Disabling Speed Limit";
-"Mutes the audio when overriding the emulation speed limit (default hotkey: Tab)." = "Mutes the audio when overriding the emulation speed limit (default hotkey: Tab).";
+"Mutes the audio when overriding the emulation speed limit (default hotkey: Tab). <br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Mutes the audio when overriding the emulation speed limit (default hotkey: Tab). <br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "No to All" = "No to All";
 "NAND Check" = "NAND Check";
 "NKit Warning" = "NKit Warning";
@@ -2153,6 +2165,7 @@ After enough passes and experimentation, you may be able to find function calls 
 "Other State Management" = "Other State Management";
 "Other game..." = "Other game...";
 "Output" = "Output";
+"Output Device" = "Output Device";
 "Output Resampling" = "Output Resampling";
 "Overwritten" = "Overwritten";
 "Play Input Recording..." = "Play Input Recording...";
@@ -2223,6 +2236,7 @@ After enough passes and experimentation, you may be able to find function calls 
 "Point (Passthrough)" = "Point (Passthrough)";
 "Port %1" = "Port %1";
 "Port %1 ROM" = "Port %1 ROM";
+"Port {0} is already in use. This might stop the game's LAN mode from working properly." = "Port {0} is already in use. This might stop the game's LAN mode from working properly.";
 "Port" = "Port";
 "Portal Slots" = "Portal Slots";
 "Possible desync detected: %1 might have desynced at frame %2" = "Possible desync detected: %1 might have desynced at frame %2";
@@ -2230,6 +2244,7 @@ After enough passes and experimentation, you may be able to find function calls 
 "Post-Processing Shader Configuration" = "Post-Processing Shader Configuration";
 "Power Disc Three" = "Power Disc Three";
 "Power Disc Two" = "Power Disc Two";
+"Precision Frame Timing" = "Precision Frame Timing";
 "Prefer VS for Point/Line Expansion" = "Prefer VS for Point/Line Expansion";
 "Prefetch Custom Textures" = "Prefetch Custom Textures";
 "Premature movie end in PlayController. {0} + {1} > {2}" = "Premature movie end in PlayController. {0} + {1} > {2}";
@@ -2262,7 +2277,6 @@ This can take a while.";
 "QT_LAYOUT_DIRECTION" = "QT_LAYOUT_DIRECTION";
 "Quality of Service (QoS) couldn't be enabled." = "Quality of Service (QoS) couldn't be enabled.";
 "Quality of Service (QoS) was successfully enabled." = "Quality of Service (QoS) was successfully enabled.";
-"Quality of the DPLII decoder. Audio latency increases with quality." = "Quality of the DPLII decoder. Audio latency increases with quality.";
 "Question" = "Question";
 "Quit" = "Quit";
 "R" = "R";
@@ -2321,6 +2335,7 @@ This can take a while.";
 "Renders the scene as a wireframe.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Renders the scene as a wireframe.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Repeat Instr." = "Repeat Instr.";
 "Repeat Instructions" = "Repeat Instructions";
+"Repeat existing audio during lag spikes to prevent stuttering.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Repeat existing audio during lag spikes to prevent stuttering.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
 "Report: GCIFolder Writing to unallocated block {0:#x}" = "Report: GCIFolder Writing to unallocated block {0:#x}";
 "Request to Join Your Party" = "Request to Join Your Party";
 "Requires the render window to be focused for hotkeys to take effect.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Requires the render window to be focused for hotkeys to take effect.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
@@ -2338,6 +2353,7 @@ This can take a while.";
 "Restart Required" = "Restart Required";
 "Restore Defaults" = "Restore Defaults";
 "Restore Instruction" = "Restore Instruction";
+"RetroAchievements Development" = "RetroAchievements Development";
 "Retry" = "Retry";
 "Return Speed" = "Return Speed";
 "Revision" = "Revision";
@@ -2447,8 +2463,10 @@ All context menus have the action to delete the selected row(s) from the candida
 "Save as Preset..." = "Save as Preset...";
 "Save as..." = "Save as...";
 "Save data for this title already exists in the NAND. Consider backing up the current data before overwriting.
-Overwrite now?" = "Save data for this title already exists in the NAND. Consider backing up the current data before overwriting.
-Overwrite now?";
+
+Overwrite existing save data?" = "Save data for this title already exists in the NAND. Consider backing up the current data before overwriting.
+
+Overwrite existing save data?";
 "Save in Same Directory as the ROM" = "Save in Same Directory as the ROM";
 "Save to Selected Slot" = "Save to Selected Slot";
 "Save to Slot %1 - %2" = "Save to Slot %1 - %2";
@@ -2458,6 +2476,7 @@ Overwrite now?";
 "Savestate movie {0} is corrupted, movie recording stopping..." = "Savestate movie {0} is corrupted, movie recording stopping...";
 "Scaled EFB Copy" = "Scaled EFB Copy";
 "Scan succeeded." = "Scan succeeded.";
+"Scanning for adapters..." = "Scanning for adapters...";
 "ScrShot" = "ScrShot";
 "Search" = "Search";
 "Search Address" = "Search Address";
@@ -2488,6 +2507,7 @@ Overwrite now?";
 "Select Riivolution XML file" = "Select Riivolution XML file";
 "Select SD Card Image" = "Select SD Card Image";
 "Select Save File" = "Select Save File";
+"Select Save Folder" = "Select Save Folder";
 "Select Skylander Collection" = "Select Skylander Collection";
 "Select Skylander File" = "Select Skylander File";
 "Select Slot %1 - %2" = "Select Slot %1 - %2";
@@ -2523,9 +2543,12 @@ Overwrite now?";
 "Selected thread context" = "Selected thread context";
 "Selects a hardware adapter to use.<br><br><dolphin_emphasis>%1 doesn't support this feature.</dolphin_emphasis>" = "Selects a hardware adapter to use.<br><br><dolphin_emphasis>%1 doesn't support this feature.</dolphin_emphasis>";
 "Selects a hardware adapter to use.<br><br><dolphin_emphasis>If unsure, select the first one.</dolphin_emphasis>" = "Selects a hardware adapter to use.<br><br><dolphin_emphasis>If unsure, select the first one.</dolphin_emphasis>";
+"Selects an output device to use.<br><br><dolphin_emphasis>If unsure, select Default Device.</dolphin_emphasis>" = "Selects an output device to use.<br><br><dolphin_emphasis>If unsure, select Default Device.</dolphin_emphasis>";
 "Selects how frame dumps (videos) and screenshots are going to be captured.<br>If the game or window resolution change during a recording, multiple video files might be created.<br>Note that color correction and cropping are always ignored by the captures.<br><br><b>Window Resolution</b>: Uses the output window resolution (without black bars).<br>This is a simple dumping option that will capture the image more or less as you see it.<br><b>Aspect Ratio Corrected Internal Resolution</b>: Uses the Internal Resolution (XFB size), and corrects it by the target aspect ratio.<br>This option will consistently dump at the specified Internal Resolution regardless of how the image is displayed during recording.<br><b>Raw Internal Resolution</b>: Uses the Internal Resolution (XFB size) without correcting it with the target aspect ratio.<br>This will provide a clean dump without any aspect ratio correction so users have as raw as possible input for external editing software.<br><br><dolphin_emphasis>If unsure, leave this at \"Aspect Ratio Corrected Internal Resolution\".</dolphin_emphasis>" = "Selects how frame dumps (videos) and screenshots are going to be captured.<br>If the game or window resolution change during a recording, multiple video files might be created.<br>Note that color correction and cropping are always ignored by the captures.<br><br><b>Window Resolution</b>: Uses the output window resolution (without black bars).<br>This is a simple dumping option that will capture the image more or less as you see it.<br><b>Aspect Ratio Corrected Internal Resolution</b>: Uses the Internal Resolution (XFB size), and corrects it by the target aspect ratio.<br>This option will consistently dump at the specified Internal Resolution regardless of how the image is displayed during recording.<br><b>Raw Internal Resolution</b>: Uses the Internal Resolution (XFB size) without correcting it with the target aspect ratio.<br>This will provide a clean dump without any aspect ratio correction so users have as raw as possible input for external editing software.<br><br><dolphin_emphasis>If unsure, leave this at \"Aspect Ratio Corrected Internal Resolution\".</dolphin_emphasis>";
+"Selects how the Digital Signal Processor (DSP) is emulated. Determines how the audio is processed and what system features are available.<br><br><b>HLE</b> - High Level Emulation of the DSP. Fast, but not always accurate. Lacks Dolby Pro Logic II decoding.<br><br><b>LLE Recompiler</b> - Low Level Emulation of the DSP, via a recompiler. Slower, but more accurate. Enables Dolby Pro Logic II decoding on certain audio backends.<br><br><b>LLE Interpreter</b> - Low Level Emulation of the DSP, via an interpreter. Slowest, for debugging purposes only. Not recommended.<br><br><dolphin_emphasis>If unsure, select HLE.</dolphin_emphasis>" = "Selects how the Digital Signal Processor (DSP) is emulated. Determines how the audio is processed and what system features are available.<br><br><b>HLE</b> - High Level Emulation of the DSP. Fast, but not always accurate. Lacks Dolby Pro Logic II decoding.<br><br><b>LLE Recompiler</b> - Low Level Emulation of the DSP, via a recompiler. Slower, but more accurate. Enables Dolby Pro Logic II decoding on certain audio backends.<br><br><b>LLE Interpreter</b> - Low Level Emulation of the DSP, via an interpreter. Slowest, for debugging purposes only. Not recommended.<br><br><dolphin_emphasis>If unsure, select HLE.</dolphin_emphasis>";
 "Selects the stereoscopic 3D mode. Stereoscopy allows a better feeling of depth if the necessary hardware is present. Heavily decreases emulation speed and sometimes causes issues.<br><br>Side-by-Side and Top-and-Bottom are used by most 3D TVs.<br>Anaglyph is used for Red-Cyan colored glasses.<br>HDMI 3D is used when the monitor supports 3D display resolutions.<br>Passive is another type of 3D used by some TVs.<br><br><dolphin_emphasis>If unsure, select Off.</dolphin_emphasis>" = "Selects the stereoscopic 3D mode. Stereoscopy allows a better feeling of depth if the necessary hardware is present. Heavily decreases emulation speed and sometimes causes issues.<br><br>Side-by-Side and Top-and-Bottom are used by most 3D TVs.<br>Anaglyph is used for Red-Cyan colored glasses.<br>HDMI 3D is used when the monitor supports 3D display resolutions.<br>Passive is another type of 3D used by some TVs.<br><br><dolphin_emphasis>If unsure, select Off.</dolphin_emphasis>";
 "Selects which aspect ratio to use for displaying the game.<br><br>The aspect ratio of the image sent out by the original consoles varied depending on the game and rarely exactly matched 4:3 or 16:9. Some of the image would be cut off by the edges of the TV, or the image wouldn't fill the TV entirely. By default, Dolphin shows the whole image without distorting its proportions, which means it's normal for the image to not entirely fill your display.<br><br><b>Auto</b>: Mimics a TV with either a 4:3 or 16:9 aspect ratio, depending on which type of TV the game seems to be targeting.<br><br><b>Force 16:9</b>: Mimics a TV with a 16:9 (widescreen) aspect ratio.<br><br><b>Force 4:3</b>: Mimics a TV with a 4:3 aspect ratio.<br><br><b>Stretch to Window</b>: Stretches the image to the window size. This will usually distort the image's proportions.<br><br><b>Custom</b>: Mimics a TV with the specified aspect ratio. This is mostly intended to be used with aspect ratio cheats/mods.<br><br><b>Custom (Stretch)</b>: Similar to `Custom`, but stretches the image to the specified aspect ratio. This will usually distort the image's proportions, and should not be used under normal circumstances.<br><br><dolphin_emphasis>If unsure, select Auto.</dolphin_emphasis>" = "Selects which aspect ratio to use for displaying the game.<br><br>The aspect ratio of the image sent out by the original consoles varied depending on the game and rarely exactly matched 4:3 or 16:9. Some of the image would be cut off by the edges of the TV, or the image wouldn't fill the TV entirely. By default, Dolphin shows the whole image without distorting its proportions, which means it's normal for the image to not entirely fill your display.<br><br><b>Auto</b>: Mimics a TV with either a 4:3 or 16:9 aspect ratio, depending on which type of TV the game seems to be targeting.<br><br><b>Force 16:9</b>: Mimics a TV with a 16:9 (widescreen) aspect ratio.<br><br><b>Force 4:3</b>: Mimics a TV with a 4:3 aspect ratio.<br><br><b>Stretch to Window</b>: Stretches the image to the window size. This will usually distort the image's proportions.<br><br><b>Custom</b>: Mimics a TV with the specified aspect ratio. This is mostly intended to be used with aspect ratio cheats/mods.<br><br><b>Custom (Stretch)</b>: Similar to `Custom`, but stretches the image to the specified aspect ratio. This will usually distort the image's proportions, and should not be used under normal circumstances.<br><br><dolphin_emphasis>If unsure, select Auto.</dolphin_emphasis>";
+"Selects which audio API to use internally.<br><br><dolphin_emphasis>If unsure, select %1.</dolphin_emphasis>" = "Selects which audio API to use internally.<br><br><dolphin_emphasis>If unsure, select %1.</dolphin_emphasis>";
 "Selects which graphics API to use internally.<br><br>The software renderer is extremely slow and only useful for debugging, so any of the other backends are recommended. Different games and different GPUs will behave differently on each backend, so for the best emulation experience it is recommended to try each and select the backend that is least problematic.<br><br><dolphin_emphasis>If unsure, select %1.</dolphin_emphasis>" = "Selects which graphics API to use internally.<br><br>The software renderer is extremely slow and only useful for debugging, so any of the other backends are recommended. Different games and different GPUs will behave differently on each backend, so for the best emulation experience it is recommended to try each and select the backend that is least problematic.<br><br><dolphin_emphasis>If unsure, select %1.</dolphin_emphasis>";
 "Selects which update track Dolphin uses when checking for updates at startup. If a new update is available, Dolphin will show a list of changes made since your current version and ask you if you want to update.<br><br>The Dev track has the latest version of Dolphin which often updates multiple times per day. Select this track if you want the newest features and fixes.<br><br>The Releases track has an update every few months. Some reasons you might prefer to use this track:<br>- You prefer using versions that have had additional testing.<br>- NetPlay requires players to have the same Dolphin version, and the latest Release version will have the most players to match with.<br>- You frequently use Dolphin's savestate system, which doesn't guarantee backward compatibility of savestates between Dolphin versions. If this applies to you, make sure you make an in-game save before updating (i.e. save your game in the same way you would on a physical GameCube or Wii), then load the in-game save after updating Dolphin and before making any new savestates.<br><br>Selecting \"Don't Update\" will prevent Dolphin from automatically checking for updates.<br><br><dolphin_emphasis>If unsure, select Releases.</dolphin_emphasis>" = "Selects which update track Dolphin uses when checking for updates at startup. If a new update is available, Dolphin will show a list of changes made since your current version and ask you if you want to update.<br><br>The Dev track has the latest version of Dolphin which often updates multiple times per day. Select this track if you want the newest features and fixes.<br><br>The Releases track has an update every few months. Some reasons you might prefer to use this track:<br>- You prefer using versions that have had additional testing.<br>- NetPlay requires players to have the same Dolphin version, and the latest Release version will have the most players to match with.<br>- You frequently use Dolphin's savestate system, which doesn't guarantee backward compatibility of savestates between Dolphin versions. If this applies to you, make sure you make an in-game save before updating (i.e. save your game in the same way you would on a physical GameCube or Wii), then load the in-game save after updating Dolphin and before making any new savestates.<br><br>Selecting \"Don't Update\" will prevent Dolphin from automatically checking for updates.<br><br><dolphin_emphasis>If unsure, select Releases.</dolphin_emphasis>";
 "Send" = "Send";
@@ -2551,8 +2574,8 @@ Example: {2}";
 May not work for all games." = "Sets the Wii display mode to 60Hz (480i) instead of 50Hz (576i) for PAL games.
 May not work for all games.";
 "Sets the Wii system language." = "Sets the Wii system language.";
+"Sets the audio latency in milliseconds. Higher values may reduce audio crackling. Certain backends only.<br><br><dolphin_emphasis>If unsure, leave this at 20 ms.</dolphin_emphasis>" = "Sets the audio latency in milliseconds. Higher values may reduce audio crackling. Certain backends only.<br><br><dolphin_emphasis>If unsure, leave this at 20 ms.</dolphin_emphasis>";
 "Sets the language displayed by Dolphin's user interface.<br><br>Changes to this setting only take effect once Dolphin is restarted.<br><br><dolphin_emphasis>If unsure, select lt;System Languagegt;.</dolphin_emphasis>" = "Sets the language displayed by Dolphin's user interface.<br><br>Changes to this setting only take effect once Dolphin is restarted.<br><br><dolphin_emphasis>If unsure, select lt;System Languagegt;.</dolphin_emphasis>";
-"Sets the latency in milliseconds. Higher values may reduce audio crackling. Certain backends only." = "Sets the latency in milliseconds. Higher values may reduce audio crackling. Certain backends only.";
 "Sets the region used for titles whose region cannot be determined automatically.<br><br>This setting cannot be changed while emulation is active." = "Sets the region used for titles whose region cannot be determined automatically.<br><br>This setting cannot be changed while emulation is active.";
 "Sets the style of Dolphin's user interface. Any custom styles that you have added will be presented here, allowing you to switch to them.<br><br><dolphin_emphasis>If unsure, select (System).</dolphin_emphasis>" = "Sets the style of Dolphin's user interface. Any custom styles that you have added will be presented here, allowing you to switch to them.<br><br><dolphin_emphasis>If unsure, select (System).</dolphin_emphasis>";
 "Sets up the search using standard MEM1 and (on Wii) MEM2 mappings in virtual address space. This will work for the vast majority of games." = "Sets up the search using standard MEM1 and (on Wii) MEM2 mappings in virtual address space. This will work for the vast majority of games.";
@@ -2608,6 +2631,7 @@ May not work for all games.";
 "Show System Clock" = "Show System Clock";
 "Show Taiwan" = "Show Taiwan";
 "Show Target in Memory" = "Show Target in Memory";
+"Show Triforce" = "Show Triforce";
 "Show USA" = "Show USA";
 "Show Unknown" = "Show Unknown";
 "Show VBlank Times" = "Show VBlank Times";
@@ -2649,14 +2673,13 @@ May not work for all games.";
 "Simulate DK Bongos" = "Simulate DK Bongos";
 "Six Axis" = "Six Axis";
 "Size" = "Size";
-"Size of stretch buffer in milliseconds. Values too low may cause audio crackling." = "Size of stretch buffer in milliseconds. Values too low may cause audio crackling.";
 "Skip" = "Skip";
 "Skip Drawing" = "Skip Drawing";
 "Skip EFB Access from CPU" = "Skip EFB Access from CPU";
 "Skip Main Menu" = "Skip Main Menu";
 "Skip Presenting Duplicate Frames" = "Skip Presenting Duplicate Frames";
-"Skips Vertical Blank Interrupts when lag is detected, allowing for smooth audio playback when emulation speed is not 100%. <br><br><dolphin_emphasis>WARNING: Can cause freezes and compatibility issues.</dolphin_emphasis> <br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Skips Vertical Blank Interrupts when lag is detected, allowing for smooth audio playback when emulation speed is not 100%. <br><br><dolphin_emphasis>WARNING: Can cause freezes and compatibility issues.</dolphin_emphasis> <br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
-"Skips presentation of duplicate frames (XFB copies) in 25fps/30fps games. This may improve performance on low-end devices, while making frame pacing less consistent.<br><br />Disable this option as well as enabling V-Sync for optimal frame pacing.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Skips presentation of duplicate frames (XFB copies) in 25fps/30fps games. This may improve performance on low-end devices, while making frame pacing less consistent.<br><br />Disable this option as well as enabling V-Sync for optimal frame pacing.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
+"Skips Vertical Blank Interrupts when lag is detected, allowing for smooth audio playback when emulation speed is not 100%. <br><br>Enabling this also forces the effect of the Skip Presenting Duplicate Frames setting.<br><br><dolphin_emphasis>WARNING: Can cause freezes and compatibility issues.</dolphin_emphasis> <br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Skips Vertical Blank Interrupts when lag is detected, allowing for smooth audio playback when emulation speed is not 100%. <br><br>Enabling this also forces the effect of the Skip Presenting Duplicate Frames setting.<br><br><dolphin_emphasis>WARNING: Can cause freezes and compatibility issues.</dolphin_emphasis> <br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
+"Skips presentation of duplicate frames (XFB copies) in 25fps/30fps games. This may improve performance on low-end devices, while making frame pacing less consistent.<br><br>Disable this option for optimal frame pacing.<br><br>This setting is unavailable when Immediately Present XFB or VBI Skip is enabled. In those cases, duplicate frames are never presented.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Skips presentation of duplicate frames (XFB copies) in 25fps/30fps games. This may improve performance on low-end devices, while making frame pacing less consistent.<br><br>Disable this option for optimal frame pacing.<br><br>This setting is unavailable when Immediately Present XFB or VBI Skip is enabled. In those cases, duplicate frames are never presented.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
 "Skylander" = "Skylander";
 "Skylander %1" = "Skylander %1";
 "Skylander (*.sky *.bin *.dmp *.dump);;All Files (*)" = "Skylander (*.sky *.bin *.dmp *.dump);;All Files (*)";
@@ -2672,6 +2695,7 @@ May not work for all games.";
 "Software Renderer" = "Software Renderer";
 "Some of the data could not be read." = "Some of the data could not be read.";
 "Some padding data that should be zero is not zero. This can make the game freeze at certain points." = "Some padding data that should be zero is not zero. This can make the game freeze at certain points.";
+"Some settings cannot be changed when emulation is running." = "Some settings cannot be changed when emulation is running.";
 "Some values you provided are invalid.
 Please check the highlighted values." = "Some values you provided are invalid.
 Please check the highlighted values.";
@@ -2738,6 +2762,7 @@ Please check the highlighted values.";
 "Successfully extracted certificates from NAND" = "Successfully extracted certificates from NAND";
 "Successfully extracted file." = "Successfully extracted file.";
 "Successfully extracted system data." = "Successfully extracted system data.";
+"Successfully imported %1 save file(s) with %2 failure(s)" = "Successfully imported %1 save file(s) with %2 failure(s)";
 "Successfully imported save file." = "Successfully imported save file.";
 "Successfully installed this title to the NAND." = "Successfully installed this title to the NAND.";
 "Successfully removed this title from the NAND." = "Successfully removed this title from the NAND.";
@@ -2803,6 +2828,7 @@ Do you really want to switch to Direct3D 11? If unsure, select 'No'.";
 "The amount of money this Skylander has. Between 0 and 65000" = "The amount of money this Skylander has. Between 0 and 65000";
 "The amount of time the FPS and VPS counters will sample over.<br><br>The higher the value, the more stable the FPS/VPS counter will be, but the slower it will be to update.<br><br><dolphin_emphasis>If unsure, leave this at 1000ms.</dolphin_emphasis>" = "The amount of time the FPS and VPS counters will sample over.<br><br>The higher the value, the more stable the FPS/VPS counter will be, but the slower it will be to update.<br><br><dolphin_emphasis>If unsure, leave this at 1000ms.</dolphin_emphasis>";
 "The channel partition is missing." = "The channel partition is missing.";
+"The controls under Accelerometer and Gyroscope are designed to interface directly with motion sensor hardware. They are not intended for mapping traditional buttons, triggers or axes. You might need to configure alternate input sources before using these controls." = "The controls under Accelerometer and Gyroscope are designed to interface directly with motion sensor hardware. They are not intended for mapping traditional buttons, triggers or axes. You might need to configure alternate input sources before using these controls.";
 "The data partition is missing." = "The data partition is missing.";
 "The data partition is not at its normal position. This will affect the emulated loading times. You will be unable to share input recordings and use NetPlay with anyone who is using a good dump." = "The data partition is not at its normal position. This will affect the emulated loading times. You will be unable to share input recordings and use NetPlay with anyone who is using a good dump.";
 "The data size for the {0} partition is not evenly divisible by the block size." = "The data size for the {0} partition is not evenly divisible by the block size.";
@@ -2908,6 +2934,7 @@ Do you want to save before closing?";
 "There is nothing to save!" = "There is nothing to save!";
 "There is nothing to undo!" = "There is nothing to undo!";
 "There was an issue adding a shortcut to the desktop" = "There was an issue adding a shortcut to the desktop";
+"These controls are designed to interface directly with motion sensor hardware. They are not intended for mapping traditional buttons, triggers or axes. You might need to configure alternate input sources before using these controls." = "These controls are designed to interface directly with motion sensor hardware. They are not intended for mapping traditional buttons, triggers or axes. You might need to configure alternate input sources before using these controls.";
 "These settings override core Dolphin settings." = "These settings override core Dolphin settings.";
 "This Action Replay code contains both encrypted and unencrypted lines; you should check that you have entered it correctly.
 
@@ -2943,11 +2970,7 @@ Please run the ARM64 build of Dolphin for a better experience.";
 "This is a good dump." = "This is a good dump.";
 "This only applies to the initial boot of the emulated software." = "This only applies to the initial boot of the emulated software.";
 "This session requires a password" = "This session requires a password";
-"This setting allows you to set a custom real time clock (RTC) separate from your current system time.
-
-If unsure, leave this unchecked." = "This setting allows you to set a custom real time clock (RTC) separate from your current system time.
-
-If unsure, leave this unchecked.";
+"This setting allows you to set a custom real time clock (RTC) separate from your current system time.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "This setting allows you to set a custom real time clock (RTC) separate from your current system time.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "This software should not be used to play games you do not legally own." = "This software should not be used to play games you do not legally own.";
 "This title cannot be booted." = "This title cannot be booted.";
 "This title is set to use an invalid IOS." = "This title is set to use an invalid IOS.";
@@ -3004,6 +3027,7 @@ May prevent desync in some games that use EFB reads. Please ensure everyone uses
 "Toggle Skip EFB Access" = "Toggle Skip EFB Access";
 "Toggle Texture Dumping" = "Toggle Texture Dumping";
 "Toggle USB Keyboard" = "Toggle USB Keyboard";
+"Toggle Wii Speak Mute" = "Toggle Wii Speak Mute";
 "Toggle XFB Copies" = "Toggle XFB Copies";
 "Toggle XFB Immediate Mode" = "Toggle XFB Immediate Mode";
 "Toggle software JIT block profiling (will clear the JIT cache)." = "Toggle software JIT block profiling (will clear the JIT cache).";
@@ -3029,7 +3053,8 @@ May prevent desync in some games that use EFB reads. Please ensure everyone uses
 "Traversal Server" = "Traversal Server";
 "Traversal server timed out connecting to the host" = "Traversal server timed out connecting to the host";
 "Tries to translate branches ahead of time, improving performance in most cases. Defaults to <b>True</b>" = "Tries to translate branches ahead of time, improving performance in most cases. Defaults to <b>True</b>";
-"Triforce AM Baseboard" = "Triforce AM Baseboard";
+"Triforce Baseboard" = "Triforce Baseboard";
+"Triforce ID" = "Triforce ID";
 "Triggers" = "Triggers";
 "Trophy" = "Trophy";
 "Type" = "Type";
@@ -3075,6 +3100,7 @@ Would you like to ignore this line and continue parsing?";
 "Unknown" = "Unknown";
 "Unknown (Id:%1 Var:%2)" = "Unknown (Id:%1 Var:%2)";
 "Unknown DVD command {0:08x} - fatal error" = "Unknown DVD command {0:08x} - fatal error";
+"Unknown Device" = "Unknown Device";
 "Unknown SYNC_CODES message received with id: {0}" = "Unknown SYNC_CODES message received with id: {0}";
 "Unknown SYNC_GECKO_CODES message with id:{0} received from player:{1} Kicking player!" = "Unknown SYNC_GECKO_CODES message with id:{0} received from player:{1} Kicking player!";
 "Unknown SYNC_SAVE_DATA message received with id: {0}" = "Unknown SYNC_SAVE_DATA message received with id: {0}";
@@ -3143,6 +3169,7 @@ inputs and outputs of the same parent controller.";
 "Username" = "Username";
 "Uses Dolphin's database of properly formatted names in the game list's Title column.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Uses Dolphin's database of properly formatted names in the game list's Title column.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
 "Uses a less accurate algorithm to calculate depth values.<br><br>Causes issues in a few games, but can result in a decent speed increase depending on the game and/or GPU.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Uses a less accurate algorithm to calculate depth values.<br><br>Causes issues in a few games, but can result in a decent speed increase depending on the game and/or GPU.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
+"Uses high resolution timers and \"busy waiting\" for improved frame pacing.<br><br>This will marginally increase power usage.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>" = "Uses high resolution timers and \"busy waiting\" for improved frame pacing.<br><br>This will marginally increase power usage.<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>";
 "Uses the entire screen for rendering.<br><br>If disabled, a render window will be created instead.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Uses the entire screen for rendering.<br><br>If disabled, a render window will be created instead.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Uses the main Dolphin window for rendering rather than a separate render window.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>" = "Uses the main Dolphin window for rendering rather than a separate render window.<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>";
 "Using Qt %1" = "Using Qt %1";
@@ -3153,6 +3180,7 @@ inputs and outputs of the same parent controller.";
 "Usually used for tex coord matrices" = "Usually used for tex coord matrices";
 "Utility" = "Utility";
 "V-Sync" = "V-Sync";
+"VBI Frequency Override" = "VBI Frequency Override";
 "VBI Skip" = "VBI Skip";
 "Value" = "Value";
 "Value tracked to current instruction." = "Value tracked to current instruction.";
@@ -3179,6 +3207,7 @@ inputs and outputs of the same parent controller.";
 "Volume Down" = "Volume Down";
 "Volume Toggle Mute" = "Volume Toggle Mute";
 "Volume Up" = "Volume Up";
+"Volume modifier (value: %1dB)" = "Volume modifier (value: %1dB)";
 "Vulkan" = "Vulkan";
 "WAD files (*.wad)" = "WAD files (*.wad)";
 "WAD installation failed: Could not create Wii Shop log files." = "WAD installation failed: Could not create Wii Shop log files.";
@@ -3188,8 +3217,6 @@ inputs and outputs of the same parent controller.";
 "WAD installation failed: The selected file is not a valid WAD." = "WAD installation failed: The selected file is not a valid WAD.";
 "WAITING" = "WAITING";
 "WARNING: Fixing this NAND requires the deletion of titles that have incomplete data on the NAND, including all associated save data. By continuing, the following title(s) will be removed" = "WARNING: Fixing this NAND requires the deletion of titles that have incomplete data on the NAND, including all associated save data. By continuing, the following title(s) will be removed";
-"WARNING: The controls under Accelerometer and Gyroscope are designed to interface directly with motion sensor hardware. They are not intended for mapping traditional buttons, triggers or axes. You might need to configure alternate input sources before using these controls." = "WARNING: The controls under Accelerometer and Gyroscope are designed to interface directly with motion sensor hardware. They are not intended for mapping traditional buttons, triggers or axes. You might need to configure alternate input sources before using these controls.";
-"WARNING: These controls are designed to interface directly with motion sensor hardware. They are not intended for mapping traditional buttons, triggers or axes. You might need to configure alternate input sources before using these controls." = "WARNING: These controls are designed to interface directly with motion sensor hardware. They are not intended for mapping traditional buttons, triggers or axes. You might need to configure alternate input sources before using these controls.";
 "WASAPI (Exclusive Mode)" = "WASAPI (Exclusive Mode)";
 "WFS Path" = "WFS Path";
 "WIA GC/Wii images (*.wia)" = "WIA GC/Wii images (*.wia)";
@@ -3240,6 +3267,7 @@ Start={24}, A={25}, B={26}, X={27}, Y={28}, Z={29}, DUp={30}, DDown={31}, DLeft=
 "Wii Remote Gyroscope" = "Wii Remote Gyroscope";
 "Wii Remote Settings" = "Wii Remote Settings";
 "Wii Remotes" = "Wii Remotes";
+"Wii Speak Manager" = "Wii Speak Manager";
 "Wii TAS Input %1 - Classic Controller" = "Wii TAS Input %1 - Classic Controller";
 "Wii TAS Input %1 - Wii Remote" = "Wii TAS Input %1 - Wii Remote";
 "Wii TAS Input %1 - Wii Remote + Nunchuk" = "Wii TAS Input %1 - Wii Remote + Nunchuk";

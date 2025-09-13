@@ -62,7 +62,7 @@
 "GOv-Af-lVT.text" = "強制24bitカラー化";
 
 /* Class = "UILabel"; text = "Enable API Validation Layers"; ObjectID = "Gox-HX-QPR"; */
-"Gox-HX-QPR.text" = "Enable API Validation Layers";
+"Gox-HX-QPR.text" = "API検証レイヤーの有効化";
 
 /* Class = "UILabel"; text = "Load Custom Textures"; ObjectID = "HjZ-jk-3AV"; */
 "HjZ-jk-3AV.text" = "カスタムテクスチャを読み込む";
