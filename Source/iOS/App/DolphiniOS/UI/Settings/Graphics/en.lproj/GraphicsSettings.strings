@@ -256,7 +256,7 @@
 /* Class = "UILabel"; text = "Force Linear and 8x Anisotropic"; ObjectID = "2G3-K2-Hl0"; */
 "2G3-K2-Hl0.text" = "Force Linear and 8x Anisotropic";
 
-/* Class = "UILabel"; text = "Force Linear"; ObjectID = "FlS-dn-3Ph"; */
+/* Class = "UILabel"; text = "Force Linear and 1x Anisotropic"; ObjectID = "FlS-dn-3Ph"; */
 "FlS-dn-3Ph.text" = "Force Linear";
 
 /* Class = "UILabel"; text = "Force Linear and 16x Anisotropic"; ObjectID = "a2q-0S-sXo"; */
@@ -303,3 +303,6 @@
 
 /* Class = "UILabel"; text = "Cull Vertices on the CPU"; ObjectID = "edj-Ox-q0H"; */
 "edj-Ox-q0H.text" = "Cull Vertices on the CPU";
+
+/* Class = "UILabel"; text = "1x Anisotropic"; ObjectID = "mRh-h9-BHZ"; */
+"mRh-h9-BHZ.text" = "1x Anisotropic";
