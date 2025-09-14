@@ -29,7 +29,7 @@ using namespace Arm64Gen;
 
 void JitArm64::GenerateAsm()
 {
-  const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes(GetRegionPtr());
+  const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes;
 
   const bool enable_debugging = Config::IsDebuggingEnabled();
 

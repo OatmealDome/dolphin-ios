@@ -27,7 +27,7 @@ class TestFPRF : public JitArm64
 public:
   explicit TestFPRF(Core::System& system) : JitArm64(system)
   {
-    const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes(GetRegionPtr());
+    const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes;
 
     AllocCodeSpace(4096);
 

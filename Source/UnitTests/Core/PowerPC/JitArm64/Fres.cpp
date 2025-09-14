@@ -26,7 +26,7 @@ class TestFres : public JitArm64
 public:
   explicit TestFres(Core::System& system) : JitArm64(system)
   {
-    const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes(GetRegionPtr());
+    const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes;
 
     AllocCodeSpace(4096);
 
