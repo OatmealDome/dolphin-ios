@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet DOLSwitch* cpuClockSwitch;
 @property (weak, nonatomic) IBOutlet UISlider* cpuClockSlider;
 @property (weak, nonatomic) IBOutlet UILabel* cpuClockLabel;
+@property (weak, nonatomic) IBOutlet DOLUIKitSwitch* vbiFrequencySwitch;
+@property (weak, nonatomic) IBOutlet UISlider* vbiFrequencySlider;
+@property (weak, nonatomic) IBOutlet UILabel* vbiFrequencyLabel;
 @property (weak, nonatomic) IBOutlet DOLSwitch* memorySwitch;
 @property (weak, nonatomic) IBOutlet UISlider* memOneSlider;
 @property (weak, nonatomic) IBOutlet UILabel* memOneLabel;

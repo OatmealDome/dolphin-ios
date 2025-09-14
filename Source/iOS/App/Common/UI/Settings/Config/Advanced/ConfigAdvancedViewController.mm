@@ -7,6 +7,7 @@
 
 #import "Core/Config/MainSettings.h"
 #import "Core/HW/SystemTimers.h"
+#import "Core/HW/VideoInterface.h"
 #import "Core/System.h"
 #import "Core/PowerPC/PowerPC.h"
 
@@ -37,6 +38,14 @@
   self.cpuClockSlider.enabled = self.cpuClockSwitch.on;
   
   [self setCpuClockLabel];
+  
+  self.vbiFrequencySwitch.on = Config::Get(Config::MAIN_VI_OVERCLOCK_ENABLE);
+  [self.vbiFrequencySwitch addValueChangedTarget:self action:@selector(vbiFrequencySwitchChanged)];
+  
+  self.vbiFrequencySlider.value = std::round(Config::Get(Config::MAIN_VI_OVERCLOCK) * 100.f);
+  self.vbiFrequencySlider.enabled = self.vbiFrequencySwitch.on;
+  
+  [self setVbiFrequencyLabelContent];
   
   self.memorySwitch.on = Config::Get(Config::MAIN_RAM_OVERRIDE_ENABLE);
   [self.memorySwitch addValueChangedTarget:self action:@selector(memorySwitchChanged)];
@@ -122,6 +131,39 @@
   int clock = static_cast<int>(std::round(overclock * core_clock));
   
   self.cpuClockLabel.text = [NSString stringWithFormat:@"%d%% (%d MHz)", percent, clock];
+}
+
+- (void)vbiFrequencySwitchChanged {
+  bool enabled = self.vbiFrequencySwitch.on;
+  
+  Config::SetBaseOrCurrent(Config::MAIN_VI_OVERCLOCK_ENABLE, enabled);
+  self.vbiFrequencySlider.enabled = enabled;
+  
+  // There is a bug on iOS 14+ where a UISlider won't update its appearance when enabled is toggled.
+  [self.cpuClockSlider setNeedsLayout];
+  [self.cpuClockSlider layoutIfNeeded];
+}
+
+- (IBAction)vbiFrequencySliderChanged:(id)sender {
+  float roundedValue = std::round(self.vbiFrequencySlider.value);
+  
+  self.vbiFrequencySlider.value = roundedValue;
+  
+  const float overclock = roundedValue / 100.0f;
+  
+  Config::SetBaseOrCurrent(Config::MAIN_VI_OVERCLOCK, overclock);
+  
+  [self setVbiFrequencyLabelContent];
+}
+
+- (void)setVbiFrequencyLabelContent {
+  int percent = static_cast<int>(std::round(Config::Get(Config::MAIN_VI_OVERCLOCK) * 100.f));
+  float vps = static_cast<float>(Core::System::GetInstance().GetVideoInterface().GetTargetRefreshRate());
+  if (vps == 0.0f || !Config::Get(Config::MAIN_VI_OVERCLOCK_ENABLE)) {
+    vps = 59.94f * Config::Get(Config::MAIN_VI_OVERCLOCK);
+  }
+  
+  self.vbiFrequencyLabel.text = [NSString stringWithFormat:@"%d%% (%.2f VPS)", percent, vps];
 }
 
 - (void)memorySwitchChanged {

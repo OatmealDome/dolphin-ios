@@ -375,3 +375,15 @@
 
 /* Class = "UILabel"; text = "Fill Audio Gaps"; ObjectID = "5ek-pI-D2E"; */
 "5ek-pI-D2E.text" = "Fill Audio Gaps";
+
+/* Class = "UILabel"; text = "Enable VBI Frequency Override"; ObjectID = "JGz-3s-fdg"; */
+"JGz-3s-fdg.text" = "Enable VBI Frequency Override";
+
+/* Class = "UITableViewSection"; footerTitle = "Adjusts the VBI frequency. Also adjusts the emulated CPU's clock rate, to keep it relatively the same.\n\nMakes games run at a different frame rate, making the emulation less demanding when lowered, or improving smoothness when increased. This may affect gameplay speed, as it is often tied to the frame rate.\n\nWARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default frequency.\n\nIf unsure, leave this unchecked."; ObjectID = "QZs-JO-Rqe"; */
+"QZs-JO-Rqe.footerTitle" = "Adjusts the VBI frequency. Also adjusts the emulated CPU's clock rate, to keep it relatively the same.\n\nMakes games run at a different frame rate, making the emulation less demanding when lowered, or improving smoothness when increased. This may affect gameplay speed, as it is often tied to the frame rate.\n\nWARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default frequency.\n\nIf unsure, leave this unchecked.";
+
+/* Class = "UITableViewSection"; headerTitle = "VBI Frequency Override"; ObjectID = "QZs-JO-Rqe"; */
+"QZs-JO-Rqe.headerTitle" = "VBI Frequency Override";
+
+/* Class = "UILabel"; text = "100% (59.94 VPS)"; ObjectID = "cZ7-Ck-sxG"; */
+"cZ7-Ck-sxG.text" = "100% (59.94 VPS)";

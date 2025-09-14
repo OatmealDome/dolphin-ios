@@ -2363,13 +2363,81 @@ WARNING: Changing this from the default (100%) can and will break games and caus
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="VBI Frequency Override" id="QZs-JO-Rqe">
+                                <mutableString key="footerTitle">Adjusts the VBI frequency. Also adjusts the emulated CPU's clock rate, to keep it relatively the same.
+
+Makes games run at a different frame rate, making the emulation less demanding when lowered, or improving smoothness when increased. This may affect gameplay speed, as it is often tied to the frame rate.
+
+WARNING: Changing this from the default (100%) can and will break games and cause glitches. Do so at your own risk. Please do not report bugs that occur with a non-default frequency.
+
+If unsure, leave this unchecked.</mutableString>
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="uYL-dC-9HP">
+                                        <rect key="frame" x="16" y="669.5" width="343" height="43"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uYL-dC-9HP" id="f6d-Kq-EuV">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable VBI Frequency Override" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="JGz-3s-fdg">
+                                                    <rect key="frame" x="16" y="11" width="254" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zXx-Ll-yZl" customClass="DOLUIKitSwitch">
+                                                    <rect key="frame" x="278" y="6" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="zXx-Ll-yZl" firstAttribute="leading" secondItem="JGz-3s-fdg" secondAttribute="trailing" constant="8" id="2tZ-ax-Ovi"/>
+                                                <constraint firstItem="JGz-3s-fdg" firstAttribute="leading" secondItem="f6d-Kq-EuV" secondAttribute="leadingMargin" id="Bbd-rd-fkr"/>
+                                                <constraint firstItem="zXx-Ll-yZl" firstAttribute="centerY" secondItem="f6d-Kq-EuV" secondAttribute="centerY" id="LKF-Cs-NRb"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="zXx-Ll-yZl" secondAttribute="trailing" id="Tuj-iL-h8h"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="JGz-3s-fdg" secondAttribute="bottom" id="U5m-H1-6Bi"/>
+                                                <constraint firstItem="JGz-3s-fdg" firstAttribute="top" secondItem="f6d-Kq-EuV" secondAttribute="topMargin" id="foM-m8-Doe"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="84" id="Lw2-Mc-fwy">
+                                        <rect key="frame" x="16" y="712.5" width="343" height="84"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Lw2-Mc-fwy" id="oYf-b1-otd">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="84"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="500" translatesAutoresizingMaskIntoConstraints="NO" id="1wF-md-1dT">
+                                                    <rect key="frame" x="14" y="11" width="315" height="31"/>
+                                                    <connections>
+                                                        <action selector="vbiFrequencySliderChanged:" destination="TFH-fa-6z1" eventType="valueChanged" id="g7p-LD-XeX"/>
+                                                    </connections>
+                                                </slider>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100% (59.94 VPS)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="cZ7-Ck-sxG">
+                                                    <rect key="frame" x="16" y="49" width="311" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="1wF-md-1dT" secondAttribute="trailing" id="Er1-Jb-3Dq"/>
+                                                <constraint firstItem="cZ7-Ck-sxG" firstAttribute="leading" secondItem="oYf-b1-otd" secondAttribute="leadingMargin" id="eez-I7-tJe"/>
+                                                <constraint firstItem="cZ7-Ck-sxG" firstAttribute="top" secondItem="1wF-md-1dT" secondAttribute="bottom" constant="8" id="lsi-gv-DyB"/>
+                                                <constraint firstItem="1wF-md-1dT" firstAttribute="top" secondItem="oYf-b1-otd" secondAttribute="topMargin" id="oUl-pt-cKu"/>
+                                                <constraint firstItem="1wF-md-1dT" firstAttribute="leading" secondItem="oYf-b1-otd" secondAttribute="leadingMargin" id="zEm-HB-iWm"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="cZ7-Ck-sxG" secondAttribute="trailing" id="zMI-gV-7lV"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                             <tableViewSection headerTitle="Memory Override" id="Q01-LG-j5M">
                                 <string key="footerTitle">Adjusts the amount of RAM in the emulated console.
 
 WARNING: Enabling this will completely break many games. Only a small number of games can benefit from this.</string>
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="EnS-PQ-ajT">
-                                        <rect key="frame" x="16" y="669.5" width="343" height="43"/>
+                                        <rect key="frame" x="16" y="1112" width="343" height="43"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="EnS-PQ-ajT" id="Kwx-tN-8Ag">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
@@ -2396,7 +2464,7 @@ WARNING: Enabling this will completely break many games. Only a small number of 
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="120" id="BX9-N9-GQi">
-                                        <rect key="frame" x="16" y="712.5" width="343" height="120"/>
+                                        <rect key="frame" x="16" y="1155" width="343" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="BX9-N9-GQi" id="Uhm-mm-Ljs">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="120"/>
@@ -2436,26 +2504,26 @@ WARNING: Enabling this will completely break many games. Only a small number of 
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="120" id="Ejg-Xn-9ez">
-                                        <rect key="frame" x="16" y="832.5" width="343" height="120"/>
+                                        <rect key="frame" x="16" y="1275" width="343" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ejg-Xn-9ez" id="EG6-Df-suR">
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="120"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MEM2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="pRO-hG-kn8">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="MEM2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="pRO-hG-kn8">
                                                     <rect key="frame" x="16" y="11" width="311" height="32.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="96" minValue="64" maxValue="128" translatesAutoresizingMaskIntoConstraints="NO" id="VQ1-a1-S0o">
-                                                    <rect key="frame" x="14" y="47.5" width="315" height="31"/>
+                                                <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="96" minValue="64" maxValue="128" translatesAutoresizingMaskIntoConstraints="NO" id="VQ1-a1-S0o">
+                                                    <rect key="frame" x="14" y="47.5" width="315" height="34"/>
                                                     <connections>
                                                         <action selector="memTwoSliderChanged:" destination="TFH-fa-6z1" eventType="valueChanged" id="whb-BR-1K3"/>
                                                     </connections>
                                                 </slider>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 MB" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="GkB-HW-gOg">
-                                                    <rect key="frame" x="16" y="85.5" width="311" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="0 MB" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="GkB-HW-gOg">
+                                                    <rect key="frame" x="16" y="88.5" width="311" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -2483,20 +2551,20 @@ WARNING: Enabling this will completely break many games. Only a small number of 
 If unsure, leave this unchecked.</string>
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="XLb-rT-8ua">
-                                        <rect key="frame" x="16" y="1108" width="343" height="43.5"/>
+                                        <rect key="frame" x="16" y="1550.5" width="343" height="43"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="XLb-rT-8ua" id="rwV-PK-E7l">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Enable Custom RTC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="46G-Mb-1hy">
-                                                    <rect key="frame" x="16" y="11" width="254" height="21.5"/>
+                                                    <rect key="frame" x="16" y="11" width="254" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FrB-mO-aLE" customClass="DOLUIKitSwitch">
-                                                    <rect key="frame" x="278" y="6.5" width="51" height="31"/>
+                                                    <rect key="frame" x="278" y="6" width="51" height="31"/>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -2510,14 +2578,14 @@ If unsure, leave this unchecked.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="oX9-0p-Swb">
-                                        <rect key="frame" x="16" y="1151.5" width="343" height="53.5"/>
+                                        <rect key="frame" x="16" y="1593.5" width="343" height="58.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oX9-0p-Swb" id="mWI-IB-LxA">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="53.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="58.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <datePicker contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" style="compact" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BE-Ko-fhA">
-                                                    <rect key="frame" x="16" y="11" width="311" height="31"/>
+                                                    <rect key="frame" x="16" y="11" width="311" height="36.5"/>
                                                     <date key="date" timeIntervalSinceReferenceDate="-31604399.218200684">
                                                         <!--2000-01-01 05:00:00 +0000-->
                                                     </date>
@@ -2564,6 +2632,9 @@ If unsure, leave this unchecked.</string>
                         <outlet property="panicPauseSwitch" destination="pvS-wI-wVX" id="z5h-MF-Qcj"/>
                         <outlet property="rtcPicker" destination="8BE-Ko-fhA" id="uKQ-Tg-OHJ"/>
                         <outlet property="rtcSwitch" destination="FrB-mO-aLE" id="3Qn-zg-fYA"/>
+                        <outlet property="vbiFrequencyLabel" destination="cZ7-Ck-sxG" id="Ywe-uh-9Jw"/>
+                        <outlet property="vbiFrequencySlider" destination="1wF-md-1dT" id="I6z-W5-kNU"/>
+                        <outlet property="vbiFrequencySwitch" destination="zXx-Ll-yZl" id="T9N-u8-ns1"/>
                         <outlet property="writeBackCacheSwitch" destination="aGg-fW-Ora" id="fSc-Sp-IP1"/>
                     </connections>
                 </tableViewController>
