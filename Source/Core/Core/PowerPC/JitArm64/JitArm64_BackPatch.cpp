@@ -335,6 +335,8 @@ bool JitArm64::HandleFastmemFault(SContext* ctx)
   const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes;
   ARM64XEmitter emitter(const_cast<u8*>(fastmem_area_start), const_cast<u8*>(fastmem_area_end));
 
+  emitter.SetWritableRegionDiff(GetWritableRegionDiff());
+
   emitter.BL(slow_handler_iter->second.slow_access_code);
 
   while (emitter.GetCodePtr() < fastmem_area_end)
