@@ -21,7 +21,9 @@
 Metal::Gfx::Gfx(MRCOwned<CAMetalLayer*> layer) : m_layer(std::move(layer))
 {
   UpdateActiveConfig();
+#ifndef IPHONEOS
   [m_layer setDisplaySyncEnabled:g_ActiveConfig.bVSyncActive];
+#endif
 
   SetupSurface();
   g_state_tracker->FlushEncoders();
@@ -287,8 +289,10 @@ void Metal::Gfx::OnConfigChanged(u32 bits)
 {
   AbstractGfx::OnConfigChanged(bits);
 
+#ifndef IPHONEOS
   if (bits & CONFIG_CHANGE_BIT_VSYNC)
     [m_layer setDisplaySyncEnabled:g_ActiveConfig.bVSyncActive];
+#endif
 
   if (bits & CONFIG_CHANGE_BIT_ANISOTROPY)
   {
