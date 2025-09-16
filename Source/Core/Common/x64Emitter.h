@@ -398,6 +398,9 @@ public:
   const u8* GetCodeEnd() const { return m_code_end; }
   u8* GetWritableCodeEnd() { return m_code_end; }
 
+  ptrdiff_t GetWritableRegionDiff() { return 0; }
+  void SetWritableRegionDiff(ptrdiff_t diff) {}
+
   void LockFlags() { flags_locked = true; }
   void UnlockFlags() { flags_locked = false; }
 

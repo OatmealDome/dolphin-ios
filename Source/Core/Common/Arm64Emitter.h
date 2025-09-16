@@ -618,6 +618,8 @@ private:
   // Writes that would reach this memory are refused and will set the m_write_failed flag instead.
   u8* m_code_end = nullptr;
 
+  ptrdiff_t m_writable_region_diff = 0;
+
   u8* m_lastCacheFlushEnd = nullptr;
 
   // Set to true when a write request happens that would write past m_code_end.
@@ -689,6 +691,9 @@ public:
   u8* AlignCodePage();
   void FlushIcache();
   void FlushIcacheSection(u8* start, u8* end);
+
+  ptrdiff_t GetWritableRegionDiff() { return m_writable_region_diff; }
+  void SetWritableRegionDiff(ptrdiff_t diff) { m_writable_region_diff = diff; }
 
   // Should be checked after a block of code has been generated to see if the code has been
   // successfully written to memory. Do not call the generated code when this returns true!
@@ -1472,7 +1477,7 @@ private:
 
     for (size_t i = 0; i < region_size; i += sizeof(u32))
     {
-      std::memcpy(region + i, &brk_0, sizeof(u32));
+      std::memcpy(region + writable_region_diff + i, &brk_0, sizeof(u32));
     }
   }
 };

@@ -83,6 +83,9 @@ public:
     m_write_failed = false;
   }
 
+  ptrdiff_t GetWritableRegionDiff() { return 0; }
+  void SetWritableRegionDiff(ptrdiff_t diff) {}
+
   static s32 PoisonCallback(PowerPC::PowerPCState& ppc_state, const void* operands);
   static s32 PoisonCallback(std::ostream& stream, const void* operands);
 
