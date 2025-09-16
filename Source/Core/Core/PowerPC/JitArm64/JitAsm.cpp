@@ -699,7 +699,7 @@ void JitArm64::GenerateQuantizedLoads()
 
   Common::JitRegister::Register(start, GetCodePtr(), "JIT_QuantizedLoad");
 
-  paired_load_quantized = reinterpret_cast<const u8**>(AlignCode16());
+  paired_load_quantized = reinterpret_cast<const u8**>(AlignCode16() + GetWritableRegionDiff());
   ReserveCodeSpace(8 * sizeof(u8*));
 
   paired_load_quantized[0] = loadPairedFloatTwo;
@@ -711,7 +711,7 @@ void JitArm64::GenerateQuantizedLoads()
   paired_load_quantized[6] = loadPairedS8Two;
   paired_load_quantized[7] = loadPairedS16Two;
 
-  single_load_quantized = reinterpret_cast<const u8**>(AlignCode16());
+  single_load_quantized = reinterpret_cast<const u8**>(AlignCode16() + GetWritableRegionDiff());
   ReserveCodeSpace(8 * sizeof(u8*));
 
   single_load_quantized[0] = loadPairedFloatOne;
@@ -919,7 +919,7 @@ void JitArm64::GenerateQuantizedStores()
 
   Common::JitRegister::Register(start, GetCodePtr(), "JIT_QuantizedStore");
 
-  paired_store_quantized = reinterpret_cast<const u8**>(AlignCode16());
+  paired_store_quantized = reinterpret_cast<const u8**>(AlignCode16() + GetWritableRegionDiff());
   ReserveCodeSpace(8 * sizeof(u8*));
 
   paired_store_quantized[0] = storePairedFloat;
@@ -931,7 +931,7 @@ void JitArm64::GenerateQuantizedStores()
   paired_store_quantized[6] = storePairedS8;
   paired_store_quantized[7] = storePairedS16;
 
-  single_store_quantized = reinterpret_cast<const u8**>(AlignCode16());
+  single_store_quantized = reinterpret_cast<const u8**>(AlignCode16() + GetWritableRegionDiff());
   ReserveCodeSpace(8 * sizeof(u8*));
 
   single_store_quantized[0] = storeSingleFloat;
