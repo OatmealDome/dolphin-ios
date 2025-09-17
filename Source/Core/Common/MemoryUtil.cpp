@@ -61,15 +61,6 @@ void* AllocateExecutableMemory(size_t size)
   if (ptr == nullptr)
     PanicAlertFmt("Failed to allocate executable memory: {}", LastStrerrorString());
 
-#ifdef IPHONEOS
-  if (__builtin_available(iOS 26, *))
-  {
-    asm ("mov x0, %0\n"
-         "mov x1, %1\n"
-         "brk #0x69" :: "r" (ptr), "r" (size) : "x0", "x1");
-  }
-#endif
-
   return ptr;
 }
 // This function is used to provide a counter for the JITPageWrite*Execute*
