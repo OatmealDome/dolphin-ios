@@ -28,9 +28,6 @@ struct ScopedJITPageWriteAndNoExecute
   ScopedJITPageWriteAndNoExecute() { JITPageWriteEnableExecuteDisable(); }
   ~ScopedJITPageWriteAndNoExecute() { JITPageWriteDisableExecuteEnable(); }
 };
-#ifdef IPHONEOS
-void* MapWritableRegionForExecutableMemory(void* region, size_t size);
-#endif
 void* AllocateMemoryPages(size_t size);
 bool FreeMemoryPages(void* ptr, size_t size);
 void* AllocateAlignedMemory(size_t size, size_t alignment);

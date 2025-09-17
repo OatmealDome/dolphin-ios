@@ -27,9 +27,6 @@
 #else
 #include <sys/sysinfo.h>
 #endif
-#ifdef IPHONEOS
-#include <mach/mach.h>
-#endif
 #endif
 
 namespace Common
@@ -130,34 +127,6 @@ void JITPageWriteDisableExecuteEnable()
   }
 #endif
 }
-
-#ifdef IPHONEOS
-void* MapWritableRegionForExecutableMemory(void* region, size_t size)
-{
-  vm_address_t new_region;
-  vm_address_t target = reinterpret_cast<vm_address_t>(region);
-  vm_prot_t cur_protection = 0;
-  vm_prot_t max_protection = 0;
-
-  kern_return_t retval =
-      vm_remap(mach_task_self(), &new_region, size, 0, true, mach_task_self(), target, false,
-               &cur_protection, &max_protection, VM_INHERIT_DEFAULT);
-  if (retval != KERN_SUCCESS)
-  {
-    PanicAlertFmt("MapWritableRegionForExecutableMemory failed!\nvm_remap returned {0:#x}", retval);
-    return nullptr;
-  }
-
-  void* ptr = reinterpret_cast<void*>(new_region);
-
-  if (mprotect(ptr, size, PROT_READ | PROT_WRITE) != 0)
-  {
-    PanicAlertFmt("MapWritableRegionForExecutableMemory failed!\nmprotect: {}", LastStrerrorString());
-  }
-
-  return ptr;
-}
-#endif
 
 void* AllocateMemoryPages(size_t size)
 {
