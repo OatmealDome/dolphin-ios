@@ -505,6 +505,8 @@ if(IOS)
   find_library(GAMECONTROLLER_LIBRARY GameController)
 
   set(USE_SHARED_LIBPNG OFF)
+
+  add_subdirectory(Externals/lwmem)
 endif()
 
 if(ENABLE_HEADLESS)
