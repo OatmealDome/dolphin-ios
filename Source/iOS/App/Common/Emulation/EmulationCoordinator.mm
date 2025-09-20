@@ -5,12 +5,15 @@
 
 #import <MetalKit/MetalKit.h>
 
+#import "Common/MemoryUtil.h"
 #import "Common/WindowSystemInfo.h"
 
 #import "Core/Boot/Boot.h"
 #import "Core/BootManager.h"
 #import "Core/Config/GraphicsSettings.h"
+#import "Core/Config/MainSettings.h"
 #import "Core/Core.h"
+#import "Core/PowerPC/PowerPC.h"
 #import "Core/System.h"
 
 #import "VideoCommon/Present.h"
@@ -105,6 +108,10 @@
     auto& system = Core::System::GetInstance();
     
     Config::SetBase(Config::GFX_VERTEX_LOADER_TYPE, [JitManager shared].acquiredJit ? VertexLoaderType::Native : VertexLoaderType::Software);
+    
+    if (Config::Get(Config::MAIN_CPU_CORE) == PowerPC::CPUCore::JITARM64) {
+      Common::AllocateExecutableMemoryRegion();
+    }
     
     std::unique_ptr<BootParameters> boot = [bootParameter generateDolphinBootParameter];
     
