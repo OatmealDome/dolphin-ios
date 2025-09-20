@@ -3,7 +3,9 @@
 
 #include "Common/FilesystemWatcher.h"
 
+#ifndef IPHONEOS
 #include <wtr/watcher.hpp>
+#endif
 
 #include "Common/Logging/Log.h"
 #include "Common/StringUtil.h"
@@ -15,6 +17,7 @@ FilesystemWatcher::~FilesystemWatcher() = default;
 
 void FilesystemWatcher::Watch(const std::string& path)
 {
+#ifndef IPHONEOS
   const auto [iter, inserted] = m_watched_paths.try_emplace(path, nullptr);
   if (inserted)
   {
@@ -58,10 +61,13 @@ void FilesystemWatcher::Watch(const std::string& path)
       }
     });
   }
+#endif
 }
 
 void FilesystemWatcher::Unwatch(const std::string& path)
 {
+#ifndef IPHONEOS
   m_watched_paths.erase(path);
+#endif
 }
 }  // namespace Common

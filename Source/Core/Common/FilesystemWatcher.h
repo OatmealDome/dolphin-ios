@@ -42,6 +42,8 @@ private:
   // A file or folder was deleted in one of the watched paths
   virtual void PathDeleted(std::string_view path) {}
 
+#ifndef IPHONEOS
   std::map<std::string, std::unique_ptr<wtr::watch>> m_watched_paths;
+#endif
 };
 }  // namespace Common
