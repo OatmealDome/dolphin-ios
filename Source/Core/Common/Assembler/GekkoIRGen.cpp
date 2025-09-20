@@ -31,7 +31,7 @@ public:
   {
     m_active_block = &m_output_result.blocks.emplace_back(base_addr);
   }
-  virtual ~GekkoIRPlugin() = default;
+  ~GekkoIRPlugin() override = default;
 
   void OnDirectivePre(GekkoDirective directive) override;
   void OnDirectivePost(GekkoDirective directive) override;
@@ -356,14 +356,13 @@ void GekkoIRPlugin::OnCloseParen(ParenType type)
 void GekkoIRPlugin::OnLabelDecl(std::string_view name)
 {
   const std::string name_str(name);
-  if (m_symset.contains(name_str))
+  if (const bool inserted = m_symset.insert(name_str).second; !inserted)
   {
     m_owner->EmitErrorHere(fmt::format("Label/Constant {} is already defined", name));
     return;
   }
 
   m_labels[name_str] = m_active_block->BlockEndAddress();
-  m_symset.insert(name_str);
 }
 
 void GekkoIRPlugin::OnNumericLabelDecl(std::string_view, u32 num)
@@ -374,14 +373,13 @@ void GekkoIRPlugin::OnNumericLabelDecl(std::string_view, u32 num)
 void GekkoIRPlugin::OnVarDecl(std::string_view name)
 {
   const std::string name_str(name);
-  if (m_symset.contains(name_str))
+  if (const bool inserted = m_symset.insert(name_str).second; !inserted)
   {
     m_owner->EmitErrorHere(fmt::format("Label/Constant {} is already defined", name));
     return;
   }
 
   m_active_var = &m_constants[name_str];
-  m_symset.insert(name_str);
 }
 
 void GekkoIRPlugin::PostParseAction()
@@ -504,16 +502,15 @@ void GekkoIRPlugin::AddBinaryEvaluator(u32 (*evaluator)(u32, u32))
   m_fixup_stack.pop();
   std::function<u32()> lhs = std::move(m_fixup_stack.top());
   m_fixup_stack.pop();
-  m_fixup_stack.emplace([evaluator, lhs = std::move(lhs), rhs = std::move(rhs)]() {
-    return evaluator(lhs(), rhs());
-  });
+  m_fixup_stack.emplace(
+      [evaluator, lhs = std::move(lhs), rhs = std::move(rhs)] { return evaluator(lhs(), rhs()); });
 }
 
 void GekkoIRPlugin::AddUnaryEvaluator(u32 (*evaluator)(u32))
 {
   std::function<u32()> sub = std::move(m_fixup_stack.top());
   m_fixup_stack.pop();
-  m_fixup_stack.emplace([evaluator, sub = std::move(sub)]() { return evaluator(sub()); });
+  m_fixup_stack.emplace([evaluator, sub = std::move(sub)] { return evaluator(sub()); });
 }
 
 void GekkoIRPlugin::AddAbsoluteAddressConv()
@@ -579,7 +576,7 @@ void GekkoIRPlugin::AddNumLabelSymResolve(std::string_view sym, u32 num)
   // Searching forward only
   size_t search_start_idx = static_cast<size_t>(m_numlabs.size());
   m_fixup_stack.emplace(
-      [this, num, source_address, search_start_idx, err_on_fail = std::move(err_on_fail)]() {
+      [this, num, source_address, search_start_idx, err_on_fail = std::move(err_on_fail)] {
         for (size_t i = search_start_idx; i < m_numlabs.size(); i++)
         {
           if (num == m_numlabs[i].first)

@@ -165,15 +165,24 @@ void AchievementManager::LoadGame(const DiscIO::Volume* volume)
   {
     return;
   }
-  if (volume == nullptr)
-  {
-    WARN_LOG_FMT(ACHIEVEMENTS, "Called Load Game without a game.");
-    return;
-  }
   if (!m_client)
   {
     ERROR_LOG_FMT(ACHIEVEMENTS,
                   "Attempted to load game achievements without achievement client initialized.");
+    return;
+  }
+  if (volume == nullptr)
+  {
+    WARN_LOG_FMT(ACHIEVEMENTS, "Software format unsupported by AchievementManager.");
+    if (rc_client_get_game_info(m_client))
+    {
+      rc_client_begin_change_media_from_hash(m_client, "", ChangeMediaCallback, NULL);
+    }
+    else
+    {
+      rc_client_set_read_memory_function(m_client, MemoryVerifier);
+      rc_client_begin_load_game(m_client, "", LoadGameCallback, NULL);
+    }
     return;
   }
   rc_client_set_unofficial_enabled(m_client, Config::Get(Config::RA_UNOFFICIAL_ENABLED));
@@ -183,8 +192,8 @@ void AchievementManager::LoadGame(const DiscIO::Volume* volume)
     std::lock_guard lg{m_lock};
 #ifdef RC_CLIENT_SUPPORTS_RAINTEGRATION
     const auto& names = volume->GetLongNames();
-    if (names.contains(DiscIO::Language::English))
-      m_title_estimate = names.at(DiscIO::Language::English);
+    if (const auto it = names.find(DiscIO::Language::English); it != names.end())
+      m_title_estimate = it->second;
     else if (!names.empty())
       m_title_estimate = names.begin()->second;
     else
@@ -206,7 +215,7 @@ void AchievementManager::LoadGame(const DiscIO::Volume* volume)
   rc_hash_init_custom_filereader(&volume_reader);
   if (rc_client_get_game_info(m_client))
   {
-    rc_client_begin_change_media(m_client, "", NULL, 0, ChangeMediaCallback, NULL);
+    rc_client_begin_identify_and_change_media(m_client, "", NULL, 0, ChangeMediaCallback, NULL);
   }
   else
   {
@@ -329,11 +338,12 @@ void AchievementManager::DoFrame()
       if (!system)
         return;
       Core::CPUThreadGuard thread_guard(*system);
-      u32 mem2_size = system->GetMemory().GetExRamSizeReal();
+      u32 mem2_size = (system->IsWii()) ? system->GetMemory().GetExRamSizeReal() : 0;
       if (m_cloned_memory.size() != MEM1_SIZE + mem2_size)
         m_cloned_memory.resize(MEM1_SIZE + mem2_size);
       system->GetMemory().CopyFromEmu(m_cloned_memory.data(), 0, MEM1_SIZE);
-      system->GetMemory().CopyFromEmu(m_cloned_memory.data() + MEM1_SIZE, MEM2_START, mem2_size);
+      if (mem2_size > 0)
+        system->GetMemory().CopyFromEmu(m_cloned_memory.data() + MEM1_SIZE, MEM2_START, mem2_size);
     }
 #endif  // RC_CLIENT_SUPPORTS_RAINTEGRATION
     std::lock_guard lg{m_lock};
@@ -370,7 +380,7 @@ bool AchievementManager::CanPause()
 
 void AchievementManager::DoIdle()
 {
-  std::thread([this]() {
+  std::thread([this] {
     while (true)
     {
       Common::SleepCurrentThread(1000);
@@ -475,8 +485,16 @@ bool AchievementManager::CheckApprovedCode(const T& code, const std::string& gam
   for (const std::string& filename : ConfigLoaders::GetGameIniFilenames(game_id, revision))
   {
     auto config = filename.substr(0, filename.length() - 4);
-    if (m_ini_root->contains(config) && m_ini_root->get(config).contains(hash))
-      verified = true;
+    if (m_ini_root->contains(config))
+    {
+      auto ini_config = m_ini_root->get(config);
+      if (ini_config.is<picojson::object>() && ini_config.contains(code.name))
+      {
+        auto ini_code = ini_config.get(code.name);
+        if (ini_code.template is<std::string>())
+          verified = (ini_code.template get<std::string>() == hash);
+      }
+    }
   }
 
   if (!verified)
@@ -596,11 +614,6 @@ std::string_view AchievementManager::GetGameDisplayName() const
 rc_client_t* AchievementManager::GetClient()
 {
   return m_client;
-}
-
-rc_api_fetch_game_data_response_t* AchievementManager::GetGameData()
-{
-  return &m_game_data;
 }
 
 const AchievementManager::Badge& AchievementManager::GetGameBadge() const
@@ -736,12 +749,8 @@ void AchievementManager::CloseGame()
     if (Config::Get(Config::RA_DISCORD_PRESENCE_ENABLED))
       Discord::UpdateDiscordPresence();
     if (rc_client_get_game_info(m_client))
-    {
-      rc_api_destroy_fetch_game_data_response(&m_game_data);
       rc_client_unload_game(m_client);
-    }
     INFO_LOG_FMT(ACHIEVEMENTS, "Game closed.");
-    m_game_data = {};
   }
 
   m_update_callback(UpdatedItems{.all = true});
@@ -958,7 +967,7 @@ void AchievementManager::LeaderboardEntriesCallback(int result, const char* erro
                                                     rc_client_t* client, void* userdata)
 {
   u32* leaderboard_id = static_cast<u32*>(userdata);
-  Common::ScopeGuard on_end_scope([&]() { delete leaderboard_id; });
+  Common::ScopeGuard on_end_scope([&] { delete leaderboard_id; });
 
   if (result != RC_OK)
   {
@@ -995,36 +1004,33 @@ void AchievementManager::LoadGameCallback(int result, const char* error_message,
                     OSD::Color::RED);
     return;
   }
-  if (result == RC_NO_GAME_LOADED && instance.m_dll_found)
+
+  auto* game = rc_client_get_game_info(client);
+  if (result == RC_OK)
   {
-    // Allow developer tools for unidentified games
-    rc_client_set_read_memory_function(instance.m_client, MemoryPeeker);
-    instance.m_system.store(&Core::System::GetInstance(), std::memory_order_release);
-    WARN_LOG_FMT(ACHIEVEMENTS, "Unrecognized title ready for development.");
-    OSD::AddMessage("Unrecognized title loaded for development.", OSD::Duration::VERY_LONG,
-                    OSD::Color::YELLOW);
+    if (!game)
+    {
+      ERROR_LOG_FMT(ACHIEVEMENTS, "Failed to retrieve game information from client.");
+      OSD::AddMessage("Failed to load achievements for this title.", OSD::Duration::VERY_LONG,
+                      OSD::Color::RED);
+    }
+    else
+    {
+      INFO_LOG_FMT(ACHIEVEMENTS, "Loaded data for game ID {}.", game->id);
+      instance.m_display_welcome_message = true;
+    }
   }
-  if (result != RC_OK)
+  else
   {
     WARN_LOG_FMT(ACHIEVEMENTS, "Failed to load data for current game.");
     OSD::AddMessage("Achievements are not supported for this title.", OSD::Duration::VERY_LONG,
                     OSD::Color::RED);
-    return;
   }
 
-  auto* game = rc_client_get_game_info(client);
-  if (!game)
-  {
-    ERROR_LOG_FMT(ACHIEVEMENTS, "Failed to retrieve game information from client.");
-    OSD::AddMessage("Failed to load achievements for this title.", OSD::Duration::VERY_LONG,
-                    OSD::Color::RED);
-    instance.CloseGame();
+  if (game == nullptr)
     return;
-  }
-  INFO_LOG_FMT(ACHIEVEMENTS, "Loaded data for game ID {}.", game->id);
 
   rc_client_set_read_memory_function(instance.m_client, MemoryPeeker);
-  instance.m_display_welcome_message = true;
   instance.FetchGameBadges();
   instance.m_system.store(&Core::System::GetInstance(), std::memory_order_release);
   instance.m_update_callback({.all = true});
@@ -1377,7 +1383,7 @@ void AchievementManager::FetchBadge(AchievementManager::Badge* badge, u32 badge_
 
   m_image_queue.Push([this, badge, badge_type, function = std::move(function),
                       callback_data = std::move(callback_data)] {
-    Common::ScopeGuard on_end_scope([&]() {
+    Common::ScopeGuard on_end_scope([&] {
       if (m_display_welcome_message && badge_type == RC_IMAGE_TYPE_GAME)
         DisplayWelcomeMessage();
     });

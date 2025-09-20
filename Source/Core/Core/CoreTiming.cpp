@@ -105,10 +105,20 @@ void CoreTimingManager::Init()
 
   m_last_oc_factor = m_config_oc_factor;
   m_globals.last_OC_factor_inverted = m_config_oc_inv_factor;
+
+  m_on_state_changed_handle = Core::AddOnStateChangedCallback([this](Core::State state) {
+    if (state == Core::State::Running)
+    {
+      // We don't want Throttle to attempt catch-up for all the time lost while paused.
+      ResetThrottle(GetTicks());
+    }
+  });
 }
 
 void CoreTimingManager::Shutdown()
 {
+  Core::RemoveOnStateChangedCallback(&m_on_state_changed_handle);
+
   std::lock_guard lk(m_ts_write_lock);
   MoveEvents();
   ClearPendingEvents();
@@ -130,6 +140,8 @@ void CoreTimingManager::RefreshConfig()
   m_max_fallback = std::chrono::duration_cast<DT>(DT_ms(Config::Get(Config::MAIN_MAX_FALLBACK)));
 
   m_max_variance = std::chrono::duration_cast<DT>(DT_ms(Config::Get(Config::MAIN_TIMING_VARIANCE)));
+
+  m_correct_time_drift = Config::Get(Config::MAIN_CORRECT_TIME_DRIFT);
 
   if (AchievementManager::GetInstance().IsHardcoreModeActive() &&
       Config::Get(Config::MAIN_EMULATION_SPEED) < 1.0f &&
@@ -270,7 +282,7 @@ void CoreTimingManager::ScheduleEvent(s64 cycles_into_future, EventType* event_t
     }
 
     std::lock_guard lk(m_ts_write_lock);
-    m_ts_queue.Push(Event{m_globals.global_timer + cycles_into_future, 0, userdata, event_type});
+    m_ts_queue.Push(Event{cycles_into_future, 0, userdata, event_type});
   }
 }
 
@@ -307,10 +319,14 @@ void CoreTimingManager::ForceExceptionCheck(s64 cycles)
 
 void CoreTimingManager::MoveEvents()
 {
-  for (Event ev; m_ts_queue.Pop(ev);)
+  while (!m_ts_queue.Empty())
   {
+    auto& ev = m_event_queue.emplace_back(m_ts_queue.Front());
+    m_ts_queue.Pop();
+
     ev.fifo_order = m_event_fifo_id++;
-    m_event_queue.emplace_back(std::move(ev));
+    ev.time += m_globals.global_timer;
+
     std::ranges::push_heap(m_event_queue, std::ranges::greater{});
   }
 }
@@ -428,7 +444,9 @@ void CoreTimingManager::Throttle(const s64 target_cycle)
   const TimePoint time = Clock::now();
 
   const TimePoint min_target = time - m_max_fallback;
-  if (target_time < min_target)
+
+  // "Correct Time Drift" setting prevents timing relaxing.
+  if (!m_correct_time_drift && target_time < min_target)
   {
     // Core is running too slow.. i.e. CPU bottleneck.
     const DT adjustment = min_target - target_time;

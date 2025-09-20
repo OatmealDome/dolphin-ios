@@ -25,14 +25,13 @@ class USBHost : public EmulationDevice
 {
 public:
   USBHost(EmulationKernel& ios, const std::string& device_name);
-  virtual ~USBHost();
+  ~USBHost() override;
 
   std::optional<IPCReply> Open(const OpenRequest& request) override;
 
   void DoState(PointerWrap& p) override;
 
   void OnDevicesChanged(const USBScanner::DeviceMap& new_devices);
-  static std::string GetDeviceNameFromVIDPID(u16 vid, u16 pid);
 
 protected:
   enum class ChangeEvent

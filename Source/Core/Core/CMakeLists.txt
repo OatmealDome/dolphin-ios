@@ -553,6 +553,8 @@ add_library(core
   TimePlayed.h
   TitleDatabase.cpp
   TitleDatabase.h
+  USBUtils.cpp
+  USBUtils.h
   WC24PatchEngine.cpp
   WC24PatchEngine.h
   WiiRoot.cpp
@@ -697,6 +699,10 @@ if(TARGET LibUSB::LibUSB)
     IOS/USB/LibusbDevice.h
     IOS/USB/Bluetooth/BTReal.cpp
     IOS/USB/Bluetooth/BTReal.h
+    IOS/USB/Bluetooth/LibUSBBluetoothAdapter.cpp
+    IOS/USB/Bluetooth/LibUSBBluetoothAdapter.h
+    IOS/USB/Bluetooth/RealtekFirmwareLoader.cpp
+    IOS/USB/Bluetooth/RealtekFirmwareLoader.h
   )
 endif()
 

@@ -95,7 +95,7 @@ static size_t s_state_writes_in_queue;
 static std::condition_variable s_state_write_queue_is_empty;
 
 // Don't forget to increase this after doing changes on the savestate system
-constexpr u32 STATE_VERSION = 174;  // Last changed in PR 13342
+constexpr u32 STATE_VERSION = 175;  // Last changed in PR 13751
 
 // Increase this if the StateExtendedHeader definition changes
 constexpr u32 EXTENDED_HEADER_VERSION = 1;  // Last changed in PR 12217
@@ -281,7 +281,7 @@ static std::string SystemTimeAsDoubleToString(double time)
 {
   // revert adjustments from GetSystemTimeAsDouble() to get a normal Unix timestamp again
   const time_t seconds = static_cast<time_t>(time) + DOUBLE_TIME_OFFSET;
-  const auto local_time = Common::Localtime(seconds);
+  const auto local_time = Common::LocalTime(seconds);
   if (!local_time)
     return "";
 
@@ -456,8 +456,6 @@ static void CompressAndDumpState(Core::System& system, CompressAndDumpState_args
       Core::DisplayMessage(fmt::format("Saved State to {}", temp_path.filename().string()), 2000);
     }
   }
-
-  Host_UpdateMainFrame();
 }
 
 void SaveAs(Core::System& system, const std::string& filename, bool wait)
@@ -727,12 +725,12 @@ static bool ValidateHeaders(const StateHeader& header)
   std::string loaded_str = header.version_string;
   const u32 loaded_version = header.version_header.version_cookie - COOKIE_BASE;
 
-  if (s_old_versions.contains(loaded_version))
+  if (const auto it = s_old_versions.find(loaded_version); it != s_old_versions.end())
   {
     // This is a REALLY old version, before we started writing the version string to file
     success = false;
 
-    std::pair<std::string, std::string> version_range = s_old_versions.find(loaded_version)->second;
+    std::pair<std::string, std::string> version_range = it->second;
     std::string oldest_version = version_range.first;
     std::string newest_version = version_range.second;
 
@@ -765,7 +763,7 @@ static void LoadFileStateData(const std::string& filename, Common::UniqueBuffer<
     if (s_state_writes_in_queue != 0)
     {
       if (!s_state_write_queue_is_empty.wait_for(lk, std::chrono::seconds(3),
-                                                 []() { return s_state_writes_in_queue == 0; }))
+                                                 [] { return s_state_writes_in_queue == 0; }))
       {
         Core::DisplayMessage(
             "A previous state saving operation is still in progress, cancelling load.", 2000);

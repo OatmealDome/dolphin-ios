@@ -24,24 +24,22 @@
 #include "Common/Config/Config.h"
 #include "Common/FatFsUtil.h"
 #include "Common/FileUtil.h"
-#include "Common/StringUtil.h"
 
 #include "Core/Config/MainSettings.h"
 #include "Core/Config/SYSCONFSettings.h"
 #include "Core/ConfigManager.h"
 #include "Core/Core.h"
 #include "Core/System.h"
+#include "Core/USBUtils.h"
 
 #include "DolphinQt/QtUtils/DolphinFileDialog.h"
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
 #include "DolphinQt/QtUtils/NonDefaultQPushButton.h"
 #include "DolphinQt/QtUtils/ParallelProgressDialog.h"
-#include "DolphinQt/QtUtils/SetWindowDecorations.h"
+#include "DolphinQt/QtUtils/QtUtils.h"
 #include "DolphinQt/QtUtils/SignalBlocking.h"
 #include "DolphinQt/Settings.h"
 #include "DolphinQt/Settings/USBDeviceAddToWhitelistDialog.h"
-
-#include "UICommon/USBUtils.h"
 
 // SYSCONF uses 0 for bottom and 1 for top, but we place them in
 // the other order in the GUI so that Top will be above Bottom,
@@ -98,13 +96,11 @@ WiiPane::WiiPane(QWidget* parent) : QWidget(parent)
 
 void WiiPane::CreateLayout()
 {
-  m_main_layout = new QVBoxLayout;
+  m_main_layout = new QVBoxLayout{this};
   CreateMisc();
   CreateSDCard();
   CreateWhitelistedUSBPassthroughDevices();
   CreateWiiRemoteSettings();
-  m_main_layout->addStretch(1);
-  setLayout(m_main_layout);
 }
 
 void WiiPane::ConnectLayout()
@@ -282,11 +278,10 @@ void WiiPane::CreateSDCard()
       progress_dialog.GetRaw()->setWindowTitle(tr("Progress"));
       auto success = std::async(std::launch::async, [&] {
         const bool good = Common::SyncSDFolderToSDImage(
-            [&progress_dialog]() { return progress_dialog.WasCanceled(); }, false);
+            [&progress_dialog] { return progress_dialog.WasCanceled(); }, false);
         progress_dialog.Reset();
         return good;
       });
-      SetQWidgetWindowDecorations(progress_dialog.GetRaw());
       progress_dialog.GetRaw()->exec();
       if (!success.get())
         ModalMessageBox::warning(this, tr(Common::SD_PACK_TEXT), tr("Conversion failed."));
@@ -307,11 +302,10 @@ void WiiPane::CreateSDCard()
       progress_dialog.GetRaw()->setWindowTitle(tr("Progress"));
       auto success = std::async(std::launch::async, [&] {
         const bool good = Common::SyncSDImageToSDFolder(
-            [&progress_dialog]() { return progress_dialog.WasCanceled(); });
+            [&progress_dialog] { return progress_dialog.WasCanceled(); });
         progress_dialog.Reset();
         return good;
       });
-      SetQWidgetWindowDecorations(progress_dialog.GetRaw());
       progress_dialog.GetRaw()->exec();
       if (!success.get())
         ModalMessageBox::warning(this, tr(Common::SD_UNPACK_TEXT), tr("Conversion failed."));
@@ -324,7 +318,8 @@ void WiiPane::CreateSDCard()
 
 void WiiPane::CreateWhitelistedUSBPassthroughDevices()
 {
-  m_whitelist_usb_list = new QListWidget();
+  m_whitelist_usb_list = new QtUtils::MinimumSizeHintWidget<QListWidget>;
+
   m_whitelist_usb_add_button = new NonDefaultQPushButton(tr("Add..."));
   m_whitelist_usb_remove_button = new NonDefaultQPushButton(tr("Remove"));
 
@@ -468,20 +463,20 @@ void WiiPane::OnUSBWhitelistAddButton()
   USBDeviceAddToWhitelistDialog usb_whitelist_dialog(this);
   connect(&usb_whitelist_dialog, &USBDeviceAddToWhitelistDialog::accepted, this,
           &WiiPane::PopulateUSBPassthroughListWidget);
-  SetQWidgetWindowDecorations(&usb_whitelist_dialog);
   usb_whitelist_dialog.exec();
 }
 
 void WiiPane::OnUSBWhitelistRemoveButton()
 {
-  QString device = m_whitelist_usb_list->currentItem()->text().left(9);
-  QStringList split = device.split(QString::fromStdString(":"));
-  QString vid = QString(split[0]);
-  QString pid = QString(split[1]);
-  const u16 vid_u16 = static_cast<u16>(std::stoul(vid.toStdString(), nullptr, 16));
-  const u16 pid_u16 = static_cast<u16>(std::stoul(pid.toStdString(), nullptr, 16));
+  auto* current_item = m_whitelist_usb_list->currentItem();
+  if (!current_item)
+    return;
+
+  QVariant item_data = current_item->data(Qt::UserRole);
+  USBUtils::DeviceInfo device = item_data.value<USBUtils::DeviceInfo>();
+
   auto whitelist = Config::GetUSBDeviceWhitelist();
-  whitelist.erase({vid_u16, pid_u16});
+  whitelist.erase(device);
   Config::SetUSBDeviceWhitelist(whitelist);
   PopulateUSBPassthroughListWidget();
 }
@@ -490,11 +485,12 @@ void WiiPane::PopulateUSBPassthroughListWidget()
 {
   m_whitelist_usb_list->clear();
   auto whitelist = Config::GetUSBDeviceWhitelist();
-  for (const auto& device : whitelist)
+  for (auto& device : whitelist)
   {
-    QListWidgetItem* usb_lwi =
-        new QListWidgetItem(QString::fromStdString(USBUtils::GetDeviceName(device)));
-    m_whitelist_usb_list->addItem(usb_lwi);
+    auto* item =
+        new QListWidgetItem(QString::fromStdString(device.ToDisplayString()), m_whitelist_usb_list);
+    QVariant device_data = QVariant::fromValue(device);
+    item->setData(Qt::UserRole, device_data);
   }
   ValidateSelectionState();
 }

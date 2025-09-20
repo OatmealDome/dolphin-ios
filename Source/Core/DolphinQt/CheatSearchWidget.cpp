@@ -249,7 +249,7 @@ void CheatSearchWidget::CreateWidgets()
   checkboxes_layout->addWidget(m_autoupdate_current_values);
   checkboxes_layout->setStretchFactor(m_autoupdate_current_values, 2);
 
-  QVBoxLayout* layout = new QVBoxLayout();
+  auto* const layout = new QVBoxLayout{this};
   layout->addWidget(session_info_label);
   layout->addWidget(instructions_label);
   layout->addLayout(value_layout);
@@ -258,8 +258,6 @@ void CheatSearchWidget::CreateWidgets()
   layout->addWidget(m_info_label_1);
   layout->addWidget(m_info_label_2);
   layout->addWidget(m_address_table);
-
-  WrapInScrollArea(this, layout);
 }
 
 void CheatSearchWidget::ConnectWidgets()
@@ -533,7 +531,7 @@ void CheatSearchWidget::GenerateARCodes()
     return;
 
   bool had_success = false;
-  bool had_error = false;
+  bool had_multiple_errors = false;
   std::optional<Cheats::GenerateActionReplayCodeErrorCode> error_code;
 
   for (auto* const item : m_address_table->selectedItems())
@@ -548,23 +546,24 @@ void CheatSearchWidget::GenerateARCodes()
     else
     {
       const auto new_error_code = result.Error();
-      if (!had_error)
+      if (!error_code.has_value())
       {
         error_code = new_error_code;
       }
       else if (error_code != new_error_code)
       {
-        // If we have a different error code signify multiple errors with an empty optional<>.
-        error_code.reset();
+        had_multiple_errors = true;
       }
-
-      had_error = true;
     }
   }
 
-  if (had_error)
+  if (error_code.has_value())
   {
-    if (error_code.has_value())
+    if (had_multiple_errors)
+    {
+      m_info_label_1->setText(tr("Multiple errors occurred while generating AR codes."));
+    }
+    else
     {
       switch (*error_code)
       {
@@ -578,10 +577,6 @@ void CheatSearchWidget::GenerateARCodes()
         m_info_label_1->setText(tr("Internal error while generating AR code."));
         break;
       }
-    }
-    else
-    {
-      m_info_label_1->setText(tr("Multiple errors while generating AR codes."));
     }
   }
   else if (had_success)

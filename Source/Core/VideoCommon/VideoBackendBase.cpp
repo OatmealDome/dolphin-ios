@@ -41,6 +41,7 @@
 #endif
 
 #include "VideoCommon/AbstractGfx.h"
+#include "VideoCommon/Assets/CustomResourceManager.h"
 #include "VideoCommon/AsyncRequests.h"
 #include "VideoCommon/BPStructs.h"
 #include "VideoCommon/BoundingBox.h"
@@ -124,7 +125,7 @@ u32 VideoBackendBase::Video_GetQueryResult(PerfQueryType type)
 
 u16 VideoBackendBase::Video_GetBoundingBox(int index)
 {
-  DolphinAnalytics::Instance().ReportGameQuirk(GameQuirk::READS_BOUNDING_BOX);
+  DolphinAnalytics::Instance().ReportGameQuirk(GameQuirk::ReadsBoundingBox);
 
   if (!g_ActiveConfig.bBBoxEnable)
   {
@@ -341,12 +342,16 @@ bool VideoBackendBase::InitializeShared(std::unique_ptr<AbstractGfx> gfx,
   }
 
   g_shader_cache->InitializeShaderCache();
+  system.GetCustomResourceManager().Initialize();
 
   return true;
 }
 
 void VideoBackendBase::ShutdownShared()
 {
+  auto& system = Core::System::GetInstance();
+  system.GetCustomResourceManager().Shutdown();
+
   g_frame_dumper.reset();
   g_presenter.reset();
 
@@ -364,12 +369,10 @@ void VideoBackendBase::ShutdownShared()
   g_vertex_manager.reset();
   g_efb_interface.reset();
   g_widescreen.reset();
-  g_presenter.reset();
   g_gfx.reset();
 
   m_initialized = false;
 
-  auto& system = Core::System::GetInstance();
   VertexLoaderManager::Clear();
   system.GetFifo().Shutdown();
 }

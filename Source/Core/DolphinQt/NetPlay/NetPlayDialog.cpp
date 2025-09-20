@@ -48,13 +48,13 @@
 #include "Core/System.h"
 
 #include "DolphinQt/NetPlay/ChunkedProgressDialog.h"
+#include "DolphinQt/NetPlay/ClickBlurLabel.h"
 #include "DolphinQt/NetPlay/GameDigestDialog.h"
 #include "DolphinQt/NetPlay/GameListDialog.h"
 #include "DolphinQt/NetPlay/PadMappingDialog.h"
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
 #include "DolphinQt/QtUtils/QueueOnObject.h"
 #include "DolphinQt/QtUtils/RunOnObject.h"
-#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/Resources.h"
 #include "DolphinQt/Settings.h"
 #include "DolphinQt/Settings/GameCubePane.h"
@@ -97,8 +97,6 @@ NetPlayDialog::NetPlayDialog(const GameListModel& game_list_model,
     : QDialog(parent), m_game_list_model(game_list_model),
       m_start_game_callback(std::move(start_game_callback))
 {
-  setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
   setWindowTitle(tr("NetPlay"));
   setWindowIcon(Resources::GetAppIcon());
 
@@ -217,7 +215,6 @@ void NetPlayDialog::CreateMainLayout()
   m_game_digest_menu->addAction(tr("Other game..."), this, [this] {
     GameListDialog gld(m_game_list_model, this);
 
-    SetQWidgetWindowDecorations(&gld);
     if (gld.exec() != QDialog::Accepted)
       return;
     Settings::Instance().GetNetPlayServer()->ComputeGameDigest(
@@ -291,7 +288,7 @@ void NetPlayDialog::CreatePlayersLayout()
 {
   m_players_box = new QGroupBox(tr("Players"));
   m_room_box = new QComboBox;
-  m_hostcode_label = new QLabel;
+  m_hostcode_label = new ClickBlurLabel;
   m_hostcode_action_button = new QPushButton(tr("Copy"));
   m_players_list = new QTableWidget;
   m_kick_button = new QPushButton(tr("Kick Player"));
@@ -339,7 +336,6 @@ void NetPlayDialog::ConnectWidgets()
     Settings::Instance().GetNetPlayServer()->KickPlayer(id);
   });
   connect(m_assign_ports_button, &QPushButton::clicked, [this] {
-    SetQWidgetWindowDecorations(m_pad_mapping);
     m_pad_mapping->exec();
 
     Settings::Instance().GetNetPlayServer()->SetPadMapping(m_pad_mapping->GetGCPadArray());
@@ -385,7 +381,6 @@ void NetPlayDialog::ConnectWidgets()
 
   connect(m_game_button, &QPushButton::clicked, [this] {
     GameListDialog gld(m_game_list_model, this);
-    SetQWidgetWindowDecorations(&gld);
     if (gld.exec() == QDialog::Accepted)
     {
       Settings& settings = Settings::Instance();
@@ -576,7 +571,7 @@ void NetPlayDialog::UpdateDiscordPresence()
   if (m_player_count == 0 || m_current_game_name.empty())
     return;
 
-  const auto use_default = [this]() {
+  const auto use_default = [this] {
     Discord::UpdateDiscordPresence(m_player_count, Discord::SecretType::Empty, "",
                                    m_current_game_name);
   };
@@ -661,8 +656,9 @@ void NetPlayDialog::UpdateGUI()
 
     auto* name_item = new QTableWidgetItem(QString::fromStdString(p->name));
     name_item->setToolTip(name_item->text());
-    const auto& status_info = player_status.contains(p->game_status) ?
-                                  player_status.at(p->game_status) :
+    const auto it = player_status.find(p->game_status);
+    const auto& status_info = it != player_status.end() ?
+                                  it->second :
                                   std::make_pair(QStringLiteral("?"), QStringLiteral("?"));
     auto* status_item = new QTableWidgetItem(status_info.first);
     status_item->setToolTip(status_info.second);

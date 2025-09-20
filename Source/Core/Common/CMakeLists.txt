@@ -64,6 +64,8 @@ add_library(common
   FatFsUtil.h
   FileSearch.cpp
   FileSearch.h
+  FilesystemWatcher.cpp
+  FilesystemWatcher.h
   FileUtil.cpp
   FileUtil.h
   FixedSizeQueue.h
@@ -176,7 +178,7 @@ PUBLIC
   enet::enet
   fmt::fmt
   MbedTLS::mbedtls
-  minizip::minizip
+  minizip-ng::minizip-ng
   sfml-network
 
 PRIVATE
@@ -184,6 +186,7 @@ PRIVATE
   FatFs
   Iconv::Iconv
   spng::spng
+  watcher
   ${VTUNE_LIBRARIES}
 )
 
@@ -311,6 +314,8 @@ if(WIN32)
     CompatPatches.cpp
     GL/GLInterface/WGL.cpp
     GL/GLInterface/WGL.h
+    WindowsDevice.cpp
+    WindowsDevice.h
     WindowsRegistry.cpp
   )
 elseif(APPLE AND NOT IOS)

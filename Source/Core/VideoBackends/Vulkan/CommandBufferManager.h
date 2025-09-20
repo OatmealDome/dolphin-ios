@@ -4,20 +4,12 @@
 #pragma once
 
 #include <array>
-#include <cstddef>
-#include <deque>
 #include <functional>
-#include <map>
 #include <memory>
-#include <mutex>
-#include <thread>
-#include <utility>
 #include <vector>
 
 #include <Common/WorkQueueThread.h>
-#include "Common/BlockingLoop.h"
 #include "Common/Flag.h"
-#include "Common/Semaphore.h"
 
 #include "VideoBackends/Vulkan/Constants.h"
 
@@ -29,7 +21,7 @@ public:
   explicit CommandBufferManager(bool use_threaded_submission);
   ~CommandBufferManager();
 
-  bool Initialize();
+  bool Initialize(size_t swapchain_image_count);
 
   // These command buffers are allocated per-frame. They are valid until the command buffer
   // is submitted, after that you should call these functions again.
@@ -92,7 +84,6 @@ public:
   // Was the last present submitted to the queue a failure? If so, we must recreate our swapchain.
   bool CheckLastPresentFail() { return m_last_present_failed.TestAndClear(); }
   VkResult GetLastPresentResult() const { return m_last_present_result; }
-  bool CheckLastPresentDone() { return m_last_present_done.TestAndClear(); }
 
   // Schedule a vulkan resource for destruction later on. This will occur when the command buffer
   // is next re-used, and the GPU has finished working with the specified resource.
@@ -103,7 +94,7 @@ public:
   void DeferImageViewDestruction(VkImageView object);
 
 private:
-  bool CreateCommandBuffers();
+  bool CreateCommandBuffers(size_t swapchain_image_count);
   void DestroyCommandBuffers();
 
   bool CreateSubmitThread();
@@ -162,9 +153,8 @@ private:
     u32 command_buffer_index;
   };
   Common::WorkQueueThreadSP<PendingCommandBufferSubmit> m_submit_thread;
-  VkSemaphore m_present_semaphore = VK_NULL_HANDLE;
+  std::vector<VkSemaphore> m_present_semaphores = {};
   Common::Flag m_last_present_failed;
-  Common::Flag m_last_present_done;
   VkResult m_last_present_result = VK_SUCCESS;
   bool m_use_threaded_submission = false;
   u32 m_descriptor_set_count = DESCRIPTOR_SETS_PER_POOL;

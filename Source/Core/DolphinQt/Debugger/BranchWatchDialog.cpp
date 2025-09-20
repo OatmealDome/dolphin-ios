@@ -47,7 +47,6 @@
 #include "DolphinQt/Host.h"
 #include "DolphinQt/QtUtils/DolphinFileDialog.h"
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
-#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/Resources.h"
 #include "DolphinQt/Settings.h"
 
@@ -200,7 +199,7 @@ BranchWatchDialog::BranchWatchDialog(Core::System& system, Core::BranchWatch& br
     : QDialog(parent), m_system(system), m_branch_watch(branch_watch), m_code_widget(code_widget)
 {
   setWindowTitle(tr("Branch Watch Tool"));
-  setWindowFlags((windowFlags() | Qt::WindowMinMaxButtonsHint) & ~Qt::WindowContextHelpButtonHint);
+  setWindowFlags(windowFlags() | Qt::WindowMinMaxButtonsHint);
 
   // Branch Watch Table
   m_table_view = new QTableView(nullptr);

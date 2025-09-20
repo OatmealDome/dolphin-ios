@@ -29,7 +29,6 @@
 #include "DolphinQt/Config/ToolTipControls/ToolTipComboBox.h"
 #include "DolphinQt/Config/ToolTipControls/ToolTipPushButton.h"
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
-#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/QtUtils/SignalBlocking.h"
 #include "DolphinQt/Settings.h"
 
@@ -115,7 +114,7 @@ void GeneralPane::ConnectLayout()
   }
 
   // Advanced
-  connect(m_combobox_speedlimit, &QComboBox::currentIndexChanged, [this]() {
+  connect(m_combobox_speedlimit, &QComboBox::currentIndexChanged, [this] {
     Config::SetBaseOrCurrent(Config::MAIN_EMULATION_SPEED,
                              m_combobox_speedlimit->currentIndex() * 0.1f);
     Config::Save();
@@ -361,7 +360,6 @@ void GeneralPane::GenerateNewIdentity()
   message_box.setIcon(QMessageBox::Information);
   message_box.setWindowTitle(tr("Identity Generation"));
   message_box.setText(tr("New identity generated."));
-  SetQWidgetWindowDecorations(&message_box);
   message_box.exec();
 }
 #endif
@@ -373,7 +371,7 @@ void GeneralPane::AddDescriptions()
                  "burden by spreading Dolphin's heaviest load across two cores, which usually "
                  "improves performance. However, it can result in glitches and crashes."
                  "<br><br>This setting cannot be changed while emulation is active."
-                 "<br><br><dolphin_emphasis>If unsure, leave this checked.</dolphin_emphasis>");
+                 "<br><br><dolphin_emphasis>If unsure, leave this unchecked.</dolphin_emphasis>");
   static constexpr char TR_CHEATS_DESCRIPTION[] = QT_TR_NOOP(
       "Enables the use of AR and Gecko cheat codes which can be used to modify games' behavior. "
       "These codes can be configured with the Cheats Manager in the Tools menu."

@@ -5,6 +5,7 @@
 
 #include <optional>
 #include <string>
+
 #include "Common/CommonTypes.h"
 
 #ifndef _WIN32

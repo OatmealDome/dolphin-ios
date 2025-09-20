@@ -24,33 +24,25 @@
 #include "DolphinQt/Config/ConfigControls/ConfigInteger.h"
 #include "DolphinQt/Config/ConfigControls/ConfigRadio.h"
 #include "DolphinQt/Config/GameConfigWidget.h"
-#include "DolphinQt/Config/Graphics/GraphicsWindow.h"
+#include "DolphinQt/Config/Graphics/GraphicsPane.h"
 #include "DolphinQt/Config/ToolTipControls/ToolTipComboBox.h"
 #include "DolphinQt/QtUtils/ModalMessageBox.h"
-#include "DolphinQt/QtUtils/SetWindowDecorations.h"
 #include "DolphinQt/Settings.h"
 
 #include "VideoCommon/VideoBackendBase.h"
 #include "VideoCommon/VideoConfig.h"
 
-GeneralWidget::GeneralWidget(GraphicsWindow* parent)
+GeneralWidget::GeneralWidget(GraphicsPane* gfx_pane) : m_game_layer{gfx_pane->GetConfigLayer()}
 {
   CreateWidgets();
   ConnectWidgets();
   AddDescriptions();
 
-  connect(parent, &GraphicsWindow::BackendChanged, this, &GeneralWidget::OnBackendChanged);
+  connect(gfx_pane, &GraphicsPane::BackendChanged, this, &GeneralWidget::OnBackendChanged);
   connect(&Settings::Instance(), &Settings::EmulationStateChanged, this, [this](Core::State state) {
     OnEmulationStateChanged(state != Core::State::Uninitialized);
   });
   OnEmulationStateChanged(!Core::IsUninitialized(Core::System::GetInstance()));
-}
-
-GeneralWidget::GeneralWidget(GameConfigWidget* parent, Config::Layer* layer) : m_game_layer(layer)
-{
-  CreateWidgets();
-  ConnectWidgets();
-  AddDescriptions();
 }
 
 void GeneralWidget::CreateWidgets()
@@ -199,7 +191,6 @@ void GeneralWidget::BackendWarning()
       confirm_sw.setWindowTitle(tr("Confirm backend change"));
       confirm_sw.setText(tr(warningMessage->c_str()));
 
-      SetQWidgetWindowDecorations(&confirm_sw);
       if (confirm_sw.exec() != QMessageBox::Yes)
       {
         m_backend_combo->setCurrentIndex(m_previous_backend);

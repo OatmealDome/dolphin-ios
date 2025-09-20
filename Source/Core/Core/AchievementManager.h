@@ -89,8 +89,8 @@ public:
   static constexpr std::string_view BLUE = "#0B71C1";
   static constexpr std::string_view APPROVED_LIST_FILENAME = "ApprovedInis.json";
   static const inline Common::SHA1::Digest APPROVED_LIST_HASH = {
-      0xE1, 0x29, 0xD1, 0x33, 0x4D, 0xF2, 0xF8, 0xA8, 0x4E, 0xCA,
-      0xF6, 0x87, 0xE6, 0xEC, 0xEC, 0xB3, 0x18, 0x69, 0x34, 0x45};
+      0x29, 0x4C, 0xBD, 0x08, 0xF0, 0x5F, 0x47, 0x94, 0xC9, 0xB8,
+      0x05, 0x2E, 0x5C, 0xD6, 0x14, 0x48, 0xFA, 0x07, 0xE8, 0x53};
 
   struct LeaderboardEntry
   {
@@ -160,7 +160,6 @@ public:
   const Badge& GetPlayerBadge() const;
   std::string_view GetGameDisplayName() const;
   rc_client_t* GetClient();
-  rc_api_fetch_game_data_response_t* GetGameData();
   const Badge& GetGameBadge() const;
   const Badge& GetAchievementBadge(AchievementId id, bool locked) const;
   const LeaderboardStatus* GetLeaderboardInfo(AchievementId leaderboard_id);
@@ -278,9 +277,6 @@ private:
   std::atomic_bool m_background_execution_allowed = true;
   Badge m_player_badge;
   Hash m_game_hash{};
-  u32 m_game_id = 0;
-  rc_api_fetch_game_data_response_t m_game_data{};
-  bool m_is_game_loaded = false;
   Badge m_game_badge;
   bool m_display_welcome_message = false;
   std::unordered_map<AchievementId, Badge> m_unlocked_badges;
