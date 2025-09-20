@@ -27,6 +27,11 @@
 #else
 #include <sys/sysinfo.h>
 #endif
+#ifdef IPHONEOS
+#include <lwmem/lwmem.h>
+#include <mach/mach.h>
+#include <unistd.h>
+#endif
 #endif
 
 namespace Common
@@ -34,13 +39,15 @@ namespace Common
 // This is purposely not a full wrapper for virtualalloc/mmap, but it
 // provides exactly the primitive operations that Dolphin needs.
 
+#ifndef IPHONEOS
+
 void* AllocateExecutableMemory(size_t size)
 {
 #if defined(_WIN32)
   void* ptr = VirtualAlloc(nullptr, size, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 #else
   int map_flags = MAP_ANON | MAP_PRIVATE;
-#if defined(__APPLE__) && !defined(IPHONEOS)
+#if defined(__APPLE__)
   map_flags |= MAP_JIT;
 #endif
 
@@ -60,6 +67,111 @@ void* AllocateExecutableMemory(size_t size)
 
   return ptr;
 }
+
+#else
+
+// 512 MiB... hopefully this is enough, because we can't allocate more if we need it
+constexpr size_t EXECUTABLE_REGION_SIZE = 536870912;
+
+static u8* g_rx_region = nullptr;
+static ptrdiff_t g_rw_region_diff = 0;
+
+void AllocateExecutableMemoryRegion()
+{
+  if (g_rx_region)
+  {
+    return;
+  }
+
+  const size_t size = EXECUTABLE_REGION_SIZE;
+  u8* rx_ptr = static_cast<u8*>(mmap(nullptr, size, PROT_READ | PROT_EXEC, MAP_ANON | MAP_PRIVATE, -1, 0));
+
+  if (!rx_ptr)
+  {
+    return;
+  }
+
+  vm_address_t rw_region;
+  vm_address_t target = reinterpret_cast<vm_address_t>(rx_ptr);
+  vm_prot_t cur_protection = 0;
+  vm_prot_t max_protection = 0;
+
+  kern_return_t retval =
+      vm_remap(mach_task_self(), &rw_region, size, 0, true, mach_task_self(), target, false,
+               &cur_protection, &max_protection, VM_INHERIT_DEFAULT);
+  if (retval != KERN_SUCCESS)
+  {
+    return;
+  }
+
+  u8* rw_ptr = reinterpret_cast<u8*>(rw_region);
+
+  if (mprotect(rw_ptr, size, PROT_READ | PROT_WRITE) != 0)
+  {
+    return;
+  }
+
+  lwmem_region_t regions[] =
+  {
+    { (void*)rw_ptr, size },
+    { NULL, 0 }
+  };
+
+  size_t lwret = lwmem_assignmem(regions);
+  if (lwret == 0)
+  {
+    return;
+  }
+  
+  if (__builtin_available(iOS 26, *))
+  {
+    asm ("mov x0, %0\n"
+         "mov x1, %1\n"
+         "brk #0x69" :: "r" (rx_ptr), "r" (size) : "x0", "x1");
+  }
+
+  g_rx_region = rx_ptr;
+  g_rw_region_diff = rw_ptr - rx_ptr;
+}
+
+ptrdiff_t GetWritableRegionDiff()
+{
+  return g_rw_region_diff;
+}
+
+void* AllocateExecutableMemory(size_t size)
+{
+  if (g_rx_region == nullptr)
+  {
+    PanicAlertFmt("AllocateExecutableMemory failed!\ng_rx_region is nullptr");
+    return nullptr;
+  }
+
+  const size_t pagesize = sysconf(_SC_PAGESIZE);
+
+  void* raw = lwmem_malloc(size + pagesize - 1 + sizeof(void*));
+
+  if (!raw)
+  {
+    PanicAlertFmt("AllocateExecutableMemory failed!\nlwmem_malloc returned nullptr");
+    return nullptr;
+  }
+
+  uintptr_t raw_addr = (uintptr_t)raw + sizeof(void*);
+  uintptr_t aligned = (raw_addr + pagesize - 1) & ~(pagesize - 1);
+
+  ((void**)aligned)[-1] = raw;
+
+  return (u8*)aligned - g_rw_region_diff;
+}
+
+void FreeExecutableMemory(void* ptr)
+{
+  lwmem_free(((void**)ptr)[-1]);
+}
+
+#endif
+
 // This function is used to provide a counter for the JITPageWrite*Execute*
 // functions to enable nesting. The static variable is wrapped in a a function
 // to allow those functions to be called inside of the constructor of a static

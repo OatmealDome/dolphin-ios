@@ -62,8 +62,7 @@ public:
     T::SetCodePtr(region, region + size);
   
 #ifdef IPHONEOS
-    u8* writable_region = static_cast<u8*>(Common::MapWritableRegionForExecutableMemory(region, size));
-    writable_region_diff = writable_region - region;
+    writable_region_diff = Common::GetWritableRegionDiff();
 #endif
 
     T::SetWritableRegionDiff(writable_region_diff);
@@ -81,9 +80,11 @@ public:
   void FreeCodeSpace()
   {
     ASSERT(!m_is_child);
-    if (writable_region_diff != 0)
-      Common::FreeMemoryPages(region + writable_region_diff, total_region_size);
+#ifdef IPHONEOS
+    Common::FreeExecutableMemory(region);
+#else
     Common::FreeMemoryPages(region, total_region_size);
+#endif
     region = nullptr;
     region_size = 0;
     total_region_size = 0;

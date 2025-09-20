@@ -400,3 +400,7 @@ if(MSVC)
   # Add precompiled header
   target_link_libraries(common PRIVATE use_pch)
 endif()
+
+if(IOS)
+  target_link_libraries(common PRIVATE lwmem)
+endif()

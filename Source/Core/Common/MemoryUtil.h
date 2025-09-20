@@ -12,6 +12,10 @@ namespace Common
 {
 void* AllocateExecutableMemory(size_t size);
 
+void AllocateExecutableMemoryRegion();
+ptrdiff_t GetWritableRegionDiff();
+void FreeExecutableMemory(void* ptr);
+
 // These two functions control the executable/writable state of the W^X memory
 // allocations. More detailed documentation about them is in the .cpp file.
 // In general where applicable the ScopedJITPageWriteAndNoExecute wrapper
