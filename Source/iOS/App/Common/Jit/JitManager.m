@@ -51,7 +51,12 @@ typedef NS_ENUM(NSInteger, DOLJitType) {
       NSDictionary* environment = [[NSProcessInfo processInfo] environment];
       
       if ([environment objectForKey:@"XCODE"] != nil) {
-        self.acquisitionError = @"JIT cannot be enabled while running within Xcode on iOS 26.";
+        static dispatch_once_t onceToken;
+
+        dispatch_once(&onceToken, ^{
+          self.acquisitionError = @"JIT cannot be enabled while running within Xcode on iOS 26.";
+        });
+        
         return;
       }
     }
