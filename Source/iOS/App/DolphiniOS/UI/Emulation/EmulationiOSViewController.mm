@@ -365,7 +365,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     irMode = (TCWiiTouchIRMode)Config::Get(Config::MAIN_TOUCH_PAD_IR_MODE);
     
     ControllerEmu::ControlGroup* group = Wiimote::GetWiimoteGroup(0, WiimoteEmu::WiimoteGroup::IMUPoint);
-    group->enabled = irMode == TCWiiTouchIRModeNone;
+    group->enabled.SetValue(irMode == TCWiiTouchIRModeNone);
   }
   
   for (int i = 0; i < [self.touchPads count]; i++) {
