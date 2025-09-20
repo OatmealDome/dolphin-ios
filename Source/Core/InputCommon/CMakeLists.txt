@@ -146,6 +146,9 @@ elseif(IOS)
     ${COREHAPTICS_LIBRARY}
     ${GAMECONTROLLER_LIBRARY}
   )
+  target_compile_options(inputcommon PRIVATE
+    -fobjc-arc
+  )
 elseif(X11_FOUND)
   target_include_directories(inputcommon PUBLIC ${X11_INPUT_INCLUDE_DIRS})
   target_sources(inputcommon PRIVATE
