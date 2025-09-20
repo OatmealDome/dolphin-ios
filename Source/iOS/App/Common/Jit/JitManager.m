@@ -47,6 +47,15 @@ typedef NS_ENUM(NSInteger, DOLJitType) {
 
 - (void)recheckIfJitIsAcquired {
   if (_jitType == DOLJitTypeDebugger) {
+    if (@available(iOS 26, *)) {
+      NSDictionary* environment = [[NSProcessInfo processInfo] environment];
+      
+      if ([environment objectForKey:@"XCODE"] != nil) {
+        self.acquisitionError = @"JIT cannot be enabled while running within Xcode on iOS 26.";
+        return;
+      }
+    }
+    
     self.acquiredJit = [self checkIfProcessIsDebugged];
   } else if (_jitType == DOLJitTypeUnrestricted) {
     self.acquiredJit = true;
