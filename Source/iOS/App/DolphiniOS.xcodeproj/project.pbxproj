@@ -179,6 +179,8 @@
 		B9EC28382D21D429000FAE09 /* ControllersTouchscreenViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EC28372D21D429000FAE09 /* ControllersTouchscreenViewController.mm */; };
 		B9EC283A2D21DA56000FAE09 /* TCWiiTouchIRMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EC28392D21DA56000FAE09 /* TCWiiTouchIRMode.swift */; };
 		B9EC283D2D21DE2F000FAE09 /* ControllersTouchscreenIRModeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9EC283C2D21DE2F000FAE09 /* ControllersTouchscreenIRModeViewController.mm */; };
+		B9EFF8532E7F56790029F016 /* AppIcon_Glass.icon in Resources */ = {isa = PBXBuildFile; fileRef = B9EFF8522E7F56790029F016 /* AppIcon_Glass.icon */; };
+		B9EFF8572E7F5E540029F016 /* AppIconBeta_Glass.icon in Resources */ = {isa = PBXBuildFile; fileRef = B9EFF8562E7F5E540029F016 /* AppIconBeta_Glass.icon */; };
 		B9F41C3C2DC53699006D2434 /* cacert.pem in Resources */ = {isa = PBXBuildFile; fileRef = B9F41C3B2DC53699006D2434 /* cacert.pem */; };
 		B9FCB7B9289670830020E233 /* JitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7B8289670830020E233 /* JitManager.m */; };
 		B9FCB7BC289672830020E233 /* JitManager+Debugger.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7BB289672830020E233 /* JitManager+Debugger.m */; };
@@ -549,6 +551,8 @@
 		B9EC28392D21DA56000FAE09 /* TCWiiTouchIRMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCWiiTouchIRMode.swift; sourceTree = "<group>"; };
 		B9EC283B2D21DE2F000FAE09 /* ControllersTouchscreenIRModeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControllersTouchscreenIRModeViewController.h; sourceTree = "<group>"; };
 		B9EC283C2D21DE2F000FAE09 /* ControllersTouchscreenIRModeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllersTouchscreenIRModeViewController.mm; sourceTree = "<group>"; };
+		B9EFF8522E7F56790029F016 /* AppIcon_Glass.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_Glass.icon; sourceTree = "<group>"; };
+		B9EFF8562E7F5E540029F016 /* AppIconBeta_Glass.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIconBeta_Glass.icon; sourceTree = "<group>"; };
 		B9F41C3B2DC53699006D2434 /* cacert.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = cacert.pem; sourceTree = "<group>"; };
 		B9FCB7B7289670830020E233 /* JitManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JitManager.h; sourceTree = "<group>"; };
 		B9FCB7B8289670830020E233 /* JitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JitManager.m; sourceTree = "<group>"; };
@@ -1613,6 +1617,8 @@
 				B900A7C427F4D4DE000361DD /* UI */,
 				B9DC3E0227EFBD2D0084DAA4 /* Main.storyboard */,
 				B9DC3E0527EFBD2F0084DAA4 /* Assets.xcassets */,
+				B9EFF8522E7F56790029F016 /* AppIcon_Glass.icon */,
+				B9EFF8562E7F5E540029F016 /* AppIconBeta_Glass.icon */,
 				B9FCB7E72898FB620020E233 /* DolphiniOS.entitlements */,
 				B9DC3E0727EFBD2F0084DAA4 /* LaunchScreen.storyboard */,
 				B9DC3E0A27EFBD2F0084DAA4 /* Info.plist */,
@@ -1840,8 +1846,10 @@
 				B99137B52882A58000588446 /* SoftwareList.storyboard in Resources */,
 				B9B2C623288DB62D00CB6569 /* TCSidewaysWiiPad.xib in Resources */,
 				B9B1483829642C75002C4BE7 /* UpdateRequiredNotice.xib in Resources */,
+				B9EFF8572E7F5E540029F016 /* AppIconBeta_Glass.icon in Resources */,
 				B950CFBD296208D400197719 /* UpdateNotice.xib in Resources */,
 				B97E4B5A29657BCB00B3EE9C /* GoogleService-Info.plist in Resources */,
+				B9EFF8532E7F56790029F016 /* AppIcon_Glass.icon in Resources */,
 				B9447B042841901200BC9110 /* TCGameCubePad.xib in Resources */,
 				B9447B09284192FA00BC9110 /* DolphinAssets.xcassets in Resources */,
 				B97C49AF297E6CFF00E30877 /* AboutSettings.storyboard in Resources */,

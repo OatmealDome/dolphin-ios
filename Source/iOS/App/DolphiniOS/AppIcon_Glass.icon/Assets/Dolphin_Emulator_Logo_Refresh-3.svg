@@ -1,0 +1,16 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1025 572" width="1025" height="572">
+	<title>Dolphin_Emulator_Logo_Refresh</title>
+	<defs>
+		<linearGradient id="g1" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(-696,-696.01,539.261,-539.253,921.62,672.33)">
+			<stop offset="0" stop-color="#3217ff"/>
+			<stop offset=".26" stop-color="#2b38ff"/>
+			<stop offset=".5" stop-color="#2455ff"/>
+			<stop offset=".75" stop-color="#1d74ff"/>
+			<stop offset="1" stop-color="#1792ff"/>
+		</linearGradient>
+	</defs>
+	<style>
+		.s0 { fill: url(#g1) } 
+	</style>
+	<path id="accent" fill-rule="evenodd" class="s0" d="m1022.6 571.2c-1.3 0.2-38.6-170-134.5-264.6-78.3-77.1-255.3-227.7-485.3-211.3-180 12.8-155.3 99.2-145.4 95.1 28.2-11.8 160.5-49.3 301.5 29.5 124.8 69.8 172.5 186.7 165.1 195.8-1.6 1.9-45.2-108.8-244.5-151-154.5-32.7-316.6-5.9-385.7 21.5-28 11.1-73.8 41.5-82.7 11.1-8.3-28.6 33.5-51.6 38.4-70.5 6.5-24.7 2-147.1 179.9-199.5 69.1-20.4 206.6-40 356.7 6.1 7.4 1.6 16.4 0.9 22.1-2.6 12.9-8 39-25 91.2-29.6 100.2-8.9 129 34.5 124.1 42.9-2.4 4.2-80.1-20.5-96.5 28-6.2 18.1 6.7 28.3 15.9 34.6 32.7 21.3 63.4 45.4 91.8 72.1 66.6 62.2 112.8 129 150.5 219.7 29.9 72.1 43.5 171.8 37.4 172.7z"/>
+</svg>
