@@ -68,6 +68,12 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   }
   
   _stateSlot = Config::GetBase(Config::MAIN_SELECTED_STATE_SLOT);
+  
+  // On iPadOS 26, the pull down button in the upper left can be blocked by window controls.
+  if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+    self.pullDownLeftConstraint.active = false;
+    self.pullDownCenterConstraint.active = true;
+  }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
