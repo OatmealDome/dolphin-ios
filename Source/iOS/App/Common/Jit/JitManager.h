@@ -10,6 +10,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, assign) bool acquiredJit;
 @property (nonatomic, nullable) NSString* acquisitionError;
 
+@property (readonly, assign) bool deviceHasTxm;
+
 + (JitManager*)shared;
 
 - (void)recheckIfJitIsAcquired;

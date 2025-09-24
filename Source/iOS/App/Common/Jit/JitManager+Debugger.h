@@ -8,6 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface JitManager (Debugger)
 
 - (bool)checkIfProcessIsDebugged;
+- (bool)checkIfDeviceUsesTXM;
 
 @end
 
