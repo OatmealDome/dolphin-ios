@@ -13,6 +13,7 @@ namespace Common
 void* AllocateExecutableMemory(size_t size);
 
 void AllocateExecutableMemoryRegion();
+void PrepareExecutableMemoryRegionOnTxmDevice();
 ptrdiff_t GetWritableRegionDiff();
 void FreeExecutableMemory(void* ptr);
 

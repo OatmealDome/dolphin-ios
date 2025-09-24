@@ -111,6 +111,10 @@
     
     if (Config::Get(Config::MAIN_CPU_CORE) == PowerPC::CPUCore::JITARM64) {
       Common::AllocateExecutableMemoryRegion();
+      
+      if ([JitManager shared].deviceHasTxm) {
+        Common::PrepareExecutableMemoryRegionOnTxmDevice();
+      }
     }
     
     std::unique_ptr<BootParameters> boot = [bootParameter generateDolphinBootParameter];
