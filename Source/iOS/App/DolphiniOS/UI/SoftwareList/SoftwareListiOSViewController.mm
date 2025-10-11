@@ -56,8 +56,8 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
   
   NSArray<UIMenuElement*>* wiiActions;
   
-  UIMenuElement* wiiNandElement = [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Manage NAND") children:@[
-    [UIAction actionWithTitle:DOLCoreLocalizedString(@"Import BootMii NAND Backup...") image:[UIImage systemImageNamed:@"internaldrive"] identifier:nil handler:^(UIAction*) {
+  UIMenuElement* wiiNandElement = [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Manage NAND") image:[UIImage systemImageNamed:@"wrench.and.screwdriver"] identifier:nil options:0 children:@[
+    [UIAction actionWithTitle:DOLCoreLocalizedString(@"Import BootMii NAND Backup...") image:[UIImage systemImageNamed:@"square.and.arrow.down"] identifier:nil handler:^(UIAction*) {
       [self openDocumentPickerWithContentTypes:@[
         [UTType typeWithFilenameExtension:@"bin"]
       ] pickerType:DOLSoftwareListDocumentPickerTypeImportNAND];
@@ -80,7 +80,7 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
     std::string version = DiscIO::GetSysMenuVersionString(tmd.GetTitleVersion(), tmd.IsvWii());
     
     wiiActions = @[
-      [UIAction actionWithTitle:[NSString stringWithFormat:loadFormat, CppToFoundationString(version)] image:[UIImage systemImageNamed:@"tray.and.arrow.down"] identifier:nil handler:^(UIAction*) {
+      [UIAction actionWithTitle:[NSString stringWithFormat:loadFormat, CppToFoundationString(version)] image:[UIImage systemImageNamed:@"power.circle"] identifier:nil handler:^(UIAction*) {
         self->_bootParameter = [[EmulationBootParameter alloc] init];
         self->_bootParameter.bootType = EmulationBootTypeSystemMenu;
         
@@ -134,7 +134,7 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
       [self openDocumentPickerWithSoftwareContentTypesAndPickerType:DOLSoftwareListDocumentPickerTypeOpenExternal];
     }],
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"GameCube") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[
-      [UIMenu menuWithTitle:@"Load GameCube Main Menu" children:iplActions]
+      [UIMenu menuWithTitle:@"Load GameCube Main Menu" image:[UIImage systemImageNamed:@"power.circle"] identifier:nil options:0 children:iplActions]
     ]],
     [UIMenu menuWithTitle:DOLCoreLocalizedString(@"Wii") image:nil identifier:nil options:UIMenuOptionsDisplayInline children:wiiActions]
   ]];
