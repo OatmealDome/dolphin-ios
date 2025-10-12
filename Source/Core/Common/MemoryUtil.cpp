@@ -89,6 +89,7 @@ void AllocateExecutableMemoryRegion()
 
   if (!rx_ptr)
   {
+    PanicAlertFmt("AllocateExecutableMemoryRegion failed! mmap returned {}", LastStrerrorString());
     return;
   }
 
@@ -102,6 +103,7 @@ void AllocateExecutableMemoryRegion()
                &cur_protection, &max_protection, VM_INHERIT_DEFAULT);
   if (retval != KERN_SUCCESS)
   {
+    PanicAlertFmt("AllocateExecutableMemoryRegion failed! vm_map returned {0:#x}", retval);
     return;
   }
 
@@ -109,6 +111,7 @@ void AllocateExecutableMemoryRegion()
 
   if (mprotect(rw_ptr, size, PROT_READ | PROT_WRITE) != 0)
   {
+    PanicAlertFmt("AllocateExecutableMemoryRegion failed! mprotect returned {}", LastStrerrorString());
     return;
   }
 
@@ -121,6 +124,7 @@ void AllocateExecutableMemoryRegion()
   size_t lwret = lwmem_assignmem(regions);
   if (lwret == 0)
   {
+    PanicAlertFmt("AllocateExecutableMemoryRegion failed!\nlwmem_assignmem failed");
     return;
   }
 
