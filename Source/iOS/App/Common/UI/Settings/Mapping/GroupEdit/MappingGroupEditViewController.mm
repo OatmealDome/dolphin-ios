@@ -91,21 +91,21 @@ typedef NS_ENUM(NSInteger, DOLMappingGroupEditSection) {
 }
 
 - (void)updateControlCellBasedOnEnabled:(MappingGroupEditControlCell*)cell {
-  bool enabled = self.controlGroup->enabled.GetValue();
+  bool enabled = !self.controlGroup->HasEnabledSetting() || self.controlGroup->enabled_setting->GetValue();
   
   cell.selectionStyle = enabled ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
   cell.nameLabel.textColor = enabled ? [UIColor labelColor] : [UIColor systemGrayColor];
 }
 
 - (void)updateDoubleCellBasedOnEnabled:(MappingGroupEditDoubleCell*)cell {
-  bool enabled = self.controlGroup->enabled.GetValue();
+  bool enabled = !self.controlGroup->HasEnabledSetting() || self.controlGroup->enabled_setting->GetValue();
   
   cell.nameLabel.textColor = enabled ? [UIColor labelColor] : [UIColor systemGrayColor];
   cell.textField.enabled = enabled;
 }
 
 - (void)updateBoolCellBasedOnEnabled:(MappingGroupEditBoolCell*)cell {
-  bool enabled = self.controlGroup->enabled.GetValue();
+  bool enabled = !self.controlGroup->HasEnabledSetting() || self.controlGroup->enabled_setting->GetValue();
   
   cell.nameLabel.textColor = enabled ? [UIColor labelColor] : [UIColor systemGrayColor];
   cell.enabledSwitch.enabled = enabled;
