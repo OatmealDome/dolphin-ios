@@ -340,8 +340,8 @@
 /* Class = "UILabel"; text = "Enable Screen Saver"; ObjectID = "xZc-n0-nMx"; */
 "xZc-n0-nMx.text" = "Enable Screen Saver";
 
-/* Class = "UILabel"; text = "Enable Emulated Memory SIze Override"; ObjectID = "y8z-i5-E2j"; */
-"y8z-i5-E2j.text" = "Enable Emulated Memory SIze Override";
+/* Class = "UILabel"; text = "Enable Emulated Memory Size Override"; ObjectID = "y8z-i5-E2j"; */
+"y8z-i5-E2j.text" = "Enable Emulated Memory Size Override";
 
 /* Class = "UILabel"; text = "0%"; ObjectID = "yFY-lJ-VTt"; */
 "yFY-lJ-VTt.text" = "0%";
