@@ -107,14 +107,19 @@
     
     auto& system = Core::System::GetInstance();
     
-    Config::SetBase(Config::GFX_VERTEX_LOADER_TYPE, [JitManager shared].acquiredJit ? VertexLoaderType::Native : VertexLoaderType::Software);
-    
-    if (Config::Get(Config::MAIN_CPU_CORE) == PowerPC::CPUCore::JITARM64) {
+    if ([JitManager shared].acquiredJit)
+    {
+      Config::SetBase(Config::GFX_VERTEX_LOADER_TYPE, VertexLoaderType::Native);
+      
       Common::AllocateExecutableMemoryRegion();
       
       if ([JitManager shared].deviceHasTxm) {
         Common::PrepareExecutableMemoryRegionOnTxmDevice();
       }
+    }
+    else
+    {
+      Config::SetBase(Config::GFX_VERTEX_LOADER_TYPE, VertexLoaderType::Software);
     }
     
     std::unique_ptr<BootParameters> boot = [bootParameter generateDolphinBootParameter];
