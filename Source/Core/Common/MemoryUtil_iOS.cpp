@@ -4,31 +4,59 @@
 #include "Common/MemoryUtil.h"
 
 #include "Common/CommonTypes.h"
+#include "Common/MsgHandler.h"
 
 namespace Common
 {
+static JitType g_jit_type = JitType::LuckTXM;
+
+void SetJitType(JitType type)
+{
+  g_jit_type = type;
+}
+
 void* AllocateExecutableMemory(size_t size)
 {
-  return AllocateExecutableMemory_LuckTXM(size);
+  if (g_jit_type == JitType::LuckTXM)
+  {
+    return AllocateExecutableMemory_LuckTXM(size);
+  }
+
+  PanicAlertFmt("AllocateExecutableMemory failed!\nUnknown JIT type set");
+  return nullptr;
 }
 
 void FreeExecutableMemory(void* ptr)
 {
-  FreeExecutableMemory_LuckTXM(ptr);
+  if (g_jit_type == JitType::LuckTXM)
+  {
+    FreeExecutableMemory_LuckTXM(ptr);
+  }
 }
 
 void AllocateExecutableMemoryRegion()
 {
-  AllocateExecutableMemoryRegion_LuckTXM();
+  if (g_jit_type == JitType::LuckTXM)
+  {
+    AllocateExecutableMemoryRegion_LuckTXM();
+  }
 }
 
 void PrepareExecutableMemoryRegionOnTxmDevice()
 {
-  PrepareExecutableMemoryRegionOnTxmDevice_LuckTXM();
+  if (g_jit_type == JitType::LuckTXM)
+  {
+    PrepareExecutableMemoryRegionOnTxmDevice_LuckTXM();
+  }
 }
 
 ptrdiff_t GetWritableRegionDiff()
 {
-  return GetWritableRegionDiff_LuckTXM();
+  if (g_jit_type == JitType::LuckTXM)
+  {
+    return GetWritableRegionDiff_LuckTXM();
+  }
+
+  return 0;
 }
 }  // namespace Common

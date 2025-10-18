@@ -43,6 +43,14 @@ size_t MemPhysical();
 
 #if defined(IPHONEOS) || TARGET_OS_IOS
 
+enum class JitType
+{
+  Legacy,
+  LuckTXM
+};
+
+void SetJitType(JitType type);
+
 void FreeExecutableMemory(void* ptr);
 
 void* AllocateExecutableMemory(size_t size);
