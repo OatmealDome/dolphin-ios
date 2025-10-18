@@ -44,7 +44,7 @@ void AllocateExecutableMemoryRegion_LuckTXM()
        "mov x1, %1\n"
        "brk #0x69" :: "r" (rx_ptr), "r" (size) : "x0", "x1");
 
-  vm_address_t rw_region;
+  vm_address_t rw_region = 0;
   vm_address_t target = reinterpret_cast<vm_address_t>(rx_ptr);
   vm_prot_t cur_protection = 0;
   vm_prot_t max_protection = 0;
