@@ -1304,6 +1304,33 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="p7v-ep-ieI">
+                                        <rect key="frame" x="16" y="184.5" width="343" height="43"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="p7v-ep-ieI" id="NZ8-7H-tb9">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Emulate Skylander Portal" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="v5h-zA-gqE">
+                                                    <rect key="frame" x="16" y="11" width="254" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uH9-jL-XQx" customClass="DOLUIKitSwitch">
+                                                    <rect key="frame" x="278" y="6.5" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="v5h-zA-gqE" secondAttribute="bottom" id="Ajz-Cr-swd"/>
+                                                <constraint firstItem="v5h-zA-gqE" firstAttribute="leading" secondItem="NZ8-7H-tb9" secondAttribute="leadingMargin" id="CEd-3K-tmN"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="uH9-jL-XQx" secondAttribute="trailing" id="E9p-hN-lxq"/>
+                                                <constraint firstItem="uH9-jL-XQx" firstAttribute="leading" secondItem="v5h-zA-gqE" secondAttribute="trailing" constant="8" id="UyS-YN-9RO"/>
+                                                <constraint firstItem="uH9-jL-XQx" firstAttribute="centerY" secondItem="NZ8-7H-tb9" secondAttribute="centerY" id="nKl-JC-6mi"/>
+                                                <constraint firstItem="v5h-zA-gqE" firstAttribute="top" secondItem="NZ8-7H-tb9" secondAttribute="topMargin" id="zWB-QD-fio"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="WXM-st-LOo">
                                         <rect key="frame" x="16" y="261.5" width="343" height="51.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
@@ -1686,6 +1713,7 @@
                         <outlet property="sdSyncSwitch" destination="DEh-h8-mWH" id="pvN-GA-358"/>
                         <outlet property="sdWritesSwitch" destination="uTC-4u-yOw" id="lYW-e9-rNa"/>
                         <outlet property="sensorBarLabel" destination="BEG-O8-spe" id="rx9-n7-56x"/>
+                        <outlet property="skylanderPortalSwitch" destination="uH9-jL-XQx" id="oNp-Tj-foi"/>
                         <outlet property="speakerVolumeSlider" destination="jHu-fD-96p" id="sur-b7-qbH"/>
                         <outlet property="usbKeyboardSwitch" destination="bxN-mP-YRX" id="gZ4-LN-Jqn"/>
                         <outlet property="wc24Switch" destination="LYq-Lv-JLH" id="j16-c3-jrw"/>

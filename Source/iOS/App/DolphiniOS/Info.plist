@@ -50,6 +50,20 @@
 				<string>me.oatmealdome.dolphinios.wii-software</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
+			<key>CFBundleTypeName</key>
+			<string>Skylander Dumps</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>me.oatmealdome.dolphinios.skylander-dumps</string>
+			</array>
+		</dict>
 	</array>
 	<key>DOLBuildSource</key>
 	<string>$(DOL_BUILD_SOURCE)</string>
@@ -181,6 +195,25 @@
 					<string>ciso</string>
 					<string>wbfs</string>
 					<string>wad</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Skylander Dump Files</string>
+			<key>UTTypeIconFiles</key>
+			<array/>
+			<key>UTTypeIdentifier</key>
+			<string>me.oatmealdome.dolphinios.skylander-dumps</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sky</string>
 				</array>
 			</dict>
 		</dict>

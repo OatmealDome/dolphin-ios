@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel* aspectRatioLabel;
 @property (weak, nonatomic) IBOutlet UILabel* languageLabel;
 @property (weak, nonatomic) IBOutlet UILabel* audioLabel;
+@property (weak, nonatomic) IBOutlet DOLSwitch* skylanderPortalSwitch;
 @property (weak, nonatomic) IBOutlet DOLSwitch* sdInsertedSwitch;
 @property (weak, nonatomic) IBOutlet DOLSwitch* sdWritesSwitch;
 @property (weak, nonatomic) IBOutlet DOLSwitch* sdSyncSwitch;
