@@ -239,6 +239,8 @@ elseif(IOS)
   target_sources(common PRIVATE
     Logging/ConsoleListenerNix.cpp
     MemArenaDarwin.cpp
+    MemoryUtil_iOS_LuckTXM.cpp
+    MemoryUtil_iOS.cpp
   )
 elseif(APPLE)
   target_sources(common PRIVATE

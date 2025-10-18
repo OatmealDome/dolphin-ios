@@ -8,14 +8,13 @@
 
 #include "Common/CommonTypes.h"
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 namespace Common
 {
 void* AllocateExecutableMemory(size_t size);
-
-void AllocateExecutableMemoryRegion();
-void PrepareExecutableMemoryRegionOnTxmDevice();
-ptrdiff_t GetWritableRegionDiff();
-void FreeExecutableMemory(void* ptr);
 
 // These two functions control the executable/writable state of the W^X memory
 // allocations. More detailed documentation about them is in the .cpp file.
@@ -41,5 +40,24 @@ bool ReadProtectMemory(void* ptr, size_t size);
 bool WriteProtectMemory(void* ptr, size_t size, bool executable = false);
 bool UnWriteProtectMemory(void* ptr, size_t size, bool allowExecute = false);
 size_t MemPhysical();
+
+#if defined(IPHONEOS) || TARGET_OS_IOS
+
+void FreeExecutableMemory(void* ptr);
+
+void* AllocateExecutableMemory(size_t size);
+void FreeExecutableMemory(void* ptr);
+void AllocateExecutableMemoryRegion();
+void PrepareExecutableMemoryRegionOnTxmDevice();
+ptrdiff_t GetWritableRegionDiff();
+
+// LuckTXM
+void* AllocateExecutableMemory_LuckTXM(size_t size);
+void FreeExecutableMemory_LuckTXM(void* ptr);
+void AllocateExecutableMemoryRegion_LuckTXM();
+void PrepareExecutableMemoryRegionOnTxmDevice_LuckTXM();
+ptrdiff_t GetWritableRegionDiff_LuckTXM();
+
+#endif
 
 }  // namespace Common
