@@ -1,3 +1,6 @@
+// Copyright 2025 DolphiniOS Project
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 #include "Common/MemoryUtil.h"
 
 #include <stdio.h>
