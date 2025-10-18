@@ -42,7 +42,7 @@ void AllocateExecutableMemoryRegion_LuckTXM()
 
   asm ("mov x0, %0\n"
        "mov x1, %1\n"
-       "brk #0x69" :: "r" (g_rx_region), "r" (size) : "x0", "x1");
+       "brk #0x69" :: "r" (rx_ptr), "r" (size) : "x0", "x1");
 
   vm_address_t rw_region;
   vm_address_t target = reinterpret_cast<vm_address_t>(rx_ptr);
