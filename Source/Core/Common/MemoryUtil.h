@@ -68,10 +68,8 @@ enum class JitType
 
 void SetJitType(JitType type);
 
-void FreeExecutableMemory(void* ptr);
-
 void* AllocateExecutableMemory(size_t size);
-void FreeExecutableMemory(void* ptr);
+void FreeExecutableMemory(void* ptr, size_t size);
 void AllocateExecutableMemoryRegion();
 ptrdiff_t GetWritableRegionDiff();
 
@@ -80,6 +78,12 @@ void* AllocateExecutableMemory_LuckTXM(size_t size);
 void FreeExecutableMemory_LuckTXM(void* ptr);
 void AllocateExecutableMemoryRegion_LuckTXM();
 ptrdiff_t GetWritableRegionDiff_LuckTXM();
+
+// Legacy
+void* AllocateExecutableMemory_Legacy(size_t size);
+void FreeExecutableMemory_Legacy(void* ptr, size_t size);
+void JITPageWriteEnableExecuteDisable_Legacy(void* ptr);
+void JITPageWriteDisableExecuteEnable_Legacy(void* ptr);
 
 #endif
 

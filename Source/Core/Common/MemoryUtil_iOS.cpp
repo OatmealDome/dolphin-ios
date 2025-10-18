@@ -26,7 +26,7 @@ void* AllocateExecutableMemory(size_t size)
   return nullptr;
 }
 
-void FreeExecutableMemory(void* ptr)
+void FreeExecutableMemory(void* ptr, size_t size)
 {
   if (g_jit_type == JitType::LuckTXM)
   {

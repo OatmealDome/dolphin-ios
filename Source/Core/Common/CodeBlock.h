@@ -81,7 +81,7 @@ public:
   {
     ASSERT(!m_is_child);
 #ifdef IPHONEOS
-    Common::FreeExecutableMemory(region);
+    Common::FreeExecutableMemory(region, total_region_size);
 #else
     Common::FreeMemoryPages(region, total_region_size);
 #endif
