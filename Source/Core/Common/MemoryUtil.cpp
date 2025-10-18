@@ -29,10 +29,18 @@
 #endif
 #endif
 
+#ifdef IPHONEOS
+#include "Common/JITMemoryTracker.h"
+#endif
+
 namespace Common
 {
 // This is purposely not a full wrapper for virtualalloc/mmap, but it
 // provides exactly the primitive operations that Dolphin needs.
+
+#ifdef IPHONEOS
+static JITMemoryTracker g_jit_memory_tracker;
+#endif
 
 #ifndef IPHONEOS
 
@@ -59,6 +67,10 @@ void* AllocateExecutableMemory(size_t size)
 
   if (ptr == nullptr)
     PanicAlertFmt("Failed to allocate executable memory: {}", LastStrerrorString());
+
+#ifdef IPHONEOS
+  g_jit_memory_tracker.RegisterJITRegion(ptr, size);
+#endif
 
   return ptr;
 }
@@ -182,6 +194,10 @@ bool FreeMemoryPages(void* ptr, size_t size)
       PanicAlertFmt("FreeMemoryPages failed!\nmunmap: {}", LastStrerrorString());
       return false;
     }
+#endif
+
+#ifdef IPHONEOS
+    g_jit_memory_tracker.UnregisterJITRegion(ptr);
 #endif
   }
   return true;
