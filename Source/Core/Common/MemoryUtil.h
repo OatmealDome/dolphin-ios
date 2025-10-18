@@ -21,6 +21,7 @@ void* AllocateExecutableMemory(size_t size);
 // In general where applicable the ScopedJITPageWriteAndNoExecute wrapper
 // should be used to prevent bugs from not pairing up the calls properly.
 
+#ifndef IPHONEOS
 // Allows a thread to write to executable memory, but not execute the data.
 void JITPageWriteEnableExecuteDisable();
 // Allows a thread to execute memory allocated for execution, but not write to it.
@@ -29,9 +30,25 @@ void JITPageWriteDisableExecuteEnable();
 // write to executable memory but not execute it.
 struct ScopedJITPageWriteAndNoExecute
 {
-  ScopedJITPageWriteAndNoExecute() { JITPageWriteEnableExecuteDisable(); }
+  ScopedJITPageWriteAndNoExecute(u8*) { JITPageWriteEnableExecuteDisable(); }
   ~ScopedJITPageWriteAndNoExecute() { JITPageWriteDisableExecuteEnable(); }
 };
+#else
+void JITPageWriteEnableExecuteDisable(void* ptr);
+void JITPageWriteDisableExecuteEnable(void* ptr);
+
+struct ScopedJITPageWriteAndNoExecute
+{
+  ScopedJITPageWriteAndNoExecute(u8* region)
+  {
+    ptr = reinterpret_cast<void*>(region);
+    JITPageWriteEnableExecuteDisable(ptr);
+  }
+  ~ScopedJITPageWriteAndNoExecute() { JITPageWriteDisableExecuteEnable(ptr); }
+
+  void* ptr;
+};
+#endif
 void* AllocateMemoryPages(size_t size);
 bool FreeMemoryPages(void* ptr, size_t size);
 void* AllocateAlignedMemory(size_t size, size_t alignment);

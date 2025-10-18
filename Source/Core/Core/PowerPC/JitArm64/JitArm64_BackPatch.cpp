@@ -332,7 +332,7 @@ bool JitArm64::HandleFastmemFault(SContext* ctx)
   if (pc < fastmem_area_start)
     return false;
 
-  const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes;
+  const Common::ScopedJITPageWriteAndNoExecute enable_jit_page_writes(GetRegionPtr());
   ARM64XEmitter emitter(const_cast<u8*>(fastmem_area_start), const_cast<u8*>(fastmem_area_end));
 
   emitter.SetWritableRegionDiff(GetWritableRegionDiff());

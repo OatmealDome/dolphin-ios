@@ -75,8 +75,6 @@ void* AllocateExecutableMemory(size_t size)
   return ptr;
 }
 
-#endif
-
 // This function is used to provide a counter for the JITPageWrite*Execute*
 // functions to enable nesting. The static variable is wrapped in a a function
 // to allow those functions to be called inside of the constructor of a static
@@ -144,6 +142,17 @@ void JITPageWriteDisableExecuteEnable()
   }
 #endif
 }
+#else
+void JITPageWriteEnableExecuteDisable(void* ptr)
+{
+  g_jit_memory_tracker.JITRegionWriteEnableExecuteDisable(ptr);
+}
+
+void JITPageWriteDisableExecuteEnable(void* ptr)
+{
+  g_jit_memory_tracker.JITRegionWriteDisableExecuteEnable(ptr);
+}
+#endif
 
 void* AllocateMemoryPages(size_t size)
 {
