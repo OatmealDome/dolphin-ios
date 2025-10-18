@@ -102,6 +102,7 @@ public:
   {
     return ptr >= region && ptr < (region + total_region_size);
   }
+  u8* GetRegionPtr() { return region; }
   void WriteProtect(bool allow_execute)
   {
     Common::WriteProtectMemory(region, region_size, allow_execute);
