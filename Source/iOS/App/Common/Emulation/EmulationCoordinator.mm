@@ -112,10 +112,6 @@
       Config::SetBase(Config::GFX_VERTEX_LOADER_TYPE, VertexLoaderType::Native);
       
       Common::AllocateExecutableMemoryRegion();
-      
-      if ([JitManager shared].deviceHasTxm) {
-        Common::PrepareExecutableMemoryRegionOnTxmDevice();
-      }
     }
     else
     {

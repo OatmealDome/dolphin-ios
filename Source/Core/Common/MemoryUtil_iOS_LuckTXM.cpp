@@ -20,7 +20,6 @@
 constexpr size_t EXECUTABLE_REGION_SIZE = 536870912;
 
 static u8* g_rx_region = nullptr;
-static bool g_rx_region_prepared = false;
 static ptrdiff_t g_rw_region_diff = 0;
 
 namespace Common
@@ -40,6 +39,10 @@ void AllocateExecutableMemoryRegion_LuckTXM()
     PanicAlertFmt("AllocateExecutableMemoryRegion failed! mmap returned {}", LastStrerrorString());
     return;
   }
+
+  asm ("mov x0, %0\n"
+       "mov x1, %1\n"
+       "brk #0x69" :: "r" (g_rx_region), "r" (size) : "x0", "x1");
 
   vm_address_t rw_region;
   vm_address_t target = reinterpret_cast<vm_address_t>(rx_ptr);
@@ -78,22 +81,6 @@ void AllocateExecutableMemoryRegion_LuckTXM()
 
   g_rx_region = rx_ptr;
   g_rw_region_diff = rw_ptr - rx_ptr;
-}
-
-void PrepareExecutableMemoryRegionOnTxmDevice_LuckTXM()
-{
-  if (g_rx_region_prepared)
-  {
-    return;
-  }
-
-  const size_t size = EXECUTABLE_REGION_SIZE;
-
-  asm ("mov x0, %0\n"
-       "mov x1, %1\n"
-       "brk #0x69" :: "r" (g_rx_region), "r" (size) : "x0", "x1");
-  
-  g_rx_region_prepared = true;
 }
 
 ptrdiff_t GetWritableRegionDiff_LuckTXM()

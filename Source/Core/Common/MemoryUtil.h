@@ -56,14 +56,12 @@ void FreeExecutableMemory(void* ptr);
 void* AllocateExecutableMemory(size_t size);
 void FreeExecutableMemory(void* ptr);
 void AllocateExecutableMemoryRegion();
-void PrepareExecutableMemoryRegionOnTxmDevice();
 ptrdiff_t GetWritableRegionDiff();
 
 // LuckTXM
 void* AllocateExecutableMemory_LuckTXM(size_t size);
 void FreeExecutableMemory_LuckTXM(void* ptr);
 void AllocateExecutableMemoryRegion_LuckTXM();
-void PrepareExecutableMemoryRegionOnTxmDevice_LuckTXM();
 ptrdiff_t GetWritableRegionDiff_LuckTXM();
 
 #endif

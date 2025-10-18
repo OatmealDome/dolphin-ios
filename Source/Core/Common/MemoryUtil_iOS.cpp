@@ -42,14 +42,6 @@ void AllocateExecutableMemoryRegion()
   }
 }
 
-void PrepareExecutableMemoryRegionOnTxmDevice()
-{
-  if (g_jit_type == JitType::LuckTXM)
-  {
-    PrepareExecutableMemoryRegionOnTxmDevice_LuckTXM();
-  }
-}
-
 ptrdiff_t GetWritableRegionDiff()
 {
   if (g_jit_type == JitType::LuckTXM)
