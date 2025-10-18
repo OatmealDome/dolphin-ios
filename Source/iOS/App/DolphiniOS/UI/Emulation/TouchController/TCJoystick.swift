@@ -77,7 +77,7 @@ class TCJoystick: UIView
       let yDiff = point.y - joystickCenter.y
       
       // Calculate distance
-      var distance = sqrt(pow(xDiff, 2) + pow(yDiff, 2))
+      let distance = sqrt(pow(xDiff, 2) + pow(yDiff, 2))
       let maxDistance = self.frame.width / 3
 
       if (distance > maxDistance)

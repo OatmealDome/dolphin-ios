@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (GameFileCacheManager*)sharedManager;
 
 - (void)rescan;
-- (void)rescanAndFetchMetadataWithCompletionHandler:(nullable void (^)())completion_handler;
+- (void)rescanAndFetchMetadataWithCompletionHandler:(nullable void (^)(void))completion_handler;
 
 - (NSArray<GameFilePtrWrapper*>*)getGames;
 
