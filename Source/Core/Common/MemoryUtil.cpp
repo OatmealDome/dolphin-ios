@@ -29,18 +29,10 @@
 #endif
 #endif
 
-#ifdef IPHONEOS
-#include "Common/JITMemoryTracker.h"
-#endif
-
 namespace Common
 {
 // This is purposely not a full wrapper for virtualalloc/mmap, but it
 // provides exactly the primitive operations that Dolphin needs.
-
-#ifdef IPHONEOS
-static JITMemoryTracker g_jit_memory_tracker;
-#endif
 
 #ifndef IPHONEOS
 
@@ -53,28 +45,16 @@ void* AllocateExecutableMemory(size_t size)
 #if defined(__APPLE__)
   map_flags |= MAP_JIT;
 #endif
-
-  int map_prot = PROT_READ | PROT_EXEC;
-#ifndef IPHONEOS
-  // The default protection is r-x on non-iOS platforms.
-  map_prot |= PROT_WRITE;
-#endif
-
-  void* ptr = mmap(nullptr, size, map_prot, map_flags, -1, 0);
+  void* ptr = mmap(nullptr, size, PROT_READ | PROT_WRITE | PROT_EXEC, map_flags, -1, 0);
   if (ptr == MAP_FAILED)
     ptr = nullptr;
 #endif
 
   if (ptr == nullptr)
-    PanicAlertFmt("Failed to allocate executable memory: {}", LastStrerrorString());
-
-#ifdef IPHONEOS
-  g_jit_memory_tracker.RegisterJITRegion(ptr, size);
-#endif
+    PanicAlertFmt("Failed to allocate executable memory");
 
   return ptr;
 }
-
 // This function is used to provide a counter for the JITPageWrite*Execute*
 // functions to enable nesting. The static variable is wrapped in a a function
 // to allow those functions to be called inside of the constructor of a static
@@ -142,16 +122,7 @@ void JITPageWriteDisableExecuteEnable()
   }
 #endif
 }
-#else
-void JITPageWriteEnableExecuteDisable(void* ptr)
-{
-  g_jit_memory_tracker.JITRegionWriteEnableExecuteDisable(ptr);
-}
 
-void JITPageWriteDisableExecuteEnable(void* ptr)
-{
-  g_jit_memory_tracker.JITRegionWriteDisableExecuteEnable(ptr);
-}
 #endif
 
 void* AllocateMemoryPages(size_t size)
@@ -203,10 +174,6 @@ bool FreeMemoryPages(void* ptr, size_t size)
       PanicAlertFmt("FreeMemoryPages failed!\nmunmap: {}", LastStrerrorString());
       return false;
     }
-#endif
-
-#ifdef IPHONEOS
-    g_jit_memory_tracker.UnregisterJITRegion(ptr);
 #endif
   }
   return true;

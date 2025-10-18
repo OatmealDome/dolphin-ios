@@ -22,6 +22,11 @@ void* AllocateExecutableMemory(size_t size)
     return AllocateExecutableMemory_LuckTXM(size);
   }
 
+  if (g_jit_type == JitType::Legacy)
+  {
+    return AllocateExecutableMemory_Legacy(size);
+  }
+
   PanicAlertFmt("AllocateExecutableMemory failed!\nUnknown JIT type set");
   return nullptr;
 }
@@ -31,6 +36,10 @@ void FreeExecutableMemory(void* ptr, size_t size)
   if (g_jit_type == JitType::LuckTXM)
   {
     FreeExecutableMemory_LuckTXM(ptr);
+  }
+  else if (g_jit_type == JitType::Legacy)
+  {
+    FreeExecutableMemory_Legacy(ptr, size);
   }
 }
 
@@ -50,5 +59,21 @@ ptrdiff_t GetWritableRegionDiff()
   }
 
   return 0;
+}
+
+void JITPageWriteEnableExecuteDisable(void* ptr)
+{
+  if (g_jit_type == JitType::Legacy)
+  {
+    JITPageWriteEnableExecuteDisable_Legacy(ptr);
+  }
+}
+
+void JITPageWriteDisableExecuteEnable(void* ptr)
+{
+  if (g_jit_type == JitType::Legacy)
+  {
+    JITPageWriteDisableExecuteEnable_Legacy(ptr);
+  }
 }
 }  // namespace Common

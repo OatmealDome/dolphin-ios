@@ -241,6 +241,7 @@ elseif(IOS)
     JITMemoryTracker.h
     JITMemoryTracker.cpp
     MemArenaDarwin.cpp
+    MemoryUtil_iOS_Legacy.cpp
     MemoryUtil_iOS_LuckTXM.cpp
     MemoryUtil_iOS.cpp
   )
