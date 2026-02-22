@@ -279,6 +279,36 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     ]]];
   }
 
+  NSInteger currentOrientationLock = [[NSUserDefaults standardUserDefaults] integerForKey:@"DOLOrientationLock"];
+
+  UIAction* orientationAutoAction = [UIAction actionWithTitle:@"Auto" image:[UIImage systemImageNamed:@"rotate.3d"] identifier:nil handler:^(UIAction*) {
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"DOLOrientationLock"];
+    [self applyOrientationLock];
+    [self recreateMenu];
+    [self.navigationController setNavigationBarHidden:true animated:true];
+  }];
+  orientationAutoAction.state = currentOrientationLock == 0 ? UIMenuElementStateOn : UIMenuElementStateOff;
+
+  UIAction* orientationPortraitAction = [UIAction actionWithTitle:@"Portrait" image:[UIImage systemImageNamed:@"rectangle.portrait"] identifier:nil handler:^(UIAction*) {
+    [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"DOLOrientationLock"];
+    [self applyOrientationLock];
+    [self recreateMenu];
+    [self.navigationController setNavigationBarHidden:true animated:true];
+  }];
+  orientationPortraitAction.state = currentOrientationLock == 1 ? UIMenuElementStateOn : UIMenuElementStateOff;
+
+  UIAction* orientationLandscapeAction = [UIAction actionWithTitle:@"Landscape" image:[UIImage systemImageNamed:@"rectangle"] identifier:nil handler:^(UIAction*) {
+    [[NSUserDefaults standardUserDefaults] setInteger:2 forKey:@"DOLOrientationLock"];
+    [self applyOrientationLock];
+    [self recreateMenu];
+    [self.navigationController setNavigationBarHidden:true animated:true];
+  }];
+  orientationLandscapeAction.state = currentOrientationLock == 2 ? UIMenuElementStateOn : UIMenuElementStateOff;
+
+  UIMenu* orientationLockMenu = [UIMenu menuWithTitle:@"Orientation Lock" image:[UIImage systemImageNamed:@"lock.rotation"] identifier:nil options:0 children:@[orientationAutoAction, orientationPortraitAction, orientationLandscapeAction]];
+
+  [menuItems addObject:[UIMenu menuWithTitle:@"Display" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[orientationLockMenu]]];
+
   self.navigationItem.leftBarButtonItem.menu = [UIMenu menuWithChildren:menuItems];
 }
 
@@ -442,6 +472,17 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
       [wiiPadView resetPointer];
       [wiiPadView recalculatePointerValuesWithNew_rect:self.rendererView.bounds game_aspect:g_presenter->CalculateDrawAspectRatio()];
     }
+  }
+}
+
+- (void)applyOrientationLock {
+  if (@available(iOS 16.0, *)) {
+    [self setNeedsUpdateOfSupportedInterfaceOrientations];
+  } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    [UIViewController attemptRotationToDeviceOrientation];
+#pragma clang diagnostic pop
   }
 }
 
