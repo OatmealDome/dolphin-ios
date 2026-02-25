@@ -31,11 +31,6 @@ class AppDelegate : UIResponder, UIApplicationDelegate {
   }
 
   func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-    let preference = UserDefaults.standard.integer(forKey: "DOLOrientationLock")
-    switch preference {
-    case 1: return .portrait
-    case 2: return .landscape
-    default: return .allButUpsideDown
-    }
+    return .landscape
   }
 }

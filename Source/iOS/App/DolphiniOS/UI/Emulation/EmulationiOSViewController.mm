@@ -44,6 +44,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 @implementation EmulationiOSViewController {
   DOLEmulationVisibleTouchPad _visibleTouchPad;
   int _stateSlot;
+  NSTimer* _pullDownHideTimer;
 }
 
 - (void)viewDidLoad {
@@ -73,12 +74,20 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
   }
 
   _stateSlot = Config::GetBase(Config::MAIN_SELECTED_STATE_SLOT);
-  
+
   // On iPadOS 26, the pull down button in the upper left can be blocked by window controls.
   if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
     self.pullDownLeftConstraint.active = false;
     self.pullDownCenterConstraint.active = true;
   }
+
+  // Add tap gesture to show the pull-down button when it's hidden
+  UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(screenTapped:)];
+  tapGesture.cancelsTouchesInView = NO;
+  [self.view addGestureRecognizer:tapGesture];
+
+  // Start the auto-hide timer for the pull-down button
+  [self resetPullDownHideTimer];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -91,6 +100,8 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 
 - (void)viewDidDisappear:(BOOL)animated {
   [super viewDidDisappear:animated];
+
+  [self invalidatePullDownHideTimer];
 
   [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLHostTitleChangedNotification object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLHostRequestRenderWindowSizeNotification object:nil];
@@ -110,7 +121,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
       [self updateVisibleTouchPadToWii];
       [self recreateMenu];
 
-      [self.navigationController setNavigationBarHidden:true animated:true];
+      [self hideNavigationBarAndRestartTimer];
     }];
 
     if (_visibleTouchPad == DOLEmulationVisibleTouchPadWiimote ||
@@ -129,7 +140,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
       [self updateVisibleTouchPadToGameCube];
       [self recreateMenu];
 
-      [self.navigationController setNavigationBarHidden:true animated:true];
+      [self hideNavigationBarAndRestartTimer];
     }];
 
     if (_visibleTouchPad == DOLEmulationVisibleTouchPadGameCube) {
@@ -146,7 +157,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
       [self updateVisibleTouchPadWithType:DOLEmulationVisibleTouchPadNone];
       [self recreateMenu];
 
-      [self.navigationController setNavigationBarHidden:true animated:true];
+      [self hideNavigationBarAndRestartTimer];
     }];
 
     if (_visibleTouchPad == DOLEmulationVisibleTouchPadNone) {
@@ -171,7 +182,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
         [self updatePointerValuesOnWiiTouchPads];
         [self recreateMenu];
 
-        [self.navigationController setNavigationBarHidden:true animated:true];
+        [self hideNavigationBarAndRestartTimer];
       }],
       [UIAction actionWithTitle:@"Follow" image:nil identifier:nil handler:^(UIAction*) {
         Config::SetBaseOrCurrent(Config::MAIN_TOUCH_PAD_IR_MODE, TCWiiTouchIRModeFollow);
@@ -179,7 +190,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
         [self updatePointerValuesOnWiiTouchPads];
         [self recreateMenu];
 
-        [self.navigationController setNavigationBarHidden:true animated:true];
+        [self hideNavigationBarAndRestartTimer];
       }],
       [UIAction actionWithTitle:@"Drag" image:nil identifier:nil handler:^(UIAction*) {
         Config::SetBaseOrCurrent(Config::MAIN_TOUCH_PAD_IR_MODE, TCWiiTouchIRModeDrag);
@@ -187,7 +198,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
         [self updatePointerValuesOnWiiTouchPads];
         [self recreateMenu];
 
-        [self.navigationController setNavigationBarHidden:true animated:true];
+        [self hideNavigationBarAndRestartTimer];
       }]
     ]];
 
@@ -220,14 +231,14 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
         State::Load(Core::System::GetInstance(), self->_stateSlot);
       });
 
-      [self.navigationController setNavigationBarHidden:true animated:true];
+      [self hideNavigationBarAndRestartTimer];
     }],
     [UIAction actionWithTitle:DOLCoreLocalizedString(@"Save State") image:[UIImage systemImageNamed:@"tray.and.arrow.up"] identifier:nil handler:^(UIAction*) {
       DOLHostQueueRunAsync(^{
         State::Save(Core::System::GetInstance(), self->_stateSlot);
       });
 
-      [self.navigationController setNavigationBarHidden:true animated:true];
+      [self hideNavigationBarAndRestartTimer];
     }]
   ]]];
   
@@ -285,7 +296,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"DOLOrientationLock"];
     [self applyOrientationLock];
     [self recreateMenu];
-    [self.navigationController setNavigationBarHidden:true animated:true];
+    [self hideNavigationBarAndRestartTimer];
   }];
   orientationAutoAction.state = currentOrientationLock == 0 ? UIMenuElementStateOn : UIMenuElementStateOff;
 
@@ -293,7 +304,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"DOLOrientationLock"];
     [self applyOrientationLock];
     [self recreateMenu];
-    [self.navigationController setNavigationBarHidden:true animated:true];
+    [self hideNavigationBarAndRestartTimer];
   }];
   orientationPortraitAction.state = currentOrientationLock == 1 ? UIMenuElementStateOn : UIMenuElementStateOff;
 
@@ -301,13 +312,22 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     [[NSUserDefaults standardUserDefaults] setInteger:2 forKey:@"DOLOrientationLock"];
     [self applyOrientationLock];
     [self recreateMenu];
-    [self.navigationController setNavigationBarHidden:true animated:true];
+    [self hideNavigationBarAndRestartTimer];
   }];
   orientationLandscapeAction.state = currentOrientationLock == 2 ? UIMenuElementStateOn : UIMenuElementStateOff;
 
   UIMenu* orientationLockMenu = [UIMenu menuWithTitle:@"Orientation Lock" image:[UIImage systemImageNamed:@"lock.rotation"] identifier:nil options:0 children:@[orientationAutoAction, orientationPortraitAction, orientationLandscapeAction]];
 
   [menuItems addObject:[UIMenu menuWithTitle:@"Display" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[orientationLockMenu]]];
+
+  // Settings action - opens the full Settings screen during emulation
+  UIAction* settingsAction = [UIAction actionWithTitle:@"Settings" image:[UIImage systemImageNamed:@"gearshape"] identifier:nil handler:^(UIAction*) {
+    UIStoryboard* settingsStoryboard = [UIStoryboard storyboardWithName:@"SettingsRoot" bundle:nil];
+    UIViewController* settingsVC = [settingsStoryboard instantiateInitialViewController];
+    settingsVC.modalPresentationStyle = UIModalPresentationPageSheet;
+    [self presentViewController:settingsVC animated:YES completion:nil];
+  }];
+  [menuItems addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[settingsAction]]];
 
   self.navigationItem.leftBarButtonItem.menu = [UIMenu menuWithChildren:menuItems];
 }
@@ -487,7 +507,39 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 }
 
 - (IBAction)pullDownPressed:(id)sender {
+  [self invalidatePullDownHideTimer];
   [self updateNavigationBar:false];
+}
+
+- (void)resetPullDownHideTimer {
+  [self invalidatePullDownHideTimer];
+  _pullDownHideTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(hidePullDownButton) userInfo:nil repeats:NO];
+}
+
+- (void)invalidatePullDownHideTimer {
+  [_pullDownHideTimer invalidate];
+  _pullDownHideTimer = nil;
+}
+
+- (void)hidePullDownButton {
+  [UIView animateWithDuration:0.3 animations:^{
+    self.pullDownButton.alpha = 0.0;
+  }];
+}
+
+- (void)screenTapped:(UITapGestureRecognizer*)gesture {
+  if (self.pullDownButton.alpha == 0.0) {
+    [UIView animateWithDuration:0.3 animations:^{
+      self.pullDownButton.alpha = 1.0;
+    }];
+    [self resetPullDownHideTimer];
+  }
+}
+
+- (void)hideNavigationBarAndRestartTimer {
+  [self.navigationController setNavigationBarHidden:true animated:true];
+  self.pullDownButton.alpha = 1.0;
+  [self resetPullDownHideTimer];
 }
 
 - (void)receiveEmulationEndNotificationiOS {
