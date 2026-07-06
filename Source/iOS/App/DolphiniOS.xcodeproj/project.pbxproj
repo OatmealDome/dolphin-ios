@@ -7,6 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0ABB5E4CCEEEDBCD2D8D2B75 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C83E3C7032E870DD08E6F64 /* main.m */; };
+		0C255450097EA1AC3768A98A /* ScriptRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE33DEC1ED32EE76E1C6C20 /* ScriptRunner.swift */; };
+		0C9F05BE6CF6E36FC6552B15 /* ScriptRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE33DEC1ED32EE76E1C6C20 /* ScriptRunner.swift */; };
+		12B74E80A6A36926DF9A8432 /* StikJITError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F845EE5887C3F5B62139E67F /* StikJITError.swift */; };
+		233A0F9C37C9B95888B38707 /* BundledScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA04FB6122848250DDBCC450 /* BundledScript.swift */; };
+		23C9C364A79572842B78A3B6 /* ProcessInfo+TXM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF5095623B61790D4E4F0B9 /* ProcessInfo+TXM.swift */; };
+		26D300A3AC24D2577DDEF559 /* DDIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB5F8BF832C1EF46796F3C6 /* DDIManager.swift */; };
+		402AB7B55CD933E56F5A1B46 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F33FAE5304A06A9D33FB135F /* Foundation.framework */; };
+		444C3F0FCA4C026057B1457F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05416988C370B963F5653000 /* Security.framework */; };
+		4ECD0F45FAB10DEF2C31334D /* DDISession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D2D2FDA0650F46CC4503C2 /* DDISession.swift */; };
+		4FFC06733A954119961CC7FD /* JITEnablerRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF374E5D4F577E8D1B49431 /* JITEnablerRequestHandler.swift */; };
+		57E174338760848870627C22 /* ProcessInfo+TXM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF5095623B61790D4E4F0B9 /* ProcessInfo+TXM.swift */; };
+		5A606D32147443DBAD1A5DD1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E263662986E8C62858AA75 /* SystemConfiguration.framework */; };
+		5E4809C1A0479998B52B9CAD /* IdeviceFFI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87CC10F11FDB6F3E0941F4 /* IdeviceFFI.swift */; };
+		6189536A53E6991E45FA74B6 /* StikJIT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D913F3F6511ACA28A99B200 /* StikJIT.swift */; };
+		620249E7FE8CEBC155116D2A /* JitManager+StikJIT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3770D9ACA7BC46B9D2C089DF /* JitManager+StikJIT.swift */; };
+		79586B1E0A77025C9FD40B41 /* BundledScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA04FB6122848250DDBCC450 /* BundledScript.swift */; };
+		8523DE84AB3C6066401C2459 /* JITSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911500DD0CC16F1FAA949A37 /* JITSession.swift */; };
+		85A4831D8CFD03DCC3FD8A02 /* JITEnabler.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E3B76F3465C2C643D991679A /* JITEnabler.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		89528D612625954D14BAA2D8 /* IdeviceFFI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87CC10F11FDB6F3E0941F4 /* IdeviceFFI.swift */; };
+		911F905600B448977639A62C /* DeveloperDiskImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36A512394FA665642AF6E8C /* DeveloperDiskImageService.swift */; };
+		AC6756A358C337596B4037D9 /* StikJITError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F845EE5887C3F5B62139E67F /* StikJITError.swift */; };
+		ACA1679CFAB09674DB8E06C8 /* StikJIT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D913F3F6511ACA28A99B200 /* StikJIT.swift */; };
 		B900A7A127F255EF000361DD /* libdolphin.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7A627F26F61000361DD /* AppDelegate.swift */; };
 		B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B900A7AD27F27F36000361DD /* DolphinCoreService.mm */; };
@@ -196,9 +219,26 @@
 		B9FCB7E12898D1E80020E233 /* SwiftLocalizationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7E02898D1E80020E233 /* SwiftLocalizationUtil.swift */; };
 		B9FCB7E42898F4D60020E233 /* JitManager+JitStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7E32898F4D60020E233 /* JitManager+JitStreamer.m */; };
 		B9FCB7E62898FAC10020E233 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FCB7E52898FAC10020E233 /* GameController.framework */; };
+		BC57620FAAF42BE6FD2B5B31 /* DDISession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D2D2FDA0650F46CC4503C2 /* DDISession.swift */; };
+		C9380003D02781F71A5505E4 /* universal.js in Resources */ = {isa = PBXBuildFile; fileRef = 6FDE11B38032F76E7F9EC446 /* universal.js */; };
+		CAF13182D2D61F3FBA8596EA /* DeveloperDiskImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36A512394FA665642AF6E8C /* DeveloperDiskImageService.swift */; };
+		D16E73DFF7987A6CDB79AD0E /* StikJITManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDCDA09107E3E4AD91EB106 /* StikJITManager.swift */; };
+		DA61591F4210B0651CFF70BB /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B836CEF66DD389BA7DFC36 /* JavaScriptCore.framework */; };
+		DE73032B38DFD8649A943D99 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A46CB993191C5AA22E27A3D /* CFNetwork.framework */; };
+		E0330A5A9DC372F70C6DA286 /* StikJITExtensionLauncher.m in Sources */ = {isa = PBXBuildFile; fileRef = F8A8952C7410ECC3E945A54E /* StikJITExtensionLauncher.m */; };
+		E549D0ACB0DBF2590C7C33AC /* JITSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911500DD0CC16F1FAA949A37 /* JITSession.swift */; };
+		EF99EC6AA3A6981EE8B76B5A /* legacy.js in Resources */ = {isa = PBXBuildFile; fileRef = 75DC8DD2585483DA18E77900 /* legacy.js */; };
+		FD05A3D9A1809002080AB853 /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C69D8DA358D57C72EE142FB /* Network.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1DF2F7B6A3112E50F02FB48D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B9DC3DEE27EFBD2C0084DAA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5EC4BDFA0AA54C352390B6AE;
+			remoteInfo = JITEnabler;
+		};
 		B96C9A532A46C1CE002B5ECF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B9DC3DEE27EFBD2C0084DAA4 /* Project object */;
@@ -220,9 +260,38 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F9FD173AA3C68BC3E49F3F0B /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				85A4831D8CFD03DCC3FD8A02 /* JITEnabler.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		05416988C370B963F5653000 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		0A46CB993191C5AA22E27A3D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		2032526AC3E708754CF79AD1 /* libidevice_ffi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libidevice_ffi.a; path = "../../../Externals/StikJIT-iOS/StikJIT/idevice/libidevice_ffi.a"; sourceTree = SOURCE_ROOT; };
+		3770D9ACA7BC46B9D2C089DF /* JitManager+StikJIT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JitManager+StikJIT.swift"; sourceTree = "<group>"; };
+		4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = JITEnablerExtension.xcconfig; sourceTree = "<group>"; };
+		5BB5F8BF832C1EF46796F3C6 /* DDIManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DDIManager.swift; sourceTree = "<group>"; };
+		63E263662986E8C62858AA75 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		6BF374E5D4F577E8D1B49431 /* JITEnablerRequestHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = JITEnablerRequestHandler.swift; sourceTree = "<group>"; };
+		6FDE11B38032F76E7F9EC446 /* universal.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = universal.js; path = "../../../Externals/StikJIT-iOS/StikJIT/Resources/universal.js"; sourceTree = SOURCE_ROOT; };
+		75DC8DD2585483DA18E77900 /* legacy.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = legacy.js; path = "../../../Externals/StikJIT-iOS/StikJIT/Resources/legacy.js"; sourceTree = SOURCE_ROOT; };
+		7C83E3C7032E870DD08E6F64 /* main.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		7D913F3F6511ACA28A99B200 /* StikJIT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StikJIT.swift; path = "../../../Externals/StikJIT-iOS/StikJIT/Sources/StikJIT.swift"; sourceTree = SOURCE_ROOT; };
+		8C69D8DA358D57C72EE142FB /* Network.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Network.framework; path = System/Library/Frameworks/Network.framework; sourceTree = SDKROOT; };
+		90B836CEF66DD389BA7DFC36 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		911500DD0CC16F1FAA949A37 /* JITSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JITSession.swift; path = "../../../Externals/StikJIT-iOS/StikJIT/Sources/JITSession.swift"; sourceTree = SOURCE_ROOT; };
+		9BF5095623B61790D4E4F0B9 /* ProcessInfo+TXM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ProcessInfo+TXM.swift"; path = "../../../Externals/StikJIT-iOS/StikJIT/Sources/ProcessInfo+TXM.swift"; sourceTree = SOURCE_ROOT; };
+		A36A512394FA665642AF6E8C /* DeveloperDiskImageService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DeveloperDiskImageService.swift; path = "../../../Externals/StikJIT-iOS/StikJIT/Sources/DeveloperDiskImageService.swift"; sourceTree = SOURCE_ROOT; };
+		ABE33DEC1ED32EE76E1C6C20 /* ScriptRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ScriptRunner.swift; path = "../../../Externals/StikJIT-iOS/StikJIT/Sources/ScriptRunner.swift"; sourceTree = SOURCE_ROOT; };
 		B900A7A227F25718000361DD /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		B900A7A627F26F61000361DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B900A7AC27F27F36000361DD /* DolphinCoreService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DolphinCoreService.h; sourceTree = "<group>"; };
@@ -577,9 +646,31 @@
 		B9FF01E72977DCBE00B49B00 /* TrollStore.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TrollStore.xcconfig; sourceTree = "<group>"; };
 		B9FF01E82977DCF700B49B00 /* Release (TrollStore).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (TrollStore).xcconfig"; sourceTree = "<group>"; };
 		B9FF01E92977DD0000B49B00 /* Release (Beta, TrollStore).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Beta, TrollStore).xcconfig"; sourceTree = "<group>"; };
+		CA04FB6122848250DDBCC450 /* BundledScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BundledScript.swift; path = "../../../Externals/StikJIT-iOS/StikJIT/Sources/BundledScript.swift"; sourceTree = SOURCE_ROOT; };
+		CBDCDA09107E3E4AD91EB106 /* StikJITManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StikJITManager.swift; sourceTree = "<group>"; };
+		E1D2D2FDA0650F46CC4503C2 /* DDISession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DDISession.swift; path = "../../../Externals/StikJIT-iOS/StikJIT/Sources/DDISession.swift"; sourceTree = SOURCE_ROOT; };
+		E3B76F3465C2C643D991679A /* JITEnabler.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = JITEnabler.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F33FAE5304A06A9D33FB135F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		F4DD8285C5840A40C82AA091 /* StikJITExtensionLauncher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = StikJITExtensionLauncher.h; sourceTree = "<group>"; };
+		F845EE5887C3F5B62139E67F /* StikJITError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StikJITError.swift; path = "../../../Externals/StikJIT-iOS/StikJIT/Sources/StikJITError.swift"; sourceTree = SOURCE_ROOT; };
+		F8A8952C7410ECC3E945A54E /* StikJITExtensionLauncher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = StikJITExtensionLauncher.m; sourceTree = "<group>"; };
+		FF87CC10F11FDB6F3E0941F4 /* IdeviceFFI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IdeviceFFI.swift; path = "../../../Externals/StikJIT-iOS/StikJIT/Sources/IdeviceFFI.swift"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8216EF80211D3DE8072F29F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				402AB7B55CD933E56F5A1B46 /* Foundation.framework in Frameworks */,
+				DA61591F4210B0651CFF70BB /* JavaScriptCore.framework in Frameworks */,
+				FD05A3D9A1809002080AB853 /* Network.framework in Frameworks */,
+				444C3F0FCA4C026057B1457F /* Security.framework in Frameworks */,
+				DE73032B38DFD8649A943D99 /* CFNetwork.framework in Frameworks */,
+				5A606D32147443DBAD1A5DD1 /* SystemConfiguration.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B96C9A4C2A46C1CE002B5ECF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -612,6 +703,7 @@
 			children = (
 				B9476B2427F23FFE009C0A4B /* libdolphin.dylib */,
 				B900A7B327F2D3AF000361DD /* MoltenVK.xcframework */,
+				2032526AC3E708754CF79AD1 /* libidevice_ffi.a */,
 			);
 			path = Libraries;
 			sourceTree = "<group>";
@@ -1226,6 +1318,7 @@
 				B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */,
 				B9476B2027F22416009C0A4B /* Release.xcconfig */,
 				B9FF01E72977DCBE00B49B00 /* TrollStore.xcconfig */,
+				4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -1560,6 +1653,12 @@
 				B97C49B5297F8B0D00E30877 /* UniformTypeIdentifiers.framework */,
 				B9FCB7E52898FAC10020E233 /* GameController.framework */,
 				B9D9389D283EF7AD00B290FC /* MetalKit.framework */,
+				90B836CEF66DD389BA7DFC36 /* JavaScriptCore.framework */,
+				8C69D8DA358D57C72EE142FB /* Network.framework */,
+				05416988C370B963F5653000 /* Security.framework */,
+				0A46CB993191C5AA22E27A3D /* CFNetwork.framework */,
+				63E263662986E8C62858AA75 /* SystemConfiguration.framework */,
+				C0F9F39577B8677E27B83F6F /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1607,6 +1706,8 @@
 			children = (
 				B9DC3DF627EFBD2C0084DAA4 /* DolphiniOS.app */,
 				B96C9A4F2A46C1CE002B5ECF /* DolphiniOSTests.xctest */,
+				E3B76F3465C2C643D991679A /* JITEnabler.appex */,
+				E3B76F3465C2C643D991679A /* JITEnabler.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1683,6 +1784,23 @@
 				B9FCB7E32898F4D60020E233 /* JitManager+JitStreamer.m */,
 				B950CFCA2962590600197719 /* JitManager+PTrace.h */,
 				B950CFCB2962590600197719 /* JitManager+PTrace.m */,
+				CBDCDA09107E3E4AD91EB106 /* StikJITManager.swift */,
+				3770D9ACA7BC46B9D2C089DF /* JitManager+StikJIT.swift */,
+				CA04FB6122848250DDBCC450 /* BundledScript.swift */,
+				FF87CC10F11FDB6F3E0941F4 /* IdeviceFFI.swift */,
+				911500DD0CC16F1FAA949A37 /* JITSession.swift */,
+				9BF5095623B61790D4E4F0B9 /* ProcessInfo+TXM.swift */,
+				ABE33DEC1ED32EE76E1C6C20 /* ScriptRunner.swift */,
+				7D913F3F6511ACA28A99B200 /* StikJIT.swift */,
+				F845EE5887C3F5B62139E67F /* StikJITError.swift */,
+				75DC8DD2585483DA18E77900 /* legacy.js */,
+				6FDE11B38032F76E7F9EC446 /* universal.js */,
+				DC1A2EFE0262007A101CFF8D /* JITEnablerExtension */,
+				F4DD8285C5840A40C82AA091 /* StikJITExtensionLauncher.h */,
+				F8A8952C7410ECC3E945A54E /* StikJITExtensionLauncher.m */,
+				E1D2D2FDA0650F46CC4503C2 /* DDISession.swift */,
+				A36A512394FA665642AF6E8C /* DeveloperDiskImageService.swift */,
+				5BB5F8BF832C1EF46796F3C6 /* DDIManager.swift */,
 			);
 			path = Jit;
 			sourceTree = "<group>";
@@ -1723,9 +1841,44 @@
 			path = Alert;
 			sourceTree = "<group>";
 		};
+		C0F9F39577B8677E27B83F6F /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				F33FAE5304A06A9D33FB135F /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		DC1A2EFE0262007A101CFF8D /* JITEnablerExtension */ = {
+			isa = PBXGroup;
+			children = (
+				6BF374E5D4F577E8D1B49431 /* JITEnablerRequestHandler.swift */,
+				7C83E3C7032E870DD08E6F64 /* main.m */,
+			);
+			name = JITEnablerExtension;
+			path = JITEnablerExtension;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5EC4BDFA0AA54C352390B6AE /* JITEnabler */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 40B68528F176A33478BC0732 /* Build configuration list for PBXNativeTarget "JITEnabler" */;
+			buildPhases = (
+				188585205A264EF1DE061B52 /* Sources */,
+				8216EF80211D3DE8072F29F2 /* Frameworks */,
+				C87E3ED2113C1C231D1F81CE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JITEnabler;
+			productName = JITEnabler;
+			productReference = E3B76F3465C2C643D991679A /* JITEnabler.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		B96C9A4E2A46C1CE002B5ECF /* DolphiniOSTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B96C9A552A46C1CE002B5ECF /* Build configuration list for PBXNativeTarget "DolphiniOSTests" */;
@@ -1757,11 +1910,13 @@
 				B99137B428829F1400588446 /* Transfer Core Strings to Storyboard Strings */,
 				B9DC3DF427EFBD2C0084DAA4 /* Resources */,
 				B900A7A027F255E0000361DD /* CopyFiles */,
+				F9FD173AA3C68BC3E49F3F0B /* Embed App Extensions */,
 				B97E4B622966227B00B3EE9C /* Upload dSYM */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				18AC26EE9CB9E68BCF2ABEAA /* PBXTargetDependency */,
 			);
 			name = DolphiniOS;
 			packageProductDependencies = (
@@ -1815,6 +1970,7 @@
 			targets = (
 				B9DC3DF527EFBD2C0084DAA4 /* DolphiniOS */,
 				B96C9A4E2A46C1CE002B5ECF /* DolphiniOSTests */,
+				5EC4BDFA0AA54C352390B6AE /* JITEnabler */,
 			);
 		};
 /* End PBXProject section */
@@ -1868,6 +2024,15 @@
 				B933EDC327F8E215004D7DD7 /* Assets.xcassets in Resources */,
 				B9D93892283DE63800B290FC /* Emulation.storyboard in Resources */,
 				B9114FA52894E0C800B9C57A /* NKitWarning.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C87E3ED2113C1C231D1F81CE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF99EC6AA3A6981EE8B76B5A /* legacy.js in Resources */,
+				C9380003D02781F71A5505E4 /* universal.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1990,6 +2155,24 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		188585205A264EF1DE061B52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79586B1E0A77025C9FD40B41 /* BundledScript.swift in Sources */,
+				5E4809C1A0479998B52B9CAD /* IdeviceFFI.swift in Sources */,
+				8523DE84AB3C6066401C2459 /* JITSession.swift in Sources */,
+				57E174338760848870627C22 /* ProcessInfo+TXM.swift in Sources */,
+				0C9F05BE6CF6E36FC6552B15 /* ScriptRunner.swift in Sources */,
+				ACA1679CFAB09674DB8E06C8 /* StikJIT.swift in Sources */,
+				12B74E80A6A36926DF9A8432 /* StikJITError.swift in Sources */,
+				4FFC06733A954119961CC7FD /* JITEnablerRequestHandler.swift in Sources */,
+				0ABB5E4CCEEEDBCD2D8D2B75 /* main.m in Sources */,
+				4ECD0F45FAB10DEF2C31334D /* DDISession.swift in Sources */,
+				911F905600B448977639A62C /* DeveloperDiskImageService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B96C9A4B2A46C1CE002B5ECF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2016,6 +2199,8 @@
 				B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */,
 				B9661F362D23190300FB2AAB /* MappingInputDisplayInputCell.m in Sources */,
 				B9FCB7B9289670830020E233 /* JitManager.m in Sources */,
+				D16E73DFF7987A6CDB79AD0E /* StikJITManager.swift in Sources */,
+				620249E7FE8CEBC155116D2A /* JitManager+StikJIT.swift in Sources */,
 				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
@@ -2141,12 +2326,28 @@
 				B95AC52E2D29C49F0048E48B /* AudioSessionCategoryService.swift in Sources */,
 				B97E4B532965011C00B3EE9C /* FirebaseService.mm in Sources */,
 				B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */,
+				E0330A5A9DC372F70C6DA286 /* StikJITExtensionLauncher.m in Sources */,
+				233A0F9C37C9B95888B38707 /* BundledScript.swift in Sources */,
+				89528D612625954D14BAA2D8 /* IdeviceFFI.swift in Sources */,
+				E549D0ACB0DBF2590C7C33AC /* JITSession.swift in Sources */,
+				23C9C364A79572842B78A3B6 /* ProcessInfo+TXM.swift in Sources */,
+				0C255450097EA1AC3768A98A /* ScriptRunner.swift in Sources */,
+				6189536A53E6991E45FA74B6 /* StikJIT.swift in Sources */,
+				AC6756A358C337596B4037D9 /* StikJITError.swift in Sources */,
+				BC57620FAAF42BE6FD2B5B31 /* DDISession.swift in Sources */,
+				CAF13182D2D61F3FBA8596EA /* DeveloperDiskImageService.swift in Sources */,
+				26D300A3AC24D2577DDEF559 /* DDIManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		18AC26EE9CB9E68BCF2ABEAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5EC4BDFA0AA54C352390B6AE /* JITEnabler */;
+			targetProxy = 1DF2F7B6A3112E50F02FB48D /* PBXContainerItemProxy */;
+		};
 		B96C9A542A46C1CE002B5ECF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = B9DC3DF527EFBD2C0084DAA4 /* DolphiniOS */;
@@ -2227,6 +2428,46 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		084C65370DCD3218EB000280 /* Release (Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (Jailbroken)";
+		};
+		1A41962069AC086CF7118A5B /* Debug (Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Debug (Jailbroken)";
+		};
+		2A271C3DB12B2871A5E2339B /* Release (Non-Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (Non-Jailbroken)";
+		};
+		7619C0F4EC75E7F66C479351 /* Release (Beta, Non-Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (Beta, Non-Jailbroken)";
+		};
+		93E449C2961ECB7DF4D223BB /* Release (Beta, Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (Beta, Jailbroken)";
+		};
 		B96C9A562A46C1CE002B5ECF /* Debug (Non-Jailbroken) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3533,9 +3774,48 @@
 			};
 			name = "Release (Beta, TrollStore)";
 		};
+		C3811DD0788E58D66FE83AEA /* Release (TrollStore) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (TrollStore)";
+		};
+		C61991B2FC46FF25FE78A8D5 /* Debug (Non-Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Debug (Non-Jailbroken)";
+		};
+		DF15F5E3D5295A6C01D89912 /* Release (Beta, TrollStore) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (Beta, TrollStore)";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		40B68528F176A33478BC0732 /* Build configuration list for PBXNativeTarget "JITEnabler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C61991B2FC46FF25FE78A8D5 /* Debug (Non-Jailbroken) */,
+				1A41962069AC086CF7118A5B /* Debug (Jailbroken) */,
+				2A271C3DB12B2871A5E2339B /* Release (Non-Jailbroken) */,
+				7619C0F4EC75E7F66C479351 /* Release (Beta, Non-Jailbroken) */,
+				084C65370DCD3218EB000280 /* Release (Jailbroken) */,
+				C3811DD0788E58D66FE83AEA /* Release (TrollStore) */,
+				93E449C2961ECB7DF4D223BB /* Release (Beta, Jailbroken) */,
+				DF15F5E3D5295A6C01D89912 /* Release (Beta, TrollStore) */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B96C9A552A46C1CE002B5ECF /* Build configuration list for PBXNativeTarget "DolphiniOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

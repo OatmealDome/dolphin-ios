@@ -248,6 +248,95 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="Stk-JIT-sw01">
+                                        <rect key="frame" x="16" y="627.5" width="343" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Stk-JIT-sw01" id="Stk-JIT-cv01">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Self-Enable JIT (StikJIT)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Stk-JIT-lb01">
+                                                    <rect key="frame" x="16" y="11" width="254" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Stk-JIT-sw02" customClass="DOLUIKitSwitch">
+                                                    <rect key="frame" x="278" y="6.5" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Stk-JIT-lb01" firstAttribute="top" secondItem="Stk-JIT-cv01" secondAttribute="topMargin" id="Stk-JIT-c001"/>
+                                                <constraint firstItem="Stk-JIT-sw02" firstAttribute="leading" secondItem="Stk-JIT-lb01" secondAttribute="trailing" constant="8" id="Stk-JIT-c002"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Stk-JIT-lb01" secondAttribute="bottom" id="Stk-JIT-c003"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Stk-JIT-sw02" secondAttribute="trailing" id="Stk-JIT-c004"/>
+                                                <constraint firstItem="Stk-JIT-lb01" firstAttribute="leading" secondItem="Stk-JIT-cv01" secondAttribute="leadingMargin" id="Stk-JIT-c005"/>
+                                                <constraint firstItem="Stk-JIT-sw02" firstAttribute="centerY" secondItem="Stk-JIT-cv01" secondAttribute="centerY" id="Stk-JIT-c006"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Stk-JIT-im01">
+                                        <rect key="frame" x="16" y="671" width="343" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Stk-JIT-im01" id="Stk-JIT-cv02">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Import Pairing File" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Stk-JIT-lb02">
+                                                    <rect key="frame" x="16" y="11" width="254" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" systemColor="linkColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not Imported" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Stk-JIT-lb03">
+                                                    <rect key="frame" x="278" y="11" width="49" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Stk-JIT-lb02" secondAttribute="bottom" id="Stk-JIT-c007"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Stk-JIT-lb03" secondAttribute="bottom" id="Stk-JIT-c008"/>
+                                                <constraint firstItem="Stk-JIT-lb03" firstAttribute="leading" secondItem="Stk-JIT-lb02" secondAttribute="trailing" constant="8" id="Stk-JIT-c009"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Stk-JIT-lb03" secondAttribute="trailing" id="Stk-JIT-c010"/>
+                                                <constraint firstItem="Stk-JIT-lb02" firstAttribute="leading" secondItem="Stk-JIT-cv02" secondAttribute="leadingMargin" id="Stk-JIT-c011"/>
+                                                <constraint firstItem="Stk-JIT-lb02" firstAttribute="top" secondItem="Stk-JIT-cv02" secondAttribute="topMargin" id="Stk-JIT-c012"/>
+                                                <constraint firstItem="Stk-JIT-lb03" firstAttribute="top" secondItem="Stk-JIT-cv02" secondAttribute="topMargin" id="Stk-JIT-c013"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Stk-DDI-mn01">
+                                        <rect key="frame" x="16" y="671" width="343" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Stk-DDI-mn01" id="Stk-DDI-cv01">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Delete Cached DDI" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Stk-DDI-lb01">
+                                                    <rect key="frame" x="16" y="11" width="254" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" systemColor="linkColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not Present" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Stk-DDI-lb02">
+                                                    <rect key="frame" x="278" y="11" width="49" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Stk-DDI-lb01" secondAttribute="bottom" id="Stk-DDI-c001"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Stk-DDI-lb02" secondAttribute="bottom" id="Stk-DDI-c002"/>
+                                                <constraint firstItem="Stk-DDI-lb02" firstAttribute="leading" secondItem="Stk-DDI-lb01" secondAttribute="trailing" constant="8" id="Stk-DDI-c003"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Stk-DDI-lb02" secondAttribute="trailing" id="Stk-DDI-c004"/>
+                                                <constraint firstItem="Stk-DDI-lb01" firstAttribute="leading" secondItem="Stk-DDI-cv01" secondAttribute="leadingMargin" id="Stk-DDI-c005"/>
+                                                <constraint firstItem="Stk-DDI-lb01" firstAttribute="top" secondItem="Stk-DDI-cv01" secondAttribute="topMargin" id="Stk-DDI-c006"/>
+                                                <constraint firstItem="Stk-DDI-lb02" firstAttribute="top" secondItem="Stk-DDI-cv01" secondAttribute="topMargin" id="Stk-DDI-c007"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="CoY-ea-Rfl">
                                         <rect key="frame" x="16" y="627.5" width="343" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
@@ -329,6 +418,9 @@
                         <outlet property="mfiSwitch" destination="v1R-bY-GZa" id="hj8-yD-8f9"/>
                         <outlet property="syncOnIdleSkipSwitch" destination="rAe-2m-46S" id="zkQ-os-2Th"/>
                         <outlet property="userFolderPathLabel" destination="v9G-Mi-XiD" id="fDJ-3u-yQY"/>
+                        <outlet property="selfEnableJitSwitch" destination="Stk-JIT-sw02" id="Stk-JIT-c014"/>
+                        <outlet property="importPairingFileStatusLabel" destination="Stk-JIT-lb03" id="Stk-JIT-c015"/>
+                        <outlet property="ddiMounterStatusLabel" destination="Stk-DDI-lb02" id="Stk-DDI-c008"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="adV-2q-gSQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

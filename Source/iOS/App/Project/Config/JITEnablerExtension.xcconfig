@@ -1,0 +1,29 @@
+// Copyright 2025 DolphiniOS Project
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+#include "BundleIdentifier.xcconfig"
+#include "DevelopmentTeam.xcconfig"
+
+PRODUCT_NAME = JITEnabler
+IPHONEOS_DEPLOYMENT_TARGET = 17.4
+TARGETED_DEVICE_FAMILY = 1,2
+SWIFT_VERSION = 5.0
+SKIP_INSTALL = YES
+CODE_SIGN_STYLE = Automatic
+
+INFOPLIST_FILE = Common/Jit/JITEnablerExtension/Info.plist
+CODE_SIGN_ENTITLEMENTS = Common/Jit/JITEnablerExtension/JITEnablerExtension.entitlements
+
+LIBRARY_SEARCH_PATHS = $(inherited) "$(SRCROOT)/../../../Externals/StikJIT-iOS/StikJIT/idevice"
+HEADER_SEARCH_PATHS = $(inherited) "$(SRCROOT)/../../../Externals/StikJIT-iOS/StikJIT/idevice"
+SWIFT_INCLUDE_PATHS = $(inherited) "$(SRCROOT)/../../../Externals/StikJIT-iOS/StikJIT/idevice"
+OTHER_LDFLAGS = $(inherited) -force_load "$(SRCROOT)/../../../Externals/StikJIT-iOS/StikJIT/idevice/libidevice_ffi.a"
+
+PRODUCT_BUNDLE_IDENTIFIER[config=Debug (Non-Jailbroken)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-njb-debug.JITEnabler
+PRODUCT_BUNDLE_IDENTIFIER[config=Debug (Jailbroken)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-debug.JITEnabler
+PRODUCT_BUNDLE_IDENTIFIER[config=Release (Non-Jailbroken)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-njb.JITEnabler
+PRODUCT_BUNDLE_IDENTIFIER[config=Release (Beta, Non-Jailbroken)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-njb-patreon-beta.JITEnabler
+PRODUCT_BUNDLE_IDENTIFIER[config=Release (Jailbroken)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME).JITEnabler
+PRODUCT_BUNDLE_IDENTIFIER[config=Release (Beta, Jailbroken)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-patreon-beta.JITEnabler
+PRODUCT_BUNDLE_IDENTIFIER[config=Release (TrollStore)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-ts.JITEnabler
+PRODUCT_BUNDLE_IDENTIFIER[config=Release (Beta, TrollStore)] = $(DOL_PBID_ORGANIZATION_IDENTIFIER).$(DOL_PBID_APP_NAME)-ts-patreon-beta.JITEnabler

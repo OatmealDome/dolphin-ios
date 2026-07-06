@@ -72,7 +72,7 @@ typedef NS_ENUM(NSInteger, DOLJitType) {
     self.acquiredJit = [self checkIfProcessIsDebugged];
     
     if (self.deviceHasTxm && self.acquiredJit) {
-      self.acquisitionError = @"A debugger is attached. However, if the debugger is not StikDebug, DolphiniOS will crash when emulation starts.";
+      self.acquisitionError = @"A debugger is attached. However, if the debugger is not StikDebug/StikJIT, DolphiniOS will crash when emulation starts.";
     }
   } else if (_jitType == DOLJitTypeUnrestricted) {
     self.acquiredJit = true;

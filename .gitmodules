@@ -106,3 +106,7 @@
 	path = Externals/miniupnpc/miniupnp
 	url = https://github.com/miniupnp/miniupnp.git
 	shallow = true
+[submodule "Externals/StikJIT-iOS/StikJIT"]
+	path = Externals/StikJIT-iOS/StikJIT
+	url = https://github.com/StephenDev0/StikJIT.git
+	shallow = true
