@@ -22,6 +22,7 @@ class JitWaitViewController: UIViewController {
 
     JitManager.shared().acquireJitByAltServer()
     JitManager.shared().acquireJitByJitStreamer()
+    JitManager.shared().acquireJitByStikDebugURLScheme()
   }
   
   override func viewWillAppear(_ animated: Bool) {

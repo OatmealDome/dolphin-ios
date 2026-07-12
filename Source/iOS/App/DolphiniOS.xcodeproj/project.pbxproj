@@ -228,6 +228,7 @@
 		E0330A5A9DC372F70C6DA286 /* StikJITExtensionLauncher.m in Sources */ = {isa = PBXBuildFile; fileRef = F8A8952C7410ECC3E945A54E /* StikJITExtensionLauncher.m */; };
 		E549D0ACB0DBF2590C7C33AC /* JITSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911500DD0CC16F1FAA949A37 /* JITSession.swift */; };
 		EF99EC6AA3A6981EE8B76B5A /* legacy.js in Resources */ = {isa = PBXBuildFile; fileRef = 75DC8DD2585483DA18E77900 /* legacy.js */; };
+		FA2CE0CDAD2162BC62DDB203 /* JitManager+StikDebugURLScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1F8632881506353AA9F2CF /* JitManager+StikDebugURLScheme.swift */; };
 		FD05A3D9A1809002080AB853 /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C69D8DA358D57C72EE142FB /* Network.framework */; };
 /* End PBXBuildFile section */
 
@@ -650,6 +651,7 @@
 		CBDCDA09107E3E4AD91EB106 /* StikJITManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StikJITManager.swift; sourceTree = "<group>"; };
 		E1D2D2FDA0650F46CC4503C2 /* DDISession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DDISession.swift; path = "../../../Externals/StikJIT-iOS/StikJIT/Sources/DDISession.swift"; sourceTree = SOURCE_ROOT; };
 		E3B76F3465C2C643D991679A /* JITEnabler.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = JITEnabler.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF1F8632881506353AA9F2CF /* JitManager+StikDebugURLScheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "JitManager+StikDebugURLScheme.swift"; sourceTree = "<group>"; };
 		F33FAE5304A06A9D33FB135F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		F4DD8285C5840A40C82AA091 /* StikJITExtensionLauncher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = StikJITExtensionLauncher.h; sourceTree = "<group>"; };
 		F845EE5887C3F5B62139E67F /* StikJITError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StikJITError.swift; path = "../../../Externals/StikJIT-iOS/StikJIT/Sources/StikJITError.swift"; sourceTree = SOURCE_ROOT; };
@@ -1801,6 +1803,7 @@
 				E1D2D2FDA0650F46CC4503C2 /* DDISession.swift */,
 				A36A512394FA665642AF6E8C /* DeveloperDiskImageService.swift */,
 				5BB5F8BF832C1EF46796F3C6 /* DDIManager.swift */,
+				EF1F8632881506353AA9F2CF /* JitManager+StikDebugURLScheme.swift */,
 			);
 			path = Jit;
 			sourceTree = "<group>";
@@ -2337,6 +2340,7 @@
 				BC57620FAAF42BE6FD2B5B31 /* DDISession.swift in Sources */,
 				CAF13182D2D61F3FBA8596EA /* DeveloperDiskImageService.swift in Sources */,
 				26D300A3AC24D2577DDEF559 /* DDIManager.swift in Sources */,
+				FA2CE0CDAD2162BC62DDB203 /* JitManager+StikDebugURLScheme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
