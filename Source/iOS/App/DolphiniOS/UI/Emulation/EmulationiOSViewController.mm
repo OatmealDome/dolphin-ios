@@ -19,6 +19,7 @@
 #import "Core/State.h"
 #import "Core/System.h"
 
+#import "InputCommon/ControllerInterface/ControllerInterface.h"
 #import "InputCommon/InputConfig.h"
 
 #import "VideoCommon/Present.h"
@@ -48,6 +49,13 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+
+  // iOS otherwise consumes the face buttons (A/B/X/Y) for UIKit menu navigation.
+  self.controllerUserInteractionEnabled = NO;
+
+  // Devices are otherwise only populated at app launch and in the mapping screen,
+  // leaving a controller connected after launch absent when the game boots.
+  g_controller_interface.RefreshDevices();
 
   for (int i = 0; i < [self.touchPads count]; i++) {
     TCView* padView = self.touchPads[i];
