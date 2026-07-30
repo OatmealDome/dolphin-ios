@@ -4,13 +4,15 @@
 #import <UIKit/UIKit.h>
 #import <MetalKit/MetalKit.h>
 
+#import <GameController/GameController.h>
+
 #import "Swift.h"
 
 @class EmulationBootParameter;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EmulationViewController : UIViewController <JitWaitViewControllerDelegate, NKitWarningViewControllerDelegate>
+@interface EmulationViewController : GCEventViewController <JitWaitViewControllerDelegate, NKitWarningViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView* rendererView;
 
