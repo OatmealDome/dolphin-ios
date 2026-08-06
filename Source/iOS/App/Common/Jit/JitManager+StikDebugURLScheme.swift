@@ -28,7 +28,7 @@ extension JitManager {
     }
 
     var components = URLComponents()
-    components.scheme = "stikjit"
+    components.scheme = "stikdebug"
     components.host = "enable-jit"
     components.queryItems = queryItems
 
