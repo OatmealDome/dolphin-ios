@@ -5,24 +5,43 @@ import UIKit
 
 class JitWaitViewController: UIViewController {
   @objc weak var delegate: JitWaitViewControllerDelegate?
-  
+  @IBOutlet var stikJITActivityIndicator: UIActivityIndicatorView!
+  @IBOutlet var stikJITStatusView: UIStackView!
+
   var timer: Timer?
   var isShowingError: Bool = false
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+
     self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(checkJit), userInfo: nil, repeats: true)
-    
-    JitManager.shared().acquireJitByAltServer()
-    JitManager.shared().acquireJitByJitStreamer()
+
+    switch StikJITManager.shared.jitLaunchMode {
+    case .waitForDebugger:
+      break
+    case .externalStikDebug:
+      JitManager.shared().acquireJitByStikDebugURLScheme()
+    case .builtInStikJIT:
+      guard #available(iOS 17.4, *),
+            !StikJITManager.shared.isRunningInLiveContainer,
+            StikJITManager.shared.hasPairingFile else {
+        StikJITManager.shared.jitLaunchMode = .waitForDebugger
+        return
+      }
+      JitManager.shared().acquireJitByStikJIT()
+    }
+
+    self.updateStikJITIndicator()
   }
   
   override func viewWillAppear(_ animated: Bool) {
+    self.updateStikJITIndicator()
     self.showAcquisitionErrorIfNecessary()
   }
   
   @objc func checkJit() {
+    self.updateStikJITIndicator()
+
     if (self.isShowingError) {
       return
     }
@@ -39,6 +58,17 @@ class JitWaitViewController: UIViewController {
     }
     
     self.showAcquisitionErrorIfNecessary()
+  }
+
+  func updateStikJITIndicator() {
+    let isRunning = JitManager.shared().isStikJITRunning
+    self.stikJITStatusView.isHidden = !isRunning
+
+    if isRunning {
+      self.stikJITActivityIndicator.startAnimating()
+    } else {
+      self.stikJITActivityIndicator.stopAnimating()
+    }
   }
   
   func showAcquisitionErrorIfNecessary() {

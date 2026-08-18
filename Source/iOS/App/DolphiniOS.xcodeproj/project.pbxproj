@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0ABB5E4CCEEEDBCD2D8D2B75 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C83E3C7032E870DD08E6F64 /* main.m */; };
+		26D300A3AC24D2577DDEF559 /* DDIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB5F8BF832C1EF46796F3C6 /* DDIManager.swift */; };
+		444C3F0FCA4C026057B1457F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05416988C370B963F5653000 /* Security.framework */; };
+		4FFC06733A954119961CC7FD /* JITEnablerRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF374E5D4F577E8D1B49431 /* JITEnablerRequestHandler.swift */; };
+		620249E7FE8CEBC155116D2A /* JitManager+StikJIT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3770D9ACA7BC46B9D2C089DF /* JitManager+StikJIT.swift */; };
+		85A4831D8CFD03DCC3FD8A02 /* JITEnabler.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E3B76F3465C2C643D991679A /* JITEnabler.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8DAF73268CFB4406A930A6F1 /* StikJIT.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 996E3116BFA7443DB2E9089F /* StikJIT.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B900A7A127F255EF000361DD /* libdolphin.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B900A7A727F26F61000361DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B900A7A627F26F61000361DD /* AppDelegate.swift */; };
 		B900A7AE27F27F36000361DD /* DolphinCoreService.mm in Sources */ = {isa = PBXBuildFile; fileRef = B900A7AD27F27F36000361DD /* DolphinCoreService.mm */; };
@@ -196,9 +203,20 @@
 		B9FCB7E12898D1E80020E233 /* SwiftLocalizationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7E02898D1E80020E233 /* SwiftLocalizationUtil.swift */; };
 		B9FCB7E42898F4D60020E233 /* JitManager+JitStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FCB7E32898F4D60020E233 /* JitManager+JitStreamer.m */; };
 		B9FCB7E62898FAC10020E233 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FCB7E52898FAC10020E233 /* GameController.framework */; };
+		D16E73DFF7987A6CDB79AD0E /* StikJITManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDCDA09107E3E4AD91EB106 /* StikJITManager.swift */; };
+		D322FBB9DED049E894EF22CA /* StikJIT.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 996E3116BFA7443DB2E9089F /* StikJIT.xcframework */; };
+		E0330A5A9DC372F70C6DA286 /* StikJITExtensionLauncher.m in Sources */ = {isa = PBXBuildFile; fileRef = F8A8952C7410ECC3E945A54E /* StikJITExtensionLauncher.m */; };
+		FA2CE0CDAD2162BC62DDB203 /* JitManager+StikDebugURLScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1F8632881506353AA9F2CF /* JitManager+StikDebugURLScheme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1DF2F7B6A3112E50F02FB48D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B9DC3DEE27EFBD2C0084DAA4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5EC4BDFA0AA54C352390B6AE;
+			remoteInfo = JITEnabler;
+		};
 		B96C9A532A46C1CE002B5ECF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B9DC3DEE27EFBD2C0084DAA4 /* Project object */;
@@ -220,9 +238,38 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1275A263BB9743F5AEFDEF36 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8DAF73268CFB4406A930A6F1 /* StikJIT.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F9FD173AA3C68BC3E49F3F0B /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				85A4831D8CFD03DCC3FD8A02 /* JITEnabler.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		05416988C370B963F5653000 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		3770D9ACA7BC46B9D2C089DF /* JitManager+StikJIT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JitManager+StikJIT.swift"; sourceTree = "<group>"; };
+		4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = JITEnablerExtension.xcconfig; sourceTree = "<group>"; };
+		5BB5F8BF832C1EF46796F3C6 /* DDIManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DDIManager.swift; sourceTree = "<group>"; };
+		6BF374E5D4F577E8D1B49431 /* JITEnablerRequestHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = JITEnablerRequestHandler.swift; sourceTree = "<group>"; };
+		7C83E3C7032E870DD08E6F64 /* main.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		996E3116BFA7443DB2E9089F /* StikJIT.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = StikJIT.xcframework; path = "../../../Externals/StikJIT-iOS/StikJIT.xcframework"; sourceTree = SOURCE_ROOT; };
 		B900A7A227F25718000361DD /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		B900A7A627F26F61000361DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B900A7AC27F27F36000361DD /* DolphinCoreService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DolphinCoreService.h; sourceTree = "<group>"; };
@@ -577,9 +624,22 @@
 		B9FF01E72977DCBE00B49B00 /* TrollStore.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TrollStore.xcconfig; sourceTree = "<group>"; };
 		B9FF01E82977DCF700B49B00 /* Release (TrollStore).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (TrollStore).xcconfig"; sourceTree = "<group>"; };
 		B9FF01E92977DD0000B49B00 /* Release (Beta, TrollStore).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release (Beta, TrollStore).xcconfig"; sourceTree = "<group>"; };
+		CBDCDA09107E3E4AD91EB106 /* StikJITManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StikJITManager.swift; sourceTree = "<group>"; };
+		E3B76F3465C2C643D991679A /* JITEnabler.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = JITEnabler.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF1F8632881506353AA9F2CF /* JitManager+StikDebugURLScheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "JitManager+StikDebugURLScheme.swift"; sourceTree = "<group>"; };
+		F4DD8285C5840A40C82AA091 /* StikJITExtensionLauncher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = StikJITExtensionLauncher.h; sourceTree = "<group>"; };
+		F8A8952C7410ECC3E945A54E /* StikJITExtensionLauncher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = StikJITExtensionLauncher.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8216EF80211D3DE8072F29F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D322FBB9DED049E894EF22CA /* StikJIT.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B96C9A4C2A46C1CE002B5ECF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -591,6 +651,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				444C3F0FCA4C026057B1457F /* Security.framework in Frameworks */,
 				B95AC5302D29C7FD0048E48B /* AVFoundation.framework in Frameworks */,
 				B97C49B6297F8B0D00E30877 /* UniformTypeIdentifiers.framework in Frameworks */,
 				B9FCB7DE28988E7E0020E233 /* AltKit in Frameworks */,
@@ -612,6 +673,7 @@
 			children = (
 				B9476B2427F23FFE009C0A4B /* libdolphin.dylib */,
 				B900A7B327F2D3AF000361DD /* MoltenVK.xcframework */,
+				996E3116BFA7443DB2E9089F /* StikJIT.xcframework */,
 			);
 			path = Libraries;
 			sourceTree = "<group>";
@@ -1226,6 +1288,7 @@
 				B9476B1D27F1AB0E009C0A4B /* PreprocessorCombine.xcconfig */,
 				B9476B2027F22416009C0A4B /* Release.xcconfig */,
 				B9FF01E72977DCBE00B49B00 /* TrollStore.xcconfig */,
+				4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -1560,6 +1623,7 @@
 				B97C49B5297F8B0D00E30877 /* UniformTypeIdentifiers.framework */,
 				B9FCB7E52898FAC10020E233 /* GameController.framework */,
 				B9D9389D283EF7AD00B290FC /* MetalKit.framework */,
+				05416988C370B963F5653000 /* Security.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1607,6 +1671,7 @@
 			children = (
 				B9DC3DF627EFBD2C0084DAA4 /* DolphiniOS.app */,
 				B96C9A4F2A46C1CE002B5ECF /* DolphiniOSTests.xctest */,
+				E3B76F3465C2C643D991679A /* JITEnabler.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1683,6 +1748,13 @@
 				B9FCB7E32898F4D60020E233 /* JitManager+JitStreamer.m */,
 				B950CFCA2962590600197719 /* JitManager+PTrace.h */,
 				B950CFCB2962590600197719 /* JitManager+PTrace.m */,
+				CBDCDA09107E3E4AD91EB106 /* StikJITManager.swift */,
+				3770D9ACA7BC46B9D2C089DF /* JitManager+StikJIT.swift */,
+				DC1A2EFE0262007A101CFF8D /* JITEnablerExtension */,
+				F4DD8285C5840A40C82AA091 /* StikJITExtensionLauncher.h */,
+				F8A8952C7410ECC3E945A54E /* StikJITExtensionLauncher.m */,
+				5BB5F8BF832C1EF46796F3C6 /* DDIManager.swift */,
+				EF1F8632881506353AA9F2CF /* JitManager+StikDebugURLScheme.swift */,
 			);
 			path = Jit;
 			sourceTree = "<group>";
@@ -1723,9 +1795,36 @@
 			path = Alert;
 			sourceTree = "<group>";
 		};
+		DC1A2EFE0262007A101CFF8D /* JITEnablerExtension */ = {
+			isa = PBXGroup;
+			children = (
+				6BF374E5D4F577E8D1B49431 /* JITEnablerRequestHandler.swift */,
+				7C83E3C7032E870DD08E6F64 /* main.m */,
+			);
+			name = JITEnablerExtension;
+			path = JITEnablerExtension;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5EC4BDFA0AA54C352390B6AE /* JITEnabler */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 40B68528F176A33478BC0732 /* Build configuration list for PBXNativeTarget "JITEnabler" */;
+			buildPhases = (
+				188585205A264EF1DE061B52 /* Sources */,
+				8216EF80211D3DE8072F29F2 /* Frameworks */,
+				1275A263BB9743F5AEFDEF36 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JITEnabler;
+			productName = JITEnabler;
+			productReference = E3B76F3465C2C643D991679A /* JITEnabler.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		B96C9A4E2A46C1CE002B5ECF /* DolphiniOSTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B96C9A552A46C1CE002B5ECF /* Build configuration list for PBXNativeTarget "DolphiniOSTests" */;
@@ -1757,11 +1856,13 @@
 				B99137B428829F1400588446 /* Transfer Core Strings to Storyboard Strings */,
 				B9DC3DF427EFBD2C0084DAA4 /* Resources */,
 				B900A7A027F255E0000361DD /* CopyFiles */,
+				F9FD173AA3C68BC3E49F3F0B /* Embed App Extensions */,
 				B97E4B622966227B00B3EE9C /* Upload dSYM */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				18AC26EE9CB9E68BCF2ABEAA /* PBXTargetDependency */,
 			);
 			name = DolphiniOS;
 			packageProductDependencies = (
@@ -1815,6 +1916,7 @@
 			targets = (
 				B9DC3DF527EFBD2C0084DAA4 /* DolphiniOS */,
 				B96C9A4E2A46C1CE002B5ECF /* DolphiniOSTests */,
+				5EC4BDFA0AA54C352390B6AE /* JITEnabler */,
 			);
 		};
 /* End PBXProject section */
@@ -1990,6 +2092,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		188585205A264EF1DE061B52 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FFC06733A954119961CC7FD /* JITEnablerRequestHandler.swift in Sources */,
+				0ABB5E4CCEEEDBCD2D8D2B75 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B96C9A4B2A46C1CE002B5ECF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2016,6 +2127,8 @@
 				B9FCB7BE28967C130020E233 /* JitAcquisitionService.swift in Sources */,
 				B9661F362D23190300FB2AAB /* MappingInputDisplayInputCell.m in Sources */,
 				B9FCB7B9289670830020E233 /* JitManager.m in Sources */,
+				D16E73DFF7987A6CDB79AD0E /* StikJITManager.swift in Sources */,
+				620249E7FE8CEBC155116D2A /* JitManager+StikJIT.swift in Sources */,
 				B99137882881486200588446 /* WiiSystemLanguageViewController.mm in Sources */,
 				B900A7CF27F4DB9A000361DD /* SoftwareListCell.swift in Sources */,
 				B939872A28800BA2008E8E47 /* AudioBackendCell.m in Sources */,
@@ -2141,12 +2254,20 @@
 				B95AC52E2D29C49F0048E48B /* AudioSessionCategoryService.swift in Sources */,
 				B97E4B532965011C00B3EE9C /* FirebaseService.mm in Sources */,
 				B9398727288009D0008E8E47 /* AudioBackendViewController.mm in Sources */,
+				E0330A5A9DC372F70C6DA286 /* StikJITExtensionLauncher.m in Sources */,
+				26D300A3AC24D2577DDEF559 /* DDIManager.swift in Sources */,
+				FA2CE0CDAD2162BC62DDB203 /* JitManager+StikDebugURLScheme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		18AC26EE9CB9E68BCF2ABEAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5EC4BDFA0AA54C352390B6AE /* JITEnabler */;
+			targetProxy = 1DF2F7B6A3112E50F02FB48D /* PBXContainerItemProxy */;
+		};
 		B96C9A542A46C1CE002B5ECF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = B9DC3DF527EFBD2C0084DAA4 /* DolphiniOS */;
@@ -2227,6 +2348,46 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		084C65370DCD3218EB000280 /* Release (Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (Jailbroken)";
+		};
+		1A41962069AC086CF7118A5B /* Debug (Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Debug (Jailbroken)";
+		};
+		2A271C3DB12B2871A5E2339B /* Release (Non-Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (Non-Jailbroken)";
+		};
+		7619C0F4EC75E7F66C479351 /* Release (Beta, Non-Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (Beta, Non-Jailbroken)";
+		};
+		93E449C2961ECB7DF4D223BB /* Release (Beta, Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (Beta, Jailbroken)";
+		};
 		B96C9A562A46C1CE002B5ECF /* Debug (Non-Jailbroken) */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3533,9 +3694,48 @@
 			};
 			name = "Release (Beta, TrollStore)";
 		};
+		C3811DD0788E58D66FE83AEA /* Release (TrollStore) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (TrollStore)";
+		};
+		C61991B2FC46FF25FE78A8D5 /* Debug (Non-Jailbroken) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Debug (Non-Jailbroken)";
+		};
+		DF15F5E3D5295A6C01D89912 /* Release (Beta, TrollStore) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4F274A73790F056297CA1FEA /* JITEnablerExtension.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "Release (Beta, TrollStore)";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		40B68528F176A33478BC0732 /* Build configuration list for PBXNativeTarget "JITEnabler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C61991B2FC46FF25FE78A8D5 /* Debug (Non-Jailbroken) */,
+				1A41962069AC086CF7118A5B /* Debug (Jailbroken) */,
+				2A271C3DB12B2871A5E2339B /* Release (Non-Jailbroken) */,
+				7619C0F4EC75E7F66C479351 /* Release (Beta, Non-Jailbroken) */,
+				084C65370DCD3218EB000280 /* Release (Jailbroken) */,
+				C3811DD0788E58D66FE83AEA /* Release (TrollStore) */,
+				93E449C2961ECB7DF4D223BB /* Release (Beta, Jailbroken) */,
+				DF15F5E3D5295A6C01D89912 /* Release (Beta, TrollStore) */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B96C9A552A46C1CE002B5ECF /* Build configuration list for PBXNativeTarget "DolphiniOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
