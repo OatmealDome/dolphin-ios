@@ -50,6 +50,7 @@ extension JitManager {
     }
 
     isAttemptingStikJIT = true
+    self.requiresUniversalJITProtocol = StikJITManager.shared.forceJITScriptEnabled
     currentAttemptID += 1
     let attemptID = currentAttemptID
     let targetPID = Int32(getpid())
@@ -67,6 +68,7 @@ extension JitManager {
       activeHost = nil
 
       if !ok {
+        self.requiresUniversalJITProtocol = false
         let hintedMessage = appendingStikJITTroubleshootingHint(message ?? "Unknown error")
         DispatchQueue.main.async { [weak self] in
           self?.acquisitionError = "StikJIT failed to enable JIT: \(hintedMessage)"

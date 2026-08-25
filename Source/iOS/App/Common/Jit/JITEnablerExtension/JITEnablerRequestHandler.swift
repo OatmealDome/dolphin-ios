@@ -23,7 +23,7 @@ protocol StikJITHostXPCProtocol {
 }
 
 private let kListenerEndpointKey = "DOLStikJITListenerEndpoint"
-private let backendSelectedScript: StikJIT.Script = .legacy
+private let backendSelectedScript: StikJIT.Script = .universal
 
 @objc(JITEnablerRequestHandler)
 final class JITEnablerRequestHandler: NSObject, NSExtensionRequestHandling, StikJITRunnerXPCProtocol {

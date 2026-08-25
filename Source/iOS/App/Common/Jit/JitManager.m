@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, DOLJitType) {
 #endif
     
     self.acquiredJit = false;
+    self.requiresUniversalJITProtocol = false;
     
     if (@available(iOS 26, *)) {
       self.deviceHasTxm = [self checkIfDeviceUsesTXM];

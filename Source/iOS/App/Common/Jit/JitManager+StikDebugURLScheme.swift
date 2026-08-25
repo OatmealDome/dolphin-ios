@@ -24,7 +24,7 @@ extension JitManager {
     ]
 
     if self.deviceHasTxm {
-      queryItems.append(URLQueryItem(name: "script-name", value: "legacy.js"))
+      queryItems.append(URLQueryItem(name: "script-name", value: "universal.js"))
     }
 
     var components = URLComponents()
