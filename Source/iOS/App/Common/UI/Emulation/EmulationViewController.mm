@@ -67,7 +67,9 @@
   if (!_didStartEmulation) {
     const PowerPC::CPUCore current_core = Config::Get(Config::MAIN_CPU_CORE);
     const bool is_interpreter_core = current_core == PowerPC::CPUCore::Interpreter || current_core == PowerPC::CPUCore::CachedInterpreter;
-    
+
+    [[JitManager shared] recheckIfJitIsAcquired];
+
     if (![JitManager shared].acquiredJit && !is_interpreter_core) {
       JitWaitViewController* jitController = [[JitWaitViewController alloc] initWithNibName:@"JitWait" bundle:nil];
       jitController.delegate = self;
