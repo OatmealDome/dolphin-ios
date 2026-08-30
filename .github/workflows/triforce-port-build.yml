@@ -1,0 +1,27 @@
+name: Triforce Port Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout DolphiniOS
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Fetch Dolphin Triforce commit
+        run: |
+          git remote add dolphin-upstream https://github.com/dolphin-emu/dolphin.git
+          git fetch --no-tags dolphin-upstream 23f5d096ae750ec1f87a05026f8279f28221692f
+
+      - name: Probe cherry-pick
+        run: |
+          git config user.name "CI"
+          git config user.email "ci@example.invalid"
+
+          git cherry-pick -m 1 23f5d096ae750ec1f87a05026f8279f28221692f
