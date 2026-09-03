@@ -1,0 +1,119 @@
+name: DSU Client CI
+
+# Workflow de validacion en runners hosteados por GitHub (sin infraestructura
+# propia, sin necesidad de una Mac local).
+#
+# El workflow existente del repo (`build.yml`) hace el archive/IPA/DEB
+# completo pero requiere `runs-on: [self-hosted, macOS]` con el toolchain de
+# jailbreak ya instalado. Este workflow es mas liviano: solo COMPILA (no
+# archiva) el scheme "DiOS (NJB)" en Debug, con firma de codigo deshabilitada,
+# para detectar errores de compilacion en cada push/PR. Pensado especialmente
+# para validar los cambios de la pantalla DSU Client (Controllers/Controllers
+# DsuClient*, Controllers/DsuServerCell*, Controllers/ControllersAddDsuServer*)
+# y cualquier otro cambio en el arbol de iOS.
+#
+# Sobre el runner y la version de Xcode:
+# - `runs-on:` en GitHub Actions usa etiquetas por VERSION DE macOS, no por
+#   version de Xcode: macos-26 (Apple Silicon, la mas nueva), macos-15,
+#   macos-14 (en baja: deprecada desde el 6/jul/2026, se apaga el 2/nov/2026
+#   - no usar). No existe "runs-on: xcode-27".
+# - Xcode se selecciona con un paso dentro del job (`xcode-select` o la
+#   action `maxim-lobanov/setup-xcode`), porque cada imagen trae varias
+#   versiones de Xcode preinstaladas en paralelo.
+# - Las versiones beta/RC de Xcode (como Xcode 27, en preview publico) solo
+#   se instalan en la imagen de macOS mas nueva (macos-26) - por eso el
+#   runner tiene que ser macos-26 si se quiere probar contra Xcode 27.
+#
+# Por eso hay DOS jobs:
+#   - build-stable: Xcode estable mas reciente -> senal confiable de "esto
+#     compila con lo que compilaria un usuario comun hoy".
+#   - build-xcode27-preview: Xcode 27 (preview publico) -> para adelantarse a
+#     roturas de SDK/toolchain, como haces otros proyectos de emuladores.
+#     No bloquea el PR si falla (continue-on-error), porque un preview puede
+#     romper por cosas ajenas a este cambio.
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'Source/iOS/**'
+      - 'Source/Core/InputCommon/ControllerInterface/DualShockUDPClient/**'
+      - '.github/workflows/dsu-client-ci.yml'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'Source/iOS/**'
+      - 'Source/Core/InputCommon/ControllerInterface/DualShockUDPClient/**'
+      - '.github/workflows/dsu-client-ci.yml'
+  workflow_dispatch: {}
+
+env:
+  XCODE_COMMON_BUILD_ARGS: -project Source/iOS/App/DolphiniOS.xcodeproj -derivedDataPath "${{ github.workspace }}/build-Xcode" -sdk iphoneos -destination generic/platform=iOS DOL_PBID_ORGANIZATION_IDENTIFIER="me.oatmealdome" DOL_BUILD_SOURCE="development" CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
+
+jobs:
+  build-stable:
+    name: Build (Xcode estable)
+    runs-on: macos-26
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Seleccionar Xcode estable mas reciente
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Mostrar version de Xcode seleccionada
+        run: xcodebuild -version
+
+      - name: Compilar DiOS (NJB) - Debug
+        run: |
+          xcodebuild build \
+            -configuration "Debug (Non-Jailbroken)" \
+            -scheme "DiOS (NJB)" \
+            ${{ env.XCODE_COMMON_BUILD_ARGS }}
+
+      - name: Subir el .app compilado (sin firmar) como artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DolphiniOS-NJB-Debug-xcode-estable
+          path: ${{ github.workspace }}/build-Xcode/Build/Products/Debug*iphoneos/DolphiniOS.app
+          if-no-files-found: ignore
+          retention-days: 14
+
+  build-xcode27-preview:
+    name: Build (Xcode 27 preview)
+    runs-on: macos-26
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Seleccionar Xcode 27 (preview publico, incluye betas)
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest
+
+      - name: Mostrar version de Xcode seleccionada
+        run: xcodebuild -version
+
+      - name: Compilar DiOS (NJB) - Debug
+        run: |
+          xcodebuild build \
+            -configuration "Debug (Non-Jailbroken)" \
+            -scheme "DiOS (NJB)" \
+            ${{ env.XCODE_COMMON_BUILD_ARGS }}
+
+      - name: Subir el .app compilado (sin firmar) como artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DolphiniOS-NJB-Debug-xcode27-preview
+          path: ${{ github.workspace }}/build-Xcode/Build/Products/Debug*iphoneos/DolphiniOS.app
+          if-no-files-found: ignore
+          retention-days: 14

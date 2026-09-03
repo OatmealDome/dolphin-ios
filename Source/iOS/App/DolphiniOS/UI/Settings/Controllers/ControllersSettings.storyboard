@@ -330,6 +330,31 @@
                                             <segue destination="LO7-Nq-Ret" kind="show" id="FlP-a3-trB"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="dsuClientCell">
+                                        <rect key="frame" x="16" y="558" width="343" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dsuClientCell" id="dsuClientCellContent">
+                                            <rect key="frame" x="0.0" y="0.0" width="316.5" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="DSU Client" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="dsuClientCellLabel">
+                                                    <rect key="frame" x="16" y="11" width="292.5" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="dsuClientCellLabel" secondAttribute="trailing" id="dsuClientCellCon1"/>
+                                                <constraint firstItem="dsuClientCellLabel" firstAttribute="top" secondItem="dsuClientCellContent" secondAttribute="topMargin" id="dsuClientCellCon2"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="dsuClientCellLabel" secondAttribute="bottom" id="dsuClientCellCon3"/>
+                                                <constraint firstItem="dsuClientCellLabel" firstAttribute="leading" secondItem="dsuClientCellContent" secondAttribute="leadingMargin" id="dsuClientCellCon4"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="dsuClientScene" kind="show" id="dsuClientSegue"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -690,6 +715,256 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e9e-Kr-HbZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3230" y="788"/>
+        </scene>
+        <!--DSU Client-->
+        <scene sceneID="dsuClientSceneWrap">
+            <objects>
+                <tableViewController id="dsuClientScene" customClass="ControllersDsuClientViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="dsuClientTableView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="enableCell" rowHeight="44" id="dsuEnableCell">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dsuEnableCell" id="dsuEnableCellContent">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="dsuEnableLabel">
+                                            <rect key="frame" x="20" y="11.5" width="50" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dsuEnableSwitch" customClass="DOLUIKitSwitch">
+                                            <rect key="frame" x="305" y="6.5" width="51" height="31"/>
+                                            <connections>
+                                                <action selector="enabledSwitchChanged:" destination="dsuClientScene" eventType="valueChanged" id="dsuEnableAction"/>
+                                            </connections>
+                                        </switch>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="dsuEnableSwitch" secondAttribute="trailing" id="dsuEnableCon1"/>
+                                        <constraint firstItem="dsuEnableLabel" firstAttribute="leading" secondItem="dsuEnableCellContent" secondAttribute="leadingMargin" id="dsuEnableCon2"/>
+                                        <constraint firstItem="dsuEnableLabel" firstAttribute="trailing" secondItem="dsuEnableSwitch" secondAttribute="leading" id="dsuEnableCon3"/>
+                                        <constraint firstItem="dsuEnableSwitch" firstAttribute="centerY" secondItem="dsuEnableCellContent" secondAttribute="centerY" id="dsuEnableCon4"/>
+                                        <constraint firstItem="dsuEnableLabel" firstAttribute="centerY" secondItem="dsuEnableCellContent" secondAttribute="centerY" id="dsuEnableCon5"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="serverCell" rowHeight="44" id="dsuServerCellProto" customClass="DsuServerCell">
+                                <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dsuServerCellProto" id="dsuServerCellContent">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="dsuServerCellLabel">
+                                            <rect key="frame" x="20" y="11.5" width="335" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="dsuServerCellLabel" firstAttribute="centerY" secondItem="dsuServerCellContent" secondAttribute="centerY" id="dsuServerCellCon1"/>
+                                        <constraint firstItem="dsuServerCellLabel" firstAttribute="leading" secondItem="dsuServerCellContent" secondAttribute="leadingMargin" id="dsuServerCellCon2"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="dsuServerCellLabel" secondAttribute="trailing" id="dsuServerCellCon3"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="nameLabel" destination="dsuServerCellLabel" id="dsuServerCellOutlet"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="addCell" rowHeight="44" id="dsuAddCell">
+                                <rect key="frame" x="0.0" y="88" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dsuAddCell" id="dsuAddCellContent">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="dsuAddCellLabel">
+                                            <rect key="frame" x="20" y="11.5" width="50" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" systemColor="linkColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="dsuAddCellLabel" firstAttribute="centerY" secondItem="dsuAddCellContent" secondAttribute="centerY" id="dsuAddCellCon1"/>
+                                        <constraint firstItem="dsuAddCellLabel" firstAttribute="leading" secondItem="dsuAddCellContent" secondAttribute="leadingMargin" id="dsuAddCellCon2"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="descriptionCell" id="dsuDescriptionCell">
+                                <rect key="frame" x="0.0" y="132" width="375" height="88"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dsuDescriptionCell" id="dsuDescriptionCellContent">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="88"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Description" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dsuDescriptionTextView">
+                                            <rect key="frame" x="16" y="8" width="343" height="72"/>
+                                            <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="textColor" systemColor="secondaryLabelColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="dsuDescriptionTextView" firstAttribute="leading" secondItem="dsuDescriptionCellContent" secondAttribute="leadingMargin" id="dsuDescriptionCon1"/>
+                                        <constraint firstItem="dsuDescriptionTextView" firstAttribute="top" secondItem="dsuDescriptionCellContent" secondAttribute="topMargin" id="dsuDescriptionCon2"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="dsuDescriptionTextView" secondAttribute="bottom" id="dsuDescriptionCon3"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="dsuDescriptionTextView" secondAttribute="trailing" id="dsuDescriptionCon4"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="dsuClientScene" id="dsuTableDS"/>
+                            <outlet property="delegate" destination="dsuClientScene" id="dsuTableDel"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="DSU Client" largeTitleDisplayMode="never" id="dsuClientNavItem"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="enabledSwitch" destination="dsuEnableSwitch" id="dsuOutletSwitch"/>
+                        <outlet property="descriptionTextView" destination="dsuDescriptionTextView" id="dsuOutletDescription"/>
+                        <segue destination="dsuAddServerScene" kind="show" identifier="addServer" id="dsuAddServerSegue"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dsuClientFirstResponder" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3230" y="1200"/>
+        </scene>
+        <!--Add New DSU Server-->
+        <scene sceneID="dsuAddServerSceneWrap">
+            <objects>
+                <tableViewController id="dsuAddServerScene" customClass="ControllersAddDsuServerViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="dsuAddTableView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <sections>
+                            <tableViewSection id="dsuAddSection">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="dsuAddDescRow">
+                                        <rect key="frame" x="16" y="18" width="343" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dsuAddDescRow" id="dsuAddDescContent">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsuAddDescLabel">
+                                                    <rect key="frame" x="16" y="11" width="90" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dsuAddDescField">
+                                                    <rect key="frame" x="114" y="5" width="213" height="34"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="none" autocorrectionType="no"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="dsuAddServerScene" id="dsuAddDescDelegate"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="leadingMargin" secondItem="dsuAddDescLabel" secondAttribute="leading" id="dsuAddDescCon1"/>
+                                                <constraint firstItem="dsuAddDescField" firstAttribute="centerY" secondItem="dsuAddDescContent" secondAttribute="centerY" id="dsuAddDescCon2"/>
+                                                <constraint firstItem="dsuAddDescLabel" firstAttribute="centerY" secondItem="dsuAddDescContent" secondAttribute="centerY" id="dsuAddDescCon3"/>
+                                                <constraint firstItem="dsuAddDescField" firstAttribute="leading" secondItem="dsuAddDescLabel" secondAttribute="trailingMargin" constant="16" id="dsuAddDescCon4"/>
+                                                <constraint firstItem="dsuAddDescField" firstAttribute="trailing" secondItem="dsuAddDescContent" secondAttribute="trailingMargin" id="dsuAddDescCon5"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="dsuAddAddrRow">
+                                        <rect key="frame" x="16" y="61.5" width="343" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dsuAddAddrRow" id="dsuAddAddrContent">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Server IP Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsuAddAddrLabel">
+                                                    <rect key="frame" x="16" y="11" width="130" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dsuAddAddrField">
+                                                    <rect key="frame" x="154" y="5" width="173" height="34"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="none" autocorrectionType="no" keyboardType="URL"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="dsuAddServerScene" id="dsuAddAddrDelegate"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="leadingMargin" secondItem="dsuAddAddrLabel" secondAttribute="leading" id="dsuAddAddrCon1"/>
+                                                <constraint firstItem="dsuAddAddrField" firstAttribute="centerY" secondItem="dsuAddAddrContent" secondAttribute="centerY" id="dsuAddAddrCon2"/>
+                                                <constraint firstItem="dsuAddAddrLabel" firstAttribute="centerY" secondItem="dsuAddAddrContent" secondAttribute="centerY" id="dsuAddAddrCon3"/>
+                                                <constraint firstItem="dsuAddAddrField" firstAttribute="leading" secondItem="dsuAddAddrLabel" secondAttribute="trailingMargin" constant="16" id="dsuAddAddrCon4"/>
+                                                <constraint firstItem="dsuAddAddrField" firstAttribute="trailing" secondItem="dsuAddAddrContent" secondAttribute="trailingMargin" id="dsuAddAddrCon5"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="dsuAddPortRow">
+                                        <rect key="frame" x="16" y="105" width="343" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dsuAddPortRow" id="dsuAddPortContent">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Server Port" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsuAddPortLabel">
+                                                    <rect key="frame" x="16" y="11" width="90" height="21.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dsuAddPortField">
+                                                    <rect key="frame" x="114" y="5" width="213" height="34"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="dsuAddServerScene" id="dsuAddPortDelegate"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="leadingMargin" secondItem="dsuAddPortLabel" secondAttribute="leading" id="dsuAddPortCon1"/>
+                                                <constraint firstItem="dsuAddPortField" firstAttribute="centerY" secondItem="dsuAddPortContent" secondAttribute="centerY" id="dsuAddPortCon2"/>
+                                                <constraint firstItem="dsuAddPortLabel" firstAttribute="centerY" secondItem="dsuAddPortContent" secondAttribute="centerY" id="dsuAddPortCon3"/>
+                                                <constraint firstItem="dsuAddPortField" firstAttribute="leading" secondItem="dsuAddPortLabel" secondAttribute="trailingMargin" constant="16" id="dsuAddPortCon4"/>
+                                                <constraint firstItem="dsuAddPortField" firstAttribute="trailing" secondItem="dsuAddPortContent" secondAttribute="trailingMargin" id="dsuAddPortCon5"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="dsuAddServerScene" id="dsuAddTableDS"/>
+                            <outlet property="delegate" destination="dsuAddServerScene" id="dsuAddTableDel"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Add New DSU Server" id="dsuAddNavItem">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="dsuAddBarButton">
+                            <connections>
+                                <action selector="addPressed:" destination="dsuAddServerScene" id="dsuAddBarButtonAction"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="descriptionField" destination="dsuAddDescField" id="dsuOutletDescField"/>
+                        <outlet property="addressField" destination="dsuAddAddrField" id="dsuOutletAddrField"/>
+                        <outlet property="portField" destination="dsuAddPortField" id="dsuOutletPortField"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dsuAddServerFirstResponder" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4130" y="1200"/>
         </scene>
     </scenes>
 </document>
