@@ -940,6 +940,7 @@ Would you like to ignore this line and continue parsing?";
 "Enable" = "Enable";
 "Add..." = "Add...";
 "Remove" = "Remove";
+"Please enter a valid server address and port." = "Please enter a valid server address and port.";
 "DSU protocol enables the use of input and motion data from compatible sources, like PlayStation, Nintendo Switch and Steam controllers.<br><br>For setup instructions, <a href=\"https://wiki.dolphin-emu.org/index.php?title=DSU_Client\">refer to this page</a>." = "DSU protocol enables the use of input and motion data from compatible sources, like PlayStation, Nintendo Switch and Steam controllers.<br><br>For setup instructions, <a href=\"https://wiki.dolphin-emu.org/index.php?title=DSU_Client\">refer to this page</a>.";
 "Size" = "Size";
 "Disc" = "Disc";
