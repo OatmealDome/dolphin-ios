@@ -11,6 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JitWaitViewController">
             <connections>
+                <outlet property="stikJITActivityIndicator" destination="StK-JT-ai1" id="StK-JT-aio"/>
+                <outlet property="stikJITStatusView" destination="StK-JT-sv1" id="StK-JT-svo"/>
                 <outlet property="view" destination="r55-Fn-aBI" id="r9r-Zd-Dn7"/>
             </connections>
         </placeholder>
@@ -56,6 +58,20 @@ For more information, tap "Help".</string>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="horizontal" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="StK-JT-sv1" userLabel="StikJIT Status">
+                                    <rect key="frame" x="87.5" y="284" width="160" height="20"/>
+                                    <subviews>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="StK-JT-ai1">
+                                            <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
+                                        </activityIndicatorView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="StikJIT is running…" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFitWidth="NO" translatesAutoresizingMaskIntoConstraints="NO" id="StK-JT-sl1">
+                                            <rect key="frame" x="28" y="1" width="132" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                            <color key="textColor" systemColor="systemBlueColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6uo-Rc-2vE">
                                     <rect key="frame" x="47.5" y="284" width="240" height="0.0"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>

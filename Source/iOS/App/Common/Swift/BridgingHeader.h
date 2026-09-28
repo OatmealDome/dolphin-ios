@@ -11,6 +11,7 @@
 #import "JitManager.h"
 #import "JitManager+AltServer.h"
 #import "JitManager+JitStreamer.h"
+#import "StikJITExtensionLauncher.h"
 #import "JitManager+PTrace.h"
 #import "LegacyInputConfigMigrationService.h"
 #import "MainSceneCoordinator.h"

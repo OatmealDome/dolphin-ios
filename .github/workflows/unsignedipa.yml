@@ -1,0 +1,92 @@
+name: Build & Upload Unsigned IPAs
+
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: unsignedipa-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.repository_owner != 'OatmealDome'
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - beta: false
+            variant: njb
+            configuration: Release (Non-Jailbroken)
+            scheme: DiOS (NJB)
+            archive_name: NonJailbroken
+            output_name: DiOS-Non-Jailbroken.ipa
+          - beta: false
+            variant: trollstore
+            configuration: Release (TrollStore)
+            scheme: DiOS (JB)
+            archive_name: TrollStore
+            output_name: DiOS-TrollStore.tipa
+          - beta: true
+            variant: njb
+            configuration: Release (Beta, Non-Jailbroken)
+            scheme: DiOS (NJB)
+            archive_name: NonJailbroken-Beta
+            output_name: DiOS-Non-Jailbroken-Beta.ipa
+          - beta: true
+            variant: trollstore
+            configuration: Release (Beta, TrollStore)
+            scheme: DiOS (JB)
+            archive_name: TrollStore-Beta
+            output_name: DiOS-TrollStore-Beta.tipa
+
+    env:
+      XCODE_COMMON_BUILD_ARGS: -project Source/iOS/App/DolphiniOS.xcodeproj -derivedDataPath "${{ github.workspace }}/build-Xcode" -sdk iphoneos -destination generic/platform=iOS DOL_PBID_ORGANIZATION_IDENTIFIER="me.${{ github.repository_owner }}" DOL_BUILD_SOURCE="development" CODE_SIGNING_ALLOWED="NO" CODE_SIGNING_REQUIRED="NO"
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - uses: irgaly/xcode-cache@v1
+        with:
+          key: xcode-cache-deriveddata-${{ runner.os }}-${{ matrix.beta }}-${{ matrix.variant }}-${{ hashFiles('Source/iOS/App/DolphiniOS.xcodeproj/project.pbxproj', '**/Package.resolved') }}
+          restore-keys: |
+            xcode-cache-deriveddata-${{ runner.os }}-${{ matrix.beta }}-${{ matrix.variant }}-
+            xcode-cache-deriveddata-${{ runner.os }}-
+          deriveddata-directory: ${{ github.workspace }}/build-Xcode
+          sourcepackages-directory: ${{ github.workspace }}/build-Xcode/SourcePackages
+
+      - name: Set Xcode Version
+        run: sudo xcode-select -s /Applications/Xcode_26.0.app
+
+      - name: Install Homebrew Dependencies
+        run: brew install cmake ninja bartycrouch
+
+      - name: Build Application
+        run: |
+          mkdir -p "${{ github.workspace }}/archives"
+          xcodebuild archive \
+            -archivePath "${{ github.workspace }}/archives/${{ matrix.archive_name }}.xcarchive" \
+            -configuration "${{ matrix.configuration }}" \
+            -scheme "${{ matrix.scheme }}" \
+            ${{ env.XCODE_COMMON_BUILD_ARGS }}
+
+      - name: Package IPA/TIPA
+        run: |
+          mkdir -p "${{ github.workspace }}/products"
+          cp -r "${{ github.workspace }}/archives/${{ matrix.archive_name }}.xcarchive/Products/Applications/DolphiniOS.app" "${{ github.workspace }}/DolphiniOS.app"
+          cd "${{ github.workspace }}"
+          rm -rf Payload
+          mkdir -p Payload
+          mv DolphiniOS.app Payload/DolphiniOS.app
+          zip -r "products/${{ matrix.output_name }}" Payload
+          rm -rf Payload
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.output_name }}
+          path: ${{ github.workspace }}/products/${{ matrix.output_name }}
+          archive: false

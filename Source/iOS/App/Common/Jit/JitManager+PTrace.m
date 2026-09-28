@@ -21,25 +21,33 @@ extern char** environ;
 
 const char* _Nonnull DOLJitPTraceChildProcessArgument = "ptraceChild";
 
+static bool HasBooleanEntitlement(CFStringRef entitlement) {
+  void* task = SecTaskCreateFromSelf(NULL);
+  if (task == NULL) {
+    return false;
+  }
+
+  CFTypeRef entitlementValue = SecTaskCopyValueForEntitlement(task, entitlement, NULL);
+  bool result = entitlementValue == kCFBooleanTrue;
+
+  if (entitlementValue != NULL) {
+    CFRelease(entitlementValue);
+  }
+  CFRelease(task);
+
+  return result;
+}
+
 @implementation JitManager (PTrace)
+
+- (bool)hasGetTaskAllowEntitlement {
+  return HasBooleanEntitlement(CFSTR("get-task-allow"));
+}
 
 - (bool)checkCanAcquireJitByPTrace {
   // If we're out of the sandbox, then we can run ptrace.
   // We can check this by the presence of the "platform-application" private entitlement.
-  
-  void* task = SecTaskCreateFromSelf(NULL);
-  CFTypeRef entitlementValue = SecTaskCopyValueForEntitlement(task, CFSTR("platform-application"), NULL);
-  
-  if (entitlementValue == NULL) {
-    return false;
-  }
-  
-  bool result = entitlementValue == kCFBooleanTrue;
-  
-  CFRelease(entitlementValue);
-  CFRelease(task);
-  
-  return result;
+  return HasBooleanEntitlement(CFSTR("platform-application"));
 }
 
 - (void)runPTraceStartupTasks {

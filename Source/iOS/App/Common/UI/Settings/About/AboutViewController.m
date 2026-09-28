@@ -25,4 +25,9 @@
   [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
 
+- (IBAction)stikJITCreditPressed:(id)sender {
+  NSURL* url = [NSURL URLWithString:@"https://github.com/StephenDev0/StikJIT"];
+  [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+}
+
 @end
