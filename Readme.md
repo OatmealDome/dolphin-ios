@@ -8,8 +8,8 @@ This is the repository for the new DolphiniOS codebase.
 
 You will need the following:
 
-* A Mac capable of running macOS Big Sur 11.3 or later
-* Xcode 13 or later
+* A Mac running a macOS version supported by Xcode 27.1 or later
+* Xcode 27.1 or later with the iOS 27.1 or later SDK
 * Homebrew (or your favourite package manager)
 
 First, install the necessary tools using Homebrew:
@@ -27,6 +27,8 @@ To change the organization identifier, go to `Project` -> `Config` -> `BundleIde
 To change the team ID, go to `Project` -> `Config` -> `DevelopmentTeam.xcconfig`, and replace `your-team-id` with your developer account's team ID.
 
 Once finished, you can open the Xcode project at `Source/iOS/App/DolphiniOS.xcodeproj` and build DolphiniOS.
+
+The app supports iOS 15 and later. Build with the current iOS SDK to enable native iPhone Duo screen sizing and adaptive system bars. Duo-specific layouts use iOS 27.1 APIs with a fallback on earlier systems. See [iPhone Duo support and validation](docs/iPhoneDuo.md) for the behavior and device test checklist.
 
 # Dolphin - A GameCube and Wii Emulator
 

@@ -13,6 +13,18 @@ class ExternalDisplaySceneDelegate: UIResponder, UIWindowSceneDelegate {
   func sceneDidDisconnect(_ scene: UIScene) {
     EmulationCoordinator.shared().isExternalDisplayConnected = false
   }
+
+  @available(iOS 26.0, *)
+  func windowScene(_ windowScene: UIWindowScene, didUpdateEffectiveGeometry previousEffectiveGeometry: UIWindowScene.Geometry) {
+    EmulationCoordinator.shared().updateRenderSurface()
+  }
+
+  func windowScene(_ windowScene: UIWindowScene, didUpdate previousCoordinateSpace: UICoordinateSpace, interfaceOrientation previousInterfaceOrientation: UIInterfaceOrientation, traitCollection previousTraitCollection: UITraitCollection) {
+    if #available(iOS 26.0, *) {
+      return
+    }
+    EmulationCoordinator.shared().updateRenderSurface()
+  }
   
   func sceneDidBecomeActive(_ scene: UIScene) {
     //

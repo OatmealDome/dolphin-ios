@@ -19,9 +19,6 @@ import Foundation
   }
   
   @objc func registerMotionHandlers() {
-    // Set our orientation properly
-    self.statusBarOrientationChanged()
-    
     // Set the sensor update times
     // 200Hz is the Wiimote update interval
     let updateInterval: Double = 1.0 / 200.0
@@ -134,8 +131,7 @@ import Foundation
     self.port = port
   }
   
-  // UIApplicationDidChangeStatusBarOrientationNotification is deprecated...
-  @objc func statusBarOrientationChanged() {
-    self.orientation = UIApplication.shared.statusBarOrientation
+  @objc func setInterfaceOrientation(_ orientation: UIInterfaceOrientation) {
+    self.orientation = orientation
   }
 }
