@@ -26,7 +26,6 @@
 
 - (void)showWindowOnScene:(UIWindowScene*)scene {
   self->_window = [[UIWindow alloc] initWithWindowScene:scene];
-  self->_window.frame = [UIScreen mainScreen].bounds;
   self->_window.rootViewController = [[UIViewController alloc] init];
   self->_window.windowLevel = UIWindowLevelAlert;
   

@@ -15,11 +15,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (EmulationCoordinator*)shared;
 
-@property (nonatomic, setter=setIsExternalDisplayConnected:) bool isExternalDisplayConnected;
-@property (nonatomic) bool userRequestedPause;
+@property(nonatomic, setter=setIsExternalDisplayConnected:) bool isExternalDisplayConnected;
+@property(nonatomic) bool userRequestedPause;
 
 - (void)registerMainDisplayView:(UIView*)mainView;
 - (void)registerExternalDisplayView:(UIView*)externalView;
+// Call on the main thread after the renderer's layout or display traits change.
+- (void)updateRenderSurface;
 - (void)runEmulationWithBootParameter:(EmulationBootParameter*)bootParameter;
 - (void)clearMetalLayer;
 

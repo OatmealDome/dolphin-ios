@@ -11,7 +11,21 @@ class MainDisplaySceneDelegate: UIResponder, UIWindowSceneDelegate {
   }
   
   func sceneDidDisconnect(_ scene: UIScene) {
-    MainSceneCoordinator.shared().mainScene = nil
+    if MainSceneCoordinator.shared().mainScene === scene {
+      MainSceneCoordinator.shared().mainScene = nil
+    }
+  }
+
+  @available(iOS 26.0, *)
+  func windowScene(_ windowScene: UIWindowScene, didUpdateEffectiveGeometry previousEffectiveGeometry: UIWindowScene.Geometry) {
+    EmulationCoordinator.shared().updateRenderSurface()
+  }
+
+  func windowScene(_ windowScene: UIWindowScene, didUpdate previousCoordinateSpace: UICoordinateSpace, interfaceOrientation previousInterfaceOrientation: UIInterfaceOrientation, traitCollection previousTraitCollection: UITraitCollection) {
+    if #available(iOS 26.0, *) {
+      return
+    }
+    EmulationCoordinator.shared().updateRenderSurface()
   }
   
   func sceneDidBecomeActive(_ scene: UIScene) {

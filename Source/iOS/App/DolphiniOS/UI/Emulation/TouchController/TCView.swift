@@ -30,8 +30,14 @@ import UIKit
     // Load ourselves from the nib
     let name = String(describing: type(of: self))
     let view = Bundle(for: type(of: self)).loadNibNamed(name, owner: self, options: nil)![0] as! UIView
-    view.frame = self.bounds
+    view.translatesAutoresizingMaskIntoConstraints = false
     self.addSubview(view)
+    NSLayoutConstraint.activate([
+      view.leadingAnchor.constraint(equalTo: leadingAnchor),
+      view.trailingAnchor.constraint(equalTo: trailingAnchor),
+      view.topAnchor.constraint(equalTo: topAnchor),
+      view.bottomAnchor.constraint(equalTo: bottomAnchor)
+    ])
     
     real_view = view;
   }
