@@ -44,10 +44,19 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 @implementation EmulationiOSViewController {
   DOLEmulationVisibleTouchPad _visibleTouchPad;
   int _stateSlot;
+  NSMutableArray<NSURL*>* _skylanderUrls;
+}
+
+- (void)dealloc {
+  for (NSURL* url in _skylanderUrls) {
+    [url stopAccessingSecurityScopedResource];
+  }
 }
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+
+  _skylanderUrls = [[NSMutableArray alloc] init];
 
   for (int i = 0; i < [self.touchPads count]; i++) {
     TCView* padView = self.touchPads[i];
@@ -243,7 +252,7 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
             NSArray<UTType*>* types = @[
                 [UTType exportedTypeWithIdentifier:@"me.oatmealdome.dolphinios.skylander-dumps"]
               ];
-            UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:types];
+            UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:types asCopy:NO];
             pickerController.delegate = self;
             pickerController.modalPresentationStyle = UIModalPresentationPageSheet;
             pickerController.allowsMultipleSelection = false;
@@ -460,7 +469,9 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
 }
 
 - (void)documentPicker:(UIDocumentPickerViewController*)controller didPickDocumentsAtURLs:(NSArray<NSURL*>*)urls {
-    NSString* sourcePath = [urls[0] path];
+    NSURL* url = urls[0];
+    BOOL accessingSecurityScopedResource = [url startAccessingSecurityScopedResource];
+    NSString* sourcePath = [url path];
     std::string path = std::string([sourcePath UTF8String]);
     File::IOFile sky_file(path, "r+b");
     if (!sky_file)
@@ -469,6 +480,9 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
                                        message:nil
                                        preferredStyle:UIAlertControllerStyleAlert];
         [self presentViewController:alert animated:YES completion:nil];
+        if (accessingSecurityScopedResource) {
+            [url stopAccessingSecurityScopedResource];
+        }
         return;
     }
     std::array<u8, 0x40 * 0x10> file_data;
@@ -478,6 +492,9 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
                                        message:nil
                                        preferredStyle:UIAlertControllerStyleAlert];
         [self presentViewController:alert animated:YES completion:nil];
+        if (accessingSecurityScopedResource) {
+            [url stopAccessingSecurityScopedResource];
+        }
         return;
     }
     auto& system = Core::System::GetInstance();
@@ -489,7 +506,13 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
                                        message:nil
                                        preferredStyle:UIAlertControllerStyleAlert];
         [self presentViewController:alert animated:YES completion:nil];
+        if (accessingSecurityScopedResource) {
+            [url stopAccessingSecurityScopedResource];
+        }
         return;
+    }
+    if (accessingSecurityScopedResource) {
+        [_skylanderUrls addObject:url];
     }
     self.skylanderSlot = portal_slot + 1;
 }

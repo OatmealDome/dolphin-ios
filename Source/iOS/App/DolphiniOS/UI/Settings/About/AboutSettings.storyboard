@@ -78,6 +78,17 @@
                                                     <action selector="sourceCodePressed:" destination="jWY-Tc-15b" eventType="touchUpInside" id="Usw-dr-pgF"/>
                                                 </connections>
                                             </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In-app JIT enablement is powered by StikJIT." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Stk-Cr-lbl" userLabel="StikJIT Credit">
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Stk-Cr-btn">
+                                                <state key="normal" title="StikJIT"/>
+                                                <connections>
+                                                    <action selector="stikJITCreditPressed:" destination="jWY-Tc-15b" eventType="touchUpInside" id="Stk-Cr-act"/>
+                                                </connections>
+                                            </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zla-wR-sFe">
                                                 <rect key="frame" x="0.0" y="538" width="335" height="0.0"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
