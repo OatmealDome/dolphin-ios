@@ -383,7 +383,7 @@
   } else if (indexPath.section == 3 && indexPath.row == 5) {
     NSArray<UTType*>* contentTypes = @[[UTType typeWithIdentifier:@"public.data"]];
 
-    UIDocumentPickerViewController* picker = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes];
+    UIDocumentPickerViewController* picker = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:YES];
     picker.delegate = self;
 
     [self presentViewController:picker animated:true completion:nil];
@@ -403,14 +403,14 @@
     return;
   }
 
-  if (![url startAccessingSecurityScopedResource]) {
-    return;
-  }
+  BOOL accessingSecurityScopedResource = [url startAccessingSecurityScopedResource];
 
   NSError* error = nil;
   [[StikJITManager shared] importPairingFile:url error:&error];
 
-  [url stopAccessingSecurityScopedResource];
+  if (accessingSecurityScopedResource) {
+    [url stopAccessingSecurityScopedResource];
+  }
 
   if (error != nil) {
     UIAlertController* errorAlert = [UIAlertController alertControllerWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to import pairing file: %@", [error localizedDescription]] preferredStyle:UIAlertControllerStyleAlert];
