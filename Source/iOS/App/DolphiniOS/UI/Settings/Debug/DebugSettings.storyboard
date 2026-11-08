@@ -282,7 +282,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="343" height="112"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="When launching a game, waits for a debugger or another JIT provider to attach. Dolphin will not launch anything automatically." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="Stk-JIT-inlb">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Waits for you to enable JIT before starting the game." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" translatesAutoresizingMaskIntoConstraints="NO" id="Stk-JIT-inlb">
                                                     <rect key="frame" x="16" y="11" width="311" height="90"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -309,7 +309,7 @@
                                                     <color key="textColor" systemColor="linkColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not Imported" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Stk-JIT-lb03">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Missing" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Stk-JIT-lb03">
                                                     <rect key="frame" x="278" y="11" width="49" height="21.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

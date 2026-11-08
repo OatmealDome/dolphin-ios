@@ -5,6 +5,8 @@
 
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
+#include <cstdlib>
+
 #import "Core/Config/MainSettings.h"
 
 #import "Swift.h"
@@ -54,7 +56,6 @@
   }
 
   [self refreshJITLaunchMode];
-  self.importPairingFileStatusLabel.text = [StikJITManager shared].pairingFileDisplayName;
 
   [self refreshPreparationStatus];
 
@@ -131,16 +132,16 @@
   switch ([StikJITManager shared].jitLaunchMode) {
   case JITLaunchModeExternalStikDebug:
     selectedTitle = @"External StikDebug";
-    self.jitLaunchModeInfoLabel.text = @"Launches StikDebug through its URL scheme when launching a game. When using LiveContainer, enable “Use LiveContainer's Bundle ID” in LiveContainer settings first.";
+    self.jitLaunchModeInfoLabel.text = @"Opens StikDebug to enable JIT when you launch a game.";
     break;
   case JITLaunchModeBuiltInStikJIT:
     selectedTitle = @"Built-in StikJIT";
-    self.jitLaunchModeInfoLabel.text = @"Before launching a game, connect to a nearby Wi-Fi network and LocalDevVPN. If Wi-Fi is unavailable, enable Cellular Data, connect to LocalDevVPN, then enable Airplane Mode before launching the game. When using LiveContainer, enable “Helper Process Support” in LiveContainer’s app settings first. A valid pairing file is required to use Built-in StikJIT. If one is not imported, Dolphin will revert to “Wait for Debugger” when you leave this screen.";
+    self.jitLaunchModeInfoLabel.text = @"Before launching a game, connect to LocalDevVPN, then connect to Wi-Fi or enable Airplane Mode. Import a pairing file to use Built-in StikJIT; otherwise, DolphiniOS uses Wait for Debugger.";
     break;
   case JITLaunchModeWaitForDebugger:
   default:
     selectedTitle = @"Wait for Debugger";
-    self.jitLaunchModeInfoLabel.text = @"When launching a game, waits for a debugger or another JIT provider to attach. Dolphin will not launch anything automatically.";
+    self.jitLaunchModeInfoLabel.text = @"Waits for you to enable JIT before starting the game.";
     break;
   }
 
@@ -240,10 +241,65 @@
   [StikJITManager shared].jitLaunchMode = mode;
   [self refreshJITLaunchMode];
 
+  if ([self configureLiveContainerForJITLaunchMode:mode]) {
+    return;
+  }
+
   if (mode == JITLaunchModeBuiltInStikJIT) {
     [self refreshPreparationStatus];
     [self detectTXM];
   }
+}
+
+- (BOOL)configureLiveContainerForJITLaunchMode:(JITLaunchMode)mode {
+  if (mode == JITLaunchModeWaitForDebugger || std::getenv("LC_HOME_PATH") == nullptr) {
+    return NO;
+  }
+
+  BOOL useBundleID = mode == JITLaunchModeExternalStikDebug;
+  NSString* key = useBundleID ? @"doUseLCBundleId" : @"helperProcessesSupport";
+  NSString* setting = useBundleID ? @"Use LiveContainer’s Bundle ID" : @"Helper Process Support";
+  NSURL* bundleURL = NSBundle.mainBundle.bundleURL;
+  NSURL* settingsURL = [bundleURL URLByAppendingPathComponent:@"LCAppInfo.plist"];
+  NSDictionary* currentSettings = [NSDictionary dictionaryWithContentsOfURL:settingsURL error:nullptr];
+  if ([currentSettings[key] boolValue]) {
+    return NO;
+  }
+
+  NSMutableDictionary* settings = [currentSettings mutableCopy];
+  settings[key] = @YES;
+  BOOL saved = NO;
+  if (useBundleID) {
+    NSURL* infoURL = [bundleURL URLByAppendingPathComponent:@"Info.plist"];
+    NSMutableDictionary* info = [[NSDictionary dictionaryWithContentsOfURL:infoURL error:nullptr] mutableCopy];
+    NSString* originalID = info[@"CFBundleIdentifier"];
+    NSString* hostID = [[JitManager shared] signedApplicationBundleIdentifier];
+    if (originalID.length > 0 && hostID.length > 0) {
+      settings[@"LCOrignalBundleIdentifier"] = originalID;
+      info[@"CFBundleIdentifier"] = hostID;
+      if ([settings writeToURL:settingsURL error:nullptr]) {
+        saved = [info writeToURL:infoURL error:nullptr];
+        if (!saved) {
+          [currentSettings writeToURL:settingsURL error:nullptr];
+        }
+      }
+    }
+  } else {
+    saved = [settings writeToURL:settingsURL error:nullptr];
+  }
+
+  NSString* title = saved ? @"LiveContainer Setting Changed" : @"LiveContainer Setting Required";
+  NSString* message = saved
+      ? [NSString stringWithFormat:@"“%@” is enabled. Reopen DolphiniOS in LiveContainer after it closes.", setting]
+      : [NSString stringWithFormat:@"Could not enable “%@”. Turn it on in LiveContainer’s settings for DolphiniOS, then reopen the app.", setting];
+  UIAlertController* alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+  [alert addAction:[UIAlertAction actionWithTitle:saved ? @"Close App" : @"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action) {
+    if (saved) {
+      std::exit(EXIT_SUCCESS);
+    }
+  }]];
+  [self presentViewController:alert animated:true completion:nil];
+  return YES;
 }
 
 - (void)forceJitScriptChanged {
@@ -252,6 +308,7 @@
 
 - (void)refreshPreparationStatus {
   self.preparationStatusLabel.text = [DDIManager shared].preparationStatus;
+  self.importPairingFileStatusLabel.text = [StikJITManager shared].pairingFileStatus;
   self.txmStatusLabel.text = [DDIManager shared].txmStatus;
 }
 
@@ -383,7 +440,7 @@
   } else if (indexPath.section == 3 && indexPath.row == 5) {
     NSArray<UTType*>* contentTypes = @[[UTType typeWithIdentifier:@"public.data"]];
 
-    UIDocumentPickerViewController* picker = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes];
+    UIDocumentPickerViewController* picker = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:YES];
     picker.delegate = self;
 
     [self presentViewController:picker animated:true completion:nil];
@@ -403,14 +460,17 @@
     return;
   }
 
-  if (![url startAccessingSecurityScopedResource]) {
-    return;
-  }
+  BOOL accessingSecurityScopedResource = [url startAccessingSecurityScopedResource];
 
   NSError* error = nil;
   [[StikJITManager shared] importPairingFile:url error:&error];
 
-  [url stopAccessingSecurityScopedResource];
+  if (accessingSecurityScopedResource) {
+    [url stopAccessingSecurityScopedResource];
+  }
+
+  [[DDIManager shared] invalidateReadiness];
+  [self refreshPreparationStatus];
 
   if (error != nil) {
     UIAlertController* errorAlert = [UIAlertController alertControllerWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to import pairing file: %@", [error localizedDescription]] preferredStyle:UIAlertControllerStyleAlert];
@@ -421,10 +481,6 @@
 
     return;
   }
-
-  self.importPairingFileStatusLabel.text = [StikJITManager shared].pairingFileDisplayName;
-  [[DDIManager shared] invalidateReadiness];
-  [self refreshPreparationStatus];
 }
 
 @end

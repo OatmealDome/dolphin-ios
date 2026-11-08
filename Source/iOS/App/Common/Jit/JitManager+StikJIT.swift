@@ -66,7 +66,9 @@ extension JitManager {
       activeLauncher = nil
       activeHost = nil
 
-      if !ok {
+      if ok {
+        StikJITManager.shared.markPairingFileValidated(pairingData)
+      } else {
         self.requiresUniversalJITProtocol = false
         let hintedMessage = appendingStikJITTroubleshootingHint(message ?? "Unknown error")
         DispatchQueue.main.async { [weak self] in
@@ -79,7 +81,10 @@ extension JitManager {
       NSLog("[StikJIT runner] %@", line)
     }
     host.onFinished = { ok, message in
-      finish(ok: ok, message: message)
+      DispatchQueue.main.async {
+        guard attemptID == currentAttemptID, isAttemptingStikJIT else { return }
+        finish(ok: ok, message: message)
+      }
     }
 
     launcher.launch { _, runner, error in

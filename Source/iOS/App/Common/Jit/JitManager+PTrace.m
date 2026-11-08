@@ -44,6 +44,26 @@ static bool HasBooleanEntitlement(CFStringRef entitlement) {
   return HasBooleanEntitlement(CFSTR("get-task-allow"));
 }
 
+- (NSString*)signedApplicationBundleIdentifier {
+  void* task = SecTaskCreateFromSelf(NULL);
+  if (task == NULL) {
+    return nil;
+  }
+
+  id value = CFBridgingRelease(SecTaskCopyValueForEntitlement(task, CFSTR("application-identifier"), NULL));
+  CFRelease(task);
+  if (![value isKindOfClass:NSString.class]) {
+    return nil;
+  }
+
+  NSString* identifier = value;
+  NSRange separator = [identifier rangeOfString:@"."];
+  if (separator.location == NSNotFound || NSMaxRange(separator) == identifier.length) {
+    return nil;
+  }
+  return [identifier substringFromIndex:NSMaxRange(separator)];
+}
+
 - (bool)checkCanAcquireJitByPTrace {
   // If we're out of the sandbox, then we can run ptrace.
   // We can check this by the presence of the "platform-application" private entitlement.

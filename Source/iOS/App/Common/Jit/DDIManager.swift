@@ -113,6 +113,7 @@ private final class DDIXPCHostBridge: NSObject, StikJITHostXPCProtocol {
             finish()
             completion(false, self.preparationFailureReason)
           case "ready":
+            StikJITManager.shared.markPairingFileValidated(pairingData)
             self.updateReadiness(status: "Ready", reason: nil)
             self.updateTXMStatus(txmPresent)
             finish()

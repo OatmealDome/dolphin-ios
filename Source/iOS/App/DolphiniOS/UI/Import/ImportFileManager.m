@@ -55,21 +55,12 @@
   
   [self showWindowOnScene:mainScene];
   
-  if (![url startAccessingSecurityScopedResource]) {
-    UIAlertController* errorAlert = [UIAlertController alertControllerWithTitle:DOLCoreLocalizedString(@"Error") message:@"Failed to start accessing security scoped resource." preferredStyle:UIAlertControllerStyleAlert];
-    
-    [errorAlert addAction:[UIAlertAction actionWithTitle:DOLCoreLocalizedString(@"OK") style:UIAlertActionStyleDefault
-      handler:^(UIAlertAction* action) {
-      [self hideWindow];
-    }]];
-    
-    [self presentViewControllerOnWindow:errorAlert];
-    
-    return;
-  }
+  BOOL accessingSecurityScopedResource = [url startAccessingSecurityScopedResource];
   
   void (^finish)(void) = ^void() {
-    [url stopAccessingSecurityScopedResource];
+    if (accessingSecurityScopedResource) {
+      [url stopAccessingSecurityScopedResource];
+    }
     
     [self hideWindow];
     
