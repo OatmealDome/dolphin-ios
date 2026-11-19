@@ -6,6 +6,7 @@
 #include "VideoBackends/Metal/MTLBoundingBox.h"
 #include "VideoBackends/Metal/MTLObjectCache.h"
 #include "VideoBackends/Metal/MTLPipeline.h"
+#include "VideoBackends/Metal/MTLPresentMirror.h"
 #include "VideoBackends/Metal/MTLStateTracker.h"
 #include "VideoBackends/Metal/MTLTexture.h"
 #include "VideoBackends/Metal/MTLUtil.h"
@@ -17,6 +18,21 @@
 #include "VideoCommon/VideoBackendBase.h"
 
 #include <fstream>
+#include <mutex>
+
+namespace
+{
+std::mutex s_present_mirror_mutex;
+Metal::PresentMirrorCallback s_present_mirror_callback = nullptr;
+void* s_present_mirror_context = nullptr;
+}  // namespace
+
+void Metal::SetPresentMirrorCallback(PresentMirrorCallback callback, void* context)
+{
+  std::lock_guard lock(s_present_mirror_mutex);
+  s_present_mirror_callback = callback;
+  s_present_mirror_context = context;
+}
 
 Metal::Gfx::Gfx(MRCOwned<CAMetalLayer*> layer) : m_layer(std::move(layer))
 {
@@ -471,6 +487,17 @@ void Metal::Gfx::PresentBackbuffer()
     g_state_tracker->EndRenderPass();
     if (m_drawable)
     {
+      {
+        std::lock_guard lock(s_present_mirror_mutex);
+        if (s_present_mirror_callback && g_presenter)
+        {
+          const auto& rc = g_presenter->GetTargetRectangle();
+          s_present_mirror_callback(s_present_mirror_context, g_state_tracker->GetRenderCmdBuf(),
+                                    [m_drawable texture], rc.left, rc.top, rc.GetWidth(),
+                                    rc.GetHeight());
+        }
+      }
+
       // PresentDrawable refuses to allow Dolphin to present faster than the display's refresh rate
       // when windowed (or fullscreen with vsync enabled, but that's more understandable).
       // On the other hand, it helps Xcode's GPU captures start and stop on frame boundaries

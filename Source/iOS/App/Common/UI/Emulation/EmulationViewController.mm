@@ -82,10 +82,29 @@
     
     _didStartEmulation = true;
   }
+  
+#if TARGET_OS_IOS
+  // iPhone Duo: show the game on the outer display too while the phone is open.
+  [[OuterDisplayMirrorController shared] attachTo:self];
+#endif
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+  [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+  
+#if TARGET_OS_IOS
+  [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    [[OuterDisplayMirrorController shared] hostSizeDidChange];
+  }];
+#endif
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
   [super viewDidDisappear:animated];
+  
+#if TARGET_OS_IOS
+  [[OuterDisplayMirrorController shared] detach];
+#endif
   
   [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLHostTitleChangedNotification object:nil];
   [[NSNotificationCenter defaultCenter] removeObserver:self name:DOLEmulationDidEndNotification object:nil];
