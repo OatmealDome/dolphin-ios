@@ -33,7 +33,284 @@ import UIKit
       UserDefaults.standard.set(newValue, forKey: Self.enabledDefaultsKey)
       NSLog("[OuterDisplayMirror] Turned %@ by the user", newValue ? "on" : "off")
       update()
+      applyLayout()
     }
+  }
+
+  private static let layoutDefaultsKey = "outer_display_layout"
+  private static let swapDefaultsKey = "outer_display_swap_halves"
+  private static let stretchDefaultsKey = "outer_display_stretch"
+
+  // MARK: Per-game profiles
+  //
+  // Layout, Swap and the picture settings are remembered per game. A game with no saved value
+  // for a setting uses the default. While a game is running, changes from the in-game menu go
+  // to that game's profile. Settings → Outer Screen edits the defaults, or any game's profile.
+  // On/Off stays global.
+
+  private static let profilesDefaultsKey = "outer_display_game_profiles"
+  /// Stored in each profile so the Settings page can name games that aren't in the library.
+  private static let titleProfileKey = "_title"
+
+  /// The running game's ID (for example "GM4E01"), or nil outside a game.
+  private(set) var currentGameID: String?
+  /// The running game's name, for the menu.
+  private(set) var currentGameTitle: String?
+
+  /// Call when a game starts (or the title changes). Loads that game's saved settings.
+  @objc(setGameID:title:) func setCurrentGame(id: String?, title: String?) {
+    let id = (id?.isEmpty ?? true) ? nil : id
+    guard id != currentGameID else { return }
+    currentGameID = id
+    currentGameTitle = (title?.isEmpty ?? true) ? id : title
+    NSLog("[OuterDisplayMirror] Game %@ (%@), saved settings: %d", id ?? "none", currentGameTitle ?? "",
+          hasProfile(game: id) ? 1 : 0)
+    applyLayout()
+  }
+
+  /// Whether `game` has any settings of its own.
+  func hasProfile(game: String?) -> Bool {
+    guard let game, let profile = Self.profiles()[game] else { return false }
+    return profile.keys.contains { $0 != Self.titleProfileKey }
+  }
+
+  /// Forget `game`'s own settings, so it uses the defaults again.
+  func resetProfile(game: String?) {
+    guard let game else { return }
+    var all = Self.profiles()
+    all[game] = nil
+    UserDefaults.standard.set(all, forKey: Self.profilesDefaultsKey)
+    applyLayout()
+  }
+
+  /// Make `game`'s own settings the defaults for every game without its own.
+  func saveProfileAsDefaults(game: String?) {
+    guard let game, let profile = Self.profiles()[game] else { return }
+    for (key, value) in profile where key != Self.titleProfileKey {
+      UserDefaults.standard.set(value, forKey: key)
+    }
+    applyLayout()
+  }
+
+  /// Games with their own settings, sorted by name.
+  func savedGames() -> [(id: String, title: String)] {
+    Self.profiles().keys.filter { hasProfile(game: $0) }
+      .map { (id: $0, title: title(game: $0)) }
+      .sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
+  }
+
+  /// A game's name: remembered in its profile, else the ID.
+  func title(game: String) -> String {
+    if game == currentGameID, let title = currentGameTitle { return title }
+    return Self.profiles()[game]?[Self.titleProfileKey] as? String ?? game
+  }
+
+  /// Remember a game's name (used before its profile exists, from the Settings page).
+  func rememberTitle(_ title: String, game: String) {
+    knownTitles[game] = title
+  }
+
+  private var knownTitles: [String: String] = [:]
+
+  private static func profiles() -> [String: [String: Any]] {
+    UserDefaults.standard.dictionary(forKey: profilesDefaultsKey) as? [String: [String: Any]] ?? [:]
+  }
+
+  private func storedValue(_ key: String, game: String?) -> Any? {
+    if let game, let value = Self.profiles()[game]?[key] {
+      return value
+    }
+    return UserDefaults.standard.object(forKey: key)
+  }
+
+  private func store(_ value: Any, _ key: String, game: String?) {
+    if let game {
+      var all = Self.profiles()
+      all[game, default: [:]][key] = value
+      let title = game == currentGameID ? currentGameTitle : knownTitles[game]
+      if let title {
+        all[game]?[Self.titleProfileKey] = title
+      }
+      UserDefaults.standard.set(all, forKey: Self.profilesDefaultsKey)
+    } else {
+      UserDefaults.standard.set(value, forKey: key)
+    }
+    applyLayout()
+  }
+
+  private func storedInt(_ key: String, game: String?) -> Int {
+    (storedValue(key, game: game) as? NSNumber)?.intValue ?? 0
+  }
+
+  // MARK: Settings
+  //
+  // Each takes `game`: nil means the defaults; a game ID means that game's profile (falling
+  // back to the defaults for anything it hasn't changed). The in-game menu uses the running game.
+
+  /// Mirror, or split-screen with one half per display. Takes effect on the next frame.
+  func layout(game: String?) -> OuterDisplayLayout {
+    OuterDisplayLayout(rawValue: storedInt(Self.layoutDefaultsKey, game: game)) ?? .mirror
+  }
+
+  func setLayout(_ layout: OuterDisplayLayout, game: String?) {
+    store(layout.rawValue, Self.layoutDefaultsKey, game: game)
+  }
+
+  /// In a split layout, put the first half (top or left) on the outer display instead.
+  func swapHalves(game: String?) -> Bool {
+    (storedValue(Self.swapDefaultsKey, game: game) as? NSNumber)?.boolValue ?? false
+  }
+
+  func setSwapHalves(_ swap: Bool, game: String?) {
+    store(swap, Self.swapDefaultsKey, game: game)
+  }
+
+  private static let automaticKey = "outer_display_automatic"
+
+  /// Mirror during menus and cutscenes, and switch to the right split layout automatically
+  /// while the game is split-screen.
+  func isAutomatic(game: String?) -> Bool {
+    (storedValue(Self.automaticKey, game: game) as? NSNumber)?.boolValue ?? false
+  }
+
+  func setAutomatic(_ automatic: Bool, game: String?) {
+    store(automatic, Self.automaticKey, game: game)
+  }
+
+  private static let mirrorWhilePausedKey = "outer_display_mirror_while_paused"
+
+  /// Automatic mode: mirror while the game is paused (Start pressed mid-race).
+  func mirrorsWhilePaused(game: String?) -> Bool {
+    (storedValue(Self.mirrorWhilePausedKey, game: game) as? NSNumber)?.boolValue ?? true
+  }
+
+  func setMirrorsWhilePaused(_ mirror: Bool, game: String?) {
+    store(mirror, Self.mirrorWhilePausedKey, game: game)
+  }
+
+  /// What automatic mode currently sees in the running game.
+  var detectedLayout: OuterDisplayLayout { OuterDisplayMirrorView.detectedLayout() }
+
+  private static let innerArrangementKey = "outer_display_inner_arrangement"
+
+  /// 3- and 4-player layouts: players 1 and 2 side by side on the inner display, or one in each half.
+  func innerArrangement(game: String?) -> OuterDisplayInnerArrangement {
+    OuterDisplayInnerArrangement(rawValue: storedInt(Self.innerArrangementKey, game: game)) ?? .sideBySide
+  }
+
+  func setInnerArrangement(_ arrangement: OuterDisplayInnerArrangement, game: String?) {
+    store(arrangement.rawValue, Self.innerArrangementKey, game: game)
+  }
+
+  static func isGrid(_ layout: OuterDisplayLayout) -> Bool {
+    layout == .threePlayers || layout == .fourPlayers
+  }
+
+  /// Posted when settings that change the inner display's layout change.
+  @objc static let layoutDidChangeNotification = Notification.Name("OuterDisplayLayoutDidChange")
+
+  /// True when the game should use the whole inner display even in laptop posture, because the
+  /// running game puts a player in each half of it.
+  @objc var wantsWholeInnerDisplay: Bool {
+    let effective = isAutomatic(game: currentGameID) ? detectedLayout : layout
+    return isUserEnabled && Self.isGrid(effective) && innerArrangement(game: currentGameID) == .stacked
+  }
+
+  /// Fit (black bars) or Zoom to Fill (edges trimmed), per display.
+  private static let pictureLinkedKey = "outer_display_picture_linked"
+
+  /// Same for Both Screens: one Fit/Zoom and stretch setting for both displays. While on, the
+  /// outer display's values are used for both, and changes are saved to both (so turning it off
+  /// leaves both screens where they were).
+  func isPictureLinked(game: String?) -> Bool {
+    (storedValue(Self.pictureLinkedKey, game: game) as? NSNumber)?.boolValue ?? false
+  }
+
+  func setPictureLinked(_ linked: Bool, game: String?) {
+    if linked {
+      // Start both screens from the outer screen's settings.
+      store(scaling(outer: true, game: game).rawValue, Self.scalingKey(outer: false), game: game)
+      store(stretchAmount(outer: true, game: game), Self.stretchAmountKey(outer: false), game: game)
+    }
+    store(linked, Self.pictureLinkedKey, game: game)
+  }
+
+  func scaling(outer: Bool, game: String?) -> OuterDisplayScaling {
+    let outer = outer || isPictureLinked(game: game)
+    return OuterDisplayScaling(rawValue: storedInt(Self.scalingKey(outer: outer), game: game)) ?? .fit
+  }
+
+  func setScaling(_ scaling: OuterDisplayScaling, outer: Bool, game: String?) {
+    if isPictureLinked(game: game) {
+      store(scaling.rawValue, Self.scalingKey(outer: false), game: game)
+      store(scaling.rawValue, Self.scalingKey(outer: true), game: game)
+    } else {
+      store(scaling.rawValue, Self.scalingKey(outer: outer), game: game)
+    }
+  }
+
+  /// How far the picture is stretched toward the display's shape, 0...1, per display.
+  func stretchAmount(outer: Bool, game: String?) -> Float {
+    let outer = outer || isPictureLinked(game: game)
+    if let value = storedValue(Self.stretchAmountKey(outer: outer), game: game) as? NSNumber {
+      return value.floatValue
+    }
+    // Earlier builds had a single on/off "Stretch to Fill".
+    return UserDefaults.standard.bool(forKey: Self.stretchDefaultsKey) ? 1 : 0
+  }
+
+  func setStretchAmount(_ amount: Float, outer: Bool, game: String?) {
+    let amount = min(max(amount, 0), 1)
+    if isPictureLinked(game: game) {
+      store(amount, Self.stretchAmountKey(outer: false), game: game)
+      store(amount, Self.stretchAmountKey(outer: true), game: game)
+    } else {
+      store(amount, Self.stretchAmountKey(outer: outer), game: game)
+    }
+  }
+
+  // The running game's settings (the defaults outside a game).
+  var layout: OuterDisplayLayout {
+    get { layout(game: currentGameID) }
+    set { setLayout(newValue, game: currentGameID) }
+  }
+
+  var swapHalves: Bool {
+    get { swapHalves(game: currentGameID) }
+    set { setSwapHalves(newValue, game: currentGameID) }
+  }
+
+  var isAutomatic: Bool {
+    get { isAutomatic(game: currentGameID) }
+    set { setAutomatic(newValue, game: currentGameID) }
+  }
+
+  var innerArrangement: OuterDisplayInnerArrangement {
+    get { innerArrangement(game: currentGameID) }
+    set { setInnerArrangement(newValue, game: currentGameID) }
+  }
+
+  func scaling(outer: Bool) -> OuterDisplayScaling { scaling(outer: outer, game: currentGameID) }
+  func setScaling(_ scaling: OuterDisplayScaling, outer: Bool) { setScaling(scaling, outer: outer, game: currentGameID) }
+  func stretchAmount(outer: Bool) -> Float { stretchAmount(outer: outer, game: currentGameID) }
+  func setStretchAmount(_ amount: Float, outer: Bool) { setStretchAmount(amount, outer: outer, game: currentGameID) }
+
+  private static func scalingKey(outer: Bool) -> String {
+    outer ? "outer_display_scaling_outer" : "outer_display_scaling_inner"
+  }
+
+  private static func stretchAmountKey(outer: Bool) -> String {
+    outer ? "outer_display_stretch_amount_outer" : "outer_display_stretch_amount_inner"
+  }
+
+  private func applyLayout() {
+    OuterDisplayMirrorView.setLayout(layout, swapHalves: swapHalves, innerArrangement: innerArrangement)
+    OuterDisplayMirrorView.setAutomatic(isAutomatic)
+    OuterDisplayMirrorView.setMirrorWhilePaused(mirrorsWhilePaused(game: currentGameID))
+    for outer in [false, true] {
+      OuterDisplayMirrorView.setScaling(scaling(outer: outer), stretch: stretchAmount(outer: outer), forOuterDisplay: outer)
+    }
+    NotificationCenter.default.post(name: Self.layoutDidChangeNotification, object: self)
   }
 
   private weak var hostViewController: UIViewController?
@@ -43,6 +320,7 @@ import UIKit
   /// Call from the emulation view controller once it is on screen.
   @objc func attach(to viewController: UIViewController) {
     hostViewController = viewController
+    applyLayout()
     update()
   }
 

@@ -13,6 +13,7 @@
 #include "VideoBackends/Metal/MTLVertexFormat.h"
 #include "VideoBackends/Metal/MTLVertexManager.h"
 
+#include "VideoCommon/BPFunctions.h"
 #include "VideoCommon/FramebufferManager.h"
 #include "VideoCommon/Present.h"
 #include "VideoCommon/VideoBackendBase.h"
@@ -32,6 +33,7 @@ void Metal::SetPresentMirrorCallback(PresentMirrorCallback callback, void* conte
   std::lock_guard lock(s_present_mirror_mutex);
   s_present_mirror_callback = callback;
   s_present_mirror_context = context;
+  BPFunctions::SetViewportTracking(callback != nullptr);
 }
 
 Metal::Gfx::Gfx(MRCOwned<CAMetalLayer*> layer) : m_layer(std::move(layer))
@@ -492,9 +494,11 @@ void Metal::Gfx::PresentBackbuffer()
         if (s_present_mirror_callback && g_presenter)
         {
           const auto& rc = g_presenter->GetTargetRectangle();
-          s_present_mirror_callback(s_present_mirror_context, g_state_tracker->GetRenderCmdBuf(),
-                                    [m_drawable texture], rc.left, rc.top, rc.GetWidth(),
-                                    rc.GetHeight());
+          const auto viewports = BPFunctions::TakeTrackedViewports();
+          s_present_mirror_callback(
+              s_present_mirror_context, g_state_tracker->GetRenderCmdBuf(), [m_drawable texture],
+              rc.left, rc.top, rc.GetWidth(), rc.GetHeight(),
+              reinterpret_cast<const float*>(viewports.data()), static_cast<int>(viewports.size()));
         }
       }
 

@@ -19,12 +19,14 @@ namespace Metal
 // (it is committed right after the callback returns). Do not commit it yourself.
 // (x, y, width, height) is the part of `backbuffer` that holds the game picture,
 // without Dolphin's letterbox bars.
+// `viewports` holds `viewport_count` rectangles (x0, y0, x1, y1, in native EFB pixels):
+// the game viewports used since the previous call (see BPFunctions::TakeTrackedViewports).
 //
 // The callback must not block on the main thread: the main thread may be waiting
 // inside SetPresentMirrorCallback for the callback to return.
 using PresentMirrorCallback = void (*)(void* context, id<MTLCommandBuffer> cmdbuf,
                                        id<MTLTexture> backbuffer, int x, int y, int width,
-                                       int height);
+                                       int height, const float* viewports, int viewport_count);
 
 // Pass nullptr to remove the callback. Returns once any call in progress has finished,
 // so `context` can be freed afterwards.

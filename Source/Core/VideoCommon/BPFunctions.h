@@ -163,4 +163,15 @@ void SetBlendMode();
 void ClearScreen(const MathUtil::Rectangle<int>& rc);
 void OnPixelFormatChange();
 void SetInterlacingMode(const BPCmd& bp);
+
+// DolphiniOS (iPhone Duo outer display): records the game's viewports, in native EFB pixels and
+// clipped to the scissor, so the host can tell when a game is drawing split-screen.
+// Off until enabled. Called on the video thread.
+struct TrackedViewport
+{
+  float x0, y0, x1, y1;
+};
+void SetViewportTracking(bool enabled);
+// Returns the viewports used since the last call (at most a few dozen, duplicates removed).
+std::vector<TrackedViewport> TakeTrackedViewports();
 }  // namespace BPFunctions

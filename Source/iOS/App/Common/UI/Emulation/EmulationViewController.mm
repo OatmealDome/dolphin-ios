@@ -244,6 +244,15 @@
 }
 
 - (void)receiveTitleChangedNotification {
+#if TARGET_OS_IOS
+  // iPhone Duo: load this game's saved outer screen settings.
+  NSString* outerGameId = CppToFoundationString(SConfig::GetInstance().GetGameID());
+  NSString* outerGameTitle = CppToFoundationString(SConfig::GetInstance().GetTitleDescription());
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [[OuterDisplayMirrorController shared] setGameID:outerGameId title:outerGameTitle];
+  });
+#endif
+
   if (Config::Get(Config::MAIN_ANALYTICS_ENABLED)) {
     NSMutableArray<NSString*>* controllerList = [[NSMutableArray alloc] init];
     
@@ -282,6 +291,11 @@
 
 - (void)receiveEmulationEndNotification {
   dispatch_async(dispatch_get_main_queue(), ^{
+#if TARGET_OS_IOS
+    // Back to the default outer screen settings (what Settings shows outside a game).
+    [[OuterDisplayMirrorController shared] setGameID:nil title:nil];
+#endif
+
     [UIView animateWithDuration:0.25f animations:^{
       self.rendererView.alpha = 0.0f;
     } completion:^(bool) {
