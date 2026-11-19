@@ -151,7 +151,7 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
 }
 
 - (void)openDocumentPickerWithContentTypes:(NSArray<UTType*>*)contentTypes pickerType:(DOLSoftwareListDocumentPickerType)pickerType {
-  UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes];
+  UIDocumentPickerViewController* pickerController = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:(pickerType == DOLSoftwareListDocumentPickerTypeImportNAND)];
   pickerController.delegate = self;
   pickerController.modalPresentationStyle = UIModalPresentationPageSheet;
   pickerController.allowsMultipleSelection = false;
@@ -180,20 +180,17 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
   } else if (_pickerType == DOLSoftwareListDocumentPickerTypeOpenExternal) {
     NSURL* url = urls[0];
     
-    if (![url startAccessingSecurityScopedResource]) {
-      showError(@"Failed to start accessing security scoped resource.");
-      return;
-    }
+    BOOL accessingSecurityScopedResource = [url startAccessingSecurityScopedResource];
+    _openedUrl = accessingSecurityScopedResource ? url : nil;
     
-    _openedUrl = url;
-    
-    NSString* sourcePath = [_openedUrl path];
+    NSString* sourcePath = [url path];
     
     GameFilePtrWrapper* gameFileWrapper = [[GameFilePtrWrapper alloc] init];
     gameFileWrapper.gameFile = std::make_shared<UICommon::GameFile>(FoundationToCppString(sourcePath));
     
     if (!gameFileWrapper.gameFile->IsValid()) {
       [_openedUrl stopAccessingSecurityScopedResource];
+      _openedUrl = nil;
       
       showError(@"File is invalid.");
       
@@ -204,10 +201,7 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
   } else if (_pickerType == DOLSoftwareListDocumentPickerTypeImportNAND) {
     NSURL* url = urls[0];
     
-    if (![url startAccessingSecurityScopedResource]) {
-      showError(@"Failed to start accessing security scoped resource.");
-      return;
-    }
+    BOOL accessingSecurityScopedResource = [url startAccessingSecurityScopedResource];
     
     UIAlertController* waitAlert = [UIAlertController alertControllerWithTitle:DOLCoreLocalizedString(@"Importing NAND backup") message:nil preferredStyle:UIAlertControllerStyleAlert];
     
@@ -221,7 +215,9 @@ typedef NS_ENUM(NSInteger, DOLSoftwareListDocumentPickerType) {
           return "";
         });
         
-        [url stopAccessingSecurityScopedResource];
+        if (accessingSecurityScopedResource) {
+          [url stopAccessingSecurityScopedResource];
+        }
         
         dispatch_async(dispatch_get_main_queue(), ^{
           [waitAlert dismissViewControllerAnimated:true completion:nil];

@@ -21,25 +21,53 @@ extern char** environ;
 
 const char* _Nonnull DOLJitPTraceChildProcessArgument = "ptraceChild";
 
+static bool HasBooleanEntitlement(CFStringRef entitlement) {
+  void* task = SecTaskCreateFromSelf(NULL);
+  if (task == NULL) {
+    return false;
+  }
+
+  CFTypeRef entitlementValue = SecTaskCopyValueForEntitlement(task, entitlement, NULL);
+  bool result = entitlementValue == kCFBooleanTrue;
+
+  if (entitlementValue != NULL) {
+    CFRelease(entitlementValue);
+  }
+  CFRelease(task);
+
+  return result;
+}
+
 @implementation JitManager (PTrace)
+
+- (bool)hasGetTaskAllowEntitlement {
+  return HasBooleanEntitlement(CFSTR("get-task-allow"));
+}
+
+- (NSString*)signedApplicationBundleIdentifier {
+  void* task = SecTaskCreateFromSelf(NULL);
+  if (task == NULL) {
+    return nil;
+  }
+
+  id value = CFBridgingRelease(SecTaskCopyValueForEntitlement(task, CFSTR("application-identifier"), NULL));
+  CFRelease(task);
+  if (![value isKindOfClass:NSString.class]) {
+    return nil;
+  }
+
+  NSString* identifier = value;
+  NSRange separator = [identifier rangeOfString:@"."];
+  if (separator.location == NSNotFound || NSMaxRange(separator) == identifier.length) {
+    return nil;
+  }
+  return [identifier substringFromIndex:NSMaxRange(separator)];
+}
 
 - (bool)checkCanAcquireJitByPTrace {
   // If we're out of the sandbox, then we can run ptrace.
   // We can check this by the presence of the "platform-application" private entitlement.
-  
-  void* task = SecTaskCreateFromSelf(NULL);
-  CFTypeRef entitlementValue = SecTaskCopyValueForEntitlement(task, CFSTR("platform-application"), NULL);
-  
-  if (entitlementValue == NULL) {
-    return false;
-  }
-  
-  bool result = entitlementValue == kCFBooleanTrue;
-  
-  CFRelease(entitlementValue);
-  CFRelease(task);
-  
-  return result;
+  return HasBooleanEntitlement(CFSTR("platform-application"));
 }
 
 - (void)runPTraceStartupTasks {

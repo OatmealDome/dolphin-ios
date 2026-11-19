@@ -111,7 +111,14 @@
     {
       if (@available(iOS 26, *))
       {
-        Common::SetJitType([JitManager shared].deviceHasTxm ? Common::JitType::LuckTXM : Common::JitType::LuckNoTXM);
+        bool useUniversalProtocol = [JitManager shared].deviceHasTxm ||
+                                    [JitManager shared].requiresUniversalJITProtocol;
+        Common::SetJitType(useUniversalProtocol ? Common::JitType::LuckTXM :
+                                                  Common::JitType::LuckNoTXM);
+      }
+      else if ([JitManager shared].requiresUniversalJITProtocol)
+      {
+        Common::SetJitType(Common::JitType::LuckTXM);
       }
       else
       {

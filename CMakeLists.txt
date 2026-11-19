@@ -500,6 +500,11 @@ if(IOS)
   # Objective-C++ because fmt tries try to use throw because __EXCEPTIONS is defined.
   add_definitions(-DFMT_EXCEPTIONS=0)
 
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 21.0)
+    # The bundled fmt's consteval format checking fails with Apple Clang 21.
+    add_definitions(-DFMT_CONSTEVAL=)
+  endif()
+
   find_library(AUDIOTOOLBOX_LIBRARY AudioToolbox)
   find_library(COREFOUNDATION_LIBRARY CoreFoundation)
   find_library(COREHAPTICS_LIBRARY CoreHaptics)

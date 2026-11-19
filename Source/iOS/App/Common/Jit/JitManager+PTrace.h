@@ -9,6 +9,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface JitManager (PTrace)
 
+- (bool)hasGetTaskAllowEntitlement;
+- (nullable NSString*)signedApplicationBundleIdentifier;
 - (void)runPTraceStartupTasks;
 - (void)acquireJitByPTrace;
 
