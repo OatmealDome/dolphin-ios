@@ -95,6 +95,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>On iPhone Duo, iOS only lets apps use the outer display while the camera is on. DolphiniOS runs the camera at its lowest setting and never saves or sends any images.</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_altserver._tcp</string>

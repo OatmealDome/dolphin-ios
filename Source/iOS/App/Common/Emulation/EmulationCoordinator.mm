@@ -48,6 +48,8 @@
     _mtkView = [[MTKView alloc] init];
     _mtkView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _mtkView.preferredFramesPerSecond = 120;
+    // Allow the finished frame to be read back so it can be mirrored to iPhone Duo's outer display.
+    _mtkView.framebufferOnly = NO;
     
     _metalLayer = (CAMetalLayer*)_mtkView.layer;
     

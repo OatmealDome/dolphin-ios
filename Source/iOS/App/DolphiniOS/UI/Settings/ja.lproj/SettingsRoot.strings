@@ -33,3 +33,6 @@
 
 /* Class = "UILabel"; text = "Debug"; ObjectID = "Bss-xh-SL3"; */
 "Bss-xh-SL3.text" = "デバッグ";
+
+/* Class = "UILabel"; text = "Split-Duo"; ObjectID = "OdS-Lb-L01"; */
+"OdS-Lb-L01.text" = "Split-Duo";

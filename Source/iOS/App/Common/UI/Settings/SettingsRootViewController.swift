@@ -21,6 +21,13 @@ class SettingsRootViewController : UITableViewController {
     if (indexPath.section == 0 && indexPath.row == 3) {
       UIApplication.shared.open(URL(string: "https://oatmealdome.me/dolphinios/")!)
     }
+
+#if os(iOS)
+    // Split-Duo (iPhone Duo), the row after Controllers.
+    if (indexPath.section == 1 && indexPath.row == 3) {
+      navigationController?.pushViewController(OuterDisplaySettingsViewController(), animated: true)
+    }
+#endif
   }
   
   @IBAction func unwindToSettings( _ seg: UIStoryboardSegue) {}

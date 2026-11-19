@@ -4,7 +4,9 @@
 #include "VideoCommon/BPFunctions.h"
 
 #include <algorithm>
+#include <atomic>
 #include <cmath>
+#include <mutex>
 #include <string_view>
 
 #include "Common/Assert.h"
@@ -177,6 +179,62 @@ ScissorResult ComputeScissorRects()
   return ScissorResult{bpmem, xfmem};
 }
 
+namespace
+{
+std::atomic<bool> s_viewport_tracking{false};
+std::mutex s_tracked_mutex;
+std::vector<TrackedViewport> s_tracked_viewports;
+
+void TrackViewport(float x, float y, float width, float height,
+                   const MathUtil::Rectangle<int>& scissor)
+{
+  if (width < 0.f)
+  {
+    x += width;
+    width = -width;
+  }
+  if (height < 0.f)
+  {
+    y += height;
+    height = -height;
+  }
+
+  // The area actually drawn: the viewport clipped to the scissor.
+  const TrackedViewport vp{
+      std::round(std::max(x, static_cast<float>(scissor.left))),
+      std::round(std::max(y, static_cast<float>(scissor.top))),
+      std::round(std::min(x + width, static_cast<float>(scissor.right))),
+      std::round(std::min(y + height, static_cast<float>(scissor.bottom))),
+  };
+  if (vp.x1 - vp.x0 < 8 || vp.y1 - vp.y0 < 8)
+    return;
+
+  std::lock_guard lock(s_tracked_mutex);
+  for (const auto& other : s_tracked_viewports)
+  {
+    if (other.x0 == vp.x0 && other.y0 == vp.y0 && other.x1 == vp.x1 && other.y1 == vp.y1)
+      return;
+  }
+  if (s_tracked_viewports.size() < 64)
+    s_tracked_viewports.push_back(vp);
+}
+}  // namespace
+
+void SetViewportTracking(bool enabled)
+{
+  s_viewport_tracking.store(enabled);
+  std::lock_guard lock(s_tracked_mutex);
+  s_tracked_viewports.clear();
+}
+
+std::vector<TrackedViewport> TakeTrackedViewports()
+{
+  std::lock_guard lock(s_tracked_mutex);
+  std::vector<TrackedViewport> result;
+  result.swap(s_tracked_viewports);
+  return result;
+}
+
 void SetScissorAndViewport()
 {
   auto native_rc = ComputeScissorRects().Best();
@@ -198,6 +256,9 @@ void SetScissorAndViewport()
     raw_width = std::round(raw_width);
     raw_height = std::round(raw_height);
   }
+
+  if (s_viewport_tracking.load(std::memory_order_relaxed))
+    TrackViewport(raw_x, raw_y, raw_width, raw_height, native_rc.rect);
 
   float x = g_framebuffer_manager->EFBToScaledXf(raw_x);
   float y = g_framebuffer_manager->EFBToScaledYf(raw_y);
