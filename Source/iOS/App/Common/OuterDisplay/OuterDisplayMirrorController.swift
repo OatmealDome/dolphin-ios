@@ -45,7 +45,7 @@ import UIKit
   //
   // Layout, Swap and the picture settings are remembered per game. A game with no saved value
   // for a setting uses the default. While a game is running, changes from the in-game menu go
-  // to that game's profile. Settings → Outer Screen edits the defaults, or any game's profile.
+  // to that game's profile. Settings → Split-Duo edits the defaults, or any game's profile.
   // On/Off stays global.
 
   private static let profilesDefaultsKey = "outer_display_game_profiles"
@@ -301,6 +301,157 @@ import UIKit
 
   private static func stretchAmountKey(outer: Bool) -> String {
     outer ? "outer_display_stretch_amount_outer" : "outer_display_stretch_amount_inner"
+  }
+
+  /// "Split-Duo" submenu for the in-game menu: Off / Mirror / Split modes, plus Swap and Stretch.
+  /// Rebuilt every time it opens, so the checkmarks are current.
+  @objc func makeMenu() -> UIMenu {
+    UIMenu(title: "Split-Duo", image: UIImage(systemName: "rectangle.on.rectangle"), children: [
+      UIDeferredMenuElement.uncached { [weak self] completion in
+        MainActor.assumeIsolated {
+          completion(self?.menuElements() ?? [])
+        }
+      }
+    ])
+  }
+
+  private func menuElements() -> [UIMenuElement] {
+    func choice(_ title: String, _ image: String, selected: Bool, _ handler: @escaping @MainActor () -> Void) -> UIAction {
+      UIAction(title: title, image: UIImage(systemName: image), state: selected ? .on : .off) { _ in
+        MainActor.assumeIsolated { handler() }
+      }
+    }
+
+    let on = isUserEnabled
+
+    let modes = UIMenu(options: .displayInline, children: [
+      choice("Off", "rectangle.slash", selected: !on) { self.isUserEnabled = false },
+      choice("Mirror", "rectangle.on.rectangle", selected: on && layout == .mirror) {
+        self.layout = .mirror
+        self.isUserEnabled = true
+      },
+      choice("Split: Top & Bottom", "rectangle.split.1x2", selected: on && layout == .splitTopBottom) {
+        self.layout = .splitTopBottom
+        self.isUserEnabled = true
+      },
+      choice("Split: Left & Right", "rectangle.split.2x1", selected: on && layout == .splitLeftRight) {
+        self.layout = .splitLeftRight
+        self.isUserEnabled = true
+      },
+      choice("3 Players", "rectangle.split.2x2", selected: on && layout == .threePlayers) {
+        self.layout = .threePlayers
+        self.isUserEnabled = true
+      },
+      choice("4 Players", "rectangle.split.2x2.fill", selected: on && layout == .fourPlayers) {
+        self.layout = .fourPlayers
+        self.isUserEnabled = true
+      },
+    ])
+
+    let automatic = UIAction(title: "Automatic", image: UIImage(systemName: "wand.and.stars"),
+                             state: isAutomatic ? .on : .off) { _ in
+      MainActor.assumeIsolated { self.isAutomatic.toggle() }
+    }
+    if #available(iOS 16.0, *) {
+      automatic.subtitle = isAutomatic
+        ? "Now: \(Self.detectedDescription(detectedLayout))"
+        : "Mirror in menus, split during split-screen"
+    }
+
+    var optionItems: [UIMenuElement] = [automatic]
+    if isAutomatic {
+      let paused = mirrorsWhilePaused(game: currentGameID)
+      optionItems.append(choice("Mirror While Paused", "pause.rectangle", selected: paused) {
+        self.setMirrorsWhilePaused(!paused, game: self.currentGameID)
+      })
+    }
+    optionItems += [
+      choice("Swap Screens", "arrow.left.arrow.right", selected: swapHalves) { self.swapHalves.toggle() },
+    ]
+    if Self.isGrid(layout) || isAutomatic {
+      let arrangement = innerArrangement
+      optionItems.append(UIMenu(title: "Players 1 & 2 (Inner Screen)", image: UIImage(systemName: "rectangle.split.2x1"), children: [
+        choice("Side by Side", "rectangle.split.2x1", selected: arrangement == .sideBySide) {
+          self.innerArrangement = .sideBySide
+        },
+        choice("Top & Bottom Halves", "rectangle.split.1x2", selected: arrangement == .stacked) {
+          self.innerArrangement = .stacked
+        },
+      ]))
+    }
+    let options = UIMenu(options: .displayInline, children: optionItems)
+
+    // Picture shape, per display. Menus can't hold sliders, so stretch has presets here;
+    // Settings → Split-Duo has a slider for anything in between.
+    func pictureMenu(_ title: String, _ image: String, outer: Bool) -> UIMenu {
+      let scaling = self.scaling(outer: outer)
+      let amount = self.stretchAmount(outer: outer)
+      let fitZoom = UIMenu(options: .displayInline, children: [
+        choice("Fit (Black Bars)", "rectangle.center.inset.filled", selected: scaling == .fit) {
+          self.setScaling(.fit, outer: outer)
+        },
+        choice("Zoom to Fill (Trim Edges)", "plus.magnifyingglass", selected: scaling == .zoom) {
+          self.setScaling(.zoom, outer: outer)
+        },
+      ])
+      let presets: [(String, Float)] = [("No Stretch", 0), ("Stretch 25%", 0.25), ("Stretch 50%", 0.5),
+                                        ("Stretch 75%", 0.75), ("Full Stretch", 1)]
+      let stretches = UIMenu(options: .displayInline, children: presets.map { title, value in
+        choice(title, "arrow.left.and.right", selected: abs(amount - value) < 0.01) {
+          self.setStretchAmount(value, outer: outer)
+        }
+      })
+      let menu = UIMenu(title: title, image: UIImage(systemName: image), children: [fitZoom, stretches])
+      menu.subtitle = Self.describe(scaling: scaling, stretch: amount)
+      return menu
+    }
+
+    let linked = isPictureLinked(game: currentGameID)
+    let linkToggle = choice("Same for Both Screens", "link", selected: linked) {
+      self.setPictureLinked(!linked, game: self.currentGameID)
+    }
+    let pictures = UIMenu(options: .displayInline, children: linked
+      ? [pictureMenu("Picture (Both Screens)", "rectangle.on.rectangle", outer: true), linkToggle]
+      : [pictureMenu("Outer Screen Picture", "iphone.gen3", outer: true),
+         pictureMenu("Inner Screen Picture (Split)", "rectangle.portrait.split.2x1", outer: false),
+         linkToggle])
+
+    var elements: [UIMenuElement] = [modes, options, pictures]
+
+    if let title = currentGameTitle {
+      let saved = self.hasProfile(game: currentGameID)
+      let reset = UIAction(title: "Reset This Game to Defaults", image: UIImage(systemName: "arrow.counterclockwise"),
+                           attributes: saved ? [] : [.disabled]) { _ in
+        MainActor.assumeIsolated { self.resetProfile(game: self.currentGameID) }
+      }
+      let makeDefault = UIAction(title: "Use These Settings for All Games", image: UIImage(systemName: "square.and.arrow.down"),
+                                 attributes: saved ? [] : [.disabled]) { _ in
+        MainActor.assumeIsolated { self.saveProfileAsDefaults(game: self.currentGameID) }
+      }
+      let gameMenu = UIMenu(title: saved ? "Saved for \(title)" : "Changes are saved for \(title)",
+                            options: .displayInline, children: [reset, makeDefault])
+      elements.append(gameMenu)
+    }
+
+    return elements
+  }
+
+  /// What automatic mode sees, for the menu.
+  static func detectedDescription(_ layout: OuterDisplayLayout) -> String {
+    switch layout {
+    case .splitTopBottom: return "2 players, top & bottom"
+    case .splitLeftRight: return "2 players, left & right"
+    case .threePlayers: return "3 players"
+    case .fourPlayers: return "4 players"
+    default: return OuterDisplayMirrorView.isPaused() ? "mirroring (paused)" : "mirroring (not split-screen)"
+    }
+  }
+
+  /// For example "Fit, 50% stretch".
+  static func describe(scaling: OuterDisplayScaling, stretch: Float) -> String {
+    let mode = scaling == .zoom ? "Zoom to Fill" : "Fit"
+    let percent = Int((stretch * 100).rounded())
+    return percent == 0 ? mode : "\(mode), \(percent)% stretch"
   }
 
   private func applyLayout() {

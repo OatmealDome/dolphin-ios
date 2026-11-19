@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0D15A000000000000000023 /* OuterDisplaySettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D15A000000000000000013 /* OuterDisplaySettingsViewController.swift */; };
 		D0D15A000000000000000020 /* OuterDisplayMirrorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D15A000000000000000010 /* OuterDisplayMirrorController.swift */; };
 		D0D15A000000000000000022 /* OuterDisplayMirrorView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0D15A000000000000000012 /* OuterDisplayMirrorView.mm */; };
 		B900A7A127F255EF000361DD /* libdolphin.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B9476B2427F23FFE009C0A4B /* libdolphin.dylib */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -225,6 +226,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D0D15A000000000000000013 /* OuterDisplaySettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OuterDisplaySettingsViewController.swift; sourceTree = "<group>"; };
 		D0D15A000000000000000010 /* OuterDisplayMirrorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OuterDisplayMirrorController.swift; sourceTree = "<group>"; };
 		D0D15A000000000000000011 /* OuterDisplayMirrorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OuterDisplayMirrorView.h; sourceTree = "<group>"; };
 		D0D15A000000000000000012 /* OuterDisplayMirrorView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OuterDisplayMirrorView.mm; sourceTree = "<group>"; };
@@ -618,6 +620,7 @@
 				D0D15A000000000000000010 /* OuterDisplayMirrorController.swift */,
 				D0D15A000000000000000011 /* OuterDisplayMirrorView.h */,
 				D0D15A000000000000000012 /* OuterDisplayMirrorView.mm */,
+				D0D15A000000000000000013 /* OuterDisplaySettingsViewController.swift */,
 			);
 			path = OuterDisplay;
 			sourceTree = "<group>";
@@ -2119,6 +2122,7 @@
 				B9B2C65B288E454700CB6569 /* ExternalDisplaySceneDelegate.swift in Sources */,
 				D0D15A000000000000000020 /* OuterDisplayMirrorController.swift in Sources */,
 				D0D15A000000000000000022 /* OuterDisplayMirrorView.mm in Sources */,
+				D0D15A000000000000000023 /* OuterDisplaySettingsViewController.swift in Sources */,
 				B97E4B5629656EC300B3EE9C /* VersionManager.swift in Sources */,
 				B904ACC128851C6F008B6BE9 /* GraphicsBackendViewController.mm in Sources */,
 				B904ACCF288555E8008B6BE9 /* InternalResolutionViewController.mm in Sources */,

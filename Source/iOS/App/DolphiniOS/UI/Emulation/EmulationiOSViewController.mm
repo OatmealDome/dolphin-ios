@@ -231,6 +231,9 @@ typedef NS_ENUM(NSInteger, DOLEmulationVisibleTouchPad) {
     }]
   ]]];
   
+  // iPhone Duo: Split-Duo submenu (Off / Mirror / Split modes, Swap, Stretch).
+  [menuItems addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[ [[OuterDisplayMirrorController shared] makeMenu] ]]];
+
   if ([self emulateSkylanderPortal] && Core::System::GetInstance().IsWii()) {
     [menuItems addObject:[UIMenu menuWithTitle:DOLCoreLocalizedString(@"Tools") image:nil identifier:nil options:UIMenuOptionsDisplayInline
                  children:@[

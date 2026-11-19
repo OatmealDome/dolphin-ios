@@ -20,6 +20,12 @@
 #include "Core/HW/GCPad.h"
 #include "InputCommon/GCPadStatus.h"
 
+#import "FoundationStringUtil.h"
+#import "GameFileCacheManager.h"
+#import "GameFilePtrWrapper.h"
+
+#include "UICommon/GameFile.h"
+
 static const char* const kMirrorShaderSource = R"(
 #include <metal_stdlib>
 using namespace metal;
@@ -842,6 +848,37 @@ static DOLMirrorRenderer* s_activeRenderer = nil;
     Metal::SetPresentMirrorCallback(nullptr, nullptr);
     s_activeRenderer = nil;
   }
+}
+
+@end
+
+@implementation OuterDisplayGameLibrary
+
++ (NSArray<NSDictionary<NSString*, NSString*>*>*)games
+{
+  NSMutableDictionary<NSString*, NSString*>* titles = [NSMutableDictionary dictionary];
+  for (GameFilePtrWrapper* wrapper in [[GameFileCacheManager sharedManager] getGames])
+  {
+    const auto& game = wrapper.gameFile;
+    NSString* gameId = CppToFoundationString(game->GetGameID());
+    if (gameId.length == 0 || titles[gameId] != nil)
+    {
+      continue;  // Other discs or revisions of a game share its settings.
+    }
+    NSString* title =
+        CppToFoundationString(game->GetName(UICommon::GameFile::Variant::LongAndPossiblyCustom));
+    titles[gameId] = title.length > 0 ? title : gameId;
+  }
+
+  NSMutableArray<NSDictionary<NSString*, NSString*>*>* result = [NSMutableArray array];
+  for (NSString* gameId in titles)
+  {
+    [result addObject:@{@"id" : gameId, @"title" : titles[gameId]}];
+  }
+  [result sortUsingComparator:^NSComparisonResult(NSDictionary* a, NSDictionary* b) {
+    return [a[@"title"] localizedCaseInsensitiveCompare:b[@"title"]];
+  }];
+  return result;
 }
 
 @end

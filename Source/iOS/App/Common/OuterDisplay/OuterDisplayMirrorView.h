@@ -87,4 +87,12 @@ typedef NS_ENUM(NSInteger, OuterDisplayScaling) {
 
 @end
 
+/// The games in the library, for picking one to give its own outer screen settings.
+@interface OuterDisplayGameLibrary : NSObject
+
+/// One entry per game ID, sorted by name. Keys: @"id", @"title".
++ (NSArray<NSDictionary<NSString*, NSString*>*>*)games;
+
+@end
+
 NS_ASSUME_NONNULL_END
